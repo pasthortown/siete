@@ -1,0 +1,20 @@
+CONECTARSE SUPERCIAS
+Completar Update Establecimiento
+
+ps -fx //listar los procesos
+screen -r NOMBRE
+ctrl + ad para volver a consola
+
+
+INSERT INTO public.account_rols(
+	id, name, description, code, father_code)
+	VALUES (1, 'Administrador', 'Administrador', 1, '-');
+INSERT INTO public.account_rols(
+	id, name, description, code, father_code)
+	VALUES (2, 'Administrador RUC', 'Administrador RUC', 2, '-');
+INSERT INTO public.account_rols(
+	id, name, description, code, father_code)
+	VALUES (3, 'Co-Administrador RUC', 'Co-Administrador RUC', 3, '-');
+INSERT INTO public.account_rols(
+	id, name, description, code, father_code)
+	VALUES (4, 'Administrador Establecimiento', 'Administrador Establecimiento', 4, '-');

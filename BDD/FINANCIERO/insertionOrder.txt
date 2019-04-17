@@ -1,0 +1,8 @@
+declarations
+declaration_item_categories
+states
+declaration_items
+declaration_declaration_item
+state_declarations
+logs
+migrations

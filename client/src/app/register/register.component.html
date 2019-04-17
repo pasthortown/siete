@@ -1,0 +1,72 @@
+<div class="container" class="register-page">
+  <div class="row">
+    <div class="col-12" style="height: 20px;">
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-3"></div>
+    <div class="col-6 pretty-form">
+      <div class="row">
+        <div class="col-12 text-center">
+          <img src="assets/images/logo.png" width="auto" height="150px" />
+        </div>
+      </div>
+      <div class="row">
+          <h2 class="col-12 text-center mt-3">
+            Crear una Cuenta Nueva
+          </h2>
+      </div>
+      <div class="form-group">
+        <label for="identification">Número de Cédula</label><span
+        *ngIf="!identificationValidated"
+        class="ml-2 badge badge-danger"
+        >Incorrecto</span>
+        <input type="text" class="form-control" maxlength="10" id="identification" placeholder="Número de Cédula"
+          [(ngModel)]="user.identification" (keyup)="checkCedula()"/>
+      </div>
+      <div class="form-group" *ngIf="identificationValidated">
+        <label for="identification">Fecha de Nacimiento</label><span
+        *ngIf="!identidadConfirmada"
+        class="ml-2 badge badge-danger"
+        >Identidad No Confirmada</span>
+        <input type="text" class="form-control" id="fechaNacimiento" [(ngModel)]="fechaNacimiento" placeholder="Fecha de Nacimeinto: DIA/MES/AÑO   -  Ejempo: 15/09/1986" (input)="confirmarIdentidad()">
+      </div>
+      <div class="form-group" *ngIf="identidadConfirmada">
+          <label for="name">Nombre Completo</label>
+          <input type="text" disabled class="form-control" id="name" placeholder="Nombre Completo" [(ngModel)]="user.name" />
+        </div>
+      <div class="form-group">
+          <label for="email">Correo Electrónico</label><span
+          *ngIf="!checkEmail()"
+          class="ml-2 badge badge-danger"
+          >Incorrecto</span>
+          <input type="email" class="form-control" id="email" placeholder="Correo Electrónico" [(ngModel)]="user.email" />
+        </div>
+      <div class="form-group" *ngIf="identificationValidated">
+        <label for="ruc">Número de RUC</label><span
+        *ngIf="!rucValidated"
+        class="ml-2 badge badge-danger"
+        >Incorrecto</span>
+        <input type="text" class="form-control" maxlength="13" id="ruc" placeholder="Número de RUC" [(ngModel)]="ruc.number" (keyup)="checkRuc()"/>
+        <small *ngIf="rucValidated" [innerHTML]="rucData"></small>
+      </div>
+      <div class="row" *ngIf="esperando">
+        <div class="col-12">
+          <div class="progress mb-3">
+            <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: 100%">Espere...</div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12 text-center">
+          <button type="submit" class="btn btn-primary mr-2" (click)="registrar()">
+            Crear Cuenta
+          </button>
+          <a [routerLink]="['/login']" class="btn btn-danger">
+            Regresar
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

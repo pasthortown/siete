@@ -1,0 +1,613 @@
+<div class="row">
+  <div class="col-12 text-right">
+    <h1>RUCs Registrados</h1>
+  </div>
+</div>
+<div class="row">
+  <div class="col-12">
+    <div class="btn-toolbar" role="toolbar">
+      <div class="btn-group mr-2" role="group">
+        <button
+          type="button"
+          class="btn btn-primary"
+          title="Actualizar"
+          (click)="goToPage(currentPage)"
+        >
+          <i class="fas fa-sync"></i>
+        </button>
+      </div>
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <button
+            type="button"
+            class="input-group-text btn btn-success"
+            title="Ir a la Página"
+            (click)="goToPage(goToPageNumber.value)"
+          >
+            <span class="fas fa-search"></span>
+          </button>
+        </div>
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Buscar..."
+          #goToPageNumber
+        />
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-12">
+    <table class="table table-hover mt-2">
+      <thead>
+        <tr>
+          <th>Seleccionado</th>
+          <th>RUC</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="text-right">
+            <span></span>
+          </td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="row">
+  <div class="col-12">
+    <div class="btn-toolbar" role="toolbar">
+      <div class="btn-group mr-2" role="group">
+        <button
+          type="button"
+          class="btn btn-light"
+          *ngIf="currentPage === 1"
+          title="Primera Página"
+          disabled
+        >
+          Primera
+        </button>
+        <button
+          type="button"
+          class="btn btn-light"
+          *ngIf="currentPage !== 1"
+          title="Primera Página"
+          (click)="goToPage(1)"
+        >
+          Primera
+        </button>
+        <button
+          type="button"
+          class="btn btn-light"
+          *ngIf="currentPage > 1"
+          title="Página Anterior"
+          (click)="goToPage(currentPage * 1 - 1)"
+        >
+          {{ currentPage * 1 - 1 }}
+        </button>
+        <button type="button" class="btn btn-primary" title="Página Actual">
+          {{ currentPage }}
+        </button>
+        <button
+          type="button"
+          class="btn btn-light"
+          *ngIf="currentPage < lastPage"
+          title="Página Siguiente"
+          (click)="goToPage(currentPage * 1 + 1)"
+        >
+          {{ currentPage * 1 + 1 }}
+        </button>
+        <button
+          type="button"
+          class="btn btn-light"
+          *ngIf="currentPage !== lastPage"
+          title="Última Página"
+          (click)="goToPage(lastPage)"
+        >
+          Última
+        </button>
+        <button
+          type="button"
+          class="btn btn-light"
+          *ngIf="currentPage === lastPage"
+          title="Última Página"
+          disabled
+        >
+          Última
+        </button>
+      </div>
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <button
+            type="button"
+            class="input-group-text btn btn-success"
+            title="Ir a la Página"
+            (click)="goToPage(goToPageNumber.value)"
+          >
+            Ir a
+          </button>
+        </div>
+        <input
+          type="number"
+          min="{{ 1 }}"
+          max="{{ lastPage }}"
+          class="form-control"
+          placeholder="Ir a la Página"
+          #goToPageNumber
+        />
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row" *ngIf="mostrarData">
+  <div class="col-12">
+    <div class="row mt-5">
+      <div class="col-12 text-left">
+        <h3>Datos del RUC:</h3>
+      </div>
+      <div class="col-12">
+        {{ rucData }}
+      </div>
+    </div>
+  </div>
+  <div class="col-12">
+    <div class="row mt-3">
+      <h4 class="col-12">
+        <strong>Establecimientos</strong>
+      </h4>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <div class="btn-toolbar" role="toolbar">
+          <div class="btn-group mr-2" role="group">
+            <button
+              type="button"
+              class="btn btn-primary"
+              title="Actualizar"
+              (click)="goToPageEstablishment(currentPageEstablishment)"
+            >
+              <i class="fas fa-sync"></i>
+            </button>
+          </div>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <button
+                type="button"
+                class="input-group-text btn btn-success"
+                title="Ir a la Página"
+                (click)="
+                  goToPageEstablishment(goToPageNumberEstablishment.value)
+                "
+              >
+                <span class="fas fa-search"></span>
+              </button>
+            </div>
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Buscar..."
+              #goToPageNumberEstablishment
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <table class="table table-hover mt-2">
+          <thead>
+            <tr>
+              <th>Seleccionado</th>
+              <th>Código</th>
+              <th>Dirección</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let establishment of ruc_registro_selected.establishments"
+              (click)="selectRegisterEstablishment(establishment)"
+            >
+              <td class="text-right">
+                <span
+                  *ngIf="establishment_selected === establishment"
+                  class="far fa-hand-point-right"
+                ></span>
+              </td>
+              <td>{{ establishment.ruc_code_id }}</td>
+              <td>{{ establishment.address }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <div class="btn-toolbar" role="toolbar">
+          <div class="btn-group mr-2" role="group">
+            <button
+              type="button"
+              class="btn btn-light"
+              *ngIf="currentPageEstablishment === 1"
+              title="Primera Página"
+              disabled
+            >
+              Primera
+            </button>
+            <button
+              type="button"
+              class="btn btn-light"
+              *ngIf="currentPage !== 1"
+              title="Primera Página"
+              (click)="goToPageEstablishment(1)"
+            >
+              Primera
+            </button>
+            <button
+              type="button"
+              class="btn btn-light"
+              *ngIf="currentPage > 1"
+              title="Página Anterior"
+              (click)="goToPageEstablishment(currentPageEstablishment * 1 - 1)"
+            >
+              {{ currentPage * 1 - 1 }}
+            </button>
+            <button type="button" class="btn btn-primary" title="Página Actual">
+              {{ currentPage }}
+            </button>
+            <button
+              type="button"
+              class="btn btn-light"
+              *ngIf="currentPageEstablishment < lastPageEstablishment"
+              title="Página Siguiente"
+              (click)="goToPageEstablishment(currentPageEstablishment * 1 + 1)"
+            >
+              {{ currentPage * 1 + 1 }}
+            </button>
+            <button
+              type="button"
+              class="btn btn-light"
+              *ngIf="currentPageEstablishment !== lastPageEstablishment"
+              title="Última Página"
+              (click)="goToPageEstablishment(lastPageEstablishment)"
+            >
+              Última
+            </button>
+            <button
+              type="button"
+              class="btn btn-light"
+              *ngIf="currentPageEstablishment === lastPageEstablishment"
+              title="Última Página"
+              disabled
+            >
+              Última
+            </button>
+          </div>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <button
+                type="button"
+                class="input-group-text btn btn-success"
+                title="Ir a la Página"
+                (click)="
+                  goToPageEstablishment(goToPageNumberEstablishment.value)
+                "
+              >
+                Ir a
+              </button>
+            </div>
+            <input
+              type="number"
+              min="{{ 1 }}"
+              max="{{ lastPageEstablishment }}"
+              class="form-control"
+              placeholder="Ir a la Página"
+              #goToPageNumberEstablishment
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-12">
+    <div class="row mt-3">
+      <h4 class="col-12">
+        <strong>Declaraciones de Impuestos</strong>
+      </h4>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <div class="btn-toolbar" role="toolbar">
+          <div class="btn-group mr-2" role="group">
+            <button
+              type="button"
+              class="btn btn-primary"
+              title="Actualizar"
+              (click)="goToPageEstablishment(currentPageEstablishment)"
+            >
+              <i class="fas fa-sync"></i>
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              title="Actualizar"
+              (click)="buildDeclarationItemsToShow()"
+            >
+              <i class="fas fa-sync"></i>
+            </button>
+          </div>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <button
+                type="button"
+                class="input-group-text btn btn-success"
+                title="Ir a la Página"
+                (click)="
+                  goToPageEstablishment(goToPageNumberEstablishment.value)
+                "
+              >
+                <span class="fas fa-search"></span>
+              </button>
+            </div>
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Buscar..."
+              #goToPageNumberEstablishment
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <table class="table table-hover mt-2">
+          <thead>
+            <tr>
+              <th>Seleccionado</th>
+              <th>Año</th>
+              <th>Monto</th>
+              <th>Estado</th>
+              <th>Anexos</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let establishment of ruc_registro_selected.establishments"
+              (click)="selectRegisterEstablishment(establishment)"
+            >
+              <td class="text-right">
+                <span
+                  *ngIf="establishment_selected === establishment"
+                  class="far fa-hand-point-right"
+                ></span>
+              </td>
+              <td>{{ establishment.ruc_code_id }}</td>
+              <td>{{ establishment.address }}</td>
+              <td>{{ establishment.ruc_code_id }}</td>
+              <td>{{ establishment.address }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <div class="btn-toolbar" role="toolbar">
+          <div class="btn-group mr-2" role="group">
+            <button
+              type="button"
+              class="btn btn-light"
+              *ngIf="currentPageEstablishment === 1"
+              title="Primera Página"
+              disabled
+            >
+              Primera
+            </button>
+            <button
+              type="button"
+              class="btn btn-light"
+              *ngIf="currentPage !== 1"
+              title="Primera Página"
+              (click)="goToPageEstablishment(1)"
+            >
+              Primera
+            </button>
+            <button
+              type="button"
+              class="btn btn-light"
+              *ngIf="currentPage > 1"
+              title="Página Anterior"
+              (click)="goToPageEstablishment(currentPageEstablishment * 1 - 1)"
+            >
+              {{ currentPage * 1 - 1 }}
+            </button>
+            <button type="button" class="btn btn-primary" title="Página Actual">
+              {{ currentPage }}
+            </button>
+            <button
+              type="button"
+              class="btn btn-light"
+              *ngIf="currentPageEstablishment < lastPageEstablishment"
+              title="Página Siguiente"
+              (click)="goToPageEstablishment(currentPageEstablishment * 1 + 1)"
+            >
+              {{ currentPage * 1 + 1 }}
+            </button>
+            <button
+              type="button"
+              class="btn btn-light"
+              *ngIf="currentPageEstablishment !== lastPageEstablishment"
+              title="Última Página"
+              (click)="goToPageEstablishment(lastPageEstablishment)"
+            >
+              Última
+            </button>
+            <button
+              type="button"
+              class="btn btn-light"
+              *ngIf="currentPageEstablishment === lastPageEstablishment"
+              title="Última Página"
+              disabled
+            >
+              Última
+            </button>
+          </div>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <button
+                type="button"
+                class="input-group-text btn btn-success"
+                title="Ir a la Página"
+                (click)="
+                  goToPageEstablishment(goToPageNumberEstablishment.value)
+                "
+              >
+                Ir a
+              </button>
+            </div>
+            <input
+              type="number"
+              min="{{ 1 }}"
+              max="{{ lastPageEstablishment }}"
+              class="form-control"
+              placeholder="Ir a la Página"
+              #goToPageNumberEstablishment
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row mt-5" *ngIf="mostrarDataDeclaracion">
+  <div class="col-12 text-left">
+    <h3>Datos de la Declaración:</h3>
+  </div>
+  <div class="col-12">
+    <table class="table">
+      <tbody>
+        <tr>
+          <th>
+            <div class="form-group">
+              <label>Año</label>
+              <h3>
+                <strong>{{ declarationSelected.year }}</strong>
+              </h3>
+            </div>
+          </th>
+          <th>
+            <div class="form-group">
+              <label>Fecha Máxima de Pago</label>
+              <h3>
+                <strong>{{ declarationSelected.max_date_to_pay | date:'y-MM-dd'}}</strong>
+              </h3>
+            </div>
+          </th>
+          <th>
+            <div class="form-group">
+              <label>Opciones</label>
+              <div class="btn-toolbar" role="toolbar">
+                <div class="btn-group mr-2" role="group">
+                  <button
+                    type="button"
+                    class="btn-lg btn-success"
+                    title="Descargar Pago"
+                    (click)="goToPage(currentPage)"
+                  >
+                    <i class="fas fa-cash-register"></i>
+                  </button>
+                </div>
+                <div class="btn-group mr-2" role="group">
+                  <button
+                    type="button"
+                    class="btn-lg btn-primary"
+                    title="Descargar Declaración"
+                    (click)="goToPage(currentPage)"
+                  >
+                    <i class="fas fa-file-invoice-dollar "></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </th>
+        </tr>
+        <tr>
+          <th>
+            <div class="form-group">
+              <label>Monto a Pagar</label>
+              <h3>
+                <strong>{{ payDeclarationSelected.amount_to_pay }} USD</strong>
+              </h3>
+            </div>
+          </th>
+          <th>
+            <div class="form-group">
+              <label>Monto Pagado</label>
+              <h3>
+                <strong class="text-danger" *ngIf="payDeclarationSelected.amount_payed < payDeclarationSelected.amount_to_pay">{{ payDeclarationSelected.amount_payed }} USD</strong>
+                <strong class="text-success" *ngIf="payDeclarationSelected.amount_payed == payDeclarationSelected.amount_to_pay">{{ payDeclarationSelected.amount_payed }} USD</strong>
+                <strong class="text-warning" *ngIf="payDeclarationSelected.amount_payed > payDeclarationSelected.amount_to_pay">{{ payDeclarationSelected.amount_payed }} USD</strong>
+              </h3>
+            </div>
+          </th>
+          <th>
+            <div class="form-group">
+              <label>Fecha de Pago</label>
+              <h3>
+                <strong class="text-success" *ngIf="payDeclarationSelected.pay_date <= declarationSelected.max_date_to_pay">{{ payDeclarationSelected.pay_date | date:'y-MM-dd'}}</strong>
+                <strong class="text-danger" *ngIf="payDeclarationSelected.pay_date > declarationSelected.max_date_to_pay">{{ payDeclarationSelected.pay_date | date:'y-MM-dd'}}</strong>
+              </h3>
+            </div>
+          </th>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="col-12">
+    <table
+      class="table table-hover mt-2"
+    >
+      <tbody *ngFor="let declarationItemToShow of declarationItemsToShow">
+        <tr class="text-light bg-secondary">
+            <th colspan="2" class="text-center">
+                {{ declarationItemToShow.CategoryName }}
+            </th>
+            </tr>
+            <tr>
+            <th>
+                Nombre
+            </th>
+            <th>
+                Valor
+            </th>
+        </tr>
+        <tr *ngFor="let item of declarationItemToShow.items">
+          <td>
+            {{ item.declarationItem.name }}
+          </td>
+          <td>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text">USD</span>
+              </div>
+              <input
+                type="number"
+                class="form-control"
+                min="0"
+                step="0.01"
+                id="declarationITemValue"
+                name="declarationITemValue"
+                (input)="checkAmount()"
+                [(ngModel)]="item.valueItem.value"
+                placeholder="Valor"
+              />
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

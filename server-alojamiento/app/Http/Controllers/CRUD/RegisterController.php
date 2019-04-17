@@ -1,0 +1,518 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+Use Exception;
+use App\Register;
+use App\Capacity;
+use App\Bed;
+use App\Tariff;
+use App\RegisterRequisite;
+use App\ComplementaryServiceType;
+use App\RegisterState;
+use App\State;
+use App\RegisterType;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+
+class RegisterController extends Controller
+{
+    function get(Request $data)
+    {
+       $id = $data['id'];
+       if ($id == null) {
+          return response()->json(Register::get(),200);
+       } else {
+          $register = Register::findOrFail($id);
+          $attach = [];
+          $complementary_service_types_on_register = $register->ComplementaryServiceTypes()->get();
+          array_push($attach, ["complementary_service_types_on_register"=>$complementary_service_types_on_register]);
+          $capacities_on_register = $register->Capacities()->get();
+          array_push($attach, ["capacities_on_register"=>$capacities_on_register]);
+          return response()->json(["Register"=>$register, "attach"=>$attach],200);
+       }
+    }
+
+    function paginate(Request $data)
+    {
+       $size = $data['size'];
+       return response()->json(Register::paginate($size),200);
+    }
+ 
+    function get_registers_by_ruc(Request $data) {
+      $token = $data->header('api_token');
+      $number = $data['ruc_number'];
+      $establishments = json_decode($this->httpGet('http://localhost:8001/establishment/get_by_ruc?size=1000&ruc='.$number, null, null, $token))->data;
+      $toReturn = [];
+      foreach($establishments as $establishment) {
+         $registers_on_establishment = Register::where('establishment_id', $establishment->id)->orderBy('created_at', 'ASC')->get();
+         foreach($registers_on_establishment as $register){
+            $register_type = RegisterType::where('id', $register->register_type_id)->first();
+            $register_category = RegisterType::where('code', $register_type->father_code)->first();
+            $status_register = RegisterState::where('register_id', $register->id)->orderBy('created_at', 'DESC')->first();
+            $status = State::where('id',$status_register->state_id)->first();
+            array_push($toReturn, ["register"=>$register, "establishment"=>$establishment, "status_register"=>$status_register, "status"=>$status, "type"=>["register_type"=>$register_type, "register_category"=>$register_category]]);
+         }
+      }
+      return response()->json($toReturn, 200);
+    }
+    
+    function get_register_data(Request $data) {
+      $id = $data['id'];
+      $register = Register::where('id', $id)->first();
+      $register_type = RegisterType::where('id', $register->register_type_id)->first();
+      $register_category = RegisterType::where('code', $register_type->father_code)->first();
+      $status_register = RegisterState::where('register_id', $register->id)->orderBy('created_at', 'DESC')->first();
+      $capacities_on_register = $register->Capacities()->get();
+      $capacities = [];
+      foreach($capacities_on_register as $capacity_on_register){
+         $beds = $capacity_on_register->Beds()->get();
+         $tariffs = $capacity_on_register->Tariffs()->get();
+         array_push($capacities, ["quantity"=>$capacity_on_register->quantity,
+         "capacity_type_id"=>$capacity_on_register->capacity_type_id,
+         "beds_on_capacity"=>$beds, "tariffs_on_capacity"=>$tariffs]);
+      }
+      $complementary_service_types_on_register = $register->ComplementaryServiceTypes()->get();
+      $toReturn = ["register"=>$register,
+                   "status"=>$status_register,
+                   "register_category"=>$register_category,
+                   "capacities_on_register"=>$capacities,
+                   "complementary_service_types_on_register"=>$complementary_service_types_on_register
+                  ];
+      return response()->json($toReturn, 200);
+    }
+
+    function register_register_data(Request $data) {
+      $result = $data->json()->all();
+      $id = $result['id'];
+      $capacities_on_register = $result['capacities_on_register'];
+      $complementary_service_types_on_register = $result['complementary_service_types_on_register'];
+      if(!$result['autorized_complementary_capacities']){
+         $complementary_service_types_on_register = [];
+      }
+      $requisites = $result['requisites'];
+      $status_id = $result['status'];
+      if($id == 0) {
+         DB::beginTransaction();
+         $register = new Register();
+         $lastRegister = Register::orderBy('id')->get()->last();
+         if($lastRegister) {
+            $register->id = $lastRegister->id + 1;
+         } else {
+            $register->id = 1;
+         }
+         $register->code = $result['code'];
+         $register->autorized_complementary_capacities = $result['autorized_complementary_capacities'];
+         $register->establishment_id = $result['establishment_id'];
+         $register->register_type_id = $result['register_type_id'];
+         $register->save();
+         foreach($complementary_service_types_on_register as $complementary_service_type) {
+            $register->ComplementaryServiceTypes()->attach($complementary_service_type['id']);
+         }
+         foreach($capacities_on_register as $capacityToRegister) {
+            $capacity = new Capacity();
+            $lastCapacity = Capacity::orderBy('id')->get()->last();
+            if($lastCapacity) {
+               $capacity->id = $lastCapacity->id + 1;
+            } else {
+               $capacity->id = 1;
+            }
+            $capacity->quantity = $capacityToRegister['quantity'];
+            $capacity->capacity_type_id = $capacityToRegister['capacity_type_id'];
+            $capacity->save();
+            $beds_on_capacity = $capacityToRegister['beds_on_capacity'];
+            foreach($beds_on_capacity as $bed_to_add){
+               $bed = new Bed();
+               $lastBed = Bed::orderBy('id')->get()->last();
+               if($lastBed) {
+                  $bed->id = $lastBed->id + 1;
+               } else {
+                  $bed->id = 1;
+               }
+               $bed->quantity = $bed_to_add['quantity'];
+               $bed->bed_type_id = $bed_to_add['bed_type_id'];
+               $bed->save();
+               $capacity->Beds()->attach($bed->id);
+            }
+            $tariffs_on_capacity = $capacityToRegister['tariffs_on_capacity'];
+            foreach($tariffs_on_capacity as $tariff_to_add) {
+               $tariff = new Tariff();
+               $lastTariff = Tariff::orderBy('id')->get()->last();
+               if($lastTariff) {
+                  $tariff->id = $lastTariff->id + 1;
+               } else {
+                  $tariff->id = 1;
+               }
+               $tariff->price = $tariff_to_add['price'];
+               $tariff->tariff_type_id = $tariff_to_add['tariff_type_id'];
+               $tariff->save();
+               $capacity->Tariffs()->attach($tariff->id);
+            }
+            $register->Capacities()->attach($capacity->id);
+         }
+         foreach($requisites as $requisite_to_add) {
+            $registerrequisite = new RegisterRequisite();
+            $lastRegisterRequisite = RegisterRequisite::orderBy('id')->get()->last();
+            if($lastRegisterRequisite) {
+               $registerrequisite->id = $lastRegisterRequisite->id + 1;
+            } else {
+               $registerrequisite->id = 1;
+            }
+            $registerrequisite->fullfill = $requisite_to_add['fullfill'];
+            $registerrequisite->requisite_id = $requisite_to_add['requisite_id'];
+            $registerrequisite->register_id = $register->id;
+            $registerrequisite->save();  
+         }
+         $registerstate = new RegisterState();
+         $lastRegisterState = RegisterState::orderBy('id')->get()->last();
+         if($lastRegisterState) {
+            $registerstate->id = $lastRegisterState->id + 1;
+         } else {
+            $registerstate->id = 1;
+         }
+         $registerstate->justification = 'Solicitud de Registro Elaborada en la fecha: ' . date('l jS \of F Y h:i:s A');
+         $registerstate->register_id = $register->id;
+         $registerstate->state_id = $status_id;
+         $registerstate->save();
+         DB::commit();
+         return response()->json($register,200);
+      }else {
+         DB::beginTransaction();
+         $register = Register::where('id',$result['id'])->update([
+            'code'=>$result['code'],
+            'autorized_complementary_capacities'=>$result['autorized_complementary_capacities'],
+            'establishment_id'=>$result['establishment_id'],
+            'register_type_id'=>$result['register_type_id'],
+         ]);
+         $complementary_service_types_on_register_old = $register->ComplementaryServiceTypes()->get();
+         foreach( $complementary_service_types_on_register_old as $complementary_service_type_old ) {
+            $delete = true;
+            foreach( $complementary_service_types_on_register as $complementary_service_type ) {
+               if ( $complementary_service_type_old->id === $complementary_service_type['id'] ) {
+                  $delete = false;
+               }
+            }
+            if ( $delete ) {
+               $register->ComplementaryServiceTypes()->detach($complementary_service_type_old->id);
+            }
+         }
+         foreach( $complementary_service_types_on_register as $complementary_service_type ) {
+            $add = true;
+            foreach( $complementary_service_types_on_register_old as $complementary_service_type_old) {
+               if ( $complementary_service_type_old->id === $complementary_service_type['id'] ) {
+                  $add = false;
+               }
+            }
+            if ( $add ) {
+               $register->ComplementaryServiceTypes()->attach($complementary_service_type['id']);
+            }
+         }
+         $capacities_on_register_old = $register->Capacities()->get();
+         foreach( $capacities_on_register_old as $capacity_old ) {
+            $register->Capacities()->detach($capacity_old->id);
+            Capacity::destroy($capacity_old->id);
+         }
+         foreach($capacities_on_register as $capacityToRegister) {
+            $capacity = new Capacity();
+            $lastCapacity = Capacity::orderBy('id')->get()->last();
+            if($lastCapacity) {
+               $capacity->id = $lastCapacity->id + 1;
+            } else {
+               $capacity->id = 1;
+            }
+            $capacity->quantity = $capacityToRegister['quantity'];
+            $capacity->capacity_type_id = $capacityToRegister['capacity_type_id'];
+            $capacity->save();
+            $beds_on_capacity = $capacityToRegister['beds_on_capacity'];
+            foreach($beds_on_capacity as $bed_to_add){
+               $bed = new Bed();
+               $lastBed = Bed::orderBy('id')->get()->last();
+               if($lastBed) {
+                  $bed->id = $lastBed->id + 1;
+               } else {
+                  $bed->id = 1;
+               }
+               $bed->quantity = $bed_to_add['quantity'];
+               $bed->bed_type_id = $bed_to_add['bed_type_id'];
+               $bed->save();
+               $capacity->Beds()->attach($bed->id);
+            }
+            $tariffs_on_capacity = $capacityToRegister['tariffs_on_capacity'];
+            foreach($tariffs_on_capacity as $tariff_to_add) {
+               $tariff = new Tariff();
+               $lastTariff = Tariff::orderBy('id')->get()->last();
+               if($lastTariff) {
+                  $tariff->id = $lastTariff->id + 1;
+               } else {
+                  $tariff->id = 1;
+               }
+               $tariff->price = $tariff_to_add['price'];
+               $tariff->tariff_type_id = $tariff_to_add['tariff_type_id'];
+               $tariff->save();
+               $capacity->Tariffs()->attach($tariff->id);
+            }
+            $register->Capacities()->attach($capacity->id);
+         }
+         $preview_requisites = RegisterRequisite::where('register_id', $register->id)->get();
+         foreach($preview_requisites as $preview_requisite){
+            Register::destroy($preview_requisite->id);
+         } 
+         foreach($requisites as $requisite_to_add) {
+            $registerrequisite = new RegisterRequisite();
+            $lastRegisterRequisite = RegisterRequisite::orderBy('id')->get()->last();
+            if($lastRegisterRequisite) {
+               $registerrequisite->id = $lastRegisterRequisite->id + 1;
+            } else {
+               $registerrequisite->id = 1;
+            }
+            $registerrequisite->fullfill = $requisite_to_add['fullfill'];
+            $registerrequisite->requisite_id = $requisite_to_add['requisite_id'];
+            $registerrequisite->register_id = $register->id;
+            $registerrequisite->save();  
+         }
+         $registerstate = new RegisterState();
+         $lastRegisterState = RegisterState::orderBy('id')->get()->last();
+         if($lastRegisterState) {
+            $registerstate->id = $lastRegisterState->id + 1;
+         } else {
+            $registerstate->id = 1;
+         }
+         $registerstate->justification = 'Solicitud de Registro Actualizada en la fecha: ' . date('l jS \of F Y h:i:s A');
+         $registerstate->register_id = $register->id;
+         $registerstate->state_id = $status_id;
+         $registerstate->save();
+         DB::commit();
+      } 
+      return response()->json($register,200);
+    }
+
+    function post(Request $data)
+    {
+       try{
+          DB::beginTransaction();
+          $result = $data->json()->all();
+          $register = new Register();
+          $lastRegister = Register::orderBy('id')->get()->last();
+          if($lastRegister) {
+             $register->id = $lastRegister->id + 1;
+          } else {
+             $register->id = 1;
+          }
+          $register->code = $result['code'];
+          $register->autorized_complementary_capacities = $result['autorized_complementary_capacities'];
+          $register->establishment_id = $result['establishment_id'];
+          $register->register_type_id = $result['register_type_id'];
+          $register->save();
+          $complementary_service_types_on_register = $result['complementary_service_types_on_register'];
+          foreach( $complementary_service_types_on_register as $complementary_service_type) {
+             $register->ComplementaryServiceTypes()->attach($complementary_service_type['id']);
+          }
+          $capacities_on_register = $result['capacities_on_register'];
+          foreach( $capacities_on_register as $capacity) {
+             $register->Capacities()->attach($capacity['id']);
+          }
+          DB::commit();
+       } catch (Exception $e) {
+          return response()->json($e,400);
+       }
+       return response()->json($register,200);
+    }
+
+    function put(Request $data)
+    {
+       try{
+          DB::beginTransaction();
+          $result = $data->json()->all();
+          $register = Register::where('id',$result['id'])->update([
+             'code'=>$result['code'],
+             'autorized_complementary_capacities'=>$result['autorized_complementary_capacities'],
+             'establishment_id'=>$result['establishment_id'],
+             'register_type_id'=>$result['register_type_id'],
+          ]);
+          $register = Register::where('id',$result['id'])->first();
+          $complementary_service_types_on_register = $result['complementary_service_types_on_register'];
+          $complementary_service_types_on_register_old = $register->ComplementaryServiceTypes()->get();
+          foreach( $complementary_service_types_on_register_old as $complementary_service_type_old ) {
+             $delete = true;
+             foreach( $complementary_service_types_on_register as $complementary_service_type ) {
+                if ( $complementary_service_type_old->id === $complementary_service_type['id'] ) {
+                   $delete = false;
+                }
+             }
+             if ( $delete ) {
+                $register->ComplementaryServiceTypes()->detach($complementary_service_type_old->id);
+             }
+          }
+          foreach( $complementary_service_types_on_register as $complementary_service_type ) {
+             $add = true;
+             foreach( $complementary_service_types_on_register_old as $complementary_service_type_old) {
+                if ( $complementary_service_type_old->id === $complementary_service_type['id'] ) {
+                   $add = false;
+                }
+             }
+             if ( $add ) {
+                $register->ComplementaryServiceTypes()->attach($complementary_service_type['id']);
+             }
+          }
+          $register = Register::where('id',$result['id'])->first();
+          $capacities_on_register = $result['capacities_on_register'];
+          $capacities_on_register_old = $register->Capacities()->get();
+          foreach( $capacities_on_register_old as $capacity_old ) {
+             $delete = true;
+             foreach( $capacities_on_register as $capacity ) {
+                if ( $capacity_old->id === $capacity['id'] ) {
+                   $delete = false;
+                }
+             }
+             if ( $delete ) {
+                $register->Capacities()->detach($capacity_old->id);
+             }
+          }
+          foreach( $capacities_on_register as $capacity ) {
+             $add = true;
+             foreach( $capacities_on_register_old as $capacity_old) {
+                if ( $capacity_old->id === $capacity['id'] ) {
+                   $add = false;
+                }
+             }
+             if ( $add ) {
+                $register->Capacities()->attach($capacity['id']);
+             }
+          }
+          DB::commit();
+       } catch (Exception $e) {
+          return response()->json($e,400);
+       }
+       return response()->json($register,200);
+    }
+
+    function delete(Request $data)
+    {
+       $id = $data['id'];
+       return Register::destroy($id);
+    }
+
+    function backup(Request $data)
+    {
+       $registers = Register::get();
+       $toReturn = [];
+       foreach( $registers as $register) {
+          $attach = [];
+          $complementary_service_types_on_register = $register->ComplementaryServiceTypes()->get();
+          array_push($attach, ["complementary_service_types_on_register"=>$complementary_service_types_on_register]);
+          $capacities_on_register = $register->Capacities()->get();
+          array_push($attach, ["capacities_on_register"=>$capacities_on_register]);
+          array_push($toReturn, ["Register"=>$register, "attach"=>$attach]);
+       }
+       return response()->json($toReturn,200);
+    }
+
+    function masiveLoad(Request $data)
+    {
+      $incomming = $data->json()->all();
+      $masiveData = $incomming['data'];
+      try{
+       DB::beginTransaction();
+       foreach($masiveData as $row) {
+         $result = $row['Register'];
+         $exist = Register::where('id',$result['id'])->first();
+         if ($exist) {
+           Register::where('id', $result['id'])->update([
+             'code'=>$result['code'],
+             'autorized_complementary_capacities'=>$result['autorized_complementary_capacities'],
+             'establishment_id'=>$result['establishment_id'],
+             'register_type_id'=>$result['register_type_id'],
+           ]);
+         } else {
+          $register = new Register();
+          $register->id = $result['id'];
+          $register->code = $result['code'];
+          $register->autorized_complementary_capacities = $result['autorized_complementary_capacities'];
+          $register->establishment_id = $result['establishment_id'];
+          $register->register_type_id = $result['register_type_id'];
+          $register->save();
+         }
+         $register = Register::where('id',$result['id'])->first();
+         $complementary_service_types_on_register = [];
+         foreach($row['attach'] as $attach){
+            $complementary_service_types_on_register = $attach['complementary_service_types_on_register'];
+         }
+         $complementary_service_types_on_register_old = $register->ComplementaryServiceTypes()->get();
+         foreach( $complementary_service_types_on_register_old as $complementary_service_type_old ) {
+            $delete = true;
+            foreach( $complementary_service_types_on_register as $complementary_service_type ) {
+               if ( $complementary_service_type_old->id === $complementary_service_type['id'] ) {
+                  $delete = false;
+               }
+            }
+            if ( $delete ) {
+               $register->ComplementaryServiceTypes()->detach($complementary_service_type_old->id);
+            }
+         }
+         foreach( $complementary_service_types_on_register as $complementary_service_type ) {
+            $add = true;
+            foreach( $complementary_service_types_on_register_old as $complementary_service_type_old) {
+               if ( $complementary_service_type_old->id === $complementary_service_type['id'] ) {
+                  $add = false;
+               }
+            }
+            if ( $add ) {
+               $register->ComplementaryServiceTypes()->attach($complementary_service_type['id']);
+            }
+         }
+         $register = Register::where('id',$result['id'])->first();
+         $capacities_on_register = [];
+         foreach($row['attach'] as $attach){
+            $capacities_on_register = $attach['capacities_on_register'];
+         }
+         $capacities_on_register_old = $register->Capacities()->get();
+         foreach( $capacities_on_register_old as $capacity_old ) {
+            $delete = true;
+            foreach( $capacities_on_register as $capacity ) {
+               if ( $capacity_old->id === $capacity['id'] ) {
+                  $delete = false;
+               }
+            }
+            if ( $delete ) {
+               $register->Capacities()->detach($capacity_old->id);
+            }
+         }
+         foreach( $capacities_on_register as $capacity ) {
+            $add = true;
+            foreach( $capacities_on_register_old as $capacity_old) {
+               if ( $capacity_old->id === $capacity['id'] ) {
+                  $add = false;
+               }
+            }
+            if ( $add ) {
+               $register->Capacities()->attach($capacity['id']);
+            }
+         }
+       }
+       DB::commit();
+      } catch (Exception $e) {
+         return response()->json($e,400);
+      }
+      return response()->json('Task Complete',200);
+    }
+
+    protected function httpGet($url, $data=NULL, $headers = NULL, $token) {
+      $ch = curl_init();
+      curl_setopt($ch, CURLOPT_URL, $url);
+      curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+      if(!empty($data)){
+          curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+      }
+      $headersSend = array();
+      array_push($headersSend, 'api_token:'.$token);
+      curl_setopt($ch, CURLOPT_HTTPHEADER, $headersSend);
+      $response = curl_exec($ch);
+      if (curl_error($ch)) {
+          trigger_error('Curl Error:' . curl_error($ch));
+      }
+      curl_close($ch);
+      return $response;
+   }
+}

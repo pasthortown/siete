@@ -1,0 +1,30 @@
+import { ComplementaryServiceType } from './ComplementaryServiceType';
+import { RegisterRequisite } from './RegisterRequisite';
+
+import { Capacity } from './Capacity';
+
+export class Register {
+   id: number;
+   code: String;
+   autorized_complementary_capacities: Boolean;
+   establishment_id: number;
+   complementary_service_types_on_register: ComplementaryServiceType[];
+   register_type_id: number;
+   capacities_on_register: Capacity[];
+   requisites: RegisterRequisite[];
+   total_spaces: number;
+   total_habitations: number;
+   status: number;
+   constructor() {
+      this.id = 0;
+      this.complementary_service_types_on_register = [];
+      this.capacities_on_register = [];
+      this.establishment_id = 0;
+      this.requisites = [];
+      this.register_type_id = 0;
+      this.total_spaces = 0;
+      this.total_habitations = 0;
+      this.status = 3;
+      this.code = 'PENDIENTE';
+   }
+}

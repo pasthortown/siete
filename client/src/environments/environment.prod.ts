@@ -1,0 +1,9 @@
+export const environment = {
+  production: true,
+  api_auth: 'http://localhost:8000/',
+  api_dinardap: 'http://localhost:9000/',
+  api_base: 'http://localhost:8001/',
+  api_alojamiento: 'http://localhost:8002/',
+  api_financiero: 'http://localhost:8003/',
+  gmapapiKey: 'AIzaSyCZQgG8L6ntkJZarveWX9mvy9f9MMOoNDA',
+};
