@@ -29,7 +29,7 @@ class DinardapController extends Controller
       );  
       return $this->client;
     }catch ( Exception $e) {
-      return $e->getMessage();
+      return $e;
     }
   }
     
@@ -41,7 +41,7 @@ class DinardapController extends Controller
       $result = $this->client->getFichaGeneral($parameters);
       return response()->json($result,200);
     }catch (Exception $e) {
-      return $e->getMessage();
+      return $e;
     }
   }
 
@@ -55,7 +55,7 @@ class DinardapController extends Controller
       $result = $this->client->getFichaGeneral(["numeroIdentificacion"=>$identificacion, "codigoPaquete"=>$codigoPaquete]);
       return response()->json($result,200);
     }catch (Exception $e) {
-      return $e->getMessage();
+      return $e;
     }
   }
 
@@ -69,7 +69,7 @@ class DinardapController extends Controller
       $result = $this->client->getFichaGeneral(["numeroIdentificacion"=>$identificacion, "codigoPaquete"=>$codigoPaquete]);
       return response()->json($result,200);
     }catch (Exception $e) {
-      return $e->getMessage();
+      return $e;
     }
   }
 
@@ -83,7 +83,7 @@ class DinardapController extends Controller
       $result = $this->client->getFichaGeneral(["numeroIdentificacion"=>$identificacion, "codigoPaquete"=>$codigoPaquete]);
       return response()->json($result,200);
     }catch (Exception $e) {
-      return $e->getMessage();
+      return $e;
     }
   }
 }
