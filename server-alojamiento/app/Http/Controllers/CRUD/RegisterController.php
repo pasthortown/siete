@@ -12,6 +12,7 @@ use App\RegisterRequisite;
 use App\ComplementaryServiceType;
 use App\RegisterState;
 use App\State;
+use App\ComplementaryServiceFood;
 use App\RegisterType;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Support\Facades\DB;
@@ -91,13 +92,13 @@ class RegisterController extends Controller
          "beds_on_capacity"=>$beds, "tariffs_on_capacity"=>$tariffs]);
       }
       $complementary_service_types_on_register = $register->ComplementaryServiceTypes()->get();
-      $complementary_service_food_on_register = $register->ComplementaryServiceFoods()->get();
+      $complementary_service_foods_on_register = $register->ComplementaryServiceFoods()->get();
       $toReturn = ["register"=>$register,
                    "status"=>$status_register,
                    "register_category"=>$register_category,
                    "capacities_on_register"=>$capacities,
                    "complementary_service_types_on_register"=>$complementary_service_types_on_register,
-                   "complementary_service_food_on_register"=>$complementary_service_food_on_register,
+                   "complementary_service_foods_on_register"=>$complementary_service_foods_on_register,
                   ];
       return response()->json($toReturn, 200);
     }
@@ -110,9 +111,9 @@ class RegisterController extends Controller
       if(!$result['autorized_complementary_capacities']){
          $complementary_service_types_on_register = [];
       }
-      $complementary_service_food_on_register = $result['complementary_service_food_on_register'];
+      $complementary_service_foods_on_register = $result['complementary_service_foods_on_register'];
       if(!$result['autorized_complementary_food_capacities']){
-         $complementary_service_food_on_register = [];
+         $complementary_service_foods_on_register = [];
       }
       $requisites = $result['requisites'];
       $status_id = $result['status'];
@@ -131,6 +132,20 @@ class RegisterController extends Controller
          $register->establishment_id = $result['establishment_id'];
          $register->register_type_id = $result['register_type_id'];
          $register->save();
+         foreach($complementary_service_foods_on_register as $complementary_service_food_on_register) {
+            $complementaryservicefood = new ComplementaryServiceFood();
+            $lastComplementaryServiceFood = ComplementaryServiceFood::orderBy('id')->get()->last();
+            if($lastComplementaryServiceFood) {
+               $complementaryservicefood->id = $lastComplementaryServiceFood->id + 1;
+            } else {
+               $complementaryservicefood->id = 1;
+            }
+            $complementaryservicefood->quantity_tables = $complementary_service_food_on_register['quantity_tables'];
+            $complementaryservicefood->quantity_chairs = $complementary_service_food_on_register['quantity_chairs'];
+            $complementaryservicefood->complementary_service_food_type_id = $complementary_service_food_on_register['complementary_service_food_type_id'];
+            $complementaryservicefood->save();
+            $register->ComplementaryServiceFoods()->attach($complementaryservicefood->id);
+         }
          foreach($complementary_service_types_on_register as $complementary_service_type) {
             $register->ComplementaryServiceTypes()->attach($complementary_service_type['id']);
          }
@@ -278,6 +293,25 @@ class RegisterController extends Controller
                $capacity->Tariffs()->attach($tariff->id);
             }
             $register->Capacities()->attach($capacity->id);
+         }
+         $complementary_service_foods_on_register_old = $register->ComplementaryServiceFoods()->get();
+         foreach( $complementary_service_foods_on_register_old as $complementary_service_food_on_register_old ) {
+            $register->ComplementaryServiceFoods()->detach($complementary_service_food_on_register_old->id);
+            ComplementaryServiceFood::destroy($complementary_service_food_on_register_old->id);
+         }
+         foreach($complementary_service_foods_on_register as $complementary_service_food_on_register) {
+            $complementaryservicefood = new ComplementaryServiceFood();
+            $lastComplementaryServiceFood = ComplementaryServiceFood::orderBy('id')->get()->last();
+            if($lastComplementaryServiceFood) {
+               $complementaryservicefood->id = $lastComplementaryServiceFood->id + 1;
+            } else {
+               $complementaryservicefood->id = 1;
+            }
+            $complementaryservicefood->quantity_tables = $complementary_service_food_on_register['quantity_tables'];
+            $complementaryservicefood->quantity_chairs = $complementary_service_food_on_register['quantity_chairs'];
+            $complementaryservicefood->complementary_service_food_type_id = $complementary_service_food_on_register['complementary_service_food_type_id'];
+            $complementaryservicefood->save();
+            $register->ComplementaryServiceFoods()->attach($complementaryservicefood->id);
          }
          $preview_requisites = RegisterRequisite::where('register_id', $register->id)->get();
          foreach($preview_requisites as $preview_requisite){

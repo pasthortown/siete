@@ -176,7 +176,7 @@ export class RegistroComponent implements OnInit {
   states: State[] = [];
   alowed_capacity_types: CapacityType[] = [];
   complementaryServiceFoodTypes: ComplementaryServiceFoodType[] = [];
-
+  
   //DINARDAP
   consumoCedula = false;
   consumoCedulaEstablishmentContact = false;
@@ -228,6 +228,27 @@ export class RegistroComponent implements OnInit {
        return this.ruc_registro_selected.ruc.group_given.group_type_id !== 0;
      }
      return true;
+  }
+  
+  validateTariffs() {
+   this.rucEstablishmentRegisterSelected.capacities_on_register.forEach(capacity => {
+      capacity.tariffsValidated = true;
+      const groups = [];
+      capacity.tariffs_on_capacity.forEach(tariff => {
+         if(tariff.is_reference) {
+            groups.push({name: tariff.tariff_father_name, price: tariff.price});
+         }
+      });
+      groups.forEach(group => {
+         capacity.tariffs_on_capacity.forEach(tariff => {
+            if(capacity.tariffsValidated && !tariff.is_reference && (tariff.tariff_father_name == group.name)) {
+               if (tariff.price > group.price * tariff.factor) {
+                  capacity.tariffsValidated = false;
+               }
+            }
+         });
+      });
+   });
   }
 
   validateRuc(): Boolean {
@@ -1540,9 +1561,11 @@ export class RegistroComponent implements OnInit {
        this.categorySelectedCode = r.register_category.code;
        this.getCategories();
        this.getAllowedInfo();
+       //this.getTariffs();
        this.getRequisitesByRegisterType();
        this.rucEstablishmentRegisterSelected.capacities_on_register = r.capacities_on_register as Capacity[];
        this.rucEstablishmentRegisterSelected.complementary_service_types_on_register = r.complementary_service_types_on_register as ComplementaryServiceType[];
+       this.rucEstablishmentRegisterSelected.complementary_service_foods_on_register = r.complementary_service_foods_on_register as ComplementaryServiceFood[];
        this.mostrarDataRegister = true;
     }).catch( e => { console.log(e); });
   }
@@ -1669,6 +1692,8 @@ export class RegistroComponent implements OnInit {
          newTariff.tariff_father_name = element.father.name;
          newTariff.tariff_name = tariffType.name;
          newTariff.tariff_type_id = tariffType.id;
+         newTariff.is_reference = tariffType.is_reference;
+         newTariff.factor = tariffType.factor;
          toReturn.push(newTariff);
       });
    });
@@ -1693,6 +1718,10 @@ export class RegistroComponent implements OnInit {
       this.rucEstablishmentRegisterSelected.total_spaces += element.total_spaces * element.quantity;
       this.rucEstablishmentRegisterSelected.total_habitations += element.quantity;
    });
+   this.validateTariffs();
+   this.rucEstablishmentRegisterSelected.capacities_on_register.forEach(capacity => {
+      this.calcBeds(capacity);
+   });
   }
 
   calcBeds(capacity: Capacity) {
@@ -1713,6 +1742,7 @@ export class RegistroComponent implements OnInit {
    }else {
       capacity.max_bed_ok = false;
    }
+   this.validateTariffs();
   }
 
   selectCapacity(capacity: Capacity) {

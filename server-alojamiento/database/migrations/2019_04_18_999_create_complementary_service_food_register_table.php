@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateRegisterComplementaryServiceFoodTable extends Migration
+class CreateComplementaryServiceFoodRegisterTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateRegisterComplementaryServiceFoodTable extends Migration
      */
     public function up()
     {
-       Schema::create('register_complementary_service_food', function (Blueprint $table) {
+       Schema::create('complementary_service_food_register', function (Blueprint $table) {
           $table->increments('id');
           $table->timestamps();
           $table->unsignedInteger('complementary_service_food_id');
@@ -30,6 +30,6 @@ class CreateRegisterComplementaryServiceFoodTable extends Migration
      */
     public function down()
     {
-       Schema::dropIfExists('register_complementary_service_food');
+       Schema::dropIfExists('complementary_service_food_register');
     }
 }

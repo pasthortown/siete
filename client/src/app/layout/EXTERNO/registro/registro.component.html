@@ -2139,6 +2139,13 @@
                               </table>
                             </td>
                             <td>
+                                <span
+                                class="badge badge-danger mb-3"
+                                *ngIf="
+                                !capacity.tariffsValidated
+                                "
+                                >Tarifas Incorrectas</span
+                              >
                               <div
                                 class="form-group"
                                 *ngFor="
@@ -2209,7 +2216,8 @@
                               <i class="fas fa-plus-circle"></i>
                             </button>
                           </th>
-                          <th>Tipo</th>
+                          <th>Tipo
+                          </th>
                           <th>Cantidad de Mesas</th>
                           <th>Cantidad de Sillas</th>
                           <th>Opciones</th>
@@ -2226,6 +2234,11 @@
                               ></span>
                             </td>
                             <td>
+                              <span
+                                *ngIf="complementaryServiceFood.complementary_service_food_type_id == 0"
+                                class="ml-2 badge badge-danger"
+                                >Incorrecto</span 
+                              >
                               <select
                                 class="form-control"
                                 id="complementary_service_food_id"
@@ -2249,6 +2262,7 @@
                                 <input
                                 type="number"
                                 class="form-control"
+                                min="0"
                                 id="mesas"
                                 name="mesas"
                                 placeholder="Cantidad de Mesas"
@@ -2259,6 +2273,7 @@
                                 <input
                                 type="number"
                                 class="form-control"
+                                min="0"
                                 id="sillas"
                                 name="sillas"
                                 placeholder="Cantidad de Sillas"
