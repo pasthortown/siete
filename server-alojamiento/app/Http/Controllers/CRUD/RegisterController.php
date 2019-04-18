@@ -31,6 +31,8 @@ class RegisterController extends Controller
           array_push($attach, ["complementary_service_types_on_register"=>$complementary_service_types_on_register]);
           $capacities_on_register = $register->Capacities()->get();
           array_push($attach, ["capacities_on_register"=>$capacities_on_register]);
+          $complementary_service_foods_on_register = $register->ComplementaryServiceFoods()->get();
+          array_push($attach, ["complementary_service_foods_on_register"=>$complementary_service_foods_on_register]);
           return response()->json(["Register"=>$register, "attach"=>$attach],200);
        }
     }
@@ -313,6 +315,10 @@ class RegisterController extends Controller
           foreach( $capacities_on_register as $capacity) {
              $register->Capacities()->attach($capacity['id']);
           }
+          $complementary_service_foods_on_register = $result['complementary_service_foods_on_register'];
+          foreach( $complementary_service_foods_on_register as $complementary_service_food) {
+             $register->ComplementaryServiceFoods()->attach($complementary_service_food['id']);
+          }
           DB::commit();
        } catch (Exception $e) {
           return response()->json($e,400);
@@ -381,6 +387,30 @@ class RegisterController extends Controller
                 $register->Capacities()->attach($capacity['id']);
              }
           }
+          $complementary_service_foods_on_register = $result['complementary_service_foods_on_register'];
+          $complementary_service_foods_on_register_old = $register->ComplementaryServiceFoods()->get();
+          foreach( $complementary_service_foods_on_register_old as $complementary_service_food_old ) {
+             $delete = true;
+             foreach( $complementary_service_foods_on_register as $complementary_service_food ) {
+                if ( $complementary_service_food_old->id === $complementary_service_food['id'] ) {
+                   $delete = false;
+                }
+             }
+             if ( $delete ) {
+                $register->ComplementaryServiceFoods()->detach($complementary_service_food_old->id);
+             }
+          }
+          foreach( $complementary_service_foods_on_register as $complementary_service_food ) {
+             $add = true;
+             foreach( $complementary_service_foods_on_register_old as $complementary_service_food_old) {
+                if ( $complementary_service_food_old->id === $complementary_service_food['id'] ) {
+                   $add = false;
+                }
+             }
+             if ( $add ) {
+                $register->ComplementaryServiceFoods()->attach($complementary_service_food['id']);
+             }
+          }
           DB::commit();
        } catch (Exception $e) {
           return response()->json($e,400);
@@ -396,17 +426,19 @@ class RegisterController extends Controller
 
     function backup(Request $data)
     {
-       $registers = Register::get();
-       $toReturn = [];
-       foreach( $registers as $register) {
-          $attach = [];
-          $complementary_service_types_on_register = $register->ComplementaryServiceTypes()->get();
-          array_push($attach, ["complementary_service_types_on_register"=>$complementary_service_types_on_register]);
-          $capacities_on_register = $register->Capacities()->get();
-          array_push($attach, ["capacities_on_register"=>$capacities_on_register]);
-          array_push($toReturn, ["Register"=>$register, "attach"=>$attach]);
-       }
-       return response()->json($toReturn,200);
+      $registers = Register::get();
+      $toReturn = [];
+      foreach( $registers as $register) {
+         $attach = [];
+         $complementary_service_types_on_register = $register->ComplementaryServiceTypes()->get();
+         array_push($attach, ["complementary_service_types_on_register"=>$complementary_service_types_on_register]);
+         $capacities_on_register = $register->Capacities()->get();
+         array_push($attach, ["capacities_on_register"=>$capacities_on_register]);
+         $complementary_service_foods_on_register = $register->ComplementaryServiceFoods()->get();
+         array_push($attach, ["complementary_service_foods_on_register"=>$complementary_service_foods_on_register]);
+         array_push($toReturn, ["Register"=>$register, "attach"=>$attach]);
+      }
+      return response()->json($toReturn,200);
     }
 
     function masiveLoad(Request $data)
@@ -488,6 +520,34 @@ class RegisterController extends Controller
             }
             if ( $add ) {
                $register->Capacities()->attach($capacity['id']);
+            }
+         }
+         $register = Register::where('id',$result['id'])->first();
+         $complementary_service_foods_on_register = [];
+         foreach($row['attach'] as $attach){
+            $complementary_service_foods_on_register = $attach['complementary_service_foods_on_register'];
+         }
+         $complementary_service_foods_on_register_old = $register->ComplementaryServiceFoods()->get();
+         foreach( $complementary_service_foods_on_register_old as $complementary_service_food_old ) {
+            $delete = true;
+            foreach( $complementary_service_foods_on_register as $complementary_service_food ) {
+               if ( $complementary_service_food_old->id === $complementary_service_food['id'] ) {
+                  $delete = false;
+               }
+            }
+            if ( $delete ) {
+               $register->ComplementaryServiceFoods()->detach($complementary_service_food_old->id);
+            }
+         }
+         foreach( $complementary_service_foods_on_register as $complementary_service_food ) {
+            $add = true;
+            foreach( $complementary_service_foods_on_register_old as $complementary_service_food_old) {
+               if ( $complementary_service_food_old->id === $complementary_service_food['id'] ) {
+                  $add = false;
+               }
+            }
+            if ( $add ) {
+               $register->ComplementaryServiceFoods()->attach($complementary_service_food['id']);
             }
          }
        }

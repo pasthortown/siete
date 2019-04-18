@@ -37,42 +37,46 @@ class RequisiteController extends Controller
 
     function post(Request $data)
     {
-       try{
-          DB::beginTransaction();
-          $result = $data->json()->all();
-          $requisite = new Requisite();
-          $lastRequisite = Requisite::orderBy('id')->get()->last();
-          if($lastRequisite) {
-             $requisite->id = $lastRequisite->id + 1;
-          } else {
-             $requisite->id = 1;
-          }
-          $requisite->name = $result['name'];
-          $requisite->description = $result['description'];
-          $requisite->register_type_id = $result['register_type_id'];
-          $requisite->save();
-          DB::commit();
-       } catch (Exception $e) {
-          return response()->json($e,400);
-       }
-       return response()->json($requisite,200);
+      try{
+         DB::beginTransaction();
+         $result = $data->json()->all();
+         $requisite = new Requisite();
+         $lastRequisite = Requisite::orderBy('id')->get()->last();
+         if($lastRequisite) {
+            $requisite->id = $lastRequisite->id + 1;
+         } else {
+            $requisite->id = 1;
+         }
+         $requisite->name = $result['name'];
+         $requisite->description = $result['description'];
+         $requisite->father_code = $result['father_code'];
+         $requisite->to_approve = $result['to_approve'];
+         $requisite->register_type_id = $result['register_type_id'];
+         $requisite->save();
+         DB::commit();
+      } catch (Exception $e) {
+         return response()->json($e,400);
+      }
+      return response()->json($requisite,200);
     }
 
     function put(Request $data)
     {
-       try{
-          DB::beginTransaction();
-          $result = $data->json()->all();
-          $requisite = Requisite::where('id',$result['id'])->update([
-             'name'=>$result['name'],
-             'description'=>$result['description'],
-             'register_type_id'=>$result['register_type_id'],
-          ]);
-          DB::commit();
-       } catch (Exception $e) {
-          return response()->json($e,400);
-       }
-       return response()->json($requisite,200);
+      try{
+         DB::beginTransaction();
+         $result = $data->json()->all();
+         $requisite = Requisite::where('id',$result['id'])->update([
+            'name'=>$result['name'],
+            'description'=>$result['description'],
+            'father_code'=>$result['father_code'],
+            'to_approve'=>$result['to_approve'],
+            'register_type_id'=>$result['register_type_id'],
+         ]);
+         DB::commit();
+      } catch (Exception $e) {
+         return response()->json($e,400);
+      }
+      return response()->json($requisite,200);
     }
 
     function delete(Request $data)
@@ -83,7 +87,7 @@ class RequisiteController extends Controller
 
     function backup(Request $data)
     {
-       $requisites = Requisite::get();
+      $requisites = Requisite::get();
        $toReturn = [];
        foreach( $requisites as $requisite) {
           $attach = [];
@@ -105,6 +109,8 @@ class RequisiteController extends Controller
            Requisite::where('id', $result['id'])->update([
              'name'=>$result['name'],
              'description'=>$result['description'],
+             'father_code'=>$result['father_code'],
+             'to_approve'=>$result['to_approve'],
              'register_type_id'=>$result['register_type_id'],
            ]);
          } else {
@@ -112,6 +118,8 @@ class RequisiteController extends Controller
           $requisite->id = $result['id'];
           $requisite->name = $result['name'];
           $requisite->description = $result['description'];
+          $requisite->father_code = $result['father_code'];
+          $requisite->to_approve = $result['to_approve'];
           $requisite->register_type_id = $result['register_type_id'];
           $requisite->save();
          }

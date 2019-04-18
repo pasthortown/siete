@@ -65,6 +65,8 @@ class TariffTypeController extends Controller
           $tarifftype->name = $result['name'];
           $tarifftype->code = $result['code'];
           $tarifftype->father_code = $result['father_code'];
+          $tarifftype->is_reference = $result['is_reference'];
+          $tarifftype->factor = $result['factor'];
           $tarifftype->save();
           DB::commit();
        } catch (Exception $e) {
@@ -82,6 +84,8 @@ class TariffTypeController extends Controller
              'name'=>$result['name'],
              'code'=>$result['code'],
              'father_code'=>$result['father_code'],
+             'is_reference'=>$result['is_reference'],
+             'factor'=>$result['factor'],
           ]);
           DB::commit();
        } catch (Exception $e) {
@@ -121,6 +125,8 @@ class TariffTypeController extends Controller
              'name'=>$result['name'],
              'code'=>$result['code'],
              'father_code'=>$result['father_code'],
+             'is_reference'=>$result['is_reference'],
+             'factor'=>$result['factor'],
            ]);
          } else {
           $tarifftype = new TariffType();
@@ -128,6 +134,8 @@ class TariffTypeController extends Controller
           $tarifftype->name = $result['name'];
           $tarifftype->code = $result['code'];
           $tarifftype->father_code = $result['father_code'];
+          $tarifftype->is_reference = $result['is_reference'];
+          $tarifftype->factor = $result['factor'];
           $tarifftype->save();
          }
        }

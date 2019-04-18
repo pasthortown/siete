@@ -182,6 +182,14 @@ const routes: Routes = [
             path: 'capacity_type',
             loadChildren: './CRUD/ALOJAMIENTO/CapacityType/capacitytype.module#CapacityTypeModule'
          },
+         {
+            path: 'complementary_service_food',
+            loadChildren: './CRUD/ALOJAMIENTO/ComplementaryServiceFood/complementaryservicefood.module#ComplementaryServiceFoodModule'
+         },
+         {
+            path: 'complementary_service_food_type',
+            loadChildren: './CRUD/ALOJAMIENTO/ComplementaryServiceFoodType/complementaryservicefoodtype.module#ComplementaryServiceFoodTypeModule'
+         },
 
          //AUTH
          {

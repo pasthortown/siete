@@ -19,6 +19,8 @@ class CreateTariffTypesTable extends Migration
           $table->string('name',50)->nullable($value = true);
           $table->string('code',100)->nullable($value = true);
           $table->string('father_code',100)->nullable($value = true);
+          $table->boolean('is_reference')->nullable($value = true);
+          $table->double('factor',8,2)->nullable($value = true);
        });
     }
 

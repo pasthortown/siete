@@ -1,6 +1,6 @@
 import { ComplementaryServiceType } from './ComplementaryServiceType';
 import { RegisterRequisite } from './RegisterRequisite';
-
+import { ComplementaryServiceFood } from './ComplementaryServiceFood';
 import { Capacity } from './Capacity';
 
 export class Register {
@@ -9,6 +9,7 @@ export class Register {
    autorized_complementary_capacities: Boolean;
    establishment_id: number;
    complementary_service_types_on_register: ComplementaryServiceType[];
+   complementary_service_foods_on_register: ComplementaryServiceFood[];
    register_type_id: number;
    capacities_on_register: Capacity[];
    requisites: RegisterRequisite[];
@@ -18,6 +19,7 @@ export class Register {
    constructor() {
       this.id = 0;
       this.complementary_service_types_on_register = [];
+      this.complementary_service_foods_on_register = [];
       this.capacities_on_register = [];
       this.establishment_id = 0;
       this.requisites = [];

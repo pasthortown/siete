@@ -16,8 +16,6 @@ export class TariffTypeComponent implements OnInit {
    all_tariff_types: TariffType[] = [];
    father_tariff_types: TariffType[] = [];
    filter_tariff_type_father = 'all';
-
-
    currentPage = 1;
    lastPage = 1;
    showDialog = false;

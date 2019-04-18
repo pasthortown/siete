@@ -21,8 +21,6 @@ export class RequisiteComponent implements OnInit {
    lastPage = 1;
    showDialog = false;
    recordsByPage = 5;
-   register_type_category_code = '-';
-   register_type_categories: RegisterType[] = [];
    register_types: RegisterType[] = [];
    constructor(
                private modalService: NgbModal,
@@ -32,24 +30,16 @@ export class RequisiteComponent implements OnInit {
 
    ngOnInit() {
       this.goToPage(1);
-      this.getRegisterTypeCategories();
+      this.getRegisterType();
    }
 
    selectRequisite(requisite: Requisite) {
       this.requisiteSelected = requisite;
    }
 
-   getRegisterTypeCategories() {
-      this.register_type_categories = [];
-      this.register_typeDataService.get_filtered('-').then( r => {
-         this.register_type_categories = r as RegisterType[];
-      }).catch( e => console.log(e) );
-   }
-
    getRegisterType() {
       this.register_types = [];
-      this.requisiteSelected.register_type_id = 0;
-      this.register_typeDataService.get_filtered(this.register_type_category_code).then( r => {
+      this.register_typeDataService.get().then( r => {
          this.register_types = r as RegisterType[];
       }).catch( e => console.log(e) );
    }
@@ -75,7 +65,6 @@ export class RequisiteComponent implements OnInit {
 
    newRequisite(content) {
       this.requisiteSelected = new Requisite();
-      this.register_type_category_code = '-';
       this.requisiteSelected.register_type_id = 0;
       this.openDialog(content);
    }
@@ -111,9 +100,9 @@ export class RequisiteComponent implements OnInit {
    toCSV() {
       this.requisiteDataService.get().then( r => {
          const backupData = r as Requisite[];
-         let output = 'id;name;description;register_type_id\n';
+         let output = 'id;name;description;father_code;to_approve;register_type_id\n';
          backupData.forEach(element => {
-            output += element.id + ';' + element.name + ';' + element.description + ';' + element.register_type_id + '\n';
+            output += element.id; + element.name + ';' + element.description + ';' + element.father_code + ';' + element.to_approve + ';' + element.register_type_id + '\n';
          });
          const blob = new Blob([output], { type: 'text/plain' });
          const fecha = new Date();

@@ -157,4 +157,22 @@ $router->group(['middleware' => ['auth']], function () use ($router) {
    $router->put('/capacitypicture', ['uses' => 'CapacityPictureController@put']);
    $router->delete('/capacitypicture', ['uses' => 'CapacityPictureController@delete']);
    $router->post('/capacitypicture/masive_load', ['uses' => 'CapacityPictureController@masiveLoad']);
+
+   //CRUD ComplementaryServiceFood
+   $router->post('/complementaryservicefood', ['uses' => 'ComplementaryServiceFoodController@post']);
+   $router->get('/complementaryservicefood', ['uses' => 'ComplementaryServiceFoodController@get']);
+   $router->get('/complementaryservicefood/paginate', ['uses' => 'ComplementaryServiceFoodController@paginate']);
+   $router->get('/complementaryservicefood/backup', ['uses' => 'ComplementaryServiceFoodController@backup']);
+   $router->put('/complementaryservicefood', ['uses' => 'ComplementaryServiceFoodController@put']);
+   $router->delete('/complementaryservicefood', ['uses' => 'ComplementaryServiceFoodController@delete']);
+   $router->post('/complementaryservicefood/masive_load', ['uses' => 'ComplementaryServiceFoodController@masiveLoad']);
+
+   //CRUD ComplementaryServiceFoodType
+   $router->post('/complementaryservicefoodtype', ['uses' => 'ComplementaryServiceFoodTypeController@post']);
+   $router->get('/complementaryservicefoodtype', ['uses' => 'ComplementaryServiceFoodTypeController@get']);
+   $router->get('/complementaryservicefoodtype/paginate', ['uses' => 'ComplementaryServiceFoodTypeController@paginate']);
+   $router->get('/complementaryservicefoodtype/backup', ['uses' => 'ComplementaryServiceFoodTypeController@backup']);
+   $router->put('/complementaryservicefoodtype', ['uses' => 'ComplementaryServiceFoodTypeController@put']);
+   $router->delete('/complementaryservicefoodtype', ['uses' => 'ComplementaryServiceFoodTypeController@delete']);
+   $router->post('/complementaryservicefoodtype/masive_load', ['uses' => 'ComplementaryServiceFoodTypeController@masiveLoad']);
 });

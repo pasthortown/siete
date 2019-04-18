@@ -12,7 +12,7 @@ class Requisite extends Model
      * @var array
      */
     protected $fillable = [
-       'name','description',
+       'name','description','father_code','to_approve',
     ];
 
     /**

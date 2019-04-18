@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class TariffType extends Model
+class ComplementaryServiceFood extends Model
 {
     /**
      * The attributes that are mass assignable.
@@ -12,7 +12,7 @@ class TariffType extends Model
      * @var array
      */
     protected $fillable = [
-       'name','code','father_code','is_reference','factor',
+       'quantity_tables','quantity_chairs',
     ];
 
     /**
@@ -24,9 +24,14 @@ class TariffType extends Model
        
     ];
 
-    function Tariff()
+    function ComplementaryServiceFoodType()
     {
-       return $this->belongsTo('App\Tariff');
+       return $this->hasOne('App\ComplementaryServiceFoodType');
+    }
+
+    function Registers()
+    {
+       return $this->belongsToMany('App\Register')->withTimestamps();
     }
 
 }

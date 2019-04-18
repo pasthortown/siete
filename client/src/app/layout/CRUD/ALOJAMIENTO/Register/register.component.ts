@@ -13,6 +13,9 @@ import { RegisterType } from './../../../../models/ALOJAMIENTO/RegisterType';
 import { CapacityService } from './../../../../services/CRUD/ALOJAMIENTO/capacity.service';
 import { Capacity } from './../../../../models/ALOJAMIENTO/Capacity';
 
+import { ComplementaryServiceFoodService } from './../../../../services/CRUD/ALOJAMIENTO/complementaryservicefood.service';
+import { ComplementaryServiceFood } from './../../../../models/ALOJAMIENTO/ComplementaryServiceFood';
+
 
 @Component({
    selector: 'app-register',
@@ -32,12 +35,15 @@ export class RegisterComponent implements OnInit {
    register_types: RegisterType[] = [];
    capacities: Capacity[] = [];
    capacities_registerSelectedId: number;
+   complementary_service_foods: ComplementaryServiceFood[] = [];
+   complementary_service_foods_registerSelectedId: number;
    constructor(
                private modalService: NgbModal,
                private toastr: ToastrManager,
                private complementary_service_typeDataService: ComplementaryServiceTypeService,
                private register_typeDataService: RegisterTypeService,
                private capacityDataService: CapacityService,
+               private complementary_service_foodDataService: ComplementaryServiceFoodService,
                private registerDataService: RegisterService) {}
 
    ngOnInit() {
@@ -45,6 +51,7 @@ export class RegisterComponent implements OnInit {
       this.getComplementaryServiceType();
       this.getRegisterType();
       this.getCapacity();
+      this.getComplementaryServiceFood();
    }
 
    selectRegister(register: Register) {
@@ -86,6 +93,20 @@ export class RegisterComponent implements OnInit {
       }).catch( e => console.log(e) );
    }
 
+   getComplementaryServiceFood() {
+      this.complementary_service_foods = [];
+      this.complementary_service_foodDataService.get().then( r => {
+         this.complementary_service_foods = r as ComplementaryServiceFood[];
+      }).catch( e => console.log(e) );
+   }
+
+   getComplementaryServiceFoodsOnRegister() {
+      this.registerSelected.complementary_service_foods_on_register = [];
+      this.registerDataService.get(this.registerSelected.id).then( r => {
+         this.registerSelected.complementary_service_foods_on_register = r.attach[0].complementary_service_foods_on_register as ComplementaryServiceFood[];
+      }).catch( e => console.log(e) );
+   }
+
    goToPage(page: number) {
       if ( page < 1 || page > this.lastPage ) {
          this.toastr.errorToastr('La página solicitada no existe.', 'Error');
@@ -101,6 +122,7 @@ export class RegisterComponent implements OnInit {
       this.complementary_service_types_registerSelectedId = 0;
       this.registerSelected.register_type_id = 0;
       this.capacities_registerSelectedId = 0;
+      this.complementary_service_foods_registerSelectedId = 0;
       this.registerDataService.get_paginate(this.recordsByPage, this.currentPage).then( r => {
          this.registers = r.data as Register[];
          this.lastPage = r.last_page;
@@ -112,6 +134,7 @@ export class RegisterComponent implements OnInit {
       this.complementary_service_types_registerSelectedId = 0;
       this.registerSelected.register_type_id = 0;
       this.capacities_registerSelectedId = 0;
+      this.complementary_service_foods_registerSelectedId = 0;
       this.openDialog(content);
    }
 
@@ -122,6 +145,9 @@ export class RegisterComponent implements OnInit {
       if ( typeof this.registerSelected.capacities_on_register === 'undefined' ) {
          this.registerSelected.capacities_on_register = [];
       }
+      if ( typeof this.registerSelected.complementary_service_foods_on_register === 'undefined' ) {
+         this.registerSelected.complementary_service_foods_on_register = [];
+      }
       if (typeof this.registerSelected.id === 'undefined') {
          this.toastr.errorToastr('Debe seleccionar un registro.', 'Error');
          return;
@@ -130,6 +156,8 @@ export class RegisterComponent implements OnInit {
       this.complementary_service_types_registerSelectedId = 0;
       this.getCapacitiesOnRegister();
       this.capacities_registerSelectedId = 0;
+      this.getComplementaryServiceFoodsOnRegister();
+      this.complementary_service_foods_registerSelectedId = 0;
       this.openDialog(content);
    }
 
@@ -277,6 +305,55 @@ export class RegisterComponent implements OnInit {
       }
       this.registerSelected.capacities_on_register = newCapacities;
       this.capacities_registerSelectedId = 0;
+   }
+
+   selectComplementaryServiceFood(complementary_service_food: ComplementaryServiceFood) {
+      this.complementary_service_foods_registerSelectedId = complementary_service_food.id;
+   }
+
+   addComplementaryServiceFood() {
+      if (this.complementary_service_foods_registerSelectedId === 0) {
+         this.toastr.errorToastr('Seleccione un registro.', 'Error');
+         return;
+      }
+      this.complementary_service_foods.forEach(complementary_service_food => {
+         if (complementary_service_food.id == this.complementary_service_foods_registerSelectedId) {
+            let existe = false;
+            this.registerSelected.complementary_service_foods_on_register.forEach(element => {
+               if (element.id == complementary_service_food.id) {
+                  existe = true;
+               }
+            });
+            if (!existe) {
+               this.registerSelected.complementary_service_foods_on_register.push(complementary_service_food);
+               this.complementary_service_foods_registerSelectedId = 0;
+            } else {
+               this.toastr.errorToastr('El registro ya existe.', 'Error');
+            }
+         }
+      });
+   }
+
+   removeComplementaryServiceFood() {
+      if (this.complementary_service_foods_registerSelectedId === 0) {
+         this.toastr.errorToastr('Seleccione un registro.', 'Error');
+         return;
+      }
+      const newComplementaryServiceFoods: ComplementaryServiceFood[] = [];
+      let eliminado = false;
+      this.registerSelected.complementary_service_foods_on_register.forEach(complementary_service_food => {
+         if (complementary_service_food.id !== this.complementary_service_foods_registerSelectedId) {
+            newComplementaryServiceFoods.push(complementary_service_food);
+         } else {
+            eliminado = true;
+         }
+      });
+      if (!eliminado) {
+         this.toastr.errorToastr('Registro no encontrado.', 'Error');
+         return;
+      }
+      this.registerSelected.complementary_service_foods_on_register = newComplementaryServiceFoods;
+      this.complementary_service_foods_registerSelectedId = 0;
    }
 
    openDialog(content) {

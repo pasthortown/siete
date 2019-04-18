@@ -78,6 +78,7 @@ export class RegistroComponent implements OnInit {
    @ViewChild('fotoFachadaInput') fotoFachadaInput;
    @ViewChild('EstablishmentCertificationAttachedFile') EstablishmentCertificationAttachedFile;
   //DATOS RUC
+  imContactRuc: Boolean = true;
   roles:any[] = [];
   terminosCondiciones = false;
   terminosCondicionesAgreement: Agreement = new Agreement();
@@ -90,7 +91,6 @@ export class RegistroComponent implements OnInit {
   rucs_registrados: RegistroDataCarrier[] = [];
   ruc_registro_selected: RegistroDataCarrier = new RegistroDataCarrier();
   rucData = 'CONECTÁNDOSE AL SRI...';
-  rucSUPERCIASData = 'CONECTÁNDOSE A LA SUPER INTENDENCIA DE COMPAÑÍAS...';
   cedulaData = 'CONECTÁNDOSE AL REGISTRO CIVIL...';
   representanteCedulaData = 'CONECTÁNDOSE AL REGISTRO CIVIL...';
   cedulaEstablishmentContactData = 'CONECTÁNDOSE AL REGISTRO CIVIL...';
@@ -279,6 +279,7 @@ export class RegistroComponent implements OnInit {
          this.ruc_registro_selected.ruc = new Ruc();
          this.ruc_registro_selected.ruc.number = number;
          this.ruc_registro_selected.ruc.contact_user = new User();
+         this.imContactRuc = (this.ruc_registro_selected.ruc.contact_user.id == this.user.id);
          this.ruc_registro_selected.ruc.establishmentsSRI = [];
          this.ruc_registro_selected.ruc.establishments = [];
          this.ruc_registro_selected.ruc.group_given = new GroupGiven();
@@ -291,6 +292,7 @@ export class RegistroComponent implements OnInit {
          this.ruc_registro_selected.ruc = r.Ruc as Ruc;
          this.ruc_registro_selected.ruc.franchise_chain_names_on_ruc = r.attach[0].franchise_chain_names_on_ruc as FranchiseChainName[];
          this.ruc_registro_selected.ruc.contact_user = r.contact_user as User;
+         this.imContactRuc = (this.ruc_registro_selected.ruc.contact_user.id == this.user.id);
          if (r.group_given == '0') {
             this.ruc_registro_selected.ruc.group_given = new GroupGiven();
          } else {
@@ -305,7 +307,10 @@ export class RegistroComponent implements OnInit {
          this.ruc_registro_selected.ruc.person_representative_attachment = new PersonRepresentativeAttachment();
          this.getPersonRepresentativeAttachment(this.ruc_registro_selected.ruc.number);
          this.checkRuc();
-         this.checkCedula();
+         this.checkImContactRuc();
+         if (!this.imContactRuc) {
+            this.checkCedula();
+         }
          this.checkEmail();
          this.checkTelefonoPrincipal();
          this.checkTelefonoSecundario();
@@ -313,6 +318,27 @@ export class RegistroComponent implements OnInit {
          this.getEstablishmentsOnRuc(this.currentPageEstablishment);
       }
    }).catch( e => { console.log(e); });
+  }
+
+  checkImContactRuc() {
+   if (this.imContactRuc) {
+      this.ruc_registro_selected.ruc.contact_user.id = this.user.id;
+      this.ruc_registro_selected.ruc.contact_user = this.user;
+      this.identificationContactValidated = true;
+      this.consumoCedula = true;
+      this.mainPhoneContactValidated = true;
+      this.secondaryPhoneContactValidated = true;
+      this.emailContactValidated = true;
+      this.REGCIVILOK = true;
+   } else {
+      this.ruc_registro_selected.ruc.contact_user.id = 0;
+      this.ruc_registro_selected.ruc.contact_user = new User();
+      this.identificationContactValidated = false;
+      this.consumoCedula = false;
+      this.mainPhoneContactValidated = false;
+      this.secondaryPhoneContactValidated = false;
+      this.emailContactValidated = false;
+   }
   }
 
   getEstablishmentsOnRuc(currentpage: number) {

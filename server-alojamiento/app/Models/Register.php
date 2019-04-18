@@ -49,4 +49,9 @@ class Register extends Model
        return $this->belongsToMany('App\Capacity')->withTimestamps();
     }
 
+    function ComplementaryServiceFoods()
+    {
+       return $this->belongsToMany('App\ComplementaryServiceFood')->withTimestamps();
+    }
+
 }
