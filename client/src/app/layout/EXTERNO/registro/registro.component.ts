@@ -1,3 +1,6 @@
+import { ComplementaryServiceFood } from 'src/app/models/ALOJAMIENTO/ComplementaryServiceFood';
+import { ComplementaryServiceFoodTypeService } from 'src/app/services/CRUD/ALOJAMIENTO/complementaryservicefoodtype.service';
+import { ComplementaryServiceFoodType } from 'src/app/models/ALOJAMIENTO/ComplementaryServiceFoodType';
 import { EstablishmentCertificationAttachment } from 'src/app/models/BASE/EstablishmentCertificationAttachment';
 import { AccountRol } from 'src/app/models/AUTH/AccountRol';
 import { Agreement } from 'src/app/models/BASE/Agreement';
@@ -153,6 +156,7 @@ export class RegistroComponent implements OnInit {
   //DATOS REGISTRO
   mostrarDataRegister = false;
   showRequisites = false;
+  complementaryServiceFoodSelected: ComplementaryServiceFood = new ComplementaryServiceFood();
   rucEstablishmentRegisterSelected: Register = new Register();
   clasifications_registers: RegisterType[] = [];
   categories_registers: RegisterType[] = [];
@@ -171,6 +175,7 @@ export class RegistroComponent implements OnInit {
   tarifas: any[] = [];
   states: State[] = [];
   alowed_capacity_types: CapacityType[] = [];
+  complementaryServiceFoodTypes: ComplementaryServiceFoodType[] = [];
 
   //DINARDAP
   consumoCedula = false;
@@ -193,6 +198,7 @@ export class RegistroComponent implements OnInit {
               private rucNameTypeDataService: RucNameTypeService,
               private group_typeDataService: GroupTypeService,
               private languageDataService: LanguageService,
+              private complementaryServiceFoodTypeDataService: ComplementaryServiceFoodTypeService,
               private establishmentPictureDataService: EstablishmentPictureService,
               private ubicationDataService: UbicationService,
               private establishmentCertificationAttachmentDataService: EstablishmentCertificationAttachmentService,
@@ -255,6 +261,7 @@ export class RegistroComponent implements OnInit {
     this.getZonalesEstablishment();
     this.getEstablishmentPropertyType();
     this.getLanguage();
+    this.getComplementaryFoodServiceType();
     this.getSystemNames();
     this.getCertificationTypes();
     this.getWorkerGroups();
@@ -263,6 +270,31 @@ export class RegistroComponent implements OnInit {
     this.getEstablishmentCertificationTypesCategories();
     this.getComplementaryServiceTypeCategories();
     this.groupTypeSelected = new GroupType();
+  }
+
+  getComplementaryFoodServiceType() {
+   this.complementaryServiceFoodTypeDataService.get().then( r => {
+      this.complementaryServiceFoodTypes = r as ComplementaryServiceFoodType[];
+   }).catch( e => { console.log(e); });
+  }
+
+  addComplementaryFoodService() {
+     const complementaryFoodService = new ComplementaryServiceFood();
+     this.rucEstablishmentRegisterSelected.complementary_service_foods_on_register.push(complementaryFoodService);
+  }
+
+  selectComplementaryFoodService(complementaryServiceFood: ComplementaryServiceFood) {
+   this.complementaryServiceFoodSelected = complementaryServiceFood;
+  }
+
+  removeComplementaryFoodService(complementaryServiceFood: ComplementaryServiceFood) {
+   const newList: ComplementaryServiceFood[] = [];
+   this.rucEstablishmentRegisterSelected.complementary_service_foods_on_register.forEach(element => {
+      if (element !== complementaryServiceFood) {
+         newList.push(element);
+      }
+   });
+   this.rucEstablishmentRegisterSelected.complementary_service_foods_on_register = newList;
   }
 
   getTerminosCondicionesAgreement() {
@@ -287,6 +319,8 @@ export class RegistroComponent implements OnInit {
          this.ruc_registro_selected.ruc.franchise_chain_names_on_ruc = [];
          this.ruc_registro_selected.ruc.tax_payer_type_id = 0;
          this.ruc_registro_selected.ruc.contact_user_id = 0;
+         this.imContactRuc = true;
+         this.checkImContactRuc();
          this.checkRuc();
       } else {
          this.ruc_registro_selected.ruc = r.Ruc as Ruc;
@@ -547,6 +581,7 @@ export class RegistroComponent implements OnInit {
          newEstablishmentWorker.gender_name = gender.name;
          newEstablishmentWorker.worker_group_id = worker_group.id;
          newEstablishmentWorker.worker_group_name = worker_group.name;
+         newEstablishmentWorker.is_max = worker_group.is_max;
          workers_on_establishment.push(newEstablishmentWorker);
       });
    });
@@ -755,7 +790,29 @@ export class RegistroComponent implements OnInit {
    return true;
   }
 
+  validateWorkers(): Boolean {
+   let toreturn = true;
+   this.genders.forEach(gender => {
+      let max = 0;
+      this.establishment_selected.workers_on_establishment.forEach(worker => {
+         if (worker.gender_name == gender.name && worker.is_max) {
+            max = worker.count;
+         }
+      });
+      this.establishment_selected.workers_on_establishment.forEach(worker => {
+         if(worker.gender_name == gender.name && worker.count > max) {
+            toreturn = false;
+         }
+      });
+   });
+   return toreturn;
+  }
+
   guardarEstablecimiento() {
+   if (!this.validateWorkers()) {
+      this.toastr.errorToastr('Existe conflicto con la información ingresada referente a los Trabajadores en el Establecimiento.', 'Nuevo');
+      return;
+   }
    if (!this.validateEstablecimiento()) {
       this.toastr.errorToastr('Existe conflicto con la información ingresada.', 'Nuevo');
    }
@@ -776,10 +833,12 @@ export class RegistroComponent implements OnInit {
       if (typeof this.establishment_selected_picture.id === 'undefined') {
          this.establishment_selected_picture.establishment_id = r.id;
          this.establishmentPictureDataService.post(this.establishment_selected_picture).then( r => {
+            this.getEstablishmentsOnRuc(this.currentPageEstablishment);
             this.toastr.successToastr('Datos guardados satisfactoriamente.', 'Nuevo');
          }).catch( e => console.log(e) );
       } else {
          this.establishmentPictureDataService.put(this.establishment_selected_picture).then( r => {
+            this.getEstablishmentsOnRuc(this.currentPageEstablishment);
             this.toastr.successToastr('Datos guardados satisfactoriamente.', 'Nuevo');
          }).catch( e => console.log(e) );
       }
@@ -1156,6 +1215,7 @@ export class RegistroComponent implements OnInit {
          newWorker.gender_id = gender.id;
          newWorker.gender_name = gender.name;
          newWorker.count = 0;
+         newWorker.is_max = worker_group.is_max;
          this.establishment_selected.workers_on_establishment.push(newWorker);
       });
    });

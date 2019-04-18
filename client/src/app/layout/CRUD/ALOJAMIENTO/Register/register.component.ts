@@ -184,9 +184,9 @@ export class RegisterComponent implements OnInit {
    toCSV() {
       this.registerDataService.get().then( r => {
          const backupData = r as Register[];
-         let output = 'id;code;autorized_complementary_capacities;establishment_id;register_type_id\n';
+         let output = 'id;code;autorized_complementary_capacities;establishment_id;autorized_complementary_food_capacities;register_type_id\n';
          backupData.forEach(element => {
-            output += element.id; + element.code + ';' + element.autorized_complementary_capacities + ';' + element.establishment_id + ';' + element.register_type_id + '\n';
+            output += element.id; + element.code + ';' + element.autorized_complementary_capacities + ';' + element.establishment_id + ';' + element.autorized_complementary_food_capacities + ';' + element.register_type_id + '\n';
          });
          const blob = new Blob([output], { type: 'text/plain' });
          const fecha = new Date();

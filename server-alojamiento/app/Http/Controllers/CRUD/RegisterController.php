@@ -21,20 +21,20 @@ class RegisterController extends Controller
 {
     function get(Request $data)
     {
-       $id = $data['id'];
-       if ($id == null) {
-          return response()->json(Register::get(),200);
-       } else {
-          $register = Register::findOrFail($id);
-          $attach = [];
-          $complementary_service_types_on_register = $register->ComplementaryServiceTypes()->get();
-          array_push($attach, ["complementary_service_types_on_register"=>$complementary_service_types_on_register]);
-          $capacities_on_register = $register->Capacities()->get();
-          array_push($attach, ["capacities_on_register"=>$capacities_on_register]);
-          $complementary_service_foods_on_register = $register->ComplementaryServiceFoods()->get();
-          array_push($attach, ["complementary_service_foods_on_register"=>$complementary_service_foods_on_register]);
-          return response()->json(["Register"=>$register, "attach"=>$attach],200);
-       }
+      $id = $data['id'];
+      if ($id == null) {
+         return response()->json(Register::get(),200);
+      } else {
+         $register = Register::findOrFail($id);
+         $attach = [];
+         $complementary_service_types_on_register = $register->ComplementaryServiceTypes()->get();
+         array_push($attach, ["complementary_service_types_on_register"=>$complementary_service_types_on_register]);
+         $capacities_on_register = $register->Capacities()->get();
+         array_push($attach, ["capacities_on_register"=>$capacities_on_register]);
+         $complementary_service_foods_on_register = $register->ComplementaryServiceFoods()->get();
+         array_push($attach, ["complementary_service_foods_on_register"=>$complementary_service_foods_on_register]);
+         return response()->json(["Register"=>$register, "attach"=>$attach],200);
+      }
     }
 
     function paginate(Request $data)
@@ -46,7 +46,11 @@ class RegisterController extends Controller
     function get_registers_by_ruc(Request $data) {
       $token = $data->header('api_token');
       $number = $data['ruc_number'];
-      $establishments = json_decode($this->httpGet('http://localhost:8001/establishment/get_by_ruc?size=1000&ruc='.$number, null, null, $token))->data;
+      try{
+         $establishments = json_decode($this->httpGet('http://localhost:8001/establishment/get_by_ruc?size=1000&ruc='.$number, null, null, $token))->data;
+      } catch (Exception $e) {
+         $establishments = [];
+      }
       $toReturn = [];
       foreach($establishments as $establishment) {
          $registers_on_establishment = Register::where('establishment_id', $establishment->id)->orderBy('created_at', 'ASC')->get();
@@ -77,11 +81,23 @@ class RegisterController extends Controller
          "beds_on_capacity"=>$beds, "tariffs_on_capacity"=>$tariffs]);
       }
       $complementary_service_types_on_register = $register->ComplementaryServiceTypes()->get();
+      $capacities_on_register = $register->Capacities()->get();
+      $capacities = [];
+      foreach($capacities_on_register as $capacity_on_register){
+         $beds = $capacity_on_register->Beds()->get();
+         $tariffs = $capacity_on_register->Tariffs()->get();
+         array_push($capacities, ["quantity"=>$capacity_on_register->quantity,
+         "capacity_type_id"=>$capacity_on_register->capacity_type_id,
+         "beds_on_capacity"=>$beds, "tariffs_on_capacity"=>$tariffs]);
+      }
+      $complementary_service_types_on_register = $register->ComplementaryServiceTypes()->get();
+      $complementary_service_food_on_register = $register->ComplementaryServiceFoods()->get();
       $toReturn = ["register"=>$register,
                    "status"=>$status_register,
                    "register_category"=>$register_category,
                    "capacities_on_register"=>$capacities,
-                   "complementary_service_types_on_register"=>$complementary_service_types_on_register
+                   "complementary_service_types_on_register"=>$complementary_service_types_on_register,
+                   "complementary_service_food_on_register"=>$complementary_service_food_on_register,
                   ];
       return response()->json($toReturn, 200);
     }
@@ -93,6 +109,10 @@ class RegisterController extends Controller
       $complementary_service_types_on_register = $result['complementary_service_types_on_register'];
       if(!$result['autorized_complementary_capacities']){
          $complementary_service_types_on_register = [];
+      }
+      $complementary_service_food_on_register = $result['complementary_service_food_on_register'];
+      if(!$result['autorized_complementary_food_capacities']){
+         $complementary_service_food_on_register = [];
       }
       $requisites = $result['requisites'];
       $status_id = $result['status'];
@@ -107,6 +127,7 @@ class RegisterController extends Controller
          }
          $register->code = $result['code'];
          $register->autorized_complementary_capacities = $result['autorized_complementary_capacities'];
+         $register->autorized_complementary_food_capacities = $result['autorized_complementary_food_capacities'];
          $register->establishment_id = $result['establishment_id'];
          $register->register_type_id = $result['register_type_id'];
          $register->save();
@@ -185,6 +206,7 @@ class RegisterController extends Controller
          $register = Register::where('id',$result['id'])->update([
             'code'=>$result['code'],
             'autorized_complementary_capacities'=>$result['autorized_complementary_capacities'],
+            'autorized_complementary_food_capacities'=>$result['autorized_complementary_food_capacities'],
             'establishment_id'=>$result['establishment_id'],
             'register_type_id'=>$result['register_type_id'],
          ]);
@@ -304,6 +326,7 @@ class RegisterController extends Controller
           }
           $register->code = $result['code'];
           $register->autorized_complementary_capacities = $result['autorized_complementary_capacities'];
+          $register->autorized_complementary_food_capacities = $result['autorized_complementary_food_capacities'];
           $register->establishment_id = $result['establishment_id'];
           $register->register_type_id = $result['register_type_id'];
           $register->save();
@@ -334,6 +357,7 @@ class RegisterController extends Controller
           $register = Register::where('id',$result['id'])->update([
              'code'=>$result['code'],
              'autorized_complementary_capacities'=>$result['autorized_complementary_capacities'],
+             'autorized_complementary_food_capacities'=>$result['autorized_complementary_food_capacities'],
              'establishment_id'=>$result['establishment_id'],
              'register_type_id'=>$result['register_type_id'],
           ]);
@@ -454,6 +478,7 @@ class RegisterController extends Controller
            Register::where('id', $result['id'])->update([
              'code'=>$result['code'],
              'autorized_complementary_capacities'=>$result['autorized_complementary_capacities'],
+             'autorized_complementary_food_capacities'=>$result['autorized_complementary_food_capacities'],
              'establishment_id'=>$result['establishment_id'],
              'register_type_id'=>$result['register_type_id'],
            ]);
@@ -462,6 +487,7 @@ class RegisterController extends Controller
           $register->id = $result['id'];
           $register->code = $result['code'];
           $register->autorized_complementary_capacities = $result['autorized_complementary_capacities'];
+          $register->autorized_complementary_food_capacities = $result['autorized_complementary_food_capacities'];
           $register->establishment_id = $result['establishment_id'];
           $register->register_type_id = $result['register_type_id'];
           $register->save();

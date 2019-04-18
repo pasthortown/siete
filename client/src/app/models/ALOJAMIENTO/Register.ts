@@ -7,6 +7,7 @@ export class Register {
    id: number;
    code: String;
    autorized_complementary_capacities: Boolean;
+   autorized_complementary_food_capacities: Boolean;
    establishment_id: number;
    complementary_service_types_on_register: ComplementaryServiceType[];
    complementary_service_foods_on_register: ComplementaryServiceFood[];
@@ -22,6 +23,8 @@ export class Register {
       this.complementary_service_foods_on_register = [];
       this.capacities_on_register = [];
       this.establishment_id = 0;
+      this.autorized_complementary_capacities = false;
+      this.autorized_complementary_food_capacities = false;
       this.requisites = [];
       this.register_type_id = 0;
       this.total_spaces = 0;

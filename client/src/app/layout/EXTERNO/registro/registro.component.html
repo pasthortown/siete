@@ -353,7 +353,7 @@
                   <h4 class="col-12"><strong>Datos de Contacto</strong></h4>
                   <div class="col-12">
                     <div class="form-group">
-                      <label>Soy el Contacto</label>
+                      <label>Soy la Persona de Contacto</label>
                       <div class="col-12">
                         <label class="switch"
                           ><input
@@ -1340,7 +1340,8 @@
                                         {{worker.gender_name}}
                                       </td>
                                       <td>
-                                        {{worker.worker_group_name}}
+                                        <strong *ngIf="worker.is_max">{{worker.worker_group_name}}</strong>
+                                        <label *ngIf="!worker.is_max">{{worker.worker_group_name}}</label>
                                       </td>
                                       <td>
                                           <input
@@ -2181,6 +2182,105 @@
                     </div>
                   </div>
                   <div class="form-group" *ngIf="categorySelectedCode !== '-' && rucEstablishmentRegisterSelected.register_type_id !== 0">
+                    <label>Oferta Servicios Complementarios</label>
+                    <div class="col-12">
+                      <label class="switch"
+                        ><input
+                          type="checkbox"
+                          id="autorized_complementary_adventure_capacities"
+                          name="autorized_complementary_adventure_capacities"
+                          [(ngModel)]="
+                            rucEstablishmentRegisterSelected.autorized_complementary_food_capacities
+                          "/><span class="slider round"></span
+                      ></label>
+                    </div>
+                  </div>
+                  <div class="row" *ngIf="rucEstablishmentRegisterSelected.autorized_complementary_food_capacities">
+                    <div class="col-12">
+                      <table class="table table-hover mt-2">
+                        <thead>
+                          <th>Seleccionado
+                              <button
+                              type="button"
+                              title="Agregar"
+                              class="btn btn-success ml-2"
+                              (click)="addComplementaryFoodService()"
+                            >
+                              <i class="fas fa-plus-circle"></i>
+                            </button>
+                          </th>
+                          <th>Tipo</th>
+                          <th>Cantidad de Mesas</th>
+                          <th>Cantidad de Sillas</th>
+                          <th>Opciones</th>
+                        </thead>
+                        <tbody>
+                          <tr (click)="selectComplementaryFoodService(complementaryServiceFood)" *ngFor="let complementaryServiceFood of rucEstablishmentRegisterSelected.complementary_service_foods_on_register">
+                            <td class="text-right">
+                              <span
+                                *ngIf="
+                                complementaryServiceFoodSelected ===
+                                complementaryServiceFood
+                                "
+                                class="far fa-hand-point-right"
+                              ></span>
+                            </td>
+                            <td>
+                              <select
+                                class="form-control"
+                                id="complementary_service_food_id"
+                                name="complementary_service_food_id"
+                                [(ngModel)]="
+                                complementaryServiceFood.complementary_service_food_type_id
+                                "
+                              >
+                                <option value="0" selected>Seleccione...</option>
+                                <option
+                                  *ngFor="
+                                    let complementary_food_service_type of complementaryServiceFoodTypes
+                                  "
+                                  value="{{ complementary_food_service_type.id }}"
+                                >
+                                  {{ complementary_food_service_type.name }}
+                                </option>
+                              </select>
+                            </td>
+                            <td>
+                                <input
+                                type="number"
+                                class="form-control"
+                                id="mesas"
+                                name="mesas"
+                                placeholder="Cantidad de Mesas"
+                                [(ngModel)]="complementaryServiceFood.quantity_tables"
+                              />
+                            </td>
+                            <td>
+                                <input
+                                type="number"
+                                class="form-control"
+                                id="sillas"
+                                name="sillas"
+                                placeholder="Cantidad de Sillas"
+                                [(ngModel)]="complementaryServiceFood.quantity_chairs"
+                              />
+                            </td>
+                            <td>
+                              <button
+                                type="button"
+                                title="Eliminar"
+                                class="btn btn-danger"
+                                (click)="removeComplementaryFoodService(complementaryServiceFood)"
+                              >
+                                <i class="fas fa-trash"></i>
+                              </button>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                  <div class="form-group" *ngIf="categorySelectedCode !== '-' && rucEstablishmentRegisterSelected.register_type_id !== 0">
                     <label>Oferta Servicios Complementarios de Aventura</label>
                     <div class="col-12">
                       <label class="switch"
@@ -2294,49 +2394,64 @@
                       </table>
                     </div>
                   </div>
-                  <div class="form-group row" *ngIf="showRequisites">
-                    <label class="col-12 col-form-label mb-2"
-                      ><strong>Requisitos</strong></label
-                    >
+                  <div class="row" *ngIf="showRequisites">
+                      <label class="col-12 col-form-label mb-2"
+                          ><strong>Requisitos</strong></label
+                        >
+                        <div class="col-12">
+                            <div class="alert alert-warning" role="alert">
+                              <label class="col-12 text-justify"
+                                ><strong>Atención</strong><br />
+                                Los requisitos listados a continuación serán revisados
+                                por el inspector del Ministerio de Turismo el día de
+                                la visita a su establecimiento. El incumplimiento de
+                                al menos uno de estos requisitos, invalida su
+                                solicitud para la categoría seleccionada.
+                              </label>
+                            </div>
+                          </div>
                     <div class="col-12">
-                      <div class="alert alert-warning" role="alert">
-                        <label class="col-12 text-justify"
-                          ><strong>Atención</strong><br />
-                          Los requisitos listados a continuación serán revisados
-                          por el inspector del Ministerio de Turismo el día de
-                          la visita a su establecimiento. El incumplimiento de
-                          al menos uno de estos requisitos, invalida su
-                          solicitud para la categoría seleccionada.
-                        </label>
-                      </div>
-                    </div>
-                    <div class="col-12">
-                      <table class="table table-hover mt-2">
-                        <thead>
-                          <th>Requisito</th>
-                          <th>Satisfecho</th>
-                        </thead>
-                        <tbody>
-                          <tr
-                            *ngFor="
-                              let register_requisite of rucEstablishmentRegisterSelected.requisites
-                            "
-                          >
-                            <td>{{ register_requisite.requisite_name }}</td>
-                            <td>
-                              <label class="switch"
-                                ><input
-                                  type="checkbox"
-                                  id="cumple"
-                                  name="cumple"
-                                  [(ngModel)]="
-                                    register_requisite.fullfill
-                                  "/><span class="slider round"></span
-                              ></label>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
+                      <ngb-accordion #acc="ngbAccordion" activeIds="ngb-panel-0">
+                        <ngb-panel id="requisitos">
+                          <ng-template ngbPanelTitle>
+                              <span>Visualizar Listado de Requisitos</span>
+                          </ng-template>
+                          <ng-template ngbPanelContent>
+                            <div class="col-12">
+                                <div class="form-group row">
+                                    <div class="col-12">
+                                      <table class="table table-hover mt-2">
+                                        <thead>
+                                          <th>Requisito</th>
+                                          <th>Satisfecho</th>
+                                        </thead>
+                                        <tbody>
+                                          <tr
+                                            *ngFor="
+                                              let register_requisite of rucEstablishmentRegisterSelected.requisites
+                                            "
+                                          >
+                                            <td>{{ register_requisite.requisite_name }}</td>
+                                            <td>
+                                              <label class="switch"
+                                                ><input
+                                                  type="checkbox"
+                                                  id="cumple"
+                                                  name="cumple"
+                                                  [(ngModel)]="
+                                                    register_requisite.fullfill
+                                                  "/><span class="slider round"></span
+                                              ></label>
+                                            </td>
+                                          </tr>
+                                        </tbody>
+                                      </table>
+                                    </div>
+                                  </div>
+                            </div>
+                          </ng-template>
+                        </ngb-panel>
+                      </ngb-accordion>
                     </div>
                   </div>
                 </div>

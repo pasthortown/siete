@@ -12,7 +12,7 @@ class Register extends Model
      * @var array
      */
     protected $fillable = [
-       'code','autorized_complementary_capacities','establishment_id',
+       'code','autorized_complementary_capacities','establishment_id','autorized_complementary_food_capacities',
     ];
 
     /**

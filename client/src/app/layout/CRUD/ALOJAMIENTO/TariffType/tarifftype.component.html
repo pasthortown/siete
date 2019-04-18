@@ -67,7 +67,10 @@
                <tr *ngFor="let tariff_type of tariff_types" (click)="selectTariffType(tariff_type)">
                   <td class="text-right"><span *ngIf="tariff_typeSelected === tariff_type" class="far fa-hand-point-right"></span></td>
                   <td>{{tariff_type.name}}</td>
-                  <td>{{tariff_type.is_reference}}</td>
+                  <td>
+                     <i class="fas fa-check-double" *ngIf="tariff_type.is_reference"></i>
+                     <i class="fas fa-times-circle" *ngIf="!tariff_type.is_reference"></i>
+                  </td>
                   <td>{{tariff_type.factor}}</td>
                </tr>
             </tbody>

@@ -34,6 +34,7 @@
                <th>code</th>
                <th>autorized_complementary_capacities</th>
                <th>establishment_id</th>
+               <th>autorized_complementary_food_capacities</th>
             </tr>
          </thead>
          <tbody>
@@ -42,6 +43,7 @@
                <td>{{register.code}}</td>
                <td>{{register.autorized_complementary_capacities}}</td>
                <td>{{register.establishment_id}}</td>
+               <td>{{register.autorized_complementary_food_capacities}}</td>
             </tr>
          </tbody>
       </table>
@@ -94,6 +96,12 @@
                <label for="establishment_id" class="col-4 col-form-label">establishment_id</label>
                <div class="col-8">
                   <input type="number" class="form-control" id="establishment_id" name="establishment_id" placeholder="establishmentId" [(ngModel)]="registerSelected.establishment_id">
+               </div>
+            </div>
+            <div class="form-group row">
+               <label for="autorized_complementary_food_capacities" class="col-4 col-form-label">autorized_complementary_food_capacities</label>
+               <div class="col-8">
+                  <label class="switch"><input type="checkbox"id="autorized_complementary_food_capacities" name="autorized_complementary_food_capacities" [(ngModel)]="registerSelected.autorized_complementary_food_capacities"><span class="slider round"></span></label>
                </div>
             </div>
             <div class="form-group row">

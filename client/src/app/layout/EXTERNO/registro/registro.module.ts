@@ -41,7 +41,7 @@ import { StateService } from 'src/app/services/CRUD/ALOJAMIENTO/state.service';
 import { CapacityTypeService } from 'src/app/services/CRUD/ALOJAMIENTO/capacitytype.service';
 import { DinardapService } from 'src/app/services/negocio/dinardap.service';
 import { EstablishmentCertificationAttachmentService } from 'src/app/services/CRUD/BASE/establishmentcertificationattachment.service';
-
+import { ComplementaryServiceFoodTypeService } from 'src/app/services/CRUD/ALOJAMIENTO/complementaryservicefoodtype.service';
 @NgModule({
   imports: [CommonModule,
     CKEditorModule,
@@ -58,6 +58,7 @@ import { EstablishmentCertificationAttachmentService } from 'src/app/services/CR
     TaxPayerTypeService,
     PersonRepresentativeAttachmentService,
     EstablishmentCertificationService,
+    ComplementaryServiceFoodTypeService,
     EstablishmentPropertyTypeService,
     RequisiteService,
     AgreementService,
