@@ -41,7 +41,10 @@
                <td class="text-right"><span *ngIf="worker_groupSelected === worker_group" class="far fa-hand-point-right"></span></td>
                <td>{{worker_group.name}}</td>
                <td>{{worker_group.description}}</td>
-               <td>{{worker_group.is_max}}</td>
+               <td>
+                  <i class="fas fa-check-double" *ngIf="worker_group.is_max"></i>
+                  <i class="fas fa-times-circle" *ngIf="!worker_group.is_max"></i>
+               </td>
             </tr>
          </tbody>
       </table>
