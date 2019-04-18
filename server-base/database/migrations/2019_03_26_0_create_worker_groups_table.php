@@ -18,6 +18,7 @@ class CreateWorkerGroupsTable extends Migration
           $table->timestamps();
           $table->string('name',100)->nullable($value = true);
           $table->longText('description')->nullable($value = true);
+          $table->boolean('is_max')->nullable($value = true);
        });
     }
 

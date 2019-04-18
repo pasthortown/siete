@@ -85,9 +85,9 @@ export class WorkerGroupComponent implements OnInit {
    toCSV() {
       this.worker_groupDataService.get().then( r => {
          const backupData = r as WorkerGroup[];
-         let output = 'id;name;description\n';
+         let output = 'id;name;description;is_max\n';
          backupData.forEach(element => {
-            output += element.id + ';' + element.name + ';' + element.description + '\n';
+            output += element.id; + element.name + ';' + element.description + ';' + element.is_max + '\n';
          });
          const blob = new Blob([output], { type: 'text/plain' });
          const fecha = new Date();

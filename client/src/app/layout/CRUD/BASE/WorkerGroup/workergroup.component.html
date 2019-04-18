@@ -1,6 +1,6 @@
 <div class="row">
    <h1 class="col-12 text-right">
-      Grupos de Trabajadores
+      Clasificación de Trabajadores
    </h1>
 </div>
 <div class="row">
@@ -33,13 +33,15 @@
                <th>Seleccionado</th>
                <th>Nombre</th>
                <th>Descripción</th>
+               <th>Es el Máximo</th>
             </tr>
          </thead>
          <tbody>
             <tr *ngFor="let worker_group of worker_groups" (click)="selectWorkerGroup(worker_group)">
                <td class="text-right"><span *ngIf="worker_groupSelected === worker_group" class="far fa-hand-point-right"></span></td>
                <td>{{worker_group.name}}</td>
-               <td [innerHTML]="worker_group.description"></td>
+               <td>{{worker_group.description}}</td>
+               <td>{{worker_group.is_max}}</td>
             </tr>
          </tbody>
       </table>
@@ -86,6 +88,12 @@
                <label for="description" class="col-4 col-form-label">Descripción</label>
                <div class="col-8">
                   <ck-editor id="description" name="description" skin="moono-lisa" [(ngModel)]="worker_groupSelected.description"></ck-editor>
+               </div>
+            </div>
+            <div class="form-group row">
+               <label for="is_max" class="col-4 col-form-label">Es el Máximo</label>
+               <div class="col-8">
+                  <label class="switch"><input type="checkbox"id="is_max" name="is_max" [(ngModel)]="worker_groupSelected.is_max"><span class="slider round"></span></label>
                </div>
             </div>
          </div>

@@ -43,6 +43,7 @@ class WorkerGroupController extends Controller
           }
           $workergroup->name = $result['name'];
           $workergroup->description = $result['description'];
+          $workergroup->is_max = $result['is_max'];
           $workergroup->save();
           DB::commit();
        } catch (Exception $e) {
@@ -59,6 +60,7 @@ class WorkerGroupController extends Controller
           $workergroup = WorkerGroup::where('id',$result['id'])->update([
              'name'=>$result['name'],
              'description'=>$result['description'],
+             'is_max'=>$result['is_max'],
           ]);
           DB::commit();
        } catch (Exception $e) {
@@ -97,12 +99,14 @@ class WorkerGroupController extends Controller
            WorkerGroup::where('id', $result['id'])->update([
              'name'=>$result['name'],
              'description'=>$result['description'],
+             'is_max'=>$result['is_max'],
            ]);
          } else {
           $workergroup = new WorkerGroup();
           $workergroup->id = $result['id'];
           $workergroup->name = $result['name'];
           $workergroup->description = $result['description'];
+          $workergroup->is_max = $result['is_max'];
           $workergroup->save();
          }
        }
