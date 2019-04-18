@@ -41,5 +41,6 @@ export class Establishment {
       this.ruc_name_type_id = 0;
       this.url_web = '';
       this.contact_user_id = 0;
+      this.ubication_id = 0;
    }
 }

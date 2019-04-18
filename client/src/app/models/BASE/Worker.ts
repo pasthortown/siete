@@ -6,6 +6,7 @@ export class Worker {
    worker_group_id: number;
    worker_group_name: String;
    constructor() {
+      this.count = 0;
       this.gender_id = 0;
       this.worker_group_id = 0;
       this.gender_name = '';

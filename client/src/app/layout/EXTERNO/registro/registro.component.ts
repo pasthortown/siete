@@ -147,7 +147,7 @@ export class RegistroComponent implements OnInit {
   addressEstablishmentValidated = false;
   mainPhoneEstablishmentValidated = false;
   secondaryPhoneEstablishmentValidated = true;
-  urlwebEstablishmentValidated = false;
+  urlwebEstablishmentValidated = true;
   establishment_certifications_establishmentSelected: EstablishmentCertification = new EstablishmentCertification();
 
   //DATOS REGISTRO
@@ -1124,7 +1124,7 @@ export class RegistroComponent implements OnInit {
   checkURLWeb():Boolean {
    const isOk = /^(ftp|https?):\/\/+(www\.)?[a-z0-9\-\.]{3,}\.[a-z]{3}$/.test(this.establishment_selected.url_web.toString());
    const isOk2 = /^(www\.)?[a-z0-9\-\.]{3,}\.[a-z]{3}$/.test(this.establishment_selected.url_web.toString());
-   this.urlwebEstablishmentValidated = isOk || isOk2;
+   this.urlwebEstablishmentValidated = isOk || isOk2 || (this.establishment_selected.url_web == '');
    return this.urlwebEstablishmentValidated;
   }
 
