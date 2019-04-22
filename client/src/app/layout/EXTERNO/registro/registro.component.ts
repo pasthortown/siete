@@ -1554,19 +1554,36 @@ export class RegistroComponent implements OnInit {
 
   selectEstablishmentRegister(register: Register) {
     this.mostrarDataRegister = false;
+    const tarifas: Tariff[] = this.newTariffs();
     this.rucEstablishmentRegisterSelected = new Register();
     this.registerDataService.get_register_data(register.id).then( r => {
        this.rucEstablishmentRegisterSelected = r.register as Register;
        this.rucEstablishmentRegisterSelected.status = r.status.state_id;
        this.categorySelectedCode = r.register_category.code;
-       this.getCategories();
-       this.getAllowedInfo();
-       //this.getTariffs();
-       this.getRequisitesByRegisterType();
-       this.rucEstablishmentRegisterSelected.capacities_on_register = r.capacities_on_register as Capacity[];
        this.rucEstablishmentRegisterSelected.complementary_service_types_on_register = r.complementary_service_types_on_register as ComplementaryServiceType[];
        this.rucEstablishmentRegisterSelected.complementary_service_foods_on_register = r.complementary_service_foods_on_register as ComplementaryServiceFood[];
-       this.mostrarDataRegister = true;
+       this.rucEstablishmentRegisterSelected.capacities_on_register = r.capacities_on_register as Capacity[];
+       this.getCategories();
+       this.getAllowedInfo();
+       this.getRequisitesByRegisterType();
+       this.alowed_capacity_types = [];
+       this.capacityTypeDataService.get_filtered_by_register_type(this.rucEstablishmentRegisterSelected.register_type_id).then( r2 => {
+         this.alowed_capacity_types = r2 as CapacityType[];
+         this.mostrarDataRegister = true;
+         this.rucEstablishmentRegisterSelected.capacities_on_register.forEach(capacity => {
+            this.getMaxBed(capacity);
+            capacity.tariffs_on_capacity.forEach(prevTariff => {
+               tarifas.forEach(tariffSchema => {
+                  if (tariffSchema.tariff_type_id == prevTariff.tariff_type_id) {
+                     prevTariff.tariff_father_name = tariffSchema.tariff_father_name;
+                     prevTariff.tariff_name = tariffSchema.tariff_name;
+                  }
+               });
+            });
+            this.calcBeds(capacity);
+         });
+         this.calcSpaces();
+       }).catch( e => { console.log(e); });
     }).catch( e => { console.log(e); });
   }
 
@@ -1595,6 +1612,28 @@ export class RegistroComponent implements OnInit {
          }
       }
     });
+  }
+
+  validateRegister(): Boolean {
+     const c1 = (this.rucEstablishmentRegisterSelected.establishment_id == 0);
+     const c2 = (this.rucEstablishmentRegisterSelected.status == 0);
+     const c3 = (this.categorySelectedCode == '-');
+     const c4 = (this.rucEstablishmentRegisterSelected.register_type_id == 0);
+     const c5 = (this.rucEstablishmentRegisterSelected.total_spaces == 0);
+     let c6: Boolean = false;
+     this.rucEstablishmentRegisterSelected.capacities_on_register.forEach(capacity => {
+      if (!c6) {
+         c6 = (capacity.quantity * capacity.total_spaces == 0);
+      }
+     });
+     let c7: Boolean = false;
+     this.rucEstablishmentRegisterSelected.complementary_service_foods_on_register.forEach(complementaryServiceFood => {
+      if (!c7) {
+         c7 = (complementaryServiceFood.complementary_service_food_type_id == 0);
+      }
+     });
+     const toReturn = c1 || c2 || c3 || c4 || c5 || c6 || c7;
+   return !toReturn;
   }
 
   removeComplementaryServiceType() {

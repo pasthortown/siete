@@ -1555,7 +1555,7 @@
               </div>
             </ng-template>
           </ngb-tab>
-          <ngb-tab title="Registros MINTUR" id="tab3">
+          <ngb-tab title="Registros MINTUR" id="tab3" *ngIf="rucSaved() && SRIOK && REGCIVILOK && (ruc_registro_selected.ruc.establishments.length > 0)">
             <ng-template ngbTabContent>
               <div class="row mt-3">
                 <h4 class="col-12">
@@ -1771,7 +1771,7 @@
                         </select>
                       </div>
                     </div>
-                    <div class="col-6">
+                    <div class="col-12" *ngIf="rucEstablishmentRegisterSelected.status != 3">
                         <div class="row">
                             <div class="col-4">
                                 <div class="form-group">
@@ -1797,12 +1797,12 @@
                             </div>
                           </div>
                     </div>
-                    <div class="col-6">
+                    <div class="col-12">
                       <div class="row">
                         <div class="col-6">
                             <div class="form-group">
                                 <label>Estado de Registro</label><span
-                                *ngIf="rucEstablishmentRegisterSelected.status == '0'"
+                                *ngIf="rucEstablishmentRegisterSelected.status == 0"
                                 class="ml-2 badge badge-danger"
                                 >Incorrecto</span
                               >
@@ -2471,16 +2471,16 @@
                   </div>
                 </div>
               </div>
-              <div class="row mt-3" *ngIf="true">
+              <div class="row mt-3" *ngIf="validateRegister()">
                 <div class="col-12 text-center">
                   <button
                     [disabled]="guardando"
                     type="button"
                     class="btn btn-success"
-                    title="Enviar Solicitud de Registro"
+                    title="Actualizar Información"
                     (click)="guardarRegistro()"
                   >
-                    <i class="fas fa-paper-plane"></i>&nbsp;Enviar Solicitud de Registro
+                    <i class="fas fa-paper-plane"></i>&nbsp;Actualizar Información
                   </button>
                   <button
                     type="button"
