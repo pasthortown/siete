@@ -43,6 +43,8 @@ class StateController extends Controller
           }
           $state->name = $result['name'];
           $state->description = $result['description'];
+          $state->code = $result['code'];
+          $state->father_code = $result['father_code'];
           $state->save();
           DB::commit();
        } catch (Exception $e) {
@@ -59,6 +61,8 @@ class StateController extends Controller
           $state = State::where('id',$result['id'])->update([
              'name'=>$result['name'],
              'description'=>$result['description'],
+             'code'=>$result['code'],
+             'father_code'=>$result['father_code'],
           ]);
           DB::commit();
        } catch (Exception $e) {
@@ -97,12 +101,16 @@ class StateController extends Controller
            State::where('id', $result['id'])->update([
              'name'=>$result['name'],
              'description'=>$result['description'],
+             'code'=>$result['code'],
+             'father_code'=>$result['father_code'],
            ]);
          } else {
           $state = new State();
           $state->id = $result['id'];
           $state->name = $result['name'];
           $state->description = $result['description'];
+          $state->code = $result['code'];
+          $state->father_code = $result['father_code'];
           $state->save();
          }
        }

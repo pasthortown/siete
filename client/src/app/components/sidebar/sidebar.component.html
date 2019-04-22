@@ -97,9 +97,6 @@
                   <a [routerLink]="['/capacity_type']" [routerLinkActive]="['router-link-active']" class="list-group-item">Tipos de Ambiente</a>
                </li>
                <li>
-                  <a [routerLink]="['/complementary_service_food']" [routerLinkActive]="['router-link-active']" class="list-group-item">ComplementaryServiceFood </a>
-               </li>
-               <li>
                   <a [routerLink]="['/complementary_service_food_type']" [routerLinkActive]="['router-link-active']" class="list-group-item">Tipos de Capacidades Complementarias </a>
                </li>
             </ul>
@@ -176,17 +173,9 @@
                <li>
                   <a [routerLink]="['/externo-registro']" [routerLinkActive]="['router-link-active']" class="list-group-item">Registro</a>
                </li>
-               <li>
-                  <a [routerLink]="['/externo-impuestos']" [routerLinkActive]="['router-link-active']" class="list-group-item">Impuestos</a>
-               </li>
-
-               <li>
-                  <a [routerLink]="['/externo-solicitudes']" [routerLinkActive]="['router-link-active']" class="list-group-item">Solicitudes de Registro</a>
-               </li>
             </ul>
          </li>
       </div>
-
       <div class="nested-menu">
          <a class="list-group-item" (click)="addExpandClass('profile')">
             <span><img class="rounded-circle" src="{{profileImg}}" width="32px" height="32px"></span>&nbsp;<small *ngIf="refreshUser()">{{ user.name }}</small>

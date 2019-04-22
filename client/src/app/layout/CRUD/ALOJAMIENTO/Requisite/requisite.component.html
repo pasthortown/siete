@@ -1,6 +1,6 @@
 <div class="row">
    <h1 class="col-12 text-right">
-      Requisite
+      Requisitos
    </h1>
 </div>
 <div class="row">
@@ -31,19 +31,28 @@
          <thead>
             <tr>
                <th>Seleccionado</th>
-               <th>name</th>
-               <th>description</th>
-               <th>father_code</th>
-               <th>to_approve</th>
+               <th>Nombre</th>
+               <th>Descripción</th>
+               <th>Grupo</th>
+               <th>Cumplimiento para Aprobar</th>
+               <th>Tipo de Registro</th>
             </tr>
          </thead>
          <tbody>
             <tr *ngFor="let requisite of requisites" (click)="selectRequisite(requisite)">
                <td class="text-right"><span *ngIf="requisiteSelected === requisite" class="far fa-hand-point-right"></span></td>
                <td>{{requisite.name}}</td>
-               <td>{{requisite.description}}</td>
-               <td>{{requisite.father_code}}</td>
+               <td [innerHTML]="requisite.description"></td>
+               <td>
+                  <select disabled class="form-control" id="fatherCodeRequisite" name="fatherCodeRequisite" [(ngModel)]="requisite.father_code">
+                     <option value="-" selected>Es un Grupo</option>
+                     <option *ngFor="let requisite of requisites" value={{requisite.id}}>
+                        {{requisite.name}}
+                     </option>
+                  </select>
+               </td>
                <td>{{requisite.to_approve}}</td>
+               <td>{{requisite.type_full_name}}</td>
             </tr>
          </tbody>
       </table>
@@ -81,36 +90,52 @@
       <div class="row">
          <div class="col-12">
             <div class="form-group row">
-               <label for="name" class="col-4 col-form-label">name</label>
+               <label for="name" class="col-4 col-form-label">Nombre</label>
                <div class="col-8">
-                  <input type="text" class="form-control" id="name" name="name" placeholder="name" [(ngModel)]="requisiteSelected.name">
+                  <input type="text" class="form-control" id="name" name="name" placeholder="Nombre" [(ngModel)]="requisiteSelected.name">
                </div>
             </div>
             <div class="form-group row">
-               <label for="description" class="col-4 col-form-label">description</label>
+               <label for="description" class="col-4 col-form-label">Descripción</label>
                <div class="col-8">
                   <ck-editor id="description" name="description" skin="moono-lisa" [(ngModel)]="requisiteSelected.description"></ck-editor>
                </div>
             </div>
             <div class="form-group row">
-               <label for="father_code" class="col-4 col-form-label">father_code</label>
+               <label for="father_code" class="col-4 col-form-label">Grupo</label>
                <div class="col-8">
-                  <input type="text" class="form-control" id="father_code" name="father_code" placeholder="fatherCode" [(ngModel)]="requisiteSelected.father_code">
+                  <select class="form-control" id="GroupfatherCodeRequisite" name="GroupfatherCodeRequisite" [(ngModel)]="requisiteSelected.father_code">
+                     <option value="-" selected>Es un Grupo</option>
+                     <option *ngFor="let requisite of requisitesGroups" value={{requisite.id}}>
+                        {{requisite.name}}
+                     </option>
+                  </select>
                </div>
             </div>
             <div class="form-group row">
-               <label for="to_approve" class="col-4 col-form-label">to_approve</label>
+               <label for="to_approve" class="col-4 col-form-label">Cumplimiento para Aprobar</label>
                <div class="col-8">
-                  <input type="number" class="form-control" id="to_approve" name="to_approve" placeholder="toApprove" [(ngModel)]="requisiteSelected.to_approve">
+                  <input type="number" class="form-control" id="to_approve" name="to_approve" placeholder="Cumplimiento para Aprobar" [(ngModel)]="requisiteSelected.to_approve">
                </div>
             </div>
             <div class="form-group row">
-               <label for="register_type_id" class="col-4 col-form-label">RegisterType</label>
+               <label for="register_type_id" class="col-4 col-form-label">Categoría de Registro</label>
+               <div class="col-8">
+                  <select class="form-control" id="register_type_id" name="register_type_id" [(ngModel)]="category_selected_code" (change)="getRegisterTypeSpecific()">
+                     <option value="-" selected>Seleccione...</option>
+                     <option *ngFor="let register_type of register_types_categories" value={{register_type.code}}>
+                        {{register_type.name}}
+                     </option>
+                  </select>
+               </div>
+            </div>
+            <div class="form-group row">
+               <label for="register_type_id" class="col-4 col-form-label">Clasificación de Registro</label>
                <div class="col-8">
                   <select class="form-control" id="register_type_id" name="register_type_id" [(ngModel)]="requisiteSelected.register_type_id">
                      <option value="0" selected>Seleccione...</option>
-                     <option *ngFor="let register_type of register_types" value={{register_type.id}}>
-                        {{register_type.id}}
+                     <option *ngFor="let register_type of register_types_specific" value={{register_type.id}}>
+                        {{register_type.name}}
                      </option>
                   </select>
                </div>

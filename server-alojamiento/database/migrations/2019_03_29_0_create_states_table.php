@@ -18,6 +18,8 @@ class CreateStatesTable extends Migration
           $table->timestamps();
           $table->string('name',50)->nullable($value = true);
           $table->longText('description')->nullable($value = true);
+          $table->string('code',20)->nullable($value = true);
+          $table->string('father_code',20)->nullable($value = true);
        });
     }
 

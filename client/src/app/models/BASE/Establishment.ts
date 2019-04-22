@@ -28,6 +28,7 @@ export class Establishment {
    establishment_certifications_on_establishment: EstablishmentCertification[];
    ruc_name_type_id: number;
    constructor() {
+      this.id = 0;
       this.contact_user = new User();
       this.preview_register_codes_on_establishment = [];
       this.languages_on_establishment = [];

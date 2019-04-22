@@ -29,7 +29,7 @@ export class Register {
       this.register_type_id = 0;
       this.total_spaces = 0;
       this.total_habitations = 0;
-      this.status = 3;
+      this.status = 4;
       this.code = 'PENDIENTE';
    }
 }

@@ -85,9 +85,9 @@ export class StateComponent implements OnInit {
    toCSV() {
       this.stateDataService.get().then( r => {
          const backupData = r as State[];
-         let output = 'id;name;description\n';
+         let output = 'id;name;description;code;father_code\n';
          backupData.forEach(element => {
-            output += element.id + ';' + element.name + ';' + element.description + '\n';
+            output += element.id; + element.name + ';' + element.description + ';' + element.code + ';' + element.father_code + '\n';
          });
          const blob = new Blob([output], { type: 'text/plain' });
          const fecha = new Date();

@@ -1,3 +1,4 @@
+import { RegisterState } from './../../../models/ALOJAMIENTO/RegisterState';
 import { ComplementaryServiceFood } from 'src/app/models/ALOJAMIENTO/ComplementaryServiceFood';
 import { ComplementaryServiceFoodTypeService } from 'src/app/services/CRUD/ALOJAMIENTO/complementaryservicefoodtype.service';
 import { ComplementaryServiceFoodType } from 'src/app/models/ALOJAMIENTO/ComplementaryServiceFoodType';
@@ -154,6 +155,10 @@ export class RegistroComponent implements OnInit {
   establishment_certifications_establishmentSelected: EstablishmentCertification = new EstablishmentCertification();
 
   //DATOS REGISTRO
+  estados_tramites: State[];
+  specific_states: State[];
+  estado_tramite_selected_code: String = '1';
+  statusSelected: RegisterState = new RegisterState();
   mostrarDataRegister = false;
   showRequisites = false;
   complementaryServiceFoodSelected: ComplementaryServiceFood = new ComplementaryServiceFood();
@@ -188,6 +193,11 @@ export class RegistroComponent implements OnInit {
   REGCIVILREPRESENTANTELEGALOK = false;
   guardando = false;
 
+  //DECLARACIONES
+  currentPageDeclaration = 1;
+  lastPageDeclaration = 1;
+  recordsByPageDeclaration = 5;
+  establishment_declarations_selected = new Establishment();
   constructor(private toastr: ToastrManager,
               private userDataService: UserService,
               private dinardapDataService: DinardapService,
@@ -220,6 +230,7 @@ export class RegistroComponent implements OnInit {
               private registerDataService: RegisterService) {}
 
   ngOnInit() {
+   this.getTramiteStates();
    this.getUser();
   }
 
@@ -230,6 +241,17 @@ export class RegistroComponent implements OnInit {
      return true;
   }
   
+  getTramiteStates() {
+   this.estados_tramites = [];
+   this.stateDataService.get().then( r => {
+      r.forEach(element => {
+         if (element.father_code == '-') {
+            this.estados_tramites.push(element);
+         }
+      });
+   }).catch( e => { console.log(e); });
+  }
+
   validateTariffs() {
    this.rucEstablishmentRegisterSelected.capacities_on_register.forEach(capacity => {
       capacity.tariffsValidated = true;
@@ -484,6 +506,7 @@ export class RegistroComponent implements OnInit {
    this.states = [];
    this.stateDataService.get().then( r => {
       this.states = r as State[];
+      this.getSpecificStates();
    }).catch( e => { console.log(e); });
   }
 
@@ -555,6 +578,7 @@ export class RegistroComponent implements OnInit {
    this.guardando = true;
    this.registerDataService.register_register_data(this.rucEstablishmentRegisterSelected).then( r => {
       this.guardando = false;
+      this.getRegistersOnRuc();
    }).catch( e => {
       this.guardando = false;
       this.toastr.errorToastr('Existe conflicto la información proporcionada.', 'Nuevo');
@@ -569,6 +593,7 @@ export class RegistroComponent implements OnInit {
   }
 
   getRegistersOnRuc() {
+   this.rucEstablishmentRegisterSelected = new Register();
    this.registerDataService.get_registers_by_ruc(this.user.ruc).then( r => {
       this.ruc_registro_selected.registers = r as any[];
    }).catch( e => { console.log(e); });
@@ -630,6 +655,7 @@ export class RegistroComponent implements OnInit {
   }
 
   getRequisitesByRegisterType() {
+   const AllRequisites = [];
    this.requisitesByRegisterType = [];
    this.rucEstablishmentRegisterSelected.requisites = [];
    this.showRequisites = false;
@@ -647,10 +673,26 @@ export class RegistroComponent implements OnInit {
             newRegisterRequisite.requisite_name = element.name;
             newRegisterRequisite.requisite_id = element.id;
             newRegisterRequisite.fullfill = true;
-            this.rucEstablishmentRegisterSelected.requisites.push(newRegisterRequisite);
+            newRegisterRequisite.requisite_father_code = element.father_code;
+            AllRequisites.push(newRegisterRequisite);
          }
       });
       this.showRequisites  = true;
+      console.log(AllRequisites);
+      const padres = [];
+      AllRequisites.forEach(element => {
+         if (element.requisite_father_code == '-') {
+            padres.push(element);
+         }
+      });
+      padres.forEach(padre => {
+         this.rucEstablishmentRegisterSelected.requisites.push(padre);
+         AllRequisites.forEach(element => {
+            if (element.requisite_father_code == padre.requisite_id.toString()) {
+               this.rucEstablishmentRegisterSelected.requisites.push(element);
+            }
+         });
+      });
    }).catch( e => console.log(e) );
   }
 
@@ -1387,6 +1429,11 @@ export class RegistroComponent implements OnInit {
     }).catch( e => { console.log(e); });
   }
 
+
+  selectRegisterEstablishmentDeclaration(establishment: Establishment) {
+   this.establishment_declarations_selected = establishment;
+  }
+
   recoverUbication() {
     this.ubicationDataService.getByIdLower(this.establishment_selected.ubication_id).then( r => {
       this.zonalEstablishmentSelectedCode = r.zonal.code;
@@ -1558,6 +1605,7 @@ export class RegistroComponent implements OnInit {
     this.rucEstablishmentRegisterSelected = new Register();
     this.registerDataService.get_register_data(register.id).then( r => {
        this.rucEstablishmentRegisterSelected = r.register as Register;
+       this.getTramiteStatus(this.rucEstablishmentRegisterSelected.status);
        this.rucEstablishmentRegisterSelected.status = r.status.state_id;
        this.categorySelectedCode = r.register_category.code;
        this.rucEstablishmentRegisterSelected.complementary_service_types_on_register = r.complementary_service_types_on_register as ComplementaryServiceType[];
@@ -1565,7 +1613,6 @@ export class RegistroComponent implements OnInit {
        this.rucEstablishmentRegisterSelected.capacities_on_register = r.capacities_on_register as Capacity[];
        this.getCategories();
        this.getAllowedInfo();
-       this.getRequisitesByRegisterType();
        this.alowed_capacity_types = [];
        this.capacityTypeDataService.get_filtered_by_register_type(this.rucEstablishmentRegisterSelected.register_type_id).then( r2 => {
          this.alowed_capacity_types = r2 as CapacityType[];
@@ -1589,6 +1636,24 @@ export class RegistroComponent implements OnInit {
 
   selectComplementaryServiceType(complementary_service_type: ComplementaryServiceType) {
     this.complementary_service_types_registerSelectedId = complementary_service_type.id;
+  }
+
+  getTramiteStatus(status_id: number) {
+     this.states.forEach(state => {
+        if (state.id == status_id) {
+         this.estado_tramite_selected_code = state.father_code;
+         this.getSpecificStates();
+        }
+     });
+  }
+
+  getSpecificStates() {
+   this.specific_states = [];
+   this.states.forEach(element => {
+      if (element.father_code == this.estado_tramite_selected_code) {
+         this.specific_states.push(element);
+      }
+   });
   }
 
   addComplementaryServiceType() {
@@ -1788,60 +1853,9 @@ export class RegistroComponent implements OnInit {
    this.capacitySelected = capacity;
   }
 
-  openDialog(content) {
-   this.modalService.open(content, { centered: true, size: 'lg' }).result.then(( response => {
-      if ( response === 'Guardar click' ) {
-         /*if (typeof this.registerSelected.id === 'undefined') {
-            this.registerDataService.post(this.registerSelected).then( r => {
-               this.toastr.successToastr('Datos guardados satisfactoriamente.', 'Nuevo');
-               this.getRegisters();
-            }).catch( e => console.log(e) );
-         } else {
-            this.registerDataService.put(this.registerSelected).then( r => {
-               this.toastr.successToastr('Registro actualizado satisfactoriamente.', 'Actualizar');
-               this.getRegisters();
-            }).catch( e => console.log(e) );
-         }*/
-      }
+  openDialog(content, status) {
+     this.statusSelected = status;
+   this.modalService.open(content, { centered: true, size: 'sm' }).result.then(( response => {
    }), ( r => {}));
-  }
-
-  newRegisterModal(content) {
-    /*this.registerSelected = new Register();
-    this.registerSelected.establishment_id = 0;
-    this.register_establishment_capacities_registerSelectedId = 0;
-    this.complementary_capacities_registerSelectedId = 0;
-    this.rack_prices_registerSelectedId = 0;
-    this.registerSelected.register_type_id = 0;
-    this.establishment_service_offers_registerSelectedId = 0;*/
-    this.openDialog(content);
-  }
-
-  editRegisterModal(content) {
-    /*if ( typeof this.registerSelected.register_establishment_capacities_on_register === 'undefined' ) {
-      this.registerSelected.register_establishment_capacities_on_register = [];
-    }
-    if ( typeof this.registerSelected.complementary_capacities_on_register === 'undefined' ) {
-      this.registerSelected.complementary_capacities_on_register = [];
-    }
-    if ( typeof this.registerSelected.rack_prices_on_register === 'undefined' ) {
-      this.registerSelected.rack_prices_on_register = [];
-    }
-    if ( typeof this.registerSelected.establishment_service_offers_on_register === 'undefined' ) {
-      this.registerSelected.establishment_service_offers_on_register = [];
-    }
-    if (typeof this.registerSelected.id === 'undefined') {
-      this.toastr.errorToastr('Debe seleccionar un registro.', 'Error');
-      return;
-    }
-    this.getRegisterEstablishmentCapacitiesOnRegister();
-    this.register_establishment_capacities_registerSelectedId = 0;
-    this.getComplementaryCapacitiesOnRegister();
-    this.complementary_capacities_registerSelectedId = 0;
-    this.getRackPricesOnRegister();
-    this.rack_prices_registerSelectedId = 0;
-    this.getEstablishmentServiceOffersOnRegister();
-    this.establishment_service_offers_registerSelectedId = 0;*/
-    this.openDialog(content);
   }
 }
