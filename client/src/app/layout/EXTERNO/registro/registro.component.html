@@ -1179,9 +1179,9 @@
                         </div>
                         <div class="col-3">
                           <div class="form-group">
-                            <label>Estado de Registro</label><span *ngIf="rucEstablishmentRegisterSelected.status == 0"
+                            <label>Trámite Requerido</label><span *ngIf="rucEstablishmentRegisterSelected.status == 0"
                               class="ml-2 badge badge-danger">Incorrecto</span>
-                            <select disabled class="form-control" id="state_name" name="state_name"
+                            <select class="form-control" id="state_name" name="state_name"
                               [(ngModel)]="rucEstablishmentRegisterSelected.status">
                               <option value="0" selected>Seleccione...</option>
                               <option *ngFor="

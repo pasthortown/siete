@@ -374,7 +374,11 @@ export class RegistroComponent implements OnInit {
             this.ruc_registro_selected.ruc.group_given = new GroupGiven();
          } else {
             this.ruc_registro_selected.ruc.group_given = r.group_given as GroupGiven;
-            this.setGroupTypeSelected(this.ruc_registro_selected.ruc.group_given.group_type_id);
+            this.group_types = [];
+            this.group_typeDataService.get().then( r => {
+               this.group_types = r as GroupType[];
+               this.setGroupTypeSelected(this.ruc_registro_selected.ruc.group_given.group_type_id);
+            }).catch( e => console.log(e) );
          }
          if (r.person_representative == '0') {
             this.ruc_registro_selected.ruc.person_representative = new PersonRepresentative();
@@ -594,6 +598,7 @@ export class RegistroComponent implements OnInit {
 
   getRegistersOnRuc() {
    this.rucEstablishmentRegisterSelected = new Register();
+   this.mostrarDataRegister = false;
    this.registerDataService.get_registers_by_ruc(this.user.ruc).then( r => {
       this.ruc_registro_selected.registers = r as any[];
    }).catch( e => { console.log(e); });
