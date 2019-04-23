@@ -5,4 +5,8 @@ export class Pay {
    pay_date: Date;
    annotation: String;
    declaration_id: number;
+   constructor() {
+      this.amount_payed = 0;
+      this.amount_to_pay = 0;
+   }
 }

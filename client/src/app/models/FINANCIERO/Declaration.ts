@@ -1,4 +1,4 @@
-import { DeclarationItem } from './DeclarationItem';
+import { DeclarationItemValue } from './DeclarationItemValue';
 
 import { ApprovalState } from './ApprovalState';
 
@@ -8,10 +8,12 @@ export class Declaration {
    declaration_date: Date;
    year: number;
    max_date_to_pay: Date;
-   declaration_items_on_declaration: DeclarationItem[];
+   declaration_item_values_on_declaration: DeclarationItemValue[];
    approval_states_on_declaration: ApprovalState[];
    constructor() {
-      this.declaration_items_on_declaration = [];
+      this.establishment_id = 0;
+      this.declaration_item_values_on_declaration = [];
       this.approval_states_on_declaration = [];
+      this.year = new Date().getFullYear();
    }
 }

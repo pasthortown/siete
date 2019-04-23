@@ -1,4 +1,12 @@
-import { RegisterState } from './../../../models/ALOJAMIENTO/RegisterState';
+import { DeclarationService } from 'src/app/services/CRUD/FINANCIERO/declaration.service';
+import { DeclarationItemValue } from 'src/app/models/FINANCIERO/DeclarationItemValue';
+import { DeclarationItemService } from 'src/app/services/CRUD/FINANCIERO/declarationitem.service';
+import { DeclarationItemCategoryService } from 'src/app/services/CRUD/FINANCIERO/declarationitemcategory.service';
+import { DeclarationItem } from 'src/app/models/FINANCIERO/DeclarationItem';
+import { DeclarationItemCategory } from 'src/app/models/FINANCIERO/DeclarationItemCategory';
+import { Pay } from 'src/app/models/FINANCIERO/Pay';
+import { Declaration } from 'src/app/models/FINANCIERO/Declaration';
+import { RegisterState } from 'src/app/models/ALOJAMIENTO/RegisterState';
 import { ComplementaryServiceFood } from 'src/app/models/ALOJAMIENTO/ComplementaryServiceFood';
 import { ComplementaryServiceFoodTypeService } from 'src/app/services/CRUD/ALOJAMIENTO/complementaryservicefoodtype.service';
 import { ComplementaryServiceFoodType } from 'src/app/models/ALOJAMIENTO/ComplementaryServiceFoodType';
@@ -198,6 +206,14 @@ export class RegistroComponent implements OnInit {
   lastPageDeclaration = 1;
   recordsByPageDeclaration = 5;
   establishment_declarations_selected = new Establishment();
+  declaration_selected: Declaration = new Declaration();
+  mostrarDataDeclaration = false;
+  declarations: Declaration[] = [];
+  payDeclarationSelected: Pay = new Pay();
+  declarationItemsToShow: any[] = [];
+  declarationItemsCategories: DeclarationItemCategory[] = [];
+  declarationItems: DeclarationItem[] = [];
+  maxYear: number = 2019;
   constructor(private toastr: ToastrManager,
               private userDataService: UserService,
               private dinardapDataService: DinardapService,
@@ -224,6 +240,9 @@ export class RegistroComponent implements OnInit {
               private register_typeDataService: RegisterTypeService,
               private requisiteDataService: RequisiteService,
               private bedTypeDataService: BedTypeService,
+              private declarationDataService: DeclarationService,
+              private declarationItemCategoryDataService: DeclarationItemCategoryService,
+              private declarationItemDataService: DeclarationItemService,
               private tariffTypeDataService: TariffTypeService,
               private stateDataService: StateService,
               private tax_payer_typeDataService: TaxPayerTypeService,
@@ -232,6 +251,9 @@ export class RegistroComponent implements OnInit {
   ngOnInit() {
    this.getTramiteStates();
    this.getUser();
+   this.getDeclarationCategories();
+   this.getDeclarationItems();
+   this.getMaxDeclarationDate();
   }
 
   validateGroupGivenTipe(): Boolean {
@@ -315,10 +337,50 @@ export class RegistroComponent implements OnInit {
     this.groupTypeSelected = new GroupType();
   }
 
+  getDeclarationCategories() {
+   this.declarationItemCategoryDataService.get().then( r => {
+     this.declarationItemsCategories = r as DeclarationItemCategory[];
+   }).catch( e => { console.log(e); });
+  }
+
+ getDeclarationItems() {
+   this.declarationItemDataService.get().then( r => {
+     this.declarationItems = r as DeclarationItem[];
+   }).catch( e => { console.log(e); });
+ }
+
+  newDeclaration() {
+   this.declaration_selected = new Declaration();
+   this.mostrarDataDeclaration = true;
+   this.buildDeclarationItemsToShow();
+  }
+
+  mostrarFechaMaximaPago(): Boolean {
+     return typeof this.declaration_selected.max_date_to_pay != 'undefined';
+  }
+
+  getMaxDeclarationDate() {
+   const today = new Date();
+   this.maxYear = today.getFullYear();
+  }
+
   getComplementaryFoodServiceType() {
    this.complementaryServiceFoodTypeDataService.get().then( r => {
       this.complementaryServiceFoodTypes = r as ComplementaryServiceFoodType[];
    }).catch( e => { console.log(e); });
+  }
+
+  buildDeclarationItemsToShow() {
+   this.declarationItemsToShow = [];
+   this.declarationItemsCategories.forEach(category => {
+     const items = [];
+     this.declarationItems.forEach(item => {
+       if(item.declaration_item_category_id == category.id) {
+         items.push({declarationItem: item, valueItem: new DeclarationItemValue()});
+       }
+     });
+     this.declarationItemsToShow.push({Category: category, items: items});
+   });
   }
 
   addComplementaryFoodService() {
@@ -528,6 +590,51 @@ export class RegistroComponent implements OnInit {
    this.rucNameTypeDataService.get().then( r => {
       this.ruc_name_types = r as RucNameType[];
    }).catch( e => { console.log(e); });
+  }
+
+  guardarDeclaracion() {
+   /*//this.declarationItemsToShow.push({CategoryName: category.name, items: items});
+   this.declarationItemsToShow.forEach(element => {
+      element.items.forEach(item => {
+         let newDeclarationItem: DeclarationItem = new DeclarationItem();
+         newDeclarationItem.declaration_item_category_id = element.Category.name;
+         newDeclarationItem.
+         items.push({declarationItem: item, valueItem: new DeclarationItemValue()});
+         this.declaration_selected.declaration_items_on_declaration.push(newDeclarationItem);
+      });
+   });
+   console.log(this.declaration_selected);
+   this.guardando = true;
+   this.declaration_selected.establishment_id = this.establishment_declarations_selected.id;
+      if (typeof this.declaration_selected.id === 'undefined') {
+         /*this.declarationDataService.register_ruc(this.ruc_registro_selected.ruc).then( r => {
+            this.guardando = false;
+            if ( r === '0' ) {
+               this.toastr.errorToastr('Existe conflicto con el correo de la persona de contacto ingresada.', 'Nuevo');
+               return;
+            }
+            this.toastr.successToastr('Datos guardados satisfactoriamente.', 'Nuevo');
+            this.refresh();
+         }).catch( e => {
+            this.guardando = false;
+            this.toastr.errorToastr('Existe conflicto la información proporcionada.', 'Nuevo');
+            return;
+         });
+      } else {
+         /*this.rucDataService.update_ruc(this.ruc_registro_selected.ruc).then( r => {
+            this.guardando = false;
+            if ( r === '0' ) {
+               this.toastr.errorToastr('Existe conflicto con el correo de la persona de contacto ingresada.', 'Actualizar');
+               return;
+            }
+            this.toastr.successToastr('Registro actualizado satisfactoriamente.', 'Actualizar');
+            this.refresh();
+         }).catch( e => {
+            this.guardando = false;
+            this.toastr.errorToastr('Existe conflicto la información proporcionada.', 'Nuevo');
+            return;
+         });
+      }*/
   }
 
   guardarRUC() {

@@ -6,7 +6,7 @@ import { DeclarationRoutingModule } from './declaration-routing.module';
 import { DeclarationComponent } from './declaration.component';
 import { DeclarationService } from './../../../../services/CRUD/FINANCIERO/declaration.service';
 import { environment } from 'src/environments/environment';
-import { DeclarationItemService } from './../../../../services/CRUD/FINANCIERO/declarationitem.service';
+import { DeclarationItemValueService } from './../../../../services/CRUD/FINANCIERO/declarationitemvalue.service';
 import { ApprovalStateService } from './../../../../services/CRUD/FINANCIERO/approvalstate.service';
 
 @NgModule({
@@ -16,7 +16,7 @@ import { ApprovalStateService } from './../../../../services/CRUD/FINANCIERO/app
    declarations: [DeclarationComponent],
    providers: [
                NgbModal,
-               DeclarationItemService,
+               DeclarationItemValueService,
                ApprovalStateService,
                DeclarationService
                ]

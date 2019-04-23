@@ -19,8 +19,8 @@ class DeclarationController extends Controller
        } else {
           $declaration = Declaration::findOrFail($id);
           $attach = [];
-          $declaration_items_on_declaration = $declaration->DeclarationItems()->get();
-          array_push($attach, ["declaration_items_on_declaration"=>$declaration_items_on_declaration]);
+          $declaration_item_values_on_declaration = $declaration->DeclarationItemValues()->get();
+          array_push($attach, ["declaration_item_values_on_declaration"=>$declaration_item_values_on_declaration]);
           $approval_states_on_declaration = $declaration->ApprovalStates()->get();
           array_push($attach, ["approval_states_on_declaration"=>$approval_states_on_declaration]);
           return response()->json(["Declaration"=>$declaration, "attach"=>$attach],200);
@@ -50,9 +50,9 @@ class DeclarationController extends Controller
           $declaration->year = $result['year'];
           $declaration->max_date_to_pay = $result['max_date_to_pay'];
           $declaration->save();
-          $declaration_items_on_declaration = $result['declaration_items_on_declaration'];
-          foreach( $declaration_items_on_declaration as $declaration_item) {
-             $declaration->DeclarationItems()->attach($declaration_item['id']);
+          $declaration_item_values_on_declaration = $result['declaration_item_values_on_declaration'];
+          foreach( $declaration_item_values_on_declaration as $declaration_item_value) {
+             $declaration->DeclarationItemValues()->attach($declaration_item_value['id']);
           }
           $approval_states_on_declaration = $result['approval_states_on_declaration'];
           foreach( $approval_states_on_declaration as $approval_state) {
@@ -77,28 +77,28 @@ class DeclarationController extends Controller
              'max_date_to_pay'=>$result['max_date_to_pay'],
           ]);
           $declaration = Declaration::where('id',$result['id'])->first();
-          $declaration_items_on_declaration = $result['declaration_items_on_declaration'];
-          $declaration_items_on_declaration_old = $declaration->DeclarationItems()->get();
-          foreach( $declaration_items_on_declaration_old as $declaration_item_old ) {
+          $declaration_item_values_on_declaration = $result['declaration_item_values_on_declaration'];
+          $declaration_item_values_on_declaration_old = $declaration->DeclarationItemValues()->get();
+          foreach( $declaration_item_values_on_declaration_old as $declaration_item_value_old ) {
              $delete = true;
-             foreach( $declaration_items_on_declaration as $declaration_item ) {
-                if ( $declaration_item_old->id === $declaration_item['id'] ) {
+             foreach( $declaration_item_values_on_declaration as $declaration_item_value ) {
+                if ( $declaration_item_value_old->id === $declaration_item_value['id'] ) {
                    $delete = false;
                 }
              }
              if ( $delete ) {
-                $declaration->DeclarationItems()->detach($declaration_item_old->id);
+                $declaration->DeclarationItemValues()->detach($declaration_item_value_old->id);
              }
           }
-          foreach( $declaration_items_on_declaration as $declaration_item ) {
+          foreach( $declaration_item_values_on_declaration as $declaration_item_value ) {
              $add = true;
-             foreach( $declaration_items_on_declaration_old as $declaration_item_old) {
-                if ( $declaration_item_old->id === $declaration_item['id'] ) {
+             foreach( $declaration_item_values_on_declaration_old as $declaration_item_value_old) {
+                if ( $declaration_item_value_old->id === $declaration_item_value['id'] ) {
                    $add = false;
                 }
              }
              if ( $add ) {
-                $declaration->DeclarationItems()->attach($declaration_item['id']);
+                $declaration->DeclarationItemValues()->attach($declaration_item_value['id']);
              }
           }
           $declaration = Declaration::where('id',$result['id'])->first();
@@ -145,8 +145,8 @@ class DeclarationController extends Controller
        $toReturn = [];
        foreach( $declarations as $declaration) {
           $attach = [];
-          $declaration_items_on_declaration = $declaration->DeclarationItems()->get();
-          array_push($attach, ["declaration_items_on_declaration"=>$declaration_items_on_declaration]);
+          $declaration_item_values_on_declaration = $declaration->DeclarationItemValues()->get();
+          array_push($attach, ["declaration_item_values_on_declaration"=>$declaration_item_values_on_declaration]);
           $approval_states_on_declaration = $declaration->ApprovalStates()->get();
           array_push($attach, ["approval_states_on_declaration"=>$approval_states_on_declaration]);
           array_push($toReturn, ["Declaration"=>$declaration, "attach"=>$attach]);
@@ -180,31 +180,31 @@ class DeclarationController extends Controller
           $declaration->save();
          }
          $declaration = Declaration::where('id',$result['id'])->first();
-         $declaration_items_on_declaration = [];
+         $declaration_item_values_on_declaration = [];
          foreach($row['attach'] as $attach){
-            $declaration_items_on_declaration = $attach['declaration_items_on_declaration'];
+            $declaration_item_values_on_declaration = $attach['declaration_item_values_on_declaration'];
          }
-         $declaration_items_on_declaration_old = $declaration->DeclarationItems()->get();
-         foreach( $declaration_items_on_declaration_old as $declaration_item_old ) {
+         $declaration_item_values_on_declaration_old = $declaration->DeclarationItemValues()->get();
+         foreach( $declaration_item_values_on_declaration_old as $declaration_item_value_old ) {
             $delete = true;
-            foreach( $declaration_items_on_declaration as $declaration_item ) {
-               if ( $declaration_item_old->id === $declaration_item['id'] ) {
+            foreach( $declaration_item_values_on_declaration as $declaration_item_value ) {
+               if ( $declaration_item_value_old->id === $declaration_item_value['id'] ) {
                   $delete = false;
                }
             }
             if ( $delete ) {
-               $declaration->DeclarationItems()->detach($declaration_item_old->id);
+               $declaration->DeclarationItemValues()->detach($declaration_item_value_old->id);
             }
          }
-         foreach( $declaration_items_on_declaration as $declaration_item ) {
+         foreach( $declaration_item_values_on_declaration as $declaration_item_value ) {
             $add = true;
-            foreach( $declaration_items_on_declaration_old as $declaration_item_old) {
-               if ( $declaration_item_old->id === $declaration_item['id'] ) {
+            foreach( $declaration_item_values_on_declaration_old as $declaration_item_value_old) {
+               if ( $declaration_item_value_old->id === $declaration_item_value['id'] ) {
                   $add = false;
                }
             }
             if ( $add ) {
-               $declaration->DeclarationItems()->attach($declaration_item['id']);
+               $declaration->DeclarationItemValues()->attach($declaration_item_value['id']);
             }
          }
          $declaration = Declaration::where('id',$result['id'])->first();

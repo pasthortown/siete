@@ -24,11 +24,6 @@ class DeclarationItem extends Model
        
     ];
 
-    function Declarations()
-    {
-       return $this->belongsToMany('App\Declaration')->withTimestamps();
-    }
-
     function DeclarationItemCategory()
     {
        return $this->hasOne('App\DeclarationItemCategory');

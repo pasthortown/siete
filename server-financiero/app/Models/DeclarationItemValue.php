@@ -24,9 +24,9 @@ class DeclarationItemValue extends Model
        
     ];
 
-    function Declaration()
+    function Declarations()
     {
-       return $this->hasOne('App\Declaration');
+       return $this->belongsToMany('App\Declaration')->withTimestamps();
     }
 
     function DeclarationItem()

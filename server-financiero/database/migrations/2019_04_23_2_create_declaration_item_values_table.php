@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateDeclarationDeclarationItemTable extends Migration
+class CreateDeclarationItemValuesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,12 @@ class CreateDeclarationDeclarationItemTable extends Migration
      */
     public function up()
     {
-       Schema::create('declaration_declaration_item', function (Blueprint $table) {
+       Schema::create('declaration_item_values', function (Blueprint $table) {
           $table->increments('id');
           $table->timestamps();
+          $table->double('value',8,2)->nullable($value = true);
           $table->unsignedInteger('declaration_item_id');
           $table->foreign('declaration_item_id')->references('id')->on('declaration_items')->onDelete('cascade');
-          $table->unsignedInteger('declaration_id');
-          $table->foreign('declaration_id')->references('id')->on('declarations')->onDelete('cascade');
        });
     }
 
@@ -30,6 +29,6 @@ class CreateDeclarationDeclarationItemTable extends Migration
      */
     public function down()
     {
-       Schema::dropIfExists('declaration_declaration_item');
+       Schema::dropIfExists('declaration_item_values');
     }
 }

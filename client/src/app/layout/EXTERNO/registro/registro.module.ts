@@ -42,6 +42,10 @@ import { CapacityTypeService } from 'src/app/services/CRUD/ALOJAMIENTO/capacityt
 import { DinardapService } from 'src/app/services/negocio/dinardap.service';
 import { EstablishmentCertificationAttachmentService } from 'src/app/services/CRUD/BASE/establishmentcertificationattachment.service';
 import { ComplementaryServiceFoodTypeService } from 'src/app/services/CRUD/ALOJAMIENTO/complementaryservicefoodtype.service';
+import { DeclarationItemService } from 'src/app/services/CRUD/FINANCIERO/declarationitem.service';
+import { DeclarationItemCategoryService } from 'src/app/services/CRUD/FINANCIERO/declarationitemcategory.service';
+import { DeclarationService } from 'src/app/services/CRUD/FINANCIERO/declaration.service';
+
 @NgModule({
   imports: [CommonModule,
     CKEditorModule,
@@ -55,6 +59,9 @@ import { ComplementaryServiceFoodTypeService } from 'src/app/services/CRUD/ALOJA
   providers: [NgbModal,
     UserService,
     DinardapService,
+    DeclarationItemService,
+    DeclarationItemCategoryService,
+    DeclarationService,
     TaxPayerTypeService,
     PersonRepresentativeAttachmentService,
     EstablishmentCertificationService,

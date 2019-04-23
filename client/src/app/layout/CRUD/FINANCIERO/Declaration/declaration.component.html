@@ -105,18 +105,18 @@
                </div>
             </div>
             <div class="form-group row">
-               <label class="col-12 col-form-label mb-2"><strong>DeclarationItems</strong></label>
-               <label class="col-4 col-form-label">DeclarationItem</label>
+               <label class="col-12 col-form-label mb-2"><strong>DeclarationItemValues</strong></label>
+               <label class="col-4 col-form-label">DeclarationItemValue</label>
                <div class="col-8">
                   <div class="input-group">
                      <div class="input-group-prepend">
-                        <button type="button" title="Eliminar" class="btn btn-danger" (click)="removeDeclarationItem()"><i class="fas fa-trash"></i></button>
-                        <button type="button" title="Agregar" class="btn btn-success" (click)="addDeclarationItem()"><i class="fas fa-plus-circle"></i></button>
+                        <button type="button" title="Eliminar" class="btn btn-danger" (click)="removeDeclarationItemValue()"><i class="fas fa-trash"></i></button>
+                        <button type="button" title="Agregar" class="btn btn-success" (click)="addDeclarationItemValue()"><i class="fas fa-plus-circle"></i></button>
                      </div>
-                     <select class="form-control" id="declaration_item_id" name="declaration_item_id" [(ngModel)]="declaration_items_declarationSelectedId">
+                     <select class="form-control" id="declaration_item_value_id" name="declaration_item_value_id" [(ngModel)]="declaration_item_values_declarationSelectedId">
                         <option value="0" selected>Seleccione...</option>
-                        <option *ngFor="let declaration_item of declaration_items" value={{declaration_item.id}}>
-                           {{declaration_item.id}}
+                        <option *ngFor="let declaration_item_value of declaration_item_values" value={{declaration_item_value.id}}>
+                           {{declaration_item_value.id}}
                         </option>
                      </select>
                   </div>
@@ -126,9 +126,9 @@
                <div class="col-8">
                   <table class="table table-hover mt-2">
                      <tbody>
-                        <tr *ngFor="let declaration_item of declarationSelected.declaration_items_on_declaration" (click)="selectDeclarationItem(declaration_item)">
-                           <td class="text-right"><span *ngIf="declaration_items_declarationSelectedId === declaration_item.id" class="far fa-hand-point-right"></span></td>
-                           <td>{{declaration_item.id}}</td>
+                        <tr *ngFor="let declaration_item_value of declarationSelected.declaration_item_values_on_declaration" (click)="selectDeclarationItemValue(declaration_item_value)">
+                           <td class="text-right"><span *ngIf="declaration_item_values_declarationSelectedId === declaration_item_value.id" class="far fa-hand-point-right"></span></td>
+                           <td>{{declaration_item_value.id}}</td>
                         </tr>
                      </tbody>
                   </table>

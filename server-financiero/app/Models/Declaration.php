@@ -24,9 +24,9 @@ class Declaration extends Model
        
     ];
 
-    function DeclarationItems()
+    function DeclarationItemValues()
     {
-       return $this->belongsToMany('App\DeclarationItem')->withTimestamps();
+       return $this->belongsToMany('App\DeclarationItemValue')->withTimestamps();
     }
 
     function StateDeclaration()
@@ -37,11 +37,6 @@ class Declaration extends Model
     function Pay()
     {
        return $this->belongsTo('App\Pay');
-    }
-
-    function DeclarationItemValue()
-    {
-       return $this->belongsTo('App\DeclarationItemValue');
     }
 
     function DeclarationAttachment()

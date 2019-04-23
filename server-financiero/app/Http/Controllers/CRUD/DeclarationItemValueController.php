@@ -42,7 +42,6 @@ class DeclarationItemValueController extends Controller
              $declarationitemvalue->id = 1;
           }
           $declarationitemvalue->value = $result['value'];
-          $declarationitemvalue->declaration_id = $result['declaration_id'];
           $declarationitemvalue->declaration_item_id = $result['declaration_item_id'];
           $declarationitemvalue->save();
           DB::commit();
@@ -59,7 +58,6 @@ class DeclarationItemValueController extends Controller
           $result = $data->json()->all();
           $declarationitemvalue = DeclarationItemValue::where('id',$result['id'])->update([
              'value'=>$result['value'],
-             'declaration_id'=>$result['declaration_id'],
              'declaration_item_id'=>$result['declaration_item_id'],
           ]);
           DB::commit();
@@ -98,14 +96,12 @@ class DeclarationItemValueController extends Controller
          if ($exist) {
            DeclarationItemValue::where('id', $result['id'])->update([
              'value'=>$result['value'],
-             'declaration_id'=>$result['declaration_id'],
              'declaration_item_id'=>$result['declaration_item_id'],
            ]);
          } else {
           $declarationitemvalue = new DeclarationItemValue();
           $declarationitemvalue->id = $result['id'];
           $declarationitemvalue->value = $result['value'];
-          $declarationitemvalue->declaration_id = $result['declaration_id'];
           $declarationitemvalue->declaration_item_id = $result['declaration_item_id'];
           $declarationitemvalue->save();
          }
