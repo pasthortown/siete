@@ -33,6 +33,10 @@ class DeclarationController extends Controller
        return response()->json(Declaration::paginate($size),200);
     }
 
+    function register_data(Request $data) {
+      return 1;
+    }
+
     function post(Request $data)
     {
        try{

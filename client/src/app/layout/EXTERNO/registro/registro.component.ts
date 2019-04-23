@@ -376,7 +376,9 @@ export class RegistroComponent implements OnInit {
      const items = [];
      this.declarationItems.forEach(item => {
        if(item.declaration_item_category_id == category.id) {
-         items.push({declarationItem: item, valueItem: new DeclarationItemValue()});
+          const newValueItem = new DeclarationItemValue();
+          newValueItem.declaration_item_id = item.id;
+         items.push({declarationItem: item, valueItem: newValueItem});
        }
      });
      this.declarationItemsToShow.push({Category: category, items: items});
@@ -494,8 +496,6 @@ export class RegistroComponent implements OnInit {
        }else {
          this.ruc_registro_selected.ruc.establishments = r.data as Establishment[];
        }
-       
-       
     }).catch( e => { console.log(e); });
   }
 
@@ -593,28 +593,21 @@ export class RegistroComponent implements OnInit {
   }
 
   guardarDeclaracion() {
-   /*//this.declarationItemsToShow.push({CategoryName: category.name, items: items});
    this.declarationItemsToShow.forEach(element => {
       element.items.forEach(item => {
-         let newDeclarationItem: DeclarationItem = new DeclarationItem();
-         newDeclarationItem.declaration_item_category_id = element.Category.name;
-         newDeclarationItem.
-         items.push({declarationItem: item, valueItem: new DeclarationItemValue()});
-         this.declaration_selected.declaration_items_on_declaration.push(newDeclarationItem);
+         this.declaration_selected.declaration_item_values_on_declaration.push(item.valueItem);
       });
    });
-   console.log(this.declaration_selected);
    this.guardando = true;
    this.declaration_selected.establishment_id = this.establishment_declarations_selected.id;
       if (typeof this.declaration_selected.id === 'undefined') {
-         /*this.declarationDataService.register_ruc(this.ruc_registro_selected.ruc).then( r => {
+         this.declarationDataService.register_data(this.declaration_selected).then( r => {
             this.guardando = false;
             if ( r === '0' ) {
                this.toastr.errorToastr('Existe conflicto con el correo de la persona de contacto ingresada.', 'Nuevo');
                return;
             }
             this.toastr.successToastr('Datos guardados satisfactoriamente.', 'Nuevo');
-            this.refresh();
          }).catch( e => {
             this.guardando = false;
             this.toastr.errorToastr('Existe conflicto la información proporcionada.', 'Nuevo');
@@ -633,8 +626,8 @@ export class RegistroComponent implements OnInit {
             this.guardando = false;
             this.toastr.errorToastr('Existe conflicto la información proporcionada.', 'Nuevo');
             return;
-         });
-      }*/
+         });*/
+      }
   }
 
   guardarRUC() {

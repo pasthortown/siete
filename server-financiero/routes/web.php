@@ -22,20 +22,6 @@ $router->group(['middleware' => ['auth']], function () use ($router) {
    
    //FINANCIERO
 
-   //CRUD ProfilePicture
-   $router->post('/profilepicture', ['uses' => 'ProfilePictureController@post']);
-   $router->get('/profilepicture', ['uses' => 'ProfilePictureController@get']);
-   $router->get('/profilepicture/paginate', ['uses' => 'ProfilePictureController@paginate']);
-   $router->put('/profilepicture', ['uses' => 'ProfilePictureController@put']);
-   $router->delete('/profilepicture', ['uses' => 'ProfilePictureController@delete']);
-
-   //CRUD User
-   $router->post('/user', ['uses' => 'UserController@post']);
-   $router->get('/user', ['uses' => 'UserController@get']);
-   $router->get('/user/paginate', ['uses' => 'UserController@paginate']);
-   $router->put('/user', ['uses' => 'UserController@put']);
-   $router->delete('/user', ['uses' => 'UserController@delete']);
-
    //CRUD Declaration
    $router->post('/declaration', ['uses' => 'DeclarationController@post']);
    $router->get('/declaration', ['uses' => 'DeclarationController@get']);
@@ -44,7 +30,8 @@ $router->group(['middleware' => ['auth']], function () use ($router) {
    $router->put('/declaration', ['uses' => 'DeclarationController@put']);
    $router->delete('/declaration', ['uses' => 'DeclarationController@delete']);
    $router->post('/declaration/masive_load', ['uses' => 'DeclarationController@masiveLoad']);
-
+   $router->post('/declaration/register_data', ['uses' => 'DeclarationController@register_data']);
+   
    //CRUD DeclarationItem
    $router->post('/declarationitem', ['uses' => 'DeclarationItemController@post']);
    $router->get('/declarationitem', ['uses' => 'DeclarationItemController@get']);
