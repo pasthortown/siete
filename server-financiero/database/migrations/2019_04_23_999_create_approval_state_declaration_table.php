@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateDeclarationApprovalStateTable extends Migration
+class CreateApprovalStateDeclarationTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateDeclarationApprovalStateTable extends Migration
      */
     public function up()
     {
-       Schema::create('declaration_approval_state', function (Blueprint $table) {
+       Schema::create('approval_state_declaration', function (Blueprint $table) {
           $table->increments('id');
           $table->timestamps();
           $table->unsignedInteger('approval_state_id');
@@ -30,6 +30,6 @@ class CreateDeclarationApprovalStateTable extends Migration
      */
     public function down()
     {
-       Schema::dropIfExists('declaration_approval_state');
+       Schema::dropIfExists('approval_state_declaration');
     }
 }

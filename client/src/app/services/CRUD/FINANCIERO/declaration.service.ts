@@ -30,6 +30,13 @@ export class DeclarationService {
       }).catch( error => { this.handledError(error.json()); });
    }
 
+   get_by_establishment(id: number): Promise<any> {
+      return this.http.get(this.url + 'by_establishment?id=' + id.toString(), this.options).toPromise()
+      .then( r => {
+         return r.json();
+      }).catch( error => { this.handledError(error.json()); });
+   }
+
    register_data(declaration: Declaration): Promise<any> {
       return this.http.post(this.url + 'register_data', JSON.stringify(declaration), this.options).toPromise()
       .then( r => {

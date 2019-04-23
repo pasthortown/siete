@@ -352,6 +352,7 @@ export class RegistroComponent implements OnInit {
   newDeclaration() {
    this.declaration_selected = new Declaration();
    this.mostrarDataDeclaration = true;
+   this.guardando = false;
    this.buildDeclarationItemsToShow();
   }
 
@@ -592,7 +593,32 @@ export class RegistroComponent implements OnInit {
    }).catch( e => { console.log(e); });
   }
 
+  getDeclarationsByEstablishment(id: number) {
+    this.declarationDataService.get_by_establishment(id).then( r => {
+       this.declarations = r as Declaration[];
+    }).catch( e => { console.log(e); });
+  }
+
+  selectDeclaration(declaration: Declaration) {
+      this.declaration_selected = declaration;
+      this.mostrarDataDeclaration = true;
+      this.declarationItemsToShow = [];
+      this.guardando = false;
+      this.declarationItemsCategories.forEach(category => {
+         const items = [];
+         declaration.declaration_item_values_on_declaration.forEach(newValueItem => {
+            this.declarationItems.forEach(item => {
+               if ((item.id == newValueItem.declaration_item_id) && (item.declaration_item_category_id == category.id)) {
+                  items.push({declarationItem: item, valueItem: newValueItem});
+               }
+            });
+         });
+         this.declarationItemsToShow.push({Category: category, items: items});
+      });
+  }
+
   guardarDeclaracion() {
+   this.declaration_selected.declaration_item_values_on_declaration = [];
    this.declarationItemsToShow.forEach(element => {
       element.items.forEach(item => {
          this.declaration_selected.declaration_item_values_on_declaration.push(item.valueItem);
@@ -600,34 +626,21 @@ export class RegistroComponent implements OnInit {
    });
    this.guardando = true;
    this.declaration_selected.establishment_id = this.establishment_declarations_selected.id;
-      if (typeof this.declaration_selected.id === 'undefined') {
-         this.declarationDataService.register_data(this.declaration_selected).then( r => {
-            this.guardando = false;
-            if ( r === '0' ) {
-               this.toastr.errorToastr('Existe conflicto con el correo de la persona de contacto ingresada.', 'Nuevo');
-               return;
-            }
-            this.toastr.successToastr('Datos guardados satisfactoriamente.', 'Nuevo');
-         }).catch( e => {
-            this.guardando = false;
-            this.toastr.errorToastr('Existe conflicto la información proporcionada.', 'Nuevo');
-            return;
-         });
-      } else {
-         /*this.rucDataService.update_ruc(this.ruc_registro_selected.ruc).then( r => {
-            this.guardando = false;
-            if ( r === '0' ) {
-               this.toastr.errorToastr('Existe conflicto con el correo de la persona de contacto ingresada.', 'Actualizar');
-               return;
-            }
-            this.toastr.successToastr('Registro actualizado satisfactoriamente.', 'Actualizar');
-            this.refresh();
-         }).catch( e => {
-            this.guardando = false;
-            this.toastr.errorToastr('Existe conflicto la información proporcionada.', 'Nuevo');
-            return;
-         });*/
+   this.declarationDataService.register_data(this.declaration_selected).then( r => {
+      this.guardando = false;
+      if ( r === '0' ) {
+         this.toastr.errorToastr('Existe conflicto la información proporcionada.', 'Declaración');
+         return;
       }
+      this.toastr.successToastr('Datos guardados satisfactoriamente.', 'Declaración');
+      this.getEstablishmentsOnRuc(this.currentPageEstablishment);
+      this.establishment_declarations_selected = new Establishment();
+      this.mostrarDataDeclaration = false;
+   }).catch( e => {
+      this.guardando = false;
+      this.toastr.errorToastr('Existe conflicto la información proporcionada.', 'Declaración');
+      return;
+   });
   }
 
   guardarRUC() {
@@ -1537,6 +1550,9 @@ export class RegistroComponent implements OnInit {
 
   selectRegisterEstablishmentDeclaration(establishment: Establishment) {
    this.establishment_declarations_selected = establishment;
+   this.getDeclarationsByEstablishment(establishment.id);
+   this.declaration_selected = new Declaration();
+   this.mostrarDataDeclaration = false;
   }
 
   recoverUbication() {

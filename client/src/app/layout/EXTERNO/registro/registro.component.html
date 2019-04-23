@@ -1638,7 +1638,7 @@
                   <div class="btn-toolbar" role="toolbar">
                     <div class="btn-group mr-2" role="group">
                       <button type="button" class="btn btn-primary" title="Actualizar" (click)="
-                        getEstablishmentsOnRuc(currentPageDeclaration)
+                        getEstablishmentsOnRuc(currentPageEstablishment)
                         ">
                         <i class="fas fa-sync"></i>
                       </button>
@@ -1787,20 +1787,25 @@
                           <tr>
                             <th>Seleccionado</th>
                             <th>Año</th>
-                            <th>Monto</th>
+                            <th>Fecha de Declaración</th>
                             <th>Estado</th>
-                            <th>Anexos</th>
+                            <th>Observaciones</th>
                           </tr>
                         </thead>
                         <tbody>
-                          <tr *ngFor="let declaration of declarations">
+                          <tr *ngFor="let declaration of declarations" (click)="selectDeclaration(declaration)">
                             <td class="text-right">
                               <span *ngIf="declaration_selected === declaration" class="far fa-hand-point-right"></span>
                             </td>
-                            <td>2019</td>
-                            <td>12.45USD</td>
-                            <td>Pendiente</td>
-                            <td>Anexos</td>
+                            <td>{{declaration.year}}</td>
+                            <td>{{declaration.declaration_date}}</td>
+                            <td>{{declaration.status_name}}</td>
+                            <td>
+                              <button type="button" title="Ver Observaciones" class="btn btn-info"
+                                (click)="openDialog(content, declaration.status)">
+                                <i class="fas fa-comment-dots"></i>
+                              </button>
+                            </td>
                           </tr>
                         </tbody>
                       </table>
@@ -2002,7 +2007,7 @@
   </div>
   <div class="modal-body">
     <div class="row">
-      <div class="col-12" [innerHTML]="statusSelected.justification"></div>
+      <div class="col-12 text-justify" [innerHTML]="statusSelected.justification"></div>
     </div>
   </div>
   <div class="modal-footer">

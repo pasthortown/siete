@@ -6,7 +6,6 @@ import { DeclarationItemValueRoutingModule } from './declarationitemvalue-routin
 import { DeclarationItemValueComponent } from './declarationitemvalue.component';
 import { DeclarationItemValueService } from './../../../../services/CRUD/FINANCIERO/declarationitemvalue.service';
 import { environment } from 'src/environments/environment';
-import { DeclarationService } from './../../../../services/CRUD/FINANCIERO/declaration.service';
 import { DeclarationItemService } from './../../../../services/CRUD/FINANCIERO/declarationitem.service';
 
 @NgModule({
@@ -16,7 +15,6 @@ import { DeclarationItemService } from './../../../../services/CRUD/FINANCIERO/d
    declarations: [DeclarationItemValueComponent],
    providers: [
                NgbModal,
-               DeclarationService,
                DeclarationItemService,
                DeclarationItemValueService
                ]

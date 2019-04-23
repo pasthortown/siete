@@ -4,9 +4,6 @@ import { ToastrManager } from 'ng6-toastr-notifications';
 import { saveAs } from 'file-saver/FileSaver';
 import { DeclarationItemValueService } from './../../../../services/CRUD/FINANCIERO/declarationitemvalue.service';
 import { DeclarationItemValue } from './../../../../models/FINANCIERO/DeclarationItemValue';
-import { DeclarationService } from './../../../../services/CRUD/FINANCIERO/declaration.service';
-import { Declaration } from './../../../../models/FINANCIERO/Declaration';
-
 import { DeclarationItemService } from './../../../../services/CRUD/FINANCIERO/declarationitem.service';
 import { DeclarationItem } from './../../../../models/FINANCIERO/DeclarationItem';
 
@@ -24,30 +21,20 @@ export class DeclarationItemValueComponent implements OnInit {
    lastPage = 1;
    showDialog = false;
    recordsByPage = 5;
-   declarations: Declaration[] = [];
    declaration_items: DeclarationItem[] = [];
    constructor(
                private modalService: NgbModal,
                private toastr: ToastrManager,
-               private declarationDataService: DeclarationService,
                private declaration_itemDataService: DeclarationItemService,
                private declaration_item_valueDataService: DeclarationItemValueService) {}
 
    ngOnInit() {
       this.goToPage(1);
-      this.getDeclaration();
       this.getDeclarationItem();
    }
 
    selectDeclarationItemValue(declaration_item_value: DeclarationItemValue) {
       this.declaration_item_valueSelected = declaration_item_value;
-   }
-
-   getDeclaration() {
-      this.declarations = [];
-      this.declarationDataService.get().then( r => {
-         this.declarations = r as Declaration[];
-      }).catch( e => console.log(e) );
    }
 
    getDeclarationItem() {
@@ -69,7 +56,6 @@ export class DeclarationItemValueComponent implements OnInit {
    getDeclarationItemValues() {
       this.declaration_item_values = [];
       this.declaration_item_valueSelected = new DeclarationItemValue();
-      this.declaration_item_valueSelected.declaration_id = 0;
       this.declaration_item_valueSelected.declaration_item_id = 0;
       this.declaration_item_valueDataService.get_paginate(this.recordsByPage, this.currentPage).then( r => {
          this.declaration_item_values = r.data as DeclarationItemValue[];
@@ -79,7 +65,6 @@ export class DeclarationItemValueComponent implements OnInit {
 
    newDeclarationItemValue(content) {
       this.declaration_item_valueSelected = new DeclarationItemValue();
-      this.declaration_item_valueSelected.declaration_id = 0;
       this.declaration_item_valueSelected.declaration_item_id = 0;
       this.openDialog(content);
    }
@@ -115,9 +100,9 @@ export class DeclarationItemValueComponent implements OnInit {
    toCSV() {
       this.declaration_item_valueDataService.get().then( r => {
          const backupData = r as DeclarationItemValue[];
-         let output = 'id;value;declaration_id;declaration_item_id\n';
+         let output = 'id;value;declaration_item_id\n';
          backupData.forEach(element => {
-            output += element.id + ';' + element.value + ';' + element.declaration_id + ';' + element.declaration_item_id + '\n';
+            output += element.id; + element.value + ';' + element.declaration_item_id + '\n';
          });
          const blob = new Blob([output], { type: 'text/plain' });
          const fecha = new Date();

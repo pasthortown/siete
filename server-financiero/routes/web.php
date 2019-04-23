@@ -25,6 +25,7 @@ $router->group(['middleware' => ['auth']], function () use ($router) {
    //CRUD Declaration
    $router->post('/declaration', ['uses' => 'DeclarationController@post']);
    $router->get('/declaration', ['uses' => 'DeclarationController@get']);
+   $router->get('/declaration/by_establishment', ['uses' => 'DeclarationController@by_establishment']);
    $router->get('/declaration/paginate', ['uses' => 'DeclarationController@paginate']);
    $router->get('/declaration/backup', ['uses' => 'DeclarationController@backup']);
    $router->put('/declaration', ['uses' => 'DeclarationController@put']);
