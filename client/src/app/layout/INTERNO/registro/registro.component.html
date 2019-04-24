@@ -21,16 +21,18 @@
               <th>Número de Ruc</th>
               <th>Establecimiento</th>
               <th>Dirección</th>
+              <th>Categoría</th>
               <th>Estado</th>
            </tr>
         </thead>
         <tbody>
-           <tr *ngFor="let register of registers_mintur" (click)="selectRegisterMintur(register)">
-              <td class="text-right"><span *ngIf="registerMinturSelected === register" class="far fa-hand-point-right"></span></td>
-              <td>{{register.code}}</td>
-              <td>{{register.autorized_complementary_capacities}}</td>
-              <td>{{register.establishment_id}}</td>
-              <td>{{register.autorized_complementary_food_capacities}}</td>
+           <tr *ngFor="let item of registers_mintur" (click)="selectRegisterMintur(item)">
+              <td class="text-right"><span *ngIf="registerMinturSelected === item" class="far fa-hand-point-right"></span></td>
+              <td>{{item.ruc.number}}</td>
+              <td>{{item.establishment.commercially_known_name}}</td>
+              <td>{{item.establishment.address}}</td>
+              <td>{{getRegisterCategory(item.register.register_type_id)}}</td>
+              <td>{{getRegisterState(item.register.state_id)}}</td>
            </tr>
         </tbody>
      </table>

@@ -1,3 +1,4 @@
+import { ConsultorService } from 'src/app/services/negocio/consultor.service';
 import { DeclarationService } from 'src/app/services/CRUD/FINANCIERO/declaration.service';
 import { DeclarationItemValue } from 'src/app/models/FINANCIERO/DeclarationItemValue';
 import { DeclarationItemService } from 'src/app/services/CRUD/FINANCIERO/declarationitem.service';
@@ -90,8 +91,8 @@ export class RegistroComponent implements OnInit {
    @ViewChild('fotoFachadaInput') fotoFachadaInput;
    @ViewChild('EstablishmentCertificationAttachedFile') EstablishmentCertificationAttachedFile;
    //RREGISTROS MINTUR
-   registers_mintur: Register[] = [];
-   registerMinturSelected: Register = new Register();
+   registers_mintur = [];
+   registerMinturSelected: any = null;
    currentPageMinturRegisters = 1;
    lastPageMinturRegisters = 1;
    recordsByPageRegisterMintur = 5;
@@ -222,6 +223,7 @@ export class RegistroComponent implements OnInit {
   declarationItems: DeclarationItem[] = [];
   maxYear: number = 2019;
   constructor(private toastr: ToastrManager,
+              private consultorDataService: ConsultorService,
               private userDataService: UserService,
               private dinardapDataService: DinardapService,
               private franchiseDataService: FranchiseChainNameService,
@@ -272,16 +274,21 @@ export class RegistroComponent implements OnInit {
   getRegistersMintur() {
    this.registers_mintur = [];
    this.registerMinturSelected = new Register();
-   this.registerDataService.get_paginate_mintur(this.recordsByPageRegisterMintur, this.currentPageMinturRegisters).then( r => {
-      this.registers_mintur = r.data as Register[];
-      this.lastPageMinturRegisters = r.last_page;
+   this.consultorDataService.get_registers(1,2).then( r => {
+      this.registers_mintur = r;
    }).catch( e => console.log(e) );
   }
 
-  selectRegisterMintur(register: Register) {
-   this.registerMinturSelected = register;
+  getRegisterTypes() {
+   this.register_typeDataService.get().then( r => {
+      this.register_types = r as RegisterType[];
+   }).catch( e => { console.log(e); });
+  }
+
+  selectRegisterMintur(item: any) {
+   this.registerMinturSelected = item;
    this.mostrarDataRegisterMintur = true;
-   this.getRuc(this.user.ruc);
+   this.getRuc(this.registerMinturSelected.ruc.number);
    this.getRegistersOnRuc();
    this.groupTypeSelected = new GroupType();
   }
@@ -355,6 +362,7 @@ export class RegistroComponent implements OnInit {
     this.getTaxPayerType();
     this.getFranchise();
     this.getGroupType();
+    this.getRegisterTypes();
     this.getCapacityTypes();
     this.getStates();
     this.getRucNameTypes();
@@ -609,6 +617,40 @@ export class RegistroComponent implements OnInit {
       this.states = r as State[];
       this.getSpecificStates();
    }).catch( e => { console.log(e); });
+  }
+
+  getRegisterCategory(id: number): String {
+   let toReturn: String = '';
+   let fatherCode: String = '';
+   this.register_types.forEach(register_type => {
+      if (register_type.id == id) {
+       toReturn = register_type.name;
+       fatherCode = register_type.father_code;
+      }
+   });
+   this.register_types.forEach(register_type => {
+      if (register_type.code == fatherCode) {
+         toReturn = register_type.name + ' - ' + toReturn;
+      }
+   });
+   return toReturn;
+}
+
+  getRegisterState(id: number): String {
+     let toReturn: String = '';
+     let fatherCode: String = '';
+     this.states.forEach(state => {
+        if (state.id == id) {
+         toReturn = state.name;
+         fatherCode = state.father_code;
+        }
+     });
+     this.states.forEach(state => {
+        if (state.code == fatherCode) {
+           toReturn = state.name + ' - ' + toReturn;
+        }
+     });
+     return toReturn;
   }
 
   getClasifications() {
