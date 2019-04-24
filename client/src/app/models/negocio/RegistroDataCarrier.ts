@@ -1,7 +1,6 @@
 import { ProfilePicture } from './../profile/ProfilePicture';
 import { Establishment } from './../BASE/Establishment';
 import { Ruc } from './../BASE/Ruc';
-import { Register } from './../ALOJAMIENTO/Register';
 export class RegistroDataCarrier {
     establishments: Establishment[];
     userProfileImage: ProfilePicture;
