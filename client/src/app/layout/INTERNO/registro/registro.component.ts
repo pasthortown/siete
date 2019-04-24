@@ -97,6 +97,15 @@ export class RegistroComponent implements OnInit {
    lastPageMinturRegisters = 1;
    recordsByPageRegisterMintur = 5;
    mostrarDataRegisterMintur = false;
+   config: any = {
+      paging: true,
+      filtering: {filterString: ''},
+      className: ['table-striped', 'table-hover', 'table-bordered']
+   };
+   rows = [];
+   columns = [];
+   data = [];
+  
   //DATOS RUC
   imContactRuc: Boolean = true;
   roles:any[] = [];
@@ -262,13 +271,84 @@ export class RegistroComponent implements OnInit {
    this.getUser();
   }
 
-  goToPageRegisterMintur(page: number) {
-    if ( page < 1 || page > this.lastPageMinturRegisters ) {
-      this.toastr.errorToastr('La página solicitada no existe.', 'Error');
-      return;
-    }
-    this.currentPageMinturRegisters = page;
-    this.getRegistersMintur();
+  onChangeTable(config: any, page: any = {page: this.currentPageMinturRegisters, itemsPerPage: this.recordsByPageRegisterMintur}): any {
+   if (config.filtering) {
+     Object.assign(this.config.filtering, config.filtering);
+   }
+   if (config.sorting) {
+     Object.assign(this.config.sorting, config.sorting);
+   }
+   const filteredData = this.changeFilter(this.data, this.config);
+   const sortedData = this.changeSort(filteredData, this.config);
+   this.rows = page && config.paging ? this.changePage(page, sortedData) : sortedData;
+  }
+
+  changeFilter(data: any, config: any): any {
+   this.mostrarDataRegisterMintur = false;
+   this.rows.forEach(row => {
+      row.selected = '';
+   });
+   let filteredData: Array<any> = data;
+   this.columns.forEach((column: any) => {
+     if (column.filtering) {
+       filteredData = filteredData.filter((item: any) => {
+         return item[column.name].match(column.filtering.filterString);
+       });
+     }
+   });
+   if (!config.filtering) {
+     return filteredData;
+   }
+   if (config.filtering.columnName) {
+     return filteredData.filter((item:any) =>
+       item[config.filtering.columnName].match(this.config.filtering.filterString));
+   }
+   const tempArray: Array<any> = [];
+   filteredData.forEach((item: any) => {
+     let flag = false;
+     this.columns.forEach((column: any) => {
+       if (item[column.name].toString().match(this.config.filtering.filterString)) {
+         flag = true;
+       }
+     });
+     if (flag) {
+       tempArray.push(item);
+     }
+   });
+   filteredData = tempArray;
+   return filteredData;
+  }
+
+  changeSort(data: any, config: any): any {
+   if (!config.sorting) {
+     return data;
+   }
+   const columns = this.config.sorting.columns || [];
+   let columnName: string = void 0;
+   let sort: string = void 0;
+   for (let i = 0; i < columns.length; i++) {
+     if (columns[i].sort !== '' && columns[i].sort !== false) {
+       columnName = columns[i].name;
+       sort = columns[i].sort;
+     }
+   }
+   if (!columnName) {
+     return data;
+   }
+   return data.sort((previous:any, current:any) => {
+     if (previous[columnName] > current[columnName]) {
+       return sort === 'desc' ? -1 : 1;
+     } else if (previous[columnName] < current[columnName]) {
+       return sort === 'asc' ? -1 : 1;
+     }
+     return 0;
+   });
+  }
+
+  changePage(page: any, data: Array<any> = this.data):Array<any> {
+   const start = (page.page - 1) * page.itemsPerPage;
+   const end = page.itemsPerPage > -1 ? (start + page.itemsPerPage) : data.length;
+   return data.slice(start, end);
   }
 
   getRegistersMintur() {
@@ -276,12 +356,53 @@ export class RegistroComponent implements OnInit {
    this.registerMinturSelected = new Register();
    this.consultorDataService.get_registers(1,2).then( r => {
       this.registers_mintur = r;
+      this.buildDataTable();
    }).catch( e => console.log(e) );
+  }
+
+  buildDataTable() {
+     this.columns = [
+        {title: 'Seleccionado', name: 'selected'},
+        {title: 'Número de RUC', name: 'number', filtering: {filterString: '', placeholder: 'Número de RUC'}},
+        {title: 'Establecimiento', name: 'establishment'},
+        {title: 'Dirección', name: 'address'},
+        {title: 'Categoría', name: 'category'},
+        {title: 'Estado', name: 'status'},
+     ];
+     const data = [];
+     this.registers_mintur.forEach(item => {
+         data.push({
+            selected: '',
+            number: item.ruc.number,
+            establishment: item.establishment.commercially_known_name,
+            address: item.establishment.address,
+            category: this.getRegisterCategory(item.register.register_type_id),
+            status: this.getRegisterState(item.register.state_id),
+         });
+     });
+     this.data = data;
+     this.onChangeTable(this.config);
+  }
+
+  onCellClick(event) {
+   this.registers_mintur.forEach(element => {
+      if (element.ruc.number == event.row.number) {
+         this.selectRegisterMintur(element);
+      }
+   });
+   this.rows.forEach(row => {
+      if (row.number == event.row.number) {
+         row.selected = '<div class="col-12 text-right"><span class="far fa-hand-point-right"></span></div>';
+      } else {
+         row.selected = '';
+      }
+   });
   }
 
   getRegisterTypes() {
    this.register_typeDataService.get().then( r => {
       this.register_types = r as RegisterType[];
+      this.getRegistersMintur();
    }).catch( e => { console.log(e); });
   }
 
@@ -354,7 +475,6 @@ export class RegistroComponent implements OnInit {
     this.registerMinturSelected = new Register();
     this.mostrarDataRegisterMintur = false;
     this.ruc_registro_selected = new RegistroDataCarrier();
-    this.goToPageRegisterMintur(this.currentPageMinturRegisters);
     this.getTramiteStates();
     this.getDeclarationCategories();
     this.getDeclarationItems();
@@ -362,9 +482,8 @@ export class RegistroComponent implements OnInit {
     this.getTaxPayerType();
     this.getFranchise();
     this.getGroupType();
-    this.getRegisterTypes();
-    this.getCapacityTypes();
     this.getStates();
+    this.getCapacityTypes();
     this.getRucNameTypes();
     this.getZonalesEstablishment();
     this.getEstablishmentPropertyType();
@@ -615,6 +734,7 @@ export class RegistroComponent implements OnInit {
    this.states = [];
    this.stateDataService.get().then( r => {
       this.states = r as State[];
+      this.getRegisterTypes();
       this.getSpecificStates();
    }).catch( e => { console.log(e); });
   }

@@ -46,6 +46,7 @@ import { ComplementaryServiceFoodTypeService } from 'src/app/services/CRUD/ALOJA
 import { DeclarationItemService } from 'src/app/services/CRUD/FINANCIERO/declarationitem.service';
 import { DeclarationItemCategoryService } from 'src/app/services/CRUD/FINANCIERO/declarationitemcategory.service';
 import { DeclarationService } from 'src/app/services/CRUD/FINANCIERO/declaration.service';
+import { Ng2TableModule } from 'ng2-table/ng2-table';
 
 @NgModule({
   imports: [CommonModule,
@@ -55,6 +56,7 @@ import { DeclarationService } from 'src/app/services/CRUD/FINANCIERO/declaration
     RegistroRoutingModule,
     NgxQRCodeModule,
     NgbModule,
+    Ng2TableModule,
     FormsModule],
   declarations: [RegistroComponent],
   providers: [NgbModal,

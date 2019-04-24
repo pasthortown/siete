@@ -13,50 +13,31 @@
   </div>
 </div>
 <div class="row">
-  <div class="col-12">
-     <table class="table table-hover mt-2">
-        <thead>
-           <tr>
-              <th>Seleccionado</th>
-              <th>Número de Ruc</th>
-              <th>Establecimiento</th>
-              <th>Dirección</th>
-              <th>Categoría</th>
-              <th>Estado</th>
-           </tr>
-        </thead>
-        <tbody>
-           <tr *ngFor="let item of registers_mintur" (click)="selectRegisterMintur(item)">
-              <td class="text-right"><span *ngIf="registerMinturSelected === item" class="far fa-hand-point-right"></span></td>
-              <td>{{item.ruc.number}}</td>
-              <td>{{item.establishment.commercially_known_name}}</td>
-              <td>{{item.establishment.address}}</td>
-              <td>{{getRegisterCategory(item.register.register_type_id)}}</td>
-              <td>{{getRegisterState(item.register.state_id)}}</td>
-           </tr>
-        </tbody>
-     </table>
+  <div class="col-12 mt-2">
+     <ng-table
+        [config]="config"
+        (cellClicked)="onCellClick($event)"
+        (tableChanged)="onChangeTable(config)"
+        [rows]="rows"
+        [columns]="columns">
+      </ng-table>
   </div>
 </div>
 <div class="row">
   <div class="col-12">
-     <div class="btn-toolbar" role="toolbar">
-        <div class="btn-group mr-2" role="group">
-           <button type="button" class="btn btn-light" *ngIf="currentPageMinturRegisters === 1" title="Primera Página" disabled>Primera</button>
-           <button type="button" class="btn btn-light" *ngIf="currentPageMinturRegisters !== 1" title="Primera Página" (click)="goToPageRegisterMintur(1)">Primera</button>
-           <button type="button" class="btn btn-light" *ngIf="currentPageMinturRegisters > 1" title="Página Anterior" (click)="goToPageRegisterMintur((currentPageMinturRegisters*1) - 1)">{{(currentPageMinturRegisters * 1) - 1}}</button>
-           <button type="button" class="btn btn-primary" title="Página Actual">{{currentPageMinturRegisters}}</button>
-           <button type="button" class="btn btn-light" *ngIf="currentPageMinturRegisters < lastPageMinturRegisters" title="Página Siguiente" (click)="goToPageRegisterMintur((currentPageMinturRegisters*1) + 1)">{{(currentPageMinturRegisters * 1) + 1}}</button>
-           <button type="button" class="btn btn-light" *ngIf="currentPageMinturRegisters !== lastPageMinturRegisters" title="Última Página" (click)="goToPageRegisterMintur(lastPageMinturRegisters)">Última</button>
-           <button type="button" class="btn btn-light" *ngIf="currentPageMinturRegisters === lastPageMinturRegisters" title="Última Página" disabled>Última</button>
-        </div>
-        <div class="input-group">
-           <div class="input-group-prepend">
-              <button type="button" class="input-group-text btn btn-success" title="Ir a la Página" (click)="goToPageRegisterMintur(goToPageNumberRegisterMintur.value)">Ir a</button>
-           </div>
-           <input type="number" min="{{1}}" max="{{lastPageMinturRegisters}}" class="form-control" placeholder="Ir a la Página" #goToPageNumberRegisterMintur>
-        </div>
-     </div>
+    <ngb-pagination
+      *ngIf="config.paging"
+      [(page)]="currentPageMinturRegisters"
+      [pageSize]="recordsByPageRegisterMintur"
+      [maxSize]="10"
+      [boundaryLinks]="true"
+      (pageChange)="onChangeTable(config, $event)"
+      [collectionSize]="registers_mintur.length">
+      <ng-template ngbPaginationFirst>Primera</ng-template>
+      <ng-template ngbPaginationPrevious>Anterior</ng-template>
+      <ng-template ngbPaginationNext>Siguiente</ng-template>
+      <ng-template ngbPaginationLast>Última</ng-template>
+    </ngb-pagination>
   </div>
 </div>
 <div class="row" *ngIf="mostrarDataRegisterMintur">
