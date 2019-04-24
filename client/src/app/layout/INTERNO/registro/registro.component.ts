@@ -272,7 +272,7 @@ export class RegistroComponent implements OnInit {
   getRegistersMintur() {
    this.registers_mintur = [];
    this.registerMinturSelected = new Register();
-   this.registerDataService.get_paginate(this.recordsByPageRegisterMintur, this.currentPageMinturRegisters).then( r => {
+   this.registerDataService.get_paginate_mintur(this.recordsByPageRegisterMintur, this.currentPageMinturRegisters).then( r => {
       this.registers_mintur = r.data as Register[];
       this.lastPageMinturRegisters = r.last_page;
    }).catch( e => console.log(e) );

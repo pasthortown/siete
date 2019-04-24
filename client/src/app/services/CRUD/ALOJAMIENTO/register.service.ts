@@ -64,6 +64,13 @@ export class RegisterService {
          return r.json();
       }).catch( error => { this.handledError(error.json()); });
    }
+   
+   get_paginate_mintur(size: number, page: number): Promise<any> {
+      return this.http.get(this.url + 'paginate_mintur?size=' + size.toString() + '&page=' + page.toString(), this.options).toPromise()
+      .then( r => {
+         return r.json();
+      }).catch( error => { this.handledError(error.json());  });
+   }
 
    register_register_data(register: Register): Promise<any> {
       return this.http.post(this.url + 'register_register_data', JSON.stringify(register), this.options).toPromise()

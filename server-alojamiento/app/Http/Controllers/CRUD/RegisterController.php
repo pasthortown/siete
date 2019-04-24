@@ -44,6 +44,12 @@ class RegisterController extends Controller
        return response()->json(Register::paginate($size),200);
     }
  
+    function paginate_mintur(Request $data)
+    {
+      $size = $data['size'];
+      return response()->json(Register::paginate($size),200);
+    }
+
     function get_registers_by_ruc(Request $data) {
       $token = $data->header('api_token');
       $number = $data['ruc_number'];
