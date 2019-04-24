@@ -417,6 +417,7 @@ export class RegistroComponent implements OnInit {
    this.rucDataService.get_filtered(number).then( r => {
       if ( typeof r.Ruc === 'undefined') {
          this.ruc_registro_selected.ruc = new Ruc();
+         this.ruc_registro_selected.ruc.establishments = [];
          this.ruc_registro_selected.ruc.number = number;
          this.ruc_registro_selected.ruc.contact_user = new User();
          this.imContactRuc = (this.ruc_registro_selected.ruc.contact_user.id == this.user.id);
@@ -432,6 +433,7 @@ export class RegistroComponent implements OnInit {
          this.checkRuc();
       } else {
          this.ruc_registro_selected.ruc = r.Ruc as Ruc;
+         this.ruc_registro_selected.ruc.establishments = [];
          this.ruc_registro_selected.ruc.franchise_chain_names_on_ruc = r.attach[0].franchise_chain_names_on_ruc as FranchiseChainName[];
          this.ruc_registro_selected.ruc.contact_user = r.contact_user as User;
          this.imContactRuc = (this.ruc_registro_selected.ruc.contact_user.id == this.user.id);
