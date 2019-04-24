@@ -270,14 +270,6 @@ const routes: Routes = [
             loadChildren: './EXTERNO/registro/registro.module#RegistroModule'
          },
          {
-            path: 'externo-solicitudes',
-            loadChildren: './EXTERNO/solicitudes/solicitudes.module#SolicitudesModule'
-         },
-         {
-            path: 'externo-impuestos',
-            loadChildren: './INTERNO/impuestos/impuestos.module#ImpuestosModule'
-         },
-         {
             path: '**',
             redirectTo: 'not-found'
          }

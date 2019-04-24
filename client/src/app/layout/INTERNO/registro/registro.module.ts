@@ -1,7 +1,10 @@
+import { RegisterService } from 'src/app/services/CRUD/ALOJAMIENTO/register.service';
+import { EstablishmentPictureService } from 'src/app/services/CRUD/BASE/establishmentpicture.service';
+import { AgreementService } from 'src/app/services/CRUD/BASE/agreement.service';
 import { UserService } from 'src/app/services/profile/user.service';
 import { RegistroComponent } from './registro.component';
 import { RegistroRoutingModule } from './registro-routing.module';
-
+import { PersonRepresentativeAttachmentService } from 'src/app/services/CRUD/BASE/personrepresentativeattachment.service';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -37,6 +40,11 @@ import { RucNameTypeService } from 'src/app/services/CRUD/BASE/rucnametype.servi
 import { StateService } from 'src/app/services/CRUD/ALOJAMIENTO/state.service';
 import { CapacityTypeService } from 'src/app/services/CRUD/ALOJAMIENTO/capacitytype.service';
 import { DinardapService } from 'src/app/services/negocio/dinardap.service';
+import { EstablishmentCertificationAttachmentService } from 'src/app/services/CRUD/BASE/establishmentcertificationattachment.service';
+import { ComplementaryServiceFoodTypeService } from 'src/app/services/CRUD/ALOJAMIENTO/complementaryservicefoodtype.service';
+import { DeclarationItemService } from 'src/app/services/CRUD/FINANCIERO/declarationitem.service';
+import { DeclarationItemCategoryService } from 'src/app/services/CRUD/FINANCIERO/declarationitemcategory.service';
+import { DeclarationService } from 'src/app/services/CRUD/FINANCIERO/declaration.service';
 
 @NgModule({
   imports: [CommonModule,
@@ -51,12 +59,21 @@ import { DinardapService } from 'src/app/services/negocio/dinardap.service';
   providers: [NgbModal,
     UserService,
     DinardapService,
+    DeclarationItemService,
+    DeclarationItemCategoryService,
+    DeclarationService,
     TaxPayerTypeService,
+    PersonRepresentativeAttachmentService,
     EstablishmentCertificationService,
+    ComplementaryServiceFoodTypeService,
     EstablishmentPropertyTypeService,
     RequisiteService,
+    AgreementService,
     UbicationService,
+    RegisterService,
     CapacityTypeService,
+    EstablishmentCertificationAttachmentService,
+    EstablishmentPictureService,
     StateService,
     RucNameTypeService,
     ComplementaryServiceTypeService,

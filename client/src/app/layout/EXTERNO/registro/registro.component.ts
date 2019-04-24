@@ -796,7 +796,6 @@ export class RegistroComponent implements OnInit {
          }
       });
       this.showRequisites  = true;
-      console.log(AllRequisites);
       const padres = [];
       AllRequisites.forEach(element => {
          if (element.requisite_father_code == '-') {

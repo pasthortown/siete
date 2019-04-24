@@ -1,3 +1,18 @@
+import { DeclarationService } from 'src/app/services/CRUD/FINANCIERO/declaration.service';
+import { DeclarationItemValue } from 'src/app/models/FINANCIERO/DeclarationItemValue';
+import { DeclarationItemService } from 'src/app/services/CRUD/FINANCIERO/declarationitem.service';
+import { DeclarationItemCategoryService } from 'src/app/services/CRUD/FINANCIERO/declarationitemcategory.service';
+import { DeclarationItem } from 'src/app/models/FINANCIERO/DeclarationItem';
+import { DeclarationItemCategory } from 'src/app/models/FINANCIERO/DeclarationItemCategory';
+import { Pay } from 'src/app/models/FINANCIERO/Pay';
+import { Declaration } from 'src/app/models/FINANCIERO/Declaration';
+import { RegisterState } from 'src/app/models/ALOJAMIENTO/RegisterState';
+import { ComplementaryServiceFood } from 'src/app/models/ALOJAMIENTO/ComplementaryServiceFood';
+import { ComplementaryServiceFoodTypeService } from 'src/app/services/CRUD/ALOJAMIENTO/complementaryservicefoodtype.service';
+import { ComplementaryServiceFoodType } from 'src/app/models/ALOJAMIENTO/ComplementaryServiceFoodType';
+import { EstablishmentCertificationAttachment } from 'src/app/models/BASE/EstablishmentCertificationAttachment';
+import { AccountRol } from 'src/app/models/AUTH/AccountRol';
+import { Agreement } from 'src/app/models/BASE/Agreement';
 import { UserService } from 'src/app/services/profile/user.service';
 import { DinardapService } from 'src/app/services/negocio/dinardap.service';
 import { CapacityTypeService } from 'src/app/services/CRUD/ALOJAMIENTO/capacitytype.service';
@@ -59,7 +74,12 @@ import { User } from 'src/app/models/profile/User';
 import { Ruc } from 'src/app/models/BASE/Ruc';
 import { GroupGiven } from 'src/app/models/BASE/GroupGiven';
 import { PersonRepresentative } from 'src/app/models/BASE/PersonRepresentative';
-
+import { PersonRepresentativeAttachment } from 'src/app/models/BASE/PersonRepresentativeAttachment';
+import { PersonRepresentativeAttachmentService } from 'src/app/services/CRUD/BASE/personrepresentativeattachment.service';
+import { AgreementService } from 'src/app/services/CRUD/BASE/agreement.service';
+import { EstablishmentPictureService } from 'src/app/services/CRUD/BASE/establishmentpicture.service';
+import { EstablishmentCertificationAttachmentService } from 'src/app/services/CRUD/BASE/establishmentcertificationattachment.service';
+import { RegisterService } from 'src/app/services/CRUD/ALOJAMIENTO/register.service';
 
 @Component({
   selector: 'app-registro',
@@ -69,7 +89,18 @@ import { PersonRepresentative } from 'src/app/models/BASE/PersonRepresentative';
 export class RegistroComponent implements OnInit {
    @ViewChild('fotoFachadaInput') fotoFachadaInput;
    @ViewChild('EstablishmentCertificationAttachedFile') EstablishmentCertificationAttachedFile;
+   //RREGISTROS MINTUR
+   registers_mintur: Register[] = [];
+   registerMinturSelected: Register = new Register();
+   currentPageMinturRegisters = 1;
+   lastPageMinturRegisters = 1;
+   recordsByPageRegisterMintur = 5;
+   mostrarDataRegisterMintur = false;
   //DATOS RUC
+  imContactRuc: Boolean = true;
+  roles:any[] = [];
+  terminosCondiciones = false;
+  terminosCondicionesAgreement: Agreement = new Agreement();
   rucReady = false;
   currentPageRegister = 1;
   lastPageRegister = 1;
@@ -78,9 +109,10 @@ export class RegistroComponent implements OnInit {
   group_types: GroupType[] = [];
   rucs_registrados: RegistroDataCarrier[] = [];
   ruc_registro_selected: RegistroDataCarrier = new RegistroDataCarrier();
-  rucData = '-';
-  cedulaData = '-';
-  representanteCedulaData = '-';
+  rucData = 'CONECTÁNDOSE AL SRI...';
+  cedulaData = 'CONECTÁNDOSE AL REGISTRO CIVIL...';
+  representanteCedulaData = 'CONECTÁNDOSE AL REGISTRO CIVIL...';
+  cedulaEstablishmentContactData = 'CONECTÁNDOSE AL REGISTRO CIVIL...';
   tax_payer_types: TaxPayerType[] = [];
   franchises: FranchiseChainName[] = [];
   zonalSelectedCode = '-';
@@ -98,15 +130,15 @@ export class RegistroComponent implements OnInit {
   user: User = new User();
 
   //DATOS ESTABLECIMIENTO
+  establishment_certification_types = [];
   identificationContactEstablishmentValidated = false;
   mainPhoneContactEstablishmentValidated = false;
   secondaryPhoneContactEstablishmentValidated = true;
   emailContactEstablishmentValidated = false;
-  cedulaEstablishmentContactData = 'Datos Interconectados de la cédula';
   currentPageEstablishment = 1;
   lastPageEstablishment = 1;
   recordsByPageEstablishment = 5;
-  mostrarDataEstablishment = true;
+  mostrarDataEstablishment = false;
   zonalEstablishmentSelectedCode = '-';
   provinciaEstablishmentSelectedCode = '-';
   cantonEstablishmentSelectedCode = '-';
@@ -129,17 +161,22 @@ export class RegistroComponent implements OnInit {
   genders: Gender[] = [];
   establishment_certification_types_categories: EstablishmentCertificationType[] = [];
   establishment_certifications: EstablishmentCertification[] = [];
-  establishment_certifications_establishmentSelected: EstablishmentCertification = new EstablishmentCertification();
   preview_register_codes_establishmentSelected = new PreviewRegisterCode();
   establishmentComercialNameValidated = false;
   addressEstablishmentValidated = false;
   mainPhoneEstablishmentValidated = false;
   secondaryPhoneEstablishmentValidated = true;
-  urlwebEstablishmentValidated = false;
-  
+  urlwebEstablishmentValidated = true;
+  establishment_certifications_establishmentSelected: EstablishmentCertification = new EstablishmentCertification();
+
   //DATOS REGISTRO
-  mostrarDataRegister = true;
+  estados_tramites: State[];
+  specific_states: State[];
+  estado_tramite_selected_code: String = '1';
+  statusSelected: RegisterState = new RegisterState();
+  mostrarDataRegister = false;
   showRequisites = false;
+  complementaryServiceFoodSelected: ComplementaryServiceFood = new ComplementaryServiceFood();
   rucEstablishmentRegisterSelected: Register = new Register();
   clasifications_registers: RegisterType[] = [];
   categories_registers: RegisterType[] = [];
@@ -158,23 +195,47 @@ export class RegistroComponent implements OnInit {
   tarifas: any[] = [];
   states: State[] = [];
   alowed_capacity_types: CapacityType[] = [];
-
+  complementaryServiceFoodTypes: ComplementaryServiceFoodType[] = [];
+  
   //DINARDAP
   consumoCedula = false;
   consumoCedulaEstablishmentContact = false;
   consumoRuc = false;
   consumoCedulaRepresentanteLegal = false;
+  SRIOK = false;
+  REGCIVILOK = false;
+  REGCIVILOKEstablishment = false;
+  REGCIVILREPRESENTANTELEGALOK = false;
+  guardando = false;
 
+  //DECLARACIONES
+  currentPageDeclaration = 1;
+  lastPageDeclaration = 1;
+  recordsByPageDeclaration = 5;
+  establishment_declarations_selected = new Establishment();
+  declaration_selected: Declaration = new Declaration();
+  mostrarDataDeclaration = false;
+  declarations: Declaration[] = [];
+  payDeclarationSelected: Pay = new Pay();
+  declarationItemsToShow: any[] = [];
+  declarationItemsCategories: DeclarationItemCategory[] = [];
+  declarationItems: DeclarationItem[] = [];
+  maxYear: number = 2019;
   constructor(private toastr: ToastrManager,
               private userDataService: UserService,
               private dinardapDataService: DinardapService,
               private franchiseDataService: FranchiseChainNameService,
               private rucDataService: RucService,
               private modalService: NgbModal,
+              private agreementDataService: AgreementService,
               private rucNameTypeDataService: RucNameTypeService,
               private group_typeDataService: GroupTypeService,
               private languageDataService: LanguageService,
+              private complementaryServiceFoodTypeDataService: ComplementaryServiceFoodTypeService,
+              private establishmentPictureDataService: EstablishmentPictureService,
               private ubicationDataService: UbicationService,
+              private establishmentCertificationAttachmentDataService: EstablishmentCertificationAttachmentService,
+              private personRepresentativeAttachmentDataService: PersonRepresentativeAttachmentService,
               private complementary_service_typeDataService: ComplementaryServiceTypeService,
               private systemNameDataService: SystemNameService,
               private genderDataService: GenderService,
@@ -186,25 +247,111 @@ export class RegistroComponent implements OnInit {
               private register_typeDataService: RegisterTypeService,
               private requisiteDataService: RequisiteService,
               private bedTypeDataService: BedTypeService,
+              private declarationDataService: DeclarationService,
+              private declarationItemCategoryDataService: DeclarationItemCategoryService,
+              private declarationItemDataService: DeclarationItemService,
               private tariffTypeDataService: TariffTypeService,
               private stateDataService: StateService,
-              private tax_payer_typeDataService: TaxPayerTypeService) {}
+              private tax_payer_typeDataService: TaxPayerTypeService,
+              private registerDataService: RegisterService) {}
 
   ngOnInit() {
-    this.refresh();
+   this.refresh();
+   this.getUser();
+  }
+
+  goToPageRegisterMintur(page: number) {
+    if ( page < 1 || page > this.lastPageMinturRegisters ) {
+      this.toastr.errorToastr('La página solicitada no existe.', 'Error');
+      return;
+    }
+    this.currentPageMinturRegisters = page;
+    this.getRegistersMintur();
+  }
+
+  getRegistersMintur() {
+   this.registers_mintur = [];
+   this.registerMinturSelected = new Register();
+   this.registerDataService.get_paginate(this.recordsByPageRegisterMintur, this.currentPageMinturRegisters).then( r => {
+      this.registers_mintur = r.data as Register[];
+      this.lastPageMinturRegisters = r.last_page;
+   }).catch( e => console.log(e) );
+  }
+
+  selectRegisterMintur(register: Register) {
+   this.registerMinturSelected = register;
+   this.mostrarDataRegisterMintur = true;
+   this.getRuc(this.user.ruc);
+   this.getRegistersOnRuc();
+   this.groupTypeSelected = new GroupType();
+  }
+
+  validateGroupGivenTipe(): Boolean {
+     if (this.ruc_registro_selected.ruc.tax_payer_type_id > 1) {
+       return this.ruc_registro_selected.ruc.group_given.group_type_id !== 0;
+     }
+     return true;
+  }
+  
+  getTramiteStates() {
+   this.estados_tramites = [];
+   this.stateDataService.get().then( r => {
+      r.forEach(element => {
+         if (element.father_code == '-') {
+            this.estados_tramites.push(element);
+         }
+      });
+   }).catch( e => { console.log(e); });
+  }
+
+  validateTariffs() {
+   this.rucEstablishmentRegisterSelected.capacities_on_register.forEach(capacity => {
+      capacity.tariffsValidated = true;
+      const groups = [];
+      capacity.tariffs_on_capacity.forEach(tariff => {
+         if(tariff.is_reference) {
+            groups.push({name: tariff.tariff_father_name, price: tariff.price});
+         }
+      });
+      groups.forEach(group => {
+         capacity.tariffs_on_capacity.forEach(tariff => {
+            if(capacity.tariffsValidated && !tariff.is_reference && (tariff.tariff_father_name == group.name)) {
+               if (tariff.price > group.price * tariff.factor) {
+                  capacity.tariffsValidated = false;
+               }
+            }
+         });
+      });
+   });
   }
 
   validateRuc(): Boolean {
+     let validateRepresentantLegalId = true;
+     if(this.ruc_registro_selected.ruc.tax_payer_type_id > 1) {
+        validateRepresentantLegalId = this.identificationRepresentativePersonValidated;
+     }
      return this.identificationContactValidated &&
      this.rucValidated &&
      this.mainPhoneContactValidated &&
      this.secondaryPhoneContactValidated &&
-     this.emailContactValidated;
+     this.emailContactValidated &&
+     this.validateNombramiento() &&
+     this.validateGroupGivenTipe() &&
+     validateRepresentantLegalId &&
+     this.REGCIVILOK &&
+     this.SRIOK &&
+     this.REGCIVILREPRESENTANTELEGALOK;
   }
 
   refresh() {
+    this.registerMinturSelected = new Register();
+    this.mostrarDataRegisterMintur = false;
     this.ruc_registro_selected = new RegistroDataCarrier();
-    this.getUser();
+    this.goToPageRegisterMintur(this.currentPageMinturRegisters);
+    this.getTramiteStates();
+    this.getDeclarationCategories();
+    this.getDeclarationItems();
+    this.getMaxDeclarationDate();
     this.getTaxPayerType();
     this.getFranchise();
     this.getGroupType();
@@ -214,23 +361,99 @@ export class RegistroComponent implements OnInit {
     this.getZonalesEstablishment();
     this.getEstablishmentPropertyType();
     this.getLanguage();
+    this.getComplementaryFoodServiceType();
     this.getSystemNames();
+    this.getCertificationTypes();
     this.getWorkerGroups();
-    this.getGenders();
     this.getTariffs();
     this.getClasifications();
     this.getEstablishmentCertificationTypesCategories();
-    this.getEstablishmentCertificationTypesSpecific();
     this.getComplementaryServiceTypeCategories();
-    this.groupTypeSelected = new GroupType();
+  }
+
+  getDeclarationCategories() {
+   this.declarationItemCategoryDataService.get().then( r => {
+     this.declarationItemsCategories = r as DeclarationItemCategory[];
+   }).catch( e => { console.log(e); });
+  }
+
+ getDeclarationItems() {
+   this.declarationItemDataService.get().then( r => {
+     this.declarationItems = r as DeclarationItem[];
+   }).catch( e => { console.log(e); });
+ }
+
+  newDeclaration() {
+   this.declaration_selected = new Declaration();
+   this.mostrarDataDeclaration = true;
+   this.guardando = false;
+   this.buildDeclarationItemsToShow();
+  }
+
+  mostrarFechaMaximaPago(): Boolean {
+     return typeof this.declaration_selected.max_date_to_pay != 'undefined';
+  }
+
+  getMaxDeclarationDate() {
+   const today = new Date();
+   this.maxYear = today.getFullYear();
+  }
+
+  getComplementaryFoodServiceType() {
+   this.complementaryServiceFoodTypeDataService.get().then( r => {
+      this.complementaryServiceFoodTypes = r as ComplementaryServiceFoodType[];
+   }).catch( e => { console.log(e); });
+  }
+
+  buildDeclarationItemsToShow() {
+   this.declarationItemsToShow = [];
+   this.declarationItemsCategories.forEach(category => {
+     const items = [];
+     this.declarationItems.forEach(item => {
+       if(item.declaration_item_category_id == category.id) {
+          const newValueItem = new DeclarationItemValue();
+          newValueItem.declaration_item_id = item.id;
+         items.push({declarationItem: item, valueItem: newValueItem});
+       }
+     });
+     this.declarationItemsToShow.push({Category: category, items: items});
+   });
+  }
+
+  addComplementaryFoodService() {
+     const complementaryFoodService = new ComplementaryServiceFood();
+     this.rucEstablishmentRegisterSelected.complementary_service_foods_on_register.push(complementaryFoodService);
+  }
+
+  selectComplementaryFoodService(complementaryServiceFood: ComplementaryServiceFood) {
+   this.complementaryServiceFoodSelected = complementaryServiceFood;
+  }
+
+  removeComplementaryFoodService(complementaryServiceFood: ComplementaryServiceFood) {
+   const newList: ComplementaryServiceFood[] = [];
+   this.rucEstablishmentRegisterSelected.complementary_service_foods_on_register.forEach(element => {
+      if (element !== complementaryServiceFood) {
+         newList.push(element);
+      }
+   });
+   this.rucEstablishmentRegisterSelected.complementary_service_foods_on_register = newList;
+  }
+
+  getTerminosCondicionesAgreement() {
+   this.agreementDataService.get(1).then( r => {
+      this.terminosCondicionesAgreement = r.Agreement as Agreement;
+      this.terminosCondicionesAgreement.content = this.terminosCondicionesAgreement.content.replace('##USER##', '<strong>' + this.user.name.toUpperCase() + '</strong>');
+      this.terminosCondicionesAgreement.content = this.terminosCondicionesAgreement.content.replace('##RUC##', '<strong>' + this.user.ruc + '</strong>');
+   }).catch( e => { console.log(e); });
   }
 
   getRuc(number: String) {
    this.rucDataService.get_filtered(number).then( r => {
-      if ( typeof r.Ruc === 'undefined' ) {
+      if ( typeof r.Ruc === 'undefined') {
          this.ruc_registro_selected.ruc = new Ruc();
          this.ruc_registro_selected.ruc.number = number;
          this.ruc_registro_selected.ruc.contact_user = new User();
+         this.imContactRuc = (this.ruc_registro_selected.ruc.contact_user.id == this.user.id);
          this.ruc_registro_selected.ruc.establishmentsSRI = [];
          this.ruc_registro_selected.ruc.establishments = [];
          this.ruc_registro_selected.ruc.group_given = new GroupGiven();
@@ -238,25 +461,135 @@ export class RegistroComponent implements OnInit {
          this.ruc_registro_selected.ruc.franchise_chain_names_on_ruc = [];
          this.ruc_registro_selected.ruc.tax_payer_type_id = 0;
          this.ruc_registro_selected.ruc.contact_user_id = 0;
+         this.imContactRuc = true;
+         this.checkImContactRuc();
          this.checkRuc();
       } else {
          this.ruc_registro_selected.ruc = r.Ruc as Ruc;
          this.ruc_registro_selected.ruc.franchise_chain_names_on_ruc = r.attach[0].franchise_chain_names_on_ruc as FranchiseChainName[];
          this.ruc_registro_selected.ruc.contact_user = r.contact_user as User;
+         this.imContactRuc = (this.ruc_registro_selected.ruc.contact_user.id == this.user.id);
+         if (r.group_given == '0') {
+            this.ruc_registro_selected.ruc.group_given = new GroupGiven();
+         } else {
+            this.ruc_registro_selected.ruc.group_given = r.group_given as GroupGiven;
+            this.group_types = [];
+            this.group_typeDataService.get().then( r => {
+               this.group_types = r as GroupType[];
+               this.setGroupTypeSelected(this.ruc_registro_selected.ruc.group_given.group_type_id);
+            }).catch( e => console.log(e) );
+         }
+         if (r.person_representative == '0') {
+            this.ruc_registro_selected.ruc.person_representative = new PersonRepresentative();
+         } else {
+            this.ruc_registro_selected.ruc.person_representative = r.person_representative as PersonRepresentative;
+         }
+         this.ruc_registro_selected.ruc.person_representative_attachment = new PersonRepresentativeAttachment();
+         this.getPersonRepresentativeAttachment(this.ruc_registro_selected.ruc.number);
          this.checkRuc();
-         this.checkCedula();
+         this.checkImContactRuc();
+         if (!this.imContactRuc) {
+            this.checkCedula();
+         }
          this.checkEmail();
          this.checkTelefonoPrincipal();
          this.checkTelefonoSecundario();
+         this.checkIdentificationRepresentant();
+         this.getEstablishmentsOnRuc(this.currentPageEstablishment);
       }
    }).catch( e => { console.log(e); });
   }
 
+  checkImContactRuc() {
+   if (this.imContactRuc) {
+      this.ruc_registro_selected.ruc.contact_user.id = this.user.id;
+      this.ruc_registro_selected.ruc.contact_user = this.user;
+      this.identificationContactValidated = true;
+      this.consumoCedula = true;
+      this.mainPhoneContactValidated = true;
+      this.secondaryPhoneContactValidated = true;
+      this.emailContactValidated = true;
+      this.REGCIVILOK = true;
+   } else {
+      this.ruc_registro_selected.ruc.contact_user.id = 0;
+      this.ruc_registro_selected.ruc.contact_user = new User();
+      this.identificationContactValidated = false;
+      this.consumoCedula = false;
+      this.mainPhoneContactValidated = false;
+      this.secondaryPhoneContactValidated = false;
+      this.emailContactValidated = false;
+   }
+  }
+
+  getEstablishmentsOnRuc(currentpage: number) {
+    this.establishment_selected = new Establishment();
+    this.mostrarDataEstablishment = false;
+    this.establishmentDataService.getByRuc(this.ruc_registro_selected.ruc.number, this.recordsByPageEstablishment, currentpage).then( r => {
+       const establecimientos = r.data as Establishment[];
+       if(establecimientos.length == 0){
+         this.ruc_registro_selected.ruc.establishments = [];
+       }else {
+         this.ruc_registro_selected.ruc.establishments = r.data as Establishment[];
+       }
+    }).catch( e => { console.log(e); });
+  }
+
+  getPersonRepresentativeAttachment(ruc_number: String) {
+   this.personRepresentativeAttachmentDataService.get_filtered(ruc_number).then( r => {
+      if(r == '0'){
+         this.ruc_registro_selected.ruc.person_representative_attachment = new PersonRepresentativeAttachment();
+      }else {
+         this.ruc_registro_selected.ruc.person_representative_attachment = r as PersonRepresentativeAttachment;
+      }
+   }).catch( e => { console.log(e); });
+  }
+
+  getCertificationTypes() {
+   this.establishment_certification_types = [];
+   this.establishment_certification_typeDataService.get().then( r => {
+      this.establishment_certification_types = r as EstablishmentCertificationType[];
+   }).catch( e => { console.log(e); });
+  }
+
+  validateNombramiento(): Boolean {
+     if(this.ruc_registro_selected.ruc.tax_payer_type_id <= 1) {
+        return true;
+     }
+     return !(this.ruc_registro_selected.ruc.person_representative_attachment.person_representative_attachment_file_name == '');
+  }
+
   getUser() {
+   this.roles = JSON.parse(sessionStorage.getItem('roles')) as AccountRol[];
    this.userDataService.get(JSON.parse(sessionStorage.getItem('user')).id).then( r => {
      this.user = r as User;
-     this.getRuc(this.user.ruc);
+     this.getTerminosCondicionesAgreement();
    }).catch( e => console.log(e));
+  }
+
+  CodeFilePersonRepresentativeAttachment(event) {
+   const reader = new FileReader();
+   if (event.target.files && event.target.files.length > 0) {
+      const file = event.target.files[0];
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+         this.ruc_registro_selected.ruc.person_representative_attachment.person_representative_attachment_file_name = file.name;
+         this.ruc_registro_selected.ruc.person_representative_attachment.person_representative_attachment_file_type = file.type;
+         this.ruc_registro_selected.ruc.person_representative_attachment.person_representative_attachment_file = reader.result.toString().split(',')[1];
+      };
+   }
+  }
+
+  borrarNombramiento() {
+   this.ruc_registro_selected.ruc.person_representative_attachment.person_representative_attachment_file = '';
+   this.ruc_registro_selected.ruc.person_representative_attachment.person_representative_attachment_file_type = '';
+   this.ruc_registro_selected.ruc.person_representative_attachment.person_representative_attachment_file_name = '';
+  }
+
+  descargarNombramiento() {
+   this.downloadFile(
+      this.ruc_registro_selected.ruc.person_representative_attachment.person_representative_attachment_file,
+      this.ruc_registro_selected.ruc.person_representative_attachment.person_representative_attachment_file_type,
+      this.ruc_registro_selected.ruc.person_representative_attachment.person_representative_attachment_file_name);
   }
 
   getCapacityTypes() {
@@ -266,10 +599,15 @@ export class RegistroComponent implements OnInit {
    }).catch( e => { console.log(e); });
   }
 
+  refreshEstablishment() {
+   this.goToPageEstablishment(this.currentPageEstablishment);
+  }
+
   getStates() {
    this.states = [];
    this.stateDataService.get().then( r => {
       this.states = r as State[];
+      this.getSpecificStates();
    }).catch( e => { console.log(e); });
   }
 
@@ -289,25 +627,128 @@ export class RegistroComponent implements OnInit {
    }).catch( e => { console.log(e); });
   }
 
+  getDeclarationsByEstablishment(id: number) {
+    this.declarationDataService.get_by_establishment(id).then( r => {
+       this.declarations = r as Declaration[];
+    }).catch( e => { console.log(e); });
+  }
+
+  selectDeclaration(declaration: Declaration) {
+      this.declaration_selected = declaration;
+      this.mostrarDataDeclaration = true;
+      this.declarationItemsToShow = [];
+      this.guardando = false;
+      this.declarationItemsCategories.forEach(category => {
+         const items = [];
+         declaration.declaration_item_values_on_declaration.forEach(newValueItem => {
+            this.declarationItems.forEach(item => {
+               if ((item.id == newValueItem.declaration_item_id) && (item.declaration_item_category_id == category.id)) {
+                  items.push({declarationItem: item, valueItem: newValueItem});
+               }
+            });
+         });
+         this.declarationItemsToShow.push({Category: category, items: items});
+      });
+  }
+
+  guardarDeclaracion() {
+   this.declaration_selected.declaration_item_values_on_declaration = [];
+   this.declarationItemsToShow.forEach(element => {
+      element.items.forEach(item => {
+         this.declaration_selected.declaration_item_values_on_declaration.push(item.valueItem);
+      });
+   });
+   this.guardando = true;
+   this.declaration_selected.establishment_id = this.establishment_declarations_selected.id;
+   this.declarationDataService.register_data(this.declaration_selected).then( r => {
+      this.guardando = false;
+      if ( r === '0' ) {
+         this.toastr.errorToastr('Existe conflicto la información proporcionada.', 'Declaración');
+         return;
+      }
+      this.toastr.successToastr('Datos guardados satisfactoriamente.', 'Declaración');
+      this.getEstablishmentsOnRuc(this.currentPageEstablishment);
+      this.establishment_declarations_selected = new Establishment();
+      this.mostrarDataDeclaration = false;
+   }).catch( e => {
+      this.guardando = false;
+      this.toastr.errorToastr('Existe conflicto la información proporcionada.', 'Declaración');
+      return;
+   });
+  }
+
   guardarRUC() {
+   if (!this.validateRuc()) {
+      this.toastr.errorToastr('Existe conflicto con la información ingresada.', 'Nuevo');
+      return;
+   }
+   if(!this.REGCIVILOK) {
+      this.toastr.errorToastr('Esperando confirmación del Registro Civil', 'Registro Civil');
+   }
+   if(!this.SRIOK) {
+      this.toastr.errorToastr('Esperando confirmación del SRI', 'SRI');
+   }
+   if(!this.SRIOK || !this.REGCIVILOK){
+      return;
+   }
    this.ruc_registro_selected.ruc.contact_user.ruc = this.ruc_registro_selected.ruc.number;
+   this.ruc_registro_selected.ruc.person_representative_attachment.ruc = this.ruc_registro_selected.ruc.number;
+   this.guardando = true;
    if (typeof this.ruc_registro_selected.ruc.id === 'undefined') {11
       this.rucDataService.register_ruc(this.ruc_registro_selected.ruc).then( r => {
+         this.guardando = false;
          if ( r === '0' ) {
             this.toastr.errorToastr('Existe conflicto con el correo de la persona de contacto ingresada.', 'Nuevo');
             return;
          }
          this.toastr.successToastr('Datos guardados satisfactoriamente.', 'Nuevo');
-      }).catch( e => console.log(e) );
+         this.refresh();
+      }).catch( e => {
+         this.guardando = false;
+         this.toastr.errorToastr('Existe conflicto la información proporcionada.', 'Nuevo');
+         return;
+      });
    } else {
       this.rucDataService.update_ruc(this.ruc_registro_selected.ruc).then( r => {
+         this.guardando = false;
          if ( r === '0' ) {
             this.toastr.errorToastr('Existe conflicto con el correo de la persona de contacto ingresada.', 'Actualizar');
             return;
          }
          this.toastr.successToastr('Registro actualizado satisfactoriamente.', 'Actualizar');
-      }).catch( e => console.log(e) );
+         this.refresh();
+      }).catch( e => {
+         this.guardando = false;
+         this.toastr.errorToastr('Existe conflicto la información proporcionada.', 'Nuevo');
+         return;
+      });
    }
+  }
+
+  guardarRegistro() {
+   this.guardando = true;
+   this.registerDataService.register_register_data(this.rucEstablishmentRegisterSelected).then( r => {
+      this.guardando = false;
+      this.getRegistersOnRuc();
+   }).catch( e => {
+      this.guardando = false;
+      this.toastr.errorToastr('Existe conflicto la información proporcionada.', 'Nuevo');
+      return;
+   });
+  }
+
+  checkAgreement() {
+   if (this.terminosCondiciones) {
+      this.refresh();
+   }
+  }
+
+  getRegistersOnRuc() {
+   this.rucEstablishmentRegisterSelected = new Register();
+   this.mostrarDataRegister = false;
+   this.registerDataService.get_registers_by_ruc(this.user.ruc).then( r => {
+      this.ruc_registro_selected.registers = r as any[];
+   }).catch( e => { console.log(e); });
   }
 
   getTariffs() {
@@ -338,6 +779,7 @@ export class RegistroComponent implements OnInit {
          newEstablishmentWorker.gender_name = gender.name;
          newEstablishmentWorker.worker_group_id = worker_group.id;
          newEstablishmentWorker.worker_group_name = worker_group.name;
+         newEstablishmentWorker.is_max = worker_group.is_max;
          workers_on_establishment.push(newEstablishmentWorker);
       });
    });
@@ -365,6 +807,7 @@ export class RegistroComponent implements OnInit {
   }
 
   getRequisitesByRegisterType() {
+   const AllRequisites = [];
    this.requisitesByRegisterType = [];
    this.rucEstablishmentRegisterSelected.requisites = [];
    this.showRequisites = false;
@@ -381,11 +824,26 @@ export class RegistroComponent implements OnInit {
             const newRegisterRequisite = new RegisterRequisite();
             newRegisterRequisite.requisite_name = element.name;
             newRegisterRequisite.requisite_id = element.id;
-            newRegisterRequisite.fullfill = false;
-            this.rucEstablishmentRegisterSelected.requisites.push(newRegisterRequisite);
+            newRegisterRequisite.fullfill = true;
+            newRegisterRequisite.requisite_father_code = element.father_code;
+            AllRequisites.push(newRegisterRequisite);
          }
       });
       this.showRequisites  = true;
+      const padres = [];
+      AllRequisites.forEach(element => {
+         if (element.requisite_father_code == '-') {
+            padres.push(element);
+         }
+      });
+      padres.forEach(padre => {
+         this.rucEstablishmentRegisterSelected.requisites.push(padre);
+         AllRequisites.forEach(element => {
+            if (element.requisite_father_code == padre.requisite_id.toString()) {
+               this.rucEstablishmentRegisterSelected.requisites.push(element);
+            }
+         });
+      });
    }).catch( e => console.log(e) );
   }
 
@@ -399,7 +857,6 @@ export class RegistroComponent implements OnInit {
   getCategories() {
    this.categories_registers = [];
    this.rucEstablishmentRegisterSelected.requisites = [];
-   this.rucEstablishmentRegisterSelected.register_type_id = 0;
    this.register_typeDataService.get_filtered(this.categorySelectedCode).then( r => {
       this.categories_registers = r as RegisterType[];
    }).catch( e => { console.log(e) });
@@ -412,11 +869,10 @@ export class RegistroComponent implements OnInit {
    }).catch( e => console.log(e) );
   }
 
-  getEstablishmentCertificationTypesSpecific() {
-   this.establishment_certifications_establishmentSelected.establishment_certification_type_specifics = []
-   this.establishment_certifications_establishmentSelected.establishment_certification_type_id = 0;
-   this.establishment_certification_typeDataService.get_filtered(this.establishment_certifications_establishmentSelected.establishment_certification_type_fatherCode).then( r => {
-      this.establishment_certifications_establishmentSelected.establishment_certification_type_specifics = r as EstablishmentCertificationType[];
+  getEstablishmentCertificationTypesSpecific(establishment_certification: EstablishmentCertification) {
+   establishment_certification.establishment_certification_type_specifics = [];
+   this.establishment_certification_typeDataService.get_filtered(establishment_certification.establishment_certification_type_fatherCode).then( r => {
+      establishment_certification.establishment_certification_type_specifics = r as EstablishmentCertificationType[];
    }).catch( e => console.log(e) );
   }
 
@@ -427,10 +883,15 @@ export class RegistroComponent implements OnInit {
    }).catch( e => console.log(e) );
   }
 
+  borrarCertificado(establishment_certification) {
+   establishment_certification.establishment_certification_attachment = new EstablishmentCertificationAttachment();
+  }
+
   getGenders() {
    this.genders = [];
    this.genderDataService.get().then( r => {
       this.genders = r as Gender[];
+      this.buildWorkerGroups();
    }).catch( e => console.log(e) );
   }
 
@@ -450,30 +911,44 @@ export class RegistroComponent implements OnInit {
    this.provinciaEstablishmentSelectedCode = '-';
    this.cantonEstablishmentSelectedCode = '-';
    this.establishment_selected.ubication_id = 0;
-   this.ubicationDataService.get_filtered('-').then( r => {
-      this.zonalesEstablishment = r as Ubication[];
-   }).catch( e => { console.log(e) });
-  }
-
-  getProvinciasEstablishment() {
-   this.provinciasEstablishment = [];
-   this.cantonesEstablishment = [];
-   this.parroquiasEstablishment = [];
-   this.provinciaEstablishmentSelectedCode = '-';
-   this.cantonSelectedCode = '-';
-   this.establishment_selected.ubication_id = 0;
-   this.ubicationDataService.get_filtered(this.zonalEstablishmentSelectedCode).then( r => {
-      this.provinciasEstablishment = r as Ubication[];
+   this.ubicationDataService.get_filtered('-').then( zonales => {
+      this.zonalesEstablishment = zonales as Ubication[];
+      zonales.forEach(zonal => {
+         this.ubicationDataService.get_filtered(zonal.code).then( r => {
+            const provincias = r as Ubication[];
+            provincias.forEach(provincia => {
+               this.provinciasEstablishment.push(provincia);
+            });
+            this.provinciasEstablishment.sort();
+         }).catch( e => { console.log(e) });
+      });
    }).catch( e => { console.log(e) });
   }
 
   getCantonesEstablishment() {
+   this.provinciasEstablishment.forEach(provincia => {
+      if(provincia.code == this.provinciaEstablishmentSelectedCode){
+         this.zonalEstablishmentSelectedCode = provincia.father_code.toString();
+      }
+   });
    this.cantonesEstablishment = [];
    this.parroquiasEstablishment = [];
    this.cantonEstablishmentSelectedCode = '-';
    this.establishment_selected.ubication_id = 0;
    this.ubicationDataService.get_filtered(this.provinciaEstablishmentSelectedCode).then( r => {
       this.cantonesEstablishment = r as Ubication[];
+   }).catch( e => { console.log(e) });
+  }
+
+  getCantonesEstablishmentRecovery() {
+   this.ubicationDataService.get_filtered(this.provinciaEstablishmentSelectedCode).then( r => {
+      this.cantonesEstablishment = r as Ubication[];
+   }).catch( e => { console.log(e) });
+  }
+
+  getParroquiasEstablishmentRecovery() {
+   this.ubicationDataService.get_filtered(this.cantonEstablishmentSelectedCode).then( r => {
+      this.parroquiasEstablishment = r as Ubication[];
    }).catch( e => { console.log(e) });
   }
 
@@ -509,24 +984,109 @@ export class RegistroComponent implements OnInit {
     }).catch( e => console.log(e) );
   }
   
+  validateEstablecimiento(): Boolean {
+   if (!((this.establishment_selected.ruc_code_id !== '-') &&
+   (this.establishment_selected.ruc_name_type_id !== 0) &&
+   this.establishmentComercialNameValidated  &&
+   (this.establishment_selected.establishment_property_type_id !== 0) &&
+   this.urlwebEstablishmentValidated &&
+   (this.establishment_selected.ubication_id !== 0) &&
+   this.addressEstablishmentValidated &&
+   (this.establishment_selected.address_reference !== '') &&
+   this.identificationContactEstablishmentValidated &&
+   this.mainPhoneContactEstablishmentValidated &&
+   this.secondaryPhoneContactEstablishmentValidated &&
+   this.emailContactEstablishmentValidated &&
+   this.REGCIVILOKEstablishment
+   )) {
+      return false;
+   }
+   return true;
+  }
+
+  validateWorkers(): Boolean {
+   let toreturn = true;
+   this.genders.forEach(gender => {
+      let max = 0;
+      this.establishment_selected.workers_on_establishment.forEach(worker => {
+         if (worker.gender_name == gender.name && worker.is_max) {
+            max = worker.count;
+         }
+      });
+      this.establishment_selected.workers_on_establishment.forEach(worker => {
+         if(worker.gender_name == gender.name && worker.count > max) {
+            toreturn = false;
+         }
+      });
+   });
+   return toreturn;
+  }
+
+  guardarEstablecimiento() {
+   if (!this.validateWorkers()) {
+      this.toastr.errorToastr('Existe conflicto con la información ingresada referente a los Trabajadores en el Establecimiento.', 'Nuevo');
+      return;
+   }
+   if (!this.validateEstablecimiento()) {
+      this.toastr.errorToastr('Existe conflicto con la información ingresada.', 'Nuevo');
+   }
+   if(!this.REGCIVILOKEstablishment) {
+      this.toastr.errorToastr('Esperando confirmación del Registro Civil', 'Registro Civil');
+   }
+   if(!this.REGCIVILOKEstablishment){
+      return;
+   }
+   this.guardando = true;
+   this.establishment_selected.ruc_id = this.ruc_registro_selected.ruc.id;
+   this.establishmentDataService.register_establishment_data(this.establishment_selected).then( r => {
+      this.guardando = false;
+      if ( r === '0' ) {
+         this.toastr.errorToastr('Existe conflicto con el correo de la persona de contacto ingresada.', 'Nuevo');
+         return;
+      }
+      if (typeof this.establishment_selected_picture.id === 'undefined') {
+         this.establishment_selected_picture.establishment_id = r.id;
+         this.establishmentPictureDataService.post(this.establishment_selected_picture).then( r => {
+            this.getEstablishmentsOnRuc(this.currentPageEstablishment);
+            this.toastr.successToastr('Datos guardados satisfactoriamente.', 'Nuevo');
+         }).catch( e => console.log(e) );
+      } else {
+         this.establishmentPictureDataService.put(this.establishment_selected_picture).then( r => {
+            this.getEstablishmentsOnRuc(this.currentPageEstablishment);
+            this.toastr.successToastr('Datos guardados satisfactoriamente.', 'Nuevo');
+         }).catch( e => console.log(e) );
+      }
+   }).catch( e => {
+      this.guardando = false;
+      this.toastr.errorToastr('Existe conflicto con la información ingresada.', 'Nuevo');
+      return;
+   });
+  }
+
   newRegisterRecord() {
    this.rucEstablishmentRegisterSelected = new Register();
    this.mostrarDataRegister = true;
   }
 
   checkRuc() {
+    if (this.consumoRuc && this.SRIOK) {
+      return;
+    }
+    this.rucData = '<div class=\"progress mb-3\"><div class=\"progress-bar progress-bar-striped progress-bar-animated bg-warning col-12\">Espere...</div></div><div class="col-12 text-center"><strong>Conectándose al SRI...</strong></div>';
     this.ruc_registro_selected.ruc.number = this.ruc_registro_selected.ruc.number.replace(/[^\d]/, '');
+    this.ruc_registro_selected.ruc.group_given.register_code = '12';
     if (this.ruc_registro_selected.ruc.number.length !== 13) {
       this.rucValidated = false;
       this.consumoRuc = false;
       this.ruc_registro_selected.ruc.baised_accounting = false;
       this.ruc_registro_selected.ruc.tax_payer_type_id = 1;
-      this.setGroupTypeSelected(this.ruc_registro_selected.ruc.group_given.group_type_id);
       return;
     }
     if (!this.consumoRuc) {
       this.consumoRuc = true;
+      this.rucValidated = true;
       this.dinardapDataService.get_RUC(this.ruc_registro_selected.ruc.number).then( r => {
+         this.SRIOK = true;
          this.rucValidated = true;
          const registros = r.return.instituciones.datosPrincipales.registros;
          let itemsDetalles = [];
@@ -589,8 +1149,6 @@ export class RegistroComponent implements OnInit {
                      this.ruc_registro_selected.ruc.tax_payer_type_id = 1;
                   } else {
                      this.ruc_registro_selected.ruc.tax_payer_type_id = 2;
-                     this.ruc_registro_selected.ruc.group_given.group_type_id = 1;
-                     this.setGroupTypeSelected(this.ruc_registro_selected.ruc.group_given.group_type_id);
                   }
                   this.rucData += '<strong>Tipo de Contribuyente: </strong> ' + element.valor + '<br/>';
                }
@@ -598,6 +1156,9 @@ export class RegistroComponent implements OnInit {
          });
       }).catch( e => {
          this.toastr.errorToastr('El RUC ingresado no es correcto.', 'SRI');
+         this.rucData = '<div class="alert alert-danger" role="alert">El SRI, no respondió. Vuelva a intentarlo.</div>';
+         this.consumoRuc = false;
+         this.SRIOK = false;
       });
    }
   }
@@ -609,6 +1170,10 @@ export class RegistroComponent implements OnInit {
       this.consumoCedula = false;
       return;
    }
+   if (this.consumoCedula && this.REGCIVILOK) {
+      return;
+   }
+   this.cedulaData = '<div class=\"progress mb-3\"><div class=\"progress-bar progress-bar-striped progress-bar-animated bg-warning col-12\">Espere...</div></div><div class="col-12 text-center"><strong>Conectándose al Registro Civil...</strong></div>';
    if (this.ruc_registro_selected.ruc.contact_user.identification === this.user.identification) {
       this.ruc_registro_selected.ruc.contact_user = this.user;
       this.checkEmail();
@@ -617,7 +1182,9 @@ export class RegistroComponent implements OnInit {
    }
    if (!this.consumoCedula) {
       this.consumoCedula = true;
+      this.identificationContactValidated = true;
       this.dinardapDataService.get_cedula(this.ruc_registro_selected.ruc.contact_user.identification).then( r => {
+         this.REGCIVILOK = true;
          const registros = r.return.instituciones.datosPrincipales.registros;
          this.cedulaData = '';
          registros.forEach(element => {
@@ -645,6 +1212,9 @@ export class RegistroComponent implements OnInit {
          });
       }).catch( e => {
          this.toastr.errorToastr('La cédula ingresada no es correcta.', 'Registro Civil');
+         this.cedulaData = '<div class="alert alert-danger" role="alert">El Registro Civil, no respondió. Vuelva a intentarlo.</div>';
+         this.REGCIVILOK = false;
+         this.consumoCedula = false;
       });
    }
   }
@@ -660,12 +1230,17 @@ export class RegistroComponent implements OnInit {
       this.consumoCedulaEstablishmentContact = false;
       return;
    }
-   if (!this.consumoCedula) {
+   if (this.consumoCedulaEstablishmentContact && this.REGCIVILOKEstablishment) {
+      return;
+   }
+   this.cedulaEstablishmentContactData = '<div class=\"progress mb-3\"><div class=\"progress-bar progress-bar-striped progress-bar-animated bg-warning col-12\">Espere...</div></div><div class="col-12 text-center"><strong>Conectándose al Registro Civil...</strong></div>';
+   if (!this.consumoCedulaEstablishmentContact) {
       this.identificationContactEstablishmentValidated = true;
       this.consumoCedulaEstablishmentContact = true;
       this.dinardapDataService.get_cedula(this.establishment_selected.contact_user.identification).then( r => {
          const registros = r.return.instituciones.datosPrincipales.registros;
          this.cedulaEstablishmentContactData = '';
+         this.REGCIVILOKEstablishment = true;
          registros.forEach(element => {
             if (element.campo === 'cedula') {
                if (element.valor === this.establishment_selected.contact_user.identification) {
@@ -679,6 +1254,7 @@ export class RegistroComponent implements OnInit {
             if (this.identificationContactEstablishmentValidated) {
                if (element.campo === 'nombre') {
                   this.cedulaEstablishmentContactData += '<strong>Nombre: </strong> ' + element.valor + '<br/>';
+                  this.establishment_selected.contact_user.name = element.valor;
                }
                if (element.campo === 'fechaNacimiento') {
                   this.cedulaEstablishmentContactData += '<strong>Fecha de Nacimiento: </strong> ' + element.valor + '<br/>';
@@ -690,6 +1266,9 @@ export class RegistroComponent implements OnInit {
          });
       }).catch( e => {
          this.toastr.errorToastr('La cédula ingresada no es correcta.', 'Registro Civil');
+         this.cedulaEstablishmentContactData = '<div class="alert alert-danger" role="alert">El Registro Civil, no respondió. Vuelva a intentarlo.</div>';
+         this.REGCIVILOKEstablishment = false;
+         this.consumoCedulaEstablishmentContact = false;
       });
    }
   }
@@ -701,12 +1280,17 @@ export class RegistroComponent implements OnInit {
       this.consumoCedulaRepresentanteLegal = false;
      return;
    }
+   if (this.consumoCedulaRepresentanteLegal && this.REGCIVILREPRESENTANTELEGALOK) {
+      return;
+   }
+   this.representanteCedulaData = '<div class=\"progress mb-3\"><div class=\"progress-bar progress-bar-striped progress-bar-animated bg-warning col-12\">Espere...</div></div><div class="col-12 text-center"><strong>Conectándose al Registro Civil...</strong></div>';
    if (!this.consumoCedulaRepresentanteLegal) {
       this.identificationRepresentativePersonValidated = true;
       this.consumoCedulaRepresentanteLegal = true;
       this.dinardapDataService.get_cedula(this.ruc_registro_selected.ruc.person_representative.identification).then( r => {
          const registros = r.return.instituciones.datosPrincipales.registros;
          this.representanteCedulaData = '';
+         this.REGCIVILREPRESENTANTELEGALOK = true;
          registros.forEach(element => {
             if (element.campo === 'cedula') {
                if (element.valor === this.ruc_registro_selected.ruc.person_representative.identification) {
@@ -731,6 +1315,9 @@ export class RegistroComponent implements OnInit {
          });
       }).catch( e => {
          this.toastr.errorToastr('La cédula ingresada no es correcta.', 'Registro Civil');
+         this.representanteCedulaData = '<div class="alert alert-danger" role="alert">El Registro Civil, no respondió. Vuelva a intentarlo.</div>';
+         this.REGCIVILREPRESENTANTELEGALOK = false;
+         this.consumoCedulaRepresentanteLegal = false;
       });
    }
   }
@@ -810,12 +1397,12 @@ export class RegistroComponent implements OnInit {
   checkURLWeb():Boolean {
    const isOk = /^(ftp|https?):\/\/+(www\.)?[a-z0-9\-\.]{3,}\.[a-z]{3}$/.test(this.establishment_selected.url_web.toString());
    const isOk2 = /^(www\.)?[a-z0-9\-\.]{3,}\.[a-z]{3}$/.test(this.establishment_selected.url_web.toString());
-   this.urlwebEstablishmentValidated = isOk || isOk2;
+   this.urlwebEstablishmentValidated = isOk || isOk2 || (this.establishment_selected.url_web == '');
    return this.urlwebEstablishmentValidated;
   }
 
   checkEstablishmentComercialName(): Boolean {
-   if(this.establishment_selected.commercially_known_name.length < 5) {
+   if(this.establishment_selected.commercially_known_name.length < 1) {
       this.establishmentComercialNameValidated = false;
       return false;
    }
@@ -832,10 +1419,27 @@ export class RegistroComponent implements OnInit {
    return true;
   }
   
+  buildWorkerGroups() {
+   this.establishment_selected.workers_on_establishment = [];
+   this.genders.forEach(gender => {
+      this.worker_groups.forEach(worker_group => {
+         const newWorker = new Worker();
+         newWorker.worker_group_id = worker_group.id;
+         newWorker.worker_group_name = worker_group.name;
+         newWorker.gender_id = gender.id;
+         newWorker.gender_name = gender.name;
+         newWorker.count = 0;
+         newWorker.is_max = worker_group.is_max;
+         this.establishment_selected.workers_on_establishment.push(newWorker);
+      });
+   });
+  }
+
   getWorkerGroups() {
    this.worker_groups = [];
    this.workerGroupDataService.get().then( r => {
       this.worker_groups = r as WorkerGroup[];
+      this.getGenders();
    }).catch( e => console.log(e) ); 
   }
 
@@ -929,9 +1533,70 @@ export class RegistroComponent implements OnInit {
     this.establishment_selected.address_map_longitude = event.coords.lng;
   }
 
-  selectRegisterEstablishment(establishment) {
-    this.establishment_selected = establishment;
-    this.mostrarDataEstablishment = true;
+  selectRegisterEstablishment(establishment: Establishment) {
+    this.establishmentDataService.get_filtered(establishment.id).then( r => {
+      this.establishment_selected = r.establishment as Establishment;
+      this.recoverUbication();
+      this.checkEstablishmentAddress();
+      this.checkURLWeb();
+      this.checkEstablishmentComercialName();
+      this.establishment_selected.contact_user = r.contact_user as User;
+      this.checkCedulaEstablishment();
+      this.checkTelefonoPrincipalContactoEstablecimiento();
+      this.checkTelefonoSecundarioContactoEstablecimiento();
+      this.checkEmailContactEstablishment();
+      this.buildWorkerGroups();
+      this.establishment_selected.workers_on_establishment = r.workers_on_establishment as Worker[];
+      this.establishment_selected.workers_on_establishment.forEach(worker => {
+         this.genders.forEach(gender => {
+            if(gender.id == worker.gender_id) {
+               worker.gender_name = gender.name;
+            }
+         });
+         this.worker_groups.forEach(worker_group => {
+            if(worker_group.id == worker.worker_group_id) {
+               worker.worker_group_name = worker_group.name;
+            }
+         });
+      });
+      this.establishment_selected.languages_on_establishment = r.languages_on_establishment as Language[];
+      this.establishment_selected.establishment_certifications_on_establishment = r.establishment_certifications_on_establishment as EstablishmentCertification[];
+      this.establishment_selected.establishment_certifications_on_establishment.forEach(establishment_certification_on_establishment => {
+         establishment_certification_on_establishment.establishment_certification_attachment = new EstablishmentCertificationAttachment();
+         this.establishment_certification_types.forEach(establishment_certification_type => {
+            if (establishment_certification_on_establishment.establishment_certification_type_id == establishment_certification_type.id) {
+               establishment_certification_on_establishment.establishment_certification_type_fatherCode = establishment_certification_type.father_code;
+               this.getEstablishmentCertificationTypesSpecific(establishment_certification_on_establishment);
+            }
+         });
+         this.establishmentCertificationAttachmentDataService.get(establishment_certification_on_establishment.establishment_certification_attachment_id).then( r_attachment => {
+            establishment_certification_on_establishment.establishment_certification_attachment = r_attachment.EstablishmentCertificationAttachment as EstablishmentCertificationAttachment;
+         }).catch( e => { console.log(e); });
+      });
+      this.mostrarDataEstablishment = true;
+    }).catch( e => { console.log(e); });
+    this.establishmentPictureDataService.get_by_establishment_id(establishment.id).then( r => {
+       this.establishment_selected_picture = r as EstablishmentPicture;
+    }).catch( e => { console.log(e); });
+  }
+
+
+  selectRegisterEstablishmentDeclaration(establishment: Establishment) {
+   this.establishment_declarations_selected = establishment;
+   this.getDeclarationsByEstablishment(establishment.id);
+   this.declaration_selected = new Declaration();
+   this.mostrarDataDeclaration = false;
+  }
+
+  recoverUbication() {
+    this.ubicationDataService.getByIdLower(this.establishment_selected.ubication_id).then( r => {
+      this.zonalEstablishmentSelectedCode = r.zonal.code;
+      this.provinciaEstablishmentSelectedCode = r.provincia.code;
+      this.cantonEstablishmentSelectedCode = r.canton.code;
+      this.establishment_selected.ubication_id = r.parroquia.id;
+      this.getCantonesEstablishmentRecovery();
+      this.getParroquiasEstablishmentRecovery();
+    }).catch( e => { console.log(e); });
   }
 
   newRegisterEstablishment() {
@@ -1088,24 +1753,61 @@ export class RegistroComponent implements OnInit {
    }
   }
 
-  selectRucRegister(register) {
-    this.rucEstablishmentRegisterSelected = register;
-  }
-
-  newRegisterEstablishmentCapacity() {
-
-  }
-
-  deleteRegisterEstablishment() {
-
-  }
-
-  deleteRegisterRecord() {
-
+  selectEstablishmentRegister(register: Register) {
+    this.mostrarDataRegister = false;
+    const tarifas: Tariff[] = this.newTariffs();
+    this.rucEstablishmentRegisterSelected = new Register();
+    this.registerDataService.get_register_data(register.id).then( r => {
+       this.rucEstablishmentRegisterSelected = r.register as Register;
+       this.getTramiteStatus(this.rucEstablishmentRegisterSelected.status);
+       this.rucEstablishmentRegisterSelected.status = r.status.state_id;
+       this.categorySelectedCode = r.register_category.code;
+       this.rucEstablishmentRegisterSelected.complementary_service_types_on_register = r.complementary_service_types_on_register as ComplementaryServiceType[];
+       this.rucEstablishmentRegisterSelected.complementary_service_foods_on_register = r.complementary_service_foods_on_register as ComplementaryServiceFood[];
+       this.rucEstablishmentRegisterSelected.capacities_on_register = r.capacities_on_register as Capacity[];
+       this.getCategories();
+       this.getAllowedInfo();
+       this.alowed_capacity_types = [];
+       this.capacityTypeDataService.get_filtered_by_register_type(this.rucEstablishmentRegisterSelected.register_type_id).then( r2 => {
+         this.alowed_capacity_types = r2 as CapacityType[];
+         this.mostrarDataRegister = true;
+         this.rucEstablishmentRegisterSelected.capacities_on_register.forEach(capacity => {
+            this.getMaxBed(capacity);
+            capacity.tariffs_on_capacity.forEach(prevTariff => {
+               tarifas.forEach(tariffSchema => {
+                  if (tariffSchema.tariff_type_id == prevTariff.tariff_type_id) {
+                     prevTariff.tariff_father_name = tariffSchema.tariff_father_name;
+                     prevTariff.tariff_name = tariffSchema.tariff_name;
+                  }
+               });
+            });
+            this.calcBeds(capacity);
+         });
+         this.calcSpaces();
+       }).catch( e => { console.log(e); });
+    }).catch( e => { console.log(e); });
   }
 
   selectComplementaryServiceType(complementary_service_type: ComplementaryServiceType) {
     this.complementary_service_types_registerSelectedId = complementary_service_type.id;
+  }
+
+  getTramiteStatus(status_id: number) {
+     this.states.forEach(state => {
+        if (state.id == status_id) {
+         this.estado_tramite_selected_code = state.father_code;
+         this.getSpecificStates();
+        }
+     });
+  }
+
+  getSpecificStates() {
+   this.specific_states = [];
+   this.states.forEach(element => {
+      if (element.father_code == this.estado_tramite_selected_code) {
+         this.specific_states.push(element);
+      }
+   });
   }
 
   addComplementaryServiceType() {
@@ -1131,6 +1833,28 @@ export class RegistroComponent implements OnInit {
     });
   }
 
+  validateRegister(): Boolean {
+     const c1 = (this.rucEstablishmentRegisterSelected.establishment_id == 0);
+     const c2 = (this.rucEstablishmentRegisterSelected.status == 0);
+     const c3 = (this.categorySelectedCode == '-');
+     const c4 = (this.rucEstablishmentRegisterSelected.register_type_id == 0);
+     const c5 = (this.rucEstablishmentRegisterSelected.total_spaces == 0);
+     let c6: Boolean = false;
+     this.rucEstablishmentRegisterSelected.capacities_on_register.forEach(capacity => {
+      if (!c6) {
+         c6 = (capacity.quantity * capacity.total_spaces == 0);
+      }
+     });
+     let c7: Boolean = false;
+     this.rucEstablishmentRegisterSelected.complementary_service_foods_on_register.forEach(complementaryServiceFood => {
+      if (!c7) {
+         c7 = (complementaryServiceFood.complementary_service_food_type_id == 0);
+      }
+     });
+     const toReturn = c1 || c2 || c3 || c4 || c5 || c6 || c7;
+   return !toReturn;
+  }
+
   removeComplementaryServiceType() {
     if (this.complementary_service_types_registerSelectedId === 0) {
       this.toastr.errorToastr('Seleccione un registro.', 'Error');
@@ -1151,10 +1875,6 @@ export class RegistroComponent implements OnInit {
     }
     this.rucEstablishmentRegisterSelected.complementary_service_types_on_register = newComplementaryCapacities;
     this.complementary_service_types_registerSelectedId = 0;
-  }
-
-  selectRegisterEstablishmentServiceOffer(establishment_service_offer: Requisite) {
-    this.establishment_service_offers_registerSelectedId = establishment_service_offer.id;
   }
 
   subirFotoFachada() {
@@ -1183,6 +1903,10 @@ export class RegistroComponent implements OnInit {
   }
 
   goToPageRegister(page: number) {
+   this.mostrarDataRegister = false;
+   this.ruc_registro_selected.registers = [];
+   this.rucEstablishmentRegisterSelected = new Register();
+   this.getRegistersOnRuc();
    if ( page < 1 || page > this.lastPageRegister ) {
       this.toastr.errorToastr('La página solicitada no existe.', 'Error');
       return;
@@ -1226,6 +1950,8 @@ export class RegistroComponent implements OnInit {
          newTariff.tariff_father_name = element.father.name;
          newTariff.tariff_name = tariffType.name;
          newTariff.tariff_type_id = tariffType.id;
+         newTariff.is_reference = tariffType.is_reference;
+         newTariff.factor = tariffType.factor;
          toReturn.push(newTariff);
       });
    });
@@ -1250,6 +1976,10 @@ export class RegistroComponent implements OnInit {
       this.rucEstablishmentRegisterSelected.total_spaces += element.total_spaces * element.quantity;
       this.rucEstablishmentRegisterSelected.total_habitations += element.quantity;
    });
+   this.validateTariffs();
+   this.rucEstablishmentRegisterSelected.capacities_on_register.forEach(capacity => {
+      this.calcBeds(capacity);
+   });
   }
 
   calcBeds(capacity: Capacity) {
@@ -1270,66 +2000,16 @@ export class RegistroComponent implements OnInit {
    }else {
       capacity.max_bed_ok = false;
    }
+   this.validateTariffs();
   }
 
   selectCapacity(capacity: Capacity) {
    this.capacitySelected = capacity;
   }
 
-  openDialog(content) {
-   this.modalService.open(content, { centered: true, size: 'lg' }).result.then(( response => {
-      if ( response === 'Guardar click' ) {
-         /*if (typeof this.registerSelected.id === 'undefined') {
-            this.registerDataService.post(this.registerSelected).then( r => {
-               this.toastr.successToastr('Datos guardados satisfactoriamente.', 'Nuevo');
-               this.getRegisters();
-            }).catch( e => console.log(e) );
-         } else {
-            this.registerDataService.put(this.registerSelected).then( r => {
-               this.toastr.successToastr('Registro actualizado satisfactoriamente.', 'Actualizar');
-               this.getRegisters();
-            }).catch( e => console.log(e) );
-         }*/
-      }
+  openDialog(content, status) {
+     this.statusSelected = status;
+   this.modalService.open(content, { centered: true, size: 'sm' }).result.then(( response => {
    }), ( r => {}));
-  }
-
-  newRegisterModal(content) {
-    /*this.registerSelected = new Register();
-    this.registerSelected.establishment_id = 0;
-    this.register_establishment_capacities_registerSelectedId = 0;
-    this.complementary_capacities_registerSelectedId = 0;
-    this.rack_prices_registerSelectedId = 0;
-    this.registerSelected.register_type_id = 0;
-    this.establishment_service_offers_registerSelectedId = 0;*/
-    this.openDialog(content);
-  }
-
-  editRegisterModal(content) {
-    /*if ( typeof this.registerSelected.register_establishment_capacities_on_register === 'undefined' ) {
-      this.registerSelected.register_establishment_capacities_on_register = [];
-    }
-    if ( typeof this.registerSelected.complementary_capacities_on_register === 'undefined' ) {
-      this.registerSelected.complementary_capacities_on_register = [];
-    }
-    if ( typeof this.registerSelected.rack_prices_on_register === 'undefined' ) {
-      this.registerSelected.rack_prices_on_register = [];
-    }
-    if ( typeof this.registerSelected.establishment_service_offers_on_register === 'undefined' ) {
-      this.registerSelected.establishment_service_offers_on_register = [];
-    }
-    if (typeof this.registerSelected.id === 'undefined') {
-      this.toastr.errorToastr('Debe seleccionar un registro.', 'Error');
-      return;
-    }
-    this.getRegisterEstablishmentCapacitiesOnRegister();
-    this.register_establishment_capacities_registerSelectedId = 0;
-    this.getComplementaryCapacitiesOnRegister();
-    this.complementary_capacities_registerSelectedId = 0;
-    this.getRackPricesOnRegister();
-    this.rack_prices_registerSelectedId = 0;
-    this.getEstablishmentServiceOffersOnRegister();
-    this.establishment_service_offers_registerSelectedId = 0;*/
-    this.openDialog(content);
   }
 }

@@ -1,19 +1,63 @@
 <div class="row">
-  <div class="col-12 text-right">
-    <h1>Gestión de Información</h1>
-  </div>
-  <div class="col-12 mt-5">
-    <div class="alert alert-warning" role="alert">
-      <label class="col-12 text-justify"
-        ><strong>Atención</strong><br />
-        Mantener la información actualizada, es su responsabilidad. <br/>
-        Éste sistema utiliza información oficial a partir de las fuentes gubernamentales. Si los datos bloqueados no son correctos,
-        usted debe acercarse a la entidad gubernamental custodia del dato para actualizarlo.
-      </label>
-    </div>
+  <h1 class="col-12 text-right">
+     Registros - MINTUR
+  </h1>
+</div>
+<div class="row">
+  <div class="col-12">
+     <div class="btn-toolbar" role="toolbar">
+        <div class="btn-group mr-2" role="group">
+           <button type="button" class="btn btn-primary" title="Actualizar" (click)="refresh()"><i class="fas fa-sync"></i></button>
+        </div>
+     </div>
   </div>
 </div>
 <div class="row">
+  <div class="col-12">
+     <table class="table table-hover mt-2">
+        <thead>
+           <tr>
+              <th>Seleccionado</th>
+              <th>Número de Ruc</th>
+              <th>Establecimiento</th>
+              <th>Dirección</th>
+              <th>Estado</th>
+           </tr>
+        </thead>
+        <tbody>
+           <tr *ngFor="let register of registers_mintur" (click)="selectRegisterMintur(register)">
+              <td class="text-right"><span *ngIf="registerMinturSelected === register" class="far fa-hand-point-right"></span></td>
+              <td>{{register.code}}</td>
+              <td>{{register.autorized_complementary_capacities}}</td>
+              <td>{{register.establishment_id}}</td>
+              <td>{{register.autorized_complementary_food_capacities}}</td>
+           </tr>
+        </tbody>
+     </table>
+  </div>
+</div>
+<div class="row">
+  <div class="col-12">
+     <div class="btn-toolbar" role="toolbar">
+        <div class="btn-group mr-2" role="group">
+           <button type="button" class="btn btn-light" *ngIf="currentPageMinturRegisters === 1" title="Primera Página" disabled>Primera</button>
+           <button type="button" class="btn btn-light" *ngIf="currentPageMinturRegisters !== 1" title="Primera Página" (click)="goToPageRegisterMintur(1)">Primera</button>
+           <button type="button" class="btn btn-light" *ngIf="currentPageMinturRegisters > 1" title="Página Anterior" (click)="goToPageRegisterMintur((currentPageMinturRegisters*1) - 1)">{{(currentPageMinturRegisters * 1) - 1}}</button>
+           <button type="button" class="btn btn-primary" title="Página Actual">{{currentPageMinturRegisters}}</button>
+           <button type="button" class="btn btn-light" *ngIf="currentPageMinturRegisters < lastPageMinturRegisters" title="Página Siguiente" (click)="goToPageRegisterMintur((currentPageMinturRegisters*1) + 1)">{{(currentPageMinturRegisters * 1) + 1}}</button>
+           <button type="button" class="btn btn-light" *ngIf="currentPageMinturRegisters !== lastPageMinturRegisters" title="Última Página" (click)="goToPageRegisterMintur(lastPageMinturRegisters)">Última</button>
+           <button type="button" class="btn btn-light" *ngIf="currentPageMinturRegisters === lastPageMinturRegisters" title="Última Página" disabled>Última</button>
+        </div>
+        <div class="input-group">
+           <div class="input-group-prepend">
+              <button type="button" class="input-group-text btn btn-success" title="Ir a la Página" (click)="goToPageRegisterMintur(goToPageNumberRegisterMintur.value)">Ir a</button>
+           </div>
+           <input type="number" min="{{1}}" max="{{lastPageMinturRegisters}}" class="form-control" placeholder="Ir a la Página" #goToPageNumberRegisterMintur>
+        </div>
+     </div>
+  </div>
+</div>
+<div class="row" *ngIf="mostrarDataRegisterMintur">
   <div class="col-12">
     <div class="row mt-5">
       <div class="col-12 text-left">
@@ -25,401 +69,286 @@
         <ngb-tabset>
           <ngb-tab title="R.U.C." id="tab1">
             <ng-template ngbTabContent>
-                <div class="alert alert-danger mt-3" role="alert" *ngIf="!validateRuc()">
-                  <label class="col-12 text-justify"
-                    ><strong>Atención</strong><br />
-                    La información proporcionada del RUC presenta errores o es incompleta.
-                  </label>
-                </div>
-                <div class="row mt-3">
-                  <h4 class="col-12">
-                    <strong>Registro Único de Contribuyente</strong>
-                  </h4>
-                </div>
-                <div class="row">
-                  <div class="col-12">
-                    <div class="form-group">
-                      <label>Número de RUC</label
-                      ><span
-                        *ngIf="!rucValidated"
-                        class="ml-2 badge badge-danger"
-                        >Incorrecto</span 
-                      >
-                      <input
-                        disabled
-                        type="text"
-                        class="form-control"
-                        id="ruc"
-                        maxlength="13"
-                        placeholder="Número de RUC"
-                        [(ngModel)]="ruc_registro_selected.ruc.number"
-                        (keyup)="checkRuc()"
-                        name="ruc"
-                      />
-                    </div>
-                  </div>
-                  <div class="col-12" *ngIf="rucValidated">
-                    <div class="form-group">
-                      <label>DATOS DEL RUC</label>
-                      <div class="col-12 text-justify" [innerHTML]="rucData">
+              <div class="alert alert-danger mt-3" role="alert" *ngIf="!validateRuc()">
+                <label class="col-12 text-justify"><strong>Atención</strong><br />
+                  La información proporcionada del RUC presenta errores o es incompleta.
+                </label>
+              </div>
+              <div class="row mt-3">
+                <h4 class="col-12">
+                  <strong>Registro Único de Contribuyente</strong>
+                </h4>
+              </div>
+              <div class="row">
+                <div class="col-12">
+                  <div class="form-group">
+                    <label>Número de RUC</label><span *ngIf="!rucValidated"
+                      class="ml-2 badge badge-danger">Incorrecto</span>
+                    <div class="input-group mb-3">
+                      <div class="input-group-prepend">
+                        <button type="button" class="btn btn-primary" title="Consultar con SRI" (click)="checkRuc()">
+                          <i class="fas fa-sync"></i>
+                        </button>
                       </div>
+                      <input disabled type="text" class="form-control" id="ruc" maxlength="13"
+                        placeholder="Número de RUC" [(ngModel)]="ruc_registro_selected.ruc.number" (keyup)="checkRuc()"
+                        name="ruc" />
                     </div>
                   </div>
                 </div>
-                <div class="row" [hidden]="true">
-                  <div class="col-6">
-                    <div class="form-group">
-                      <label>Tipo de Contribuyente</label
-                      ><span
-                        *ngIf="ruc_registro_selected.ruc.tax_payer_type_id == 0"
-                        class="ml-2 badge badge-danger"
-                        >Incorrecto</span
-                      >
-                      <select
-                        disabled
-                        class="form-control"
-                        id="tax_payer_type_id"
-                        name="tax_payer_type_id"
-                        [(ngModel)]="
+                <div class="col-12" *ngIf="rucValidated">
+                  <div class="form-group">
+                    <label>DATOS DEL RUC</label>
+                    <div class="col-12 text-justify" [innerHTML]="rucData">
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row" [hidden]="true">
+                <div class="col-6">
+                  <div class="form-group">
+                    <label>Tipo de Contribuyente</label><span *ngIf="ruc_registro_selected.ruc.tax_payer_type_id == 0"
+                      class="ml-2 badge badge-danger">Incorrecto</span>
+                    <select disabled class="form-control" id="tax_payer_type_id" name="tax_payer_type_id" [(ngModel)]="
                           ruc_registro_selected.ruc.tax_payer_type_id
-                        "
-                      >
-                        <option value="0" selected>Seleccione...</option>
-                        <option
-                          *ngFor="let tax_payer_type of tax_payer_types"
-                          value="{{ tax_payer_type.id }}"
-                        >
-                          {{ tax_payer_type.name }}
-                        </option>
-                      </select>
-                    </div>
+                        ">
+                      <option value="0" selected>Seleccione...</option>
+                      <option *ngFor="let tax_payer_type of tax_payer_types" value="{{ tax_payer_type.id }}">
+                        {{ tax_payer_type.name }}
+                      </option>
+                    </select>
                   </div>
-                  <div class="col-6">
-                    <div class="form-group">
-                      <label>Obligado a Llevar Contabilidad</label>
-                      <div class="col-12">
-                        <label class="switch"
-                          ><input
-                            type="checkbox" disabled
-                            id="baised_accounting"
-                            name="baised_accounting"
-                            [(ngModel)]="
+                </div>
+                <div class="col-6">
+                  <div class="form-group">
+                    <label>Obligado a Llevar Contabilidad</label>
+                    <div class="col-12">
+                      <label class="switch"><input type="checkbox" disabled id="baised_accounting"
+                          name="baised_accounting" [(ngModel)]="
                               ruc_registro_selected.ruc.baised_accounting
-                            "/><span class="slider round"></span
-                        ></label>
-                      </div>
+                            " /><span class="slider round"></span></label>
                     </div>
                   </div>
                 </div>
-                <div
-                  class="row"
-                  *ngIf="ruc_registro_selected.ruc.tax_payer_type_id == 2"
-                >
-                  <div class="col-3">
-                    <div class="form-group">
-                      <label for="group_type_id"
-                        >Tipo de Personería Jurídica</label
-                      ><span
-                        *ngIf="ruc_registro_selected.ruc.group_given.group_type_id == 0"
-                        class="ml-2 badge badge-danger"
-                        >Incorrecto</span
-                      >
-                      <select
-                        disabled
-                        class="form-control"
-                        id="group_type_id"
-                        name="group_type_id"
-                        [(ngModel)]="ruc_registro_selected.ruc.group_given.group_type_id"
-                        (change)="
+              </div>
+              <div class="row" *ngIf="ruc_registro_selected.ruc.tax_payer_type_id > 1">
+                <div class="col-3">
+                  <div class="form-group">
+                    <label for="group_type_id">Tipo de Personería Jurídica</label><span
+                      *ngIf="!validateGroupGivenTipe()" class="ml-2 badge badge-danger">Incorrecto</span>
+                    <select class="form-control" id="group_type_id" name="group_type_id"
+                      [(ngModel)]="ruc_registro_selected.ruc.group_given.group_type_id" (change)="
                           setGroupTypeSelected(
                             ruc_registro_selected.ruc.group_given.group_type_id
                           )
-                        "
-                      >
-                        <option value="0" selected>Seleccione...</option>
-                        <option
-                          *ngFor="let group_type of group_types"
-                          value="{{ group_type.id }}"
-                        >
-                          {{ group_type.name }}
-                        </option>
-                      </select>
-                    </div>
+                        ">
+                      <option value="0" selected>Seleccione...</option>
+                      <option *ngFor="let group_type of group_types" value="{{ group_type.id }}">
+                        {{ group_type.name }}
+                      </option>
+                    </select>
                   </div>
-                  <div class="col-3">
-                    <div
-                      class="form-group"
-                      *ngIf="ruc_registro_selected.ruc.group_given.group_type_id != 0"
-                    >
-                      <label
-                        >Identificación
-                        {{ groupTypeSelected.representative_rol_name }}</label
-                      ><span
-                        *ngIf="!identificationRepresentativePersonValidated"
-                        class="ml-2 badge badge-danger"
-                        >Incorrecto</span
-                      >
-                      <input
-                        type="text"
-                        class="form-control"
-                        id="identificacionRepresentante"
-                        maxlength="10"
+                </div>
+                <div class="col-3">
+                  <div class="form-group" *ngIf="ruc_registro_selected.ruc.group_given.group_type_id != 0">
+                    <label>Identificación
+                      {{ groupTypeSelected.representative_rol_name }}</label><span
+                      *ngIf="!identificationRepresentativePersonValidated"
+                      class="ml-2 badge badge-danger">Incorrecto</span>
+                    <div class="input-group mb-3">
+                      <div class="input-group-prepend">
+                        <button type="button" class="btn btn-primary" title="Consultar con Registro Civil"
+                          (click)="checkIdentificationRepresentant()">
+                          <i class="fas fa-sync"></i>
+                        </button>
+                      </div>
+                      <input type="text" class="form-control" id="identificacionRepresentante" maxlength="10"
                         placeholder="Identificación {{
-                          groupTypeSelected.representative_rol_name
-                        }}"
-                        [(ngModel)]="
-                          ruc_registro_selected.ruc.person_representative.identification
-                        "
-                        (keyup)="checkIdentificationRepresentant()"
-                        name="identificacionRepresentante"
-                      />
-                      <small
-                        *ngIf="identificationRepresentativePersonValidated"
-                        id="cedulaRepresentanteHelp"
-                        class="form-text text-muted"
-                        [innerHTML]="representanteCedulaData"
-                        ></small
-                      >
+                            groupTypeSelected.representative_rol_name
+                          }}" [(ngModel)]="
+                            ruc_registro_selected.ruc.person_representative.identification
+                          " (keyup)="checkIdentificationRepresentant()" name="identificacionRepresentante" />
                     </div>
+                    <small *ngIf="identificationRepresentativePersonValidated" id="cedulaRepresentanteHelp"
+                      class="form-text text-muted" [innerHTML]="representanteCedulaData"></small>
                   </div>
-                  <div class="col-3">
-                    <div
-                      class="form-group"
-                      *ngIf="ruc_registro_selected.ruc.group_given.group_type_id != 0"
-                    >
-                      <label>Fecha de Asignación</label>
-                      <input
-                        type="date"
-                        class="form-control"
-                        id="assignment_date"
-                        name="assignment_date"
-                        placeholder="assignmentDate"
-                        [ngModel]="
-                          ruc_registro_selected.ruc.person_representative.assignment_date | date: 'y-MM-dd'
-                        "
-                        (ngModelChange)="
-                          personRepresentativeSelected.assignment_date = $event
-                        "
-                      />
-                    </div>
+                </div>
+                <div class="col-3">
+                  <div class="form-group" *ngIf="ruc_registro_selected.ruc.group_given.group_type_id != 0">
+                    <label>Fecha de Asignación</label>
+                    <input type="date" class="form-control" id="assignment_date" name="assignment_date"
+                      placeholder="assignmentDate" [ngModel]="
+                          ruc_registro_selected.ruc.person_representative_attachment.assignment_date | date: 'y-MM-dd'
+                        " (ngModelChange)="
+                          ruc_registro_selected.ruc.person_representative_attachment.assignment_date = $event
+                        " />
                   </div>
-                  <div class="col-3">
-                    <div
-                      class="form-group"
-                      *ngIf="ruc_registro_selected.ruc.group_given.group_type_id != 0"
-                    >
-                      <label>Número de Expediente en la SUPERCIAS</label>
-                      <input
-                        type="text"
-                        class="form-control"
-                        id="register_code"
-                        name="register_code"
-                        placeholder="Número de Expediente en la SUPERCIAS"
-                        [(ngModel)]="ruc_registro_selected.ruc.group_given.register_code"
-                      />
+                </div>
+                <div class="col-3">
+                  <div class="form-group" *ngIf="ruc_registro_selected.ruc.group_given.group_type_id != 0">
+                    <label>Nombramiento Representante del Legal</label><span *ngIf="!validateNombramiento()"
+                      class="ml-2 badge badge-danger">Incorrecto</span>
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <button [disabled]="!validateNombramiento()" type="button" title="Descargar"
+                          class="btn btn-success" (click)="descargarNombramiento()">
+                          <i class="fas fa-download"></i>
+                        </button>
+                        <button [disabled]="!validateNombramiento()" type="button" title="Eliminar"
+                          class="btn btn-danger" (click)="borrarNombramiento()">
+                          <i class="fas fa-trash"></i>
+                        </button>
+                      </div>
+                      <input type="file" class="form-control" id="person_representative_attachment_file"
+                        name="person_representative_attachment_file" placeholder="Nombramiento Representante del Legal"
+                        (change)="CodeFilePersonRepresentativeAttachment($event)">
                     </div>
                   </div>
                 </div>
-                <div class="row">
-                  <div class="col-12">
-                    <div class="form-group row">
-                      <label class="col-12 col-form-label mb-2"
-                        ><strong>Franquicias y/o Cadenas</strong></label
-                      >
-                      <label class="col-4 col-form-label">Franquicia y/o Cadena</label>
-                      <div class="col-8">
-                        <div class="input-group">
-                          <div class="input-group-prepend">
-                            <button
-                              type="button"
-                              title="Eliminar"
-                              class="btn btn-danger"
-                              (click)="removeFranchise()"
-                            >
-                              <i class="fas fa-trash"></i>
-                            </button>
-                            <button
-                              type="button"
-                              title="Agregar"
-                              class="btn btn-success"
-                              (click)="addFranchise()"
-                            >
-                              <i class="fas fa-plus-circle"></i>
-                            </button>
-                          </div>
-                          <select
-                            class="form-control"
-                            id="franchise_id"
-                            name="franchise_id"
-                            [(ngModel)]="franchises_rucSelectedId"
-                          >
-                            <option value="0" selected>Seleccione...</option>
-                            <option
-                              *ngFor="let franchise of franchises"
-                              value="{{ franchise.id }}"
-                            >
-                              {{ franchise.name }}
-                            </option>
-                          </select>
+              </div>
+              <div class="row">
+                <div class="col-12">
+                  <div class="form-group row">
+                    <label class="col-12 col-form-label mb-2"><strong>Franquicias y/o Cadenas</strong></label>
+                    <label class="col-4 col-form-label">Franquicia y/o Cadena</label>
+                    <div class="col-8">
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <button type="button" title="Eliminar" class="btn btn-danger" (click)="removeFranchise()">
+                            <i class="fas fa-trash"></i>
+                          </button>
+                          <button type="button" title="Agregar" class="btn btn-success" (click)="addFranchise()">
+                            <i class="fas fa-plus-circle"></i>
+                          </button>
                         </div>
+                        <select class="form-control" id="franchise_id" name="franchise_id"
+                          [(ngModel)]="franchises_rucSelectedId">
+                          <option value="0" selected>Seleccione...</option>
+                          <option *ngFor="let franchise of franchises" value="{{ franchise.id }}">
+                            {{ franchise.name }}
+                          </option>
+                        </select>
                       </div>
-                      <div class="col-4"></div>
-                      <div class="col-8">
-                        <table class="table table-hover mt-2">
-                          <tbody>
-                            <tr
-                              *ngFor="
+                    </div>
+                    <div class="col-4"></div>
+                    <div class="col-8">
+                      <table class="table table-hover mt-2">
+                        <tbody>
+                          <tr *ngFor="
                                 let franchise of ruc_registro_selected.ruc
                                   .franchise_chain_names_on_ruc
-                              "
-                              (click)="selectFranchise(franchise)"
-                            >
-                              <td class="text-right">
-                                <span
-                                  *ngIf="
+                              " (click)="selectFranchise(franchise)">
+                            <td class="text-right">
+                              <span *ngIf="
                                     franchises_rucSelectedId === franchise.id
-                                  "
-                                  class="far fa-hand-point-right"
-                                ></span>
-                              </td>
-                              <td>{{ franchise.name }}</td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
+                                  " class="far fa-hand-point-right"></span>
+                            </td>
+                            <td>{{ franchise.name }}</td>
+                          </tr>
+                        </tbody>
+                      </table>
                     </div>
                   </div>
                 </div>
-                <div class="row">
-                  <h4 class="col-12"><strong>Datos de Contacto</strong></h4>
-                  <div class="col-12">
-                    <div class="row">
-                      <div class="col-12">
-                        <div class="form-group">
-                          <label>Cédula de Identidad</label
-                          ><span
-                            *ngIf="!identificationContactValidated"
-                            class="ml-2 badge badge-danger"
-                            >Incorrecto</span
-                          >
-                          <input
-                            type="text"
-                            class="form-control"
-                            id="cedula"
-                            maxlength="10"
-                            placeholder="Cédula de Identidad"
-                            (keyup)="checkCedula()"
-                            [(ngModel)]="
-                              ruc_registro_selected.ruc.contact_user
-                                .identification
-                            "
-                            name="cedula"
-                          />
-                        </div>
-                      </div>
-                      <div class="col-12" *ngIf="identificationContactValidated">
-                        <div class="form-group">
-                          <label>DATOS DE LA CÉDULA</label>
-                          <div class="col-12 text-justify" [innerHTML]="cedulaData">
+              </div>
+              <div class="row">
+                <h4 class="col-12"><strong>Datos de Contacto</strong></h4>
+                <div class="col-12">
+                  <div class="form-group">
+                    <label>Soy la Persona de Contacto</label>
+                    <div class="col-12">
+                      <label class="switch"><input type="checkbox" id="contactoSoyYo" name="contactoSoyYo"
+                          (change)="checkImContactRuc()" [(ngModel)]="imContactRuc" /><span
+                          class="slider round"></span></label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12" *ngIf="!imContactRuc">
+                  <div class="alert alert-warning" role="alert">
+                    <label class="col-12 text-justify"><strong>Atención</strong><br />
+                      Al asignar un contacto diferente a usted, se creará una cuenta de Co-Administrador de Ruc, para
+                      que gestione la información que se ingresa en éste sistema.
+                    </label>
+                  </div>
+                  <div class="row">
+                    <div class="col-12">
+                      <div class="form-group">
+                        <label>Cédula de Identidad</label><span *ngIf="!identificationContactValidated"
+                          class="ml-2 badge badge-danger">Incorrecto</span>
+                        <div class="input-group mb-3">
+                          <div class="input-group-prepend">
+                            <button type="button" class="btn btn-primary" title="Consultar con Registro Civil"
+                              (click)="checkCedula()">
+                              <i class="fas fa-sync"></i>
+                            </button>
                           </div>
+                          <input type="text" class="form-control" id="cedula" maxlength="10"
+                            placeholder="Cédula de Identidad" (keyup)="checkCedula()" [(ngModel)]="
+                                ruc_registro_selected.ruc.contact_user
+                                  .identification
+                              " name="cedula" />
                         </div>
                       </div>
                     </div>
-                    <div class="row mt-2">
-                      <div class="col-6">
-                        <div class="form-group">
-                          <label>Número de Teléfono Principal</label
-                          ><span
-                            *ngIf="!mainPhoneContactValidated"
-                            class="ml-2 badge badge-danger"
-                            >Incorrecto</span
-                          >
-                          <input
-                            type="text"
-                            class="form-control"
-                            id="mainRucPhoneNumber"
-                            maxlength="10"
-                            placeholder="Número de Teléfono Principal"
-                            (keyup)="checkTelefonoPrincipal()"
-                            [(ngModel)]="
+                    <div class="col-12" *ngIf="identificationContactValidated">
+                      <div class="form-group">
+                        <label>DATOS DE LA CÉDULA</label>
+                        <div class="col-12 text-justify" [innerHTML]="cedulaData">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row mt-2">
+                    <div class="col-6">
+                      <div class="form-group">
+                        <label>Número de Teléfono Principal</label><span *ngIf="!mainPhoneContactValidated"
+                          class="ml-2 badge badge-danger">Incorrecto</span>
+                        <input type="text" class="form-control" id="mainRucPhoneNumber" maxlength="10"
+                          placeholder="Número de Teléfono Principal" (keyup)="checkTelefonoPrincipal()" [(ngModel)]="
                               ruc_registro_selected.ruc.contact_user.main_phone_number
-                            "
-                            name="mainRucPhoneNumber"
-                          />
-                        </div>
+                            " name="mainRucPhoneNumber" />
                       </div>
-                      <div class="col-6">
-                        <div class="form-group">
-                          <label>Número de Teléfono Secundario</label
-                          ><span
-                            *ngIf="!secondaryPhoneContactValidated"
-                            class="ml-2 badge badge-danger"
-                            >Incorrecto</span
-                          >
-                          <input
-                            type="text"
-                            class="form-control"
-                            id="secondaryRucPhone"
-                            maxlength="10"
-                            (keyup)="checkTelefonoSecundario()"
-                            placeholder="Número de Teléfono Secundario"
-                            [(ngModel)]="
+                    </div>
+                    <div class="col-6">
+                      <div class="form-group">
+                        <label>Número de Teléfono Secundario</label><span *ngIf="!secondaryPhoneContactValidated"
+                          class="ml-2 badge badge-danger">Incorrecto</span>
+                        <input type="text" class="form-control" id="secondaryRucPhone" maxlength="10"
+                          (keyup)="checkTelefonoSecundario()" placeholder="Número de Teléfono Secundario" [(ngModel)]="
                               ruc_registro_selected.ruc.contact_user.secondary_phone_number
-                            "
-                            name="secondaryRucPhone"
-                          />
-                        </div>
+                            " name="secondaryRucPhone" />
                       </div>
                     </div>
-                    <div class="row">
-                      <div class="col-12">
-                        <div class="form-group">
-                          <label>Correo Electrónico</label
-                          ><span
-                            *ngIf="!emailContactValidated"
-                            class="ml-2 badge badge-danger"
-                            >Incorrecto</span
-                          >
-                          <input
-                            type="email"
-                            class="form-control"
-                            id="email"
-                            maxlength="255"
-                            (keyup)="checkEmail()"
-                            placeholder="Correo Electrónico"
-                            [(ngModel)]="ruc_registro_selected.ruc.contact_user.email"
-                            name="email"
-                          />
-                        </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-12">
+                      <div class="form-group">
+                        <label>Correo Electrónico</label><span *ngIf="!emailContactValidated"
+                          class="ml-2 badge badge-danger">Incorrecto</span>
+                        <input type="email" class="form-control" id="email" maxlength="255" (keyup)="checkEmail()"
+                          placeholder="Correo Electrónico" [(ngModel)]="ruc_registro_selected.ruc.contact_user.email"
+                          name="email" />
                       </div>
                     </div>
                   </div>
                 </div>
-                <div class="row mt-3" *ngIf="validateRuc()">
-                  <div class="col-12 text-center">
-                    <button
-                      type="button"
-                      class="btn btn-success"
-                      title="Guardar Datos del RUC"
-                      (click)="guardarRUC()"
-                    >
-                      <i class="fas fa-save"></i>&nbsp;Guardar Datos del RUC
-                    </button>
-                    <button
-                      type="button"
-                      class="btn btn-danger ml-2"
-                      title="Cancelar Cambios"
-                      (click)="
+              </div>
+              <div class="row mt-3" *ngIf="validateRuc()">
+                <div class="col-12 text-center">
+                  <button [disabled]="guardando" type="button" class="btn btn-success" title="Guardar Datos del RUC"
+                    (click)="guardarRUC()">
+                    <i class="fas fa-save"></i>&nbsp;Guardar Datos del RUC
+                  </button>
+                  <button type="button" class="btn btn-danger ml-2" title="Cancelar Cambios" (click)="
                         refresh()
-                      "
-                    >
-                      <i class="fas fa-trash"></i>&nbsp;Cancelar Cambios
-                    </button>
-                  </div>
+                      ">
+                    <i class="fas fa-trash"></i>&nbsp;Cancelar Cambios
+                  </button>
                 </div>
+              </div>
             </ng-template>
           </ngb-tab>
-          <ngb-tab title="Establecimientos" id="tab2" *ngIf="rucSaved()">
+          <ngb-tab title="Establecimientos" id="tab2" *ngIf="rucSaved() && SRIOK && REGCIVILOK">
             <ng-template ngbTabContent>
               <div class="row mt-3">
                 <h4 class="col-12">
@@ -430,58 +359,28 @@
                 <div class="col-12">
                   <div class="btn-toolbar" role="toolbar">
                     <div class="btn-group mr-2" role="group">
-                      <button
-                        type="button"
-                        class="btn btn-primary"
-                        title="Actualizar"
-                        (click)="
-                          goToPageEstablishment(currentPageEstablishment)
-                        "
-                      >
+                      <button type="button" class="btn btn-primary" title="Actualizar" (click)="
+                        getEstablishmentsOnRuc(currentPageEstablishment)
+                        ">
                         <i class="fas fa-sync"></i>
                       </button>
                     </div>
                     <div class="btn-group mr-2" role="group">
-                      <button
-                        type="button"
-                        title="Nuevo"
-                        class="btn btn-success"
-                        (click)="newRegisterEstablishment()"
-                      >
+                      <button type="button" title="Nuevo" class="btn btn-success" (click)="newRegisterEstablishment()">
                         <i class="fas fa-file"></i>
-                      </button>
-                    </div>
-                    <div class="btn-group mr-2" role="group">
-                      <button
-                        type="button"
-                        title="Eliminar"
-                        class="btn btn-danger"
-                        (click)="deleteRegisterEstablishment()"
-                      >
-                        <i class="fas fa-trash"></i>
                       </button>
                     </div>
                     <div class="input-group">
                       <div class="input-group-prepend">
-                        <button
-                          type="button"
-                          class="input-group-text btn btn-success"
-                          title="Ir a la Página"
-                          (click)="
+                        <button type="button" class="input-group-text btn btn-success" title="Ir a la Página" (click)="
                             goToPageEstablishment(
                               goToPageNumberEstablishment.value
                             )
-                          "
-                        >
+                          ">
                           <span class="fas fa-search"></span>
                         </button>
                       </div>
-                      <input
-                        type="text"
-                        class="form-control"
-                        placeholder="Buscar..."
-                        #goToPageNumberEstablishment
-                      />
+                      <input type="text" class="form-control" placeholder="Buscar..." #goToPageNumberEstablishment />
                     </div>
                   </div>
                 </div>
@@ -497,17 +396,12 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr
-                        *ngFor="
-                          let establishment of ruc_registro_selected.establishments
-                        "
-                        (click)="selectRegisterEstablishment(establishment)"
-                      >
+                      <tr *ngFor="
+                          let establishment of ruc_registro_selected.ruc.establishments
+                        " (click)="selectRegisterEstablishment(establishment)">
                         <td class="text-right">
-                          <span
-                            *ngIf="establishment_selected === establishment"
-                            class="far fa-hand-point-right"
-                          ></span>
+                          <span *ngIf="establishment_selected.id == establishment.id"
+                            class="far fa-hand-point-right"></span>
                         </td>
                         <td>{{ establishment.ruc_code_id }}</td>
                         <td>{{ establishment.address }}</td>
@@ -520,103 +414,56 @@
                 <div class="col-12">
                   <div class="btn-toolbar" role="toolbar">
                     <div class="btn-group mr-2" role="group">
-                      <button
-                        type="button"
-                        class="btn btn-light"
-                        *ngIf="currentPageEstablishment === 1"
-                        title="Primera Página"
-                        disabled
-                      >
+                      <button type="button" class="btn btn-light" *ngIf="currentPageEstablishment === 1"
+                        title="Primera Página" disabled>
                         Primera
                       </button>
-                      <button
-                        type="button"
-                        class="btn btn-light"
-                        *ngIf="currentPageEstablishment !== 1"
-                        title="Primera Página"
-                        (click)="goToPageEstablishment(1)"
-                      >
+                      <button type="button" class="btn btn-light" *ngIf="currentPageEstablishment !== 1"
+                        title="Primera Página" (click)="goToPageEstablishment(1)">
                         Primera
                       </button>
-                      <button
-                        type="button"
-                        class="btn btn-light"
-                        *ngIf="currentPageEstablishment > 1"
-                        title="Página Anterior"
-                        (click)="
+                      <button type="button" class="btn btn-light" *ngIf="currentPageEstablishment > 1"
+                        title="Página Anterior" (click)="
                           goToPageEstablishment(
                             currentPageEstablishment * 1 - 1
                           )
-                        "
-                      >
+                        ">
                         {{ currentPageEstablishment * 1 - 1 }}
                       </button>
-                      <button
-                        type="button"
-                        class="btn btn-primary"
-                        title="Página Actual"
-                      >
+                      <button type="button" class="btn btn-primary" title="Página Actual">
                         {{ currentPageEstablishment }}
                       </button>
-                      <button
-                        type="button"
-                        class="btn btn-light"
-                        *ngIf="currentPageEstablishment < lastPageEstablishment"
-                        title="Página Siguiente"
-                        (click)="
+                      <button type="button" class="btn btn-light"
+                        *ngIf="currentPageEstablishment < lastPageEstablishment" title="Página Siguiente" (click)="
                           goToPageEstablishment(
                             currentPageEstablishment * 1 + 1
                           )
-                        "
-                      >
+                        ">
                         {{ currentPageEstablishment * 1 + 1 }}
                       </button>
-                      <button
-                        type="button"
-                        class="btn btn-light"
-                        *ngIf="
+                      <button type="button" class="btn btn-light" *ngIf="
                           currentPageEstablishment !== lastPageEstablishment
-                        "
-                        title="Última Página"
-                        (click)="goToPageEstablishment(lastPageEstablishment)"
-                      >
+                        " title="Última Página" (click)="goToPageEstablishment(lastPageEstablishment)">
                         Última
                       </button>
-                      <button
-                        type="button"
-                        class="btn btn-light"
-                        *ngIf="
+                      <button type="button" class="btn btn-light" *ngIf="
                           currentPageEstablishment === lastPageEstablishment
-                        "
-                        title="Última Página"
-                        disabled
-                      >
+                        " title="Última Página" disabled>
                         Última
                       </button>
                     </div>
                     <div class="input-group">
                       <div class="input-group-prepend">
-                        <button
-                          type="button"
-                          class="input-group-text btn btn-success"
-                          title="Ir a la Página"
-                          (click)="
+                        <button type="button" class="input-group-text btn btn-success" title="Ir a la Página" (click)="
                             goToPageEstablishment(
                               goToPageNumberEstablishment.value
                             )
-                          "
-                        >
+                          ">
                           Ir a
                         </button>
                       </div>
-                      <input
-                        type="number"
-                        min="{{ 1 }}"
-                        max="{{ lastPageEstablishment }}"
-                        class="form-control"
-                        placeholder="Ir a la Página"
-                        #goToPageNumberEstablishment
-                      />
+                      <input type="number" min="{{ 1 }}" max="{{ lastPageEstablishment }}" class="form-control"
+                        placeholder="Ir a la Página" #goToPageNumberEstablishment />
                     </div>
                   </div>
                 </div>
@@ -631,204 +478,121 @@
                   <div class="row">
                     <div class="col-12">
                       <div class="form-group">
-                        <label>Código referente al RUC</label
-                        ><span
-                          *ngIf="establishment_selected.ruc_code_id == '-'"
-                          class="ml-2 badge badge-danger"
-                          >Incorrecto</span
-                        >
-                        <select
-                          class="form-control"
-                          id="ruc_code_id"
-                          name="ruc_code_id"
-                          [(ngModel)]="establishment_selected.ruc_code_id"
-                        >
+                        <label>Código referente al RUC</label><span *ngIf="establishment_selected.ruc_code_id == '-'"
+                          class="ml-2 badge badge-danger">Incorrecto</span>
+                        <select class="form-control" id="ruc_code_id" name="ruc_code_id"
+                          [(ngModel)]="establishment_selected.ruc_code_id">
                           <option value="-" selected>Seleccione...</option>
-                          <option
-                            *ngFor="
+                          <option *ngFor="
                               let establishmentRucCode of ruc_registro_selected.ruc.establishmentsSRI
-                            "
-                            value="{{ establishmentRucCode.numero }}"
-                          >
-                            {{ establishmentRucCode.numero }} | {{ establishmentRucCode.tipo }} - {{ establishmentRucCode.direccion }}
+                            " value="{{ establishmentRucCode.numero }}">
+                            {{ establishmentRucCode.numero }} | {{ establishmentRucCode.tipo }} -
+                            {{ establishmentRucCode.direccion }}
                           </option>
                         </select>
                       </div>
                       <div class="row">
                         <div class="col-3">
                           <div class="form-group">
-                            <label>Tipo de Nombre Comercial</label>
-                            <select
-                          class="form-control"
-                          id="comercial_name_type_id"
-                          name="comercial_name_type_id"
-                          [(ngModel)]="establishment_selected.ruc_name_type_id"
-                        >
-                          <option value="0" selected>Seleccione...</option>
-                          <option
-                            *ngFor="
+                            <label>Tipo de Nombre Comercial</label><span
+                              *ngIf="establishment_selected.ruc_name_type_id == 0"
+                              class="ml-2 badge badge-danger">Incorrecto</span>
+                            <select class="form-control" id="comercial_name_type_id" name="comercial_name_type_id"
+                              [(ngModel)]="establishment_selected.ruc_name_type_id">
+                              <option value="0" selected>Seleccione...</option>
+                              <option *ngFor="
                               let ruc_name_type of ruc_name_types
-                            "
-                            value="{{ ruc_name_type.id }}"
-                          >
-                            {{ ruc_name_type.name }}
-                          </option>
-                        </select>
+                            " value="{{ ruc_name_type.id }}">
+                                {{ ruc_name_type.name }}
+                              </option>
+                            </select>
                           </div>
                         </div>
                         <div class="col-9">
                           <div class="form-group">
-                            <label>Nombre Comercial</label
-                            ><span
-                              *ngIf="!establishmentComercialNameValidated"
-                              class="ml-2 badge badge-danger"
-                              >Incorrecto</span
-                            >
-                            <input
-                              type="text"
-                              class="form-control"
-                              id="commercially_known_name"
-                              name="commercially_known_name"
-                              (keyup)="checkEstablishmentComercialName()"
-                              placeholder="Nombre Comercial"
-                              [(ngModel)]="
+                            <label>Nombre Comercial</label><span *ngIf="!establishmentComercialNameValidated"
+                              class="ml-2 badge badge-danger">Incorrecto</span>
+                            <input type="text" class="form-control" id="commercially_known_name"
+                              name="commercially_known_name" (keyup)="checkEstablishmentComercialName()"
+                              placeholder="Nombre Comercial" [(ngModel)]="
                                 establishment_selected.commercially_known_name
-                              "
-                            />
+                              " />
                           </div>
                         </div>
                       </div>
                       <div class="form-group">
-                        <label>Tipo de Propiedad sobre el Establecimiento</label
-                        ><span
-                          *ngIf="
-                            establishment_selected.establishment_property_type_id ==
-                            0
-                          "
-                          class="ml-2 badge badge-danger"
-                          >Incorrecto</span
-                        >
-                        <select
-                          class="form-control"
-                          id="establishment_property_type_id"
-                          name="establishment_property_type_id"
-                          [(ngModel)]="
+                        <label>Tipo de Propiedad sobre el Establecimiento</label><span *ngIf="
+                            establishment_selected.establishment_property_type_id == 0
+                          " class="ml-2 badge badge-danger">Incorrecto</span>
+                        <select class="form-control" id="establishment_property_type_id"
+                          name="establishment_property_type_id" [(ngModel)]="
                             establishment_selected.establishment_property_type_id
-                          "
-                        >
+                          ">
                           <option value="0" selected>Seleccione...</option>
-                          <option
-                            *ngFor="
+                          <option *ngFor="
                               let establishment_property_type of establishment_property_types
-                            "
-                            value="{{ establishment_property_type.id }}"
-                          >
+                            " value="{{ establishment_property_type.id }}">
                             {{ establishment_property_type.name }}
                           </option>
                         </select>
                       </div>
                       <div class="form-group">
-                        <label>Dirección URL de la Página WEB</label
-                        ><span
-                          *ngIf="!urlwebEstablishmentValidated"
-                          class="ml-2 badge badge-danger"
-                          >Incorrecto</span
-                        >
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="url_web"
-                          name="url_web"
-                          (keyup)="checkURLWeb()"
-                          placeholder="Dirección URL de la Página WEB"
-                          [(ngModel)]="establishment_selected.url_web"
-                        />
+                        <label>Dirección URL de la Página WEB</label><span *ngIf="!urlwebEstablishmentValidated"
+                          class="ml-2 badge badge-danger">Incorrecto</span>
+                        <input type="text" class="form-control" id="url_web" name="url_web" (keyup)="checkURLWeb()"
+                          placeholder="Dirección URL de la Página WEB" [(ngModel)]="establishment_selected.url_web" />
                       </div>
                       <div class="row mt-2">
                         <label class="col-12"><strong>Ubicación</strong></label>
-                        <div class="col-3">
+                        <div class="col-3" *ngIf="false">
                           <div class="form-group">
                             <label>Zonal</label>
-                            <select
-                              class="form-control"
-                              id="zonal_establishment_id"
-                              name="zonal_establishment_id"
-                              [(ngModel)]="zonalEstablishmentSelectedCode"
-                              (change)="getProvinciasEstablishment()"
-                            >
+                            <select class="form-control" disabled id="zonal_establishment_id"
+                              name="zonal_establishment_id" [(ngModel)]="zonalEstablishmentSelectedCode">
                               <option value="-" selected>Seleccione...</option>
-                              <option
-                                *ngFor="let zonal of zonalesEstablishment"
-                                value="{{ zonal.code }}"
-                              >
+                              <option *ngFor="let zonal of zonalesEstablishment" value="{{ zonal.code }}">
                                 {{ zonal.name }}
                               </option>
                             </select>
                           </div>
                         </div>
-                        <div class="col-3">
+                        <div class="col-4">
                           <div class="form-group">
                             <label>Provincia</label>
-                            <select
-                              class="form-control"
-                              id="provincia_establishment_id"
-                              name="provincia_establishment_id"
-                              [(ngModel)]="provinciaEstablishmentSelectedCode"
-                              (change)="getCantonesEstablishment()"
-                            >
+                            <select class="form-control" id="provincia_establishment_id"
+                              name="provincia_establishment_id" [(ngModel)]="provinciaEstablishmentSelectedCode"
+                              (change)="getCantonesEstablishment()">
                               <option value="-" selected>Seleccione...</option>
-                              <option
-                                *ngFor="
+                              <option *ngFor="
                                   let provincia of provinciasEstablishment
-                                "
-                                value="{{ provincia.code }}"
-                              >
+                                " value="{{ provincia.code }}">
                                 {{ provincia.name }}
                               </option>
                             </select>
                           </div>
                         </div>
-                        <div class="col-3">
+                        <div class="col-4">
                           <div class="form-group">
                             <label>Cantón</label>
-                            <select
-                              class="form-control"
-                              id="canton_establishment_id"
-                              name="canton_establishment_id"
-                              [(ngModel)]="cantonEstablishmentSelectedCode"
-                              (change)="getParroquiasEstablishment()"
-                            >
+                            <select class="form-control" id="canton_establishment_id" name="canton_establishment_id"
+                              [(ngModel)]="cantonEstablishmentSelectedCode" (change)="getParroquiasEstablishment()">
                               <option value="-" selected>Seleccione...</option>
-                              <option
-                                *ngFor="let canton of cantonesEstablishment"
-                                value="{{ canton.code }}"
-                              >
+                              <option *ngFor="let canton of cantonesEstablishment" value="{{ canton.code }}">
                                 {{ canton.name }}
                               </option>
                             </select>
                           </div>
                         </div>
-                        <div class="col-3">
+                        <div class="col-4">
                           <div class="form-group">
-                            <label>Parroquia</label
-                            ><span
-                              *ngIf="establishment_selected.ubication_id == 0"
-                              class="ml-2 badge badge-danger"
-                              >Incorrecto</span
-                            >
-                            <select
-                              class="form-control"
-                              id="parroquia_establishment_id"
-                              name="parroquia_establishment_id"
-                              [(ngModel)]="establishment_selected.ubication_id"
-                            >
+                            <label>Parroquia</label><span *ngIf="establishment_selected.ubication_id == 0"
+                              class="ml-2 badge badge-danger">Incorrecto</span>
+                            <select class="form-control" id="parroquia_establishment_id"
+                              name="parroquia_establishment_id" [(ngModel)]="establishment_selected.ubication_id">
                               <option value="0" selected>Seleccione...</option>
-                              <option
-                                *ngFor="
+                              <option *ngFor="
                                   let parroquia of parroquiasEstablishment
-                                "
-                                value="{{ parroquia.id }}"
-                              >
+                                " value="{{ parroquia.id }}">
                                 {{ parroquia.name }}
                               </option>
                             </select>
@@ -836,94 +600,54 @@
                         </div>
                       </div>
                       <div class="form-group">
-                        <label>Dirección</label
-                        ><span
-                          *ngIf="!addressEstablishmentValidated"
-                          class="ml-2 badge badge-danger"
-                          >Incorrecto</span
-                        >
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="address"
-                          name="address"
+                        <label>Dirección</label><span *ngIf="!addressEstablishmentValidated"
+                          class="ml-2 badge badge-danger">Incorrecto</span>
+                        <input type="text" class="form-control" id="address" name="address"
                           (keyup)="checkEstablishmentAddress()"
                           placeholder="Calle Principal    Numeración    Calle Intersección"
-                          [(ngModel)]="establishment_selected.address"
-                        />
+                          [(ngModel)]="establishment_selected.address" />
                       </div>
                       <div class="form-group">
-                        <label>Referencias - ¿Como llegar?</label
-                        ><span
+                        <label>Referencias - ¿Como llegar?</label><span
                           *ngIf="establishment_selected.address_reference == ''"
-                          class="ml-2 badge badge-danger"
-                          >Incorrecto</span
-                        >
-                        <ck-editor id="address_reference" name="address_reference" skin="moono-lisa" [(ngModel)]="establishment_selected.address_reference"></ck-editor>
+                          class="ml-2 badge badge-danger">Incorrecto</span>
+                        <ck-editor id="address_reference" name="address_reference" skin="moono-lisa"
+                          [(ngModel)]="establishment_selected.address_reference"></ck-editor>
                       </div>
                       <div class="form-group">
                         <label>Dirección Georeferenciada</label>
-                        <agm-map
-                          class="col-12"
-                          style="height: 400px;"
-                          [latitude]="
+                        <agm-map class="col-12" style="height: 400px;" [latitude]="
                             establishment_selected.address_map_latitude * 1
-                          "
-                          [longitude]="
+                          " [longitude]="
                             establishment_selected.address_map_longitude * 1
-                          "
-                          [zoom]="15"
-                          (mapClick)="address_mapEventEstablishment($event)"
-                        >
-                          <agm-marker
-                            [latitude]="
+                          " [zoom]="15" (mapClick)="address_mapEventEstablishment($event)">
+                          <agm-marker [latitude]="
                               establishment_selected.address_map_latitude * 1
-                            "
-                            [longitude]="
+                            " [longitude]="
                               establishment_selected.address_map_longitude * 1
-                            "
-                            [markerDraggable]="true"
-                            (dragEnd)="address_mapEventEstablishment($event)"
-                            [animation]="'DROP'"
-                          ></agm-marker>
+                            " [markerDraggable]="true" (dragEnd)="address_mapEventEstablishment($event)"
+                            [animation]="'DROP'"></agm-marker>
                         </agm-map>
                       </div>
                       <div class="row">
                         <div class="col-12">
                           <div class="form-group">
-                            <label
-                              >Foto de la Fachada del Establecimiento</label
-                            >
+                            <label>Foto de la Fachada del Establecimiento</label>
                           </div>
                         </div>
                         <div class="col-12 text-center">
-                          <img
-                            class="rounded mb-2"
-                            src="data:{{
+                          <img class="rounded mb-2" src="data:{{
                               establishment_selected_picture.establishment_picture_file_type
                             }};base64,{{
                               establishment_selected_picture.establishment_picture_file
-                            }}"
-                            height="400px"
-                            width="600px"
-                            (click)="subirFotoFachada()"
-                          />
+                            }}" height="400px" width="600px" (click)="subirFotoFachada()" />
                         </div>
                         <div class="col-12 text-center">
-                          <button
-                            type="button"
-                            class="btn btn-primary"
-                            (click)="subirFotoFachada()"
-                          >
+                          <button type="button" class="btn btn-primary" (click)="subirFotoFachada()">
                             Subir Foto
                           </button>
-                          <input
-                            [hidden]="true"
-                            #fotoFachadaInput
-                            type="file"
-                            (change)="CodificarArchivo($event)"
-                            accept="image/*"
-                          />
+                          <input [hidden]="true" #fotoFachadaInput type="file" (change)="CodificarArchivo($event)"
+                            accept="image/*" />
                         </div>
                       </div>
                       <div class="row">
@@ -932,25 +656,22 @@
                           <div class="row">
                             <div class="col-12">
                               <div class="form-group">
-                                <label>Cédula de Identidad</label
-                                ><span
+                                <label>Cédula de Identidad</label><span
                                   *ngIf="!identificationContactEstablishmentValidated"
-                                  class="ml-2 badge badge-danger"
-                                  >Incorrecto</span
-                                >
-                                <input
-                                  type="text"
-                                  class="form-control"
-                                  id="cedula"
-                                  maxlength="10"
-                                  placeholder="Cédula de Identidad"
-                                  (keyup)="checkCedulaEstablishment()"
-                                  [(ngModel)]="
-                                    establishment_selected.contact_user
-                                      .identification
-                                  "
-                                  name="cedula"
-                                />
+                                  class="ml-2 badge badge-danger">Incorrecto</span>
+                                <div class="input-group mb-3">
+                                  <div class="input-group-prepend">
+                                    <button type="button" class="btn btn-primary" title="Consultar con Registro Civil"
+                                      (click)="checkCedulaEstablishment()">
+                                      <i class="fas fa-sync"></i>
+                                    </button>
+                                  </div>
+                                  <input type="text" class="form-control" id="cedula" maxlength="10"
+                                    placeholder="Cédula de Identidad" (keyup)="checkCedulaEstablishment()" [(ngModel)]="
+                                      establishment_selected.contact_user
+                                        .identification
+                                    " name="cedula" />
+                                </div>
                               </div>
                             </div>
                             <div class="col-12" *ngIf="identificationContactEstablishmentValidated">
@@ -964,128 +685,60 @@
                           <div class="row mt-2">
                             <div class="col-6">
                               <div class="form-group">
-                                <label>Número de Teléfono Principal</label
-                                ><span
+                                <label>Número de Teléfono Principal</label><span
                                   *ngIf="!mainPhoneContactEstablishmentValidated"
-                                  class="ml-2 badge badge-danger"
-                                  >Incorrecto</span
-                                >
-                                <input
-                                  type="text"
-                                  class="form-control"
-                                  id="mainRucPhoneNumber"
-                                  maxlength="10"
+                                  class="ml-2 badge badge-danger">Incorrecto</span>
+                                <input type="text" class="form-control" id="mainRucPhoneNumber" maxlength="10"
                                   placeholder="Número de Teléfono Principal"
-                                  (keyup)="checkTelefonoPrincipalContactoEstablecimiento()"
-                                  [(ngModel)]="
+                                  (keyup)="checkTelefonoPrincipalContactoEstablecimiento()" [(ngModel)]="
                                     establishment_selected.contact_user.main_phone_number
-                                  "
-                                  name="mainRucPhoneNumber"
-                                />
+                                  " name="mainRucPhoneNumber" />
                               </div>
                             </div>
                             <div class="col-6">
                               <div class="form-group">
-                                <label>Número de Teléfono Secundario</label
-                                ><span
+                                <label>Número de Teléfono Secundario</label><span
                                   *ngIf="!secondaryPhoneContactEstablishmentValidated"
-                                  class="ml-2 badge badge-danger"
-                                  >Incorrecto</span
-                                >
-                                <input
-                                  type="text"
-                                  class="form-control"
-                                  id="secondaryRucPhone"
-                                  maxlength="10"
+                                  class="ml-2 badge badge-danger">Incorrecto</span>
+                                <input type="text" class="form-control" id="secondaryRucPhone" maxlength="10"
                                   (keyup)="checkTelefonoSecundarioContactoEstablecimiento()"
-                                  placeholder="Número de Teléfono Secundario"
-                                  [(ngModel)]="
+                                  placeholder="Número de Teléfono Secundario" [(ngModel)]="
                                     establishment_selected.contact_user.secondary_phone_number
-                                  "
-                                  name="secondaryRucPhone"
-                                />
+                                  " name="secondaryRucPhone" />
                               </div>
                             </div>
                           </div>
                           <div class="row">
                             <div class="col-12">
                               <div class="form-group">
-                                <label>Correo Electrónico</label
-                                ><span
-                                  *ngIf="!emailContactEstablishmentValidated"
-                                  class="ml-2 badge badge-danger"
-                                  >Incorrecto</span
-                                >
-                                <input
-                                  type="email"
-                                  class="form-control"
-                                  id="email"
-                                  maxlength="255"
-                                  (keyup)="checkEmailContactEstablishment()"
-                                  placeholder="Correo Electrónico"
-                                  [(ngModel)]="establishment_selected.contact_user.email"
-                                  name="email"
-                                />
+                                <label>Correo Electrónico</label><span *ngIf="!emailContactEstablishmentValidated"
+                                  class="ml-2 badge badge-danger">Incorrecto</span>
+                                <input type="email" class="form-control" id="email" maxlength="255"
+                                  (keyup)="checkEmailContactEstablishment()" placeholder="Correo Electrónico"
+                                  [(ngModel)]="establishment_selected.contact_user.email" name="email" />
                               </div>
                             </div>
                           </div>
                         </div>
                       </div>
-                      <div class="form-group">
-                        <label>Fecha de Registro como Turístico</label>
-                        <input
-                          type="date"
-                          class="form-control"
-                          id="as_turistic_register_date"
-                          name="as_turistic_register_date"
-                          placeholder="Fecha de Registro como Turístico"
-                          [ngModel]="
-                            establishment_selected.as_turistic_register_date
-                              | date: 'y-MM-dd'
-                          "
-                          (ngModelChange)="
-                            establishment_selected.as_turistic_register_date = $event
-                          "
-                        />
-                      </div>
                       <div class="form-group row">
-                        <label class="col-12 col-form-label mb-2"
-                          ><strong
-                            >Idiomas de Atención en el Establecimiento</strong
-                          ></label
-                        >
+                        <label class="col-12 col-form-label mb-2"><strong>Idiomas de Atención en el
+                            Establecimiento</strong></label>
                         <label class="col-4 col-form-label">Idiomas</label>
                         <div class="col-8">
                           <div class="input-group">
                             <div class="input-group-prepend">
-                              <button
-                                type="button"
-                                title="Eliminar"
-                                class="btn btn-danger"
-                                (click)="removeLanguage()"
-                              >
+                              <button type="button" title="Eliminar" class="btn btn-danger" (click)="removeLanguage()">
                                 <i class="fas fa-trash"></i>
                               </button>
-                              <button
-                                type="button"
-                                title="Agregar"
-                                class="btn btn-success"
-                                (click)="addLanguage()"
-                              >
+                              <button type="button" title="Agregar" class="btn btn-success" (click)="addLanguage()">
                                 <i class="fas fa-plus-circle"></i>
                               </button>
                             </div>
-                            <select
-                              class="form-control"
-                              id="language_id"
-                              name="language_id"
-                              [(ngModel)]="languages_establishmentSelectedId"
-                            >
+                            <select class="form-control" id="language_id" name="language_id"
+                              [(ngModel)]="languages_establishmentSelectedId">
                               <option value="0" selected>Seleccione...</option>
-                              <option
-                                *ngFor="let language of languages"
-                                value="{{ language.id }}"
-                              >
+                              <option *ngFor="let language of languages" value="{{ language.id }}">
                                 {{ language.name }}
                               </option>
                             </select>
@@ -1095,20 +748,14 @@
                         <div class="col-8">
                           <table class="table table-hover mt-2">
                             <tbody>
-                              <tr
-                                *ngFor="
+                              <tr *ngFor="
                                   let language of establishment_selected.languages_on_establishment
-                                "
-                                (click)="selectLanguage(language)"
-                              >
+                                " (click)="selectLanguage(language)">
                                 <td class="text-right">
-                                  <span
-                                    *ngIf="
+                                  <span *ngIf="
                                       languages_establishmentSelectedId ===
                                       language.id
-                                    "
-                                    class="far fa-hand-point-right"
-                                  ></span>
+                                    " class="far fa-hand-point-right"></span>
                                 </td>
                                 <td>{{ language.name }}</td>
                               </tr>
@@ -1116,24 +763,30 @@
                           </table>
                         </div>
                       </div>
-                      <div class="form-group row">
-                        <label class="col-12 col-form-label mb-2"
-                          ><strong
-                            >Número de Registro en Sistemas del MINTUR
-                            Previamente</strong
-                          ></label
-                        >
+                      <div class="row" *ngIf="false">
+                        <div class="col-12">
+                          <div class="form-group">
+                            <label>Fecha de Registro como Turístico</label>
+                            <input type="date" class="form-control" id="as_turistic_register_date"
+                              name="as_turistic_register_date" placeholder="Fecha de Registro como Turístico" [ngModel]="
+                                  establishment_selected.as_turistic_register_date
+                                    | date: 'y-MM-dd'
+                                " (ngModelChange)="
+                                  establishment_selected.as_turistic_register_date = $event
+                                " />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-group row" *ngIf="false">
+                        <label class="col-12 col-form-label mb-2"><strong>Número de Registro en Sistemas del MINTUR
+                            Previamente</strong></label>
                         <div class="col-12">
                           <table class="table table-hover mt-2">
                             <thead>
                               <th>
                                 Seleccionado
-                                <button
-                                  type="button"
-                                  title="Agregar"
-                                  class="btn btn-success ml-2"
-                                  (click)="addPreviewRegisterCode()"
-                                >
+                                <button type="button" title="Agregar" class="btn btn-success ml-2"
+                                  (click)="addPreviewRegisterCode()">
                                   <i class="fas fa-plus-circle"></i>
                                 </button>
                               </th>
@@ -1148,66 +801,40 @@
                               </th>
                             </thead>
                             <tbody>
-                              <tr
-                                *ngFor="
+                              <tr *ngFor="
                                   let preview_register_code of establishment_selected.preview_register_codes_on_establishment
-                                "
-                                (click)="
+                                " (click)="
                                   selectPreviewRegisterCode(
                                     preview_register_code
                                   )
-                                "
-                              >
+                                ">
                                 <td class="text-right">
-                                  <span
-                                    *ngIf="
+                                  <span *ngIf="
                                       preview_register_codes_establishmentSelected ===
                                       preview_register_code
-                                    "
-                                    class="far fa-hand-point-right"
-                                  ></span>
+                                    " class="far fa-hand-point-right"></span>
                                 </td>
                                 <td>
-                                  <select
-                                    class="form-control"
-                                    id="system_name_id"
-                                    name="system_name_id"
-                                    [(ngModel)]="
+                                  <select class="form-control" id="system_name_id" name="system_name_id" [(ngModel)]="
                                       preview_register_code.system_name_id
-                                    "
-                                  >
-                                    <option value="0" selected
-                                      >Seleccione...</option
-                                    >
-                                    <option
-                                      *ngFor="let systemName of system_names"
-                                      value="{{ systemName.id }}"
-                                    >
+                                    ">
+                                    <option value="0" selected>Seleccione...</option>
+                                    <option *ngFor="let systemName of system_names" value="{{ systemName.id }}">
                                       {{ systemName.name }}
                                     </option>
                                   </select>
                                 </td>
                                 <td>
-                                  <input
-                                    type="text"
-                                    class="form-control"
-                                    id="preview_register_code_number"
-                                    name="preview_register_code_number"
-                                    placeholder="Número de Registro"
-                                    [(ngModel)]="preview_register_code.code"
-                                  />
+                                  <input type="text" class="form-control" id="preview_register_code_number"
+                                    name="preview_register_code_number" placeholder="Número de Registro"
+                                    [(ngModel)]="preview_register_code.code" />
                                 </td>
                                 <td>
-                                  <button
-                                    type="button"
-                                    title="Eliminar"
-                                    class="btn btn-danger"
-                                    (click)="
+                                  <button type="button" title="Eliminar" class="btn btn-danger" (click)="
                                       removePreviewRegisterCode(
                                         preview_register_code
                                       )
-                                    "
-                                  >
+                                    ">
                                     <i class="fas fa-trash"></i>
                                   </button>
                                 </td>
@@ -1217,62 +844,51 @@
                         </div>
                       </div>
                       <div class="form-group row">
-                        <label class="col-12 col-form-label mb-2"
-                          ><strong
-                            >Trabajadores en el Establecimiento</strong
-                          ></label
-                        >
+                        <label class="col-12 col-form-label mb-2"><strong>Trabajadores en el
+                            Establecimiento</strong></label>
                         <div class="col-12">
-                          <div class="form-group" *ngFor="let gender of genders">
-                            <h6 class="col-12 text-left"><strong>{{gender.name.toUpperCase()}}</strong></h6>
+                          <div class="form-group">
                             <table class="table table-hover mt-2">
-                                <thead>
-                                  <th>
-                                    Grupo
-                                  </th>
-                                  <th>
-                                    Cantidad
-                                  </th>
-                                </thead>
-                                <tbody>
-                                  <tr *ngFor="let worker_group of worker_groups">
-                                      <td>
-                                        {{worker_group.name}}
-                                      </td>
-                                      <td>
-                                          <input
-                                          type="number"
-                                          class="form-control"
-                                          min="0"
-                                          id="worker-count"
-                                          name="worker-count"
-                                          placeholder="Cantidad"
-                                          value="0"
-                                        />
-                                      </td>
-                                  </tr>
-                                </tbody>
-                              </table>
+                              <thead>
+                                <th>
+                                  Género
+                                </th>
+                                <th>
+                                  Grupo
+                                </th>
+                                <th>
+                                  Cantidad
+                                </th>
+                              </thead>
+                              <tbody>
+                                <tr *ngFor="let worker of establishment_selected.workers_on_establishment">
+                                  <td>
+                                    {{worker.gender_name}}
+                                  </td>
+                                  <td>
+                                    <strong *ngIf="worker.is_max">{{worker.worker_group_name}}</strong>
+                                    <label *ngIf="!worker.is_max">{{worker.worker_group_name}}</label>
+                                  </td>
+                                  <td>
+                                    <input type="number" class="form-control" min="0" id="worker-count"
+                                      name="worker-count" placeholder="Cantidad" [(ngModel)]="worker.count" />
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
                           </div>
                         </div>
                       </div>
                       <div class="form-group row">
-                        <label class="col-12 col-form-label mb-2"
-                          ><strong
-                            >Certificaciones del Establecimiento</strong
-                          ></label
-                        >
+                        <label class="col-12 col-form-label mb-2"><strong>Certificaciones del
+                            Establecimiento</strong></label>
                         <div class="col-12">
                           <table class="table table-hover mt-2">
                             <thead>
                               <th>
                                 Seleccionado
-                                <button
-                                  type="button"
-                                  title="Agregar"
-                                  class="btn btn-success ml-2"
-                                  (click)="addEstablishmentCertification()"
-                                >
+                                <button type="button" title="Agregar" class="btn btn-success ml-2"
+                                  (click)="addEstablishmentCertification()">
                                   <i class="fas fa-plus-circle"></i>
                                 </button>
                               </th>
@@ -1290,48 +906,32 @@
                               </th>
                             </thead>
                             <tbody>
-                              <tr
-                                *ngFor="
+                              <tr *ngFor="
                                   let establishment_certification of establishment_selected.establishment_certifications_on_establishment
-                                "
-                                (click)="
+                                " (click)="
                                   selectEstablishmentCertification(
                                     establishment_certification
                                   )
-                                "
-                              >
+                                ">
                                 <td class="text-right">
-                                  <span
-                                    *ngIf="
+                                  <span *ngIf="
                                       establishment_certifications_establishmentSelected ===
                                       establishment_certification
-                                    "
-                                    class="far fa-hand-point-right"
-                                  ></span>
+                                    " class="far fa-hand-point-right"></span>
                                 </td>
                                 <td>
-                                  <select
-                                    class="form-control"
-                                    id="certificate_type_id"
-                                    name="certificate_type_id"
+                                  <select class="form-control" id="certificate_type_id" name="certificate_type_id"
                                     [(ngModel)]="
                                       establishment_certification.establishment_certification_type_fatherCode
-                                    "
-                                    (change)="
-                                      getEstablishmentCertificationTypesSpecific()
-                                    "
-                                  >
-                                    <option value="-" selected
-                                      >Seleccione...</option
-                                    >
-                                    <option
-                                      *ngFor="
+                                    " (change)="
+                                      getEstablishmentCertificationTypesSpecific(establishment_certification)
+                                    ">
+                                    <option value="-" selected>Seleccione...</option>
+                                    <option *ngFor="
                                         let establishment_certification_type of establishment_certification_types_categories
-                                      "
-                                      value="{{
+                                      " value="{{
                                         establishment_certification_type.code
-                                      }}"
-                                    >
+                                      }}">
                                       {{
                                         establishment_certification_type.name
                                       }}
@@ -1339,25 +939,16 @@
                                   </select>
                                 </td>
                                 <td>
-                                  <select
-                                    class="form-control"
-                                    id="certificate_type_id"
-                                    name="certificate_type_id"
+                                  <select class="form-control" id="certificate_type_id" name="certificate_type_id"
                                     [(ngModel)]="
                                       establishment_certification.establishment_certification_type_id
-                                    "
-                                  >
-                                    <option value="0" selected
-                                      >Seleccione...</option
-                                    >
-                                    <option
-                                      *ngFor="
+                                    ">
+                                    <option value="0" selected>Seleccione...</option>
+                                    <option *ngFor="
                                         let establishment_certification_type of establishment_certification.establishment_certification_type_specifics
-                                      "
-                                      value="{{
+                                      " value="{{
                                         establishment_certification_type.id
-                                      }}"
-                                    >
+                                      }}">
                                       {{
                                         establishment_certification_type.name
                                       }}
@@ -1365,45 +956,38 @@
                                   </select>
                                 </td>
                                 <td>
-                                  <div class="btn-toolbar" role="toolbar">
-                                    <button
-                                      type="button"
-                                      title="Descargar Certificado"
-                                      class="btn btn-primary"
-                                      (click)="
-                                        downloadEstablishmentCertification(
-                                          establishment_certification
-                                        )
-                                      "
-                                    >
-                                      <i class="fas fa-download"></i>
-                                    </button>
-                                    <div class="btn-group ml-2" role="group">
-                                      <input
-                                        type="file"
-                                        class="form-control"
-                                        (change)="
+                                  <div class="input-group">
+                                    <div class="input-group-prepend">
+                                      <button
+                                        [disabled]="establishment_certification.establishment_certification_attachment.establishment_certification_attachment_file == ''"
+                                        type="button" title="Descargar Certificado" class="btn btn-primary" (click)="
+                                              downloadEstablishmentCertification(
+                                                establishment_certification
+                                              )
+                                            ">
+                                        <i class="fas fa-download"></i>
+                                      </button>
+                                      <button
+                                        [disabled]="establishment_certification.establishment_certification_attachment.establishment_certification_attachment_file == ''"
+                                        type="button" title="Eliminar" class="btn btn-danger"
+                                        (click)="borrarCertificado(establishment_certification)">
+                                        <i class="fas fa-trash"></i>
+                                      </button>
+                                    </div>
+                                    <input type="file" class="form-control" (change)="
                                           CodificarArchivoEstablishmentCertification(
                                             $event,
                                             establishment_certification
                                           )
-                                        "
-                                        accept="application/pdf"
-                                      />
-                                    </div>
+                                        " accept="application/pdf" />
                                   </div>
                                 </td>
                                 <td>
-                                  <button
-                                    type="button"
-                                    title="Eliminar"
-                                    class="btn btn-danger"
-                                    (click)="
+                                  <button type="button" title="Eliminar" class="btn btn-danger" (click)="
                                       removeEstablishmentCertification(
                                         establishment_certification
                                       )
-                                    "
-                                  >
+                                    ">
                                     <i class="fas fa-trash"></i>
                                   </button>
                                 </td>
@@ -1416,57 +1000,53 @@
                   </div>
                 </div>
               </div>
+              <div class="row mt-3" *ngIf="validateEstablecimiento()">
+                <div class="col-12 text-center">
+                  <button type="button" [disabled]="guardando" class="btn btn-success"
+                    title="Guardar Datos del Establecimiento" (click)="guardarEstablecimiento()">
+                    <i class="fas fa-save"></i>&nbsp;Guardar Datos del Establecimiento
+                  </button>
+                  <button type="button" class="btn btn-danger ml-2" title="Cancelar Cambios" (click)="
+                      refresh()
+                    ">
+                    <i class="fas fa-trash"></i>&nbsp;Cancelar Cambios
+                  </button>
+                </div>
+              </div>
             </ng-template>
           </ngb-tab>
-          <ngb-tab title="Registros Otorgados" id="tab3">
+          <ngb-tab title="Registros MINTUR" id="tab3"
+            *ngIf="rucSaved() && SRIOK && REGCIVILOK && (ruc_registro_selected.ruc.establishments.length > 0)">
             <ng-template ngbTabContent>
               <div class="row mt-3">
                 <h4 class="col-12">
-                  <strong>Registros Otorgados</strong>
+                  <strong>Registros del Ministerio de Turismo</strong>
                 </h4>
               </div>
               <div class="row">
                 <div class="col-12">
                   <div class="btn-toolbar" role="toolbar">
                     <div class="btn-group mr-2" role="group">
-                      <button
-                        type="button"
-                        class="btn btn-primary"
-                        title="Actualizar"
-                        (click)="goToPageRegister(currentPageRegister)"
-                      >
+                      <button type="button" class="btn btn-primary" title="Actualizar"
+                        (click)="goToPageRegister(currentPageRegister)">
                         <i class="fas fa-sync"></i>
                       </button>
                     </div>
                     <div class="btn-group mr-2" role="group">
-                      <button
-                        type="button"
-                        title="Solicitar Registro"
-                        class="btn btn-success"
-                        (click)="newRegisterRecord()"
-                      >
+                      <button type="button" title="Solicitar Registro" class="btn btn-success"
+                        (click)="newRegisterRecord()">
                         <i class="fas fa-file"></i>
                       </button>
                     </div>
                     <div class="input-group">
                       <div class="input-group-prepend">
-                        <button
-                          type="button"
-                          class="input-group-text btn btn-success"
-                          title="Ir a la Página"
-                          (click)="
+                        <button type="button" class="input-group-text btn btn-success" title="Ir a la Página" (click)="
                             goToPageRegister(goToPageNumberRegister.value)
-                          "
-                        >
+                          ">
                           <span class="fas fa-search"></span>
                         </button>
                       </div>
-                      <input
-                        type="text"
-                        class="form-control"
-                        placeholder="Buscar..."
-                        #goToPageNumberRegister
-                      />
+                      <input type="text" class="form-control" placeholder="Buscar..." #goToPageNumberRegister />
                     </div>
                   </div>
                 </div>
@@ -1481,25 +1061,29 @@
                         <th>Ubicación Establecimiento</th>
                         <th>Código Registro</th>
                         <th>Tipo Registro</th>
+                        <th>Estado</th>
+                        <th>Observaciones</th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr
-                        *ngFor="let register of ruc_registro_selected.registers"
-                        (click)="selectRucRegister(register)"
-                      >
+                      <tr *ngFor="let row of ruc_registro_selected.registers"
+                        (click)="selectEstablishmentRegister(row.register)">
                         <td class="text-right">
-                          <span
-                            *ngIf="
-                              rucEstablishmentRegisterSelected === register
-                            "
-                            class="far fa-hand-point-right"
-                          ></span>
+                          <span *ngIf="
+                              rucEstablishmentRegisterSelected.id == row.register.id
+                            " class="far fa-hand-point-right"></span>
                         </td>
-                        <td>{{ register.code }}</td>
-                        <td>{{ register.code }}</td>
-                        <td>{{ register.code }}</td>
-                        <td>{{ register.code }}</td>
+                        <td>{{ row.establishment.ruc_code_id }}</td>
+                        <td>{{ row.establishment.address }}</td>
+                        <td>{{ row.register.code }}</td>
+                        <td>{{ row.type.register_category.name }} / {{ row.type.register_type.name }}</td>
+                        <td>{{ row.status.name }}</td>
+                        <td>
+                          <button type="button" title="Ver Observaciones" class="btn btn-info"
+                            (click)="openDialog(content, row.status_register)">
+                            <i class="fas fa-comment-dots"></i>
+                          </button>
+                        </td>
                       </tr>
                     </tbody>
                   </table>
@@ -1509,89 +1093,44 @@
                 <div class="col-12">
                   <div class="btn-toolbar" role="toolbar">
                     <div class="btn-group mr-2" role="group">
-                      <button
-                        type="button"
-                        class="btn btn-light"
-                        *ngIf="currentPageRegister === 1"
-                        title="Primera Página"
-                        disabled
-                      >
+                      <button type="button" class="btn btn-light" *ngIf="currentPageRegister === 1"
+                        title="Primera Página" disabled>
                         Primera
                       </button>
-                      <button
-                        type="button"
-                        class="btn btn-light"
-                        *ngIf="currentPageRegister !== 1"
-                        title="Primera Página"
-                        (click)="goToPageRegister(1)"
-                      >
+                      <button type="button" class="btn btn-light" *ngIf="currentPageRegister !== 1"
+                        title="Primera Página" (click)="goToPageRegister(1)">
                         Primera
                       </button>
-                      <button
-                        type="button"
-                        class="btn btn-light"
-                        *ngIf="currentPageRegister > 1"
-                        title="Página Anterior"
-                        (click)="goToPageRegister(currentPageRegister * 1 - 1)"
-                      >
+                      <button type="button" class="btn btn-light" *ngIf="currentPageRegister > 1"
+                        title="Página Anterior" (click)="goToPageRegister(currentPageRegister * 1 - 1)">
                         {{ currentPageRegister * 1 - 1 }}
                       </button>
-                      <button
-                        type="button"
-                        class="btn btn-primary"
-                        title="Página Actual"
-                      >
+                      <button type="button" class="btn btn-primary" title="Página Actual">
                         {{ currentPageRegister }}
                       </button>
-                      <button
-                        type="button"
-                        class="btn btn-light"
-                        *ngIf="currentPageRegister < lastPageRegister"
-                        title="Página Siguiente"
-                        (click)="goToPageRegister(currentPageRegister * 1 + 1)"
-                      >
+                      <button type="button" class="btn btn-light" *ngIf="currentPageRegister < lastPageRegister"
+                        title="Página Siguiente" (click)="goToPageRegister(currentPageRegister * 1 + 1)">
                         {{ currentPageRegister * 1 + 1 }}
                       </button>
-                      <button
-                        type="button"
-                        class="btn btn-light"
-                        *ngIf="currentPageRegister !== lastPageRegister"
-                        title="Última Página"
-                        (click)="goToPageRegister(lastPageRegister)"
-                      >
+                      <button type="button" class="btn btn-light" *ngIf="currentPageRegister !== lastPageRegister"
+                        title="Última Página" (click)="goToPageRegister(lastPageRegister)">
                         Última
                       </button>
-                      <button
-                        type="button"
-                        class="btn btn-light"
-                        *ngIf="currentPageRegister === lastPageRegister"
-                        title="Última Página"
-                        disabled
-                      >
+                      <button type="button" class="btn btn-light" *ngIf="currentPageRegister === lastPageRegister"
+                        title="Última Página" disabled>
                         Última
                       </button>
                     </div>
                     <div class="input-group">
                       <div class="input-group-prepend">
-                        <button
-                          type="button"
-                          class="input-group-text btn btn-success"
-                          title="Ir a la Página"
-                          (click)="
+                        <button type="button" class="input-group-text btn btn-success" title="Ir a la Página" (click)="
                             goToPageRegister(goToPageNumberRegister.value)
-                          "
-                        >
+                          ">
                           Ir a
                         </button>
                       </div>
-                      <input
-                        type="number"
-                        min="{{ 1 }}"
-                        max="{{ lastPageRegister }}"
-                        class="form-control"
-                        placeholder="Ir a la Página"
-                        #goToPageNumberRegister
-                      />
+                      <input type="number" min="{{ 1 }}" max="{{ lastPageRegister }}" class="form-control"
+                        placeholder="Ir a la Página" #goToPageNumberRegister />
                     </div>
                   </div>
                 </div>
@@ -1606,98 +1145,96 @@
                 </div>
                 <div class="col-12">
                   <div class="row">
-                    <div class="col-6">
-                        <div class="row">
-                            <div class="col-4">
-                                <div class="form-group">
-                                    <label>Código de Seguridad QR</label>
-                                    <ngx-qrcode 
-                                      *ngIf="rucEstablishmentRegisterSelected.code != ''"
-                                      [qrc-element-type]="'url'"
-                                      [qrc-value] = "rucEstablishmentRegisterSelected.code"
-                                      qrc-class = "aclass"
-                                      qrc-errorCorrectionLevel = "L">
-                                    </ngx-qrcode>
-                                </div>
-                            </div>
-                            <div class="col-8">
-                                <div class="form-group">
-                                  <label>Código de Barras</label>
-                                  <ngx-barcode
-                                    *ngIf="rucEstablishmentRegisterSelected.code != ''"
-                                    [bc-value]="rucEstablishmentRegisterSelected.code"
-                                    [bc-display-value]="true"
-                                  ></ngx-barcode>
-                                </div>
-                            </div>
-                          </div>
+                    <div class="col-12">
+                      <div class="form-group">
+                        <label>Establecimiento</label><span
+                          *ngIf="rucEstablishmentRegisterSelected.establishment_id == 0"
+                          class="ml-2 badge badge-danger">Incorrecto</span>
+                        <select class="form-control" id="establishment_id" name="establishment_id"
+                          [(ngModel)]="rucEstablishmentRegisterSelected.establishment_id">
+                          <option value="0" selected>Seleccione...</option>
+                          <option *ngFor="
+                              let establishment of ruc_registro_selected.ruc.establishments
+                            " value="{{ establishment.id }}">
+                            {{ establishment.ruc_code_id }} | {{establishment.commercially_known_name}} -
+                            {{ establishment.address }}
+                          </option>
+                        </select>
+                      </div>
                     </div>
-                    <div class="col-6">
+                    <div class="col-12" *ngIf="rucEstablishmentRegisterSelected.status != 4">
                       <div class="row">
-                        <div class="col-6">
-                            <div class="form-group">
-                                <label>Estado de Registro</label><span
-                                *ngIf="rucEstablishmentRegisterSelected.status == '-'"
-                                class="ml-2 badge badge-danger"
-                                >Incorrecto</span
-                              >
-                                <select
-                              class="form-control"
-                              id="state_name"
-                              name="state_name"
-                              [(ngModel)]="rucEstablishmentRegisterSelected.status"
-                            >
+                        <div class="col-4">
+                          <div class="form-group">
+                            <label>Código de Seguridad QR</label>
+                            <ngx-qrcode *ngIf="rucEstablishmentRegisterSelected.code != ''" [qrc-element-type]="'url'"
+                              [qrc-value]="rucEstablishmentRegisterSelected.code" qrc-class="aclass"
+                              qrc-errorCorrectionLevel="L">
+                            </ngx-qrcode>
+                          </div>
+                        </div>
+                        <div class="col-8">
+                          <div class="form-group">
+                            <label>Código de Barras</label>
+                            <ngx-barcode *ngIf="rucEstablishmentRegisterSelected.code != ''"
+                              [bc-value]="rucEstablishmentRegisterSelected.code" [bc-display-value]="true">
+                            </ngx-barcode>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-12">
+                      <div class="row">
+                        <div class="col-3">
+                          <div class="form-group">
+                            <label>Estado del Trámite</label>
+                            <select disabled class="form-control" id="tramite_state_name" name="tramite_state_name"
+                              (change)="getSpecificStates()" [(ngModel)]="estado_tramite_selected_code">
                               <option value="-" selected>Seleccione...</option>
-                              <option
-                                *ngFor="
-                                  let state of states
-                                "
-                                value="{{ state.name }}"
-                              >
+                              <option *ngFor="
+                                let state of estados_tramites
+                              " value="{{ state.code }}">
                                 {{ state.name }}
                               </option>
                             </select>
-                              </div>
+                          </div>
+                        </div>
+                        <div class="col-3">
+                          <div class="form-group">
+                            <label>Trámite Requerido</label><span *ngIf="rucEstablishmentRegisterSelected.status == 0"
+                              class="ml-2 badge badge-danger">Incorrecto</span>
+                            <select class="form-control" id="state_name" name="state_name"
+                              [(ngModel)]="rucEstablishmentRegisterSelected.status">
+                              <option value="0" selected>Seleccione...</option>
+                              <option *ngFor="
+                                  let state of specific_states
+                                " value="{{ state.id }}">
+                                {{ state.name }}
+                              </option>
+                            </select>
+                          </div>
                         </div>
                         <div class="col-6">
                           <div class="form-group">
                             <label for="code">Número de Registro</label>
-                            <input
-                              type="text"
-                              class="form-control"
-                              id="code"
-                              name="code"
-                              placeholder="Número de Registro"
-                              [(ngModel)]="
+                            <input disabled type="text" class="form-control" id="code" name="code"
+                              placeholder="Número de Registro" [(ngModel)]="
                                 rucEstablishmentRegisterSelected.code
-                              "
-                            />
+                              " />
                           </div>
                         </div>
                       </div>
                       <div class="row">
                         <div class="col-6">
                           <div class="form-group">
-                            <label>Clasificación</label
-                            ><span
-                              *ngIf="categorySelectedCode == '-'"
-                              class="ml-2 badge badge-danger"
-                              >Incorrecto</span
-                            >
-                            <select
-                              class="form-control"
-                              id="register_type_id"
-                              name="register_type_id"
-                              (change)="getCategories()"
-                              [(ngModel)]="categorySelectedCode"
-                            >
+                            <label>Clasificación</label><span *ngIf="categorySelectedCode == '-'"
+                              class="ml-2 badge badge-danger">Incorrecto</span>
+                            <select class="form-control" id="register_type_id" name="register_type_id"
+                              (change)="getCategories()" [(ngModel)]="categorySelectedCode">
                               <option value="-" selected>Seleccione...</option>
-                              <option
-                                *ngFor="
+                              <option *ngFor="
                                   let register_type of clasifications_registers
-                                "
-                                value="{{ register_type.code }}"
-                              >
+                                " value="{{ register_type.code }}">
                                 {{ register_type.name }}
                               </option>
                             </select>
@@ -1705,31 +1242,18 @@
                         </div>
                         <div class="col-6">
                           <div class="form-group">
-                            <label>Categoría</label
-                            ><span
-                              *ngIf="
+                            <label>Categoría</label><span *ngIf="
                                 rucEstablishmentRegisterSelected.register_type_id ==
                                 0
-                              "
-                              class="ml-2 badge badge-danger"
-                              >Incorrecto</span
-                            >
-                            <select
-                              class="form-control"
-                              id="register_type_id"
-                              name="register_type_id"
-                              (change)="getAllowedInfo()"
-                              [(ngModel)]="
+                              " class="ml-2 badge badge-danger">Incorrecto</span>
+                            <select class="form-control" id="register_type_id" name="register_type_id"
+                              (change)="getAllowedInfo()" [(ngModel)]="
                                 rucEstablishmentRegisterSelected.register_type_id
-                              "
-                            >
+                              ">
                               <option value="0" selected>Seleccione...</option>
-                              <option
-                                *ngFor="
+                              <option *ngFor="
                                   let register_type of categories_registers
-                                "
-                                value="{{ register_type.id }}"
-                              >
+                                " value="{{ register_type.id }}">
                                 {{ register_type.name }}
                               </option>
                             </select>
@@ -1738,50 +1262,28 @@
                       </div>
                     </div>
                   </div>
-                  <div class="form-group row">
+                  <div class="form-group row"
+                    *ngIf="categorySelectedCode !== '-' && rucEstablishmentRegisterSelected.register_type_id !== 0">
                     <div class="col-12">
-                        <label class="col-form-label mb-2"
-                        ><strong>Ambientes del Establecimiento</strong
-                        ><span class="ml-2 mr-2 badge badge-info"
-                        >Total de Ambientes:
-                        {{
+                      <label class="col-form-label mb-2"><strong>Ambientes del Establecimiento</strong><span
+                          class="ml-2 mr-2 badge badge-info">Total de Ambientes:
+                          {{
                           rucEstablishmentRegisterSelected.total_habitations
-                        }}</span
-                      ><span class="mr-2 badge badge-info"
-                          >Total de Plazas:
+                        }}</span><span class="mr-2 badge badge-info">Total de Plazas:
                           {{
                             rucEstablishmentRegisterSelected.total_spaces
-                          }}</span
-                        ><span
-                          class="badge badge-danger"
-                          *ngIf="
+                          }}</span><span class="badge badge-danger" *ngIf="
                             rucEstablishmentRegisterSelected.total_spaces == 0
-                          "
-                          >Incorrecto</span
-                        ></label
-                      >  
+                          ">Incorrecto</span></label>
                     </div>
                     <div class="col-12">
                       <div class="btn-toolbar" role="toolbar">
-                        <div
-                          class="btn-group"
-                          role="group"
-                          aria-label="First group"
-                        >
-                          <button
-                            type="button"
-                            title="Agregar"
-                            class="btn btn-success ml-2"
-                            (click)="addCapacity()"
-                          >
+                        <div class="btn-group" role="group" aria-label="First group">
+                          <button type="button" title="Agregar" class="btn btn-success ml-2" (click)="addCapacity()">
                             <i class="fas fa-plus-circle"></i>
                           </button>
-                          <button
-                            type="button"
-                            title="Contar Plazas"
-                            class="btn btn-warning ml-2"
-                            (click)="calcSpaces()"
-                          >
+                          <button type="button" title="Contar Plazas" class="btn btn-warning ml-2"
+                            (click)="calcSpaces()">
                             <i class="fas fa-bed"></i>
                           </button>
                         </div>
@@ -1808,204 +1310,188 @@
                           </th>
                         </thead>
                         <tbody>
-                          <tr
-                            *ngFor="
+                          <tr *ngFor="
                               let capacity of rucEstablishmentRegisterSelected.capacities_on_register
-                            "
-                            (click)="selectCapacity(capacity)"
-                          >
+                            " (click)="selectCapacity(capacity)">
                             <td class="text-right">
-                              <span
-                                *ngIf="capacitySelected == capacity"
-                                class="far fa-hand-point-right"
-                              ></span>
+                              <span *ngIf="capacitySelected == capacity" class="far fa-hand-point-right"></span>
                             </td>
                             <td>
-                              <input
-                                type="number"
-                                class="form-control"
-                                min="0"
-                                id="count_space"
-                                name="count_space"
-                                placeholder="Cantidad"
-                                [(ngModel)]="capacity.quantity"
-                              />
+                              <input type="number" class="form-control" min="0" id="count_space" name="count_space"
+                                placeholder="Cantidad" [(ngModel)]="capacity.quantity" />
                               <div class="form-group row mt-3">
-                                <span class="badge badge-info mr-2"
-                                  >Total de Plazas:
+                                <span class="badge badge-info mr-2">Total de Plazas:
                                   {{
                                     capacity.quantity * capacity.total_spaces
-                                  }}</span
-                                ><span
-                                  class="badge badge-danger"
-                                  *ngIf="
+                                  }}</span><span class="badge badge-danger" *ngIf="
                                     capacity.quantity * capacity.total_spaces ==
                                     0
-                                  "
-                                  >Incorrecto</span
-                                >
+                                  ">Incorrecto</span>
                               </div>
                             </td>
                             <td>
-                                <select
-                                class="form-control"
-                                id="capacity_type_id"
-                                name="capacity_type_id"
-                                [(ngModel)]="capacity.capacity_type_id"
-                                (change)="getMaxBed(capacity)"
-                              >
-                                <option value="0" selected
-                                  >Seleccione...</option
-                                >
-                                <option
-                                  *ngFor="
+                              <select class="form-control" id="capacity_type_id" name="capacity_type_id"
+                                [(ngModel)]="capacity.capacity_type_id" (change)="getMaxBed(capacity)">
+                                <option value="0" selected>Seleccione...</option>
+                                <option *ngFor="
                                     let capacity_type of alowed_capacity_types
-                                  "
-                                  value="{{ capacity_type.id }}"
-                                >
+                                  " value="{{ capacity_type.id }}">
                                   {{ capacity_type.name }}
                                 </option>
                               </select>
                             </td>
                             <td>
-                              <span class="badge badge-info mb-3 mr-2"
-                                >Plazas por Ambiente:
-                                {{ capacity.total_spaces }}</span
-                              ><span
-                                class="badge badge-danger mb-3 mr-2"
-                                *ngIf="capacity.total_spaces == 0"
-                                >Incorrecto</span
-                              ><span class="badge badge-info"
-                              *ngIf="capacity.max_bed_ok"
-                              >Máximo de Camas:
-                              {{
+                              <span class="badge badge-info mb-3 mr-2">Plazas por Ambiente:
+                                {{ capacity.total_spaces }}</span><span class="badge badge-danger mb-3 mr-2"
+                                *ngIf="capacity.total_spaces == 0">Incorrecto</span><span class="badge badge-info"
+                                *ngIf="capacity.max_bed_ok">Máximo de Camas:
+                                {{
                                 capacity.max_bed
-                              }}</span
-                            >
-                            <span class="badge badge-danger"
-                            *ngIf="!capacity.max_bed_ok"
-                              >Máximo de Camas:
-                              {{
+                              }}</span>
+                              <span class="badge badge-danger" *ngIf="!capacity.max_bed_ok">Máximo de Camas:
+                                {{
                                 capacity.max_bed
-                              }}</span
-                            >
+                              }}</span>
                               <div class="btn-toolbar" role="toolbar">
                                 <div class="btn-group" role="group">
-                                  <button
-                                    type="button"
-                                    title="Agregar"
-                                    class="btn btn-success"
-                                    (click)="addBed(capacity)"
-                                  >
+                                  <button type="button" title="Agregar" class="btn btn-success"
+                                    (click)="addBed(capacity)">
                                     <i class="fas fa-plus-circle"></i>
                                   </button>
-                                  <button
-                                    type="button"
-                                    title="Quitar"
-                                    class="btn btn-danger"
-                                    (click)="removeBed(capacity)"
-                                  >
+                                  <button type="button" title="Quitar" class="btn btn-danger"
+                                    (click)="removeBed(capacity)">
                                     <i class="fas fa-trash"></i>
                                   </button>
-                                  <button
-                                    type="button"
-                                    title="Contar Plazas"
-                                    class="btn btn-warning ml-2"
-                                    (click)="calcBeds(capacity)"
-                                  >
+                                  <button type="button" title="Contar Plazas" class="btn btn-warning ml-2"
+                                    (click)="calcBeds(capacity)">
                                     <i class="fas fa-bed"></i>
                                   </button>
                                 </div>
                               </div>
                               <table>
                                 <thead>
-                                  <th>Seleccionado</th>
-                                  <th>Cantidad</th>
-                                  <th>Tipo</th>
-                                </thead>
-                                <tbody>
-                                  <tr
-                                    *ngFor="
+                            <th>Seleccionado</th>
+                            <th>Cantidad</th>
+                            <th>Tipo</th>
+                            </thead>
+                        <tbody>
+                          <tr *ngFor="
                                       let bed of capacity.beds_on_capacity
-                                    "
-                                    (click)="selectBed(bed)"
-                                  >
-                                    <td>
-                                      <span
-                                        *ngIf="bedSelected == bed"
-                                        class="far fa-hand-point-right"
-                                      ></span>
-                                    </td>
-                                    <td>
-                                      <input
-                                        type="number"
-                                        class="form-control"
-                                        min="0"
-                                        id="count_bed"
-                                        name="count_bed"
-                                        placeholder="Cantidad"
-                                        [(ngModel)]="bed.quantity"
-                                      />
-                                    </td>
-                                    <td>
-                                      <select
-                                        class="form-control"
-                                        id="bed_type_id"
-                                        name="bed_type_id"
-                                        [(ngModel)]="bed.bed_type_id"
-                                      >
-                                        <option value="0" selected
-                                          >Seleccione...</option
-                                        >
-                                        <option
-                                          *ngFor="
+                                    " (click)="selectBed(bed)">
+                            <td>
+                              <span *ngIf="bedSelected == bed" class="far fa-hand-point-right"></span>
+                            </td>
+                            <td>
+                              <input type="number" class="form-control" min="0" id="count_bed" name="count_bed"
+                                placeholder="Cantidad" [(ngModel)]="bed.quantity" />
+                            </td>
+                            <td>
+                              <select class="form-control" id="bed_type_id" name="bed_type_id"
+                                [(ngModel)]="bed.bed_type_id">
+                                <option value="0" selected>Seleccione...</option>
+                                <option *ngFor="
                                             let bed_type of alowed_bed_types
-                                          "
-                                          value="{{ bed_type.id }}"
-                                        >
-                                          {{ bed_type.name }}
-                                        </option>
-                                      </select>
-                                    </td>
-                                  </tr>
-                                </tbody>
-                              </table>
+                                          " value="{{ bed_type.id }}">
+                                  {{ bed_type.name }}
+                                </option>
+                              </select>
                             </td>
-                            <td>
-                              <div
-                                class="form-group"
-                                *ngFor="
+                          </tr>
+                        </tbody>
+                      </table>
+                      </td>
+                      <td>
+                        <span class="badge badge-danger mb-3" *ngIf="
+                                !capacity.tariffsValidated
+                                ">Tarifas Incorrectas</span>
+                        <div class="form-group" *ngFor="
                                   let tariff of capacity.tariffs_on_capacity
-                                "
-                              >
-                                <label
-                                  >Por {{ tariff.tariff_father_name }} en
-                                  {{ tariff.tariff_name }}</label
-                                >
-                                <div class="input-group">
-                                  <div class="input-group-prepend">
-                                    <span class="input-group-text">$</span>
-                                  </div>
-                                  <input
-                                    type="number"
-                                    class="form-control"
-                                    min="0"
-                                    step="0.01"
-                                    id="low_capacity_room_price"
-                                    name="low_capacity_room_price"
-                                    [(ngModel)]="tariff.price"
-                                    placeholder="Precio"
-                                  />
-                                </div>
-                              </div>
+                                ">
+                          <label>Por {{ tariff.tariff_father_name }} en
+                            {{ tariff.tariff_name }}</label>
+                          <div class="input-group">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text">$</span>
+                            </div>
+                            <input type="number" class="form-control" min="0" step="0.01" id="low_capacity_room_price"
+                              name="low_capacity_room_price" [(ngModel)]="tariff.price" placeholder="Precio" />
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <button type="button" title="Eliminar" class="btn btn-danger"
+                          (click)="removeCapacity(capacity)">
+                          <i class="fas fa-trash"></i>
+                        </button>
+                      </td>
+                      </tr>
+                      </tbody>
+                      </table>
+                    </div>
+                  </div>
+                  <div class="form-group"
+                    *ngIf="categorySelectedCode !== '-' && rucEstablishmentRegisterSelected.register_type_id !== 0">
+                    <label>Oferta Servicios Complementarios</label>
+                    <div class="col-12">
+                      <label class="switch"><input type="checkbox" id="autorized_complementary_adventure_capacities"
+                          name="autorized_complementary_adventure_capacities" [(ngModel)]="
+                            rucEstablishmentRegisterSelected.autorized_complementary_food_capacities
+                          " /><span class="slider round"></span></label>
+                    </div>
+                  </div>
+                  <div class="row" *ngIf="rucEstablishmentRegisterSelected.autorized_complementary_food_capacities">
+                    <div class="col-12">
+                      <table class="table table-hover mt-2">
+                        <thead>
+                          <th>Seleccionado
+                            <button type="button" title="Agregar" class="btn btn-success ml-2"
+                              (click)="addComplementaryFoodService()">
+                              <i class="fas fa-plus-circle"></i>
+                            </button>
+                          </th>
+                          <th>Tipo
+                          </th>
+                          <th>Cantidad de Mesas</th>
+                          <th>Cantidad de Sillas</th>
+                          <th>Opciones</th>
+                        </thead>
+                        <tbody>
+                          <tr (click)="selectComplementaryFoodService(complementaryServiceFood)"
+                            *ngFor="let complementaryServiceFood of rucEstablishmentRegisterSelected.complementary_service_foods_on_register">
+                            <td class="text-right">
+                              <span *ngIf="
+                                complementaryServiceFoodSelected ===
+                                complementaryServiceFood
+                                " class="far fa-hand-point-right"></span>
                             </td>
                             <td>
-                              <button
-                                type="button"
-                                title="Eliminar"
-                                class="btn btn-danger"
-                                (click)="removeCapacity(capacity)"
-                              >
+                              <span *ngIf="complementaryServiceFood.complementary_service_food_type_id == 0"
+                                class="ml-2 badge badge-danger">Incorrecto</span>
+                              <select class="form-control" id="complementary_service_food_id"
+                                name="complementary_service_food_id" [(ngModel)]="
+                                complementaryServiceFood.complementary_service_food_type_id
+                                ">
+                                <option value="0" selected>Seleccione...</option>
+                                <option *ngFor="
+                                    let complementary_food_service_type of complementaryServiceFoodTypes
+                                  " value="{{ complementary_food_service_type.id }}">
+                                  {{ complementary_food_service_type.name }}
+                                </option>
+                              </select>
+                            </td>
+                            <td>
+                              <input type="number" class="form-control" min="0" id="mesas" name="mesas"
+                                placeholder="Cantidad de Mesas"
+                                [(ngModel)]="complementaryServiceFood.quantity_tables" />
+                            </td>
+                            <td>
+                              <input type="number" class="form-control" min="0" id="sillas" name="sillas"
+                                placeholder="Cantidad de Sillas"
+                                [(ngModel)]="complementaryServiceFood.quantity_chairs" />
+                            </td>
+                            <td>
+                              <button type="button" title="Eliminar" class="btn btn-danger"
+                                (click)="removeComplementaryFoodService(complementaryServiceFood)">
                                 <i class="fas fa-trash"></i>
                               </button>
                             </td>
@@ -2014,86 +1500,53 @@
                       </table>
                     </div>
                   </div>
-                  <div class="form-group">
-                    <label>Oferta Servicios Complementarios</label>
+                  <div class="form-group"
+                    *ngIf="categorySelectedCode !== '-' && rucEstablishmentRegisterSelected.register_type_id !== 0">
+                    <label>Oferta Servicios Complementarios de Aventura</label>
                     <div class="col-12">
-                      <label class="switch"
-                        ><input
-                          type="checkbox"
-                          id="autorized_complementary_capacities"
-                          name="autorized_complementary_capacities"
-                          [(ngModel)]="
+                      <label class="switch"><input type="checkbox" id="autorized_complementary_adventure_capacities"
+                          name="autorized_complementary_adventure_capacities" [(ngModel)]="
                             rucEstablishmentRegisterSelected.autorized_complementary_capacities
-                          "/><span class="slider round"></span
-                      ></label>
+                          " /><span class="slider round"></span></label>
                     </div>
                   </div>
-                  <div
-                    class="form-group row"
-                    *ngIf="
+                  <div class="form-group row" *ngIf="
                       rucEstablishmentRegisterSelected.autorized_complementary_capacities
-                    "
-                  >
-                    <label class="col-12 col-form-label mb-2"
-                      ><strong>Servicios Complementarios</strong></label
-                    >
-                    <label class="col-4 col-form-label"
-                      >Servicios Complementarios</label
-                    >
+                    ">
+                    <label class="col-12 col-form-label mb-2"><strong>Servicios Complementarios de
+                        Aventura</strong></label>
+                    <label class="col-4 col-form-label">Servicios Complementarios de Aventura</label>
                     <div class="col-8">
                       <div class="input-group">
                         <div class="input-group-prepend">
-                          <button
-                            type="button"
-                            title="Eliminar"
-                            class="btn btn-danger"
-                            (click)="removeComplementaryServiceType()"
-                          >
+                          <button type="button" title="Eliminar" class="btn btn-danger"
+                            (click)="removeComplementaryServiceType()">
                             <i class="fas fa-trash"></i>
                           </button>
-                          <button
-                            type="button"
-                            title="Agregar"
-                            class="btn btn-success"
-                            (click)="addComplementaryServiceType()"
-                          >
+                          <button type="button" title="Agregar" class="btn btn-success"
+                            (click)="addComplementaryServiceType()">
                             <i class="fas fa-plus-circle"></i>
                           </button>
                         </div>
-                        <select
-                          class="form-control"
-                          id="complementary_service_type_category_code"
-                          name="complementary_service_type_category_code"
-                          #categoryFilter
-                          (change)="
+                        <select class="form-control" id="complementary_service_type_category_code"
+                          name="complementary_service_type_category_code" #categoryFilter (change)="
                             getComplementaryServiceType(categoryFilter.value)
-                          "
-                        >
+                          ">
                           <option value="0" selected>Seleccione...</option>
-                          <option
-                            *ngFor="
+                          <option *ngFor="
                               let complementary_service_type of complementary_service_types_categories
-                            "
-                            value="{{ complementary_service_type.code }}"
-                          >
+                            " value="{{ complementary_service_type.code }}">
                             {{ complementary_service_type.name }}
                           </option>
                         </select>
-                        <select
-                          class="form-control"
-                          id="complementary_service_type_id"
-                          name="complementary_service_type_id"
-                          [(ngModel)]="
+                        <select class="form-control" id="complementary_service_type_id"
+                          name="complementary_service_type_id" [(ngModel)]="
                             complementary_service_types_registerSelectedId
-                          "
-                        >
+                          ">
                           <option value="0" selected>Seleccione...</option>
-                          <option
-                            *ngFor="
+                          <option *ngFor="
                               let complementary_service_type of complementary_service_types
-                            "
-                            value="{{ complementary_service_type.id }}"
-                          >
+                            " value="{{ complementary_service_type.id }}">
                             {{ complementary_service_type.name }}
                           </option>
                         </select>
@@ -2103,24 +1556,18 @@
                     <div class="col-8">
                       <table class="table table-hover mt-2">
                         <tbody>
-                          <tr
-                            *ngFor="
+                          <tr *ngFor="
                               let complementary_service_type of rucEstablishmentRegisterSelected.complementary_service_types_on_register
-                            "
-                            (click)="
+                            " (click)="
                               selectComplementaryServiceType(
                                 complementary_service_type
                               )
-                            "
-                          >
+                            ">
                             <td class="text-right">
-                              <span
-                                *ngIf="
+                              <span *ngIf="
                                   complementary_service_types_registerSelectedId ===
                                   complementary_service_type.id
-                                "
-                                class="far fa-hand-point-right"
-                              ></span>
+                                " class="far fa-hand-point-right"></span>
                             </td>
                             <td>{{ complementary_service_type.name }}</td>
                           </tr>
@@ -2128,14 +1575,11 @@
                       </table>
                     </div>
                   </div>
-                  <div class="form-group row" *ngIf="showRequisites">
-                    <label class="col-12 col-form-label mb-2"
-                      ><strong>Requisitos</strong></label
-                    >
+                  <div class="row" *ngIf="showRequisites">
+                    <label class="col-12 col-form-label mb-2"><strong>Requisitos</strong></label>
                     <div class="col-12">
                       <div class="alert alert-warning" role="alert">
-                        <label class="col-12 text-justify"
-                          ><strong>Atención</strong><br />
+                        <label class="col-12 text-justify"><strong>Atención</strong><br />
                           Los requisitos listados a continuación serán revisados
                           por el inspector del Ministerio de Turismo el día de
                           la visita a su establecimiento. El incumplimiento de
@@ -2145,34 +1589,430 @@
                       </div>
                     </div>
                     <div class="col-12">
+                      <ngb-accordion #acc="ngbAccordion" activeIds="ngb-panel-0">
+                        <ngb-panel id="requisitos">
+                          <ng-template ngbPanelTitle>
+                            <span>Visualizar Listado de Requisitos</span>
+                          </ng-template>
+                          <ng-template ngbPanelContent>
+                            <div class="col-12">
+                              <div class="form-group row">
+                                <div class="col-12">
+                                  <table class="table table-hover mt-2">
+                                    <thead>
+                                      <th>Requisito</th>
+                                      <th>Satisfecho</th>
+                                    </thead>
+                                    <tbody>
+                                      <tr *ngFor="
+                                              let register_requisite of rucEstablishmentRegisterSelected.requisites
+                                            ">
+                                        <td>
+                                          <label
+                                            *ngIf="register_requisite.requisite_father_code !== '-'">{{ register_requisite.requisite_name }}</label>
+                                          <strong
+                                            *ngIf="register_requisite.requisite_father_code == '-'">{{ register_requisite.requisite_name }}</strong>
+                                        </td>
+                                        <td>
+                                          <label class="switch"
+                                            *ngIf="register_requisite.requisite_father_code !== '-'"><input
+                                              type="checkbox" id="cumple" name="cumple" [(ngModel)]="
+                                                    register_requisite.fullfill
+                                                  " /><span class="slider round"></span></label>
+                                        </td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                                </div>
+                              </div>
+                            </div>
+                          </ng-template>
+                        </ngb-panel>
+                      </ngb-accordion>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row mt-3" *ngIf="validateRegister()">
+                <div class="col-12 text-center">
+                  <button [disabled]="guardando" type="button" class="btn btn-success" title="Actualizar Información"
+                    (click)="guardarRegistro()">
+                    <i class="fas fa-paper-plane"></i>&nbsp;Actualizar Información
+                  </button>
+                  <button type="button" class="btn btn-danger ml-2" title="Cancelar Cambios" (click)="
+                      refresh()
+                    ">
+                    <i class="fas fa-trash"></i>&nbsp;Cancelar Cambios
+                  </button>
+                </div>
+              </div>
+            </ng-template>
+          </ngb-tab>
+          <ngb-tab title="Declaración de Impuestos" id="tab4" *ngIf="rucSaved() && SRIOK && REGCIVILOK && (ruc_registro_selected.ruc.establishments.length > 0)">
+            <ng-template ngbTabContent>
+              <div class="row mt-3">
+                <h4 class="col-12">
+                  <strong>Establecimientos Registrados</strong>
+                </h4>
+              </div>
+              <div class="row">
+                <div class="col-12">
+                  <div class="btn-toolbar" role="toolbar">
+                    <div class="btn-group mr-2" role="group">
+                      <button type="button" class="btn btn-primary" title="Actualizar" (click)="
+                        getEstablishmentsOnRuc(currentPageEstablishment)
+                        ">
+                        <i class="fas fa-sync"></i>
+                      </button>
+                    </div>
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <button type="button" class="input-group-text btn btn-success" title="Ir a la Página" (click)="
+                            goToPageEstablishment(
+                              goToPageNumberEstablishment.value
+                            )
+                          ">
+                          <span class="fas fa-search"></span>
+                        </button>
+                      </div>
+                      <input type="text" class="form-control" placeholder="Buscar..." #goToPageNumberEstablishment />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12">
+                  <table class="table table-hover mt-2">
+                    <thead>
+                      <tr>
+                        <th>Seleccionado</th>
+                        <th>Código</th>
+                        <th>Dirección</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="
+                          let establishment of ruc_registro_selected.ruc.establishments
+                        " (click)="selectRegisterEstablishmentDeclaration(establishment)">
+                        <td class="text-right">
+                          <span *ngIf="establishment_declarations_selected == establishment"
+                            class="far fa-hand-point-right"></span>
+                        </td>
+                        <td>{{ establishment.ruc_code_id }}</td>
+                        <td>{{ establishment.address }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12">
+                  <div class="btn-toolbar" role="toolbar">
+                    <div class="btn-group mr-2" role="group">
+                      <button type="button" class="btn btn-light" *ngIf="currentPageDeclaration === 1"
+                        title="Primera Página" disabled>
+                        Primera
+                      </button>
+                      <button type="button" class="btn btn-light" *ngIf="currentPageDeclaration !== 1"
+                        title="Primera Página" (click)="goToPageEstablishment(1)">
+                        Primera
+                      </button>
+                      <button type="button" class="btn btn-light" *ngIf="currentPageDeclaration > 1"
+                        title="Página Anterior" (click)="
+                          goToPageEstablishment(
+                            currentPageDeclaration * 1 - 1
+                          )
+                        ">
+                        {{ currentPageDeclaration * 1 - 1 }}
+                      </button>
+                      <button type="button" class="btn btn-primary" title="Página Actual">
+                        {{ currentPageDeclaration }}
+                      </button>
+                      <button type="button" class="btn btn-light" *ngIf="currentPageDeclaration < lastPageDeclaration"
+                        title="Página Siguiente" (click)="
+                          goToPageEstablishment(
+                            currentPageDeclaration * 1 + 1
+                          )
+                        ">
+                        {{ currentPageEstablishment * 1 + 1 }}
+                      </button>
+                      <button type="button" class="btn btn-light" *ngIf="
+                      currentPageDeclaration !== lastPageDeclaration
+                        " title="Última Página" (click)="goToPageEstablishment(lastPageDeclaration)">
+                        Última
+                      </button>
+                      <button type="button" class="btn btn-light" *ngIf="
+                      currentPageDeclaration === lastPageDeclaration
+                        " title="Última Página" disabled>
+                        Última
+                      </button>
+                    </div>
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <button type="button" class="input-group-text btn btn-success" title="Ir a la Página" (click)="
+                            goToPageEstablishment(
+                              goToPageNumberEstablishment.value
+                            )
+                          ">
+                          Ir a
+                        </button>
+                      </div>
+                      <input type="number" min="{{ 1 }}" max="{{ lastPageDeclaration }}" class="form-control"
+                        placeholder="Ir a la Página" #goToPageNumberEstablishment />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row mt-5" *ngIf="establishment_declarations_selected.id !== 0">
+                <div class="col-12">
+                  <div class="row mt-3">
+                    <h4 class="col-12">
+                      <strong>Declaraciones de Impuestos</strong>
+                    </h4>
+                  </div>
+                  <div class="row">
+                    <div class="col-12">
+                      <div class="btn-toolbar" role="toolbar">
+                        <div class="btn-group mr-2" role="group">
+                          <button type="button" class="btn btn-primary" title="Actualizar" (click)="
+                            getEstablishmentsOnRuc(currentPageDeclaration)
+                            ">
+                            <i class="fas fa-sync"></i>
+                          </button>
+                        </div>
+                        <div class="btn-group mr-2" role="group">
+                          <button type="button" title="Nuevo" class="btn btn-success" (click)="newDeclaration()">
+                            <i class="fas fa-file"></i>
+                          </button>
+                        </div>
+                        <div class="input-group">
+                          <div class="input-group-prepend">
+                            <button type="button" class="input-group-text btn btn-success" title="Ir a la Página"
+                              (click)="
+                                goToPageEstablishment(
+                                  goToPageNumberDeclaration.value
+                                )
+                              ">
+                              <span class="fas fa-search"></span>
+                            </button>
+                          </div>
+                          <input type="text" class="form-control" placeholder="Buscar..."
+                            #goToPageNumberEstablishment />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-12">
                       <table class="table table-hover mt-2">
                         <thead>
-                          <th>Requisito</th>
-                          <th>Satisfecho</th>
+                          <tr>
+                            <th>Seleccionado</th>
+                            <th>Año</th>
+                            <th>Fecha de Declaración</th>
+                            <th>Estado</th>
+                            <th>Observaciones</th>
+                          </tr>
                         </thead>
                         <tbody>
-                          <tr
-                            *ngFor="
-                              let register_requisite of rucEstablishmentRegisterSelected.requisites
-                            "
-                          >
-                            <td>{{ register_requisite.requisite_name }}</td>
+                          <tr *ngFor="let declaration of declarations" (click)="selectDeclaration(declaration)">
+                            <td class="text-right">
+                              <span *ngIf="declaration_selected === declaration" class="far fa-hand-point-right"></span>
+                            </td>
+                            <td>{{declaration.year}}</td>
+                            <td>{{declaration.declaration_date}}</td>
+                            <td>{{declaration.status_name}}</td>
                             <td>
-                              <label class="switch"
-                                ><input
-                                  type="checkbox"
-                                  id="cumple"
-                                  name="cumple"
-                                  [(ngModel)]="
-                                    register_requisite.fullfill
-                                  "/><span class="slider round"></span
-                              ></label>
+                              <button type="button" title="Ver Observaciones" class="btn btn-info"
+                                (click)="openDialog(content, declaration.status)">
+                                <i class="fas fa-comment-dots"></i>
+                              </button>
                             </td>
                           </tr>
                         </tbody>
                       </table>
                     </div>
                   </div>
+                  <div class="row">
+                    <div class="col-12">
+                      <div class="btn-toolbar" role="toolbar">
+                        <div class="btn-group mr-2" role="group">
+                          <button type="button" class="btn btn-light" *ngIf="currentPageDeclaration === 1"
+                            title="Primera Página" disabled>
+                            Primera
+                          </button>
+                          <button type="button" class="btn btn-light" *ngIf="currentPageDeclaration !== 1"
+                            title="Primera Página" (click)="goToPageEstablishment(1)">
+                            Primera
+                          </button>
+                          <button type="button" class="btn btn-light" *ngIf="currentPageDeclaration > 1"
+                            title="Página Anterior" (click)="goToPageEstablishment(currentPageDeclaration * 1 - 1)">
+                            {{ currentPageDeclaration * 1 - 1 }}
+                          </button>
+                          <button type="button" class="btn btn-primary" title="Página Actual">
+                            {{ currentPageDeclaration }}
+                          </button>
+                          <button type="button" class="btn btn-light"
+                            *ngIf="currentPageDeclaration < lastPageDeclaration" title="Página Siguiente"
+                            (click)="goToPageEstablishment(currentPageDeclaration * 1 + 1)">
+                            {{ currentPageDeclaration * 1 + 1 }}
+                          </button>
+                          <button type="button" class="btn btn-light"
+                            *ngIf="currentPageEstablishment !== lastPageDeclaration" title="Última Página"
+                            (click)="goToPageEstablishment(lastPageDeclaration)">
+                            Última
+                          </button>
+                          <button type="button" class="btn btn-light"
+                            *ngIf="currentPageEstablishment === lastPageDeclaration" title="Última Página" disabled>
+                            Última
+                          </button>
+                        </div>
+                        <div class="input-group">
+                          <div class="input-group-prepend">
+                            <button type="button" class="input-group-text btn btn-success" title="Ir a la Página"
+                              (click)="
+                                  goToPageEstablishment(goToPageNumberDeclaration.value)
+                                ">
+                              Ir a
+                            </button>
+                          </div>
+                          <input type="number" min="{{ 1 }}" max="{{ lastPageDeclaration }}" class="form-control"
+                            placeholder="Ir a la Página" #goToPageNumberDeclaration />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div *ngIf="mostrarDataDeclaration">
+                <div class="row mt-5">
+                  <div class="col-12 text-left">
+                    <h3>Datos de la Declaración:</h3>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-12">
+                    <div class="form-group">
+                      <label>Año a Declarar</label>
+                      <input type="number" class="form-control" id="declarationYear" name="declarationYear"
+                        placeholder="Año a Declarar" [(ngModel)]="declaration_selected.year" [max]="maxYear">
+                    </div>
+                  </div>
+                </div>
+                <div class="row" *ngIf="mostrarFechaMaximaPago()">
+                  <div class="col-6">
+                    <div class="form-group">
+                      <label>Fecha Máxima de Pago</label>
+                      <h3>
+                        <strong>{{ declaration_selected.max_date_to_pay | date:'y-MM-dd'}}</strong>
+                      </h3>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="form-group">
+                      <label>Opciones</label>
+                      <div class="btn-toolbar" role="toolbar">
+                        <div class="btn-group mr-2" role="group">
+                          <button type="button" class="btn-lg btn-success" title="Descargar Pago"
+                            (click)="goToPage(currentPage)">
+                            <i class="fas fa-cash-register"></i>
+                          </button>
+                        </div>
+                        <div class="btn-group mr-2" role="group">
+                          <button type="button" class="btn-lg btn-primary" title="Descargar Declaración"
+                            (click)="goToPage(currentPage)">
+                            <i class="fas fa-file-invoice-dollar "></i>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row" *ngIf="mostrarFechaMaximaPago()">
+                  <div class="col-4">
+                    <div class="form-group">
+                      <label>Monto a Pagar</label>
+                      <h3>
+                        <strong>{{ payDeclarationSelected.amount_to_pay }} USD</strong>
+                      </h3>
+                    </div>
+                  </div>
+                  <div class="col-4">
+                    <div class="form-group">
+                      <label>Monto Pagado</label>
+                      <h3>
+                        <strong class="text-danger"
+                          *ngIf="payDeclarationSelected.amount_payed < payDeclarationSelected.amount_to_pay">{{ payDeclarationSelected.amount_payed }}
+                          USD</strong>
+                        <strong class="text-success"
+                          *ngIf="payDeclarationSelected.amount_payed == payDeclarationSelected.amount_to_pay">{{ payDeclarationSelected.amount_payed }}
+                          USD</strong>
+                        <strong class="text-warning"
+                          *ngIf="payDeclarationSelected.amount_payed > payDeclarationSelected.amount_to_pay">{{ payDeclarationSelected.amount_payed }}
+                          USD</strong>
+                      </h3>
+                    </div>
+                  </div>
+                  <div class="col-4">
+                    <div class="form-group">
+                      <label>Fecha de Pago</label>
+                      <h3>
+                        <strong class="text-success"
+                          *ngIf="payDeclarationSelected.pay_date <= declaration_selected.max_date_to_pay">{{ payDeclarationSelected.pay_date | date:'y-MM-dd'}}</strong>
+                        <strong class="text-danger"
+                          *ngIf="payDeclarationSelected.pay_date > declaration_selected.max_date_to_pay">{{ payDeclarationSelected.pay_date | date:'y-MM-dd'}}</strong>
+                      </h3>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-12">
+                    <table class="table table-hover mt-2">
+                      <tbody *ngFor="let declarationItemToShow of declarationItemsToShow">
+                        <tr class="text-light bg-secondary">
+                          <th colspan="2" class="text-center">
+                            {{ declarationItemToShow.Category.name }}
+                          </th>
+                        </tr>
+                        <tr>
+                          <th>
+                            Nombre
+                          </th>
+                          <th>
+                            Valor
+                          </th>
+                        </tr>
+                        <tr *ngFor="let item of declarationItemToShow.items">
+                          <td>
+                            {{ item.declarationItem.name }}
+                          </td>
+                          <td>
+                            <div class="input-group">
+                              <div class="input-group-prepend">
+                                <span class="input-group-text">USD</span>
+                              </div>
+                              <input type="number" class="form-control" min="0" step="0.01" id="declarationITemValue"
+                                name="declarationITemValue" [(ngModel)]="item.valueItem.value"
+                                placeholder="Valor" />
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <div class="row mt-3">
+                <div class="col-12 text-center">
+                  <button [disabled]="guardando" type="button" class="btn btn-success"
+                    title="Guardar Datos de la Declaración" (click)="guardarDeclaracion()">
+                    <i class="fas fa-paper-plane"></i>&nbsp;Guardar Datos de la Declaración
+                  </button>
+                  <button type="button" class="btn btn-danger ml-2" title="Cancelar Cambios" (click)="
+                      refresh()
+                    ">
+                    <i class="fas fa-trash"></i>&nbsp;Cancelar Cambios
+                  </button>
                 </div>
               </div>
             </ng-template>
@@ -2185,12 +2025,14 @@
 
 <ng-template #content let-modal>
   <div class="modal-header">
-    cabeza
+    <h3>Observaciones</h3>
   </div>
   <div class="modal-body">
-    Cuerpo
+    <div class="row">
+      <div class="col-12 text-justify" [innerHTML]="statusSelected.justification"></div>
+    </div>
   </div>
   <div class="modal-footer">
-    pie
+    <button type="button" class="btn btn-outline-success" (click)="modal.close('Guardar click')">Cerrar</button>
   </div>
 </ng-template>
