@@ -350,100 +350,46 @@
                     </div>
                     <div class="input-group">
                       <div class="input-group-prepend">
-                        <button type="button" class="input-group-text btn btn-success" title="Ir a la Página" (click)="
-                            goToPageEstablishment(
-                              goToPageNumberEstablishment.value
-                            )
+                        <button type="button" class="input-group-text btn btn-success" title="Buscar" (click)="
+                        onChangeTableEstablishment(config)
                           ">
                           <span class="fas fa-search"></span>
                         </button>
                       </div>
-                      <input type="text" class="form-control" placeholder="Buscar..." #goToPageNumberEstablishment />
+                      <input *ngIf="config.filtering" placeholder="Buscar..."
+                        [ngTableFiltering]="config.filtering"
+                        class="form-control"
+                        (input)="onChangeTableEstablishment(config)"/>
                     </div>
                   </div>
                 </div>
               </div>
               <div class="row">
-                <div class="col-12">
-                  <table class="table table-hover mt-2">
-                    <thead>
-                      <tr>
-                        <th>Seleccionado</th>
-                        <th>Código</th>
-                        <th>Dirección</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr *ngFor="
-                          let establishment of ruc_registro_selected.ruc.establishments
-                        " (click)="selectRegisterEstablishment(establishment)">
-                        <td class="text-right">
-                          <span *ngIf="establishment_selected.id == establishment.id"
-                            class="far fa-hand-point-right"></span>
-                        </td>
-                        <td>{{ establishment.ruc_code_id }}</td>
-                        <td>{{ establishment.address }}</td>
-                      </tr>
-                    </tbody>
-                  </table>
+                <div class="col-12 mt-2">
+                   <ng-table
+                      [config]="config"
+                      (cellClicked)="onCellClickEstablishment($event)"
+                      (tableChanged)="onChangeTableEstablishment(config)"
+                      [rows]="rowsEstablishment"
+                      [columns]="columnsEstablishment">
+                    </ng-table>
                 </div>
               </div>
               <div class="row">
                 <div class="col-12">
-                  <div class="btn-toolbar" role="toolbar">
-                    <div class="btn-group mr-2" role="group">
-                      <button type="button" class="btn btn-light" *ngIf="currentPageEstablishment === 1"
-                        title="Primera Página" disabled>
-                        Primera
-                      </button>
-                      <button type="button" class="btn btn-light" *ngIf="currentPageEstablishment !== 1"
-                        title="Primera Página" (click)="goToPageEstablishment(1)">
-                        Primera
-                      </button>
-                      <button type="button" class="btn btn-light" *ngIf="currentPageEstablishment > 1"
-                        title="Página Anterior" (click)="
-                          goToPageEstablishment(
-                            currentPageEstablishment * 1 - 1
-                          )
-                        ">
-                        {{ currentPageEstablishment * 1 - 1 }}
-                      </button>
-                      <button type="button" class="btn btn-primary" title="Página Actual">
-                        {{ currentPageEstablishment }}
-                      </button>
-                      <button type="button" class="btn btn-light"
-                        *ngIf="currentPageEstablishment < lastPageEstablishment" title="Página Siguiente" (click)="
-                          goToPageEstablishment(
-                            currentPageEstablishment * 1 + 1
-                          )
-                        ">
-                        {{ currentPageEstablishment * 1 + 1 }}
-                      </button>
-                      <button type="button" class="btn btn-light" *ngIf="
-                          currentPageEstablishment !== lastPageEstablishment
-                        " title="Última Página" (click)="goToPageEstablishment(lastPageEstablishment)">
-                        Última
-                      </button>
-                      <button type="button" class="btn btn-light" *ngIf="
-                          currentPageEstablishment === lastPageEstablishment
-                        " title="Última Página" disabled>
-                        Última
-                      </button>
-                    </div>
-                    <div class="input-group">
-                      <div class="input-group-prepend">
-                        <button type="button" class="input-group-text btn btn-success" title="Ir a la Página" (click)="
-                            goToPageEstablishment(
-                              goToPageNumberEstablishment.value
-                            )
-                          ">
-                          Ir a
-                        </button>
-                      </div>
-                      <input type="number" min="{{ 1 }}" max="{{ lastPageEstablishment }}" class="form-control"
-                        placeholder="Ir a la Página" #goToPageNumberEstablishment />
-                    </div>
-                  </div>
+                  <ngb-pagination
+                    *ngIf="config.paging"
+                    [(page)]="currentPageEstablishment"
+                    [pageSize]="recordsByPageEstablishment"
+                    [maxSize]="10"
+                    [boundaryLinks]="true"
+                    (pageChange)="onChangeTableEstablishment(config, $event)"
+                    [collectionSize]="ruc_registro_selected.ruc.establishments.length">
+                    <ng-template ngbPaginationFirst>Primera</ng-template>
+                    <ng-template ngbPaginationPrevious>Anterior</ng-template>
+                    <ng-template ngbPaginationNext>Siguiente</ng-template>
+                    <ng-template ngbPaginationLast>Última</ng-template>
+                  </ngb-pagination>
                 </div>
               </div>
               <div class="row" *ngIf="mostrarDataEstablishment">
