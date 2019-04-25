@@ -219,13 +219,14 @@ class RegisterController extends Controller
          return response()->json($register,200);
       }else {
          DB::beginTransaction();
-         $register = Register::where('id',$result['id'])->update([
+         $register = Register::where('id', $result['id'])->update([
             'code'=>$result['code'],
             'autorized_complementary_capacities'=>$result['autorized_complementary_capacities'],
             'autorized_complementary_food_capacities'=>$result['autorized_complementary_food_capacities'],
             'establishment_id'=>$result['establishment_id'],
             'register_type_id'=>$result['register_type_id'],
          ]);
+         $register = Register::where('id', $result['id'])->first();
          $complementary_service_types_on_register_old = $register->ComplementaryServiceTypes()->get();
          foreach( $complementary_service_types_on_register_old as $complementary_service_type_old ) {
             $delete = true;
@@ -316,7 +317,7 @@ class RegisterController extends Controller
          }
          $preview_requisites = RegisterRequisite::where('register_id', $register->id)->get();
          foreach($preview_requisites as $preview_requisite){
-            Register::destroy($preview_requisite->id);
+            RegisterRequisite::destroy($preview_requisite->id);
          } 
          foreach($requisites as $requisite_to_add) {
             $registerrequisite = new RegisterRequisite();
@@ -328,7 +329,7 @@ class RegisterController extends Controller
             }
             $registerrequisite->fullfill = $requisite_to_add['fullfill'];
             $registerrequisite->requisite_id = $requisite_to_add['requisite_id'];
-            $registerrequisite->register_id = $register->id;
+            $registerrequisite->register_id = $result['id'];
             $registerrequisite->save();  
          }
          $registerstate = new RegisterState();
