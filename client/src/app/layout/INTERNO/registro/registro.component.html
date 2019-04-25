@@ -978,98 +978,45 @@
                     <div class="input-group">
                       <div class="input-group-prepend">
                         <button type="button" class="input-group-text btn btn-success" title="Ir a la Página" (click)="
-                            goToPageRegister(goToPageNumberRegister.value)
+                        onChangeTableRegister(config)
                           ">
                           <span class="fas fa-search"></span>
                         </button>
                       </div>
-                      <input type="text" class="form-control" placeholder="Buscar..." #goToPageNumberRegister />
+                      <input *ngIf="config.filtering" placeholder="Buscar..."
+                        [ngTableFiltering]="config.filtering"
+                        class="form-control"
+                        (input)="onChangeTableRegister(config)"/>
                     </div>
                   </div>
                 </div>
               </div>
               <div class="row">
-                <div class="col-12">
-                  <table class="table table-hover mt-2">
-                    <thead>
-                      <tr>
-                        <th>Seleccionado</th>
-                        <th>Código Establecimiento</th>
-                        <th>Ubicación Establecimiento</th>
-                        <th>Código Registro</th>
-                        <th>Tipo Registro</th>
-                        <th>Estado</th>
-                        <th>Observaciones</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr *ngFor="let row of ruc_registro_selected.registers"
-                        (click)="selectEstablishmentRegister(row.register)">
-                        <td class="text-right">
-                          <span *ngIf="
-                              rucEstablishmentRegisterSelected.id == row.register.id
-                            " class="far fa-hand-point-right"></span>
-                        </td>
-                        <td>{{ row.establishment.ruc_code_id }}</td>
-                        <td>{{ row.establishment.address }}</td>
-                        <td>{{ row.register.code }}</td>
-                        <td>{{ row.type.register_category.name }} / {{ row.type.register_type.name }}</td>
-                        <td>{{ row.status.name }}</td>
-                        <td>
-                          <button type="button" title="Ver Observaciones" class="btn btn-info"
-                            (click)="openDialog(content, row.status_register)">
-                            <i class="fas fa-comment-dots"></i>
-                          </button>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
+                <div class="col-12 mt-2">
+                   <ng-table
+                      [config]="config"
+                      (cellClicked)="onCellClickRegister($event)"
+                      (tableChanged)="onChangeTableRegister(config)"
+                      [rows]="rowsRegister"
+                      [columns]="columnsRegister">
+                    </ng-table>
                 </div>
               </div>
               <div class="row">
                 <div class="col-12">
-                  <div class="btn-toolbar" role="toolbar">
-                    <div class="btn-group mr-2" role="group">
-                      <button type="button" class="btn btn-light" *ngIf="currentPageRegister === 1"
-                        title="Primera Página" disabled>
-                        Primera
-                      </button>
-                      <button type="button" class="btn btn-light" *ngIf="currentPageRegister !== 1"
-                        title="Primera Página" (click)="goToPageRegister(1)">
-                        Primera
-                      </button>
-                      <button type="button" class="btn btn-light" *ngIf="currentPageRegister > 1"
-                        title="Página Anterior" (click)="goToPageRegister(currentPageRegister * 1 - 1)">
-                        {{ currentPageRegister * 1 - 1 }}
-                      </button>
-                      <button type="button" class="btn btn-primary" title="Página Actual">
-                        {{ currentPageRegister }}
-                      </button>
-                      <button type="button" class="btn btn-light" *ngIf="currentPageRegister < lastPageRegister"
-                        title="Página Siguiente" (click)="goToPageRegister(currentPageRegister * 1 + 1)">
-                        {{ currentPageRegister * 1 + 1 }}
-                      </button>
-                      <button type="button" class="btn btn-light" *ngIf="currentPageRegister !== lastPageRegister"
-                        title="Última Página" (click)="goToPageRegister(lastPageRegister)">
-                        Última
-                      </button>
-                      <button type="button" class="btn btn-light" *ngIf="currentPageRegister === lastPageRegister"
-                        title="Última Página" disabled>
-                        Última
-                      </button>
-                    </div>
-                    <div class="input-group">
-                      <div class="input-group-prepend">
-                        <button type="button" class="input-group-text btn btn-success" title="Ir a la Página" (click)="
-                            goToPageRegister(goToPageNumberRegister.value)
-                          ">
-                          Ir a
-                        </button>
-                      </div>
-                      <input type="number" min="{{ 1 }}" max="{{ lastPageRegister }}" class="form-control"
-                        placeholder="Ir a la Página" #goToPageNumberRegister />
-                    </div>
-                  </div>
+                  <ngb-pagination
+                    *ngIf="config.paging"
+                    [(page)]="currentPageRegister"
+                    [pageSize]="recordsByPageRegister"
+                    [maxSize]="10"
+                    [boundaryLinks]="true"
+                    (pageChange)="onChangeTableRegister(config, $event)"
+                    [collectionSize]="ruc_registro_selected.registers.length">
+                    <ng-template ngbPaginationFirst>Primera</ng-template>
+                    <ng-template ngbPaginationPrevious>Anterior</ng-template>
+                    <ng-template ngbPaginationNext>Siguiente</ng-template>
+                    <ng-template ngbPaginationLast>Última</ng-template>
+                  </ngb-pagination>
                 </div>
               </div>
               <div class="row" *ngIf="mostrarDataRegister">

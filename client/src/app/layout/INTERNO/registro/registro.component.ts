@@ -184,6 +184,10 @@ export class RegistroComponent implements OnInit {
   establishment_certifications_establishmentSelected: EstablishmentCertification = new EstablishmentCertification();
 
   //DATOS REGISTRO
+  rowsRegister = [];
+  columnsRegister = [];
+  dataRegister = [];
+
   estados_tramites: State[];
   specific_states: State[];
   estado_tramite_selected_code: String = '1';
@@ -383,6 +387,128 @@ export class RegistroComponent implements OnInit {
    });
    this.rowsEstablishment.forEach(row => {
       if (row.code == event.row.code) {
+         row.selected = '<div class="col-12 text-right"><span class="far fa-hand-point-right"></span></div>';
+      } else {
+         row.selected = '';
+      }
+   });
+  }
+
+  onChangeTableRegister(config: any, page: any = {page: this.currentPageRegister, itemsPerPage: this.recordsByPageRegister}): any {
+   if (config.filtering) {
+     Object.assign(this.config.filtering, config.filtering);
+   }
+   if (config.sorting) {
+     Object.assign(this.config.sorting, config.sorting);
+   }
+   const filteredData = this.changeFilterRegister(this.dataRegister, this.config);
+   const sortedData = this.changeSortRegister(filteredData, this.config);
+   this.rowsRegister = page && config.paging ? this.changePageRegister(page, sortedData) : sortedData;
+  }
+
+  changeFilterRegister(data: any, config: any): any {
+   this.mostrarDataRegister = false;
+   this.rowsRegister.forEach(row => {
+      row.selected = '';
+   });
+   let filteredData: Array<any> = data;
+   this.columnsRegister.forEach((column: any) => {
+     if (column.filtering) {
+       filteredData = filteredData.filter((item: any) => {
+         return item[column.name].match(column.filtering.filterString);
+       });
+     }
+   });
+   if (!config.filtering) {
+     return filteredData;
+   }
+   if (config.filtering.columnName) {
+     return filteredData.filter((item:any) =>
+       item[config.filtering.columnName].match(this.config.filtering.filterString));
+   }
+   const tempArray: Array<any> = [];
+   filteredData.forEach((item: any) => {
+     let flag = false;
+     this.columnsRegister.forEach((column: any) => {
+       if (item[column.name].toString().match(this.config.filtering.filterString)) {
+         flag = true;
+       }
+     });
+     if (flag) {
+       tempArray.push(item);
+     }
+   });
+   filteredData = tempArray;
+   return filteredData;
+  }
+
+  changeSortRegister(data: any, config: any): any {
+   if (!config.sorting) {
+     return data;
+   }
+   const columns = this.config.sorting.columns || [];
+   let columnName: string = void 0;
+   let sort: string = void 0;
+   for (let i = 0; i < columns.length; i++) {
+     if (columns[i].sort !== '' && columns[i].sort !== false) {
+       columnName = columns[i].name;
+       sort = columns[i].sort;
+     }
+   }
+   if (!columnName) {
+     return data;
+   }
+   return data.sort((previous:any, current:any) => {
+     if (previous[columnName] > current[columnName]) {
+       return sort === 'desc' ? -1 : 1;
+     } else if (previous[columnName] < current[columnName]) {
+       return sort === 'asc' ? -1 : 1;
+     }
+     return 0;
+   });
+  }
+
+  changePageRegister(page: any, data: Array<any> = this.dataRegister):Array<any> {
+   const start = (page.page - 1) * page.itemsPerPage;
+   const end = page.itemsPerPage > -1 ? (start + page.itemsPerPage) : data.length;
+   return data.slice(start, end);
+  }
+
+  buildDataTableRegister() {
+     this.columnsRegister = [
+        {title: 'Seleccionado', name: 'selected'},
+        {title: 'Código del Establecimiento', name: 'establishment_code', filtering: {filterString: '', placeholder: 'Código del Establecimiento'}},
+        {title: 'Ubicación del Establecimiento', name: 'address', filtering: {filterString: '', placeholder: 'Ubicación del Establecimiento'}},
+        {title: 'Código del Registro', name: 'register_code', filtering: {filterString: '', placeholder: 'Código del Registro'}},
+        {title: 'Tipo de Registro', name: 'register_type', filtering: {filterString: '', placeholder: 'Tipo de Registro'}},
+        {title: 'Estado', name: 'state', filtering: {filterString: '', placeholder: 'Estado'}},
+        {title: 'Observaciones', name: 'notes'},
+     ];
+     const data = [];
+     this.ruc_registro_selected.registers.forEach(item => {
+         data.push({
+            selected: '',
+            id: item.register.id,
+            establishment_code: item.establishment.ruc_code_id,
+            address: item.establishment.address,
+            register_code: item.register.code,
+            register_type: item.type.register_category.name + ' / ' + item.type.register_type.name,
+            state: item.status.name,
+            notes: '<div class="col-12 text-justify">' + item.status_register.justification + '</div>',
+         });
+     });
+     this.dataRegister = data;
+     this.onChangeTableRegister(this.config);
+  }
+
+  onCellClickRegister(event) {
+   this.ruc_registro_selected.registers.forEach(element => {
+      if (element.register.id == event.row.id) {
+         this.selectEstablishmentRegister(element.register);
+      }
+   });
+   this.rowsRegister.forEach(row => {
+      if (row.id == event.row.id) {
          row.selected = '<div class="col-12 text-right"><span class="far fa-hand-point-right"></span></div>';
       } else {
          row.selected = '';
@@ -1032,6 +1158,7 @@ export class RegistroComponent implements OnInit {
    this.mostrarDataRegister = false;
    this.registerDataService.get_registers_by_ruc(this.user.ruc).then( r => {
       this.ruc_registro_selected.registers = r as any[];
+      this.buildDataTableRegister();
    }).catch( e => { console.log(e); });
   }
 
