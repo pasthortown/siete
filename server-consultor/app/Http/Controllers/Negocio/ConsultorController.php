@@ -15,9 +15,10 @@ class ConsultorController extends Controller
     $toReturn = [];
     $registers_alojamiento = json_decode($this->httpGet('http://localhost:8002/register',null,null,$token));
     foreach($registers_alojamiento as $register) {
+      $status = json_decode($this->httpGet('http://localhost:8002/registerstate/get_by_register_id?id='.$register->id,null,null,$token));
       $establishment = json_decode($this->httpGet('http://localhost:8001/establishment?id='.$register->establishment_id,null,null,$token));
       $ruc = json_decode($this->httpGet('http://localhost:8001/ruc?id='.$establishment->Establishment->ruc_id,null,null,$token));
-      array_push($toReturn, ["register"=>$register, "establishment"=>$establishment->Establishment, "ruc"=>$ruc->Ruc]);
+      array_push($toReturn, ["register"=>$register, "establishment"=>$establishment->Establishment, "ruc"=>$ruc->Ruc, "states"=>$status]);
     }
     return response()->json($toReturn,200);
   }

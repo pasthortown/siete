@@ -23,6 +23,11 @@ class RegisterStateController extends Controller
        }
     }
 
+    function get_by_register_id(Request $data)
+    {
+       return response()->json(RegisterState::where('register_id', $data['id'])->orderBy('created_at','DESC')->first(),200);
+    }
+
     function paginate(Request $data)
     {
        $size = $data['size'];

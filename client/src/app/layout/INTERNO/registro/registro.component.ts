@@ -377,7 +377,7 @@ export class RegistroComponent implements OnInit {
             establishment: item.establishment.commercially_known_name,
             address: item.establishment.address,
             category: this.getRegisterCategory(item.register.register_type_id),
-            status: this.getRegisterState(item.register.state_id),
+            status: this.getRegisterState(item.states.state_id),
          });
      });
      this.data = data;
@@ -893,7 +893,7 @@ export class RegistroComponent implements OnInit {
    this.guardando = true;
    this.registerDataService.register_register_data(this.rucEstablishmentRegisterSelected).then( r => {
       this.guardando = false;
-      this.getRegistersOnRuc();
+      this.refresh();
    }).catch( e => {
       this.guardando = false;
       this.toastr.errorToastr('Existe conflicto la información proporcionada.', 'Nuevo');

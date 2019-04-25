@@ -16,6 +16,7 @@ $router->get('/', function () use ($router) {
 });
 
 $router->group(['middleware' => []], function () use ($router) {
+   $router->get('/registerstate/get_by_register_id', ['uses' => 'RegisterStateController@get_by_register_id']);
 });
 
 $router->group(['middleware' => ['auth']], function () use ($router) {
@@ -93,6 +94,7 @@ $router->group(['middleware' => ['auth']], function () use ($router) {
    //CRUD RegisterState
    $router->post('/registerstate', ['uses' => 'RegisterStateController@post']);
    $router->get('/registerstate', ['uses' => 'RegisterStateController@get']);
+   
    $router->get('/registerstate/paginate', ['uses' => 'RegisterStateController@paginate']);
    $router->get('/registerstate/backup', ['uses' => 'RegisterStateController@backup']);
    $router->put('/registerstate', ['uses' => 'RegisterStateController@put']);

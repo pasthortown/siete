@@ -24,7 +24,7 @@ class RegisterController extends Controller
     {
       $id = $data['id'];
       if ($id == null) {
-         $registers = Register::join('register_states', 'registers.id', '=', 'register_states.register_id')->select('registers.*','register_states.state_id', 'register_states.justification')->orderBy('register_states.state_id', 'ASC')->orderBy('created_at', 'ASC')->get();
+         $registers = Register::orderBy('updated_at', 'DESC')->get();
          return response()->json($registers, 200);
       } else {
          $register = Register::findOrFail($id);
