@@ -1162,6 +1162,21 @@ export class RegistroComponent implements OnInit {
    }).catch( e => { console.log(e); });
   }
 
+  onCellClickEstablishmentDeclaration(event) {
+   this.ruc_registro_selected.ruc.establishments.forEach(element => {
+      if (element.ruc_code_id == event.row.code) {
+         this.selectRegisterEstablishmentDeclaration(element);
+      }
+   });
+   this.rowsEstablishment.forEach(row => {
+      if (row.code == event.row.code) {
+         row.selected = '<div class="col-12 text-right"><span class="far fa-hand-point-right"></span></div>';
+      } else {
+         row.selected = '';
+      }
+   });
+  }
+  
   getTariffs() {
    this.tarifas = [];
    this.tariffTypeDataService.get().then( r => {
