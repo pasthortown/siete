@@ -19,11 +19,6 @@
                     <i class="fas fa-edit"></i>
                 </button>
             </div>
-            <div class="btn-group mr-2" role="group">
-                <button type="button" title="Eliminar" class="btn btn-danger" (click)="deleteAccountRuc()">
-                    <i class="fas fa-trash"></i>
-                </button>
-            </div>
             <div class="input-group">
                 <div class="input-group-prepend">
                     <button type="button" class="input-group-text btn btn-primary" title="Filtrar" (click)="refresh()">
@@ -43,7 +38,6 @@
                     <th>Seleccionado</th>
                     <th>Nombre</th>
                     <th>Cédula</th>
-                    <th>RUC</th>
                     <th>Correo Electrónico</th>
                 </tr>
             </thead>
@@ -54,7 +48,6 @@
                     </td>
                     <td>{{ account_ruc.name }}</td>
                     <td>{{ account_ruc.identification }}</td>
-                    <td>{{ account_ruc.ruc }}</td>
                     <td>{{ account_ruc.email }}</td>
                 </tr>
             </tbody>
@@ -121,11 +114,6 @@
             <label for="identification">Número de Cédula</label>
             <input type="text" class="form-control" maxlength="10" id="identification" placeholder="Número de Cédula"
                 [(ngModel)]="account_rucSelected.identification" />
-        </div>
-        <div class="form-group">
-            <label for="ruc">Número de RUC</label>
-            <input type="text" class="form-control" maxlength="13" id="ruc" placeholder="Número de RUC"
-                [(ngModel)]="account_rucSelected.ruc" />
         </div>
         <div class="form-group">
             <label for="email">Correo Electrónico</label>
