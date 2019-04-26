@@ -27,6 +27,7 @@ const routes: Routes = [
             path: 'not-found',
             loadChildren: './not-found/not-found.module#NotFoundModule'
          },
+
          //BASE
          {
             path: 'ruc',
@@ -257,13 +258,26 @@ const routes: Routes = [
             loadChildren: './INTERNO/registro/registro.module#RegistroModule'
          },
          {
-            path: 'interno-impuestos',
-            loadChildren: './INTERNO/impuestos/impuestos.module#ImpuestosModule'
+            path: 'agendamiento-inspecciones',
+            loadChildren: './INTERNO/agendamiento-inspecciones/agendamiento-inspecciones.module#AgendamientoInspeccionesModule'
+         },
+         {
+            path: 'coordinador',
+            loadChildren: './INTERNO/coordinador/coordinador.module#CoordinadorModule'
          },
          {
             path: 'interno-account-admin',
             loadChildren: './INTERNO/account-admin/account-admin.module#AccountAdminModule'
          },
+         {
+            path: 'inner-account-admin',
+            loadChildren: './INTERNO/inner-account-admin/inner-account-admin.module#InnerAccountAdminModule'
+         },
+         {
+            path: 'tecnico-financiero',
+            loadChildren: './INTERNO/tecnico-financiero/tecnico-financiero.module#TecnicoFinancieroModule'
+         },
+
          // EXTERNO
          {
             path: 'externo-registro',

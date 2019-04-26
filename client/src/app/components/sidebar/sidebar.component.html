@@ -154,16 +154,23 @@
                   <a [routerLink]="['/interno-registro']" [routerLinkActive]="['router-link-active']" class="list-group-item">Registro</a>
                </li>
                <li>
-                  <a [routerLink]="['/interno-impuestos']" [routerLinkActive]="['router-link-active']" class="list-group-item">Impuestos</a>
+                  <a [routerLink]="['/coordinador']" [routerLinkActive]="['router-link-active']" class="list-group-item">Coordinador</a>
                </li>
                <li>
-                  <a [routerLink]="['/interno-account-admin']" [routerLinkActive]="['router-link-active']" class="list-group-item">Administración de Cuentas</a>
+                  <a [routerLink]="['/agendamiento-inspecciones']" [routerLinkActive]="['router-link-active']" class="list-group-item">Agendamiento Inspecciones</a>
+               </li>
+               <li>
+                  <a [routerLink]="['/interno-account-admin']" [routerLinkActive]="['router-link-active']" class="list-group-item">Administración de Cuentas Externas</a>
+               </li>
+               <li>
+                  <a [routerLink]="['/inner-account-admin']" [routerLinkActive]="['router-link-active']" class="list-group-item">Administración de Cuentas Inernas</a>
+               </li>
+               <li>
+                  <a [routerLink]="['/tecnico-financiero']" [routerLinkActive]="['router-link-active']" class="list-group-item">Técnico Financiero</a>
                </li>
             </ul>
          </li>
       </div>
-
-
       <div *ngIf="true" class="nested-menu">
          <a class="list-group-item" (click)="addExpandClass('externo')">
             <span class="fas fa-newspaper"></span>&nbsp;EXTERNO
