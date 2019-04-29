@@ -300,50 +300,6 @@
 				 <td><span title='Cascade on delete:&#10;Deletion of parent deletes child'>Cascade on delete</span></td>
 				</tr>
 				<tr>
-				 <td>ruc_franchise_chain_name_franchise_chain_name_id_foreign</td>
-				 <td>
-				  <table border='0' cellspacing='0' cellpadding='0'>
-				   <tr>
-					<td>
-						<a href='tables/ruc_franchise_chain_name.html'>ruc_franchise_chain_name</a><span>.franchise_chain_name_id</span>
-					</td>
-				   </tr>
-				  </table>				 
-				 </td>			 
-				 <td>
-				  <table border='0' cellspacing='0' cellpadding='0'>
-				   <tr>
-					<td>
-						<a href='tables/franchise_chain_names.html'>franchise_chain_names</a><span>.id</span>
-					</td>
-				   </tr>
-				  </table>				 
-				 </td>	
-				 <td><span title='Cascade on delete:&#10;Deletion of parent deletes child'>Cascade on delete</span></td>
-				</tr>
-				<tr>
-				 <td>ruc_franchise_chain_name_ruc_id_foreign</td>
-				 <td>
-				  <table border='0' cellspacing='0' cellpadding='0'>
-				   <tr>
-					<td>
-						<a href='tables/ruc_franchise_chain_name.html'>ruc_franchise_chain_name</a><span>.ruc_id</span>
-					</td>
-				   </tr>
-				  </table>				 
-				 </td>			 
-				 <td>
-				  <table border='0' cellspacing='0' cellpadding='0'>
-				   <tr>
-					<td>
-						<a href='tables/rucs.html'>rucs</a><span>.id</span>
-					</td>
-				   </tr>
-				  </table>				 
-				 </td>	
-				 <td><span title='Cascade on delete:&#10;Deletion of parent deletes child'>Cascade on delete</span></td>
-				</tr>
-				<tr>
 				 <td>establishment_preview_register_code_establishment_id_foreign</td>
 				 <td>
 				  <table border='0' cellspacing='0' cellpadding='0'>
@@ -388,28 +344,6 @@
 				 <td><span title='Cascade on delete:&#10;Deletion of parent deletes child'>Cascade on delete</span></td>
 				</tr>
 				<tr>
-				 <td>rucs_contact_id_foreign</td>
-				 <td>
-				  <table border='0' cellspacing='0' cellpadding='0'>
-				   <tr>
-					<td>
-						<a href='tables/rucs.html'>rucs</a><span>.contact_id</span>
-					</td>
-				   </tr>
-				  </table>				 
-				 </td>			 
-				 <td>
-				  <table border='0' cellspacing='0' cellpadding='0'>
-				   <tr>
-					<td>
-						<a href='tables/contacts.html'>contacts</a><span>.id</span>
-					</td>
-				   </tr>
-				  </table>				 
-				 </td>	
-				 <td><span title='Cascade on delete:&#10;Deletion of parent deletes child'>Cascade on delete</span></td>
-				</tr>
-				<tr>
 				 <td>rucs_tax_payer_type_id_foreign</td>
 				 <td>
 				  <table border='0' cellspacing='0' cellpadding='0'>
@@ -425,6 +359,28 @@
 				   <tr>
 					<td>
 						<a href='tables/tax_payer_types.html'>tax_payer_types</a><span>.id</span>
+					</td>
+				   </tr>
+				  </table>				 
+				 </td>	
+				 <td><span title='Cascade on delete:&#10;Deletion of parent deletes child'>Cascade on delete</span></td>
+				</tr>
+				<tr>
+				 <td>person_representative_attachments_person_representative_id_fore</td>
+				 <td>
+				  <table border='0' cellspacing='0' cellpadding='0'>
+				   <tr>
+					<td>
+						<a href='tables/person_representative_attachments.html'>person_representative_attachments</a><span>.person_representative_id</span>
+					</td>
+				   </tr>
+				  </table>				 
+				 </td>			 
+				 <td>
+				  <table border='0' cellspacing='0' cellpadding='0'>
+				   <tr>
+					<td>
+						<a href='tables/person_representatives.html'>person_representatives</a><span>.id</span>
 					</td>
 				   </tr>
 				  </table>				 
@@ -623,6 +579,50 @@
 				   <tr>
 					<td>
 						<a href='tables/establishments.html'>establishments</a><span>.id</span>
+					</td>
+				   </tr>
+				  </table>				 
+				 </td>	
+				 <td><span title='Cascade on delete:&#10;Deletion of parent deletes child'>Cascade on delete</span></td>
+				</tr>
+				<tr>
+				 <td>franchise_chain_name_ruc_franchise_chain_name_id_foreign</td>
+				 <td>
+				  <table border='0' cellspacing='0' cellpadding='0'>
+				   <tr>
+					<td>
+						<a href='tables/franchise_chain_name_ruc.html'>franchise_chain_name_ruc</a><span>.franchise_chain_name_id</span>
+					</td>
+				   </tr>
+				  </table>				 
+				 </td>			 
+				 <td>
+				  <table border='0' cellspacing='0' cellpadding='0'>
+				   <tr>
+					<td>
+						<a href='tables/franchise_chain_names.html'>franchise_chain_names</a><span>.id</span>
+					</td>
+				   </tr>
+				  </table>				 
+				 </td>	
+				 <td><span title='Cascade on delete:&#10;Deletion of parent deletes child'>Cascade on delete</span></td>
+				</tr>
+				<tr>
+				 <td>franchise_chain_name_ruc_ruc_id_foreign</td>
+				 <td>
+				  <table border='0' cellspacing='0' cellpadding='0'>
+				   <tr>
+					<td>
+						<a href='tables/franchise_chain_name_ruc.html'>franchise_chain_name_ruc</a><span>.ruc_id</span>
+					</td>
+				   </tr>
+				  </table>				 
+				 </td>			 
+				 <td>
+				  <table border='0' cellspacing='0' cellpadding='0'>
+				   <tr>
+					<td>
+						<a href='tables/rucs.html'>rucs</a><span>.id</span>
 					</td>
 				   </tr>
 				  </table>				 

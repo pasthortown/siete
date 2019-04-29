@@ -120,19 +120,27 @@
 				 <td>
 				  <table border='0' cellspacing='0' cellpadding='0'>
 				   <tr>
-					<td title="register_capacity.register_id references registers.id via register_capacity_register_id_foreign">
-						<a href='register_capacity.html'>register_capacity</a><span class='relatedKey'>.register_id</span>
+					<td title="capacity_register.register_id references registers.id via capacity_register_register_id_foreign">
+						<a href='capacity_register.html'>capacity_register</a><span class='relatedKey'>.register_id</span>
 					</td>
 					<td class="constraint detail">
-						register_capacity_register_id_foreign <span title='Cascade on delete:&#10;Deletion of parent deletes child'>C</span>
+						capacity_register_register_id_foreign <span title='Cascade on delete:&#10;Deletion of parent deletes child'>C</span>
 					</td>
 				   </tr>
 				   <tr>
-					<td title="register_complementary_service_type.register_id references registers.id via register_complementary_service_type_register_id_foreign">
-						<a href='register_complementary_service_type.html'>register_complementary_service_type</a><span class='relatedKey'>.register_id</span>
+					<td title="complementary_service_food_register.register_id references registers.id via complementary_service_food_register_register_id_foreign">
+						<a href='complementary_service_food_register.html'>complementary_service_food_register</a><span class='relatedKey'>.register_id</span>
 					</td>
 					<td class="constraint detail">
-						register_complementary_service_type_register_id_foreign <span title='Cascade on delete:&#10;Deletion of parent deletes child'>C</span>
+						complementary_service_food_register_register_id_foreign <span title='Cascade on delete:&#10;Deletion of parent deletes child'>C</span>
+					</td>
+				   </tr>
+				   <tr>
+					<td title="complementary_service_type_register.register_id references registers.id via complementary_service_type_register_register_id_foreign">
+						<a href='complementary_service_type_register.html'>complementary_service_type_register</a><span class='relatedKey'>.register_id</span>
+					</td>
+					<td class="constraint detail">
+						complementary_service_type_register_register_id_foreign <span title='Cascade on delete:&#10;Deletion of parent deletes child'>C</span>
 					</td>
 				   </tr>
 				   <tr>
@@ -228,10 +236,10 @@
 				 <td></td>
 				</tr>
 				<tr>
-				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i><span id="establishment_id">establishment_id</span></td>
+				 <td><span id="establishment_id">establishment_id</span></td>
 				 <td>int4</td>
 				 <td>10</td>
-				 <td title=''></td>
+				 <td title='nullable'>√</td>
 				 <td title=''></td>
 				 <td>null</td>
 				 <td>
@@ -240,14 +248,23 @@
 				 </td>
 				 <td>
 				  <table border='0' cellspacing='0' cellpadding='0'>
-				   <tr>
-					<td title="registers.establishment_id references establishments.id via registers_establishment_id_foreign">
-						<a href='establishments.html'>establishments</a><span class='relatedKey'>.id</span>
-					</td>
-					<td class="constraint detail">
-						registers_establishment_id_foreign <span title='Cascade on delete:&#10;Deletion of parent deletes child'>C</span>
-					</td>
-				   </tr>
+				  </table>					 
+				 </td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td><span id="autorized_complementary_food_capacities">autorized_complementary_food_capacities</span></td>
+				 <td>bool</td>
+				 <td>1</td>
+				 <td title='nullable'>√</td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td>
+				  <table border='0' cellspacing='0' cellpadding='0'>
+				  </table>				 
+				 </td>
+				 <td>
+				  <table border='0' cellspacing='0' cellpadding='0'>
 				  </table>					 
 				 </td>
 				 <td></td>
@@ -279,7 +296,7 @@
 				</tr>
 								</tbody>
 				</table>
-				<p title='7 columns'>Table contained <span id="recordNumber">0</span> rows<p/>
+				<p title='8 columns'>Table contained <span id="recordNumber">2</span> rows<p/>
 			</div>
 		</div>
 		<div class="box box-primary">		
@@ -338,32 +355,33 @@
             <div class="tab-content no-padding">            
 				<div class="chart tab-pane active" id="oneDegreeImg-chart" style="position: relative; overflow-x:auto;">					
 					<map id="oneDegreeRelationshipsDiagram" name="oneDegreeRelationshipsDiagram">
-<area shape="rect" id="node1" href="register_capacity.html" title="register_capacity" alt="" coords="859,5,1063,181">
-<area shape="rect" id="node2" href="registers.html" title="registers" alt="" coords="236,352,723,627">
-<area shape="rect" id="node6" href="establishments.html" title="establishments" alt="" coords="5,448,192,565">
-<area shape="rect" id="node7" href="register_types.html" title="register_types" alt="" coords="8,583,189,700">
-<area shape="rect" id="node3" href="register_complementary_service_type.html" title="register_complementary_service_type" alt="" coords="767,199,1156,375">
-<area shape="rect" id="node4" href="register_requisites.html" title="register_requisites" alt="" coords="852,392,1071,568">
-<area shape="rect" id="node5" href="register_states.html" title="register_states" alt="" coords="869,585,1054,761">
+<area shape="rect" id="node1" href="capacity_register.html" title="capacity_register" alt="" coords="902,5,1106,181">
+<area shape="rect" id="node2" href="registers.html" title="registers" alt="" coords="231,448,765,752">
+<area shape="rect" id="node7" href="register_types.html" title="register_types" alt="" coords="5,656,187,773">
+<area shape="rect" id="node3" href="complementary_service_food_register.html" title="complementary_service_food_register" alt="" coords="809,199,1199,375">
+<area shape="rect" id="node4" href="complementary_service_type_register.html" title="complementary_service_type_register" alt="" coords="809,392,1199,568">
+<area shape="rect" id="node5" href="register_requisites.html" title="register_requisites" alt="" coords="895,585,1113,761">
+<area shape="rect" id="node6" href="register_states.html" title="register_states" alt="" coords="911,779,1097,955">
 </map>
 
 					<a name='diagram'><img id='oneDegreeImg' src='../diagrams/registers.1degree.png' usemap='#oneDegreeRelationshipsDiagram' class='diagram' border='0' alt='' align='left'></a>							
 				</div>
 				<div class="chart tab-pane " id="twodegreesDegreeImg-chart" style="position: relative; overflow-x:auto;">					
 					<map id="twoDegreesRelationshipsDiagram" name="twoDegreesRelationshipsDiagram">
-<area shape="rect" id="node1" href="bed_types.html" title="bed_types" alt="" coords="403,5,556,93">
-<area shape="rect" id="node2" href="register_types.html" title="register_types" alt="" coords="8,161,189,279">
-<area shape="rect" id="node3" href="capacities.html" title="capacities" alt="" coords="886,79,1037,167">
-<area shape="rect" id="node4" href="capacity_types.html" title="capacity_types" alt="" coords="387,111,572,199">
-<area shape="rect" id="node5" href="register_capacity.html" title="register_capacity" alt="" coords="1200,260,1404,436">
-<area shape="rect" id="node6" href="registers.html" title="registers" alt="" coords="236,433,723,708">
-<area shape="rect" id="node13" href="establishments.html" title="establishments" alt="" coords="5,583,192,700">
-<area shape="rect" id="node7" href="register_complementary_service_type.html" title="register_complementary_service_type" alt="" coords="767,377,1156,553">
-<area shape="rect" id="node8" href="complementary_service_types.html" title="complementary_service_types" alt="" coords="333,328,626,416">
-<area shape="rect" id="node9" href="register_requisites.html" title="register_requisites" alt="" coords="852,184,1071,360">
-<area shape="rect" id="node10" href="requisites.html" title="requisites" alt="" coords="405,216,554,304">
-<area shape="rect" id="node11" href="register_states.html" title="register_states" alt="" coords="869,635,1054,811">
-<area shape="rect" id="node12" href="states.html" title="states" alt="" coords="418,725,541,813">
+<area shape="rect" id="node1" href="bed_types.html" title="bed_types" alt="" coords="421,348,575,436">
+<area shape="rect" id="node2" href="register_types.html" title="register_types" alt="" coords="5,240,187,357">
+<area shape="rect" id="node3" href="capacities.html" title="capacities" alt="" coords="929,5,1079,93">
+<area shape="rect" id="node4" href="capacity_types.html" title="capacity_types" alt="" coords="405,19,591,107">
+<area shape="rect" id="node5" href="capacity_register.html" title="capacity_register" alt="" coords="1243,283,1447,459">
+<area shape="rect" id="node6" href="registers.html" title="registers" alt="" coords="231,559,765,863">
+<area shape="rect" id="node7" href="complementary_service_food_register.html" title="complementary_service_food_register" alt="" coords="809,304,1199,480">
+<area shape="rect" id="node8" href="complementary_service_foods.html" title="complementary_service_foods" alt="" coords="351,243,645,331">
+<area shape="rect" id="node9" href="complementary_service_type_register.html" title="complementary_service_type_register" alt="" coords="809,497,1199,673">
+<area shape="rect" id="node10" href="complementary_service_types.html" title="complementary_service_types" alt="" coords="351,453,645,541">
+<area shape="rect" id="node11" href="register_requisites.html" title="register_requisites" alt="" coords="895,111,1113,287">
+<area shape="rect" id="node12" href="requisites.html" title="requisites" alt="" coords="423,137,573,225">
+<area shape="rect" id="node13" href="register_states.html" title="register_states" alt="" coords="911,769,1097,945">
+<area shape="rect" id="node14" href="states.html" title="states" alt="" coords="434,880,562,968">
 </map>
 
 					<a name='diagram'><img id='twodegreesDegreeImg' src='../diagrams/registers.2degrees.png' usemap='#twoDegreesRelationshipsDiagram' class='diagram' border='0' alt='' align='left'></a>							

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <database name="SIETEAUTH" schema="public" type="PostgreSQL - 11.2 (Ubuntu 11.2-1.pgdg18.04+1)">
    <tables>
-      <table name="account_rol_assigments" numRows="1" remarks="" schema="public" type="TABLE">
+      <table name="account_rol_assigments" numRows="4" remarks="" schema="public" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('account_rol_assigments_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial"/>
          <column autoUpdated="false" digits="0" id="1" name="created_at" nullable="true" remarks="" size="22" type="timestamp"/>
          <column autoUpdated="false" digits="0" id="2" name="updated_at" nullable="true" remarks="" size="22" type="timestamp"/>
@@ -16,7 +16,7 @@
             <column ascending="true" name="id"/>
          </index>
       </table>
-      <table name="account_rols" numRows="1" remarks="" schema="public" type="TABLE">
+      <table name="account_rols" numRows="6" remarks="" schema="public" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('account_rols_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial">
             <child column="account_rol_id" foreignKey="account_rol_assigments_account_rol_id_foreign" implied="false" onDeleteCascade="true" schema="public" table="account_rol_assigments"/>
             <child column="account_rol_id" foreignKey="auth_locations_account_rol_id_foreign" implied="false" onDeleteCascade="true" schema="public" table="auth_locations"/>
@@ -45,7 +45,7 @@
             <column ascending="true" name="id"/>
          </index>
       </table>
-      <table name="logs" numRows="7" remarks="" schema="public" type="TABLE">
+      <table name="logs" numRows="19" remarks="" schema="public" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('logs_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial"/>
          <column autoUpdated="false" digits="0" id="1" name="created_at" nullable="true" remarks="" size="22" type="timestamp"/>
          <column autoUpdated="false" digits="0" id="2" name="updated_at" nullable="true" remarks="" size="22" type="timestamp"/>
@@ -83,7 +83,7 @@
             <column ascending="true" name="id"/>
          </index>
       </table>
-      <table name="users" numRows="1" remarks="" schema="public" type="TABLE">
+      <table name="users" numRows="3" remarks="" schema="public" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('users_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial">
             <child column="user_id" foreignKey="account_rol_assigments_user_id_foreign" implied="false" onDeleteCascade="true" schema="public" table="account_rol_assigments"/>
             <child column="user_id" foreignKey="logs_user_id_foreign" implied="false" onDeleteCascade="true" schema="public" table="logs"/>

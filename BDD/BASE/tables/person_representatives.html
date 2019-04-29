@@ -127,6 +127,14 @@
 						group_givens_person_representative_id_foreign <span title='Cascade on delete:&#10;Deletion of parent deletes child'>C</span>
 					</td>
 				   </tr>
+				   <tr>
+					<td title="person_representative_attachments.person_representative_id references person_representatives.id via person_representative_attachments_person_representative_id_fore">
+						<a href='person_representative_attachments.html'>person_representative_attachments</a><span class='relatedKey'>.person_representative_id</span>
+					</td>
+					<td class="constraint detail">
+						person_representative_attachments_person_representative_id_fore <span title='Cascade on delete:&#10;Deletion of parent deletes child'>C</span>
+					</td>
+				   </tr>
 				  </table>				 
 				 </td>
 				 <td>
@@ -186,26 +194,9 @@
 				 </td>
 				 <td></td>
 				</tr>
-				<tr>
-				 <td><span id="assignment_date">assignment_date</span></td>
-				 <td>date</td>
-				 <td>13</td>
-				 <td title='nullable'>√</td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td>
-				  <table border='0' cellspacing='0' cellpadding='0'>
-				  </table>				 
-				 </td>
-				 <td>
-				  <table border='0' cellspacing='0' cellpadding='0'>
-				  </table>					 
-				 </td>
-				 <td></td>
-				</tr>
 								</tbody>
 				</table>
-				<p title='5 columns'>Table contained <span id="recordNumber">0</span> rows<p/>
+				<p title='4 columns'>Table contained <span id="recordNumber">1</span> rows<p/>
 			</div>
 		</div>
 		<div class="box box-primary">		
@@ -264,18 +255,20 @@
             <div class="tab-content no-padding">            
 				<div class="chart tab-pane active" id="oneDegreeImg-chart" style="position: relative; overflow-x:auto;">					
 					<map id="oneDegreeRelationshipsDiagram" name="oneDegreeRelationshipsDiagram">
-<area shape="rect" id="node1" href="group_givens.html" title="group_givens" alt="" coords="415,5,692,211">
-<area shape="rect" id="node2" href="person_representatives.html" title="person_representatives" alt="" coords="5,61,371,277">
+<area shape="rect" id="node1" href="group_givens.html" title="group_givens" alt="" coords="505,5,783,211">
+<area shape="rect" id="node2" href="person_representatives.html" title="person_representatives" alt="" coords="5,159,371,345">
+<area shape="rect" id="node3" href="person_representative_attachments.html" title="person_representative_attachments" alt="" coords="415,228,873,375">
 </map>
 
 					<a name='diagram'><img id='oneDegreeImg' src='../diagrams/person_representatives.1degree.png' usemap='#oneDegreeRelationshipsDiagram' class='diagram' border='0' alt='' align='left'></a>							
 				</div>
 				<div class="chart tab-pane " id="twodegreesDegreeImg-chart" style="position: relative; overflow-x:auto;">					
 					<map id="twoDegreesRelationshipsDiagram" name="twoDegreesRelationshipsDiagram">
-<area shape="rect" id="node1" href="group_givens.html" title="group_givens" alt="" coords="415,55,692,260">
-<area shape="rect" id="node2" href="group_types.html" title="group_types" alt="" coords="103,344,273,432">
-<area shape="rect" id="node3" href="person_representatives.html" title="person_representatives" alt="" coords="5,111,371,327">
-<area shape="rect" id="node4" href="rucs.html" title="rucs" alt="" coords="122,5,254,93">
+<area shape="rect" id="node1" href="group_givens.html" title="group_givens" alt="" coords="505,204,783,409">
+<area shape="rect" id="node2" href="group_types.html" title="group_types" alt="" coords="103,341,273,429">
+<area shape="rect" id="node3" href="person_representatives.html" title="person_representatives" alt="" coords="5,32,371,219">
+<area shape="rect" id="node4" href="rucs.html" title="rucs" alt="" coords="125,236,251,324">
+<area shape="rect" id="node5" href="person_representative_attachments.html" title="person_representative_attachments" alt="" coords="415,5,873,152">
 </map>
 
 					<a name='diagram'><img id='twodegreesDegreeImg' src='../diagrams/person_representatives.2degrees.png' usemap='#twoDegreesRelationshipsDiagram' class='diagram' border='0' alt='' align='left'></a>							

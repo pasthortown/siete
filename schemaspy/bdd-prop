@@ -5,7 +5,7 @@ schemaspy.dp=postgresql-42.2.5.jar
 # database properties: host, port number, name user, password
 schemaspy.host=localhost:5432
 schemaspy.port=5432
-schemaspy.db=SIETEAUTH
+schemaspy.db=SIETEFINANCIERO
 schemaspy.u=prueba
 schemaspy.p=12345678
 # output dir to save generated files

@@ -120,11 +120,43 @@
 				 <td>
 				  <table border='0' cellspacing='0' cellpadding='0'>
 				   <tr>
+					<td title="declaration_approval_state.declaration_id references declarations.id via declaration_approval_state_declaration_id_foreign">
+						<a href='declaration_approval_state.html'>declaration_approval_state</a><span class='relatedKey'>.declaration_id</span>
+					</td>
+					<td class="constraint detail">
+						declaration_approval_state_declaration_id_foreign <span title='Cascade on delete:&#10;Deletion of parent deletes child'>C</span>
+					</td>
+				   </tr>
+				   <tr>
+					<td title="declaration_attachments.declaration_id references declarations.id via declaration_attachments_declaration_id_foreign">
+						<a href='declaration_attachments.html'>declaration_attachments</a><span class='relatedKey'>.declaration_id</span>
+					</td>
+					<td class="constraint detail">
+						declaration_attachments_declaration_id_foreign <span title='Cascade on delete:&#10;Deletion of parent deletes child'>C</span>
+					</td>
+				   </tr>
+				   <tr>
 					<td title="declaration_declaration_item.declaration_id references declarations.id via declaration_declaration_item_declaration_id_foreign">
 						<a href='declaration_declaration_item.html'>declaration_declaration_item</a><span class='relatedKey'>.declaration_id</span>
 					</td>
 					<td class="constraint detail">
 						declaration_declaration_item_declaration_id_foreign <span title='Cascade on delete:&#10;Deletion of parent deletes child'>C</span>
+					</td>
+				   </tr>
+				   <tr>
+					<td title="declaration_item_values.declaration_id references declarations.id via declaration_item_values_declaration_id_foreign">
+						<a href='declaration_item_values.html'>declaration_item_values</a><span class='relatedKey'>.declaration_id</span>
+					</td>
+					<td class="constraint detail">
+						declaration_item_values_declaration_id_foreign <span title='Cascade on delete:&#10;Deletion of parent deletes child'>C</span>
+					</td>
+				   </tr>
+				   <tr>
+					<td title="pays.declaration_id references declarations.id via pays_declaration_id_foreign">
+						<a href='pays.html'>pays</a><span class='relatedKey'>.declaration_id</span>
+					</td>
+					<td class="constraint detail">
+						pays_declaration_id_foreign <span title='Cascade on delete:&#10;Deletion of parent deletes child'>C</span>
 					</td>
 				   </tr>
 				   <tr>
@@ -178,7 +210,7 @@
 				 <td></td>
 				</tr>
 				<tr>
-				 <td><span id="regrister_id">regrister_id</span></td>
+				 <td><span id="establishment_id">establishment_id</span></td>
 				 <td>int4</td>
 				 <td>10</td>
 				 <td title='nullable'>√</td>
@@ -195,7 +227,7 @@
 				 <td></td>
 				</tr>
 				<tr>
-				 <td><span id="pay_date">pay_date</span></td>
+				 <td><span id="declaration_date">declaration_date</span></td>
 				 <td>timestamp</td>
 				 <td>22</td>
 				 <td title='nullable'>√</td>
@@ -212,7 +244,7 @@
 				 <td></td>
 				</tr>
 				<tr>
-				 <td><span id="pay_year">pay_year</span></td>
+				 <td><span id="year">year</span></td>
 				 <td>int4</td>
 				 <td>10</td>
 				 <td title='nullable'>√</td>
@@ -229,26 +261,9 @@
 				 <td></td>
 				</tr>
 				<tr>
-				 <td><span id="tax">tax</span></td>
-				 <td>float8</td>
-				 <td>17,17</td>
-				 <td title='nullable'>√</td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td>
-				  <table border='0' cellspacing='0' cellpadding='0'>
-				  </table>				 
-				 </td>
-				 <td>
-				  <table border='0' cellspacing='0' cellpadding='0'>
-				  </table>					 
-				 </td>
-				 <td></td>
-				</tr>
-				<tr>
-				 <td><span id="time_tax">time_tax</span></td>
-				 <td>float8</td>
-				 <td>17,17</td>
+				 <td><span id="max_date_to_pay">max_date_to_pay</span></td>
+				 <td>timestamp</td>
+				 <td>22</td>
 				 <td title='nullable'>√</td>
 				 <td title=''></td>
 				 <td>null</td>
@@ -264,7 +279,7 @@
 				</tr>
 								</tbody>
 				</table>
-				<p title='8 columns'>Table contained <span id="recordNumber">0</span> rows<p/>
+				<p title='7 columns'>Table contained <span id="recordNumber">0</span> rows<p/>
 			</div>
 		</div>
 		<div class="box box-primary">		
@@ -323,20 +338,30 @@
             <div class="tab-content no-padding">            
 				<div class="chart tab-pane active" id="oneDegreeImg-chart" style="position: relative; overflow-x:auto;">					
 					<map id="oneDegreeRelationshipsDiagram" name="oneDegreeRelationshipsDiagram">
-<area shape="rect" id="node1" href="declaration_declaration_item.html" title="declaration_declaration_item" alt="" coords="313,5,623,181">
-<area shape="rect" id="node2" href="declarations.html" title="declarations" alt="" coords="5,143,269,447">
-<area shape="rect" id="node3" href="state_declarations.html" title="state_declarations" alt="" coords="361,199,575,375">
+<area shape="rect" id="node1" href="declaration_approval_state.html" title="declaration_approval_state" alt="" coords="388,5,681,181">
+<area shape="rect" id="node2" href="declarations.html" title="declarations" alt="" coords="5,501,312,776">
+<area shape="rect" id="node3" href="declaration_attachments.html" title="declaration_attachments" alt="" coords="356,199,713,345">
+<area shape="rect" id="node4" href="declaration_declaration_item.html" title="declaration_declaration_item" alt="" coords="380,363,689,539">
+<area shape="rect" id="node5" href="declaration_item_values.html" title="declaration_item_values" alt="" coords="401,556,668,732">
+<area shape="rect" id="node6" href="pays.html" title="pays" alt="" coords="442,749,627,896">
+<area shape="rect" id="node7" href="state_declarations.html" title="state_declarations" alt="" coords="427,913,642,1089">
 </map>
 
 					<a name='diagram'><img id='oneDegreeImg' src='../diagrams/declarations.1degree.png' usemap='#oneDegreeRelationshipsDiagram' class='diagram' border='0' alt='' align='left'></a>							
 				</div>
 				<div class="chart tab-pane " id="twodegreesDegreeImg-chart" style="position: relative; overflow-x:auto;">					
 					<map id="twoDegreesRelationshipsDiagram" name="twoDegreesRelationshipsDiagram">
-<area shape="rect" id="node1" href="declaration_declaration_item.html" title="declaration_declaration_item" alt="" coords="313,15,623,191">
-<area shape="rect" id="node2" href="declarations.html" title="declarations" alt="" coords="5,111,269,415">
-<area shape="rect" id="node3" href="declaration_items.html" title="declaration_items" alt="" coords="35,5,240,93">
-<area shape="rect" id="node4" href="state_declarations.html" title="state_declarations" alt="" coords="361,269,575,445">
-<area shape="rect" id="node5" href="states.html" title="states" alt="" coords="76,432,199,520">
+<area shape="rect" id="node1" href="declaration_approval_state.html" title="declaration_approval_state" alt="" coords="388,5,681,181">
+<area shape="rect" id="node2" href="approval_states.html" title="approval_states" alt="" coords="63,37,255,125">
+<area shape="rect" id="node3" href="declarations.html" title="declarations" alt="" coords="5,439,312,713">
+<area shape="rect" id="node4" href="declaration_attachments.html" title="declaration_attachments" alt="" coords="356,199,713,345">
+<area shape="rect" id="node5" href="declaration_declaration_item.html" title="declaration_declaration_item" alt="" coords="380,527,689,703">
+<area shape="rect" id="node6" href="declaration_items.html" title="declaration_items" alt="" coords="56,756,261,844">
+<area shape="rect" id="node7" href="declaration_item_values.html" title="declaration_item_values" alt="" coords="401,720,668,896">
+<area shape="rect" id="node8" href="pay_attachments.html" title="pay_attachments" alt="" coords="757,365,957,453">
+<area shape="rect" id="node9" href="pays.html" title="pays" alt="" coords="442,363,627,509">
+<area shape="rect" id="node10" href="state_declarations.html" title="state_declarations" alt="" coords="427,913,642,1089">
+<area shape="rect" id="node11" href="states.html" title="states" alt="" coords="97,975,220,1063">
 </map>
 
 					<a name='diagram'><img id='twodegreesDegreeImg' src='../diagrams/declarations.2degrees.png' usemap='#twoDegreesRelationshipsDiagram' class='diagram' border='0' alt='' align='left'></a>							

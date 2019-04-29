@@ -1,8 +1,15 @@
 declarations
+approvals
 declaration_item_categories
 states
 declaration_items
+approval_states
+pays
+declaration_attachments
+pay_attachments
+declaration_approval_state
 declaration_declaration_item
+declaration_item_values
 state_declarations
 logs
 migrations

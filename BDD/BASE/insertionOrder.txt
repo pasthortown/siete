@@ -1,4 +1,4 @@
-contacts
+person_representatives
 establishment_certification_attachments
 establishment_certification_types
 establishment_property_types
@@ -6,7 +6,6 @@ franchise_chain_names
 genders
 group_types
 languages
-person_representatives
 ruc_name_types
 states
 system_names
@@ -19,12 +18,14 @@ preview_register_codes
 establishment_certifications
 workers
 establishment_pictures
+person_representative_attachments
 establishment_establishment_certification
 establishment_language
 establishment_preview_register_code
 establishment_states
 establishment_worker
-ruc_franchise_chain_name
+franchise_chain_name_ruc
 group_givens
+agreements
 logs
 migrations
