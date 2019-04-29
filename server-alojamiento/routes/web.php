@@ -177,4 +177,31 @@ $router->group(['middleware' => ['auth']], function () use ($router) {
    $router->put('/complementaryservicefoodtype', ['uses' => 'ComplementaryServiceFoodTypeController@put']);
    $router->delete('/complementaryservicefoodtype', ['uses' => 'ComplementaryServiceFoodTypeController@delete']);
    $router->post('/complementaryservicefoodtype/masive_load', ['uses' => 'ComplementaryServiceFoodTypeController@masiveLoad']);
+
+   //CRUD Approval
+   $router->post('/approval', ['uses' => 'ApprovalController@post']);
+   $router->get('/approval', ['uses' => 'ApprovalController@get']);
+   $router->get('/approval/paginate', ['uses' => 'ApprovalController@paginate']);
+   $router->get('/approval/backup', ['uses' => 'ApprovalController@backup']);
+   $router->put('/approval', ['uses' => 'ApprovalController@put']);
+   $router->delete('/approval', ['uses' => 'ApprovalController@delete']);
+   $router->post('/approval/masive_load', ['uses' => 'ApprovalController@masiveLoad']);
+
+   //CRUD ApprovalState
+   $router->post('/approvalstate', ['uses' => 'ApprovalStateController@post']);
+   $router->get('/approvalstate', ['uses' => 'ApprovalStateController@get']);
+   $router->get('/approvalstate/paginate', ['uses' => 'ApprovalStateController@paginate']);
+   $router->get('/approvalstate/backup', ['uses' => 'ApprovalStateController@backup']);
+   $router->put('/approvalstate', ['uses' => 'ApprovalStateController@put']);
+   $router->delete('/approvalstate', ['uses' => 'ApprovalStateController@delete']);
+   $router->post('/approvalstate/masive_load', ['uses' => 'ApprovalStateController@masiveLoad']);
+
+   //CRUD InspectionAssigment
+   $router->post('/inspectionassigment', ['uses' => 'InspectionAssigmentController@post']);
+   $router->get('/inspectionassigment', ['uses' => 'InspectionAssigmentController@get']);
+   $router->get('/inspectionassigment/paginate', ['uses' => 'InspectionAssigmentController@paginate']);
+   $router->get('/inspectionassigment/backup', ['uses' => 'InspectionAssigmentController@backup']);
+   $router->put('/inspectionassigment', ['uses' => 'InspectionAssigmentController@put']);
+   $router->delete('/inspectionassigment', ['uses' => 'InspectionAssigmentController@delete']);
+   $router->post('/inspectionassigment/masive_load', ['uses' => 'InspectionAssigmentController@masiveLoad']);
 });

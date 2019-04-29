@@ -2,8 +2,8 @@ import { RegisterService } from 'src/app/services/CRUD/ALOJAMIENTO/register.serv
 import { EstablishmentPictureService } from 'src/app/services/CRUD/BASE/establishmentpicture.service';
 import { AgreementService } from 'src/app/services/CRUD/BASE/agreement.service';
 import { UserService } from 'src/app/services/profile/user.service';
-import { CoordinadorComponent } from './coordinador.component';
-import { CoordinadorRoutingModule } from './coordinador-routing.module';
+import { InspectorComponent } from './inspector.component';
+import { InspectorRoutingModule } from './inspector-routing.module';
 import { PersonRepresentativeAttachmentService } from 'src/app/services/CRUD/BASE/personrepresentativeattachment.service';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
@@ -53,12 +53,12 @@ import { Ng2TableModule } from 'ng2-table/ng2-table';
     CKEditorModule,
     NgxBarcodeModule,
     AgmCoreModule.forRoot({apiKey: environment.gmapapiKey}),
-    CoordinadorRoutingModule,
+    InspectorRoutingModule,
     NgxQRCodeModule,
     NgbModule,
     Ng2TableModule,
     FormsModule],
-  declarations: [CoordinadorComponent],
+  declarations: [InspectorComponent],
   providers: [NgbModal,
     UserService,
     DinardapService,
@@ -96,4 +96,4 @@ import { Ng2TableModule } from 'ng2-table/ng2-table';
     SystemNameService,
     RucService]
 })
-export class CoordinadorModule {}
+export class InspectorModule {}

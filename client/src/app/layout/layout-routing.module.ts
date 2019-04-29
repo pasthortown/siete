@@ -191,6 +191,18 @@ const routes: Routes = [
             path: 'complementary_service_food_type',
             loadChildren: './CRUD/ALOJAMIENTO/ComplementaryServiceFoodType/complementaryservicefoodtype.module#ComplementaryServiceFoodTypeModule'
          },
+         {
+            path: 'approval_register_alojamiento',
+            loadChildren: './CRUD/ALOJAMIENTO/Approval/approval.module#ApprovalModule'
+         },
+         {
+            path: 'approval_state_register_alojamiento',
+            loadChildren: './CRUD/ALOJAMIENTO/ApprovalState/approvalstate.module#ApprovalStateModule'
+         },
+         {
+            path: 'inspection_assigment',
+            loadChildren: './CRUD/ALOJAMIENTO/InspectionAssigment/inspectionassigment.module#InspectionAssigmentModule'
+         },
 
          //AUTH
          {
@@ -264,6 +276,10 @@ const routes: Routes = [
          {
             path: 'coordinador',
             loadChildren: './INTERNO/coordinador/coordinador.module#CoordinadorModule'
+         },
+         {
+            path: 'inspector',
+            loadChildren: './INTERNO/inspector/inspector.module#InspectorModule'
          },
          {
             path: 'interno-account-admin',
