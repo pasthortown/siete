@@ -73,7 +73,7 @@ export class AccountAdminComponent implements OnInit {
       this.toastr.errorToastr('Debe seleccionar un registro.', 'Error');
       return;
    }
-   this.userDataService.delete_account_by_rol(this.account_rucSelected.id).then( r => {
+   this.userDataService.delete_account_by_rol(this.account_rucSelected.id, 2).then( r => {
       this.toastr.successToastr('Registro Borrado satisfactoriamente.', 'Borrar');
       this.getAccountRucs();
    }).catch( e => console.log(e) );
@@ -87,12 +87,12 @@ export class AccountAdminComponent implements OnInit {
     this.modalService.open(content, { centered: true , size: 'lg' }).result.then(( response => {
        if ( response === 'Guardar click' ) {
           if (typeof this.account_rucSelected.id === 'undefined') {
-             this.userDataService.create_account_by_rol(this.account_rucSelected).then( r => {
+             this.userDataService.create_account_by_rol(this.account_rucSelected, 2).then( r => {
                this.toastr.successToastr('Datos guardados satisfactoriamente.', 'Nuevo');
                this.refresh();
               }).catch( e => { console.log(e); });
           } else {
-            this.userDataService.update_account_by_rol(this.account_rucSelected).then( r => {
+            this.userDataService.update_account_by_rol(this.account_rucSelected, 2).then( r => {
               this.toastr.successToastr('Registro actualizado satisfactoriamente.', 'Actualizar');
               this.refresh();
             }).catch( e => console.log(e) );

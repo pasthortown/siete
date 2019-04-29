@@ -318,8 +318,10 @@ class UserController extends Controller
 
     function createAccountByRol(Request $data) {
       $result = $data->json()->all();
-      $email = $result['email'];
-      $name = $result['name'];
+      $user = $result['user'];
+      $email = $user['email'];
+      $name = $user['name'];
+      $account_rol_id = $result['account_rol_id'];
       $new_password = str_random(10);
       try{
          DB::beginTransaction();
@@ -330,10 +332,10 @@ class UserController extends Controller
          } else {
             $user->id = 1;
          }
-         $user->name = $result['name'];
+         $user->name = $name;
          $user->email = $email;
-         $user->identification = $result['identification'];
-         $user->ruc = $result['ruc'];
+         $user->identification = $result['user']['identification'];
+         $user->ruc = ($account_rol_id == 2) ? $result['user']['ruc'] : '';
          $user->password = Crypt::encrypt($new_password);
          $user->api_token = str_random(64);
          $user->save();
@@ -344,11 +346,14 @@ class UserController extends Controller
          } else {
             $accountrolassigment->id = 1;
          }
-         $accountrolassigment->account_rol_id = 2;
+         $accountrolassigment->account_rol_id = $account_rol_id;
          $accountrolassigment->user_id = $user->id;
          $accountrolassigment->save();
          DB::commit();
-         $message = "Para administrar el RUC " . $result['ruc'] . ", Tu nueva contraseña es " . $new_password;
+         $message = "Tu nueva contraseña es " . $new_password;
+         if($account_rol_id == 2) {
+            $message = "Para administrar el RUC " . $result['user']['ruc'] . ", Tu nueva contraseña es " . $new_password;
+         }
          $subject = "Te damos la bienvenida a " . env('MAIL_FROM_NAME');
          return $this->send_mail($email, $name, $subject, $message, env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME'));
       } catch (Exception $e) {
@@ -358,7 +363,8 @@ class UserController extends Controller
 
     function deleteAccountByRol(Request $data) {
       $user_id = $data['user_id'];
-      $account_rol_assigment = AccountRolAssigment::where('account_rol_id', 2)->where('user_id', $user_id)->first();
+      $account_rol_id = $data['account_rol_id'];
+      $account_rol_assigment = AccountRolAssigment::where('account_rol_id', $account_rol_id)->where('user_id', $user_id)->first();
       AccountRolAssigment::destroy($account_rol_assigment->id);
       $account_rol_assigment = AccountRolAssigment::where('user_id', $user_id)->first();
       if(!$account_rol_assigment){
@@ -369,18 +375,22 @@ class UserController extends Controller
 
     function updateAccountByRol(Request $data) {
       $result = $data->json()->all();
-      $email = $result['email'];
-      $name = $result['name'];
+      $email = $result['user']['email'];
+      $name = $result['user']['name'];
+      $account_rol_id = $result['account_rol_id'];
+      $message = "Tu nueva contraseña es " . $new_password;
+      if($account_rol_id == 2) {
+         $message = "Para administrar el RUC " . $result['user']['ruc'] . ", Tu nueva contraseña es " . $new_password;
+      }
       $new_password = str_random(10);
-      $message = "Para administrar el RUC " . $result['ruc'] . ", Tu nueva contraseña es " . $new_password;
       $subject = "Cambiamos tus datos " . env('MAIL_FROM_NAME');
       try{
          DB::beginTransaction();
-         $user = User::where('id', $result['id'])->update([
-            'name'=>$result['name'],
-            'email'=>$result['email'],
-            'identification'=>$result['identification'],
-            'ruc'=>$result['ruc'],
+         $user = User::where('id', $result['user']['id'])->update([
+            'name'=>$name,
+            'email'=>$email,
+            'identification'=>$result['user']['identification'],
+            'ruc'=>($account_rol_id == 2) ? $result['user']['ruc'] : '',
             'password'=>Crypt::encrypt($new_password),
             'api_token'=>str_random(64),
          ]);

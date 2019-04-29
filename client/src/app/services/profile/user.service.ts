@@ -64,22 +64,24 @@ export class UserService {
       }).catch( error => { this.handledError(error.json());  });
    }
 
-   create_account_by_rol(user: User): Promise<any> {
-      return this.http.post(this.url + 'create_account_by_rol', JSON.stringify(user), this.options).toPromise()
+   create_account_by_rol(user: User, account_rol_id: number): Promise<any> {
+      const data = {user: user, account_rol_id: account_rol_id}; 
+      return this.http.post(this.url + 'create_account_by_rol', JSON.stringify(data), this.options).toPromise()
       .then( r => {
          return r.json();
       }).catch( error => { this.handledError(error.json()); });
    }
 
-   update_account_by_rol(user: User): Promise<any> {
-      return this.http.put(this.url + 'update_account_by_rol', JSON.stringify(user), this.options).toPromise()
+   update_account_by_rol(user: User, account_rol_id: number): Promise<any> {
+      const data = {user: user, account_rol_id: account_rol_id};
+      return this.http.put(this.url + 'update_account_by_rol', JSON.stringify(data), this.options).toPromise()
       .then( r => {
          return r.json();
       }).catch( error => { this.handledError(error.json()); });
    }
 
-   delete_account_by_rol(user_id: number): Promise<any> {
-      return this.http.delete(this.url + 'delete_account_by_rol?user_id=' + user_id.toString(), this.options).toPromise()
+   delete_account_by_rol(user_id: number, account_rol_id: number): Promise<any> {
+      return this.http.delete(this.url + 'delete_account_by_rol?user_id=' + user_id.toString() + '&account_rol_id=' + account_rol_id.toString(), this.options).toPromise()
       .then( r => {
          return r.json();
       }).catch( error => { this.handledError(error.json()); });
