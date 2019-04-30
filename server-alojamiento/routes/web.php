@@ -204,4 +204,31 @@ $router->group(['middleware' => ['auth']], function () use ($router) {
    $router->put('/inspectionassigment', ['uses' => 'InspectionAssigmentController@put']);
    $router->delete('/inspectionassigment', ['uses' => 'InspectionAssigmentController@delete']);
    $router->post('/inspectionassigment/masive_load', ['uses' => 'InspectionAssigmentController@masiveLoad']);
+
+   //CRUD ApprovalStateAttachment
+   $router->post('/approvalstateattachment', ['uses' => 'ApprovalStateAttachmentController@post']);
+   $router->get('/approvalstateattachment', ['uses' => 'ApprovalStateAttachmentController@get']);
+   $router->get('/approvalstateattachment/paginate', ['uses' => 'ApprovalStateAttachmentController@paginate']);
+   $router->get('/approvalstateattachment/backup', ['uses' => 'ApprovalStateAttachmentController@backup']);
+   $router->put('/approvalstateattachment', ['uses' => 'ApprovalStateAttachmentController@put']);
+   $router->delete('/approvalstateattachment', ['uses' => 'ApprovalStateAttachmentController@delete']);
+   $router->post('/approvalstateattachment/masive_load', ['uses' => 'ApprovalStateAttachmentController@masiveLoad']);
+
+   //CRUD InspectorReport
+   $router->post('/inspectorreport', ['uses' => 'InspectorReportController@post']);
+   $router->get('/inspectorreport', ['uses' => 'InspectorReportController@get']);
+   $router->get('/inspectorreport/paginate', ['uses' => 'InspectorReportController@paginate']);
+   $router->get('/inspectorreport/backup', ['uses' => 'InspectorReportController@backup']);
+   $router->put('/inspectorreport', ['uses' => 'InspectorReportController@put']);
+   $router->delete('/inspectorreport', ['uses' => 'InspectorReportController@delete']);
+   $router->post('/inspectorreport/masive_load', ['uses' => 'InspectorReportController@masiveLoad']);
+
+   //CRUD InspectorReportAttachment
+   $router->post('/inspectorreportattachment', ['uses' => 'InspectorReportAttachmentController@post']);
+   $router->get('/inspectorreportattachment', ['uses' => 'InspectorReportAttachmentController@get']);
+   $router->get('/inspectorreportattachment/paginate', ['uses' => 'InspectorReportAttachmentController@paginate']);
+   $router->get('/inspectorreportattachment/backup', ['uses' => 'InspectorReportAttachmentController@backup']);
+   $router->put('/inspectorreportattachment', ['uses' => 'InspectorReportAttachmentController@put']);
+   $router->delete('/inspectorreportattachment', ['uses' => 'InspectorReportAttachmentController@delete']);
+   $router->post('/inspectorreportattachment/masive_load', ['uses' => 'InspectorReportAttachmentController@masiveLoad']);
 });

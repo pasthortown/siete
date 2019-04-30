@@ -203,6 +203,18 @@ const routes: Routes = [
             path: 'inspection_assigment',
             loadChildren: './CRUD/ALOJAMIENTO/InspectionAssigment/inspectionassigment.module#InspectionAssigmentModule'
          },
+         {
+            path: 'approval_state_attachment',
+            loadChildren: './CRUD/ALOJAMIENTO/ApprovalStateAttachment/approvalstateattachment.module#ApprovalStateAttachmentModule'
+         },
+         {
+            path: 'inspector_report',
+            loadChildren: './CRUD/ALOJAMIENTO/InspectorReport/inspectorreport.module#InspectorReportModule'
+         },
+         {
+            path: 'inspector_report_attachment',
+            loadChildren: './CRUD/ALOJAMIENTO/InspectorReportAttachment/inspectorreportattachment.module#InspectorReportAttachmentModule'
+         },
 
          //AUTH
          {
@@ -292,6 +304,10 @@ const routes: Routes = [
          {
             path: 'tecnico-financiero',
             loadChildren: './INTERNO/tecnico-financiero/tecnico-financiero.module#TecnicoFinancieroModule'
+         },
+         {
+            path: 'asignacion-financiero',
+            loadChildren: './INTERNO/asignacion-financiero/asignacion-financiero.module#AsignacionFinancieroModule'
          },
 
          // EXTERNO

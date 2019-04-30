@@ -29,4 +29,9 @@ class InspectionAssigment extends Model
        return $this->hasOne('App\Register');
     }
 
+    function InspectorReport()
+    {
+       return $this->belongsTo('App\InspectorReport');
+    }
+
 }

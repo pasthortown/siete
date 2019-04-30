@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ApprovalState extends Model
+class InspectorReport extends Model
 {
     /**
      * The attributes that are mass assignable.
@@ -12,7 +12,7 @@ class ApprovalState extends Model
      * @var array
      */
     protected $fillable = [
-       'value','date','notes','id_user',
+       'body','params',
     ];
 
     /**
@@ -24,14 +24,14 @@ class ApprovalState extends Model
        
     ];
 
-    function Approval()
+    function InspectionAssigment()
     {
-       return $this->hasOne('App\Approval');
+       return $this->hasOne('App\InspectionAssigment');
     }
 
-    function ApprovalStateAttachment()
+    function InspectorReportAttachment()
     {
-       return $this->belongsTo('App\ApprovalStateAttachment');
+       return $this->belongsTo('App\InspectorReportAttachment');
     }
 
 }
