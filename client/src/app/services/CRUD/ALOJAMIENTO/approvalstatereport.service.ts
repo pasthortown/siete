@@ -2,14 +2,14 @@ import { Injectable } from '@angular/core';
 import { Http, RequestOptions, Headers } from '@angular/http';
 import { Router } from '@angular/router';
 import { environment } from './../../../../environments/environment';
-import { InspectorReportAttachment } from './../../../models/ALOJAMIENTO/InspectorReportAttachment';
+import { ApprovalStateReport } from './../../../models/ALOJAMIENTO/ApprovalStateReport';
 
 @Injectable({
    providedIn: 'root'
 })
-export class InspectorReportAttachmentService {
+export class ApprovalStateReportService {
 
-   url = environment.api_alojamiento + 'inspectorreportattachment/';
+   url = environment.api_alojamiento + 'approvalstatereport/';
    options = new RequestOptions();
 
    constructor(private http: Http, private router: Router) {
@@ -51,15 +51,15 @@ export class InspectorReportAttachmentService {
       }).catch( error => { this.handledError(error.json()); });
    }
 
-   post(inspectorreportattachment: InspectorReportAttachment): Promise<any> {
-      return this.http.post(this.url, JSON.stringify(inspectorreportattachment), this.options).toPromise()
+   post(approvalstatereport: ApprovalStateReport): Promise<any> {
+      return this.http.post(this.url, JSON.stringify(approvalstatereport), this.options).toPromise()
       .then( r => {
          return r.json();
       }).catch( error => { this.handledError(error.json()); });
    }
 
-   put(inspectorreportattachment: InspectorReportAttachment): Promise<any> {
-      return this.http.put(this.url, JSON.stringify(inspectorreportattachment), this.options).toPromise()
+   put(approvalstatereport: ApprovalStateReport): Promise<any> {
+      return this.http.put(this.url, JSON.stringify(approvalstatereport), this.options).toPromise()
       .then( r => {
          return r.json();
       }).catch( error => { this.handledError(error.json()); });

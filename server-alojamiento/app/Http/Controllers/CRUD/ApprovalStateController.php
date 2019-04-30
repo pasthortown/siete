@@ -42,9 +42,10 @@ class ApprovalStateController extends Controller
              $approvalstate->id = 1;
           }
           $approvalstate->value = $result['value'];
-          $approvalstate->date = $result['date'];
+          $approvalstate->date_assigment = $result['date_assigment'];
           $approvalstate->notes = $result['notes'];
           $approvalstate->id_user = $result['id_user'];
+          $approvalstate->date_fullfill = $result['date_fullfill'];
           $approvalstate->approval_id = $result['approval_id'];
           $approvalstate->save();
           DB::commit();
@@ -61,9 +62,10 @@ class ApprovalStateController extends Controller
           $result = $data->json()->all();
           $approvalstate = ApprovalState::where('id',$result['id'])->update([
              'value'=>$result['value'],
-             'date'=>$result['date'],
+             'date_assigment'=>$result['date_assigment'],
              'notes'=>$result['notes'],
              'id_user'=>$result['id_user'],
+             'date_fullfill'=>$result['date_fullfill'],
              'approval_id'=>$result['approval_id'],
           ]);
           DB::commit();
@@ -102,18 +104,20 @@ class ApprovalStateController extends Controller
          if ($exist) {
            ApprovalState::where('id', $result['id'])->update([
              'value'=>$result['value'],
-             'date'=>$result['date'],
+             'date_assigment'=>$result['date_assigment'],
              'notes'=>$result['notes'],
              'id_user'=>$result['id_user'],
+             'date_fullfill'=>$result['date_fullfill'],
              'approval_id'=>$result['approval_id'],
            ]);
          } else {
           $approvalstate = new ApprovalState();
           $approvalstate->id = $result['id'];
           $approvalstate->value = $result['value'];
-          $approvalstate->date = $result['date'];
+          $approvalstate->date_assigment = $result['date_assigment'];
           $approvalstate->notes = $result['notes'];
           $approvalstate->id_user = $result['id_user'];
+          $approvalstate->date_fullfill = $result['date_fullfill'];
           $approvalstate->approval_id = $result['approval_id'];
           $approvalstate->save();
          }

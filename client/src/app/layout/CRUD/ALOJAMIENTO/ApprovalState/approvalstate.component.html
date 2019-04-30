@@ -32,18 +32,20 @@
             <tr>
                <th>Seleccionado</th>
                <th>value</th>
-               <th>date</th>
+               <th>date_assigment</th>
                <th>notes</th>
                <th>id_user</th>
+               <th>date_fullfill</th>
             </tr>
          </thead>
          <tbody>
             <tr *ngFor="let approval_state of approval_states" (click)="selectApprovalState(approval_state)">
                <td class="text-right"><span *ngIf="approval_stateSelected === approval_state" class="far fa-hand-point-right"></span></td>
                <td>{{approval_state.value}}</td>
-               <td>{{approval_state.date}}</td>
+               <td>{{approval_state.date_assigment}}</td>
                <td>{{approval_state.notes}}</td>
                <td>{{approval_state.id_user}}</td>
+               <td>{{approval_state.date_fullfill}}</td>
             </tr>
          </tbody>
       </table>
@@ -87,9 +89,9 @@
                </div>
             </div>
             <div class="form-group row">
-               <label for="date" class="col-4 col-form-label">date</label>
+               <label for="date_assigment" class="col-4 col-form-label">date_assigment</label>
                <div class="col-8">
-                  <input type="date" class="form-control" id="date" name="date" placeholder="date" [ngModel]="approval_stateSelected.date | date:'y-MM-dd'" (ngModelChange)="approval_stateSelected.date = $event">
+                  <input type="date" class="form-control" id="date_assigment" name="date_assigment" placeholder="dateAssigment" [ngModel]="approval_stateSelected.date_assigment | date:'y-MM-dd'" (ngModelChange)="approval_stateSelected.date_assigment = $event">
                </div>
             </div>
             <div class="form-group row">
@@ -102,6 +104,12 @@
                <label for="id_user" class="col-4 col-form-label">id_user</label>
                <div class="col-8">
                   <input type="number" class="form-control" id="id_user" name="id_user" placeholder="idUser" [(ngModel)]="approval_stateSelected.id_user">
+               </div>
+            </div>
+            <div class="form-group row">
+               <label for="date_fullfill" class="col-4 col-form-label">date_fullfill</label>
+               <div class="col-8">
+                  <input type="text" class="form-control" id="date_fullfill" name="date_fullfill" placeholder="dateFullfill" [(ngModel)]="approval_stateSelected.date_fullfill">
                </div>
             </div>
             <div class="form-group row">

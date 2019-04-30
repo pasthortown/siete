@@ -1,3 +1,4 @@
+import { ApprovalService } from './../../../services/CRUD/ALOJAMIENTO/approval.service';
 import { ApprovalState } from 'src/app/models/ALOJAMIENTO/ApprovalState';
 import { Approval } from 'src/app/models/ALOJAMIENTO/Approval';
 import { ConsultorService } from 'src/app/services/negocio/consultor.service';
@@ -83,7 +84,6 @@ import { AgreementService } from 'src/app/services/CRUD/BASE/agreement.service';
 import { EstablishmentPictureService } from 'src/app/services/CRUD/BASE/establishmentpicture.service';
 import { EstablishmentCertificationAttachmentService } from 'src/app/services/CRUD/BASE/establishmentcertificationattachment.service';
 import { RegisterService } from 'src/app/services/CRUD/ALOJAMIENTO/register.service';
-import { InspectionAssigment } from 'src/app/models/ALOJAMIENTO/InspectionAssigment';
 
 @Component({
   selector: 'app-registro',
@@ -97,11 +97,9 @@ export class CoordinadorComponent implements OnInit {
    inspectores: User[] = [];
    financieros: User[] = [];
    inspectorSelectedId: number = 0;
-   inspectionAssigment: InspectionAssigment = new InspectionAssigment();
    isAssigned = false;
-   registerApprovals: Approval[] = [];
-   registerApprovalStates: ApprovalState[] = [];
-   
+   registerApprovals: any[] = [];
+   inspectionApproval: Approval = new Approval();
    //RREGISTROS MINTUR
    registers_mintur = [];
    registerMinturSelected: any = null;
@@ -251,9 +249,10 @@ export class CoordinadorComponent implements OnInit {
   declarationItemsCategories: DeclarationItemCategory[] = [];
   declarationItems: DeclarationItem[] = [];
   maxYear: number = 2019;
-  idAprobalRegister: number = 0;
+  idRegister: number = 0;
 
   constructor(private toastr: ToastrManager,
+              private approvalDataService: ApprovalService,
               private consultorDataService: ConsultorService,
               private userDataService: UserService,
               private dinardapDataService: DinardapService,
@@ -294,14 +293,11 @@ export class CoordinadorComponent implements OnInit {
   }
 
   asignarInspector() {
-   this.inspectionAssigment.id_user_inspector = this.inspectorSelectedId;
-   this.inspectionAssigment.date_assigment = new Date();
    this.isAssigned = true;
   }
 
   desasignarInspector() {
      this.isAssigned = false;
-     this.inspectionAssigment = new InspectionAssigment();
      this.inspectorSelectedId = 0;
   }
 
@@ -662,10 +658,10 @@ export class CoordinadorComponent implements OnInit {
          this.selectRegisterMintur(element);
       }
    });
-   this.idAprobalRegister = event.row.registerId;
-   this.inspectionAssigment.register_id = event.row.registerId;
+   this.idRegister = event.row.registerId;
+   this.getApprovalStates();
    this.rows.forEach(row => {
-      if (this.idAprobalRegister == row.registerId) {
+      if (this.idRegister == row.registerId) {
          row.selected = '<div class="col-12 text-right"><span class="far fa-hand-point-right"></span></div>';
       } else {
          row.selected = '';
@@ -673,8 +669,24 @@ export class CoordinadorComponent implements OnInit {
    });
   }
 
+  getApprovalStates() {
+   /*this.approvalDataService.get_by_register_id(this.idRegister).then( r => {
+      this.registerApprovals = r;
+      this.registerApprovals.forEach(element => {
+         if (element.approval.name == 'Técnico de Registro y Control') {
+            this.inspectionApproval = new Approval();
+            this.inspectionApproval.id = element.approval.id;
+            this.inspectionApproval.name = element.approval.name;
+            this.inspectionApproval.approvalStates = 
+            this.inspectionApproval.id = element.approval.id;
+         }
+      });
+      console.log(r);
+   }).catch( e => { console.log(e); });*/
+  }
+
   aprobarTramite() {
-   alert(this.idAprobalRegister);
+   alert(this.idRegister);
   }
 
   negarTramite() {

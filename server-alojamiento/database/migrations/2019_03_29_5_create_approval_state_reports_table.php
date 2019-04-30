@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateInspectorReportsTable extends Migration
+class CreateApprovalStateReportsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,13 @@ class CreateInspectorReportsTable extends Migration
      */
     public function up()
     {
-       Schema::create('inspector_reports', function (Blueprint $table) {
+       Schema::create('approval_state_reports', function (Blueprint $table) {
           $table->increments('id');
           $table->timestamps();
           $table->longText('body')->nullable($value = true);
           $table->longText('params')->nullable($value = true);
-          $table->unsignedInteger('inspection_assigment_id');
-          $table->foreign('inspection_assigment_id')->references('id')->on('inspection_assigments')->onDelete('cascade');
+          $table->unsignedInteger('approval_state_id');
+          $table->foreign('approval_state_id')->references('id')->on('approval_states')->onDelete('cascade');
        });
     }
 
@@ -30,6 +30,6 @@ class CreateInspectorReportsTable extends Migration
      */
     public function down()
     {
-       Schema::dropIfExists('inspector_reports');
+       Schema::dropIfExists('approval_state_reports');
     }
 }

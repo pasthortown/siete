@@ -140,7 +140,6 @@ $router->group(['middleware' => ['auth']], function () use ($router) {
    $router->delete('/bedtype', ['uses' => 'BedTypeController@delete']);
    $router->post('/bedtype/masive_load', ['uses' => 'BedTypeController@masiveLoad']);
 
-
    //CRUD CapacityType
    $router->post('/capacitytype', ['uses' => 'CapacityTypeController@post']);
    $router->get('/capacitytype', ['uses' => 'CapacityTypeController@get']);
@@ -196,15 +195,6 @@ $router->group(['middleware' => ['auth']], function () use ($router) {
    $router->delete('/approvalstate', ['uses' => 'ApprovalStateController@delete']);
    $router->post('/approvalstate/masive_load', ['uses' => 'ApprovalStateController@masiveLoad']);
 
-   //CRUD InspectionAssigment
-   $router->post('/inspectionassigment', ['uses' => 'InspectionAssigmentController@post']);
-   $router->get('/inspectionassigment', ['uses' => 'InspectionAssigmentController@get']);
-   $router->get('/inspectionassigment/paginate', ['uses' => 'InspectionAssigmentController@paginate']);
-   $router->get('/inspectionassigment/backup', ['uses' => 'InspectionAssigmentController@backup']);
-   $router->put('/inspectionassigment', ['uses' => 'InspectionAssigmentController@put']);
-   $router->delete('/inspectionassigment', ['uses' => 'InspectionAssigmentController@delete']);
-   $router->post('/inspectionassigment/masive_load', ['uses' => 'InspectionAssigmentController@masiveLoad']);
-
    //CRUD ApprovalStateAttachment
    $router->post('/approvalstateattachment', ['uses' => 'ApprovalStateAttachmentController@post']);
    $router->get('/approvalstateattachment', ['uses' => 'ApprovalStateAttachmentController@get']);
@@ -214,21 +204,12 @@ $router->group(['middleware' => ['auth']], function () use ($router) {
    $router->delete('/approvalstateattachment', ['uses' => 'ApprovalStateAttachmentController@delete']);
    $router->post('/approvalstateattachment/masive_load', ['uses' => 'ApprovalStateAttachmentController@masiveLoad']);
 
-   //CRUD InspectorReport
-   $router->post('/inspectorreport', ['uses' => 'InspectorReportController@post']);
-   $router->get('/inspectorreport', ['uses' => 'InspectorReportController@get']);
-   $router->get('/inspectorreport/paginate', ['uses' => 'InspectorReportController@paginate']);
-   $router->get('/inspectorreport/backup', ['uses' => 'InspectorReportController@backup']);
-   $router->put('/inspectorreport', ['uses' => 'InspectorReportController@put']);
-   $router->delete('/inspectorreport', ['uses' => 'InspectorReportController@delete']);
-   $router->post('/inspectorreport/masive_load', ['uses' => 'InspectorReportController@masiveLoad']);
-
-   //CRUD InspectorReportAttachment
-   $router->post('/inspectorreportattachment', ['uses' => 'InspectorReportAttachmentController@post']);
-   $router->get('/inspectorreportattachment', ['uses' => 'InspectorReportAttachmentController@get']);
-   $router->get('/inspectorreportattachment/paginate', ['uses' => 'InspectorReportAttachmentController@paginate']);
-   $router->get('/inspectorreportattachment/backup', ['uses' => 'InspectorReportAttachmentController@backup']);
-   $router->put('/inspectorreportattachment', ['uses' => 'InspectorReportAttachmentController@put']);
-   $router->delete('/inspectorreportattachment', ['uses' => 'InspectorReportAttachmentController@delete']);
-   $router->post('/inspectorreportattachment/masive_load', ['uses' => 'InspectorReportAttachmentController@masiveLoad']);
+   //CRUD ApprovalStateReport
+   $router->post('/approvalstatereport', ['uses' => 'ApprovalStateReportController@post']);
+   $router->get('/approvalstatereport', ['uses' => 'ApprovalStateReportController@get']);
+   $router->get('/approvalstatereport/paginate', ['uses' => 'ApprovalStateReportController@paginate']);
+   $router->get('/approvalstatereport/backup', ['uses' => 'ApprovalStateReportController@backup']);
+   $router->put('/approvalstatereport', ['uses' => 'ApprovalStateReportController@put']);
+   $router->delete('/approvalstatereport', ['uses' => 'ApprovalStateReportController@delete']);
+   $router->post('/approvalstatereport/masive_load', ['uses' => 'ApprovalStateReportController@masiveLoad']);   
 });

@@ -200,20 +200,12 @@ const routes: Routes = [
             loadChildren: './CRUD/ALOJAMIENTO/ApprovalState/approvalstate.module#ApprovalStateModule'
          },
          {
-            path: 'inspection_assigment',
-            loadChildren: './CRUD/ALOJAMIENTO/InspectionAssigment/inspectionassigment.module#InspectionAssigmentModule'
-         },
-         {
-            path: 'approval_state_attachment',
+            path: 'approval_state_attachment_register_alojamiento',
             loadChildren: './CRUD/ALOJAMIENTO/ApprovalStateAttachment/approvalstateattachment.module#ApprovalStateAttachmentModule'
          },
          {
-            path: 'inspector_report',
-            loadChildren: './CRUD/ALOJAMIENTO/InspectorReport/inspectorreport.module#InspectorReportModule'
-         },
-         {
-            path: 'inspector_report_attachment',
-            loadChildren: './CRUD/ALOJAMIENTO/InspectorReportAttachment/inspectorreportattachment.module#InspectorReportAttachmentModule'
+            path: 'approval_state_report_register_alojamiento',
+            loadChildren: './CRUD/ALOJAMIENTO/ApprovalStateReport/approvalstatereport.module#ApprovalStateReportModule'
          },
 
          //AUTH

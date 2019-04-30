@@ -12,7 +12,7 @@ class ApprovalState extends Model
      * @var array
      */
     protected $fillable = [
-       'value','date','notes','id_user',
+       'value','date_assigment','notes','id_user','date_fullfill',
     ];
 
     /**
@@ -32,6 +32,11 @@ class ApprovalState extends Model
     function ApprovalStateAttachment()
     {
        return $this->belongsTo('App\ApprovalStateAttachment');
+    }
+
+    function ApprovalStateReport()
+    {
+       return $this->belongsTo('App\ApprovalStateReport');
     }
 
 }
