@@ -64,6 +64,13 @@ export class UserService {
       }).catch( error => { this.handledError(error.json());  });
    }
 
+   get_by_rol(filter: String) {
+      return this.http.get(this.url + 'get_by_rol?filter=' + filter, this.options).toPromise()
+      .then( r => {
+         return r.json();
+      }).catch( error => { this.handledError(error.json());  });
+   }
+
    create_account_by_rol(user: User, account_rol_id: number): Promise<any> {
       const data = {user: user, account_rol_id: account_rol_id}; 
       return this.http.post(this.url + 'create_account_by_rol', JSON.stringify(data), this.options).toPromise()

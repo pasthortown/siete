@@ -316,6 +316,11 @@ class UserController extends Controller
       return response()->json(AccountRolAssigment::where('account_rol_id', $rol_id)->select('users.id', 'users.name', 'users.email', 'users.identification', 'users.ruc')->join('users', 'users.id', '=', 'account_rol_assigments.user_id')->where('users.ruc', 'ilike', '%'.$ruc.'%')->paginate($size),200);
     }
 
+    function getByRol(Request $data) {
+      $rol_id = $data['filter'];
+      return response()->json(AccountRolAssigment::where('account_rol_id', $rol_id)->join('users', 'users.id', '=', 'account_rol_assigments.user_id')->select('users.id', 'users.name', 'users.email', 'users.identification')->orderby('users.name', 'ASC')->get(),200);
+    }
+
     function createAccountByRol(Request $data) {
       $result = $data->json()->all();
       $user = $result['user'];

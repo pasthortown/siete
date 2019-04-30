@@ -48,6 +48,7 @@ $router->group(['middleware' => ['auth']], function () use ($router) {
    $router->put('/user/update_account_by_rol', ['uses' => 'UserController@updateAccountByRol']);
    $router->put('/user/update_user_establishment', ['uses' => 'UserController@update_user_establishment']);
    $router->get('/user/filtered_by_rol', ['uses' => 'UserController@filteredByRol']);
+   $router->get('/user/get_by_rol', ['uses' => 'UserController@getByRol']);
    $router->delete('/user/delete_account_by_rol', ['uses' => 'UserController@deleteAccountByRol']);
    
     //CRUD AccountRol

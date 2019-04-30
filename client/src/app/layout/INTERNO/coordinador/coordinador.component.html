@@ -47,14 +47,73 @@
   </div>
 </div>
 <div class="row" *ngIf="mostrarDataRegisterMintur">
-  <label class="col-12 col-form-label">Observaciones</label>
+  <div class="col-12">
+    <label class="col-form-label">Inspector Asignado</label>
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <button [disabled]="inspectorSelectedId == 0" type="button" title="Asignar" class="btn btn-success" (click)="asignarInspector()"><span class="fas fa-user-plus"></span></button>
+        <button [disabled]="!isAssigned" type="button" title="Remover" class="btn btn-danger" (click)="desasignarInspector()"><span class="fas fa-user-minus"></span></button>
+      </div>
+      <select [disabled]="isAssigned" class="form-control" id="idInspector" name="idInspector" [(ngModel)]="inspectorSelectedId">
+        <option value="0" selected>Seleccione...</option>
+        <option *ngFor="let inspector of inspectores" value="inspector.id">{{inspector.name}} - {{inspector.email}}</option>
+      </select>
+    </div>
+  </div>
+  <div class="col-12">
+    <div class="col-12" *ngIf="true">
+      <span class="badge badge-info">Revisión de Requisitos</span>  
+    </div>
+    <div class="col-12" *ngIf="true">
+      <span class="badge badge-info">Informe</span>
+    </div>
+    <div class="col-12" *ngIf="isAssigned">
+      <small><strong>Fecha de Asignación:</strong>&nbsp;<i>{{inspectionAssigment.date_assigment | date:'y-MM-dd'}}</i></small>
+    </div>
+    <div class="col-12" *ngIf="true">
+      <small><strong>Fecha de Inspección:</strong>&nbsp;<i>2019-05-04</i></small>
+    </div>
+    <div class="col-12" *ngIf="true">
+      <small><strong>Estado:</strong>&nbsp;<span class="badge badge-success">Aprobado</span></small>
+    </div>
+  </div>
+  <div class="col-12">
+      <label class="col-form-label">Técnico Financiero Asignado</label>
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <button type="button" title="Asignar" class="btn btn-success"><span class="fas fa-user-plus"></span></button>
+          <button type="button" title="Remover" class="btn btn-danger"><span class="fas fa-user-minus"></span></button>
+        </div>
+        <select class="form-control" id="idFinancial" name="idFinancial">
+          <option value="0" selected>Seleccione...</option>
+          <option *ngFor="let financiero of financieros" value="financiero.id">{{financiero.name}} - {{financiero.email}}</option>
+        </select>
+      </div>
+  </div>
+  <div class="col-12">
+    <div class="col-12" *ngIf="true">
+      <span class="badge badge-info">Revisión de Requisitos</span>  
+    </div>
+    <div class="col-12" *ngIf="true">
+      <span class="badge badge-info">Informe</span>
+    </div>
+    <div class="col-12" *ngIf="true">
+      <small><strong>Fecha de Inspección:</strong>&nbsp;<i>2019-05-04</i></small>
+    </div>
+    <div class="col-12" *ngIf="true">
+      <small><strong>Estado:</strong>&nbsp;<span class="badge badge-success">Aprobado</span></small>
+    </div>
+  </div>
   <div class="col-12 mt-3 mb-2">
-    <ck-editor id="notes" name="notes" skin="moono-lisa"></ck-editor>
+      <label class="col-form-label">Observaciones</label>
+      <ck-editor id="notes" name="notes" skin="moono-lisa"></ck-editor>
   </div>
   <div class="col-12 text-center mb-3">
     <button type="button" class="btn btn-success" title="Aprobar Trámite" (click)="aprobarTramite()"><i class="fas fa-check-square "></i> Aprobar Trámite</button>
     <button type="button" class="btn btn-danger ml-2" title="Negar Trámite" (click)="negarTramite()"><i class="fas fa-minus-square"></i> Negar Trámite</button>
   </div>
+</div>
+<div class="row" *ngIf="mostrarDataRegisterMintur">  
   <div class="col-12">
     <div class="row mt-5">
       <div class="col-12 text-left">

@@ -1,3 +1,5 @@
+import { ApprovalState } from 'src/app/models/ALOJAMIENTO/ApprovalState';
+import { Approval } from 'src/app/models/ALOJAMIENTO/Approval';
 import { ConsultorService } from 'src/app/services/negocio/consultor.service';
 import { DeclarationService } from 'src/app/services/CRUD/FINANCIERO/declaration.service';
 import { DeclarationItemValue } from 'src/app/models/FINANCIERO/DeclarationItemValue';
@@ -81,6 +83,7 @@ import { AgreementService } from 'src/app/services/CRUD/BASE/agreement.service';
 import { EstablishmentPictureService } from 'src/app/services/CRUD/BASE/establishmentpicture.service';
 import { EstablishmentCertificationAttachmentService } from 'src/app/services/CRUD/BASE/establishmentcertificationattachment.service';
 import { RegisterService } from 'src/app/services/CRUD/ALOJAMIENTO/register.service';
+import { InspectionAssigment } from 'src/app/models/ALOJAMIENTO/InspectionAssigment';
 
 @Component({
   selector: 'app-registro',
@@ -90,6 +93,15 @@ import { RegisterService } from 'src/app/services/CRUD/ALOJAMIENTO/register.serv
 export class CoordinadorComponent implements OnInit {
    @ViewChild('fotoFachadaInput') fotoFachadaInput;
    @ViewChild('EstablishmentCertificationAttachedFile') EstablishmentCertificationAttachedFile;
+   //ASIGNACIONES
+   inspectores: User[] = [];
+   financieros: User[] = [];
+   inspectorSelectedId: number = 0;
+   inspectionAssigment: InspectionAssigment = new InspectionAssigment();
+   isAssigned = false;
+   registerApprovals: Approval[] = [];
+   registerApprovalStates: ApprovalState[] = [];
+   
    //RREGISTROS MINTUR
    registers_mintur = [];
    registerMinturSelected: any = null;
@@ -279,6 +291,18 @@ export class CoordinadorComponent implements OnInit {
   ngOnInit() {
    this.refresh();
    this.getUser();
+  }
+
+  asignarInspector() {
+   this.inspectionAssigment.id_user_inspector = this.inspectorSelectedId;
+   this.inspectionAssigment.date_assigment = new Date();
+   this.isAssigned = true;
+  }
+
+  desasignarInspector() {
+     this.isAssigned = false;
+     this.inspectionAssigment = new InspectionAssigment();
+     this.inspectorSelectedId = 0;
   }
 
   onChangeTableEstablishment(config: any, page: any = {page: this.currentPageEstablishment, itemsPerPage: this.recordsByPageEstablishment}): any {
@@ -639,6 +663,7 @@ export class CoordinadorComponent implements OnInit {
       }
    });
    this.idAprobalRegister = event.row.registerId;
+   this.inspectionAssigment.register_id = event.row.registerId;
    this.rows.forEach(row => {
       if (this.idAprobalRegister == row.registerId) {
          row.selected = '<div class="col-12 text-right"><span class="far fa-hand-point-right"></span></div>';
@@ -732,6 +757,8 @@ export class CoordinadorComponent implements OnInit {
     this.registerMinturSelected = new Register();
     this.mostrarDataRegisterMintur = false;
     this.ruc_registro_selected = new RegistroDataCarrier();
+    this.getInspectores();
+    this.getFinancieros();
     this.getTramiteStates();
     this.getDeclarationCategories();
     this.getDeclarationItems();
@@ -753,6 +780,20 @@ export class CoordinadorComponent implements OnInit {
     this.getClasifications();
     this.getEstablishmentCertificationTypesCategories();
     this.getComplementaryServiceTypeCategories();
+  }
+
+  getInspectores() {
+   this.inspectores = [];
+   this.userDataService.get_by_rol('5').then( r => {
+      this.inspectores = r as User[];
+   }).catch( e => {console.log(e); });
+  }
+   
+  getFinancieros() {
+   this.financieros = [];
+   this.userDataService.get_by_rol('6').then( r => {
+      this.financieros = r as User[];
+   }).catch( e => {console.log(e); });
   }
 
   getDeclarationCategories() {

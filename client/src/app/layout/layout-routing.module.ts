@@ -282,10 +282,6 @@ const routes: Routes = [
             loadChildren: './INTERNO/registro/registro.module#RegistroModule'
          },
          {
-            path: 'agendamiento-inspecciones',
-            loadChildren: './INTERNO/agendamiento-inspecciones/agendamiento-inspecciones.module#AgendamientoInspeccionesModule'
-         },
-         {
             path: 'coordinador',
             loadChildren: './INTERNO/coordinador/coordinador.module#CoordinadorModule'
          },
@@ -302,12 +298,12 @@ const routes: Routes = [
             loadChildren: './INTERNO/inner-account-admin/inner-account-admin.module#InnerAccountAdminModule'
          },
          {
-            path: 'tecnico-financiero',
-            loadChildren: './INTERNO/tecnico-financiero/tecnico-financiero.module#TecnicoFinancieroModule'
+            path: 'inner-financial-account-admin',
+            loadChildren: './INTERNO/inner-financial-account-admin/inner-financial-account-admin.module#InnerFinancialAccountAdminModule'
          },
          {
-            path: 'asignacion-financiero',
-            loadChildren: './INTERNO/asignacion-financiero/asignacion-financiero.module#AsignacionFinancieroModule'
+            path: 'tecnico-financiero',
+            loadChildren: './INTERNO/tecnico-financiero/tecnico-financiero.module#TecnicoFinancieroModule'
          },
 
          // EXTERNO
