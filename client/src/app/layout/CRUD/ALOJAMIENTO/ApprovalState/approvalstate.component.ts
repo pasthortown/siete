@@ -4,6 +4,9 @@ import { ToastrManager } from 'ng6-toastr-notifications';
 import { saveAs } from 'file-saver/FileSaver';
 import { ApprovalStateService } from './../../../../services/CRUD/ALOJAMIENTO/approvalstate.service';
 import { ApprovalState } from './../../../../models/ALOJAMIENTO/ApprovalState';
+import { RegisterService } from './../../../../services/CRUD/ALOJAMIENTO/register.service';
+import { Register } from './../../../../models/ALOJAMIENTO/Register';
+
 import { ApprovalService } from './../../../../services/CRUD/ALOJAMIENTO/approval.service';
 import { Approval } from './../../../../models/ALOJAMIENTO/Approval';
 
@@ -21,20 +24,30 @@ export class ApprovalStateComponent implements OnInit {
    lastPage = 1;
    showDialog = false;
    recordsByPage = 5;
+   registers: Register[] = [];
    approvals: Approval[] = [];
    constructor(
                private modalService: NgbModal,
                private toastr: ToastrManager,
+               private registerDataService: RegisterService,
                private approvalDataService: ApprovalService,
                private approval_stateDataService: ApprovalStateService) {}
 
    ngOnInit() {
       this.goToPage(1);
+      this.getRegister();
       this.getApproval();
    }
 
    selectApprovalState(approval_state: ApprovalState) {
       this.approval_stateSelected = approval_state;
+   }
+
+   getRegister() {
+      this.registers = [];
+      this.registerDataService.get().then( r => {
+         this.registers = r as Register[];
+      }).catch( e => console.log(e) );
    }
 
    getApproval() {
@@ -56,6 +69,7 @@ export class ApprovalStateComponent implements OnInit {
    getApprovalStates() {
       this.approval_states = [];
       this.approval_stateSelected = new ApprovalState();
+      this.approval_stateSelected.register_id = 0;
       this.approval_stateSelected.approval_id = 0;
       this.approval_stateDataService.get_paginate(this.recordsByPage, this.currentPage).then( r => {
          this.approval_states = r.data as ApprovalState[];
@@ -65,6 +79,7 @@ export class ApprovalStateComponent implements OnInit {
 
    newApprovalState(content) {
       this.approval_stateSelected = new ApprovalState();
+      this.approval_stateSelected.register_id = 0;
       this.approval_stateSelected.approval_id = 0;
       this.openDialog(content);
    }
@@ -100,9 +115,9 @@ export class ApprovalStateComponent implements OnInit {
    toCSV() {
       this.approval_stateDataService.get().then( r => {
          const backupData = r as ApprovalState[];
-         let output = 'id;value;date_assigment;notes;id_user;date_fullfill;approval_id\n';
+         let output = 'id;value;date_assigment;notes;id_user;date_fullfill;register_id;approval_id\n';
          backupData.forEach(element => {
-            output += element.id; + element.value + ';' + element.date_assigment + ';' + element.notes + ';' + element.id_user + ';' + element.date_fullfill + ';' + element.approval_id + '\n';
+            output += element.id; + element.value + ';' + element.date_assigment + ';' + element.notes + ';' + element.id_user + ';' + element.date_fullfill + ';' + element.register_id + ';' + element.approval_id + '\n';
          });
          const blob = new Blob([output], { type: 'text/plain' });
          const fecha = new Date();

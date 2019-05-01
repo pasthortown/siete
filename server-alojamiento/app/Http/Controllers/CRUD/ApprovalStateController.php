@@ -23,6 +23,12 @@ class ApprovalStateController extends Controller
        }
     }
 
+    function byRegisterId(Request $data)
+    {
+       $register_id = $data['register_id'];
+       return response()->json(ApprovalState::where('register_id', $register_id)->get(),200);
+    }
+    
     function paginate(Request $data)
     {
        $size = $data['size'];
@@ -46,6 +52,7 @@ class ApprovalStateController extends Controller
           $approvalstate->notes = $result['notes'];
           $approvalstate->id_user = $result['id_user'];
           $approvalstate->date_fullfill = $result['date_fullfill'];
+          $approvalstate->register_id = $result['register_id'];
           $approvalstate->approval_id = $result['approval_id'];
           $approvalstate->save();
           DB::commit();
@@ -66,6 +73,7 @@ class ApprovalStateController extends Controller
              'notes'=>$result['notes'],
              'id_user'=>$result['id_user'],
              'date_fullfill'=>$result['date_fullfill'],
+             'register_id'=>$result['register_id'],
              'approval_id'=>$result['approval_id'],
           ]);
           DB::commit();
@@ -108,6 +116,7 @@ class ApprovalStateController extends Controller
              'notes'=>$result['notes'],
              'id_user'=>$result['id_user'],
              'date_fullfill'=>$result['date_fullfill'],
+             'register_id'=>$result['register_id'],
              'approval_id'=>$result['approval_id'],
            ]);
          } else {
@@ -118,6 +127,7 @@ class ApprovalStateController extends Controller
           $approvalstate->notes = $result['notes'];
           $approvalstate->id_user = $result['id_user'];
           $approvalstate->date_fullfill = $result['date_fullfill'];
+          $approvalstate->register_id = $result['register_id'];
           $approvalstate->approval_id = $result['approval_id'];
           $approvalstate->save();
          }

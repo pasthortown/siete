@@ -1,4 +1,4 @@
-import { ApprovalService } from './../../../services/CRUD/ALOJAMIENTO/approval.service';
+import { ApprovalStateService } from './../../../services/CRUD/ALOJAMIENTO/approvalstate.service';
 import { ApprovalState } from 'src/app/models/ALOJAMIENTO/ApprovalState';
 import { Approval } from 'src/app/models/ALOJAMIENTO/Approval';
 import { ConsultorService } from 'src/app/services/negocio/consultor.service';
@@ -97,9 +97,15 @@ export class CoordinadorComponent implements OnInit {
    inspectores: User[] = [];
    financieros: User[] = [];
    inspectorSelectedId: number = 0;
+   registerApprovals: ApprovalState[] = [];
+   registerApprovalCoordinador: ApprovalState = new ApprovalState();
+   registerApprovalInspector: ApprovalState = new ApprovalState();
+   registerApprovalFinanciero: ApprovalState = new ApprovalState();
    isAssigned = false;
-   registerApprovals: any[] = [];
-   inspectionApproval: Approval = new Approval();
+   hasIspectionDate  = false;
+   hasInform  = false;
+   hasRequisites = false;
+   
    //RREGISTROS MINTUR
    registers_mintur = [];
    registerMinturSelected: any = null;
@@ -252,7 +258,7 @@ export class CoordinadorComponent implements OnInit {
   idRegister: number = 0;
 
   constructor(private toastr: ToastrManager,
-              private approvalDataService: ApprovalService,
+              private approvalStateDataService: ApprovalStateService,
               private consultorDataService: ConsultorService,
               private userDataService: UserService,
               private dinardapDataService: DinardapService,
@@ -294,11 +300,21 @@ export class CoordinadorComponent implements OnInit {
 
   asignarInspector() {
    this.isAssigned = true;
+   this.registerApprovalInspector.id_user = this.inspectorSelectedId;
+   this.registerApprovalInspector.date_assigment = new Date();
+   this.approvalStateDataService.put(this.registerApprovalInspector).then( r => {
+      this.toastr.successToastr('Inspector Asignado Satisfactoriamente.', 'Asignación de Inspector');
+   }).catch( e => { console.log(e); });
   }
 
   desasignarInspector() {
      this.isAssigned = false;
      this.inspectorSelectedId = 0;
+     this.registerApprovalInspector.id_user = 0;
+     this.registerApprovalInspector.date_assigment = null;
+     this.approvalStateDataService.put(this.registerApprovalInspector).then( r => {
+        this.toastr.warningToastr('Inspector Removido Satisfactoriamente.', 'Asignación de Inspector');
+     }).catch( e => { console.log(e); });
   }
 
   onChangeTableEstablishment(config: any, page: any = {page: this.currentPageEstablishment, itemsPerPage: this.recordsByPageEstablishment}): any {
@@ -621,7 +637,7 @@ export class CoordinadorComponent implements OnInit {
   getRegistersMintur() {
    this.registers_mintur = [];
    this.registerMinturSelected = new Register();
-   this.consultorDataService.get_registers(1,2).then( r => {
+   this.consultorDataService.get_registers(1).then( r => {
       this.registers_mintur = r;
       this.buildDataTable();
    }).catch( e => console.log(e) );
@@ -630,20 +646,38 @@ export class CoordinadorComponent implements OnInit {
   buildDataTable() {
      this.columns = [
         {title: 'Seleccionado', name: 'selected'},
+        {title: 'Días en Espera', name: 'date_assigment_alert'},
         {title: 'Número de RUC', name: 'number', filtering: {filterString: '', placeholder: 'Número de RUC'}},
         {title: 'Establecimiento', name: 'establishment'},
         {title: 'Dirección', name: 'address'},
         {title: 'Categoría', name: 'category'},
         {title: 'Estado', name: 'status'},
+        {title: 'Fecha de Solicitud', name: 'updated_at'},
      ];
      const data = [];
      this.registers_mintur.forEach(item => {
+         let date_assigment_alert = '';
+         const date1 = new Date();
+         const date2 = new Date(item.register.updated_at);
+         const diffTime = Math.abs(date2.getTime() - date1.getTime());
+         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+         if (diffDays < 7) {
+            date_assigment_alert = '<div class="col-12 text-center"><span class="badge badge-success">&nbsp;' + diffDays.toString() + '&nbsp;</span></div>';
+         }
+         if (diffDays >= 7 && diffDays <= 10) {
+            date_assigment_alert = '<div class="col-12 text-center"><span class="badge badge-warning">&nbsp;' + diffDays.toString() + '&nbsp;</span></div>';
+         }
+         if (diffDays > 10) {
+            date_assigment_alert = '<div class="col-12 text-center"><span class="badge badge-danger">&nbsp;' + diffDays.toString() + '&nbsp;</span></div>';
+         }
          data.push({
             selected: '',
+            date_assigment_alert: date_assigment_alert,
             number: item.ruc.number,
             registerId: item.register.id,
             establishment: item.establishment.commercially_known_name,
             address: item.establishment.address,
+            updated_at: item.register.updated_at,
             category: this.getRegisterCategory(item.register.register_type_id),
             status: this.getRegisterState(item.states.state_id),
          });
@@ -669,20 +703,53 @@ export class CoordinadorComponent implements OnInit {
    });
   }
 
+  checkIfIsAssigned() {
+   if (this.inspectorSelectedId !== 0) {
+      this.isAssigned = true;
+   } else {
+      this.isAssigned = false;
+   }
+  }
+
+  checkIfHasInform() {
+
+  }
+
+  checkIfHasRequisites() {
+
+  }
+
+  checkIfHasIspectionDate() {
+
+  }
+
   getApprovalStates() {
-   /*this.approvalDataService.get_by_register_id(this.idRegister).then( r => {
+   this.isAssigned = false;
+   this.hasIspectionDate  = false;
+   this.hasInform  = false;
+   this.hasRequisites = false;
+   this.registerApprovalInspector = new ApprovalState();
+   this.registerApprovalFinanciero = new ApprovalState();
+   this.registerApprovalCoordinador = new ApprovalState();
+   this.approvalStateDataService.get_by_register_id(this.idRegister).then( r => {
       this.registerApprovals = r;
       this.registerApprovals.forEach(element => {
-         if (element.approval.name == 'Técnico de Registro y Control') {
-            this.inspectionApproval = new Approval();
-            this.inspectionApproval.id = element.approval.id;
-            this.inspectionApproval.name = element.approval.name;
-            this.inspectionApproval.approvalStates = 
-            this.inspectionApproval.id = element.approval.id;
+         if(element.approval_id == 1){
+            this.registerApprovalInspector = element;
+            this.inspectorSelectedId = this.registerApprovalInspector.id_user;
+            this.checkIfIsAssigned();
+            this.checkIfHasInform();
+            this.checkIfHasRequisites();
+            this.checkIfHasIspectionDate();
+         }
+         if(element.approval_id == 2){
+            this.registerApprovalFinanciero = element;
+         }
+         if(element.approval_id == 3){
+            this.registerApprovalCoordinador = element;
          }
       });
-      console.log(r);
-   }).catch( e => { console.log(e); });*/
+   }).catch( e => { console.log(e); });
   }
 
   aprobarTramite() {

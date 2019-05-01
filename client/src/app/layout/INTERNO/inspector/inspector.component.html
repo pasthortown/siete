@@ -47,14 +47,59 @@
   </div>
 </div>
 <div class="row" *ngIf="mostrarDataRegisterMintur">
-  <label class="col-12 col-form-label">Observaciones</label>
+  <div class="col-12">
+    <h4>Resultado de la Inspección</h4>
+  </div>
+  <div class="col-6">
+      <label>Formulario de Requisitos</label>
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <button type="button" class="btn btn-secondary" title="Imprimir Formulario de Requisitos" (click)="imprimirRequisitos()"><i class="fas fa-print"></i></button>
+          <button type="button" class="btn btn-secondary" title="Cargar Formulario de Requisitos" (click)="imprimirRequisitos()"><i class="fas fa-upload"></i></button>
+          <button type="button" class="btn btn-secondary" title="Descargar Formulario de Requisitos" (click)="imprimirRequisitos()"><i class="fas fa-download"></i></button>
+          <button type="button" class="btn btn-danger" title="Borrar Formulario de Requisitos" (click)="imprimirRequisitos()"><i class="fas fa-trash"></i></button>
+        </div>
+        <input type="file" class="form-control" id="person_representative_attachment_file"
+          name="person_representative_attachment_file" placeholder="Nombramiento Representante del Legal"
+          (change)="CodeFilePersonRepresentativeAttachment($event)">
+      </div>
+  </div>
+  <div class="col-6">
+      <label>Informe de Inspección</label>
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <button type="button" class="btn btn-secondary" title="Imprimir Formulario de Requisitos" (click)="imprimirRequisitos()"><i class="fas fa-print"></i></button>
+          <button type="button" class="btn btn-secondary" title="Cargar Formulario de Requisitos" (click)="imprimirRequisitos()"><i class="fas fa-upload"></i></button>
+          <button type="button" class="btn btn-secondary" title="Descargar Formulario de Requisitos" (click)="imprimirRequisitos()"><i class="fas fa-download"></i></button>
+          <button type="button" class="btn btn-danger" title="Borrar Formulario de Requisitos" (click)="imprimirRequisitos()"><i class="fas fa-trash"></i></button>
+        </div>
+        <input type="file" class="form-control" id="person_representative_attachment_file"
+          name="person_representative_attachment_file" placeholder="Nombramiento Representante del Legal"
+          (change)="CodeFilePersonRepresentativeAttachment($event)">
+      </div>
+  </div>
+  <div class="col-6">
+      <label>Fecha de la Inspección</label>
+      <input type="date" class="form-control" id="date_assigment" name="date_assigment" placeholder="dateAssigment" [ngModel]="registerApprovalInspector.date_assigment | date:'y-MM-dd'" (ngModelChange)="registerApprovalInspector.date_assigment = $event">
+  </div>
+  <div class="col-6">
+      <label>Estado de la Inspección</label>
+      <select class="form-control" id="stateInspection" name="stateInspection" [(ngModel)]="inspectionState">
+        <option value="0" selected>Pendiente</option>
+        <option value="1" selected>Aprobado</option>
+        <option value="2" selected>Negado</option>
+      </select>
+  </div>
   <div class="col-12 mt-3 mb-2">
-    <ck-editor id="notes" name="notes" skin="moono-lisa"></ck-editor>
+    <label class="col-form-label">Observaciones</label>
+    <ck-editor id="notes" name="notes" skin="moono-lisa" [(ngModel)]="registerApprovalInspector.notes"></ck-editor>
   </div>
   <div class="col-12 text-center mb-3">
-    <button type="button" class="btn btn-success" title="Aprobar Trámite" (click)="aprobarTramite()"><i class="fas fa-check-square "></i> Aprobar Trámite</button>
-    <button type="button" class="btn btn-danger ml-2" title="Negar Trámite" (click)="negarTramite()"><i class="fas fa-minus-square"></i> Negar Trámite</button>
+    <button type="button" class="btn btn-success" title="Aprobar Trámite" (click)="guardarInspeccion()"><i class="fas fa-save"></i> Guardar Información</button>
+    <button type="button" class="btn btn-danger ml-2" title="Negar Trámite" (click)="refresh()"><i class="fas fa-times"></i> Cancelar</button>
   </div>
+</div>
+<div class="row" *ngIf="mostrarDataRegisterMintur">  
   <div class="col-12">
     <div class="row mt-5">
       <div class="col-12 text-left">

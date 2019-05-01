@@ -6,7 +6,6 @@ import { ApprovalRoutingModule } from './approval-routing.module';
 import { ApprovalComponent } from './approval.component';
 import { ApprovalService } from './../../../../services/CRUD/ALOJAMIENTO/approval.service';
 import { environment } from 'src/environments/environment';
-import { RegisterService } from './../../../../services/CRUD/ALOJAMIENTO/register.service';
 
 @NgModule({
    imports: [CommonModule,
@@ -15,7 +14,6 @@ import { RegisterService } from './../../../../services/CRUD/ALOJAMIENTO/registe
    declarations: [ApprovalComponent],
    providers: [
                NgbModal,
-               RegisterService,
                ApprovalService
                ]
 })

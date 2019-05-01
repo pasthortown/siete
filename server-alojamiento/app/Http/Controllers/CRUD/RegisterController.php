@@ -47,6 +47,11 @@ class RegisterController extends Controller
       return response()->json(Register::paginate($size),200);
     }
 
+    function by_inspector_id(Request $data) {
+      $registers = Register::join('approval_states', 'approval_states.register_id', '=', 'registers.id')->where('approval_states.id_user',$data['id'])->select('registers.*', 'approval_states.date_assigment')->distinct()->orderBy('registers.updated_at', 'DESC')->orderBy('approval_states.date_assigment', 'ASC')->get();
+      return response()->json($registers, 200);
+    }
+
     function get_registers_by_ruc(Request $data) {
       $token = $data->header('api_token');
       $number = $data['ruc_number'];
@@ -217,50 +222,21 @@ class RegisterController extends Controller
          $registerstate->register_id = $register->id;
          $registerstate->state_id = $status_id;
          $registerstate->save();
-         $approval = new Approval();
-         $lastApproval = Approval::orderBy('id')->get()->last();
-         if($lastApproval) {
-             $approval->id = $lastApproval->id + 1;
-         } else {
-             $approval->id = 1;
+         $approvals = Approval::get();
+         foreach($approvals as $approval) {
+            $approvalstate = new ApprovalState();
+            $lastApprovalState = ApprovalState::orderBy('id')->get()->last();
+             if($lastApprovalState) {
+                $approvalstate->id = $lastApprovalState->id + 1;
+             } else {
+                $approvalstate->id = 1;
+            }
+            $approvalstate->value = false;
+            $approvalstate->id_user = 0;
+            $approvalstate->approval_id = $approval->id;
+            $approvalstate->register_id = $register->id;
+            $approvalstate->save();      
          }
-         $approval->name = 'Técnico de Registro y Control';
-         $approval->register_id = $register->id;
-         $approval->save();
-         $approvalstate = new ApprovalState();
-         $lastApprovalState = ApprovalState::orderBy('id')->get()->last();
-          if($lastApprovalState) {
-             $approvalstate->id = $lastApprovalState->id + 1;
-          } else {
-             $approvalstate->id = 1;
-         }
-         $approvalstate->value = false;
-         $approvalstate->date = date("Y-m-d H:i:s");
-         $approvalstate->id_user = 0;
-         $approvalstate->approval_id = $approval->id;
-         $approvalstate->save();
-         $approval = new Approval();
-         $lastApproval = Approval::orderBy('id')->get()->last();
-         if($lastApproval) {
-             $approval->id = $lastApproval->id + 1;
-         } else {
-             $approval->id = 1;
-         }
-         $approval->name = 'Coordinador';
-         $approval->register_id = $register->id;
-         $approval->save();
-         $approvalstate = new ApprovalState();
-         $lastApprovalState = ApprovalState::orderBy('id')->get()->last();
-          if($lastApprovalState) {
-             $approvalstate->id = $lastApprovalState->id + 1;
-          } else {
-             $approvalstate->id = 1;
-         }
-         $approvalstate->value = false;
-         $approvalstate->date = date("Y-m-d H:i:s");
-         $approvalstate->id_user = 0;
-         $approvalstate->approval_id = $approval->id;
-         $approvalstate->save();
          DB::commit();
          return response()->json($register,200);
       }else {
@@ -389,54 +365,25 @@ class RegisterController extends Controller
          $registerstate->register_id = $register->id;
          $registerstate->state_id = $status_id;
          $registerstate->save();
-         $approvals = Approval::where('register_id', $register->id)->get();
+         $approvalstates = ApprovalState::where('register_id', $register->id)->get();
+         foreach($approvalstates as $approvalstate) {
+            ApprovalState::destroy($approvalstate->id);
+         }
+         $approvals = Approval::get();
          foreach($approvals as $approval) {
-            Approval::destroy($approval->id);
+            $approvalstate = new ApprovalState();
+            $lastApprovalState = ApprovalState::orderBy('id')->get()->last();
+             if($lastApprovalState) {
+                $approvalstate->id = $lastApprovalState->id + 1;
+             } else {
+                $approvalstate->id = 1;
+            }
+            $approvalstate->value = false;
+            $approvalstate->id_user = 0;
+            $approvalstate->approval_id = $approval->id;
+            $approvalstate->register_id = $register->id;
+            $approvalstate->save();      
          }
-         $approval = new Approval();
-         $lastApproval = Approval::orderBy('id')->get()->last();
-         if($lastApproval) {
-             $approval->id = $lastApproval->id + 1;
-         } else {
-             $approval->id = 1;
-         }
-         $approval->name = 'Técnico de Registro y Control';
-         $approval->register_id = $register->id;
-         $approval->save();
-         $approvalstate = new ApprovalState();
-         $lastApprovalState = ApprovalState::orderBy('id')->get()->last();
-          if($lastApprovalState) {
-             $approvalstate->id = $lastApprovalState->id + 1;
-          } else {
-             $approvalstate->id = 1;
-         }
-         $approvalstate->value = false;
-         $approvalstate->date = date("Y-m-d H:i:s");
-         $approvalstate->id_user = 0;
-         $approvalstate->approval_id = $approval->id;
-         $approvalstate->save();
-         $approval = new Approval();
-         $lastApproval = Approval::orderBy('id')->get()->last();
-         if($lastApproval) {
-             $approval->id = $lastApproval->id + 1;
-         } else {
-             $approval->id = 1;
-         }
-         $approval->name = 'Coordinador';
-         $approval->register_id = $register->id;
-         $approval->save();
-         $approvalstate = new ApprovalState();
-         $lastApprovalState = ApprovalState::orderBy('id')->get()->last();
-          if($lastApprovalState) {
-             $approvalstate->id = $lastApprovalState->id + 1;
-          } else {
-             $approvalstate->id = 1;
-         }
-         $approvalstate->value = false;
-         $approvalstate->date = date("Y-m-d H:i:s");
-         $approvalstate->id_user = 0;
-         $approvalstate->approval_id = $approval->id;
-         $approvalstate->save();
          DB::commit();
       } 
       return response()->json($register,200);

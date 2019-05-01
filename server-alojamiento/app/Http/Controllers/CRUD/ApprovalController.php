@@ -42,7 +42,6 @@ class ApprovalController extends Controller
              $approval->id = 1;
           }
           $approval->name = $result['name'];
-          $approval->register_id = $result['register_id'];
           $approval->save();
           DB::commit();
        } catch (Exception $e) {
@@ -58,7 +57,6 @@ class ApprovalController extends Controller
           $result = $data->json()->all();
           $approval = Approval::where('id',$result['id'])->update([
              'name'=>$result['name'],
-             'register_id'=>$result['register_id'],
           ]);
           DB::commit();
        } catch (Exception $e) {
@@ -96,13 +94,11 @@ class ApprovalController extends Controller
          if ($exist) {
            Approval::where('id', $result['id'])->update([
              'name'=>$result['name'],
-             'register_id'=>$result['register_id'],
            ]);
          } else {
           $approval = new Approval();
           $approval->id = $result['id'];
           $approval->name = $result['name'];
-          $approval->register_id = $result['register_id'];
           $approval->save();
          }
        }

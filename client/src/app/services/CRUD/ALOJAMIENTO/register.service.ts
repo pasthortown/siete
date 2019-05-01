@@ -64,7 +64,7 @@ export class RegisterService {
          return r.json();
       }).catch( error => { this.handledError(error.json()); });
    }   
-
+ 
    register_register_data(register: Register): Promise<any> {
       return this.http.post(this.url + 'register_register_data', JSON.stringify(register), this.options).toPromise()
       .then( r => {

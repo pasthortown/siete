@@ -20,7 +20,9 @@ class CreateApprovalStatesTable extends Migration
           $table->dateTime('date_assigment')->nullable($value = true);
           $table->longText('notes')->nullable($value = true);
           $table->integer('id_user')->nullable($value = true);
-          $table->string('date_fullfill',0)->nullable($value = true);
+          $table->dateTime('date_fullfill')->nullable($value = true);
+          $table->unsignedInteger('register_id');
+          $table->foreign('register_id')->references('id')->on('registers')->onDelete('cascade');
           $table->unsignedInteger('approval_id');
           $table->foreign('approval_id')->references('id')->on('approvals')->onDelete('cascade');
        });

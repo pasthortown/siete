@@ -6,6 +6,7 @@ import { ApprovalStateRoutingModule } from './approvalstate-routing.module';
 import { ApprovalStateComponent } from './approvalstate.component';
 import { ApprovalStateService } from './../../../../services/CRUD/ALOJAMIENTO/approvalstate.service';
 import { environment } from 'src/environments/environment';
+import { RegisterService } from './../../../../services/CRUD/ALOJAMIENTO/register.service';
 import { ApprovalService } from './../../../../services/CRUD/ALOJAMIENTO/approval.service';
 import { CKEditorModule } from 'ngx-ckeditor';
 
@@ -17,6 +18,7 @@ import { CKEditorModule } from 'ngx-ckeditor';
    declarations: [ApprovalStateComponent],
    providers: [
                NgbModal,
+               RegisterService,
                ApprovalService,
                ApprovalStateService
                ]

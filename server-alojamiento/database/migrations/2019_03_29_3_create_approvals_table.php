@@ -17,8 +17,6 @@ class CreateApprovalsTable extends Migration
           $table->increments('id');
           $table->timestamps();
           $table->string('name',50)->nullable($value = true);
-          $table->unsignedInteger('register_id');
-          $table->foreign('register_id')->references('id')->on('registers')->onDelete('cascade');
        });
     }
 

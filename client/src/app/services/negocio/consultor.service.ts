@@ -16,13 +16,21 @@ export class ConsultorService {
       this.options.headers.append('api_token', sessionStorage.getItem('api_token'));
    }
 
-   get_registers(filterIdLocation: number, filterState: number): Promise<any> {
-      const data = {'filterIdLocation': filterIdLocation, 'filterState': filterState};
+   get_registers(filterIdLocation: number): Promise<any> {
+      const data = {'filterIdLocation': filterIdLocation};
       return this.http.post(this.url + 'registers', JSON.stringify(data), this.options).toPromise()
       .then( r => {
          return r.json();
       }).catch( error => { this.handledError(error.json());  });
    }
+
+   get_registers_assigned_inspector_id(id: number) {
+      return this.http.get(this.url + 'get_registers_assigned_inspector_id?id=' + id.toString(), this.options).toPromise()
+      .then( r => {
+         return r.json();
+      }).catch( error => { this.handledError(error.json()); });
+   }
+
 
    handledError(error: any) {
       console.log(error);

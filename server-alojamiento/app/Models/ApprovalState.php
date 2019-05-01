@@ -24,6 +24,11 @@ class ApprovalState extends Model
        
     ];
 
+    function Register()
+    {
+       return $this->hasOne('App\Register');
+    }
+
     function Approval()
     {
        return $this->hasOne('App\Approval');

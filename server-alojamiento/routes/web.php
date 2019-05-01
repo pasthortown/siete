@@ -23,6 +23,7 @@ $router->group(['middleware' => ['auth']], function () use ($router) {
    //CRUD Register
    $router->post('/register', ['uses' => 'RegisterController@post']);
    $router->get('/register', ['uses' => 'RegisterController@get']);
+   $router->get('/register/by_inspector_id', ['uses' => 'RegisterController@by_inspector_id']);
    $router->get('/register/get_registers_by_ruc', ['uses' => 'RegisterController@get_registers_by_ruc']);
    $router->get('/register/get_register_data', ['uses' => 'RegisterController@get_register_data']);
    $router->get('/register/paginate', ['uses' => 'RegisterController@paginate']);
@@ -188,6 +189,7 @@ $router->group(['middleware' => ['auth']], function () use ($router) {
 
    //CRUD ApprovalState
    $router->post('/approvalstate', ['uses' => 'ApprovalStateController@post']);
+   $router->get('/approvalstate/by_register_id', ['uses' => 'ApprovalStateController@byRegisterId']);
    $router->get('/approvalstate', ['uses' => 'ApprovalStateController@get']);
    $router->get('/approvalstate/paginate', ['uses' => 'ApprovalStateController@paginate']);
    $router->get('/approvalstate/backup', ['uses' => 'ApprovalStateController@backup']);

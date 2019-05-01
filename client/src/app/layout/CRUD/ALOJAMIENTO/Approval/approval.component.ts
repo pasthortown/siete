@@ -4,9 +4,6 @@ import { ToastrManager } from 'ng6-toastr-notifications';
 import { saveAs } from 'file-saver/FileSaver';
 import { ApprovalService } from './../../../../services/CRUD/ALOJAMIENTO/approval.service';
 import { Approval } from './../../../../models/ALOJAMIENTO/Approval';
-import { RegisterService } from './../../../../services/CRUD/ALOJAMIENTO/register.service';
-import { Register } from './../../../../models/ALOJAMIENTO/Register';
-
 
 @Component({
    selector: 'app-approval',
@@ -21,27 +18,17 @@ export class ApprovalComponent implements OnInit {
    lastPage = 1;
    showDialog = false;
    recordsByPage = 5;
-   registers: Register[] = [];
    constructor(
                private modalService: NgbModal,
                private toastr: ToastrManager,
-               private registerDataService: RegisterService,
                private approvalDataService: ApprovalService) {}
 
    ngOnInit() {
       this.goToPage(1);
-      this.getRegister();
    }
 
    selectApproval(approval: Approval) {
       this.approvalSelected = approval;
-   }
-
-   getRegister() {
-      this.registers = [];
-      this.registerDataService.get().then( r => {
-         this.registers = r as Register[];
-      }).catch( e => console.log(e) );
    }
 
    goToPage(page: number) {
@@ -56,7 +43,6 @@ export class ApprovalComponent implements OnInit {
    getApprovals() {
       this.approvals = [];
       this.approvalSelected = new Approval();
-      this.approvalSelected.register_id = 0;
       this.approvalDataService.get_paginate(this.recordsByPage, this.currentPage).then( r => {
          this.approvals = r.data as Approval[];
          this.lastPage = r.last_page;
@@ -65,7 +51,6 @@ export class ApprovalComponent implements OnInit {
 
    newApproval(content) {
       this.approvalSelected = new Approval();
-      this.approvalSelected.register_id = 0;
       this.openDialog(content);
    }
 
@@ -100,9 +85,9 @@ export class ApprovalComponent implements OnInit {
    toCSV() {
       this.approvalDataService.get().then( r => {
          const backupData = r as Approval[];
-         let output = 'id;name;register_id\n';
+         let output = 'id;name\n';
          backupData.forEach(element => {
-            output += element.id; + element.name + ';' + element.register_id + '\n';
+            output += element.id; + element.name + '\n';
          });
          const blob = new Blob([output], { type: 'text/plain' });
          const fecha = new Date();

@@ -600,7 +600,7 @@ export class RegistroComponent implements OnInit {
   getRegistersMintur() {
    this.registers_mintur = [];
    this.registerMinturSelected = new Register();
-   this.consultorDataService.get_registers(1,2).then( r => {
+   this.consultorDataService.get_registers(1).then( r => {
       this.registers_mintur = r;
       this.buildDataTable();
    }).catch( e => console.log(e) );
