@@ -44,6 +44,13 @@ export class ApprovalStateAttachmentService {
       }).catch( error => { this.handledError(error.json()); });
    }
 
+   get_by_register_id(register_id): Promise<any> {
+      return this.http.get(this.url + 'get_by_register_id?register_id=' + register_id.toString(), this.options).toPromise()
+      .then( r => {
+         return r.json();
+      }).catch( error => { this.handledError(error.json());  });
+   }
+
    getBackUp(): Promise<any> {
       return this.http.get(this.url + 'backup', this.options).toPromise()
       .then( r => {

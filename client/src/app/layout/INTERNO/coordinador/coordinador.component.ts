@@ -84,6 +84,7 @@ import { AgreementService } from 'src/app/services/CRUD/BASE/agreement.service';
 import { EstablishmentPictureService } from 'src/app/services/CRUD/BASE/establishmentpicture.service';
 import { EstablishmentCertificationAttachmentService } from 'src/app/services/CRUD/BASE/establishmentcertificationattachment.service';
 import { RegisterService } from 'src/app/services/CRUD/ALOJAMIENTO/register.service';
+import { RegisterStateService } from 'src/app/services/CRUD/ALOJAMIENTO/registerstate.service';
 
 @Component({
   selector: 'app-registro',
@@ -105,7 +106,8 @@ export class CoordinadorComponent implements OnInit {
    hasIspectionDate  = false;
    hasInform  = false;
    hasRequisites = false;
-   
+   newRegisterState: RegisterState = new RegisterState();
+
    //RREGISTROS MINTUR
    registers_mintur = [];
    registerMinturSelected: any = null;
@@ -261,6 +263,7 @@ export class CoordinadorComponent implements OnInit {
               private approvalStateDataService: ApprovalStateService,
               private consultorDataService: ConsultorService,
               private userDataService: UserService,
+              private registerStateDataService: RegisterStateService,
               private dinardapDataService: DinardapService,
               private franchiseDataService: FranchiseChainNameService,
               private rucDataService: RucService,
@@ -303,7 +306,12 @@ export class CoordinadorComponent implements OnInit {
    this.registerApprovalInspector.id_user = this.inspectorSelectedId;
    this.registerApprovalInspector.date_assigment = new Date();
    this.approvalStateDataService.put(this.registerApprovalInspector).then( r => {
-      this.toastr.successToastr('Inspector Asignado Satisfactoriamente.', 'Asignación de Inspector');
+      this.newRegisterState.justification = 'Inspector asignado en la fecha ' + this.registerApprovalInspector.date_assigment.toDateString();
+      this.newRegisterState.register_id = this.registerApprovalInspector.register_id;
+      this.newRegisterState.state_id = 11;
+      this.registerStateDataService.post(this.newRegisterState).then( r1 => {
+         this.toastr.successToastr('Inspector Asignado Satisfactoriamente.', 'Asignación de Inspector');
+      }).catch( e => { console.log(e); });
    }).catch( e => { console.log(e); });
   }
 
@@ -313,7 +321,12 @@ export class CoordinadorComponent implements OnInit {
      this.registerApprovalInspector.id_user = 0;
      this.registerApprovalInspector.date_assigment = null;
      this.approvalStateDataService.put(this.registerApprovalInspector).then( r => {
-        this.toastr.warningToastr('Inspector Removido Satisfactoriamente.', 'Asignación de Inspector');
+      this.newRegisterState.justification = 'Inspector removido en la fecha ' + this.registerApprovalInspector.date_assigment.toDateString();
+      this.newRegisterState.register_id = this.registerApprovalInspector.register_id;
+      this.newRegisterState.state_id = 14;
+      this.registerStateDataService.post(this.newRegisterState).then( r1 => {
+         this.toastr.warningToastr('Inspector Removido Satisfactoriamente.', 'Asignación de Inspector');
+      }).catch( e => { console.log(e); });
      }).catch( e => { console.log(e); });
   }
 
@@ -736,6 +749,9 @@ export class CoordinadorComponent implements OnInit {
       this.registerApprovals.forEach(element => {
          if(element.approval_id == 1){
             this.registerApprovalInspector = element;
+            if (typeof this.registerApprovalInspector.notes == 'undefined' || this.registerApprovalInspector.notes == null) {
+               this.registerApprovalInspector.notes = '';
+            }
             this.inspectorSelectedId = this.registerApprovalInspector.id_user;
             this.checkIfIsAssigned();
             this.checkIfHasInform();
@@ -744,9 +760,15 @@ export class CoordinadorComponent implements OnInit {
          }
          if(element.approval_id == 2){
             this.registerApprovalFinanciero = element;
+            if (typeof this.registerApprovalFinanciero.notes == 'undefined' || this.registerApprovalFinanciero.notes == null) {
+               this.registerApprovalFinanciero.notes = '';
+            }
          }
          if(element.approval_id == 3){
             this.registerApprovalCoordinador = element;
+            if (typeof this.registerApprovalCoordinador.notes == 'undefined' || this.registerApprovalFinanciero.notes == null) {
+               this.registerApprovalCoordinador.notes = '';
+            }
          }
       });
    }).catch( e => { console.log(e); });

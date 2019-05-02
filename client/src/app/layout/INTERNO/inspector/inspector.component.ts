@@ -1,3 +1,4 @@
+import { ApprovalStateAttachmentService } from './../../../services/CRUD/ALOJAMIENTO/approvalstateattachment.service';
 import { ApprovalStateAttachment } from './../../../models/ALOJAMIENTO/ApprovalStateAttachment';
 import { ApprovalStateService } from './../../../services/CRUD/ALOJAMIENTO/approvalstate.service';
 import { ApprovalState } from 'src/app/models/ALOJAMIENTO/ApprovalState';
@@ -85,6 +86,7 @@ import { AgreementService } from 'src/app/services/CRUD/BASE/agreement.service';
 import { EstablishmentPictureService } from 'src/app/services/CRUD/BASE/establishmentpicture.service';
 import { EstablishmentCertificationAttachmentService } from 'src/app/services/CRUD/BASE/establishmentcertificationattachment.service';
 import { RegisterService } from 'src/app/services/CRUD/ALOJAMIENTO/register.service';
+import { RegisterStateService } from 'src/app/services/CRUD/ALOJAMIENTO/registerstate.service';
 
 @Component({
   selector: 'app-registro',
@@ -109,6 +111,8 @@ export class InspectorComponent implements OnInit {
    inspectionState = 0;
    requisitosApprovalStateAttachment: ApprovalStateAttachment = new ApprovalStateAttachment();
    informeApprovalStateAttachment: ApprovalStateAttachment = new ApprovalStateAttachment();
+   newRegisterState: RegisterState = new RegisterState();
+
    //RREGISTROS MINTUR
    registers_mintur = [];
    registerMinturSelected: any = null;
@@ -265,6 +269,8 @@ export class InspectorComponent implements OnInit {
               private consultorDataService: ConsultorService,
               private userDataService: UserService,
               private dinardapDataService: DinardapService,
+              private registerStateDataService: RegisterStateService,
+              private approvalStateAttachmentDataService: ApprovalStateAttachmentService,
               private franchiseDataService: FranchiseChainNameService,
               private rucDataService: RucService,
               private modalService: NgbModal,
@@ -299,25 +305,6 @@ export class InspectorComponent implements OnInit {
   ngOnInit() {
    this.refresh();
    this.getUser();
-  }
-
-  asignarInspector() {
-   this.isAssigned = true;
-   this.registerApprovalInspector.id_user = this.inspectorSelectedId;
-   this.registerApprovalInspector.date_assigment = new Date();
-   this.approvalStateDataService.put(this.registerApprovalInspector).then( r => {
-      this.toastr.successToastr('Inspector Asignado Satisfactoriamente.', 'Asignación de Inspector');
-   }).catch( e => { console.log(e); });
-  }
-
-  desasignarInspector() {
-     this.isAssigned = false;
-     this.inspectorSelectedId = 0;
-     this.registerApprovalInspector.id_user = 0;
-     this.registerApprovalInspector.date_assigment = null;
-     this.approvalStateDataService.put(this.registerApprovalInspector).then( r => {
-        this.toastr.warningToastr('Inspector Removido Satisfactoriamente.', 'Asignación de Inspector');
-     }).catch( e => { console.log(e); });
   }
 
   onChangeTableEstablishment(config: any, page: any = {page: this.currentPageEstablishment, itemsPerPage: this.recordsByPageEstablishment}): any {
@@ -692,7 +679,7 @@ export class InspectorComponent implements OnInit {
   }
 
   imprimirRequisitos() {
-
+   
   }
 
   validateNotesInspection(): Boolean {
@@ -764,9 +751,43 @@ export class InspectorComponent implements OnInit {
   }
 
   guardarInspeccion() {
-     this.approvalStateDataService.put(this.registerApprovalInspector).then( r => {
-      this.toastr.successToastr('Fecha de Inspección Guardada Satisfactoriamente', 'Inspección');
-     }).catch( e => { console.log(e); });
+    if ( this.inspectionState == 0) {
+      this.toastr.errorToastr('Debe seleccionar un estado de la inspección', 'Inspección');
+      return;
+    }
+    const today = new Date();
+    this.registerApprovalInspector.date_fullfill = today;
+    if ( this.inspectionState == 1) {
+      this.registerApprovalInspector.value = true;
+    }
+    if ( this.inspectionState == 2) {
+      this.registerApprovalInspector.value = false;
+    }
+    this.newRegisterState.justification = 'Resultados de la Inspección cargados en la fecha ' + today.toDateString();
+    this.newRegisterState.register_id = this.registerApprovalInspector.register_id;
+    this.newRegisterState.state_id = 14;
+    this.registerStateDataService.post(this.newRegisterState).then( r1 => {
+    }).catch( e => { console.log(e); });
+    this.approvalStateDataService.put(this.registerApprovalInspector).then( r => {
+      this.requisitosApprovalStateAttachment.approval_state_attachment_file_name = 'Formulario_Requisitos_' + this.user.identification + '_' + today.getFullYear().toString() + '_' + (today.getMonth() + 1).toString() + '_' + today.getDate().toString();
+      this.informeApprovalStateAttachment.approval_state_attachment_file_name = 'Informe_Requisitos_' + this.user.identification + '_' + today.getFullYear().toString() + '_' + (today.getMonth() + 1).toString() + '_' + today.getDate().toString();
+      if (this.requisitosApprovalStateAttachment.id == 0) {
+         this.approvalStateAttachmentDataService.post(this.requisitosApprovalStateAttachment).then( r2 => {
+            this.toastr.successToastr('Inspección Guardada Satisfactoriamente', 'Inspección');
+         }).catch( e => { console.log(e); });
+       } else {
+         this.approvalStateAttachmentDataService.put(this.requisitosApprovalStateAttachment).then( r2 => {
+            this.toastr.successToastr('Inspección Guardada Satisfactoriamente', 'Inspección');
+         }).catch( e => { console.log(e); });
+       }
+       if (this.informeApprovalStateAttachment.id == 0) {
+         this.approvalStateAttachmentDataService.post(this.informeApprovalStateAttachment).then( r3 => {
+         }).catch( e => { console.log(e); });
+       } else {
+         this.approvalStateAttachmentDataService.put(this.informeApprovalStateAttachment).then( r3 => {
+         }).catch( e => { console.log(e); });
+       }
+    }).catch( e => { console.log(e); });
   }
 
   onCellClick(event) {
@@ -816,31 +837,45 @@ export class InspectorComponent implements OnInit {
    this.registerApprovalCoordinador = new ApprovalState();
    this.approvalStateDataService.get_by_register_id(this.idRegister).then( r => {
       this.registerApprovals = r;
-      this.registerApprovals.forEach(element => {
-         if(element.approval_id == 1){
-            this.registerApprovalInspector = element;
-            this.inspectorSelectedId = this.registerApprovalInspector.id_user;
-            this.checkIfIsAssigned();
-            this.checkIfHasInform();
-            this.checkIfHasRequisites();
-            this.checkIfHasIspectionDate();
-         }
-         if(element.approval_id == 2){
-            this.registerApprovalFinanciero = element;
-         }
-         if(element.approval_id == 3){
-            this.registerApprovalCoordinador = element;
-         }
-      });
+      this.approvalStateAttachmentDataService.get_by_register_id(this.idRegister).then( r => {
+         const approvalStateAttachments = r as ApprovalStateAttachment[];
+         this.registerApprovals.forEach(element => {
+            if (element.approval_id == 1){
+               if (element.value) {
+                  this.inspectionState = 1;
+               } else {
+                  this.inspectionState = 2;
+               }
+               if (approvalStateAttachments.length == 0) {
+                  this.inspectionState = 0;
+                  this.requisitosApprovalStateAttachment = new ApprovalStateAttachment();
+                  this.requisitosApprovalStateAttachment.approval_state_id = element.id;
+                  this.informeApprovalStateAttachment = new ApprovalStateAttachment();
+                  this.informeApprovalStateAttachment.approval_state_id = element.id;
+               }
+               approvalStateAttachments.forEach(approvalStateAttachment => {
+                  if (approvalStateAttachment.approval_state_id == element.id) {
+                     if (approvalStateAttachment.approval_state_attachment_file_name.search('Informe') == 0) {
+                        this.informeApprovalStateAttachment = approvalStateAttachment;
+                     }
+                     if (approvalStateAttachment.approval_state_attachment_file_name.search('Formulario') == 0) {
+                        this.requisitosApprovalStateAttachment = approvalStateAttachment;
+                     }
+                  }
+               });
+               this.registerApprovalInspector = element;
+               if (typeof this.registerApprovalInspector.notes == 'undefined' || this.registerApprovalInspector.notes == null) {
+                  this.registerApprovalInspector.notes = '';
+               }
+               this.inspectorSelectedId = this.registerApprovalInspector.id_user;
+               this.checkIfIsAssigned();
+               this.checkIfHasInform();
+               this.checkIfHasRequisites();
+               this.checkIfHasIspectionDate();
+            }
+         });
+      }).catch( e => { console.log(e); });
    }).catch( e => { console.log(e); });
-  }
-
-  aprobarTramite() {
-   alert(this.idRegister);
-  }
-
-  negarTramite() {
-   alert('chao');
   }
 
   getRegisterTypes() {

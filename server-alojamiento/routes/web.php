@@ -201,6 +201,7 @@ $router->group(['middleware' => ['auth']], function () use ($router) {
    $router->post('/approvalstateattachment', ['uses' => 'ApprovalStateAttachmentController@post']);
    $router->get('/approvalstateattachment', ['uses' => 'ApprovalStateAttachmentController@get']);
    $router->get('/approvalstateattachment/paginate', ['uses' => 'ApprovalStateAttachmentController@paginate']);
+   $router->get('/approvalstateattachment/get_by_register_id', ['uses' => 'ApprovalStateAttachmentController@get_by_register_id']);
    $router->get('/approvalstateattachment/backup', ['uses' => 'ApprovalStateAttachmentController@backup']);
    $router->put('/approvalstateattachment', ['uses' => 'ApprovalStateAttachmentController@put']);
    $router->delete('/approvalstateattachment', ['uses' => 'ApprovalStateAttachmentController@delete']);

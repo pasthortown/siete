@@ -23,6 +23,12 @@ class ApprovalStateAttachmentController extends Controller
        }
     }
 
+    function get_by_register_id(Request $data) {
+      $register_id = $data['register_id'];
+      $toReturn = ApprovalStateAttachment::join('approval_states', 'approval_states.id', '=', 'approval_state_attachments.approval_state_id')->where('approval_states.register_id', $register_id)->select('approval_state_attachments.*')->get();
+      return response()->json($toReturn, 200);
+    }
+
     function paginate(Request $data)
     {
        $size = $data['size'];

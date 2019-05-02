@@ -17,7 +17,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgxBarcodeModule } from 'ngx-barcode';
 import { NgxQRCodeModule } from 'ngx-qrcode2';
 import { ConsultorService } from 'src/app/services/negocio/consultor.service';
-
+import { RegisterStateService } from 'src/app/services/CRUD/ALOJAMIENTO/registerstate.service';
 import { WorkerService } from 'src/app/services/CRUD/BASE/worker.service';
 import { TaxPayerTypeService } from 'src/app/services/CRUD/BASE/taxpayertype.service';
 import { FranchiseChainNameService } from 'src/app/services/CRUD/BASE/franchisechainname.service';
@@ -77,6 +77,7 @@ import { Ng2TableModule } from 'ng2-table/ng2-table';
     AgreementService,
     UbicationService,
     RegisterService,
+    RegisterStateService,
     CapacityTypeService,
     EstablishmentCertificationAttachmentService,
     EstablishmentPictureService,
