@@ -74,6 +74,18 @@
     {
         "State": {
             "id": 7,
+            "created_at": "2019-04-22 17:07:01",
+            "updated_at": "2019-04-22 17:07:01",
+            "name": "Coordinador",
+            "description": "<p>Coordinador</p>\n",
+            "code": "7",
+            "father_code": "-"
+        },
+        "attach": []
+    },
+    {
+        "State": {
+            "id": 8,
             "created_at": "2019-04-22 17:07:20",
             "updated_at": "2019-04-22 17:07:20",
             "name": "Registro",
@@ -85,7 +97,7 @@
     },
     {
         "State": {
-            "id": 8,
+            "id": 9,
             "created_at": "2019-04-22 17:07:33",
             "updated_at": "2019-04-22 17:07:33",
             "name": "Registro",
@@ -97,7 +109,7 @@
     },
     {
         "State": {
-            "id": 9,
+            "id": 10,
             "created_at": "2019-04-22 17:07:41",
             "updated_at": "2019-04-22 17:07:41",
             "name": "Registro",
@@ -109,7 +121,7 @@
     },
     {
         "State": {
-            "id": 10,
+            "id": 11,
             "created_at": "2019-04-22 17:07:41",
             "updated_at": "2019-04-22 17:07:41",
             "name": "Registro",
@@ -121,7 +133,7 @@
     },
     {
         "State": {
-            "id": 11,
+            "id": 12,
             "created_at": "2019-04-22 17:07:41",
             "updated_at": "2019-04-22 17:07:41",
             "name": "Registro",
@@ -133,7 +145,7 @@
     },
     {
         "State": {
-            "id": 12,
+            "id": 13,
             "created_at": "2019-04-22 17:07:41",
             "updated_at": "2019-04-22 17:07:41",
             "name": "Registro",
@@ -145,7 +157,19 @@
     },
     {
         "State": {
-            "id": 13,
+            "id": 14,
+            "created_at": "2019-04-22 17:07:41",
+            "updated_at": "2019-04-22 17:07:41",
+            "name": "Registro",
+            "description": "<p>Registro</p>\n",
+            "code": "7.1",
+            "father_code": "7"
+        },
+        "attach": []
+    },
+    {
+        "State": {
+            "id": 15,
             "created_at": "2019-04-22 17:08:25",
             "updated_at": "2019-04-22 17:08:25",
             "name": "Reclasificación",
@@ -157,7 +181,7 @@
     },
     {
         "State": {
-            "id": 14,
+            "id": 16,
             "created_at": "2019-04-22 17:08:32",
             "updated_at": "2019-04-22 17:08:32",
             "name": "Reclasificación",
@@ -169,7 +193,7 @@
     },
     {
         "State": {
-            "id": 15,
+            "id": 17,
             "created_at": "2019-04-22 17:08:43",
             "updated_at": "2019-04-22 17:08:43",
             "name": "Reclasificación",
@@ -181,7 +205,7 @@
     },
     {
         "State": {
-            "id": 16,
+            "id": 18,
             "created_at": "2019-04-22 17:08:43",
             "updated_at": "2019-04-22 17:08:43",
             "name": "Reclasificación",
@@ -193,7 +217,7 @@
     },
     {
         "State": {
-            "id": 17,
+            "id": 19,
             "created_at": "2019-04-22 17:08:43",
             "updated_at": "2019-04-22 17:08:43",
             "name": "Reclasificación",
@@ -205,7 +229,7 @@
     },
     {
         "State": {
-            "id": 18,
+            "id": 20,
             "created_at": "2019-04-22 17:08:43",
             "updated_at": "2019-04-22 17:08:43",
             "name": "Reclasificación",
@@ -217,7 +241,19 @@
     },
     {
         "State": {
-            "id": 19,
+            "id": 21,
+            "created_at": "2019-04-22 17:08:43",
+            "updated_at": "2019-04-22 17:08:43",
+            "name": "Reclasificación",
+            "description": "<p>Reclasificaci&oacute;n</p>\n",
+            "code": "7.2",
+            "father_code": "7"
+        },
+        "attach": []
+    },
+    {
+        "State": {
+            "id": 22,
             "created_at": "2019-04-22 17:09:08",
             "updated_at": "2019-04-22 17:09:08",
             "name": "Recategorización",
@@ -229,7 +265,7 @@
     },
     {
         "State": {
-            "id": 20,
+            "id": 23,
             "created_at": "2019-04-22 17:09:14",
             "updated_at": "2019-04-22 17:09:14",
             "name": "Recategorización",
@@ -241,7 +277,7 @@
     },
     {
         "State": {
-            "id": 21,
+            "id": 24,
             "created_at": "2019-04-22 17:09:25",
             "updated_at": "2019-04-22 17:09:25",
             "name": "Recategorización",
@@ -253,7 +289,7 @@
     },
     {
         "State": {
-            "id": 22,
+            "id": 25,
             "created_at": "2019-04-22 17:09:25",
             "updated_at": "2019-04-22 17:09:25",
             "name": "Recategorización",
@@ -265,7 +301,7 @@
     },
     {
         "State": {
-            "id": 23,
+            "id": 26,
             "created_at": "2019-04-22 17:09:25",
             "updated_at": "2019-04-22 17:09:25",
             "name": "Recategorización",
@@ -277,7 +313,7 @@
     },
     {
         "State": {
-            "id": 24,
+            "id": 27,
             "created_at": "2019-04-22 17:09:25",
             "updated_at": "2019-04-22 17:09:25",
             "name": "Recategorización",
@@ -289,7 +325,19 @@
     },
     {
         "State": {
-            "id": 25,
+            "id": 28,
+            "created_at": "2019-04-22 17:09:25",
+            "updated_at": "2019-04-22 17:09:25",
+            "name": "Recategorización",
+            "description": "<p>Recategorizaci&oacute;n</p>\n",
+            "code": "7.3",
+            "father_code": "7"
+        },
+        "attach": []
+    },
+    {
+        "State": {
+            "id": 29,
             "created_at": "2019-04-22 17:09:45",
             "updated_at": "2019-04-22 17:09:45",
             "name": "Actualización",
@@ -301,7 +349,7 @@
     },
     {
         "State": {
-            "id": 26,
+            "id": 30,
             "created_at": "2019-04-22 17:09:52",
             "updated_at": "2019-04-22 17:09:52",
             "name": "Actualización",
@@ -313,7 +361,7 @@
     },
     {
         "State": {
-            "id": 27,
+            "id": 31,
             "created_at": "2019-04-22 17:10:05",
             "updated_at": "2019-04-22 17:10:05",
             "name": "Actualización",
@@ -325,7 +373,7 @@
     },
     {
         "State": {
-            "id": 28,
+            "id": 32,
             "created_at": "2019-04-22 17:10:05",
             "updated_at": "2019-04-22 17:10:05",
             "name": "Actualización",
@@ -337,7 +385,7 @@
     },
     {
         "State": {
-            "id": 29,
+            "id": 33,
             "created_at": "2019-04-22 17:10:05",
             "updated_at": "2019-04-22 17:10:05",
             "name": "Actualización",
@@ -349,7 +397,7 @@
     },
     {
         "State": {
-            "id": 30,
+            "id": 34,
             "created_at": "2019-04-22 17:10:05",
             "updated_at": "2019-04-22 17:10:05",
             "name": "Actualización",
@@ -361,7 +409,19 @@
     },
     {
         "State": {
-            "id": 31,
+            "id": 35,
+            "created_at": "2019-04-22 17:10:05",
+            "updated_at": "2019-04-22 17:10:05",
+            "name": "Actualización",
+            "description": "<p>Actualizaci&oacute;n</p>\n",
+            "code": "7.4",
+            "father_code": "7"
+        },
+        "attach": []
+    },
+    {
+        "State": {
+            "id": 36,
             "created_at": "2019-04-22 17:10:30",
             "updated_at": "2019-04-22 17:10:30",
             "name": "Inactivación",
@@ -373,7 +433,7 @@
     },
     {
         "State": {
-            "id": 32,
+            "id": 37,
             "created_at": "2019-04-22 17:10:37",
             "updated_at": "2019-04-22 17:10:37",
             "name": "Inactivación",
@@ -385,7 +445,7 @@
     },
     {
         "State": {
-            "id": 33,
+            "id": 38,
             "created_at": "2019-04-22 17:10:45",
             "updated_at": "2019-04-22 17:10:45",
             "name": "Inactivación",
@@ -397,7 +457,7 @@
     },
     {
         "State": {
-            "id": 34,
+            "id": 39,
             "created_at": "2019-04-22 17:10:45",
             "updated_at": "2019-04-22 17:10:45",
             "name": "Inactivación",
@@ -409,7 +469,7 @@
     },
     {
         "State": {
-            "id": 35,
+            "id": 40,
             "created_at": "2019-04-22 17:10:45",
             "updated_at": "2019-04-22 17:10:45",
             "name": "Inactivación",
@@ -421,7 +481,7 @@
     },
     {
         "State": {
-            "id": 36,
+            "id": 41,
             "created_at": "2019-04-22 17:10:45",
             "updated_at": "2019-04-22 17:10:45",
             "name": "Inactivación",
@@ -433,7 +493,19 @@
     },
     {
         "State": {
-            "id": 37,
+            "id": 42,
+            "created_at": "2019-04-22 17:10:45",
+            "updated_at": "2019-04-22 17:10:45",
+            "name": "Inactivación",
+            "description": "<p>Inactivaci&oacute;n</p>\n",
+            "code": "7.5",
+            "father_code": "7"
+        },
+        "attach": []
+    },
+    {
+        "State": {
+            "id": 43,
             "created_at": "2019-04-22 17:11:05",
             "updated_at": "2019-04-22 17:11:05",
             "name": "Reingreso",
@@ -445,7 +517,7 @@
     },
     {
         "State": {
-            "id": 38,
+            "id": 44,
             "created_at": "2019-04-22 17:11:12",
             "updated_at": "2019-04-22 17:11:12",
             "name": "Reingreso",
@@ -457,7 +529,7 @@
     },
     {
         "State": {
-            "id": 39,
+            "id": 45,
             "created_at": "2019-04-22 17:11:18",
             "updated_at": "2019-04-22 17:11:18",
             "name": "Reingreso",
@@ -469,7 +541,7 @@
     },
     {
         "State": {
-            "id": 40,
+            "id": 46,
             "created_at": "2019-04-22 17:11:18",
             "updated_at": "2019-04-22 17:11:18",
             "name": "Reingreso",
@@ -481,7 +553,7 @@
     },
     {
         "State": {
-            "id": 41,
+            "id": 47,
             "created_at": "2019-04-22 17:11:18",
             "updated_at": "2019-04-22 17:11:18",
             "name": "Reingreso",
@@ -493,13 +565,25 @@
     },
     {
         "State": {
-            "id": 42,
+            "id": 48,
             "created_at": "2019-04-22 17:11:18",
             "updated_at": "2019-04-22 17:11:18",
             "name": "Reingreso",
             "description": "<p>Reingreso</p>\n",
             "code": "6.6",
             "father_code": "6"
+        },
+        "attach": []
+    },
+    {
+        "State": {
+            "id": 49,
+            "created_at": "2019-04-22 17:11:18",
+            "updated_at": "2019-04-22 17:11:18",
+            "name": "Reingreso",
+            "description": "<p>Reingreso</p>\n",
+            "code": "7.6",
+            "father_code": "7"
         },
         "attach": []
     }

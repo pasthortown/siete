@@ -1,12 +1,12 @@
 migrations
 logs
 state_declarations
-declaration_item_values
-declaration_declaration_item
-declaration_approval_state
+declaration_declaration_item_value
+approval_state_declaration
 pay_attachments
 declaration_attachments
 pays
+declaration_item_values
 approval_states
 declaration_items
 states

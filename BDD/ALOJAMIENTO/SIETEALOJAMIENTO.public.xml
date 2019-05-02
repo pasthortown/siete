@@ -1,7 +1,71 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <database name="SIETEALOJAMIENTO" schema="public" type="PostgreSQL - 11.2 (Ubuntu 11.2-1.pgdg18.04+1)">
    <tables>
-      <table name="bed_capacity" numRows="4" remarks="" schema="public" type="TABLE">
+      <table name="approval_state_attachments" numRows="0" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('approval_state_attachments_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial"/>
+         <column autoUpdated="false" digits="0" id="1" name="created_at" nullable="true" remarks="" size="22" type="timestamp"/>
+         <column autoUpdated="false" digits="0" id="2" name="updated_at" nullable="true" remarks="" size="22" type="timestamp"/>
+         <column autoUpdated="false" digits="0" id="3" name="approval_state_attachment_file_type" nullable="true" remarks="" size="50" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="4" name="approval_state_attachment_file_name" nullable="true" remarks="" size="50" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="5" name="approval_state_attachment_file" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="6" name="approval_state_id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="id" foreignKey="approval_state_attachments_approval_state_id_foreign" implied="false" onDeleteCascade="true" schema="public" table="approval_states"/>
+         </column>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="approval_state_attachments_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="approval_state_reports" numRows="0" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('approval_state_reports_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial"/>
+         <column autoUpdated="false" digits="0" id="1" name="created_at" nullable="true" remarks="" size="22" type="timestamp"/>
+         <column autoUpdated="false" digits="0" id="2" name="updated_at" nullable="true" remarks="" size="22" type="timestamp"/>
+         <column autoUpdated="false" digits="0" id="3" name="body" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="4" name="params" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="5" name="approval_state_id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="id" foreignKey="approval_state_reports_approval_state_id_foreign" implied="false" onDeleteCascade="true" schema="public" table="approval_states"/>
+         </column>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="approval_state_reports_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="approval_states" numRows="3" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('approval_states_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial">
+            <child column="approval_state_id" foreignKey="approval_state_attachments_approval_state_id_foreign" implied="false" onDeleteCascade="true" schema="public" table="approval_state_attachments"/>
+            <child column="approval_state_id" foreignKey="approval_state_reports_approval_state_id_foreign" implied="false" onDeleteCascade="true" schema="public" table="approval_state_reports"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="created_at" nullable="true" remarks="" size="22" type="timestamp"/>
+         <column autoUpdated="false" digits="0" id="2" name="updated_at" nullable="true" remarks="" size="22" type="timestamp"/>
+         <column autoUpdated="false" digits="0" id="3" name="value" nullable="true" remarks="" size="1" type="bool"/>
+         <column autoUpdated="false" digits="0" id="4" name="date_assigment" nullable="true" remarks="" size="22" type="timestamp"/>
+         <column autoUpdated="false" digits="0" id="5" name="notes" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="6" name="id_user" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="7" name="date_fullfill" nullable="true" remarks="" size="22" type="timestamp"/>
+         <column autoUpdated="false" digits="0" id="8" name="register_id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="id" foreignKey="approval_states_register_id_foreign" implied="false" onDeleteCascade="true" schema="public" table="registers"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="9" name="approval_id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="id" foreignKey="approval_states_approval_id_foreign" implied="false" onDeleteCascade="true" schema="public" table="approvals"/>
+         </column>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="approval_states_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="approvals" numRows="3" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('approvals_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial">
+            <child column="approval_id" foreignKey="approval_states_approval_id_foreign" implied="false" onDeleteCascade="true" schema="public" table="approval_states"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="created_at" nullable="true" remarks="" size="22" type="timestamp"/>
+         <column autoUpdated="false" digits="0" id="2" name="updated_at" nullable="true" remarks="" size="22" type="timestamp"/>
+         <column autoUpdated="false" digits="0" id="3" name="name" nullable="true" remarks="" size="50" type="varchar"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="approvals_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="bed_capacity" numRows="3" remarks="" schema="public" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('bed_capacity_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial"/>
          <column autoUpdated="false" digits="0" id="1" name="created_at" nullable="true" remarks="" size="22" type="timestamp"/>
          <column autoUpdated="false" digits="0" id="2" name="updated_at" nullable="true" remarks="" size="22" type="timestamp"/>
@@ -32,7 +96,7 @@
             <column ascending="true" name="id"/>
          </index>
       </table>
-      <table name="beds" numRows="4" remarks="" schema="public" type="TABLE">
+      <table name="beds" numRows="3" remarks="" schema="public" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('beds_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial">
             <child column="bed_id" foreignKey="bed_capacity_bed_id_foreign" implied="false" onDeleteCascade="true" schema="public" table="bed_capacity"/>
          </column>
@@ -127,7 +191,7 @@
             <column ascending="true" name="id"/>
          </index>
       </table>
-      <table name="complementary_service_food_register" numRows="4" remarks="" schema="public" type="TABLE">
+      <table name="complementary_service_food_register" numRows="3" remarks="" schema="public" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('complementary_service_food_register_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial"/>
          <column autoUpdated="false" digits="0" id="1" name="created_at" nullable="true" remarks="" size="22" type="timestamp"/>
          <column autoUpdated="false" digits="0" id="2" name="updated_at" nullable="true" remarks="" size="22" type="timestamp"/>
@@ -154,7 +218,7 @@
             <column ascending="true" name="id"/>
          </index>
       </table>
-      <table name="complementary_service_foods" numRows="4" remarks="" schema="public" type="TABLE">
+      <table name="complementary_service_foods" numRows="3" remarks="" schema="public" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('complementary_service_foods_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial">
             <child column="complementary_service_food_id" foreignKey="complementary_service_food_register_complementary_service_food_" implied="false" onDeleteCascade="true" schema="public" table="complementary_service_food_register"/>
          </column>
@@ -170,7 +234,7 @@
             <column ascending="true" name="id"/>
          </index>
       </table>
-      <table name="complementary_service_type_register" numRows="4" remarks="" schema="public" type="TABLE">
+      <table name="complementary_service_type_register" numRows="2" remarks="" schema="public" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('complementary_service_type_register_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial"/>
          <column autoUpdated="false" digits="0" id="1" name="created_at" nullable="true" remarks="" size="22" type="timestamp"/>
          <column autoUpdated="false" digits="0" id="2" name="updated_at" nullable="true" remarks="" size="22" type="timestamp"/>
@@ -200,7 +264,7 @@
             <column ascending="true" name="id"/>
          </index>
       </table>
-      <table name="logs" numRows="42" remarks="" schema="public" type="TABLE">
+      <table name="logs" numRows="12" remarks="" schema="public" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('logs_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial"/>
          <column autoUpdated="false" digits="0" id="1" name="created_at" nullable="true" remarks="" size="22" type="timestamp"/>
          <column autoUpdated="false" digits="0" id="2" name="updated_at" nullable="true" remarks="" size="22" type="timestamp"/>
@@ -212,7 +276,7 @@
             <column ascending="true" name="id"/>
          </index>
       </table>
-      <table name="migrations" numRows="22" remarks="" schema="public" type="TABLE">
+      <table name="migrations" numRows="26" remarks="" schema="public" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('migrations_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial"/>
          <column autoUpdated="false" digits="0" id="1" name="migration" nullable="false" remarks="" size="255" type="varchar"/>
          <column autoUpdated="false" digits="0" id="2" name="batch" nullable="false" remarks="" size="10" type="int4"/>
@@ -221,7 +285,7 @@
             <column ascending="true" name="id"/>
          </index>
       </table>
-      <table name="register_requisites" numRows="10" remarks="" schema="public" type="TABLE">
+      <table name="register_requisites" numRows="4" remarks="" schema="public" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('register_requisites_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial"/>
          <column autoUpdated="false" digits="0" id="1" name="created_at" nullable="true" remarks="" size="22" type="timestamp"/>
          <column autoUpdated="false" digits="0" id="2" name="updated_at" nullable="true" remarks="" size="22" type="timestamp"/>
@@ -237,7 +301,7 @@
             <column ascending="true" name="id"/>
          </index>
       </table>
-      <table name="register_states" numRows="2" remarks="" schema="public" type="TABLE">
+      <table name="register_states" numRows="1" remarks="" schema="public" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('register_states_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial"/>
          <column autoUpdated="false" digits="0" id="1" name="created_at" nullable="true" remarks="" size="22" type="timestamp"/>
          <column autoUpdated="false" digits="0" id="2" name="updated_at" nullable="true" remarks="" size="22" type="timestamp"/>
@@ -271,8 +335,9 @@
             <column ascending="true" name="id"/>
          </index>
       </table>
-      <table name="registers" numRows="2" remarks="" schema="public" type="TABLE">
+      <table name="registers" numRows="1" remarks="" schema="public" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('registers_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial">
+            <child column="register_id" foreignKey="approval_states_register_id_foreign" implied="false" onDeleteCascade="true" schema="public" table="approval_states"/>
             <child column="register_id" foreignKey="capacity_register_register_id_foreign" implied="false" onDeleteCascade="true" schema="public" table="capacity_register"/>
             <child column="register_id" foreignKey="complementary_service_food_register_register_id_foreign" implied="false" onDeleteCascade="true" schema="public" table="complementary_service_food_register"/>
             <child column="register_id" foreignKey="complementary_service_type_register_register_id_foreign" implied="false" onDeleteCascade="true" schema="public" table="complementary_service_type_register"/>
@@ -293,7 +358,7 @@
             <column ascending="true" name="id"/>
          </index>
       </table>
-      <table name="requisites" numRows="5" remarks="" schema="public" type="TABLE">
+      <table name="requisites" numRows="15" remarks="" schema="public" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('requisites_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial">
             <child column="requisite_id" foreignKey="register_requisites_requisite_id_foreign" implied="false" onDeleteCascade="true" schema="public" table="register_requisites"/>
          </column>
@@ -311,7 +376,7 @@
             <column ascending="true" name="id"/>
          </index>
       </table>
-      <table name="states" numRows="35" remarks="" schema="public" type="TABLE">
+      <table name="states" numRows="49" remarks="" schema="public" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('states_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial">
             <child column="state_id" foreignKey="register_states_state_id_foreign" implied="false" onDeleteCascade="true" schema="public" table="register_states"/>
          </column>

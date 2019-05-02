@@ -14,5 +14,6 @@ export class ApprovalState {
       this.id = 0;
       this.value = false;
       this.date_fullfill = new Date();
+      this.notes = '';
    }
 }

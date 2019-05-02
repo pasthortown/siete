@@ -517,8 +517,8 @@ export class CoordinadorComponent implements OnInit {
         {title: 'Seleccionado', name: 'selected'},
         {title: 'Código del Establecimiento', name: 'establishment_code', filtering: {filterString: '', placeholder: 'Código del Establecimiento'}},
         {title: 'Ubicación del Establecimiento', name: 'address', filtering: {filterString: '', placeholder: 'Ubicación del Establecimiento'}},
-        {title: 'Código del Coordinador', name: 'register_code', filtering: {filterString: '', placeholder: 'Código del Coordinador'}},
-        {title: 'Tipo de Coordinador', name: 'register_type', filtering: {filterString: '', placeholder: 'Tipo de Coordinador'}},
+        {title: 'Código del Registro', name: 'register_code', filtering: {filterString: '', placeholder: 'Código del Registro'}},
+        {title: 'Tipo de Registro', name: 'register_type', filtering: {filterString: '', placeholder: 'Tipo de Registro'}},
         {title: 'Estado', name: 'state', filtering: {filterString: '', placeholder: 'Estado'}},
         {title: 'Observaciones', name: 'notes'},
      ];
@@ -1225,7 +1225,7 @@ export class CoordinadorComponent implements OnInit {
       return;
    }
    if(!this.REGCIVILOK) {
-      this.toastr.errorToastr('Esperando confirmación del Coordinador Civil', 'Coordinador Civil');
+      this.toastr.errorToastr('Esperando confirmación del Registro Civil', 'Registro Civil');
    }
    if(!this.SRIOK) {
       this.toastr.errorToastr('Esperando confirmación del SRI', 'SRI');
@@ -1257,7 +1257,7 @@ export class CoordinadorComponent implements OnInit {
             this.toastr.errorToastr('Existe conflicto con el correo de la persona de contacto ingresada.', 'Actualizar');
             return;
          }
-         this.toastr.successToastr('Coordinador actualizado satisfactoriamente.', 'Actualizar');
+         this.toastr.successToastr('Registro actualizado satisfactoriamente.', 'Actualizar');
          this.refresh();
       }).catch( e => {
          this.guardando = false;
@@ -1267,7 +1267,7 @@ export class CoordinadorComponent implements OnInit {
    }
   }
 
-  guardarCoordinador() {
+  guardarRegistro() {
    this.guardando = true;
    this.registerDataService.register_register_data(this.rucEstablishmentRegisterSelected).then( r => {
       this.guardando = false;
@@ -1589,7 +1589,7 @@ export class CoordinadorComponent implements OnInit {
       this.toastr.errorToastr('Existe conflicto con la información ingresada.', 'Nuevo');
    }
    if(!this.REGCIVILOKEstablishment) {
-      this.toastr.errorToastr('Esperando confirmación del Coordinador Civil', 'Coordinador Civil');
+      this.toastr.errorToastr('Esperando confirmación del Registro Civil', 'Registro Civil');
    }
    if(!this.REGCIVILOKEstablishment){
       return;
@@ -1731,7 +1731,7 @@ export class CoordinadorComponent implements OnInit {
    if (this.consumoCedula && this.REGCIVILOK) {
       return;
    }
-   this.cedulaData = '<div class=\"progress mb-3\"><div class=\"progress-bar progress-bar-striped progress-bar-animated bg-warning col-12\">Espere...</div></div><div class="col-12 text-center"><strong>Conectándose al Coordinador Civil...</strong></div>';
+   this.cedulaData = '<div class=\"progress mb-3\"><div class=\"progress-bar progress-bar-striped progress-bar-animated bg-warning col-12\">Espere...</div></div><div class="col-12 text-center"><strong>Conectándose al Registro Civil...</strong></div>';
    if (this.ruc_registro_selected.ruc.contact_user.identification === this.user.identification) {
       this.ruc_registro_selected.ruc.contact_user = this.user;
       this.checkEmail();
@@ -1748,10 +1748,10 @@ export class CoordinadorComponent implements OnInit {
          registros.forEach(element => {
             if (element.campo === 'cedula') {
                if (element.valor === this.ruc_registro_selected.ruc.contact_user.identification) {
-                  this.toastr.successToastr('La cédula ingresada es correcta.', 'Coordinador Civil');
+                  this.toastr.successToastr('La cédula ingresada es correcta.', 'Registro Civil');
                   this.identificationContactValidated = true;
                } else {
-                  this.toastr.errorToastr('La cédula ingresada no es correcta.', 'Coordinador Civil');
+                  this.toastr.errorToastr('La cédula ingresada no es correcta.', 'Registro Civil');
                   this.identificationContactValidated = false;
                }
             }
@@ -1769,8 +1769,8 @@ export class CoordinadorComponent implements OnInit {
             }
          });
       }).catch( e => {
-         this.toastr.errorToastr('La cédula ingresada no es correcta.', 'Coordinador Civil');
-         this.cedulaData = '<div class="alert alert-danger" role="alert">El Coordinador Civil, no respondió. Vuelva a intentarlo.</div>';
+         this.toastr.errorToastr('La cédula ingresada no es correcta.', 'Registro Civil');
+         this.cedulaData = '<div class="alert alert-danger" role="alert">El Registro Civil, no respondió. Vuelva a intentarlo.</div>';
          this.REGCIVILOK = false;
          this.consumoCedula = false;
       });
@@ -1791,7 +1791,7 @@ export class CoordinadorComponent implements OnInit {
    if (this.consumoCedulaEstablishmentContact && this.REGCIVILOKEstablishment) {
       return;
    }
-   this.cedulaEstablishmentContactData = '<div class=\"progress mb-3\"><div class=\"progress-bar progress-bar-striped progress-bar-animated bg-warning col-12\">Espere...</div></div><div class="col-12 text-center"><strong>Conectándose al Coordinador Civil...</strong></div>';
+   this.cedulaEstablishmentContactData = '<div class=\"progress mb-3\"><div class=\"progress-bar progress-bar-striped progress-bar-animated bg-warning col-12\">Espere...</div></div><div class="col-12 text-center"><strong>Conectándose al Registro Civil...</strong></div>';
    if (!this.consumoCedulaEstablishmentContact) {
       this.identificationContactEstablishmentValidated = true;
       this.consumoCedulaEstablishmentContact = true;
@@ -1802,10 +1802,10 @@ export class CoordinadorComponent implements OnInit {
          registros.forEach(element => {
             if (element.campo === 'cedula') {
                if (element.valor === this.establishment_selected.contact_user.identification) {
-                  this.toastr.successToastr('La cédula ingresada es correcta.', 'Coordinador Civil');
+                  this.toastr.successToastr('La cédula ingresada es correcta.', 'Registro Civil');
                   this.identificationContactEstablishmentValidated = true;
                } else {
-                  this.toastr.errorToastr('La cédula ingresada no es correcta.', 'Coordinador Civil');
+                  this.toastr.errorToastr('La cédula ingresada no es correcta.', 'Registro Civil');
                   this.identificationContactEstablishmentValidated = false;
                }
             }
@@ -1823,8 +1823,8 @@ export class CoordinadorComponent implements OnInit {
             }
          });
       }).catch( e => {
-         this.toastr.errorToastr('La cédula ingresada no es correcta.', 'Coordinador Civil');
-         this.cedulaEstablishmentContactData = '<div class="alert alert-danger" role="alert">El Coordinador Civil, no respondió. Vuelva a intentarlo.</div>';
+         this.toastr.errorToastr('La cédula ingresada no es correcta.', 'Registro Civil');
+         this.cedulaEstablishmentContactData = '<div class="alert alert-danger" role="alert">El Registro Civil, no respondió. Vuelva a intentarlo.</div>';
          this.REGCIVILOKEstablishment = false;
          this.consumoCedulaEstablishmentContact = false;
       });
@@ -1841,7 +1841,7 @@ export class CoordinadorComponent implements OnInit {
    if (this.consumoCedulaRepresentanteLegal && this.REGCIVILREPRESENTANTELEGALOK) {
       return;
    }
-   this.representanteCedulaData = '<div class=\"progress mb-3\"><div class=\"progress-bar progress-bar-striped progress-bar-animated bg-warning col-12\">Espere...</div></div><div class="col-12 text-center"><strong>Conectándose al Coordinador Civil...</strong></div>';
+   this.representanteCedulaData = '<div class=\"progress mb-3\"><div class=\"progress-bar progress-bar-striped progress-bar-animated bg-warning col-12\">Espere...</div></div><div class="col-12 text-center"><strong>Conectándose al Registro Civil...</strong></div>';
    if (!this.consumoCedulaRepresentanteLegal) {
       this.identificationRepresentativePersonValidated = true;
       this.consumoCedulaRepresentanteLegal = true;
@@ -1852,10 +1852,10 @@ export class CoordinadorComponent implements OnInit {
          registros.forEach(element => {
             if (element.campo === 'cedula') {
                if (element.valor === this.ruc_registro_selected.ruc.person_representative.identification) {
-                  this.toastr.successToastr('La cédula ingresada es correcta.', 'Coordinador Civil');
+                  this.toastr.successToastr('La cédula ingresada es correcta.', 'Registro Civil');
                   this.identificationRepresentativePersonValidated = true;
                } else {
-                  this.toastr.errorToastr('La cédula ingresada no es correcta.', 'Coordinador Civil');
+                  this.toastr.errorToastr('La cédula ingresada no es correcta.', 'Registro Civil');
                   this.identificationRepresentativePersonValidated = false;
                }
             }
@@ -1872,8 +1872,8 @@ export class CoordinadorComponent implements OnInit {
             }
          });
       }).catch( e => {
-         this.toastr.errorToastr('La cédula ingresada no es correcta.', 'Coordinador Civil');
-         this.representanteCedulaData = '<div class="alert alert-danger" role="alert">El Coordinador Civil, no respondió. Vuelva a intentarlo.</div>';
+         this.toastr.errorToastr('La cédula ingresada no es correcta.', 'Registro Civil');
+         this.representanteCedulaData = '<div class="alert alert-danger" role="alert">El Registro Civil, no respondió. Vuelva a intentarlo.</div>';
          this.REGCIVILREPRESENTANTELEGALOK = false;
          this.consumoCedulaRepresentanteLegal = false;
       });
@@ -2064,7 +2064,7 @@ export class CoordinadorComponent implements OnInit {
        }
     });
     if (!eliminado) {
-       this.toastr.errorToastr('Coordinador no encontrado.', 'Error');
+       this.toastr.errorToastr('Registro no encontrado.', 'Error');
        return;
     }
     this.ruc_registro_selected.ruc.franchise_chain_names_on_ruc = newFranchises;
@@ -2227,7 +2227,7 @@ export class CoordinadorComponent implements OnInit {
        }
     });
     if (!eliminado) {
-       this.toastr.errorToastr('Coordinador no encontrado.', 'Error');
+       this.toastr.errorToastr('Registro no encontrado.', 'Error');
        return;
     }
     this.establishment_selected.languages_on_establishment = newLanguages;
@@ -2428,7 +2428,7 @@ export class CoordinadorComponent implements OnInit {
       }
     });
     if (!eliminado) {
-      this.toastr.errorToastr('Coordinador no encontrado.', 'Error');
+      this.toastr.errorToastr('Registro no encontrado.', 'Error');
       return;
     }
     this.rucEstablishmentRegisterSelected.complementary_service_types_on_register = newComplementaryCapacities;

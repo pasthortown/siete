@@ -120,6 +120,14 @@
 				 <td>
 				  <table border='0' cellspacing='0' cellpadding='0'>
 				   <tr>
+					<td title="approval_states.register_id references registers.id via approval_states_register_id_foreign">
+						<a href='approval_states.html'>approval_states</a><span class='relatedKey'>.register_id</span>
+					</td>
+					<td class="constraint detail">
+						approval_states_register_id_foreign <span title='Cascade on delete:&#10;Deletion of parent deletes child'>C</span>
+					</td>
+				   </tr>
+				   <tr>
 					<td title="capacity_register.register_id references registers.id via capacity_register_register_id_foreign">
 						<a href='capacity_register.html'>capacity_register</a><span class='relatedKey'>.register_id</span>
 					</td>
@@ -296,7 +304,7 @@
 				</tr>
 								</tbody>
 				</table>
-				<p title='8 columns'>Table contained <span id="recordNumber">2</span> rows<p/>
+				<p title='8 columns'>Table contained <span id="recordNumber">1</span> rows<p/>
 			</div>
 		</div>
 		<div class="box box-primary">		
@@ -355,33 +363,38 @@
             <div class="tab-content no-padding">            
 				<div class="chart tab-pane active" id="oneDegreeImg-chart" style="position: relative; overflow-x:auto;">					
 					<map id="oneDegreeRelationshipsDiagram" name="oneDegreeRelationshipsDiagram">
-<area shape="rect" id="node1" href="capacity_register.html" title="capacity_register" alt="" coords="902,5,1106,181">
-<area shape="rect" id="node2" href="registers.html" title="registers" alt="" coords="231,448,765,752">
-<area shape="rect" id="node7" href="register_types.html" title="register_types" alt="" coords="5,656,187,773">
-<area shape="rect" id="node3" href="complementary_service_food_register.html" title="complementary_service_food_register" alt="" coords="809,199,1199,375">
-<area shape="rect" id="node4" href="complementary_service_type_register.html" title="complementary_service_type_register" alt="" coords="809,392,1199,568">
-<area shape="rect" id="node5" href="register_requisites.html" title="register_requisites" alt="" coords="895,585,1113,761">
-<area shape="rect" id="node6" href="register_states.html" title="register_states" alt="" coords="911,779,1097,955">
+<area shape="rect" id="node1" href="approval_states.html" title="approval_states" alt="" coords="908,5,1100,181">
+<area shape="rect" id="node2" href="registers.html" title="registers" alt="" coords="231,545,765,849">
+<area shape="rect" id="node8" href="register_types.html" title="register_types" alt="" coords="5,753,187,871">
+<area shape="rect" id="node3" href="capacity_register.html" title="capacity_register" alt="" coords="902,199,1106,375">
+<area shape="rect" id="node4" href="complementary_service_food_register.html" title="complementary_service_food_register" alt="" coords="809,392,1199,568">
+<area shape="rect" id="node5" href="complementary_service_type_register.html" title="complementary_service_type_register" alt="" coords="809,585,1199,761">
+<area shape="rect" id="node6" href="register_requisites.html" title="register_requisites" alt="" coords="895,779,1113,955">
+<area shape="rect" id="node7" href="register_states.html" title="register_states" alt="" coords="911,972,1097,1148">
 </map>
 
 					<a name='diagram'><img id='oneDegreeImg' src='../diagrams/registers.1degree.png' usemap='#oneDegreeRelationshipsDiagram' class='diagram' border='0' alt='' align='left'></a>							
 				</div>
 				<div class="chart tab-pane " id="twodegreesDegreeImg-chart" style="position: relative; overflow-x:auto;">					
 					<map id="twoDegreesRelationshipsDiagram" name="twoDegreesRelationshipsDiagram">
-<area shape="rect" id="node1" href="bed_types.html" title="bed_types" alt="" coords="421,348,575,436">
-<area shape="rect" id="node2" href="register_types.html" title="register_types" alt="" coords="5,240,187,357">
-<area shape="rect" id="node3" href="capacities.html" title="capacities" alt="" coords="929,5,1079,93">
-<area shape="rect" id="node4" href="capacity_types.html" title="capacity_types" alt="" coords="405,19,591,107">
-<area shape="rect" id="node5" href="capacity_register.html" title="capacity_register" alt="" coords="1243,283,1447,459">
-<area shape="rect" id="node6" href="registers.html" title="registers" alt="" coords="231,559,765,863">
-<area shape="rect" id="node7" href="complementary_service_food_register.html" title="complementary_service_food_register" alt="" coords="809,304,1199,480">
-<area shape="rect" id="node8" href="complementary_service_foods.html" title="complementary_service_foods" alt="" coords="351,243,645,331">
-<area shape="rect" id="node9" href="complementary_service_type_register.html" title="complementary_service_type_register" alt="" coords="809,497,1199,673">
-<area shape="rect" id="node10" href="complementary_service_types.html" title="complementary_service_types" alt="" coords="351,453,645,541">
-<area shape="rect" id="node11" href="register_requisites.html" title="register_requisites" alt="" coords="895,111,1113,287">
-<area shape="rect" id="node12" href="requisites.html" title="requisites" alt="" coords="423,137,573,225">
-<area shape="rect" id="node13" href="register_states.html" title="register_states" alt="" coords="911,769,1097,945">
-<area shape="rect" id="node14" href="states.html" title="states" alt="" coords="434,880,562,968">
+<area shape="rect" id="node1" href="approval_state_attachments.html" title="approval_state_attachments" alt="" coords="1243,111,1520,199">
+<area shape="rect" id="node2" href="approval_states.html" title="approval_states" alt="" coords="908,55,1100,231">
+<area shape="rect" id="node4" href="approvals.html" title="approvals" alt="" coords="423,115,573,203">
+<area shape="rect" id="node5" href="registers.html" title="registers" alt="" coords="231,641,765,945">
+<area shape="rect" id="node3" href="approval_state_reports.html" title="approval_state_reports" alt="" coords="1260,5,1503,93">
+<area shape="rect" id="node7" href="register_types.html" title="register_types" alt="" coords="5,376,187,493">
+<area shape="rect" id="node6" href="bed_types.html" title="bed_types" alt="" coords="421,325,575,413">
+<area shape="rect" id="node8" href="capacities.html" title="capacities" alt="" coords="929,249,1079,337">
+<area shape="rect" id="node9" href="capacity_types.html" title="capacity_types" alt="" coords="405,220,591,308">
+<area shape="rect" id="node10" href="capacity_register.html" title="capacity_register" alt="" coords="1279,433,1483,609">
+<area shape="rect" id="node11" href="complementary_service_food_register.html" title="complementary_service_food_register" alt="" coords="809,551,1199,727">
+<area shape="rect" id="node12" href="complementary_service_foods.html" title="complementary_service_foods" alt="" coords="351,536,645,624">
+<area shape="rect" id="node13" href="complementary_service_type_register.html" title="complementary_service_type_register" alt="" coords="809,785,1199,961">
+<area shape="rect" id="node14" href="complementary_service_types.html" title="complementary_service_types" alt="" coords="351,963,645,1051">
+<area shape="rect" id="node15" href="register_requisites.html" title="register_requisites" alt="" coords="895,357,1113,533">
+<area shape="rect" id="node16" href="requisites.html" title="requisites" alt="" coords="423,431,573,519">
+<area shape="rect" id="node17" href="register_states.html" title="register_states" alt="" coords="911,988,1097,1164">
+<area shape="rect" id="node18" href="states.html" title="states" alt="" coords="434,1068,562,1156">
 </map>
 
 					<a name='diagram'><img id='twodegreesDegreeImg' src='../diagrams/registers.2degrees.png' usemap='#twoDegreesRelationshipsDiagram' class='diagram' border='0' alt='' align='left'></a>							

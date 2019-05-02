@@ -1,9 +1,24 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <database name="SIETEFINANCIERO" schema="public" type="PostgreSQL - 11.2 (Ubuntu 11.2-1.pgdg18.04+1)">
    <tables>
+      <table name="approval_state_declaration" numRows="0" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('approval_state_declaration_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial"/>
+         <column autoUpdated="false" digits="0" id="1" name="created_at" nullable="true" remarks="" size="22" type="timestamp"/>
+         <column autoUpdated="false" digits="0" id="2" name="updated_at" nullable="true" remarks="" size="22" type="timestamp"/>
+         <column autoUpdated="false" digits="0" id="3" name="approval_state_id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="id" foreignKey="approval_state_declaration_approval_state_id_foreign" implied="false" onDeleteCascade="true" schema="public" table="approval_states"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="4" name="declaration_id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="id" foreignKey="approval_state_declaration_declaration_id_foreign" implied="false" onDeleteCascade="true" schema="public" table="declarations"/>
+         </column>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="approval_state_declaration_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
       <table name="approval_states" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('approval_states_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial">
-            <child column="approval_state_id" foreignKey="declaration_approval_state_approval_state_id_foreign" implied="false" onDeleteCascade="true" schema="public" table="declaration_approval_state"/>
+            <child column="approval_state_id" foreignKey="approval_state_declaration_approval_state_id_foreign" implied="false" onDeleteCascade="true" schema="public" table="approval_state_declaration"/>
          </column>
          <column autoUpdated="false" digits="0" id="1" name="created_at" nullable="true" remarks="" size="22" type="timestamp"/>
          <column autoUpdated="false" digits="0" id="2" name="updated_at" nullable="true" remarks="" size="22" type="timestamp"/>
@@ -17,7 +32,7 @@
             <column ascending="true" name="id"/>
          </index>
       </table>
-      <table name="approvals" numRows="0" remarks="" schema="public" type="TABLE">
+      <table name="approvals" numRows="2" remarks="" schema="public" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('approvals_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial">
             <child column="approval_id" foreignKey="approval_states_approval_id_foreign" implied="false" onDeleteCascade="true" schema="public" table="approval_states"/>
          </column>
@@ -26,21 +41,6 @@
          <column autoUpdated="false" digits="0" id="3" name="name" nullable="true" remarks="" size="50" type="varchar"/>
          <primaryKey column="id" sequenceNumberInPK="1"/>
          <index name="approvals_pkey" unique="true">
-            <column ascending="true" name="id"/>
-         </index>
-      </table>
-      <table name="declaration_approval_state" numRows="0" remarks="" schema="public" type="TABLE">
-         <column autoUpdated="true" defaultValue="nextval('declaration_approval_state_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial"/>
-         <column autoUpdated="false" digits="0" id="1" name="created_at" nullable="true" remarks="" size="22" type="timestamp"/>
-         <column autoUpdated="false" digits="0" id="2" name="updated_at" nullable="true" remarks="" size="22" type="timestamp"/>
-         <column autoUpdated="false" digits="0" id="3" name="approval_state_id" nullable="false" remarks="" size="10" type="int4">
-            <parent column="id" foreignKey="declaration_approval_state_approval_state_id_foreign" implied="false" onDeleteCascade="true" schema="public" table="approval_states"/>
-         </column>
-         <column autoUpdated="false" digits="0" id="4" name="declaration_id" nullable="false" remarks="" size="10" type="int4">
-            <parent column="id" foreignKey="declaration_approval_state_declaration_id_foreign" implied="false" onDeleteCascade="true" schema="public" table="declarations"/>
-         </column>
-         <primaryKey column="id" sequenceNumberInPK="1"/>
-         <index name="declaration_approval_state_pkey" unique="true">
             <column ascending="true" name="id"/>
          </index>
       </table>
@@ -59,22 +59,22 @@
             <column ascending="true" name="id"/>
          </index>
       </table>
-      <table name="declaration_declaration_item" numRows="0" remarks="" schema="public" type="TABLE">
-         <column autoUpdated="true" defaultValue="nextval('declaration_declaration_item_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial"/>
+      <table name="declaration_declaration_item_value" numRows="3" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('declaration_declaration_item_value_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial"/>
          <column autoUpdated="false" digits="0" id="1" name="created_at" nullable="true" remarks="" size="22" type="timestamp"/>
          <column autoUpdated="false" digits="0" id="2" name="updated_at" nullable="true" remarks="" size="22" type="timestamp"/>
-         <column autoUpdated="false" digits="0" id="3" name="declaration_item_id" nullable="false" remarks="" size="10" type="int4">
-            <parent column="id" foreignKey="declaration_declaration_item_declaration_item_id_foreign" implied="false" onDeleteCascade="true" schema="public" table="declaration_items"/>
+         <column autoUpdated="false" digits="0" id="3" name="declaration_item_value_id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="id" foreignKey="declaration_declaration_item_value_declaration_item_value_id_fo" implied="false" onDeleteCascade="true" schema="public" table="declaration_item_values"/>
          </column>
          <column autoUpdated="false" digits="0" id="4" name="declaration_id" nullable="false" remarks="" size="10" type="int4">
-            <parent column="id" foreignKey="declaration_declaration_item_declaration_id_foreign" implied="false" onDeleteCascade="true" schema="public" table="declarations"/>
+            <parent column="id" foreignKey="declaration_declaration_item_value_declaration_id_foreign" implied="false" onDeleteCascade="true" schema="public" table="declarations"/>
          </column>
          <primaryKey column="id" sequenceNumberInPK="1"/>
-         <index name="declaration_declaration_item_pkey" unique="true">
+         <index name="declaration_declaration_item_value_pkey" unique="true">
             <column ascending="true" name="id"/>
          </index>
       </table>
-      <table name="declaration_item_categories" numRows="0" remarks="" schema="public" type="TABLE">
+      <table name="declaration_item_categories" numRows="2" remarks="" schema="public" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('declaration_item_categories_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial">
             <child column="declaration_item_category_id" foreignKey="declaration_items_declaration_item_category_id_foreign" implied="false" onDeleteCascade="true" schema="public" table="declaration_items"/>
          </column>
@@ -89,15 +89,14 @@
             <column ascending="true" name="id"/>
          </index>
       </table>
-      <table name="declaration_item_values" numRows="0" remarks="" schema="public" type="TABLE">
-         <column autoUpdated="true" defaultValue="nextval('declaration_item_values_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial"/>
+      <table name="declaration_item_values" numRows="3" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('declaration_item_values_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial">
+            <child column="declaration_item_value_id" foreignKey="declaration_declaration_item_value_declaration_item_value_id_fo" implied="false" onDeleteCascade="true" schema="public" table="declaration_declaration_item_value"/>
+         </column>
          <column autoUpdated="false" digits="0" id="1" name="created_at" nullable="true" remarks="" size="22" type="timestamp"/>
          <column autoUpdated="false" digits="0" id="2" name="updated_at" nullable="true" remarks="" size="22" type="timestamp"/>
          <column autoUpdated="false" digits="17" id="3" name="value" nullable="true" remarks="" size="17" type="float8"/>
-         <column autoUpdated="false" digits="0" id="4" name="declaration_id" nullable="false" remarks="" size="10" type="int4">
-            <parent column="id" foreignKey="declaration_item_values_declaration_id_foreign" implied="false" onDeleteCascade="true" schema="public" table="declarations"/>
-         </column>
-         <column autoUpdated="false" digits="0" id="5" name="declaration_item_id" nullable="false" remarks="" size="10" type="int4">
+         <column autoUpdated="false" digits="0" id="4" name="declaration_item_id" nullable="false" remarks="" size="10" type="int4">
             <parent column="id" foreignKey="declaration_item_values_declaration_item_id_foreign" implied="false" onDeleteCascade="true" schema="public" table="declaration_items"/>
          </column>
          <primaryKey column="id" sequenceNumberInPK="1"/>
@@ -105,9 +104,8 @@
             <column ascending="true" name="id"/>
          </index>
       </table>
-      <table name="declaration_items" numRows="0" remarks="" schema="public" type="TABLE">
+      <table name="declaration_items" numRows="3" remarks="" schema="public" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('declaration_items_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial">
-            <child column="declaration_item_id" foreignKey="declaration_declaration_item_declaration_item_id_foreign" implied="false" onDeleteCascade="true" schema="public" table="declaration_declaration_item"/>
             <child column="declaration_item_id" foreignKey="declaration_item_values_declaration_item_id_foreign" implied="false" onDeleteCascade="true" schema="public" table="declaration_item_values"/>
          </column>
          <column autoUpdated="false" digits="0" id="1" name="created_at" nullable="true" remarks="" size="22" type="timestamp"/>
@@ -125,12 +123,11 @@
             <column ascending="true" name="id"/>
          </index>
       </table>
-      <table name="declarations" numRows="0" remarks="" schema="public" type="TABLE">
+      <table name="declarations" numRows="1" remarks="" schema="public" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('declarations_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial">
-            <child column="declaration_id" foreignKey="declaration_approval_state_declaration_id_foreign" implied="false" onDeleteCascade="true" schema="public" table="declaration_approval_state"/>
+            <child column="declaration_id" foreignKey="approval_state_declaration_declaration_id_foreign" implied="false" onDeleteCascade="true" schema="public" table="approval_state_declaration"/>
             <child column="declaration_id" foreignKey="declaration_attachments_declaration_id_foreign" implied="false" onDeleteCascade="true" schema="public" table="declaration_attachments"/>
-            <child column="declaration_id" foreignKey="declaration_declaration_item_declaration_id_foreign" implied="false" onDeleteCascade="true" schema="public" table="declaration_declaration_item"/>
-            <child column="declaration_id" foreignKey="declaration_item_values_declaration_id_foreign" implied="false" onDeleteCascade="true" schema="public" table="declaration_item_values"/>
+            <child column="declaration_id" foreignKey="declaration_declaration_item_value_declaration_id_foreign" implied="false" onDeleteCascade="true" schema="public" table="declaration_declaration_item_value"/>
             <child column="declaration_id" foreignKey="pays_declaration_id_foreign" implied="false" onDeleteCascade="true" schema="public" table="pays"/>
             <child column="declaration_id" foreignKey="state_declarations_declaration_id_foreign" implied="false" onDeleteCascade="true" schema="public" table="state_declarations"/>
          </column>
@@ -145,7 +142,7 @@
             <column ascending="true" name="id"/>
          </index>
       </table>
-      <table name="logs" numRows="0" remarks="" schema="public" type="TABLE">
+      <table name="logs" numRows="13" remarks="" schema="public" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('logs_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial"/>
          <column autoUpdated="false" digits="0" id="1" name="created_at" nullable="true" remarks="" size="22" type="timestamp"/>
          <column autoUpdated="false" digits="0" id="2" name="updated_at" nullable="true" remarks="" size="22" type="timestamp"/>
@@ -199,7 +196,7 @@
             <column ascending="true" name="id"/>
          </index>
       </table>
-      <table name="state_declarations" numRows="0" remarks="" schema="public" type="TABLE">
+      <table name="state_declarations" numRows="1" remarks="" schema="public" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('state_declarations_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial"/>
          <column autoUpdated="false" digits="0" id="1" name="created_at" nullable="true" remarks="" size="22" type="timestamp"/>
          <column autoUpdated="false" digits="0" id="2" name="updated_at" nullable="true" remarks="" size="22" type="timestamp"/>
@@ -216,7 +213,7 @@
             <column ascending="true" name="id"/>
          </index>
       </table>
-      <table name="states" numRows="0" remarks="" schema="public" type="TABLE">
+      <table name="states" numRows="3" remarks="" schema="public" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('states_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial">
             <child column="state_id" foreignKey="state_declarations_state_id_foreign" implied="false" onDeleteCascade="true" schema="public" table="state_declarations"/>
          </column>

@@ -4,12 +4,12 @@ declaration_item_categories
 states
 declaration_items
 approval_states
+declaration_item_values
 pays
 declaration_attachments
 pay_attachments
-declaration_approval_state
-declaration_declaration_item
-declaration_item_values
+approval_state_declaration
+declaration_declaration_item_value
 state_declarations
 logs
 migrations

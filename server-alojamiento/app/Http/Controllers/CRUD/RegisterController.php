@@ -73,7 +73,7 @@ class RegisterController extends Controller
       }
       return response()->json($toReturn, 200);
     }
-    
+
     function get_register_data(Request $data) {
       $id = $data['id'];
       $register = Register::where('id', $id)->first();
