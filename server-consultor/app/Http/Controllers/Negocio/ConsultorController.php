@@ -37,6 +37,20 @@ class ConsultorController extends Controller
     return response()->json($toReturn,200);
   }
 
+  function get_registers_assigned_financial_id(Request $data) {
+    $request = $data->json()->all();
+    $token = $data->header('api_token');
+    $toReturn = [];
+    $registers_alojamiento = json_decode($this->httpGet('http://localhost:8002/register/by_financial_id?id='.$data['id'],null,null,$token));
+    foreach($registers_alojamiento as $register) {
+      $status = json_decode($this->httpGet('http://localhost:8002/registerstate/get_by_register_id?id='.$register->id,null,null,$token));
+      $establishment = json_decode($this->httpGet('http://localhost:8001/establishment?id='.$register->establishment_id,null,null,$token));
+      $ruc = json_decode($this->httpGet('http://localhost:8001/ruc?id='.$establishment->Establishment->ruc_id,null,null,$token));
+      array_push($toReturn, ["register"=>$register, "establishment"=>$establishment->Establishment, "ruc"=>$ruc->Ruc, "states"=>$status]);
+    }
+    return response()->json($toReturn,200);
+  }
+
   protected function httpGet($url, $data=NULL, $headers = NULL, $token) {
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);

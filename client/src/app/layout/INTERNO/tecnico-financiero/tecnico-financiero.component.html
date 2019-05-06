@@ -1,5 +1,365 @@
 <div class="row">
-    <h1 class="col-12 text-right">
-        Técnico Financiero
-    </h1>
-</div>
+        <h1 class="col-12 text-right">
+           Registros - MINTUR
+        </h1>
+      </div>
+      <div class="row">
+        <div class="col-12">
+           <div class="btn-toolbar" role="toolbar">
+              <div class="btn-group mr-2" role="group">
+                 <button type="button" class="btn btn-primary" title="Actualizar" (click)="refresh()"><i class="fas fa-sync"></i></button>
+              </div>
+              <div class="btn-group mr-2" role="group">
+                <input *ngIf="config.filtering" placeholder="Buscar..."
+                   [ngTableFiltering]="config.filtering"
+                   class="form-control"
+                   (input)="onChangeTable(config)"/>
+             </div>
+           </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12 mt-2">
+           <ng-table
+              [config]="config"
+              (cellClicked)="onCellClick($event)"
+              (tableChanged)="onChangeTable(config)"
+              [rows]="rows"
+              [columns]="columns">
+            </ng-table>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <ngb-pagination
+            *ngIf="config.paging"
+            [(page)]="currentPageMinturRegisters"
+            [pageSize]="recordsByPageRegisterMintur"
+            [maxSize]="10"
+            [boundaryLinks]="true"
+            (pageChange)="onChangeTable(config, $event)"
+            [collectionSize]="registers_mintur.length">
+            <ng-template ngbPaginationFirst>Primera</ng-template>
+            <ng-template ngbPaginationPrevious>Anterior</ng-template>
+            <ng-template ngbPaginationNext>Siguiente</ng-template>
+            <ng-template ngbPaginationLast>Última</ng-template>
+          </ngb-pagination>
+        </div>
+      </div>
+      <div class="row" *ngIf="mostrarDataRegisterMintur">
+        <div class="col-12">
+          <h4>Resultado de la Inspección</h4>
+        </div>
+        <div class="col-6">
+            <label>Formulario de Requisitos</label>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <button type="button" class="btn btn-secondary" title="Imprimir Formulario de Requisitos" (click)="imprimirRequisitos()"><i class="fas fa-print"></i></button>
+                <button type="button" [disabled]="!validateRequisitesFile()" class="btn btn-secondary" title="Descargar Formulario de Requisitos Cargado" (click)="descargarRequisitos()"><i class="fas fa-download"></i></button>
+                <button type="button" [disabled]="!validateRequisitesFile()" class="btn btn-danger" title="Borrar Formulario de Requisitos Cargado" (click)="borrarRequisitos()"><i class="fas fa-trash"></i></button>
+              </div>
+              <input type="file" class="form-control" id="requisitesFile"
+                name="requisitesFile" placeholder="Formulario de Revisión de Requisitos"
+                (change)="CodeFileRequisitesAttachment($event)">
+            </div>
+        </div>
+        <div class="col-6">
+            <label>Informe de Inspección</label>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <button type="button" class="btn btn-secondary" title="Imprimir Informe" (click)="imprimirInforme()"><i class="fas fa-print"></i></button>
+                <button type="button" [disabled]="!validateInformeFile()" class="btn btn-secondary" title="Descargar Informe Cargado" (click)="descargarInforme()"><i class="fas fa-download"></i></button>
+                <button type="button" [disabled]="!validateInformeFile()" class="btn btn-danger" title="Borrar Informe Cargado" (click)="borrarInforme()"><i class="fas fa-trash"></i></button>
+              </div>
+              <input type="file" class="form-control" id="informeFile"
+                name="informeFile" placeholder="Informe de Inspección"
+                (change)="CodeFileInformeAttachment($event)">
+            </div>
+        </div>
+        <div class="col-6">
+            <label>Fecha de la Inspección</label>
+            <input type="date" class="form-control" id="date_assigment" name="date_assigment" placeholder="dateAssigment" [ngModel]="registerApprovalInspector.date_assigment | date:'y-MM-dd'" (ngModelChange)="registerApprovalInspector.date_assigment = $event">
+        </div>
+        <div class="col-6">
+            <label>Estado de la Inspección</label>
+            <select class="form-control" id="stateInspection" name="stateInspection" [(ngModel)]="inspectionState">
+              <option value="0" selected>Pendiente</option>
+              <option value="1" selected>Aprobado</option>
+              <option value="2" selected>Negado</option>
+            </select>
+        </div>
+        <div class="col-12 mt-3 mb-2">
+          <label class="col-form-label">Observaciones</label>
+          <ck-editor id="notes" name="notes" skin="moono-lisa" [(ngModel)]="registerApprovalInspector.notes"></ck-editor>
+        </div>
+        <div class="col-12 text-center mb-3">
+          <button type="button" [disabled]="!validateInspectionInfo()" class="btn btn-success" title="Aprobar Trámite" (click)="guardarInspeccion()"><i class="fas fa-save"></i> Guardar Información</button>
+          <button type="button" class="btn btn-danger ml-2" title="Cancelar Cambios" (click)="refresh()"><i class="fas fa-times"></i> Cancelar</button>
+        </div>
+      </div>
+      <div class="row" *ngIf="mostrarDataRegisterMintur">  
+        <div class="col-12">
+          <div class="row mt-5">
+            <div class="col-12 text-left">
+              <h3>Datos:</h3>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <ngb-tabset>
+                <ngb-tab title="Declaración de Impuestos" id="tab4">
+                  <ng-template ngbTabContent>
+                    <div class="row mt-3">
+                      <h4 class="col-12">
+                        <strong>Establecimientos Registrados</strong>
+                      </h4>
+                    </div>
+                    <div class="row">
+                      <div class="col-12">
+                        <div class="btn-toolbar" role="toolbar">
+                          <div class="btn-group mr-2" role="group">
+                            <button type="button" class="btn btn-primary" title="Actualizar" (click)="
+                              getEstablishmentsOnRuc(currentPageEstablishment)
+                              ">
+                              <i class="fas fa-sync"></i>
+                            </button>
+                          </div>
+                          <div class="input-group">
+                            <div class="input-group-prepend">
+                              <button type="button" class="input-group-text btn btn-success" title="Buscar">
+                                <span class="fas fa-search"></span>
+                              </button>
+                            </div>
+                            <input *ngIf="config.filtering" placeholder="Buscar..."
+                              [ngTableFiltering]="config.filtering"
+                              class="form-control"
+                              (input)="onChangeTableEstablishment(config)"/>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-12 mt-2">
+                         <ng-table
+                            [config]="config"
+                            (cellClicked)="onCellClickEstablishmentDeclaration($event)"
+                            (tableChanged)="onChangeTableEstablishment(config)"
+                            [rows]="rowsEstablishment"
+                            [columns]="columnsEstablishment">
+                          </ng-table>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-12">
+                        <ngb-pagination
+                          *ngIf="config.paging"
+                          [(page)]="currentPageEstablishment"
+                          [pageSize]="recordsByPageEstablishment"
+                          [maxSize]="10"
+                          [boundaryLinks]="true"
+                          (pageChange)="onChangeTableEstablishment(config, $event)"
+                          [collectionSize]="ruc_registro_selected.ruc.establishments.length">
+                          <ng-template ngbPaginationFirst>Primera</ng-template>
+                          <ng-template ngbPaginationPrevious>Anterior</ng-template>
+                          <ng-template ngbPaginationNext>Siguiente</ng-template>
+                          <ng-template ngbPaginationLast>Última</ng-template>
+                        </ngb-pagination>
+                      </div>
+                    </div>
+                    <div class="row mt-5" *ngIf="establishment_declarations_selected.id !== 0">
+                      <div class="col-12">
+                        <div class="row mt-3">
+                          <h4 class="col-12">
+                            <strong>Declaraciones de Impuestos</strong>
+                          </h4>
+                        </div>
+                        <div class="row">
+                          <div class="col-12">
+                            <div class="btn-toolbar" role="toolbar">
+                              <div class="btn-group mr-2" role="group">
+                                <button type="button" class="btn btn-primary" title="Actualizar" (click)="
+                                  getEstablishmentsOnRuc(currentPageDeclaration)
+                                  ">
+                                  <i class="fas fa-sync"></i>
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-12">
+                            <table class="table table-hover mt-2">
+                              <thead>
+                                <tr>
+                                  <th>Seleccionado</th>
+                                  <th>Año</th>
+                                  <th>Fecha de Declaración</th>
+                                  <th>Estado</th>
+                                  <th>Observaciones</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr *ngFor="let declaration of declarations" (click)="selectDeclaration(declaration)">
+                                  <td class="text-right">
+                                    <span *ngIf="declaration_selected === declaration" class="far fa-hand-point-right"></span>
+                                  </td>
+                                  <td>{{declaration.year}}</td>
+                                  <td>{{declaration.declaration_date}}</td>
+                                  <td>{{declaration.status_name}}</td>
+                                  <td>
+                                    <button type="button" title="Ver Observaciones" class="btn btn-info"
+                                      (click)="openDialog(content, declaration.status)">
+                                      <i class="fas fa-comment-dots"></i>
+                                    </button>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div *ngIf="mostrarDataDeclaration">
+                      <div class="row mt-5">
+                        <div class="col-12 text-left">
+                          <h3>Datos de la Declaración:</h3>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-12">
+                          <div class="form-group">
+                            <label>Año a Declarar</label>
+                            <input type="number" class="form-control" id="declarationYear" name="declarationYear"
+                              placeholder="Año a Declarar" [(ngModel)]="declaration_selected.year" [max]="maxYear">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row" *ngIf="mostrarFechaMaximaPago()">
+                        <div class="col-6">
+                          <div class="form-group">
+                            <label>Fecha Máxima de Pago</label>
+                            <h3>
+                              <strong>{{ declaration_selected.max_date_to_pay | date:'y-MM-dd'}}</strong>
+                            </h3>
+                          </div>
+                        </div>
+                        <div class="col-6">
+                          <div class="form-group">
+                            <label>Opciones</label>
+                            <div class="btn-toolbar" role="toolbar">
+                              <div class="btn-group mr-2" role="group">
+                                <button type="button" class="btn-lg btn-success" title="Descargar Pago"
+                                  (click)="goToPage(currentPage)">
+                                  <i class="fas fa-cash-register"></i>
+                                </button>
+                              </div>
+                              <div class="btn-group mr-2" role="group">
+                                <button type="button" class="btn-lg btn-primary" title="Descargar Declaración"
+                                  (click)="goToPage(currentPage)">
+                                  <i class="fas fa-file-invoice-dollar "></i>
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row" *ngIf="mostrarFechaMaximaPago()">
+                        <div class="col-4">
+                          <div class="form-group">
+                            <label>Monto a Pagar</label>
+                            <h3>
+                              <strong>{{ payDeclarationSelected.amount_to_pay }} USD</strong>
+                            </h3>
+                          </div>
+                        </div>
+                        <div class="col-4">
+                          <div class="form-group">
+                            <label>Monto Pagado</label>
+                            <h3>
+                              <strong class="text-danger"
+                                *ngIf="payDeclarationSelected.amount_payed < payDeclarationSelected.amount_to_pay">{{ payDeclarationSelected.amount_payed }}
+                                USD</strong>
+                              <strong class="text-success"
+                                *ngIf="payDeclarationSelected.amount_payed == payDeclarationSelected.amount_to_pay">{{ payDeclarationSelected.amount_payed }}
+                                USD</strong>
+                              <strong class="text-warning"
+                                *ngIf="payDeclarationSelected.amount_payed > payDeclarationSelected.amount_to_pay">{{ payDeclarationSelected.amount_payed }}
+                                USD</strong>
+                            </h3>
+                          </div>
+                        </div>
+                        <div class="col-4">
+                          <div class="form-group">
+                            <label>Fecha de Pago</label>
+                            <h3>
+                              <strong class="text-success"
+                                *ngIf="payDeclarationSelected.pay_date <= declaration_selected.max_date_to_pay">{{ payDeclarationSelected.pay_date | date:'y-MM-dd'}}</strong>
+                              <strong class="text-danger"
+                                *ngIf="payDeclarationSelected.pay_date > declaration_selected.max_date_to_pay">{{ payDeclarationSelected.pay_date | date:'y-MM-dd'}}</strong>
+                            </h3>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-12">
+                          <table class="table table-hover mt-2">
+                            <tbody *ngFor="let declarationItemToShow of declarationItemsToShow">
+                              <tr class="text-light bg-secondary">
+                                <th colspan="2" class="text-center">
+                                  {{ declarationItemToShow.Category.name }}
+                                </th>
+                              </tr>
+                              <tr>
+                                <th>
+                                  Nombre
+                                </th>
+                                <th>
+                                  Valor
+                                </th>
+                              </tr>
+                              <tr *ngFor="let item of declarationItemToShow.items">
+                                <td>
+                                  {{ item.declarationItem.name }}
+                                </td>
+                                <td>
+                                  <div class="input-group">
+                                    <div class="input-group-prepend">
+                                      <span class="input-group-text">USD</span>
+                                    </div>
+                                    <input type="number" class="form-control" min="0" step="0.01" id="declarationITemValue"
+                                      name="declarationITemValue" [(ngModel)]="item.valueItem.value"
+                                      placeholder="Valor" />
+                                  </div>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row mt-3">
+                      <div class="col-12 text-center">
+                          
+                      </div>
+                    </div>
+                  </ng-template>
+                </ngb-tab>
+              </ngb-tabset>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <ng-template #content let-modal>
+        <div class="modal-header">
+          <h3>Observaciones</h3>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-12 text-justify" [innerHTML]="statusSelected.justification"></div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-success" (click)="modal.close('Guardar click')">Cerrar</button>
+        </div>
+      </ng-template>

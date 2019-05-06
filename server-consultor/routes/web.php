@@ -18,7 +18,7 @@ $router->get('/', function () use ($router) {
 $router->group(['middleware' => []], function () use ($router) {
    $router->post('registers', ['uses' => 'ConsultorController@registers']);
    $router->get('get_registers_assigned_inspector_id', ['uses' => 'ConsultorController@get_registers_assigned_inspector_id']);
-   
+   $router->get('get_registers_assigned_financial_id', ['uses' => 'ConsultorController@get_registers_assigned_financial_id']);   
 });
 
 $router->group(['middleware' => ['auth']], function () use ($router) {

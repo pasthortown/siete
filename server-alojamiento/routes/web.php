@@ -24,6 +24,7 @@ $router->group(['middleware' => ['auth']], function () use ($router) {
    $router->post('/register', ['uses' => 'RegisterController@post']);
    $router->get('/register', ['uses' => 'RegisterController@get']);
    $router->get('/register/by_inspector_id', ['uses' => 'RegisterController@by_inspector_id']);
+   $router->get('/register/by_financial_id', ['uses' => 'RegisterController@by_financial_id']);
    $router->get('/register/get_registers_by_ruc', ['uses' => 'RegisterController@get_registers_by_ruc']);
    $router->get('/register/get_register_data', ['uses' => 'RegisterController@get_register_data']);
    $router->get('/register/paginate', ['uses' => 'RegisterController@paginate']);

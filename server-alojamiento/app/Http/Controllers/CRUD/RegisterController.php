@@ -52,6 +52,11 @@ class RegisterController extends Controller
       return response()->json($registers, 200);
     }
 
+    function by_financial_id(Request $data) {
+      $registers = Register::join('approval_states', 'approval_states.register_id', '=', 'registers.id')->where('approval_states.id_user',$data['id'])->select('registers.*', 'approval_states.date_assigment')->distinct()->orderBy('registers.updated_at', 'DESC')->orderBy('approval_states.date_assigment', 'ASC')->get();
+      return response()->json($registers, 200);
+    }
+
     function get_registers_by_ruc(Request $data) {
       $token = $data->header('api_token');
       $number = $data['ruc_number'];

@@ -383,11 +383,11 @@ class UserController extends Controller
       $email = $result['user']['email'];
       $name = $result['user']['name'];
       $account_rol_id = $result['account_rol_id'];
+      $new_password = str_random(10);
       $message = "Tu nueva contraseña es " . $new_password;
       if($account_rol_id == 2) {
          $message = "Para administrar el RUC " . $result['user']['ruc'] . ", Tu nueva contraseña es " . $new_password;
       }
-      $new_password = str_random(10);
       $subject = "Cambiamos tus datos " . env('MAIL_FROM_NAME');
       try{
          DB::beginTransaction();

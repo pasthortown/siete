@@ -113,7 +113,7 @@ export class InspectorComponent implements OnInit {
    informeApprovalStateAttachment: ApprovalStateAttachment = new ApprovalStateAttachment();
    newRegisterState: RegisterState = new RegisterState();
 
-   //RREGISTROS MINTUR
+   //REGISTROS MINTUR
    registers_mintur = [];
    registerMinturSelected: any = null;
    currentPageMinturRegisters = 1;

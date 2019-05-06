@@ -31,6 +31,12 @@ export class ConsultorService {
       }).catch( error => { this.handledError(error.json()); });
    }
 
+   get_registers_assigned_financial_id(id: number) {
+      return this.http.get(this.url + 'get_registers_assigned_financial_id?id=' + id.toString(), this.options).toPromise()
+      .then( r => {
+         return r.json();
+      }).catch( error => { this.handledError(error.json()); });
+   }
 
    handledError(error: any) {
       console.log(error);
