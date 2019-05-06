@@ -99,7 +99,7 @@ export class TecnicoFinancieroComponent implements OnInit {
   //ASIGNACIONES
   inspectores: User[] = [];
   financieros: User[] = [];
-  inspectorSelectedId: number = 0;
+  financialSelectedId: number = 0;
   registerApprovals: ApprovalState[] = [];
   registerApprovalCoordinador: ApprovalState = new ApprovalState();
   registerApprovalInspector: ApprovalState = new ApprovalState();
@@ -109,8 +109,8 @@ export class TecnicoFinancieroComponent implements OnInit {
   hasInform  = false;
   hasRequisites = false;
   inspectionState = 0;
-  requisitosApprovalStateAttachment: ApprovalStateAttachment = new ApprovalStateAttachment();
-  informeApprovalStateAttachment: ApprovalStateAttachment = new ApprovalStateAttachment();
+  declarationApprovalStateAttachment: ApprovalStateAttachment = new ApprovalStateAttachment();
+  payApprovalStateAttachment: ApprovalStateAttachment = new ApprovalStateAttachment();
   newRegisterState: RegisterState = new RegisterState();
 
   //REGISTROS MINTUR
@@ -678,7 +678,7 @@ export class TecnicoFinancieroComponent implements OnInit {
     this.onChangeTable(this.config);
  }
 
- imprimirRequisitos() {
+ imprimirDeclaracion() {
   
  }
 
@@ -690,30 +690,30 @@ export class TecnicoFinancieroComponent implements OnInit {
   return this.validateNotesInspection() && this.validateInformeFile() && this.validateRequisitesFile();
  }
 
- descargarRequisitos() {
+ descargarDeclaracion() {
   this.downloadFile(
-     this.requisitosApprovalStateAttachment.approval_state_attachment_file,
-     this.requisitosApprovalStateAttachment.approval_state_attachment_file_type,
-     this.requisitosApprovalStateAttachment.approval_state_attachment_file_name);
+     this.declarationApprovalStateAttachment.approval_state_attachment_file,
+     this.declarationApprovalStateAttachment.approval_state_attachment_file_type,
+     this.declarationApprovalStateAttachment.approval_state_attachment_file_name);
  }
 
- borrarRequisitos() {
-  this.requisitosApprovalStateAttachment = new ApprovalStateAttachment();
+ borrarDeclaracion() {
+  this.declarationApprovalStateAttachment = new ApprovalStateAttachment();
  }
 
- imprimirInforme() {
+ imprimirPago() {
 
  }
 
- descargarInforme() {
+ descargarPago() {
   this.downloadFile(
-     this.informeApprovalStateAttachment.approval_state_attachment_file,
-     this.informeApprovalStateAttachment.approval_state_attachment_file_type,
-     this.informeApprovalStateAttachment.approval_state_attachment_file_name);
+     this.payApprovalStateAttachment.approval_state_attachment_file,
+     this.payApprovalStateAttachment.approval_state_attachment_file_type,
+     this.payApprovalStateAttachment.approval_state_attachment_file_name);
  }
 
- borrarInforme() {
-  this.informeApprovalStateAttachment = new ApprovalStateAttachment();
+ borrarPago() {
+  this.payApprovalStateAttachment = new ApprovalStateAttachment();
  }
 
  CodeFileRequisitesAttachment(event) {
@@ -722,9 +722,9 @@ export class TecnicoFinancieroComponent implements OnInit {
      const file = event.target.files[0];
      reader.readAsDataURL(file);
      reader.onload = () => {
-        this.requisitosApprovalStateAttachment.approval_state_attachment_file_name = file.name;
-        this.requisitosApprovalStateAttachment.approval_state_attachment_file_type = file.type;
-        this.requisitosApprovalStateAttachment.approval_state_attachment_file = reader.result.toString().split(',')[1];
+        this.declarationApprovalStateAttachment.approval_state_attachment_file_name = file.name;
+        this.declarationApprovalStateAttachment.approval_state_attachment_file_type = file.type;
+        this.declarationApprovalStateAttachment.approval_state_attachment_file = reader.result.toString().split(',')[1];
      };
   }
  }
@@ -735,19 +735,19 @@ export class TecnicoFinancieroComponent implements OnInit {
      const file = event.target.files[0];
      reader.readAsDataURL(file);
      reader.onload = () => {
-        this.informeApprovalStateAttachment.approval_state_attachment_file_name = file.name;
-        this.informeApprovalStateAttachment.approval_state_attachment_file_type = file.type;
-        this.informeApprovalStateAttachment.approval_state_attachment_file = reader.result.toString().split(',')[1];
+        this.payApprovalStateAttachment.approval_state_attachment_file_name = file.name;
+        this.payApprovalStateAttachment.approval_state_attachment_file_type = file.type;
+        this.payApprovalStateAttachment.approval_state_attachment_file = reader.result.toString().split(',')[1];
      };
   }
  }
 
  validateRequisitesFile(): Boolean {
-  return !(this.requisitosApprovalStateAttachment.approval_state_attachment_file_name == '');
+  return !(this.declarationApprovalStateAttachment.approval_state_attachment_file_name == '');
  }
 
  validateInformeFile(): Boolean {
-  return !(this.informeApprovalStateAttachment.approval_state_attachment_file_name == '');
+  return !(this.payApprovalStateAttachment.approval_state_attachment_file_name == '');
  }
 
  guardarInspeccion() {
@@ -769,22 +769,22 @@ export class TecnicoFinancieroComponent implements OnInit {
    this.registerStateDataService.post(this.newRegisterState).then( r1 => {
    }).catch( e => { console.log(e); });
    this.approvalStateDataService.put(this.registerApprovalInspector).then( r => {
-     this.requisitosApprovalStateAttachment.approval_state_attachment_file_name = 'Formulario_Requisitos_' + this.user.identification + '_' + today.getFullYear().toString() + '_' + (today.getMonth() + 1).toString() + '_' + today.getDate().toString();
-     this.informeApprovalStateAttachment.approval_state_attachment_file_name = 'Informe_Requisitos_' + this.user.identification + '_' + today.getFullYear().toString() + '_' + (today.getMonth() + 1).toString() + '_' + today.getDate().toString();
-     if (this.requisitosApprovalStateAttachment.id == 0) {
-        this.approvalStateAttachmentDataService.post(this.requisitosApprovalStateAttachment).then( r2 => {
+     this.declarationApprovalStateAttachment.approval_state_attachment_file_name = 'Formulario_Requisitos_' + this.user.identification + '_' + today.getFullYear().toString() + '_' + (today.getMonth() + 1).toString() + '_' + today.getDate().toString();
+     this.payApprovalStateAttachment.approval_state_attachment_file_name = 'Informe_Requisitos_' + this.user.identification + '_' + today.getFullYear().toString() + '_' + (today.getMonth() + 1).toString() + '_' + today.getDate().toString();
+     if (this.declarationApprovalStateAttachment.id == 0) {
+        this.approvalStateAttachmentDataService.post(this.declarationApprovalStateAttachment).then( r2 => {
            this.toastr.successToastr('Inspección Guardada Satisfactoriamente', 'Inspección');
         }).catch( e => { console.log(e); });
       } else {
-        this.approvalStateAttachmentDataService.put(this.requisitosApprovalStateAttachment).then( r2 => {
+        this.approvalStateAttachmentDataService.put(this.declarationApprovalStateAttachment).then( r2 => {
            this.toastr.successToastr('Inspección Guardada Satisfactoriamente', 'Inspección');
         }).catch( e => { console.log(e); });
       }
-      if (this.informeApprovalStateAttachment.id == 0) {
-        this.approvalStateAttachmentDataService.post(this.informeApprovalStateAttachment).then( r3 => {
+      if (this.payApprovalStateAttachment.id == 0) {
+        this.approvalStateAttachmentDataService.post(this.payApprovalStateAttachment).then( r3 => {
         }).catch( e => { console.log(e); });
       } else {
-        this.approvalStateAttachmentDataService.put(this.informeApprovalStateAttachment).then( r3 => {
+        this.approvalStateAttachmentDataService.put(this.payApprovalStateAttachment).then( r3 => {
         }).catch( e => { console.log(e); });
       }
    }).catch( e => { console.log(e); });
@@ -808,7 +808,7 @@ export class TecnicoFinancieroComponent implements OnInit {
  }
 
  checkIfIsAssigned() {
-  if (this.inspectorSelectedId !== 0) {
+  if (this.financialSelectedId !== 0) {
      this.isAssigned = true;
   } else {
      this.isAssigned = false;
@@ -840,7 +840,7 @@ export class TecnicoFinancieroComponent implements OnInit {
      this.approvalStateAttachmentDataService.get_by_register_id(this.idRegister).then( r => {
         const approvalStateAttachments = r as ApprovalStateAttachment[];
         this.registerApprovals.forEach(element => {
-           if (element.approval_id == 1){
+           if (element.approval_id == 2){
               if (element.value) {
                  this.inspectionState = 1;
               } else {
@@ -848,18 +848,18 @@ export class TecnicoFinancieroComponent implements OnInit {
               }
               if (approvalStateAttachments.length == 0) {
                  this.inspectionState = 0;
-                 this.requisitosApprovalStateAttachment = new ApprovalStateAttachment();
-                 this.requisitosApprovalStateAttachment.approval_state_id = element.id;
-                 this.informeApprovalStateAttachment = new ApprovalStateAttachment();
-                 this.informeApprovalStateAttachment.approval_state_id = element.id;
+                 this.declarationApprovalStateAttachment = new ApprovalStateAttachment();
+                 this.declarationApprovalStateAttachment.approval_state_id = element.id;
+                 this.payApprovalStateAttachment = new ApprovalStateAttachment();
+                 this.payApprovalStateAttachment.approval_state_id = element.id;
               }
               approvalStateAttachments.forEach(approvalStateAttachment => {
                  if (approvalStateAttachment.approval_state_id == element.id) {
                     if (approvalStateAttachment.approval_state_attachment_file_name.search('Informe') == 0) {
-                       this.informeApprovalStateAttachment = approvalStateAttachment;
+                       this.payApprovalStateAttachment = approvalStateAttachment;
                     }
                     if (approvalStateAttachment.approval_state_attachment_file_name.search('Formulario') == 0) {
-                       this.requisitosApprovalStateAttachment = approvalStateAttachment;
+                       this.declarationApprovalStateAttachment = approvalStateAttachment;
                     }
                  }
               });
@@ -867,7 +867,7 @@ export class TecnicoFinancieroComponent implements OnInit {
               if (typeof this.registerApprovalInspector.notes == 'undefined' || this.registerApprovalInspector.notes == null) {
                  this.registerApprovalInspector.notes = '';
               }
-              this.inspectorSelectedId = this.registerApprovalInspector.id_user;
+              this.financialSelectedId = this.registerApprovalInspector.id_user;
               this.checkIfIsAssigned();
               this.checkIfHasInform();
               this.checkIfHasRequisites();

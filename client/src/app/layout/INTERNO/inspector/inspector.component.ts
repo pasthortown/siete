@@ -756,14 +756,13 @@ export class InspectorComponent implements OnInit {
       return;
     }
     const today = new Date();
-    this.registerApprovalInspector.date_fullfill = today;
     if ( this.inspectionState == 1) {
       this.registerApprovalInspector.value = true;
     }
     if ( this.inspectionState == 2) {
       this.registerApprovalInspector.value = false;
     }
-    this.newRegisterState.justification = 'Resultados de la Inspección cargados en la fecha ' + today.toDateString();
+    this.newRegisterState.justification = 'Resultados de la Inspección cargados en la fecha ' + this.registerApprovalInspector.date_fullfill.toDateString();
     this.newRegisterState.register_id = this.registerApprovalInspector.register_id;
     this.newRegisterState.state_id = 14;
     this.registerStateDataService.post(this.newRegisterState).then( r1 => {

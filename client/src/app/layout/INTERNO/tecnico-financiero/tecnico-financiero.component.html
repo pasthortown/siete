@@ -51,25 +51,11 @@
           <h4>Resultado de la Inspección</h4>
         </div>
         <div class="col-6">
-            <label>Formulario de Requisitos</label>
+            <label>Comprobante de Pago</label>
             <div class="input-group mb-3">
               <div class="input-group-prepend">
-                <button type="button" class="btn btn-secondary" title="Imprimir Formulario de Requisitos" (click)="imprimirRequisitos()"><i class="fas fa-print"></i></button>
-                <button type="button" [disabled]="!validateRequisitesFile()" class="btn btn-secondary" title="Descargar Formulario de Requisitos Cargado" (click)="descargarRequisitos()"><i class="fas fa-download"></i></button>
-                <button type="button" [disabled]="!validateRequisitesFile()" class="btn btn-danger" title="Borrar Formulario de Requisitos Cargado" (click)="borrarRequisitos()"><i class="fas fa-trash"></i></button>
-              </div>
-              <input type="file" class="form-control" id="requisitesFile"
-                name="requisitesFile" placeholder="Formulario de Revisión de Requisitos"
-                (change)="CodeFileRequisitesAttachment($event)">
-            </div>
-        </div>
-        <div class="col-6">
-            <label>Informe de Inspección</label>
-            <div class="input-group mb-3">
-              <div class="input-group-prepend">
-                <button type="button" class="btn btn-secondary" title="Imprimir Informe" (click)="imprimirInforme()"><i class="fas fa-print"></i></button>
-                <button type="button" [disabled]="!validateInformeFile()" class="btn btn-secondary" title="Descargar Informe Cargado" (click)="descargarInforme()"><i class="fas fa-download"></i></button>
-                <button type="button" [disabled]="!validateInformeFile()" class="btn btn-danger" title="Borrar Informe Cargado" (click)="borrarInforme()"><i class="fas fa-trash"></i></button>
+                <button type="button" [disabled]="!validateInformeFile()" class="btn btn-secondary" title="Descargar Comprobante de Pago Cargado" (click)="descargarPago()"><i class="fas fa-download"></i></button>
+                <button type="button" [disabled]="!validateInformeFile()" class="btn btn-danger" title="Borrar Comprobante de Pago Cargado" (click)="borrarPago()"><i class="fas fa-trash"></i></button>
               </div>
               <input type="file" class="form-control" id="informeFile"
                 name="informeFile" placeholder="Informe de Inspección"
@@ -77,16 +63,28 @@
             </div>
         </div>
         <div class="col-6">
-            <label>Fecha de la Inspección</label>
+            <label>Declaración de Activos</label>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <button type="button" [disabled]="!validateRequisitesFile()" class="btn btn-secondary" title="Descargar Formulario de Declaración de Activos Cargado" (click)="descargarDeclaracion()"><i class="fas fa-download"></i></button>
+              </div>
+            </div>
+        </div>
+        <div class="col-4">
+            <label>Fecha de la Revisión</label>
             <input type="date" class="form-control" id="date_assigment" name="date_assigment" placeholder="dateAssigment" [ngModel]="registerApprovalInspector.date_assigment | date:'y-MM-dd'" (ngModelChange)="registerApprovalInspector.date_assigment = $event">
         </div>
-        <div class="col-6">
-            <label>Estado de la Inspección</label>
-            <select class="form-control" id="stateInspection" name="stateInspection" [(ngModel)]="inspectionState">
+        <div class="col-4">
+            <label>Estado del Trámite</label>
+            <select class="form-control" id="stateTramit" name="stateTramit" [(ngModel)]="inspectionState">
               <option value="0" selected>Pendiente</option>
               <option value="1" selected>Aprobado</option>
               <option value="2" selected>Negado</option>
             </select>
+        </div>
+        <div class="col-4">
+            <label>Valor a Pagar</label>
+            <input type="number" class="form-control" id="declarationValueToPay" name="declarationValueToPay" placeholder="Valor a Pagar" [(ngModel)]="declaration_selected.year" step="0.01">
         </div>
         <div class="col-12 mt-3 mb-2">
           <label class="col-form-label">Observaciones</label>
