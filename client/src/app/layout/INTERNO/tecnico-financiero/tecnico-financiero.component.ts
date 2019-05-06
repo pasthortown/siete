@@ -1,3 +1,4 @@
+import { PayService } from './../../../services/CRUD/FINANCIERO/pay.service';
 import { ApprovalStateAttachmentService } from './../../../services/CRUD/ALOJAMIENTO/approvalstateattachment.service';
 import { ApprovalStateAttachment } from './../../../models/ALOJAMIENTO/ApprovalStateAttachment';
 import { ApprovalStateService } from './../../../services/CRUD/ALOJAMIENTO/approvalstate.service';
@@ -104,6 +105,7 @@ export class TecnicoFinancieroComponent implements OnInit {
   registerApprovalCoordinador: ApprovalState = new ApprovalState();
   registerApprovalInspector: ApprovalState = new ApprovalState();
   registerApprovalFinanciero: ApprovalState = new ApprovalState();
+  pay: Pay = new Pay();
   isAssigned = false;
   hasIspectionDate  = false;
   hasInform  = false;
@@ -112,6 +114,7 @@ export class TecnicoFinancieroComponent implements OnInit {
   declarationApprovalStateAttachment: ApprovalStateAttachment = new ApprovalStateAttachment();
   payApprovalStateAttachment: ApprovalStateAttachment = new ApprovalStateAttachment();
   newRegisterState: RegisterState = new RegisterState();
+  maxDeclarationYear: number = 0;
 
   //REGISTROS MINTUR
   registers_mintur = [];
@@ -267,6 +270,7 @@ export class TecnicoFinancieroComponent implements OnInit {
  constructor(private toastr: ToastrManager,
              private approvalStateDataService: ApprovalStateService,
              private consultorDataService: ConsultorService,
+             private payDataService: PayService,
              private userDataService: UserService,
              private dinardapDataService: DinardapService,
              private registerStateDataService: RegisterStateService,
@@ -687,7 +691,26 @@ export class TecnicoFinancieroComponent implements OnInit {
  }
  
  validateInspectionInfo(): Boolean {
-  return this.validateNotesInspection() && this.validateInformeFile() && this.validateRequisitesFile();
+  return this.validateNotesInspection() && this.validateComprobanteFile() && this.validateDeclaracionFile();
+ }
+
+ saveToPayValue() {
+   this.pay.ruc_id = this.ruc_registro_selected.ruc.id;
+   this.pay.amount_payed = -1;
+   this.pay.pay_date = null;
+   this.pay.code = this.ruc_registro_selected.ruc.number;
+   this.pay.taxes = 0;
+   if (this.pay.id == 0) {
+      this.payDataService.post(this.pay).then( r => {
+         this.toastr.successToastr('Información Guardada Satisfactoriamente', 'Revisión, Técnico Financiero');
+         this.refresh();
+      }).catch( e => { console.log(e); });
+   } else {
+      this.payDataService.put(this.pay).then( r => {
+         this.toastr.successToastr('Información Actualizada Satisfactoriamente', 'Revisión, Técnico Financiero');
+         this.refresh();
+      }).catch( e => { console.log(e); });
+   }
  }
 
  descargarDeclaracion() {
@@ -716,7 +739,7 @@ export class TecnicoFinancieroComponent implements OnInit {
   this.payApprovalStateAttachment = new ApprovalStateAttachment();
  }
 
- CodeFileRequisitesAttachment(event) {
+ CodeFileDeclaracionAttachment(event) {
   const reader = new FileReader();
   if (event.target.files && event.target.files.length > 0) {
      const file = event.target.files[0];
@@ -729,7 +752,7 @@ export class TecnicoFinancieroComponent implements OnInit {
   }
  }
 
- CodeFileInformeAttachment(event) {
+ CodeFileComprobanteAttachment(event) {
   const reader = new FileReader();
   if (event.target.files && event.target.files.length > 0) {
      const file = event.target.files[0];
@@ -742,11 +765,11 @@ export class TecnicoFinancieroComponent implements OnInit {
   }
  }
 
- validateRequisitesFile(): Boolean {
+ validateDeclaracionFile(): Boolean {
   return !(this.declarationApprovalStateAttachment.approval_state_attachment_file_name == '');
  }
 
- validateInformeFile(): Boolean {
+ validateComprobanteFile(): Boolean {
   return !(this.payApprovalStateAttachment.approval_state_attachment_file_name == '');
  }
 
@@ -954,6 +977,7 @@ export class TecnicoFinancieroComponent implements OnInit {
    this.registerMinturSelected = new Register();
    this.mostrarDataRegisterMintur = false;
    this.ruc_registro_selected = new RegistroDataCarrier();
+   this.pay = new Pay();
    this.getInspectores();
    this.getFinancieros();
    this.getTramiteStates();
@@ -1111,6 +1135,7 @@ getDeclarationItems() {
         this.ruc_registro_selected.ruc.person_representative_attachment = new PersonRepresentativeAttachment();
         this.getPersonRepresentativeAttachment(this.ruc_registro_selected.ruc.number);
         this.checkRuc();
+        this.getPays();
         this.checkImContactRuc();
         if (!this.imContactRuc) {
            this.checkCedula();
@@ -1122,6 +1147,12 @@ getDeclarationItems() {
         this.getEstablishmentsOnRuc(this.currentPageEstablishment);
      }
   }).catch( e => { console.log(e); });
+ }
+
+ getPays() {
+   this.payDataService.get_by_ruc_id(this.ruc_registro_selected.ruc.id).then( r => {
+      this.pay = r as Pay;
+   }).catch( e => { console.log(e); } );
  }
 
  checkImContactRuc() {

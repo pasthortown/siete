@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class DeclarationAttachment extends Model
+class PayMassFileAttachment extends Model
 {
     /**
      * The attributes that are mass assignable.
@@ -12,7 +12,7 @@ class DeclarationAttachment extends Model
      * @var array
      */
     protected $fillable = [
-       'declaration_attachment_file_type','declaration_attachment_file_name','declaration_attachment_file',
+       'pay_mass_file_attachment_file_type','pay_mass_file_attachment_file_name','pay_mass_file_attachment_file','date',
     ];
 
     /**
@@ -23,10 +23,5 @@ class DeclarationAttachment extends Model
     protected $hidden = [
        
     ];
-
-    function Declaration()
-    {
-       return $this->hasOne('App\Declaration');
-    }
 
 }

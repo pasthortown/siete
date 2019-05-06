@@ -6,7 +6,6 @@ import { PayRoutingModule } from './pay-routing.module';
 import { PayComponent } from './pay.component';
 import { PayService } from './../../../../services/CRUD/FINANCIERO/pay.service';
 import { environment } from 'src/environments/environment';
-import { DeclarationService } from './../../../../services/CRUD/FINANCIERO/declaration.service';
 import { CKEditorModule } from 'ngx-ckeditor';
 
 @NgModule({
@@ -17,7 +16,6 @@ import { CKEditorModule } from 'ngx-ckeditor';
    declarations: [PayComponent],
    providers: [
                NgbModal,
-               DeclarationService,
                PayService
                ]
 })

@@ -49,6 +49,7 @@ import { DeclarationItemService } from 'src/app/services/CRUD/FINANCIERO/declara
 import { DeclarationItemCategoryService } from 'src/app/services/CRUD/FINANCIERO/declarationitemcategory.service';
 import { DeclarationService } from 'src/app/services/CRUD/FINANCIERO/declaration.service';
 import { Ng2TableModule } from 'ng2-table/ng2-table';
+import { PayService } from './../../../services/CRUD/FINANCIERO/pay.service';
 
 @NgModule({
   imports: [CommonModule,
@@ -66,6 +67,7 @@ import { Ng2TableModule } from 'ng2-table/ng2-table';
     DinardapService,
     DeclarationItemService,
     ConsultorService,
+    PayService,
     ApprovalStateAttachmentService,
     DeclarationItemCategoryService,
     DeclarationService,

@@ -256,8 +256,8 @@ const routes: Routes = [
             loadChildren: './CRUD/FINANCIERO/PayAttachment/payattachment.module#PayAttachmentModule'
          },
          {
-            path: 'declaration_attachment',
-            loadChildren: './CRUD/FINANCIERO/DeclarationAttachment/declarationattachment.module#DeclarationAttachmentModule'
+            path: 'pay_mass_file_attachment',
+            loadChildren: './CRUD/FINANCIERO/PayMassFileAttachment/paymassfileattachment.module#PayMassFileAttachmentModule'
          },
 
          // INTERNO

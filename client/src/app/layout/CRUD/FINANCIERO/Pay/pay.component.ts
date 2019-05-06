@@ -4,9 +4,6 @@ import { ToastrManager } from 'ng6-toastr-notifications';
 import { saveAs } from 'file-saver/FileSaver';
 import { PayService } from './../../../../services/CRUD/FINANCIERO/pay.service';
 import { Pay } from './../../../../models/FINANCIERO/Pay';
-import { DeclarationService } from './../../../../services/CRUD/FINANCIERO/declaration.service';
-import { Declaration } from './../../../../models/FINANCIERO/Declaration';
-
 
 @Component({
    selector: 'app-pay',
@@ -21,27 +18,17 @@ export class PayComponent implements OnInit {
    lastPage = 1;
    showDialog = false;
    recordsByPage = 5;
-   declarations: Declaration[] = [];
    constructor(
                private modalService: NgbModal,
                private toastr: ToastrManager,
-               private declarationDataService: DeclarationService,
                private payDataService: PayService) {}
 
    ngOnInit() {
       this.goToPage(1);
-      this.getDeclaration();
    }
 
    selectPay(pay: Pay) {
       this.paySelected = pay;
-   }
-
-   getDeclaration() {
-      this.declarations = [];
-      this.declarationDataService.get().then( r => {
-         this.declarations = r as Declaration[];
-      }).catch( e => console.log(e) );
    }
 
    goToPage(page: number) {
@@ -56,7 +43,6 @@ export class PayComponent implements OnInit {
    getPays() {
       this.pays = [];
       this.paySelected = new Pay();
-      this.paySelected.declaration_id = 0;
       this.payDataService.get_paginate(this.recordsByPage, this.currentPage).then( r => {
          this.pays = r.data as Pay[];
          this.lastPage = r.last_page;
@@ -65,7 +51,6 @@ export class PayComponent implements OnInit {
 
    newPay(content) {
       this.paySelected = new Pay();
-      this.paySelected.declaration_id = 0;
       this.openDialog(content);
    }
 
@@ -100,9 +85,9 @@ export class PayComponent implements OnInit {
    toCSV() {
       this.payDataService.get().then( r => {
          const backupData = r as Pay[];
-         let output = 'id;amount_payed;amount_to_pay;pay_date;annotation;declaration_id\n';
+         let output = 'id;amount_payed;amount_to_pay;pay_date;annotation;code;max_pay_date;taxes;ruc_id\n';
          backupData.forEach(element => {
-            output += element.id + ';' + element.amount_payed + ';' + element.amount_to_pay + ';' + element.pay_date + ';' + element.annotation + ';' + element.declaration_id + '\n';
+            output += element.id; + element.amount_payed + ';' + element.amount_to_pay + ';' + element.pay_date + ';' + element.annotation + ';' + element.code + ';' + element.max_pay_date + ';' + element.taxes + ';' + element.ruc_id + '\n';
          });
          const blob = new Blob([output], { type: 'text/plain' });
          const fecha = new Date();

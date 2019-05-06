@@ -37,6 +37,13 @@ export class PayService {
       }).catch( error => { this.handledError(error.json());  });
    }
 
+   get_by_ruc_id(ruc_id: number): Promise<any> {
+      return this.http.get(this.url + 'get_by_ruc_id?id=' + ruc_id.toString(), this.options).toPromise()
+      .then( r => {
+         return r.json();
+      }).catch( error => { this.handledError(error.json());  });
+   }
+
    delete(id: number): Promise<any> {
       return this.http.delete(this.url + '?id=' + id.toString(), this.options).toPromise()
       .then( r => {

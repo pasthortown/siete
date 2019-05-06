@@ -73,6 +73,7 @@ $router->group(['middleware' => ['auth']], function () use ($router) {
    $router->post('/pay', ['uses' => 'PayController@post']);
    $router->get('/pay', ['uses' => 'PayController@get']);
    $router->get('/pay/paginate', ['uses' => 'PayController@paginate']);
+   $router->get('/pay/get_by_ruc_id', ['uses' => 'PayController@get_by_ruc_id']);
    $router->get('/pay/backup', ['uses' => 'PayController@backup']);
    $router->put('/pay', ['uses' => 'PayController@put']);
    $router->delete('/pay', ['uses' => 'PayController@delete']);
@@ -96,30 +97,12 @@ $router->group(['middleware' => ['auth']], function () use ($router) {
    $router->delete('/payattachment', ['uses' => 'PayAttachmentController@delete']);
    $router->post('/payattachment/masive_load', ['uses' => 'PayAttachmentController@masiveLoad']);
 
-   //CRUD DeclarationAttachment
-   $router->post('/declarationattachment', ['uses' => 'DeclarationAttachmentController@post']);
-   $router->get('/declarationattachment', ['uses' => 'DeclarationAttachmentController@get']);
-   $router->get('/declarationattachment/paginate', ['uses' => 'DeclarationAttachmentController@paginate']);
-   $router->get('/declarationattachment/backup', ['uses' => 'DeclarationAttachmentController@backup']);
-   $router->put('/declarationattachment', ['uses' => 'DeclarationAttachmentController@put']);
-   $router->delete('/declarationattachment', ['uses' => 'DeclarationAttachmentController@delete']);
-   $router->post('/declarationattachment/masive_load', ['uses' => 'DeclarationAttachmentController@masiveLoad']);
-
-   //CRUD Approval
-   $router->post('/approval', ['uses' => 'ApprovalController@post']);
-   $router->get('/approval', ['uses' => 'ApprovalController@get']);
-   $router->get('/approval/paginate', ['uses' => 'ApprovalController@paginate']);
-   $router->get('/approval/backup', ['uses' => 'ApprovalController@backup']);
-   $router->put('/approval', ['uses' => 'ApprovalController@put']);
-   $router->delete('/approval', ['uses' => 'ApprovalController@delete']);
-   $router->post('/approval/masive_load', ['uses' => 'ApprovalController@masiveLoad']);
-
-   //CRUD ApprovalState
-   $router->post('/approvalstate', ['uses' => 'ApprovalStateController@post']);
-   $router->get('/approvalstate', ['uses' => 'ApprovalStateController@get']);
-   $router->get('/approvalstate/paginate', ['uses' => 'ApprovalStateController@paginate']);
-   $router->get('/approvalstate/backup', ['uses' => 'ApprovalStateController@backup']);
-   $router->put('/approvalstate', ['uses' => 'ApprovalStateController@put']);
-   $router->delete('/approvalstate', ['uses' => 'ApprovalStateController@delete']);
-   $router->post('/approvalstate/masive_load', ['uses' => 'ApprovalStateController@masiveLoad']);
+   //CRUD PayMassFileAttachment
+   $router->post('/paymassfileattachment', ['uses' => 'PayMassFileAttachmentController@post']);
+   $router->get('/paymassfileattachment', ['uses' => 'PayMassFileAttachmentController@get']);
+   $router->get('/paymassfileattachment/paginate', ['uses' => 'PayMassFileAttachmentController@paginate']);
+   $router->get('/paymassfileattachment/backup', ['uses' => 'PayMassFileAttachmentController@backup']);
+   $router->put('/paymassfileattachment', ['uses' => 'PayMassFileAttachmentController@put']);
+   $router->delete('/paymassfileattachment', ['uses' => 'PayMassFileAttachmentController@delete']);
+   $router->post('/paymassfileattachment/masive_load', ['uses' => 'PayMassFileAttachmentController@masiveLoad']);
 });

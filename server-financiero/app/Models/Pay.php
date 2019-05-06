@@ -12,7 +12,7 @@ class Pay extends Model
      * @var array
      */
     protected $fillable = [
-       'amount_payed','amount_to_pay','pay_date','annotation',
+       'amount_payed','amount_to_pay','pay_date','annotation','code','max_pay_date','taxes','ruc_id',
     ];
 
     /**
@@ -23,11 +23,6 @@ class Pay extends Model
     protected $hidden = [
        
     ];
-
-    function Declaration()
-    {
-       return $this->hasOne('App\Declaration');
-    }
 
     function PayAttachment()
     {

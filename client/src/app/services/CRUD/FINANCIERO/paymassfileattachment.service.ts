@@ -2,14 +2,14 @@ import { Injectable } from '@angular/core';
 import { Http, RequestOptions, Headers } from '@angular/http';
 import { Router } from '@angular/router';
 import { environment } from './../../../../environments/environment';
-import { DeclarationAttachment } from './../../../models/FINANCIERO/DeclarationAttachment';
+import { PayMassFileAttachment } from './../../../models/FINANCIERO/PayMassFileAttachment';
 
 @Injectable({
    providedIn: 'root'
 })
-export class DeclarationAttachmentService {
+export class PayMassFileAttachmentService {
 
-   url = environment.api_financiero + 'declarationattachment/';
+   url = environment.api_financiero + 'paymassfileattachment/';
    options = new RequestOptions();
 
    constructor(private http: Http, private router: Router) {
@@ -51,15 +51,15 @@ export class DeclarationAttachmentService {
       }).catch( error => { this.handledError(error.json()); });
    }
 
-   post(declarationattachment: DeclarationAttachment): Promise<any> {
-      return this.http.post(this.url, JSON.stringify(declarationattachment), this.options).toPromise()
+   post(paymassfileattachment: PayMassFileAttachment): Promise<any> {
+      return this.http.post(this.url, JSON.stringify(paymassfileattachment), this.options).toPromise()
       .then( r => {
          return r.json();
       }).catch( error => { this.handledError(error.json()); });
    }
 
-   put(declarationattachment: DeclarationAttachment): Promise<any> {
-      return this.http.put(this.url, JSON.stringify(declarationattachment), this.options).toPromise()
+   put(paymassfileattachment: PayMassFileAttachment): Promise<any> {
+      return this.http.put(this.url, JSON.stringify(paymassfileattachment), this.options).toPromise()
       .then( r => {
          return r.json();
       }).catch( error => { this.handledError(error.json()); });

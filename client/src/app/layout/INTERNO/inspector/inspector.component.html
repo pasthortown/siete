@@ -1629,7 +1629,6 @@
                             <th>Año</th>
                             <th>Fecha de Declaración</th>
                             <th>Estado</th>
-                            <th>Observaciones</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -1640,12 +1639,6 @@
                             <td>{{declaration.year}}</td>
                             <td>{{declaration.declaration_date}}</td>
                             <td>{{declaration.status_name}}</td>
-                            <td>
-                              <button type="button" title="Ver Observaciones" class="btn btn-info"
-                                (click)="openDialog(content, declaration.status)">
-                                <i class="fas fa-comment-dots"></i>
-                              </button>
-                            </td>
                           </tr>
                         </tbody>
                       </table>

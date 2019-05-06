@@ -29,6 +29,12 @@ class PayController extends Controller
        return response()->json(Pay::paginate($size),200);
     }
 
+    function get_by_ruc_id(Request $data)
+    {
+       $id = $data['id'];
+       return response()->json(Pay::where('ruc_id', $id)->orderBy('created_at', 'DESC')->first(),200);
+    }
+
     function post(Request $data)
     {
        try{
@@ -45,7 +51,10 @@ class PayController extends Controller
           $pay->amount_to_pay = $result['amount_to_pay'];
           $pay->pay_date = $result['pay_date'];
           $pay->annotation = $result['annotation'];
-          $pay->declaration_id = $result['declaration_id'];
+          $pay->code = $result['code'];
+          $pay->max_pay_date = $result['max_pay_date'];
+          $pay->taxes = $result['taxes'];
+          $pay->ruc_id = $result['ruc_id'];
           $pay->save();
           DB::commit();
        } catch (Exception $e) {
@@ -64,7 +73,10 @@ class PayController extends Controller
              'amount_to_pay'=>$result['amount_to_pay'],
              'pay_date'=>$result['pay_date'],
              'annotation'=>$result['annotation'],
-             'declaration_id'=>$result['declaration_id'],
+             'code'=>$result['code'],
+             'max_pay_date'=>$result['max_pay_date'],
+             'taxes'=>$result['taxes'],
+             'ruc_id'=>$result['ruc_id'],
           ]);
           DB::commit();
        } catch (Exception $e) {
@@ -105,7 +117,10 @@ class PayController extends Controller
              'amount_to_pay'=>$result['amount_to_pay'],
              'pay_date'=>$result['pay_date'],
              'annotation'=>$result['annotation'],
-             'declaration_id'=>$result['declaration_id'],
+             'code'=>$result['code'],
+             'max_pay_date'=>$result['max_pay_date'],
+             'taxes'=>$result['taxes'],
+             'ruc_id'=>$result['ruc_id'],
            ]);
          } else {
           $pay = new Pay();
@@ -114,7 +129,10 @@ class PayController extends Controller
           $pay->amount_to_pay = $result['amount_to_pay'];
           $pay->pay_date = $result['pay_date'];
           $pay->annotation = $result['annotation'];
-          $pay->declaration_id = $result['declaration_id'];
+          $pay->code = $result['code'];
+          $pay->max_pay_date = $result['max_pay_date'];
+          $pay->taxes = $result['taxes'];
+          $pay->ruc_id = $result['ruc_id'];
           $pay->save();
          }
        }

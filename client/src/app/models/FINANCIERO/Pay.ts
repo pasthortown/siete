@@ -4,9 +4,15 @@ export class Pay {
    amount_to_pay: number;
    pay_date: Date;
    annotation: String;
-   declaration_id: number;
+   code: String;
+   max_pay_date: Date;
+   taxes: number;
+   ruc_id: number;
    constructor() {
-      this.amount_payed = 0;
-      this.amount_to_pay = 0;
+      this.annotation = '';
+      this.ruc_id = 0;
+      this.max_pay_date = new Date();
+      this.id = 0;
+      this.amount_payed = -1;
    }
 }

@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { DeclarationAttachmentComponent } from './declarationattachment.component';
+import { PayMassFileAttachmentComponent } from './paymassfileattachment.component';
 
 const routes: Routes = [
    {
       path: '',
-      component: DeclarationAttachmentComponent
+      component: PayMassFileAttachmentComponent
    }
 ];
 
@@ -13,4 +13,4 @@ const routes: Routes = [
    imports: [RouterModule.forChild(routes)],
    exports: [RouterModule]
 })
-export class DeclarationAttachmentRoutingModule {}
+export class PayMassFileAttachmentRoutingModule {}

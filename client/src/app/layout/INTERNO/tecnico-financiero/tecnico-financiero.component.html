@@ -48,33 +48,50 @@
       </div>
       <div class="row" *ngIf="mostrarDataRegisterMintur">
         <div class="col-12">
-          <h4>Resultado de la Inspección</h4>
+          <h4>Resultado de la Revisión</h4>
         </div>
         <div class="col-6">
-            <label>Comprobante de Pago</label>
-            <div class="input-group mb-3">
-              <div class="input-group-prepend">
-                <button type="button" [disabled]="!validateInformeFile()" class="btn btn-secondary" title="Descargar Comprobante de Pago Cargado" (click)="descargarPago()"><i class="fas fa-download"></i></button>
-                <button type="button" [disabled]="!validateInformeFile()" class="btn btn-danger" title="Borrar Comprobante de Pago Cargado" (click)="borrarPago()"><i class="fas fa-trash"></i></button>
-              </div>
-              <input type="file" class="form-control" id="informeFile"
-                name="informeFile" placeholder="Informe de Inspección"
-                (change)="CodeFileInformeAttachment($event)">
-            </div>
-        </div>
-        <div class="col-6">
-            <label>Declaración de Activos</label>
-            <div class="input-group mb-3">
-              <div class="input-group-prepend">
-                <button type="button" [disabled]="!validateRequisitesFile()" class="btn btn-secondary" title="Descargar Formulario de Declaración de Activos Cargado" (click)="descargarDeclaracion()"><i class="fas fa-download"></i></button>
+            <label>Valor a Pagar</label>
+            <div class="input-group">
+              <input type="number" class="form-control" id="declarationValueToPay" name="declarationValueToPay" placeholder="Valor a Pagar" [(ngModel)]="pay.amount_to_pay" step="0.01">
+              <div class="input-group-append">
+                <span class="input-group-text">USD</span>
               </div>
             </div>
         </div>
-        <div class="col-4">
-            <label>Fecha de la Revisión</label>
-            <input type="date" class="form-control" id="date_assigment" name="date_assigment" placeholder="dateAssigment" [ngModel]="registerApprovalInspector.date_assigment | date:'y-MM-dd'" (ngModelChange)="registerApprovalInspector.date_assigment = $event">
+        <div class="col-6">
+          <label>Fecha Máxima de Pago</label>
+          <input type="date" class="form-control" id="maxPayDate" name="maxPayDate" placeholder="Fecha Máxima de Pago" [ngModel]="pay.max_pay_date | date:'y-MM-dd'" (ngModelChange)="pay.max_pay_date = $event">
         </div>
-        <div class="col-4">
+      </div>
+      <div class="row mt-3" *ngIf="mostrarDataRegisterMintur">
+        <div class="col-12 text-center">
+            <button type="button" class="btn btn-success" (click)="saveToPayValue()">
+              <span class="fas fa-money-check-alt"></span>&nbsp;Cargar Valor a Pagar
+            </button>
+            <button type="button" class="btn btn-danger ml-2" title="Cancelar Cambios" (click)="refresh()"><i class="fas fa-times"></i> Cancelar</button>
+        </div>
+      </div>
+      <div class="row mt-3" *ngIf="mostrarDataRegisterMintur">
+        <div class="col-12">
+            <label>Comprobante de Pago</label>        
+            <div class="col-12">
+              <small><strong>Orden de Pago:</strong>&nbsp;<i>{{pay.code}}</i></small>
+            </div>
+            <div class="col-12" *ngIf="pay.amount_payed > -1">
+              <small><strong>Fecha de Pago:</strong>&nbsp;<i>{{pay.pay_date}}</i></small>
+            </div>
+            <div class="col-12" *ngIf="pay.amount_payed > -1">
+              <small><strong>Valor Pagado:</strong>&nbsp;<i>{{pay.amount_payed}}</i></small>
+            </div>
+        </div>
+      </div>
+      <div class="row mt-3" *ngIf="mostrarDataRegisterMintur">
+        <div class="col-6">
+          <label>Fecha de la Revisión</label>
+          <input type="date" class="form-control" id="date_fullfill" name="date_fullfill" placeholder="Fecha de Revisión" [ngModel]="registerApprovalFinanciero.date_fullfill | date:'y-MM-dd'" (ngModelChange)="registerApprovalFinanciero.date_fullfill = $event">
+        </div>
+        <div class="col-6">
             <label>Estado del Trámite</label>
             <select class="form-control" id="stateTramit" name="stateTramit" [(ngModel)]="inspectionState">
               <option value="0" selected>Pendiente</option>
@@ -82,13 +99,11 @@
               <option value="2" selected>Negado</option>
             </select>
         </div>
-        <div class="col-4">
-            <label>Valor a Pagar</label>
-            <input type="number" class="form-control" id="declarationValueToPay" name="declarationValueToPay" placeholder="Valor a Pagar" [(ngModel)]="declaration_selected.year" step="0.01">
-        </div>
+      </div>
+      <div class="row" *ngIf="mostrarDataRegisterMintur">
         <div class="col-12 mt-3 mb-2">
           <label class="col-form-label">Observaciones</label>
-          <ck-editor id="notes" name="notes" skin="moono-lisa" [(ngModel)]="registerApprovalInspector.notes"></ck-editor>
+          <ck-editor id="notes" name="notes" skin="moono-lisa" [(ngModel)]="registerApprovalFinanciero.notes"></ck-editor>
         </div>
         <div class="col-12 text-center mb-3">
           <button type="button" [disabled]="!validateInspectionInfo()" class="btn btn-success" title="Aprobar Trámite" (click)="guardarInspeccion()"><i class="fas fa-save"></i> Guardar Información</button>
@@ -193,7 +208,6 @@
                                   <th>Año</th>
                                   <th>Fecha de Declaración</th>
                                   <th>Estado</th>
-                                  <th>Observaciones</th>
                                 </tr>
                               </thead>
                               <tbody>
@@ -204,12 +218,6 @@
                                   <td>{{declaration.year}}</td>
                                   <td>{{declaration.declaration_date}}</td>
                                   <td>{{declaration.status_name}}</td>
-                                  <td>
-                                    <button type="button" title="Ver Observaciones" class="btn btn-info"
-                                      (click)="openDialog(content, declaration.status)">
-                                      <i class="fas fa-comment-dots"></i>
-                                    </button>
-                                  </td>
                                 </tr>
                               </tbody>
                             </table>
