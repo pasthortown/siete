@@ -48,6 +48,7 @@ import { DeclarationItemService } from 'src/app/services/CRUD/FINANCIERO/declara
 import { DeclarationItemCategoryService } from 'src/app/services/CRUD/FINANCIERO/declarationitemcategory.service';
 import { DeclarationService } from 'src/app/services/CRUD/FINANCIERO/declaration.service';
 import { Ng2TableModule } from 'ng2-table/ng2-table';
+import { ApprovalStateAttachmentService } from './../../../services/CRUD/ALOJAMIENTO/approvalstateattachment.service';
 
 @NgModule({
   imports: [CommonModule,
@@ -73,6 +74,7 @@ import { Ng2TableModule } from 'ng2-table/ng2-table';
     ComplementaryServiceFoodTypeService,
     EstablishmentPropertyTypeService,
     RequisiteService,
+    ApprovalStateAttachmentService,
     ApprovalStateService,
     AgreementService,
     UbicationService,

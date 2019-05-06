@@ -1,3 +1,5 @@
+import { ApprovalStateAttachment } from './../../../models/ALOJAMIENTO/ApprovalStateAttachment';
+import { ApprovalStateAttachmentService } from './../../../services/CRUD/ALOJAMIENTO/approvalstateattachment.service';
 import { ApprovalStateService } from './../../../services/CRUD/ALOJAMIENTO/approvalstate.service';
 import { ApprovalState } from 'src/app/models/ALOJAMIENTO/ApprovalState';
 import { Approval } from 'src/app/models/ALOJAMIENTO/Approval';
@@ -106,8 +108,10 @@ export class CoordinadorComponent implements OnInit {
    hasIspectionDate  = false;
    hasInform  = false;
    hasRequisites = false;
-   newRegisterState: RegisterState = new RegisterState();
-
+   informeApprovalStateAttachment = new ApprovalStateAttachment();
+   requisitosApprovalStateAttachment = new ApprovalStateAttachment();
+   financialSelectedId: number = 0;
+   isAssignedFinancial = false;
    //RREGISTROS MINTUR
    registers_mintur = [];
    registerMinturSelected: any = null;
@@ -267,6 +271,7 @@ export class CoordinadorComponent implements OnInit {
               private dinardapDataService: DinardapService,
               private franchiseDataService: FranchiseChainNameService,
               private rucDataService: RucService,
+              private approvalStateAttachmentDataService: ApprovalStateAttachmentService,
               private modalService: NgbModal,
               private agreementDataService: AgreementService,
               private rucNameTypeDataService: RucNameTypeService,
@@ -306,10 +311,11 @@ export class CoordinadorComponent implements OnInit {
    this.registerApprovalInspector.id_user = this.inspectorSelectedId;
    this.registerApprovalInspector.date_assigment = new Date();
    this.approvalStateDataService.put(this.registerApprovalInspector).then( r => {
-      this.newRegisterState.justification = 'Inspector asignado en la fecha ' + this.registerApprovalInspector.date_assigment.toDateString();
-      this.newRegisterState.register_id = this.registerApprovalInspector.register_id;
-      this.newRegisterState.state_id = 11;
-      this.registerStateDataService.post(this.newRegisterState).then( r1 => {
+      const newRegisterState = new RegisterState();
+      newRegisterState.justification = 'Inspector asignado en la fecha ' + this.registerApprovalInspector.date_assigment.toDateString();
+      newRegisterState.register_id = this.registerApprovalInspector.register_id;
+      newRegisterState.state_id = 11;
+      this.registerStateDataService.post(newRegisterState).then( r1 => {
          this.toastr.successToastr('Inspector Asignado Satisfactoriamente.', 'Asignación de Inspector');
       }).catch( e => { console.log(e); });
    }).catch( e => { console.log(e); });
@@ -319,15 +325,49 @@ export class CoordinadorComponent implements OnInit {
      this.isAssigned = false;
      this.inspectorSelectedId = 0;
      this.registerApprovalInspector.id_user = 0;
+     const today = new Date();
      this.registerApprovalInspector.date_assigment = null;
      this.approvalStateDataService.put(this.registerApprovalInspector).then( r => {
-      this.newRegisterState.justification = 'Inspector removido en la fecha ' + this.registerApprovalInspector.date_assigment.toDateString();
-      this.newRegisterState.register_id = this.registerApprovalInspector.register_id;
-      this.newRegisterState.state_id = 14;
-      this.registerStateDataService.post(this.newRegisterState).then( r1 => {
+      const newRegisterState = new RegisterState();
+      newRegisterState.justification = 'Inspector removido en la fecha ' + today.toDateString();
+      newRegisterState.register_id = this.registerApprovalInspector.register_id;
+      newRegisterState.state_id = 14;
+      this.registerStateDataService.post(newRegisterState).then( r1 => {
          this.toastr.warningToastr('Inspector Removido Satisfactoriamente.', 'Asignación de Inspector');
       }).catch( e => { console.log(e); });
      }).catch( e => { console.log(e); });
+  }
+
+  asignarFinanciero() {
+   this.isAssignedFinancial = true;
+   this.registerApprovalFinanciero.id_user = this.financialSelectedId;
+   this.registerApprovalFinanciero.date_assigment = new Date();
+   this.approvalStateDataService.put(this.registerApprovalFinanciero).then( r => {
+      const newRegisterState = new RegisterState();
+      newRegisterState.justification = 'Técnico Financiero asignado en la fecha ' + this.registerApprovalFinanciero.date_assigment.toDateString();
+      newRegisterState.register_id = this.registerApprovalFinanciero.register_id;
+      newRegisterState.state_id = 12;
+      this.registerStateDataService.post(newRegisterState).then( r1 => {
+         this.toastr.successToastr('Técnico Financiero Asignado Satisfactoriamente.', 'Asignación de Técnico Financiero');
+      }).catch( e => { console.log(e); });
+   }).catch( e => { console.log(e); });
+  }
+
+  desasignarFinanciero() {
+   this.isAssignedFinancial = false;
+   this.financialSelectedId = 0;
+   this.registerApprovalFinanciero.id_user = 0;
+   this.registerApprovalFinanciero.date_assigment = null;
+   const today = new Date();
+   this.approvalStateDataService.put(this.registerApprovalFinanciero).then( r => {
+    const newRegisterState = new RegisterState();
+    newRegisterState.justification = 'Técnico Financiero removido en la fecha ' + today.toDateString();
+    newRegisterState.register_id = this.registerApprovalFinanciero.register_id;
+    newRegisterState.state_id = 14;
+    this.registerStateDataService.post(newRegisterState).then( r1 => {
+       this.toastr.warningToastr('Técnico Financiero Removido Satisfactoriamente.', 'Asignación de Técnico Financiero');
+    }).catch( e => { console.log(e); });
+   }).catch( e => { console.log(e); });
   }
 
   onChangeTableEstablishment(config: any, page: any = {page: this.currentPageEstablishment, itemsPerPage: this.recordsByPageEstablishment}): any {
@@ -724,15 +764,32 @@ export class CoordinadorComponent implements OnInit {
    }
   }
 
-  checkIfHasInform() {
-
+  checkAttachments() {
+   this.hasRequisites = false;
+   this.hasInform = false;
+   this.approvalStateAttachmentDataService.get_by_register_id(this.idRegister).then( r => {
+      r.forEach(approvalStateAttachment => {
+         if (approvalStateAttachment.approval_state_attachment_file_name.search('Informe') == 0) {
+            this.informeApprovalStateAttachment = approvalStateAttachment;
+            this.hasInform = true;
+         }
+         if (approvalStateAttachment.approval_state_attachment_file_name.search('Formulario') == 0) {
+            this.requisitosApprovalStateAttachment = approvalStateAttachment;
+            this.hasRequisites = true;
+         }
+      });
+   }).catch( e => { console.log(e); });
   }
 
-  checkIfHasRequisites() {
-
+  checkIfIsAssignedFinanciero() {
+   if (this.financialSelectedId !== 0) {
+      this.isAssignedFinancial = true;
+   } else {
+      this.isAssignedFinancial = false;
+   }
   }
 
-  checkIfHasIspectionDate() {
+  checkAttachmentsFinanciero(){
 
   }
 
@@ -754,15 +811,16 @@ export class CoordinadorComponent implements OnInit {
             }
             this.inspectorSelectedId = this.registerApprovalInspector.id_user;
             this.checkIfIsAssigned();
-            this.checkIfHasInform();
-            this.checkIfHasRequisites();
-            this.checkIfHasIspectionDate();
+            this.checkAttachments();
          }
          if(element.approval_id == 2){
             this.registerApprovalFinanciero = element;
             if (typeof this.registerApprovalFinanciero.notes == 'undefined' || this.registerApprovalFinanciero.notes == null) {
                this.registerApprovalFinanciero.notes = '';
             }
+            this.financialSelectedId = this.registerApprovalFinanciero.id_user;
+            this.checkIfIsAssignedFinanciero();
+            this.checkAttachmentsFinanciero();
          }
          if(element.approval_id == 3){
             this.registerApprovalCoordinador = element;
@@ -1119,6 +1177,20 @@ export class CoordinadorComponent implements OnInit {
       this.ruc_registro_selected.ruc.person_representative_attachment.person_representative_attachment_file,
       this.ruc_registro_selected.ruc.person_representative_attachment.person_representative_attachment_file_type,
       this.ruc_registro_selected.ruc.person_representative_attachment.person_representative_attachment_file_name);
+  }
+
+  descargarInforme() {
+   this.downloadFile(
+      this.informeApprovalStateAttachment.approval_state_attachment_file,
+      this.informeApprovalStateAttachment.approval_state_attachment_file_type,
+      this.informeApprovalStateAttachment.approval_state_attachment_file_name);
+  }
+
+  descargarRequisitos() {
+   this.downloadFile(
+      this.requisitosApprovalStateAttachment.approval_state_attachment_file,
+      this.requisitosApprovalStateAttachment.approval_state_attachment_file_type,
+      this.requisitosApprovalStateAttachment.approval_state_attachment_file_name);
   }
 
   getCapacityTypes() {
