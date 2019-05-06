@@ -259,14 +259,6 @@ const routes: Routes = [
             path: 'declaration_attachment',
             loadChildren: './CRUD/FINANCIERO/DeclarationAttachment/declarationattachment.module#DeclarationAttachmentModule'
          },
-         {
-            path: 'approval',
-            loadChildren: './CRUD/FINANCIERO/Approval/approval.module#ApprovalModule'
-         },
-         {
-            path: 'approval_state',
-            loadChildren: './CRUD/FINANCIERO/ApprovalState/approvalstate.module#ApprovalStateModule'
-         },
 
          // INTERNO
          {

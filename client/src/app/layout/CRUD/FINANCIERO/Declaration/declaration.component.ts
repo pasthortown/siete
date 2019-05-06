@@ -7,9 +7,6 @@ import { Declaration } from './../../../../models/FINANCIERO/Declaration';
 import { DeclarationItemValueService } from './../../../../services/CRUD/FINANCIERO/declarationitemvalue.service';
 import { DeclarationItemValue } from './../../../../models/FINANCIERO/DeclarationItemValue';
 
-import { ApprovalStateService } from './../../../../services/CRUD/FINANCIERO/approvalstate.service';
-import { ApprovalState } from './../../../../models/FINANCIERO/ApprovalState';
-
 
 @Component({
    selector: 'app-declaration',
@@ -26,19 +23,15 @@ export class DeclarationComponent implements OnInit {
    recordsByPage = 5;
    declaration_item_values: DeclarationItemValue[] = [];
    declaration_item_values_declarationSelectedId: number;
-   approval_states: ApprovalState[] = [];
-   approval_states_declarationSelectedId: number;
    constructor(
                private modalService: NgbModal,
                private toastr: ToastrManager,
                private declaration_item_valueDataService: DeclarationItemValueService,
-               private approval_stateDataService: ApprovalStateService,
                private declarationDataService: DeclarationService) {}
 
    ngOnInit() {
       this.goToPage(1);
       this.getDeclarationItemValue();
-      this.getApprovalState();
    }
 
    selectDeclaration(declaration: Declaration) {
@@ -59,20 +52,6 @@ export class DeclarationComponent implements OnInit {
       }).catch( e => console.log(e) );
    }
 
-   getApprovalState() {
-      this.approval_states = [];
-      this.approval_stateDataService.get().then( r => {
-         this.approval_states = r as ApprovalState[];
-      }).catch( e => console.log(e) );
-   }
-
-   getApprovalStatesOnDeclaration() {
-      this.declarationSelected.approval_states_on_declaration = [];
-      this.declarationDataService.get(this.declarationSelected.id).then( r => {
-         this.declarationSelected.approval_states_on_declaration = r.attach[0].approval_states_on_declaration as ApprovalState[];
-      }).catch( e => console.log(e) );
-   }
-
    goToPage(page: number) {
       if ( page < 1 || page > this.lastPage ) {
          this.toastr.errorToastr('La página solicitada no existe.', 'Error');
@@ -86,7 +65,6 @@ export class DeclarationComponent implements OnInit {
       this.declarations = [];
       this.declarationSelected = new Declaration();
       this.declaration_item_values_declarationSelectedId = 0;
-      this.approval_states_declarationSelectedId = 0;
       this.declarationDataService.get_paginate(this.recordsByPage, this.currentPage).then( r => {
          this.declarations = r.data as Declaration[];
          this.lastPage = r.last_page;
@@ -96,7 +74,6 @@ export class DeclarationComponent implements OnInit {
    newDeclaration(content) {
       this.declarationSelected = new Declaration();
       this.declaration_item_values_declarationSelectedId = 0;
-      this.approval_states_declarationSelectedId = 0;
       this.openDialog(content);
    }
 
@@ -104,17 +81,12 @@ export class DeclarationComponent implements OnInit {
       if ( typeof this.declarationSelected.declaration_item_values_on_declaration === 'undefined' ) {
          this.declarationSelected.declaration_item_values_on_declaration = [];
       }
-      if ( typeof this.declarationSelected.approval_states_on_declaration === 'undefined' ) {
-         this.declarationSelected.approval_states_on_declaration = [];
-      }
       if (typeof this.declarationSelected.id === 'undefined') {
          this.toastr.errorToastr('Debe seleccionar un registro.', 'Error');
          return;
       }
       this.getDeclarationItemValuesOnDeclaration();
       this.declaration_item_values_declarationSelectedId = 0;
-      this.getApprovalStatesOnDeclaration();
-      this.approval_states_declarationSelectedId = 0;
       this.openDialog(content);
    }
 
@@ -213,55 +185,6 @@ export class DeclarationComponent implements OnInit {
       }
       this.declarationSelected.declaration_item_values_on_declaration = newDeclarationItemValues;
       this.declaration_item_values_declarationSelectedId = 0;
-   }
-
-   selectApprovalState(approval_state: ApprovalState) {
-      this.approval_states_declarationSelectedId = approval_state.id;
-   }
-
-   addApprovalState() {
-      if (this.approval_states_declarationSelectedId === 0) {
-         this.toastr.errorToastr('Seleccione un registro.', 'Error');
-         return;
-      }
-      this.approval_states.forEach(approval_state => {
-         if (approval_state.id == this.approval_states_declarationSelectedId) {
-            let existe = false;
-            this.declarationSelected.approval_states_on_declaration.forEach(element => {
-               if (element.id == approval_state.id) {
-                  existe = true;
-               }
-            });
-            if (!existe) {
-               this.declarationSelected.approval_states_on_declaration.push(approval_state);
-               this.approval_states_declarationSelectedId = 0;
-            } else {
-               this.toastr.errorToastr('El registro ya existe.', 'Error');
-            }
-         }
-      });
-   }
-
-   removeApprovalState() {
-      if (this.approval_states_declarationSelectedId === 0) {
-         this.toastr.errorToastr('Seleccione un registro.', 'Error');
-         return;
-      }
-      const newApprovalStates: ApprovalState[] = [];
-      let eliminado = false;
-      this.declarationSelected.approval_states_on_declaration.forEach(approval_state => {
-         if (approval_state.id !== this.approval_states_declarationSelectedId) {
-            newApprovalStates.push(approval_state);
-         } else {
-            eliminado = true;
-         }
-      });
-      if (!eliminado) {
-         this.toastr.errorToastr('Registro no encontrado.', 'Error');
-         return;
-      }
-      this.declarationSelected.approval_states_on_declaration = newApprovalStates;
-      this.approval_states_declarationSelectedId = 0;
    }
 
    openDialog(content) {

@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 Use Exception;
 use App\Declaration;
 use App\DeclarationItemValue;
-use App\ApprovalState;
 use App\StateDeclaration;
 use App\State;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -25,8 +24,6 @@ class DeclarationController extends Controller
           $attach = [];
           $declaration_item_values_on_declaration = $declaration->DeclarationItemValues()->get();
           array_push($attach, ["declaration_item_values_on_declaration"=>$declaration_item_values_on_declaration]);
-          $approval_states_on_declaration = $declaration->ApprovalStates()->get();
-          array_push($attach, ["approval_states_on_declaration"=>$approval_states_on_declaration]);
           return response()->json(["Declaration"=>$declaration, "attach"=>$attach],200);
        }
     }
@@ -93,10 +90,6 @@ class DeclarationController extends Controller
           foreach( $declaration_item_values_on_declaration_old as $declaration_item_value_old ) {
             DeclarationItemValue::destroy($declaration_item_value_old->id);
           }
-          $approval_states_on_declaration_old = $declaration->ApprovalStates()->get();
-          foreach( $approval_states_on_declaration_old as $approval_state_old ) {
-            ApprovalState::destroy($approval_state_old->id);
-          }
           foreach( $declaration_item_values_on_declaration as $declaration_item_value) {
             $declarationitemvalue = new DeclarationItemValue();
             $lastDeclarationItemValue = DeclarationItemValue::orderBy('id')->get()->last();
@@ -135,7 +128,6 @@ class DeclarationController extends Controller
          $state = State::where('id',$statusDeclaration->state_id)->first();
          $status_name = $state->name;
          $declaration_item_values_on_declaration = $declaration->DeclarationItemValues()->get();
-         $approval_states_on_declaration = $declaration->ApprovalStates()->get();
          array_push($toReturn, [
          'id'=>$declaration->id,
          'establishment_id'=>$declaration->establishment_id,
@@ -143,8 +135,7 @@ class DeclarationController extends Controller
          'year'=>$declaration->year,
          'declaration_item_values_on_declaration'=>$declaration_item_values_on_declaration,
          'status'=>$statusDeclaration,
-         'status_name'=>$status_name,
-         'approval_states_on_declaration'=>$approval_states_on_declaration]);
+         'status_name'=>$status_name]);
       }
       return $toReturn;
     }
@@ -169,10 +160,6 @@ class DeclarationController extends Controller
           $declaration_item_values_on_declaration = $result['declaration_item_values_on_declaration'];
           foreach( $declaration_item_values_on_declaration as $declaration_item_value) {
              $declaration->DeclarationItemValues()->attach($declaration_item_value['id']);
-          }
-          $approval_states_on_declaration = $result['approval_states_on_declaration'];
-          foreach( $approval_states_on_declaration as $approval_state) {
-             $declaration->ApprovalStates()->attach($approval_state['id']);
           }
           DB::commit();
        } catch (Exception $e) {
@@ -218,30 +205,6 @@ class DeclarationController extends Controller
              }
           }
           $declaration = Declaration::where('id',$result['id'])->first();
-          $approval_states_on_declaration = $result['approval_states_on_declaration'];
-          $approval_states_on_declaration_old = $declaration->ApprovalStates()->get();
-          foreach( $approval_states_on_declaration_old as $approval_state_old ) {
-             $delete = true;
-             foreach( $approval_states_on_declaration as $approval_state ) {
-                if ( $approval_state_old->id === $approval_state['id'] ) {
-                   $delete = false;
-                }
-             }
-             if ( $delete ) {
-                $declaration->ApprovalStates()->detach($approval_state_old->id);
-             }
-          }
-          foreach( $approval_states_on_declaration as $approval_state ) {
-             $add = true;
-             foreach( $approval_states_on_declaration_old as $approval_state_old) {
-                if ( $approval_state_old->id === $approval_state['id'] ) {
-                   $add = false;
-                }
-             }
-             if ( $add ) {
-                $declaration->ApprovalStates()->attach($approval_state['id']);
-             }
-          }
           DB::commit();
        } catch (Exception $e) {
           return response()->json($e,400);
@@ -263,8 +226,6 @@ class DeclarationController extends Controller
           $attach = [];
           $declaration_item_values_on_declaration = $declaration->DeclarationItemValues()->get();
           array_push($attach, ["declaration_item_values_on_declaration"=>$declaration_item_values_on_declaration]);
-          $approval_states_on_declaration = $declaration->ApprovalStates()->get();
-          array_push($attach, ["approval_states_on_declaration"=>$approval_states_on_declaration]);
           array_push($toReturn, ["Declaration"=>$declaration, "attach"=>$attach]);
        }
        return response()->json($toReturn,200);
@@ -324,33 +285,6 @@ class DeclarationController extends Controller
             }
          }
          $declaration = Declaration::where('id',$result['id'])->first();
-         $approval_states_on_declaration = [];
-         foreach($row['attach'] as $attach){
-            $approval_states_on_declaration = $attach['approval_states_on_declaration'];
-         }
-         $approval_states_on_declaration_old = $declaration->ApprovalStates()->get();
-         foreach( $approval_states_on_declaration_old as $approval_state_old ) {
-            $delete = true;
-            foreach( $approval_states_on_declaration as $approval_state ) {
-               if ( $approval_state_old->id === $approval_state['id'] ) {
-                  $delete = false;
-               }
-            }
-            if ( $delete ) {
-               $declaration->ApprovalStates()->detach($approval_state_old->id);
-            }
-         }
-         foreach( $approval_states_on_declaration as $approval_state ) {
-            $add = true;
-            foreach( $approval_states_on_declaration_old as $approval_state_old) {
-               if ( $approval_state_old->id === $approval_state['id'] ) {
-                  $add = false;
-               }
-            }
-            if ( $add ) {
-               $declaration->ApprovalStates()->attach($approval_state['id']);
-            }
-         }
        }
        DB::commit();
       } catch (Exception $e) {

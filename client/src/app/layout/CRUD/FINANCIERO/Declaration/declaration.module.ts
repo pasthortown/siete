@@ -7,7 +7,6 @@ import { DeclarationComponent } from './declaration.component';
 import { DeclarationService } from './../../../../services/CRUD/FINANCIERO/declaration.service';
 import { environment } from 'src/environments/environment';
 import { DeclarationItemValueService } from './../../../../services/CRUD/FINANCIERO/declarationitemvalue.service';
-import { ApprovalStateService } from './../../../../services/CRUD/FINANCIERO/approvalstate.service';
 
 @NgModule({
    imports: [CommonModule,
@@ -17,7 +16,6 @@ import { ApprovalStateService } from './../../../../services/CRUD/FINANCIERO/app
    providers: [
                NgbModal,
                DeclarationItemValueService,
-               ApprovalStateService,
                DeclarationService
                ]
 })

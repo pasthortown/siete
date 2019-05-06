@@ -44,9 +44,4 @@ class Declaration extends Model
        return $this->belongsTo('App\DeclarationAttachment');
     }
 
-    function ApprovalStates()
-    {
-       return $this->belongsToMany('App\ApprovalState')->withTimestamps();
-    }
-
 }
