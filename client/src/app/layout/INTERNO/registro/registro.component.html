@@ -130,7 +130,7 @@
                           setGroupTypeSelected(
                             ruc_registro_selected.ruc.group_given.group_type_id
                           )
-                        ">
+                        " disabled>
                       <option value="0" selected>Seleccione...</option>
                       <option *ngFor="let group_type of group_types" value="{{ group_type.id }}">
                         {{ group_type.name }}
@@ -183,14 +183,14 @@
                           class="btn btn-success" (click)="descargarNombramiento()">
                           <i class="fas fa-download"></i>
                         </button>
-                        <button [disabled]="!validateNombramiento()" type="button" title="Eliminar"
+                        <button [disabled]="true" type="button" title="Eliminar"
                           class="btn btn-danger" (click)="borrarNombramiento()">
                           <i class="fas fa-trash"></i>
                         </button>
                       </div>
                       <input type="file" class="form-control" id="person_representative_attachment_file"
                         name="person_representative_attachment_file" placeholder="Nombramiento Representante del Legal"
-                        (change)="CodeFilePersonRepresentativeAttachment($event)">
+                        (change)="CodeFilePersonRepresentativeAttachment($event)" disabled>
                     </div>
                   </div>
                 </div>
@@ -324,15 +324,7 @@
               </div>
               <div class="row mt-3" *ngIf="validateRuc()">
                 <div class="col-12 text-center">
-                  <button [disabled]="guardando" type="button" class="btn btn-success" title="Guardar Datos del RUC"
-                    (click)="guardarRUC()">
-                    <i class="fas fa-save"></i>&nbsp;Guardar Datos del RUC
-                  </button>
-                  <button type="button" class="btn btn-danger ml-2" title="Cancelar Cambios" (click)="
-                        refresh()
-                      ">
-                    <i class="fas fa-trash"></i>&nbsp;Cancelar Cambios
-                  </button>
+                  
                 </div>
               </div>
             </ng-template>
@@ -930,15 +922,7 @@
               </div>
               <div class="row mt-3" *ngIf="validateEstablecimiento()">
                 <div class="col-12 text-center">
-                  <button type="button" [disabled]="guardando" class="btn btn-success"
-                    title="Guardar Datos del Establecimiento" (click)="guardarEstablecimiento()">
-                    <i class="fas fa-save"></i>&nbsp;Guardar Datos del Establecimiento
-                  </button>
-                  <button type="button" class="btn btn-danger ml-2" title="Cancelar Cambios" (click)="
-                      refresh()
-                    ">
-                    <i class="fas fa-trash"></i>&nbsp;Cancelar Cambios
-                  </button>
+                  
                 </div>
               </div>
             </ng-template>
@@ -1502,15 +1486,7 @@
               </div>
               <div class="row mt-3" *ngIf="validateRegister()">
                 <div class="col-12 text-center">
-                  <button [disabled]="guardando" type="button" class="btn btn-success" title="Actualizar Información"
-                    (click)="guardarRegistro()">
-                    <i class="fas fa-paper-plane"></i>&nbsp;Actualizar Información
-                  </button>
-                  <button type="button" class="btn btn-danger ml-2" title="Cancelar Cambios" (click)="
-                      refresh()
-                    ">
-                    <i class="fas fa-trash"></i>&nbsp;Cancelar Cambios
-                  </button>
+                  
                 </div>
               </div>
             </ng-template>
@@ -1747,15 +1723,7 @@
               </div>
               <div class="row mt-3">
                 <div class="col-12 text-center">
-                  <button [disabled]="guardando" type="button" class="btn btn-success"
-                    title="Guardar Datos de la Declaración" (click)="guardarDeclaracion()">
-                    <i class="fas fa-paper-plane"></i>&nbsp;Guardar Datos de la Declaración
-                  </button>
-                  <button type="button" class="btn btn-danger ml-2" title="Cancelar Cambios" (click)="
-                      refresh()
-                    ">
-                    <i class="fas fa-trash"></i>&nbsp;Cancelar Cambios
-                  </button>
+                  
                 </div>
               </div>
             </ng-template>
