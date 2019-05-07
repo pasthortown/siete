@@ -1051,22 +1051,26 @@ export class RegistroComponent implements OnInit {
   }
 
   selectDeclaration(declaration: Declaration) {
-      this.declaration_selected = declaration;
-      this.mostrarDataDeclaration = true;
-      this.declarationItemsToShow = [];
-      this.guardando = false;
-      this.declarationItemsCategories.forEach(category => {
+   this.declaration_selected = declaration;
+   this.mostrarDataDeclaration = true;
+   this.declarationItemsToShow = [];
+   this.guardando = false;
+   this.declarationItemsCategories.forEach(category => {
+      if (category.tax_payer_type_id == this.ruc_registro_selected.ruc.tax_payer_type_id) {
          const items = [];
          declaration.declaration_item_values_on_declaration.forEach(newValueItem => {
             this.declarationItems.forEach(item => {
-               if ((item.id == newValueItem.declaration_item_id) && (item.declaration_item_category_id == category.id)) {
-                  items.push({declarationItem: item, valueItem: newValueItem});
+               if (item.tax_payer_type_id == this.ruc_registro_selected.ruc.tax_payer_type_id) {
+                  if ((item.id == newValueItem.declaration_item_id) && (item.declaration_item_category_id == category.id)) {
+                     items.push({declarationItem: item, valueItem: newValueItem});
+                  }
                }
             });
          });
          this.declarationItemsToShow.push({Category: category, items: items});
-      });
-  }
+      }
+   });
+}
 
   guardarDeclaracion() {
    this.declaration_selected.declaration_item_values_on_declaration = [];

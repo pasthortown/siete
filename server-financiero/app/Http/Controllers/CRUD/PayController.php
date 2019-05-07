@@ -32,7 +32,7 @@ class PayController extends Controller
     function get_by_ruc_id(Request $data)
     {
        $id = $data['id'];
-       return response()->json(Pay::where('ruc_id', $id)->orderBy('created_at', 'DESC')->first(),200);
+       return response()->json(Pay::where('ruc_id', $id)->orderBy('created_at', 'DESC')->get(),200);
     }
 
     function post(Request $data)

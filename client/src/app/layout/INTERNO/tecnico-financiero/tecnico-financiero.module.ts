@@ -40,7 +40,7 @@ import { ComplementaryServiceTypeService } from 'src/app/services/CRUD/ALOJAMIEN
 import { BedTypeService } from 'src/app/services/CRUD/ALOJAMIENTO/bedtype.service';
 import { TariffTypeService } from 'src/app/services/CRUD/ALOJAMIENTO/tarifftype.service';
 import { RucNameTypeService } from 'src/app/services/CRUD/BASE/rucnametype.service';
-import { StateService } from 'src/app/services/CRUD/ALOJAMIENTO/state.service';
+import { StateService } from 'src/app/services/CRUD/FINANCIERO/state.service';
 import { CapacityTypeService } from 'src/app/services/CRUD/ALOJAMIENTO/capacitytype.service';
 import { DinardapService } from 'src/app/services/negocio/dinardap.service';
 import { EstablishmentCertificationAttachmentService } from 'src/app/services/CRUD/BASE/establishmentcertificationattachment.service';
@@ -50,6 +50,7 @@ import { DeclarationItemCategoryService } from 'src/app/services/CRUD/FINANCIERO
 import { DeclarationService } from 'src/app/services/CRUD/FINANCIERO/declaration.service';
 import { Ng2TableModule } from 'ng2-table/ng2-table';
 import { PayService } from './../../../services/CRUD/FINANCIERO/pay.service';
+import { StateDeclarationService } from 'src/app/services/CRUD/FINANCIERO/statedeclaration.service';
 
 @NgModule({
   imports: [CommonModule,
@@ -82,6 +83,7 @@ import { PayService } from './../../../services/CRUD/FINANCIERO/pay.service';
     AgreementService,
     UbicationService,
     RegisterService,
+    StateDeclarationService,
     CapacityTypeService,
     EstablishmentCertificationAttachmentService,
     EstablishmentPictureService,

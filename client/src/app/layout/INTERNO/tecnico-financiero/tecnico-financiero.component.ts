@@ -1,3 +1,4 @@
+import { StateDeclarationService } from './../../../services/CRUD/FINANCIERO/statedeclaration.service';
 import { PayService } from './../../../services/CRUD/FINANCIERO/pay.service';
 import { ApprovalStateAttachmentService } from './../../../services/CRUD/ALOJAMIENTO/approvalstateattachment.service';
 import { ApprovalStateAttachment } from './../../../models/ALOJAMIENTO/ApprovalStateAttachment';
@@ -24,7 +25,7 @@ import { UserService } from 'src/app/services/profile/user.service';
 import { DinardapService } from 'src/app/services/negocio/dinardap.service';
 import { CapacityTypeService } from 'src/app/services/CRUD/ALOJAMIENTO/capacitytype.service';
 import { CapacityType } from 'src/app/models/ALOJAMIENTO/CapacityType';
-import { State } from 'src/app/models/ALOJAMIENTO/State';
+import { State } from 'src/app/models/FINANCIERO/State';
 import { TariffTypeService } from 'src/app/services/CRUD/ALOJAMIENTO/tarifftype.service';
 import { BedTypeService } from 'src/app/services/CRUD/ALOJAMIENTO/bedtype.service';
 import { BedType } from 'src/app/models/ALOJAMIENTO/BedType';
@@ -76,7 +77,7 @@ import { TariffType } from 'src/app/models/ALOJAMIENTO/TariffType';
 import { Tariff } from 'src/app/models/ALOJAMIENTO/Tariff';
 import { RucNameType } from 'src/app/models/BASE/RucNameType';
 import { RucNameTypeService } from 'src/app/services/CRUD/BASE/rucnametype.service';
-import { StateService } from 'src/app/services/CRUD/ALOJAMIENTO/state.service';
+import { StateService } from 'src/app/services/CRUD/FINANCIERO/state.service';
 import { User } from 'src/app/models/profile/User';
 import { Ruc } from 'src/app/models/BASE/Ruc';
 import { GroupGiven } from 'src/app/models/BASE/GroupGiven';
@@ -88,6 +89,7 @@ import { EstablishmentPictureService } from 'src/app/services/CRUD/BASE/establis
 import { EstablishmentCertificationAttachmentService } from 'src/app/services/CRUD/BASE/establishmentcertificationattachment.service';
 import { RegisterService } from 'src/app/services/CRUD/ALOJAMIENTO/register.service';
 import { RegisterStateService } from 'src/app/services/CRUD/ALOJAMIENTO/registerstate.service';
+import { StateDeclaration } from 'src/app/models/FINANCIERO/StateDeclaration';
 
 @Component({
   selector: 'app-tecnico-financiero',
@@ -106,6 +108,7 @@ export class TecnicoFinancieroComponent implements OnInit {
   registerApprovalInspector: ApprovalState = new ApprovalState();
   registerApprovalFinanciero: ApprovalState = new ApprovalState();
   pay: Pay = new Pay();
+  pays: Pay[] = [];
   isAssigned = false;
   hasIspectionDate  = false;
   hasInform  = false;
@@ -115,7 +118,8 @@ export class TecnicoFinancieroComponent implements OnInit {
   payApprovalStateAttachment: ApprovalStateAttachment = new ApprovalStateAttachment();
   newRegisterState: RegisterState = new RegisterState();
   maxDeclarationYear: number = 0;
-
+  declaration_state_id = 0;
+  declarationstates: State[] = [];
   //REGISTROS MINTUR
   registers_mintur = [];
   registerMinturSelected: any = null;
@@ -281,6 +285,7 @@ export class TecnicoFinancieroComponent implements OnInit {
              private agreementDataService: AgreementService,
              private rucNameTypeDataService: RucNameTypeService,
              private group_typeDataService: GroupTypeService,
+             private stateDeclaratonDataService: StateDeclarationService,
              private languageDataService: LanguageService,
              private complementaryServiceFoodTypeDataService: ComplementaryServiceFoodTypeService,
              private establishmentPictureDataService: EstablishmentPictureService,
@@ -694,13 +699,21 @@ export class TecnicoFinancieroComponent implements OnInit {
   return this.validateNotesInspection() && this.validateComprobanteFile() && this.validateDeclaracionFile();
  }
 
+ borrarOrdenDePago() {
+   this.payDataService.delete(this.pay.id).then( r => {
+      this.toastr.errorToastr('Órden de Pago Eliminada Satisfactoriamente', 'Revisión, Técnico Financiero');
+      this.refresh();
+   }).catch( e => { console.log(e); });
+ }
+
  saveToPayValue() {
-   this.pay.ruc_id = this.ruc_registro_selected.ruc.id;
-   this.pay.amount_payed = -1;
-   this.pay.pay_date = null;
-   this.pay.code = this.ruc_registro_selected.ruc.number;
-   this.pay.taxes = 0;
    if (this.pay.id == 0) {
+      this.pay.ruc_id = this.ruc_registro_selected.ruc.id;
+      this.pay.amount_payed = -1;
+      this.pay.pay_date = null;
+      const today = new Date();
+      this.pay.code = this.ruc_registro_selected.ruc.number + '' + today.getFullYear().toString() + '' + (today.getMonth() + 1).toString() + '' + today.getDate().toString();
+      this.pay.payed = false;   
       this.payDataService.post(this.pay).then( r => {
          this.toastr.successToastr('Información Guardada Satisfactoriamente', 'Revisión, Técnico Financiero');
          this.refresh();
@@ -978,6 +991,8 @@ export class TecnicoFinancieroComponent implements OnInit {
    this.mostrarDataRegisterMintur = false;
    this.ruc_registro_selected = new RegistroDataCarrier();
    this.pay = new Pay();
+   this.pays = [];
+   this.getDeclarationStates();
    this.getInspectores();
    this.getFinancieros();
    this.getTramiteStates();
@@ -1015,6 +1030,22 @@ export class TecnicoFinancieroComponent implements OnInit {
   this.userDataService.get_by_rol('6').then( r => {
      this.financieros = r as User[];
   }).catch( e => {console.log(e); });
+ }
+
+ actualizarDeclaracion() {
+   const newStateDeclaration  = new StateDeclaration();
+   newStateDeclaration.declaration_id = this.declaration_selected.id;
+   newStateDeclaration.state_id = this.declaration_selected.status.id;
+   newStateDeclaration.moment = new Date();
+   this.declarationstates.forEach(element => {
+      if (element.id == newStateDeclaration.state_id) {
+         newStateDeclaration.justification = element.name + ' en la fecha ' + newStateDeclaration.moment.toDateString();
+      }
+   });
+   this.stateDeclaratonDataService.post(newStateDeclaration).then( r => {
+      this.toastr.successToastr('Datos guardados satisfactoriamente.', 'Declaración');
+      this.refresh();
+   }).catch( e => { console.log(e); });
  }
 
  getDeclarationCategories() {
@@ -1153,9 +1184,16 @@ getDeclarationItems() {
   }).catch( e => { console.log(e); });
  }
 
+ selectPay(pay: Pay) {
+   this.pay = pay;
+ }
+
  getPays() {
    this.payDataService.get_by_ruc_id(this.ruc_registro_selected.ruc.id).then( r => {
-      this.pay = r as Pay;
+      this.pays = r as Pay[];
+      if (this.pays.length == 0) {
+         this.pay = new Pay();
+      }
    }).catch( e => { console.log(e); } );
  }
 
@@ -1181,6 +1219,7 @@ getDeclarationItems() {
  }
 
  getEstablishmentsOnRuc(currentpage: number) {
+    this.declaration_selected = new Declaration();
    this.establishment_selected = new Establishment();
    this.mostrarDataEstablishment = false;
    this.establishmentDataService.getByRuc(this.ruc_registro_selected.ruc.number, this.recordsByPageEstablishment, currentpage).then( r => {
@@ -1291,18 +1330,6 @@ getDeclarationItems() {
 
  getRegisterState(id: number): String {
     let toReturn: String = '';
-    let fatherCode: String = '';
-    this.states.forEach(state => {
-       if (state.id == id) {
-        toReturn = state.name;
-        fatherCode = state.father_code;
-       }
-    });
-    this.states.forEach(state => {
-       if (state.code == fatherCode) {
-          toReturn = state.name + ' - ' + toReturn;
-       }
-    });
     return toReturn;
  }
 
@@ -1328,23 +1355,31 @@ getDeclarationItems() {
    }).catch( e => { console.log(e); });
  }
 
- selectDeclaration(declaration: Declaration) {
-     this.declaration_selected = declaration;
-     this.mostrarDataDeclaration = true;
-     this.declarationItemsToShow = [];
-     this.guardando = false;
-     this.declarationItemsCategories.forEach(category => {
-        const items = [];
-        declaration.declaration_item_values_on_declaration.forEach(newValueItem => {
-           this.declarationItems.forEach(item => {
-              if ((item.id == newValueItem.declaration_item_id) && (item.declaration_item_category_id == category.id)) {
-                 items.push({declarationItem: item, valueItem: newValueItem});
-              }
-           });
-        });
-        this.declarationItemsToShow.push({Category: category, items: items});
-     });
+ nuevaOrdenDePago() {
+   this.pay = new Pay();
  }
+
+ selectDeclaration(declaration: Declaration) {
+   this.declaration_selected = declaration;
+   this.mostrarDataDeclaration = true;
+   this.declarationItemsToShow = [];
+   this.guardando = false;
+   this.declarationItemsCategories.forEach(category => {
+      if (category.tax_payer_type_id == this.ruc_registro_selected.ruc.tax_payer_type_id) {
+         const items = [];
+         declaration.declaration_item_values_on_declaration.forEach(newValueItem => {
+            this.declarationItems.forEach(item => {
+               if (item.tax_payer_type_id == this.ruc_registro_selected.ruc.tax_payer_type_id) {
+                  if ((item.id == newValueItem.declaration_item_id) && (item.declaration_item_category_id == category.id)) {
+                     items.push({declarationItem: item, valueItem: newValueItem});
+                  }
+               }
+            });
+         });
+         this.declarationItemsToShow.push({Category: category, items: items});
+      }
+   });
+}
 
  guardarDeclaracion() {
   this.declaration_selected.declaration_item_values_on_declaration = [];
@@ -2494,7 +2529,7 @@ removeLanguage() {
  getTramiteStatus(status_id: number) {
     this.states.forEach(state => {
        if (state.id == status_id) {
-        this.estado_tramite_selected_code = state.father_code;
+  
         this.getSpecificStates();
        }
     });
@@ -2502,11 +2537,13 @@ removeLanguage() {
 
  getSpecificStates() {
   this.specific_states = [];
-  this.states.forEach(element => {
-     if (element.father_code == this.estado_tramite_selected_code) {
-        this.specific_states.push(element);
-     }
-  });
+  
+ }
+
+ getDeclarationStates() {
+   this.stateDataService.get().then( r => {
+      this.declarationstates = r as State[];
+   }).catch( e => { console.log(e); });
  }
 
  addComplementaryServiceType() {
