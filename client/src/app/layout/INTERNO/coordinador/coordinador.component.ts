@@ -1006,7 +1006,8 @@ export class CoordinadorComponent implements OnInit {
          this.declarationItemsToShow.push({Category: category, items: items});  
       }
    });
-
+  }
+ 
   addComplementaryFoodService() {
      const complementaryFoodService = new ComplementaryServiceFood();
      this.rucEstablishmentRegisterSelected.complementary_service_foods_on_register.push(complementaryFoodService);

@@ -1043,6 +1043,7 @@ export class InspectorComponent implements OnInit {
          this.declarationItemsToShow.push({Category: category, items: items});  
       }
    });
+  }
 
   addComplementaryFoodService() {
      const complementaryFoodService = new ComplementaryServiceFood();
