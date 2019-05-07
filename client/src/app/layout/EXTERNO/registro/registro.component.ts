@@ -1,3 +1,4 @@
+import { PayService } from './../../../services/CRUD/FINANCIERO/pay.service';
 import { DeclarationService } from 'src/app/services/CRUD/FINANCIERO/declaration.service';
 import { DeclarationItemValue } from 'src/app/models/FINANCIERO/DeclarationItemValue';
 import { DeclarationItemService } from 'src/app/services/CRUD/FINANCIERO/declarationitem.service';
@@ -90,6 +91,7 @@ export class RegistroComponent implements OnInit {
    @ViewChild('fotoFachadaInput') fotoFachadaInput;
    @ViewChild('EstablishmentCertificationAttachedFile') EstablishmentCertificationAttachedFile;
   //DATOS RUC
+  pays: Pay[] = [];
   imContactRuc: Boolean = true;
   roles:any[] = [];
   terminosCondiciones = false;
@@ -233,6 +235,7 @@ export class RegistroComponent implements OnInit {
               private franchiseDataService: FranchiseChainNameService,
               private rucDataService: RucService,
               private modalService: NgbModal,
+              private payDataService: PayService,
               private agreementDataService: AgreementService,
               private rucNameTypeDataService: RucNameTypeService,
               private group_typeDataService: GroupTypeService,
@@ -579,6 +582,16 @@ export class RegistroComponent implements OnInit {
   }
 
   refresh() {
+    this.pays = [];
+    this.consumoCedula = false;
+    this.consumoCedulaEstablishmentContact = false;
+    this.consumoRuc = false;
+    this.consumoCedulaRepresentanteLegal = false;
+    this.SRIOK = false;
+    this.REGCIVILOK = false;
+    this.REGCIVILOKEstablishment = false;
+    this.REGCIVILREPRESENTANTELEGALOK = false;
+    this.guardando = false;
     this.ruc_registro_selected = new RegistroDataCarrier();
     this.getRuc(this.user.ruc);
     this.getRegistersOnRuc();
@@ -591,6 +604,7 @@ export class RegistroComponent implements OnInit {
     this.getZonalesEstablishment();
     this.getEstablishmentPropertyType();
     this.getLanguage();
+    this.getPays();
     this.getComplementaryFoodServiceType();
     this.getSystemNames();
     this.getCertificationTypes();
@@ -628,6 +642,12 @@ export class RegistroComponent implements OnInit {
   getMaxDeclarationDate() {
    const today = new Date();
    this.maxYear = today.getFullYear();
+  }
+
+  getPays() {
+   this.payDataService.get_by_ruc_number(this.user.ruc).then( r => {
+      this.pays = r as Pay[];
+   }).catch( e => { console.log(e); } );
   }
 
   getComplementaryFoodServiceType() {

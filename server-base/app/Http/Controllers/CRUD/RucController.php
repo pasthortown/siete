@@ -29,6 +29,11 @@ class RucController extends Controller
        }
     }
 
+    function get_by_ruc_number(Request $data) {
+       $number = $data['number'];
+       return response()->json(Ruc::where('number', $number)->first(),200);
+    }
+    
     function filtered(Request $data) {
       $number = $data['number'];
       $ruc = Ruc::where('number',$number)->first();

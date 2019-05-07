@@ -1,3 +1,4 @@
+import { PayService } from './../../../services/CRUD/FINANCIERO/pay.service';
 import { RegisterService } from 'src/app/services/CRUD/ALOJAMIENTO/register.service';
 import { EstablishmentPictureService } from 'src/app/services/CRUD/BASE/establishmentpicture.service';
 import { AgreementService } from 'src/app/services/CRUD/BASE/agreement.service';
@@ -82,6 +83,7 @@ import { Ng2TableModule } from 'ng2-table/ng2-table';
     GroupTypeService,
     RegisterTypeService,
     WorkerGroupService,
+    PayService,
     TariffTypeService,
     PreviewRegisterCodeService,
     EstablishmentCertificationTypeService,

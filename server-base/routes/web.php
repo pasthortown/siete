@@ -23,6 +23,7 @@ $router->group(['middleware' => ['auth']], function () use ($router) {
    $router->post('/ruc', ['uses' => 'RucController@post']);
    $router->get('/ruc', ['uses' => 'RucController@get']);
    $router->get('/ruc/get_id_contact_ruc', ['uses' => 'RucController@get_id_contact_ruc']);
+   $router->get('/ruc/get_by_ruc_number', ['uses' => 'RucController@get_by_ruc_number']);
    $router->post('/ruc/register_ruc', ['uses' => 'RucController@register_ruc']);
    $router->get('/ruc/paginate', ['uses' => 'RucController@paginate']);
    $router->get('/ruc/filtered', ['uses' => 'RucController@filtered']);

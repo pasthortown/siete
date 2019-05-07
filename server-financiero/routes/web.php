@@ -74,6 +74,7 @@ $router->group(['middleware' => ['auth']], function () use ($router) {
    $router->get('/pay', ['uses' => 'PayController@get']);
    $router->get('/pay/paginate', ['uses' => 'PayController@paginate']);
    $router->get('/pay/get_by_ruc_id', ['uses' => 'PayController@get_by_ruc_id']);
+   $router->get('/pay/get_by_ruc_number', ['uses' => 'PayController@get_by_ruc_number']);
    $router->get('/pay/backup', ['uses' => 'PayController@backup']);
    $router->put('/pay', ['uses' => 'PayController@put']);
    $router->delete('/pay', ['uses' => 'PayController@delete']);

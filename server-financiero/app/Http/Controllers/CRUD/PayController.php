@@ -35,6 +35,14 @@ class PayController extends Controller
        return response()->json(Pay::where('ruc_id', $id)->orderBy('created_at', 'DESC')->get(),200);
     }
 
+    function get_by_ruc_number(Request $data)
+    {
+       $token = $data->header('api_token'); 
+       $number = $data['number'];
+       $ruc = json_decode($this->httpGet('http://localhost:8001/ruc/get_by_ruc_number?number='.$number, null, null, $token));
+       return response()->json(Pay::where('ruc_id', $ruc->id)->orderBy('created_at', 'DESC')->get(),200);
+    }
+
     function post(Request $data)
     {
        try{
@@ -138,4 +146,22 @@ class PayController extends Controller
       }
       return response()->json('Task Complete',200);
     }
+
+    protected function httpGet($url, $data=NULL, $headers = NULL, $token) {
+      $ch = curl_init();
+      curl_setopt($ch, CURLOPT_URL, $url);
+      curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+      if(!empty($data)){
+          curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+      }
+      $headersSend = array();
+      array_push($headersSend, 'api_token:'.$token);
+      curl_setopt($ch, CURLOPT_HTTPHEADER, $headersSend);
+      $response = curl_exec($ch);
+      if (curl_error($ch)) {
+          trigger_error('Curl Error:' . curl_error($ch));
+      }
+      curl_close($ch);
+      return $response;
+   }
 }
