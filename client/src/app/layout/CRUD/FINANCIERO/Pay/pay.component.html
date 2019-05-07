@@ -34,10 +34,9 @@
                <th>amount_payed</th>
                <th>amount_to_pay</th>
                <th>pay_date</th>
-               <th>annotation</th>
+               <th>payed</th>
                <th>code</th>
                <th>max_pay_date</th>
-               <th>taxes</th>
                <th>ruc_id</th>
             </tr>
          </thead>
@@ -47,10 +46,9 @@
                <td>{{pay.amount_payed}}</td>
                <td>{{pay.amount_to_pay}}</td>
                <td>{{pay.pay_date}}</td>
-               <td>{{pay.annotation}}</td>
+               <td>{{pay.payed}}</td>
                <td>{{pay.code}}</td>
                <td>{{pay.max_pay_date}}</td>
-               <td>{{pay.taxes}}</td>
                <td>{{pay.ruc_id}}</td>
             </tr>
          </tbody>
@@ -107,9 +105,9 @@
                </div>
             </div>
             <div class="form-group row">
-               <label for="annotation" class="col-4 col-form-label">annotation</label>
+               <label for="payed" class="col-4 col-form-label">payed</label>
                <div class="col-8">
-                  <ck-editor id="annotation" name="annotation" skin="moono-lisa" [(ngModel)]="paySelected.annotation"></ck-editor>
+                  <label class="switch"><input type="checkbox"id="payed" name="payed" [(ngModel)]="paySelected.payed"><span class="slider round"></span></label>
                </div>
             </div>
             <div class="form-group row">
@@ -122,12 +120,6 @@
                <label for="max_pay_date" class="col-4 col-form-label">max_pay_date</label>
                <div class="col-8">
                   <input type="date" class="form-control" id="max_pay_date" name="max_pay_date" placeholder="maxPayDate" [ngModel]="paySelected.max_pay_date | date:'y-MM-dd'" (ngModelChange)="paySelected.max_pay_date = $event">
-               </div>
-            </div>
-            <div class="form-group row">
-               <label for="taxes" class="col-4 col-form-label">taxes</label>
-               <div class="col-8">
-                  <input type="number" class="form-control" id="taxes" name="taxes" placeholder="taxes" [(ngModel)]="paySelected.taxes">
                </div>
             </div>
             <div class="form-group row">

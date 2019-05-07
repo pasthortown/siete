@@ -6,12 +6,10 @@ import { PayRoutingModule } from './pay-routing.module';
 import { PayComponent } from './pay.component';
 import { PayService } from './../../../../services/CRUD/FINANCIERO/pay.service';
 import { environment } from 'src/environments/environment';
-import { CKEditorModule } from 'ngx-ckeditor';
 
 @NgModule({
    imports: [CommonModule,
              PayRoutingModule,
-             CKEditorModule,
              FormsModule],
    declarations: [PayComponent],
    providers: [

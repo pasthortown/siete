@@ -50,10 +50,9 @@ class PayController extends Controller
           $pay->amount_payed = $result['amount_payed'];
           $pay->amount_to_pay = $result['amount_to_pay'];
           $pay->pay_date = $result['pay_date'];
-          $pay->annotation = $result['annotation'];
+          $pay->payed = $result['payed'];
           $pay->code = $result['code'];
           $pay->max_pay_date = $result['max_pay_date'];
-          $pay->taxes = $result['taxes'];
           $pay->ruc_id = $result['ruc_id'];
           $pay->save();
           DB::commit();
@@ -72,10 +71,9 @@ class PayController extends Controller
              'amount_payed'=>$result['amount_payed'],
              'amount_to_pay'=>$result['amount_to_pay'],
              'pay_date'=>$result['pay_date'],
-             'annotation'=>$result['annotation'],
+             'payed'=>$result['payed'],
              'code'=>$result['code'],
              'max_pay_date'=>$result['max_pay_date'],
-             'taxes'=>$result['taxes'],
              'ruc_id'=>$result['ruc_id'],
           ]);
           DB::commit();
@@ -116,10 +114,9 @@ class PayController extends Controller
              'amount_payed'=>$result['amount_payed'],
              'amount_to_pay'=>$result['amount_to_pay'],
              'pay_date'=>$result['pay_date'],
-             'annotation'=>$result['annotation'],
+             'payed'=>$result['payed'],
              'code'=>$result['code'],
              'max_pay_date'=>$result['max_pay_date'],
-             'taxes'=>$result['taxes'],
              'ruc_id'=>$result['ruc_id'],
            ]);
          } else {
@@ -128,10 +125,9 @@ class PayController extends Controller
           $pay->amount_payed = $result['amount_payed'];
           $pay->amount_to_pay = $result['amount_to_pay'];
           $pay->pay_date = $result['pay_date'];
-          $pay->annotation = $result['annotation'];
+          $pay->payed = $result['payed'];
           $pay->code = $result['code'];
           $pay->max_pay_date = $result['max_pay_date'];
-          $pay->taxes = $result['taxes'];
           $pay->ruc_id = $result['ruc_id'];
           $pay->save();
          }
