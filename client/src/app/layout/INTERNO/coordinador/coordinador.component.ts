@@ -992,17 +992,20 @@ export class CoordinadorComponent implements OnInit {
   buildDeclarationItemsToShow() {
    this.declarationItemsToShow = [];
    this.declarationItemsCategories.forEach(category => {
-     const items = [];
-     this.declarationItems.forEach(item => {
-       if(item.declaration_item_category_id == category.id) {
-          const newValueItem = new DeclarationItemValue();
-          newValueItem.declaration_item_id = item.id;
-         items.push({declarationItem: item, valueItem: newValueItem});
-       }
-     });
-     this.declarationItemsToShow.push({Category: category, items: items});
+      if (category.tax_payer_type_id == this.ruc_registro_selected.ruc.tax_payer_type_id) {
+         const items = [];
+         this.declarationItems.forEach(item => {
+           if(item.declaration_item_category_id == category.id) {
+              const newValueItem = new DeclarationItemValue();
+              newValueItem.declaration_item_id = item.id;
+              if (item.tax_payer_type_id == this.ruc_registro_selected.ruc.tax_payer_type_id) {
+                items.push({declarationItem: item, valueItem: newValueItem});
+              }
+           }
+         });
+         this.declarationItemsToShow.push({Category: category, items: items});  
+      }
    });
-  }
 
   addComplementaryFoodService() {
      const complementaryFoodService = new ComplementaryServiceFood();
