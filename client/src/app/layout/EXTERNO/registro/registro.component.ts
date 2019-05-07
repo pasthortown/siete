@@ -123,6 +123,8 @@ export class RegistroComponent implements OnInit {
   secondaryPhoneContactValidated = true;
   franchises_rucSelectedId = 0;
   user: User = new User();
+  specific_states: State[];
+  states: State[];
 
   //DATOS ESTABLECIMIENTO
    config: any = {
@@ -179,7 +181,6 @@ export class RegistroComponent implements OnInit {
   dataRegister = [];
 
   estados_tramites: State[];
-  specific_states: State[];
   estado_tramite_selected_code: String = '1';
   statusSelected: RegisterState = new RegisterState();
   mostrarDataRegister = false;
@@ -201,7 +202,6 @@ export class RegistroComponent implements OnInit {
   rack_prices_registerSelectedId = 0;
   establishment_service_offers_registerSelectedId = 0;
   tarifas: any[] = [];
-  states: State[] = [];
   alowed_capacity_types: CapacityType[] = [];
   complementaryServiceFoodTypes: ComplementaryServiceFoodType[] = [];
   
@@ -450,6 +450,23 @@ export class RegistroComponent implements OnInit {
    return filteredData;
   }
 
+  getRegisterCategory(id: number): String {
+   let toReturn: String = '';
+   let fatherCode: String = '';
+   this.register_types.forEach(register_type => {
+      if (register_type.id == id) {
+       toReturn = register_type.name;
+       fatherCode = register_type.father_code;
+      }
+   });
+   this.register_types.forEach(register_type => {
+      if (register_type.code == fatherCode) {
+         toReturn = register_type.name + ' - ' + toReturn;
+      }
+   });
+   return toReturn;
+  }
+
   changeSortRegister(data: any, config: any): any {
    if (!config.sorting) {
      return data;
@@ -485,23 +502,46 @@ export class RegistroComponent implements OnInit {
   buildDataTableRegister() {
      this.columnsRegister = [
         {title: 'Seleccionado', name: 'selected'},
+        {title: 'Días en Espera', name: 'date_assigment_alert'},
         {title: 'Código del Establecimiento', name: 'establishment_code', filtering: {filterString: '', placeholder: 'Código del Establecimiento'}},
         {title: 'Ubicación del Establecimiento', name: 'address', filtering: {filterString: '', placeholder: 'Ubicación del Establecimiento'}},
         {title: 'Código del Registro', name: 'register_code', filtering: {filterString: '', placeholder: 'Código del Registro'}},
-        {title: 'Tipo de Registro', name: 'register_type', filtering: {filterString: '', placeholder: 'Tipo de Registro'}},
+        {title: 'Categoría', name: 'register_type', filtering: {filterString: '', placeholder: 'Categoría'}},
         {title: 'Estado', name: 'state', filtering: {filterString: '', placeholder: 'Estado'}},
         {title: 'Observaciones', name: 'notes'},
      ];
-     const data = [];
+     const data = []; 
      this.ruc_registro_selected.registers.forEach(item => {
+         let date_assigment_alert = '';
+         let date1 = new Date();
+         const registerState = this.getRegisterState(item.status_register.state_id);
+         if (registerState.search('Aprobado') == 0) {
+            date1 = new Date(item.status_register.updated_at);
+         }
+         if (registerState.search('Negado') == 0) {
+            date1 = new Date(item.status_register.updated_at);
+         }
+         const date2 = new Date(item.register.updated_at);
+         const diffTime = Math.abs(date2.getTime() - date1.getTime());
+         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+         if (diffDays < 7) {
+            date_assigment_alert = '<div class="col-12 text-center"><span class="badge badge-success">&nbsp;' + diffDays.toString() + '&nbsp;</span></div>';
+         }
+         if (diffDays >= 7 && diffDays <= 10) {
+            date_assigment_alert = '<div class="col-12 text-center"><span class="badge badge-warning">&nbsp;' + diffDays.toString() + '&nbsp;</span></div>';
+         }
+         if (diffDays > 10) {
+            date_assigment_alert = '<div class="col-12 text-center"><span class="badge badge-danger">&nbsp;' + diffDays.toString() + '&nbsp;</span></div>';
+         }
          data.push({
             selected: '',
             id: item.register.id,
+            date_assigment_alert: date_assigment_alert,
             establishment_code: item.establishment.ruc_code_id,
             address: item.establishment.address,
             register_code: item.register.code,
             register_type: item.type.register_category.name + ' / ' + item.type.register_type.name,
-            state: item.status.name,
+            state: registerState,
             notes: '<div class="col-12 text-justify">' + item.status_register.justification + '</div>',
          });
      });
@@ -531,6 +571,23 @@ export class RegistroComponent implements OnInit {
      return true;
   }
   
+  getRegisterState(id: number): String {
+   let toReturn: String = '';
+   let fatherCode: String = '';
+   this.states.forEach(state => {
+      if (state.id == id) {
+       toReturn = state.name;
+       fatherCode = state.father_code;
+      }
+   });
+   this.states.forEach(state => {
+      if (state.code == fatherCode) {
+         toReturn = state.name + ' - ' + toReturn;
+      }
+   });
+   return toReturn;
+}
+
   getTramiteStates() {
    this.estados_tramites = [];
    this.stateDataService.get().then( r => {
@@ -594,7 +651,6 @@ export class RegistroComponent implements OnInit {
     this.guardando = false;
     this.ruc_registro_selected = new RegistroDataCarrier();
     this.getRuc(this.user.ruc);
-    this.getRegistersOnRuc();
     this.getTaxPayerType();
     this.getFranchise();
     this.getGroupType();
@@ -865,7 +921,15 @@ export class RegistroComponent implements OnInit {
    this.states = [];
    this.stateDataService.get().then( r => {
       this.states = r as State[];
+      this.getRegisterTypes();
       this.getSpecificStates();
+   }).catch( e => { console.log(e); });
+  }
+
+  getRegisterTypes() {
+   this.register_typeDataService.get().then( r => {
+      this.register_types = r as RegisterType[];
+      this.getRegistersOnRuc();
    }).catch( e => { console.log(e); });
   }
 

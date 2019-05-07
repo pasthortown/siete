@@ -648,7 +648,14 @@ export class InspectorComponent implements OnInit {
      const data = [];
      this.registers_mintur.forEach(item => {
          let date_assigment_alert = '';
-         const date1 = new Date();
+         let date1 = new Date();
+         const registerState = this.getRegisterState(item.states.state_id);
+         if (registerState.search('Aprobado') == 0) {
+            date1 = new Date(item.states.updated_at);
+         }
+         if (registerState.search('Negado') == 0) {
+            date1 = new Date(item.states.updated_at);
+         }
          const date2 = new Date(item.register.updated_at);
          const diffTime = Math.abs(date2.getTime() - date1.getTime());
          const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
@@ -671,7 +678,7 @@ export class InspectorComponent implements OnInit {
             updated_at: item.register.updated_at,
             date_assigment: item.register.date_assigment,
             category: this.getRegisterCategory(item.register.register_type_id),
-            status: this.getRegisterState(item.states.state_id),
+            status: registerState,
          });
      });
      this.data = data;
@@ -765,6 +772,7 @@ export class InspectorComponent implements OnInit {
     this.newRegisterState.justification = 'Resultados de la Inspección cargados en la fecha ' + this.registerApprovalInspector.date_fullfill.toDateString();
     this.newRegisterState.register_id = this.registerApprovalInspector.register_id;
     this.newRegisterState.state_id = 14;
+    this.registerApprovalInspector.id_user = this.user.id;
     this.registerStateDataService.post(this.newRegisterState).then( r1 => {
     }).catch( e => { console.log(e); });
     this.approvalStateDataService.put(this.registerApprovalInspector).then( r => {

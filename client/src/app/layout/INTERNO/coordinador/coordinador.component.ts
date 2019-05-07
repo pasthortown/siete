@@ -97,6 +97,7 @@ export class CoordinadorComponent implements OnInit {
    @ViewChild('fotoFachadaInput') fotoFachadaInput;
    @ViewChild('EstablishmentCertificationAttachedFile') EstablishmentCertificationAttachedFile;
    //ASIGNACIONES
+   stateTramite: number = 0;
    inspectores: User[] = [];
    financieros: User[] = [];
    inspectorSelectedId: number = 0;
@@ -710,7 +711,14 @@ export class CoordinadorComponent implements OnInit {
      const data = [];
      this.registers_mintur.forEach(item => {
          let date_assigment_alert = '';
-         const date1 = new Date();
+         let date1 = new Date();
+         const registerState = this.getRegisterState(item.states.state_id);
+         if (registerState.search('Aprobado') == 0) {
+            date1 = new Date(item.states.updated_at);
+         }
+         if (registerState.search('Negado') == 0) {
+            date1 = new Date(item.states.updated_at);
+         }
          const date2 = new Date(item.register.updated_at);
          const diffTime = Math.abs(date2.getTime() - date1.getTime());
          const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
@@ -732,7 +740,7 @@ export class CoordinadorComponent implements OnInit {
             address: item.establishment.address,
             updated_at: item.register.updated_at,
             category: this.getRegisterCategory(item.register.register_type_id),
-            status: this.getRegisterState(item.states.state_id),
+            status: registerState,
          });
      });
      this.data = data;
@@ -832,12 +840,31 @@ export class CoordinadorComponent implements OnInit {
    }).catch( e => { console.log(e); });
   }
 
-  aprobarTramite() {
-   alert(this.idRegister);
-  }
-
-  negarTramite() {
-   alert('chao');
+  guardarTramite() {
+     if ( this.stateTramite == 0) {
+       this.toastr.errorToastr('Debe seleccionar un estado de trámite', 'Coordinación');
+       return;
+     }
+     const newRegisterState = new RegisterState();
+     this.registerApprovalCoordinador.register_id = this.idRegister;
+     this.registerApprovalCoordinador.date_assigment = this.registerApprovalFinanciero.date_fullfill;
+     this.registerApprovalCoordinador.id_user = this.user.id;
+     this.registerApprovalCoordinador.date_fullfill = new Date();
+     if( this.stateTramite == 1 ){
+        this.registerApprovalCoordinador.value = true;
+        newRegisterState.state_id = 9;
+     }
+     if( this.stateTramite == 2 ){
+      this.registerApprovalCoordinador.value = false;
+      newRegisterState.state_id = 10;
+     }
+     newRegisterState.justification = this.registerApprovalCoordinador.notes;
+     newRegisterState.register_id = this.idRegister;
+     this.registerStateDataService.post(newRegisterState).then( r1 => {
+     }).catch( e => { console.log(e); });
+     this.approvalStateDataService.put(this.registerApprovalCoordinador).then( r => {
+      this.toastr.successToastr('Datos Guardados Satisfactoriamente', 'Coordinación');
+     }).catch( e => { console.log(e); });
   }
 
   getRegisterTypes() {
@@ -916,6 +943,9 @@ export class CoordinadorComponent implements OnInit {
     this.registerMinturSelected = new Register();
     this.mostrarDataRegisterMintur = false;
     this.ruc_registro_selected = new RegistroDataCarrier();
+    this.registerApprovalFinanciero = new ApprovalState();
+    this.registerApprovalInspector = new ApprovalState();
+    this.registerApprovalCoordinador = new ApprovalState();
     this.getInspectores();
     this.getFinancieros();
     this.getTramiteStates();

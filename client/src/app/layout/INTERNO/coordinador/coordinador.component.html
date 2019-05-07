@@ -117,15 +117,23 @@
         </div>
     </div>
   </div>
-  <div class="col-12" *ngIf="registerApprovalInspector.value">
-    <div class="col-12 mt-3 mb-2">
-      <label class="col-form-label">Observaciones</label>
-      <ck-editor id="notes" name="notes" skin="moono-lisa"></ck-editor>
-    </div>
-    <div class="col-12 text-center mb-3">
-      <button type="button" class="btn btn-success" title="Aprobar Trámite" (click)="aprobarTramite()"><i class="fas fa-check-square "></i> Aprobar Trámite</button>
-      <button type="button" class="btn btn-danger ml-2" title="Negar Trámite" (click)="negarTramite()"><i class="fas fa-minus-square"></i> Negar Trámite</button>
-    </div>
+</div>
+<div class="row" *ngIf="registerApprovalInspector.value && registerApprovalFinanciero.notes != ''">
+  <div class="col-12">
+      <label>Estado del Trámite</label>
+      <select class="form-control" id="stateTramite" name="stateTramite" [(ngModel)]="stateTramite">
+        <option value="0" selected>Pendiente</option>
+        <option value="1" selected>Aprobado</option>
+        <option value="2" selected>Negado</option>
+      </select>
+  </div>
+  <div class="col-12 mt-3 mb-2">
+    <label class="col-form-label">Observaciones</label>
+    <ck-editor id="notes" name="notes" skin="moono-lisa" [(ngModel)]="registerApprovalCoordinador.notes"></ck-editor>
+  </div>
+  <div class="col-12 text-center mb-3">
+      <button type="button" class="btn btn-success" title="Guardar Información de Inspección" (click)="guardarTramite()"><i class="fas fa-save"></i> Guardar Información</button>
+      <button type="button" class="btn btn-danger ml-2" title="Cancelar Cambios" (click)="refresh()"><i class="fas fa-times"></i> Cancelar</button>
   </div>
 </div>
 <div class="row" *ngIf="mostrarDataRegisterMintur">  
