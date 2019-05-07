@@ -79,6 +79,21 @@ class RegisterController extends Controller
       return response()->json($toReturn, 200);
     }
 
+    function set_register_code(Request $data) {
+      $result = $data->json()->all();
+      $code = $result['code'];
+      try{
+         DB::beginTransaction();
+         $register = Register::where('id', $result['id'])->update([
+            'code'=>$result['code'],
+         ]);
+         DB::commit();
+      } catch (Exception $e) {
+         return response()->json($e,400);
+      }
+      return response()->json($register,200);
+    }
+
     function get_register_data(Request $data) {
       $id = $data['id'];
       $register = Register::where('id', $id)->first();

@@ -629,6 +629,7 @@ export class InspectorComponent implements OnInit {
    this.registerMinturSelected = new Register();
    this.consultorDataService.get_registers_assigned_inspector_id(this.user.id).then( r => {
       this.registers_mintur = r;
+      console.log(r);
       this.buildDataTable();
    }).catch( e => console.log(e) );
   }

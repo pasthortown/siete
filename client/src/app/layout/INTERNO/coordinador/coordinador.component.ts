@@ -108,6 +108,8 @@ export class CoordinadorComponent implements OnInit {
    isAssigned = false;
    hasIspectionDate  = false;
    hasInform  = false;
+   hasRegisterReady = false;
+   canSave = true;
    hasRequisites = false;
    informeApprovalStateAttachment = new ApprovalStateAttachment();
    requisitosApprovalStateAttachment = new ApprovalStateAttachment();
@@ -752,6 +754,19 @@ export class CoordinadorComponent implements OnInit {
       if (element.ruc.number == event.row.number) {
          this.selectRegisterMintur(element);
       }
+      const registerState = this.getRegisterState(element.states.state_id);
+      this.stateTramite = 0;
+      this.canSave = true;
+      if (registerState.search('Aprobado') == 0) {
+         this.stateTramite = 1;
+         this.hasRegisterReady = true;
+         this.canSave = false;
+      }
+      if (registerState.search('Negado') == 0) {
+         this.stateTramite = 2;
+         this.hasRegisterReady = false;
+         this.canSave = false;
+      }
    });
    this.idRegister = event.row.registerId;
    this.getApprovalStates();
@@ -846,6 +861,19 @@ export class CoordinadorComponent implements OnInit {
        return;
      }
      const newRegisterState = new RegisterState();
+     let establishmentId = 0;
+     let countRegisters = 1;
+     this.ruc_registro_selected.registers.forEach(element => {
+        if (element.register.id == this.idRegister) {
+           establishmentId = element.establishment.id;
+        }
+     });
+     this.ruc_registro_selected.registers.forEach(element => {
+      if (establishmentId == element.establishment.id && element.status_register.state_id == 9) {
+         countRegisters++;
+      }
+     });
+     const code = this.ruc_registro_selected.ruc.number + '.' + establishmentId.toString() + '.' + countRegisters.toString();
      this.registerApprovalCoordinador.register_id = this.idRegister;
      this.registerApprovalCoordinador.date_assigment = this.registerApprovalFinanciero.date_fullfill;
      this.registerApprovalCoordinador.id_user = this.user.id;
@@ -863,7 +891,9 @@ export class CoordinadorComponent implements OnInit {
      this.registerStateDataService.post(newRegisterState).then( r1 => {
      }).catch( e => { console.log(e); });
      this.approvalStateDataService.put(this.registerApprovalCoordinador).then( r => {
-      this.toastr.successToastr('Datos Guardados Satisfactoriamente', 'Coordinación');
+        this.registerDataService.set_register_code(code, this.idRegister).then( r => {
+         this.toastr.successToastr('Datos Guardados Satisfactoriamente', 'Coordinación');
+        }).catch( e => { console.log(e); });
      }).catch( e => { console.log(e); });
   }
 
@@ -880,6 +910,10 @@ export class CoordinadorComponent implements OnInit {
    this.getRuc(this.registerMinturSelected.ruc.number);
    this.getRegistersOnRuc();
    this.groupTypeSelected = new GroupType();
+  }
+
+  imprimirRegistro() {
+
   }
 
   validateGroupGivenTipe(): Boolean {

@@ -86,6 +86,14 @@ export class RegisterService {
       }).catch( error => { this.handledError(error.json()); });
    }
 
+   set_register_code(code: String, register_id: number): Promise<any> {
+      const data = {code: code, id: register_id};
+      return this.http.put(this.url + 'set_register_code', JSON.stringify(data), this.options).toPromise()
+      .then( r => {
+         return r.json();
+      }).catch( error => { this.handledError(error.json()); });
+   }
+   
    masiveLoad(data: any[]): Promise<any> {
       return this.http.post(this.url + 'masive_load', JSON.stringify({data: data}), this.options).toPromise()
       .then( r => {

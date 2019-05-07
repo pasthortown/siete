@@ -478,6 +478,7 @@ export class RegistroComponent implements OnInit {
   buildDataTableRegister() {
      this.columnsRegister = [
         {title: 'Seleccionado', name: 'selected'},
+        {title: 'Días en Espera', name: 'date_assigment_alert'},
         {title: 'Código del Establecimiento', name: 'establishment_code', filtering: {filterString: '', placeholder: 'Código del Establecimiento'}},
         {title: 'Ubicación del Establecimiento', name: 'address', filtering: {filterString: '', placeholder: 'Ubicación del Establecimiento'}},
         {title: 'Código del Registro', name: 'register_code', filtering: {filterString: '', placeholder: 'Código del Registro'}},
@@ -487,14 +488,36 @@ export class RegistroComponent implements OnInit {
      ];
      const data = [];
      this.ruc_registro_selected.registers.forEach(item => {
+         let date_assigment_alert = '';
+         let date1 = new Date();
+         const registerState = this.getRegisterState(item.status_register.state_id);
+         if (registerState.search('Aprobado') == 0) {
+            date1 = new Date(item.status_register.updated_at);
+         }
+         if (registerState.search('Negado') == 0) {
+            date1 = new Date(item.status_register.updated_at);
+         }
+         const date2 = new Date(item.register.updated_at);
+         const diffTime = Math.abs(date2.getTime() - date1.getTime());
+         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+         if (diffDays < 7) {
+            date_assigment_alert = '<div class="col-12 text-center"><span class="badge badge-success">&nbsp;' + diffDays.toString() + '&nbsp;</span></div>';
+         }
+         if (diffDays >= 7 && diffDays <= 10) {
+            date_assigment_alert = '<div class="col-12 text-center"><span class="badge badge-warning">&nbsp;' + diffDays.toString() + '&nbsp;</span></div>';
+         }
+         if (diffDays > 10) {
+            date_assigment_alert = '<div class="col-12 text-center"><span class="badge badge-danger">&nbsp;' + diffDays.toString() + '&nbsp;</span></div>';
+         }
          data.push({
             selected: '',
+            date_assigment_alert: date_assigment_alert,
             id: item.register.id,
             establishment_code: item.establishment.ruc_code_id,
             address: item.establishment.address,
             register_code: item.register.code,
             register_type: item.type.register_category.name + ' / ' + item.type.register_type.name,
-            state: item.status.name,
+            state: registerState,
             notes: '<div class="col-12 text-justify">' + item.status_register.justification + '</div>',
          });
      });
@@ -609,6 +632,7 @@ export class RegistroComponent implements OnInit {
   buildDataTable() {
      this.columns = [
         {title: 'Seleccionado', name: 'selected'},
+        {title: 'Días en Espera', name: 'date_assigment_alert'},
         {title: 'Número de RUC', name: 'number', filtering: {filterString: '', placeholder: 'Número de RUC'}},
         {title: 'Establecimiento', name: 'establishment'},
         {title: 'Dirección', name: 'address'},
@@ -617,14 +641,36 @@ export class RegistroComponent implements OnInit {
      ];
      const data = [];
      this.registers_mintur.forEach(item => {
+         let date_assigment_alert = '';
+         let date1 = new Date();
+         const registerState = this.getRegisterState(item.states.state_id);
+         if (registerState.search('Aprobado') == 0) {
+            date1 = new Date(item.states.updated_at);
+         }
+         if (registerState.search('Negado') == 0) {
+            date1 = new Date(item.states.updated_at);
+         }
+         const date2 = new Date(item.register.updated_at);
+         const diffTime = Math.abs(date2.getTime() - date1.getTime());
+         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+         if (diffDays < 7) {
+            date_assigment_alert = '<div class="col-12 text-center"><span class="badge badge-success">&nbsp;' + diffDays.toString() + '&nbsp;</span></div>';
+         }
+         if (diffDays >= 7 && diffDays <= 10) {
+            date_assigment_alert = '<div class="col-12 text-center"><span class="badge badge-warning">&nbsp;' + diffDays.toString() + '&nbsp;</span></div>';
+         }
+         if (diffDays > 10) {
+            date_assigment_alert = '<div class="col-12 text-center"><span class="badge badge-danger">&nbsp;' + diffDays.toString() + '&nbsp;</span></div>';
+         }
          data.push({
             selected: '',
+            date_assigment_alert: date_assigment_alert,
             number: item.ruc.number,
             registerId: item.register.id,
             establishment: item.establishment.commercially_known_name,
             address: item.establishment.address,
             category: this.getRegisterCategory(item.register.register_type_id),
-            status: this.getRegisterState(item.states.state_id),
+            status: registerState,
          });
      });
      this.data = data;

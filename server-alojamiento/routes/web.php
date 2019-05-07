@@ -31,6 +31,7 @@ $router->group(['middleware' => ['auth']], function () use ($router) {
    $router->get('/register/backup', ['uses' => 'RegisterController@backup']);
    $router->post('/register/register_register_data', ['uses' => 'RegisterController@register_register_data']);
    $router->put('/register', ['uses' => 'RegisterController@put']);
+   $router->put('/register/set_register_code', ['uses' => 'RegisterController@set_register_code']);
    $router->delete('/register', ['uses' => 'RegisterController@delete']);
    $router->post('/register/masive_load', ['uses' => 'RegisterController@masiveLoad']);
 
