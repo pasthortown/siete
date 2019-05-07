@@ -45,7 +45,6 @@ import { EstablishmentPicture } from 'src/app/models/BASE/EstablishmentPicture';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ToastrManager } from 'ng6-toastr-notifications';
 import { saveAs } from 'file-saver/FileSaver';
-
 import { Establishment } from 'src/app/models/BASE/Establishment';
 import { EstablishmentPropertyType } from 'src/app/models/BASE/EstablishmentPropertyType';
 import { FranchiseChainName } from 'src/app/models/BASE/FranchiseChainName';
@@ -91,6 +90,8 @@ import { RegisterService } from 'src/app/services/CRUD/ALOJAMIENTO/register.serv
 import { RegisterStateService } from 'src/app/services/CRUD/ALOJAMIENTO/registerstate.service';
 import { StateDeclaration } from 'src/app/models/FINANCIERO/StateDeclaration';
 
+import { StateService as StateAlojamientoService } from 'src/app/services/CRUD/ALOJAMIENTO/state.service';
+import { State as StateAlojamiento } from 'src/app/models/ALOJAMIENTO/State';
 @Component({
   selector: 'app-tecnico-financiero',
   templateUrl: './tecnico-financiero.component.html',
@@ -242,6 +243,7 @@ export class TecnicoFinancieroComponent implements OnInit {
  establishment_service_offers_registerSelectedId = 0;
  tarifas: any[] = [];
  states: State[] = [];
+ statesAlojamiento: StateAlojamiento[] = [];
  alowed_capacity_types: CapacityType[] = [];
  complementaryServiceFoodTypes: ComplementaryServiceFoodType[] = [];
  
@@ -308,6 +310,7 @@ export class TecnicoFinancieroComponent implements OnInit {
              private declarationItemDataService: DeclarationItemService,
              private tariffTypeDataService: TariffTypeService,
              private stateDataService: StateService,
+             private stateAlojamientoDataService: StateAlojamientoService,
              private tax_payer_typeDataService: TaxPayerTypeService,
              private registerDataService: RegisterService) {}
 
@@ -692,11 +695,11 @@ export class TecnicoFinancieroComponent implements OnInit {
  }
 
  validateNotesInspection(): Boolean {
-  return this.registerApprovalInspector.notes.length > 4;
+  return this.registerApprovalFinanciero.notes.length > 4;
  }
  
  validateInspectionInfo(): Boolean {
-  return this.validateNotesInspection() && this.validateComprobanteFile() && this.validateDeclaracionFile();
+  return this.validateNotesInspection();
  }
 
  borrarOrdenDePago() {
@@ -788,41 +791,25 @@ export class TecnicoFinancieroComponent implements OnInit {
 
  guardarInspeccion() {
    if ( this.inspectionState == 0) {
-     this.toastr.errorToastr('Debe seleccionar un estado de la inspección', 'Inspección');
+     this.toastr.errorToastr('Debe seleccionar un estado de la revisión', 'Revisión, Técnico Financiero');
      return;
    }
    const today = new Date();
-   this.registerApprovalInspector.date_fullfill = today;
+   this.registerApprovalFinanciero.date_fullfill = today;
    if ( this.inspectionState == 1) {
-     this.registerApprovalInspector.value = true;
+     this.registerApprovalFinanciero.value = true;
    }
    if ( this.inspectionState == 2) {
-     this.registerApprovalInspector.value = false;
+     this.registerApprovalFinanciero.value = false;
    }
-   this.newRegisterState.justification = 'Resultados de la Inspección cargados en la fecha ' + today.toDateString();
-   this.newRegisterState.register_id = this.registerApprovalInspector.register_id;
+   this.newRegisterState.justification = 'Resultados de la Revisión de Técnico Financiero cargados en la fecha ' + today.toDateString();
+   this.newRegisterState.register_id = this.registerApprovalFinanciero.register_id;
    this.newRegisterState.state_id = 14;
    this.registerStateDataService.post(this.newRegisterState).then( r1 => {
    }).catch( e => { console.log(e); });
-   this.approvalStateDataService.put(this.registerApprovalInspector).then( r => {
-     this.declarationApprovalStateAttachment.approval_state_attachment_file_name = 'Formulario_Requisitos_' + this.user.identification + '_' + today.getFullYear().toString() + '_' + (today.getMonth() + 1).toString() + '_' + today.getDate().toString();
-     this.payApprovalStateAttachment.approval_state_attachment_file_name = 'Informe_Requisitos_' + this.user.identification + '_' + today.getFullYear().toString() + '_' + (today.getMonth() + 1).toString() + '_' + today.getDate().toString();
-     if (this.declarationApprovalStateAttachment.id == 0) {
-        this.approvalStateAttachmentDataService.post(this.declarationApprovalStateAttachment).then( r2 => {
-           this.toastr.successToastr('Inspección Guardada Satisfactoriamente', 'Inspección');
-        }).catch( e => { console.log(e); });
-      } else {
-        this.approvalStateAttachmentDataService.put(this.declarationApprovalStateAttachment).then( r2 => {
-           this.toastr.successToastr('Inspección Guardada Satisfactoriamente', 'Inspección');
-        }).catch( e => { console.log(e); });
-      }
-      if (this.payApprovalStateAttachment.id == 0) {
-        this.approvalStateAttachmentDataService.post(this.payApprovalStateAttachment).then( r3 => {
-        }).catch( e => { console.log(e); });
-      } else {
-        this.approvalStateAttachmentDataService.put(this.payApprovalStateAttachment).then( r3 => {
-        }).catch( e => { console.log(e); });
-      }
+   this.approvalStateDataService.put(this.registerApprovalFinanciero).then( r => {
+      this.toastr.successToastr('Datos guardados satisfactoriamente.', 'Revisión, Técnico Financiero');
+      this.refresh();
    }).catch( e => { console.log(e); });
  }
 
@@ -899,11 +886,12 @@ export class TecnicoFinancieroComponent implements OnInit {
                     }
                  }
               });
-              this.registerApprovalInspector = element;
-              if (typeof this.registerApprovalInspector.notes == 'undefined' || this.registerApprovalInspector.notes == null) {
-                 this.registerApprovalInspector.notes = '';
+              this.registerApprovalFinanciero = element;
+              this.registerApprovalFinanciero.date_fullfill = new Date();
+              if (typeof this.registerApprovalFinanciero.notes == 'undefined' || this.registerApprovalFinanciero.notes == null) {
+                 this.registerApprovalFinanciero.notes = '';
               }
-              this.financialSelectedId = this.registerApprovalInspector.id_user;
+              this.financialSelectedId = this.registerApprovalFinanciero.id_user;
               this.checkIfIsAssigned();
               this.checkIfHasInform();
               this.checkIfHasRequisites();
@@ -1003,6 +991,7 @@ export class TecnicoFinancieroComponent implements OnInit {
    this.getFranchise();
    this.getGroupType();
    this.getStates();
+   this.getStatesAlojamiento();
    this.getCapacityTypes();
    this.getRucNameTypes();
    this.getZonalesEstablishment();
@@ -1311,6 +1300,15 @@ getDeclarationItems() {
   }).catch( e => { console.log(e); });
  }
 
+ getStatesAlojamiento() {
+   this.statesAlojamiento = [];
+   this.stateAlojamientoDataService.get().then( r => {
+      this.statesAlojamiento = r as StateAlojamiento[];
+      this.getRegisterTypes();
+      this.getSpecificStates();
+   }).catch( e => { console.log(e); });
+ }
+
  getRegisterCategory(id: number): String {
   let toReturn: String = '';
   let fatherCode: String = '';
@@ -1329,9 +1327,22 @@ getDeclarationItems() {
 }
 
  getRegisterState(id: number): String {
-    let toReturn: String = '';
-    return toReturn;
- }
+   let toReturn: String = '';
+   let fatherCode: String = '';
+   this.statesAlojamiento.forEach(state => {
+      if (state.id == id) {
+       toReturn = state.name;
+       fatherCode = state.father_code;
+      }
+   });
+   this.statesAlojamiento.forEach(state => {
+      if (state.code == fatherCode) {
+         toReturn = state.name + ' - ' + toReturn;
+      }
+   });
+   return toReturn;
+}
+
 
  getClasifications() {
   this.clasifications_registers = [];
@@ -2527,17 +2538,21 @@ removeLanguage() {
  }
 
  getTramiteStatus(status_id: number) {
-    this.states.forEach(state => {
+    this.statesAlojamiento.forEach(state => {
        if (state.id == status_id) {
-  
+        this.estado_tramite_selected_code = state.father_code;
         this.getSpecificStates();
        }
     });
  }
 
  getSpecificStates() {
-  this.specific_states = [];
-  
+   this.specific_states = [];
+   this.statesAlojamiento.forEach(element => {
+      if (element.father_code == this.estado_tramite_selected_code) {
+         this.specific_states.push(element);
+      }
+   });
  }
 
  getDeclarationStates() {

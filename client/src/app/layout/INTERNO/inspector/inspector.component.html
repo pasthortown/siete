@@ -93,7 +93,7 @@
     <ck-editor id="notes" name="notes" skin="moono-lisa" [(ngModel)]="registerApprovalInspector.notes"></ck-editor>
   </div>
   <div class="col-12 text-center mb-3">
-    <button type="button" [disabled]="!validateInspectionInfo()" class="btn btn-success" title="Aprobar Trámite" (click)="guardarInspeccion()"><i class="fas fa-save"></i> Guardar Información</button>
+    <button type="button" [disabled]="!validateInspectionInfo()" class="btn btn-success" title="Guardar Información de Inspección" (click)="guardarInspeccion()"><i class="fas fa-save"></i> Guardar Información</button>
     <button type="button" class="btn btn-danger ml-2" title="Cancelar Cambios" (click)="refresh()"><i class="fas fa-times"></i> Cancelar</button>
   </div>
 </div>
