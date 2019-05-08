@@ -91,7 +91,6 @@ export class RegistroComponent implements OnInit {
    @ViewChild('fotoFachadaInput') fotoFachadaInput;
    @ViewChild('EstablishmentCertificationAttachedFile') EstablishmentCertificationAttachedFile;
   //DATOS RUC
-  editable = true;
   pays: Pay[] = [];
   imContactRuc: Boolean = true;
   roles:any[] = [];
@@ -516,6 +515,7 @@ export class RegistroComponent implements OnInit {
          let date_assigment_alert = '';
          let date1 = new Date();
          const registerState = this.getRegisterState(item.status_register.state_id);
+         let editable = true;
          if (
             item.status_register.state_id == 8 ||
             item.status_register.state_id == 15 ||
@@ -524,9 +524,9 @@ export class RegistroComponent implements OnInit {
             item.status_register.state_id == 36 ||
             item.status_register.state_id == 43
             ) {
-            this.editable = true;
+            editable = true;
          } else {
-            this.editable = false;
+            editable = false;
          }
          if (registerState.search('Aprobado') == 0) {
             date1 = new Date(item.status_register.updated_at);
@@ -555,7 +555,7 @@ export class RegistroComponent implements OnInit {
             register_code: item.register.code,
             register_type: item.type.register_category.name + ' / ' + item.type.register_type.name,
             state: registerState,
-            editable: this.editable,
+            editable: editable,
             notes: '<div class="col-12 text-justify">' + item.status_register.justification + '</div>',
          });
      });
@@ -566,7 +566,7 @@ export class RegistroComponent implements OnInit {
   onCellClickRegister(event) {
    this.ruc_registro_selected.registers.forEach(element => {
       if (element.register.id == event.row.id) {
-         this.selectEstablishmentRegister(element.register);
+         this.selectEstablishmentRegister(element.register, event.row.editable);
       }
    });
    this.rowsRegister.forEach(row => {
@@ -971,6 +971,7 @@ export class RegistroComponent implements OnInit {
 
   selectDeclaration(declaration: Declaration) {
       this.declaration_selected = declaration;
+      this.declaration_selected.editable = false;
       this.mostrarDataDeclaration = true;
       this.declarationItemsToShow = [];
       this.guardando = false;
@@ -2094,12 +2095,13 @@ export class RegistroComponent implements OnInit {
    }
   }
 
-  selectEstablishmentRegister(register: Register) {
+  selectEstablishmentRegister(register: Register, editable: Boolean) {
     this.mostrarDataRegister = false;
     const tarifas: Tariff[] = this.newTariffs();
     this.rucEstablishmentRegisterSelected = new Register();
     this.registerDataService.get_register_data(register.id).then( r => {
        this.rucEstablishmentRegisterSelected = r.register as Register;
+       this.rucEstablishmentRegisterSelected.editable = editable;
        this.getTramiteStatus(this.rucEstablishmentRegisterSelected.status);
        this.rucEstablishmentRegisterSelected.status = r.status.state_id;
        this.categorySelectedCode = r.register_category.code;

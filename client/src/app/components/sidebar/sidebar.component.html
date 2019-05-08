@@ -152,7 +152,7 @@
       </div>
       <div *ngIf="true" class="nested-menu">
          <a class="list-group-item" (click)="addExpandClass('interno')">
-            <span class="fas fa-newspaper"></span>&nbsp;Registro y Control
+            <span class="fas fa-newspaper"></span>&nbsp;INTERNO
          </a>
          <li class="nested" [class.expand]="showMenu === 'interno'">
             <ul class="submenu">
@@ -176,6 +176,9 @@
                </li>
                <li>
                   <a [routerLink]="['/tecnico-financiero']" [routerLinkActive]="['router-link-active']" class="list-group-item">Técnico Financiero</a>
+               </li>
+               <li>
+                  <a [routerLink]="['/pagos']" [routerLinkActive]="['router-link-active']" class="list-group-item">Pagos</a>
                </li>
             </ul>
          </li>
