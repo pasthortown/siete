@@ -87,7 +87,7 @@ export class PayComponent implements OnInit {
          const backupData = r as Pay[];
          let output = 'id;amount_payed;amount_to_pay;pay_date;payed;code;max_pay_date;ruc_id\n';
          backupData.forEach(element => {
-            output += element.id; + element.amount_payed + ';' + element.amount_to_pay + ';' + element.pay_date + ';' + element.payed + ';' + element.code + ';' + element.max_pay_date + ';' + element.ruc_id + '\n';
+            output += element.id + ';' + element.amount_payed + ';' + element.amount_to_pay + ';' + element.pay_date + ';' + element.payed + ';' + element.code + ';' + element.max_pay_date + ';' + element.ruc_id + '\n';
          });
          const blob = new Blob([output], { type: 'text/plain' });
          const fecha = new Date();

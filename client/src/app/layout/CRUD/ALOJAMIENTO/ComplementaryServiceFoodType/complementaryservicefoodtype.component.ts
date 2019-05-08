@@ -87,7 +87,7 @@ export class ComplementaryServiceFoodTypeComponent implements OnInit {
          const backupData = r as ComplementaryServiceFoodType[];
          let output = 'id;name\n';
          backupData.forEach(element => {
-            output += element.id; + element.name + '\n';
+            output += element.id + ';' + element.name + '\n';
          });
          const blob = new Blob([output], { type: 'text/plain' });
          const fecha = new Date();

@@ -264,7 +264,7 @@ export class EstablishmentComponent implements OnInit {
          const backupData = r as Establishment[];
          let output = 'id;ruc_code_id;commercially_known_name;address;address_map_latitude;address_map_longitude;url_web;as_turistic_register_date;address_reference;contact_user_id;ruc_id;ubication_id;establishment_property_type_id;ruc_name_type_id\n';
          backupData.forEach(element => {
-            output += element.id; + element.ruc_code_id + ';' + element.commercially_known_name + ';' + element.address + ';' + element.address_map_latitude + ';' + element.address_map_longitude + ';' + element.url_web + ';' + element.as_turistic_register_date + ';' + element.address_reference + ';' + element.contact_user_id + ';' + element.ruc_id + ';' + element.ubication_id + ';' + element.establishment_property_type_id + ';' + element.ruc_name_type_id + '\n';
+            output += element.id + ';' + element.ruc_code_id + ';' + element.commercially_known_name + ';' + element.address + ';' + element.address_map_latitude + ';' + element.address_map_longitude + ';' + element.url_web + ';' + element.as_turistic_register_date + ';' + element.address_reference + ';' + element.contact_user_id + ';' + element.ruc_id + ';' + element.ubication_id + ';' + element.establishment_property_type_id + ';' + element.ruc_name_type_id + '\n';
          });
          const blob = new Blob([output], { type: 'text/plain' });
          const fecha = new Date();

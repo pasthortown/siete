@@ -9,18 +9,56 @@
             <tbody>
                 <tr>
                     <td>
-                        <div class="col-12">
+                        <div class="row">
                             <h3 class="col-12">Descargar Órdenes de Pagos</h3>
                             <div class="col-12">
-                                
+                                <div class="btn-toolbar" role="toolbar">
+                                    <div class="btn-group mr-2" role="group">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" id="basic-addon1">Desde</span>
+                                            </div>
+                                            <input type="date" class="form-control" id="desde"
+                                                name="desde" placeholder="Desde" [ngModel]="
+                                                    desde | date: 'y-MM-dd'" (ngModelChange)="
+                                                    desde = $event" />
+                                        </div>
+                                    </div>
+                                    <div class="btn-group mr-2" role="group">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" id="basic-addon1">Hasta</span>
+                                            </div>
+                                            <input type="date" class="form-control" id="hasta"
+                                                name="hasta" placeholder="hasta" [ngModel]="
+                                                    hasta | date: 'y-MM-dd'" (ngModelChange)="
+                                                    hasta = $event" />
+                                        </div>
+                                    </div>
+                                    <div class="btn-group mr-2" role="group">
+                                        <button type="button" class="btn btn-success" (click)="descargarReporte()"><span class="fas fa-download"></span></button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <div class="col-12">
+                        <div class="row">
                             <h3 class="col-12">Cargar Reporte de Pagos</h3>
+                            <div class="col-12">
+                                <div class="btn-toolbar" role="toolbar">
+                                    <div class="btn-group mr-2" role="group">
+                                        <button type="button" class="btn btn-dark" (click)="file.click()"><span class="fas fa-upload"></span></button>
+                                        <button type="button" class="btn btn-dark" [disabled]="archivo.nombre == ''" (click)="downloadFile(archivo.contenido, archivo.tipo, archivo.nombre)"><span class="fas fa-download"></span></button>
+                                        <button type="button" class="btn btn-danger" [disabled]="archivo.nombre == ''" (click)="borrarArchivo()"><span class="fas fa-trash"></span></button>
+                                    </div>
+                                    <div class="btn-group mr-2" role="group">
+                                        <button type="button" class="btn btn-success" [disabled]="archivo.nombre == ''" (click)="procesarArchivo()"><span class="fas fa-save"></span>&nbsp;Procesar</button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </td>
                 </tr>
@@ -28,3 +66,11 @@
         </table>
     </div>
 </div>
+<div class="container">
+    <div class="col-12">
+        <div *ngIf="reporte!=''" class="alert alert-warning" role="alert" [innerHTML]="reporte">
+        </div>
+    </div>
+</div>
+
+<input type="file" [hidden]="true"  #file class="form-control" (change)="CodificarArchivoPagos($event)" accept="application/csv" />

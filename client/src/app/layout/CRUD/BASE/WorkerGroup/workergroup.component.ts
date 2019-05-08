@@ -87,7 +87,7 @@ export class WorkerGroupComponent implements OnInit {
          const backupData = r as WorkerGroup[];
          let output = 'id;name;description;is_max\n';
          backupData.forEach(element => {
-            output += element.id; + element.name + ';' + element.description + ';' + element.is_max + '\n';
+            output += element.id + ';' + element.name + ';' + element.description + ';' + element.is_max + '\n';
          });
          const blob = new Blob([output], { type: 'text/plain' });
          const fecha = new Date();

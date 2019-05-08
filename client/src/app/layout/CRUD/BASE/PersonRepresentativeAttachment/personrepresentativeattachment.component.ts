@@ -115,7 +115,7 @@ export class PersonRepresentativeAttachmentComponent implements OnInit {
          const backupData = r as PersonRepresentativeAttachment[];
          let output = 'id;person_representative_attachment_file_type;person_representative_attachment_file_name;person_representative_attachment_file;ruc;assignment_date;person_representative_id\n';
          backupData.forEach(element => {
-            output += element.id; + element.person_representative_attachment_file_type + ';' + element.person_representative_attachment_file_name + ';' + element.person_representative_attachment_file + ';' + element.ruc + ';' + element.assignment_date + ';' + element.person_representative_id + '\n';
+            output += element.id + ';' + element.person_representative_attachment_file_type + ';' + element.person_representative_attachment_file_name + ';' + element.person_representative_attachment_file + ';' + element.ruc + ';' + element.assignment_date + ';' + element.person_representative_id + '\n';
          });
          const blob = new Blob([output], { type: 'text/plain' });
          const fecha = new Date();

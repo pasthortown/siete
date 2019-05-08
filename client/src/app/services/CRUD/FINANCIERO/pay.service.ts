@@ -30,6 +30,14 @@ export class PayService {
       }).catch( error => { this.handledError(error.json()); });
    }
 
+   get_report(desde: Date, hasta: Date): Promise<any> {
+      const data = {desde: desde, hasta: hasta};
+      return this.http.post(this.url + 'get_report', JSON.stringify(data), this.options).toPromise()
+      .then( r => {
+         return r.json();
+      }).catch( error => { this.handledError(error.json());  });
+   }
+
    get_paginate(size: number, page: number): Promise<any> {
       return this.http.get(this.url + 'paginate?size=' + size.toString() + '&page=' + page.toString(), this.options).toPromise()
       .then( r => {

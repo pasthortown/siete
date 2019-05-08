@@ -100,7 +100,7 @@ export class PayMassFileAttachmentComponent implements OnInit {
          const backupData = r as PayMassFileAttachment[];
          let output = 'id;pay_mass_file_attachment_file_type;pay_mass_file_attachment_file_name;pay_mass_file_attachment_file;date\n';
          backupData.forEach(element => {
-            output += element.id; + element.pay_mass_file_attachment_file_type + ';' + element.pay_mass_file_attachment_file_name + ';' + element.pay_mass_file_attachment_file + ';' + element.date + '\n';
+            output += element.id + ';' + element.pay_mass_file_attachment_file_type + ';' + element.pay_mass_file_attachment_file_name + ';' + element.pay_mass_file_attachment_file + ';' + element.date + '\n';
          });
          const blob = new Blob([output], { type: 'text/plain' });
          const fecha = new Date();

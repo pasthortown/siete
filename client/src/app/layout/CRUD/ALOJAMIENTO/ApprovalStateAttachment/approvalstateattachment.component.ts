@@ -115,7 +115,7 @@ export class ApprovalStateAttachmentComponent implements OnInit {
          const backupData = r as ApprovalStateAttachment[];
          let output = 'id;approval_state_attachment_file_type;approval_state_attachment_file_name;approval_state_attachment_file;approval_state_id\n';
          backupData.forEach(element => {
-            output += element.id; + element.approval_state_attachment_file_type + ';' + element.approval_state_attachment_file_name + ';' + element.approval_state_attachment_file + ';' + element.approval_state_id + '\n';
+            output += element.id + ';' + element.approval_state_attachment_file_type + ';' + element.approval_state_attachment_file_name + ';' + element.approval_state_attachment_file + ';' + element.approval_state_id + '\n';
          });
          const blob = new Blob([output], { type: 'text/plain' });
          const fecha = new Date();

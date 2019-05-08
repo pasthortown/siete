@@ -29,6 +29,15 @@ class PayController extends Controller
        return response()->json(Pay::paginate($size),200);
     }
 
+    function get_report(Request $data)
+    {
+      $result = $data->json()->all();
+      $desde = $result['desde'];
+      $hasta = $result['hasta'];
+      $toReturn = Pay::where('created_at','>=',$desde)->where('created_at','<=',$hasta)->orderby('created_at','DESC')->get();
+      return response()->json($toReturn,200);
+    }
+    
     function get_by_ruc_id(Request $data)
     {
        $id = $data['id'];

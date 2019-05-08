@@ -102,7 +102,7 @@ export class ComplementaryServiceFoodComponent implements OnInit {
          const backupData = r as ComplementaryServiceFood[];
          let output = 'id;quantity_tables;quantity_chairs;complementary_service_food_type_id\n';
          backupData.forEach(element => {
-            output += element.id; + element.quantity_tables + ';' + element.quantity_chairs + ';' + element.complementary_service_food_type_id + '\n';
+            output += element.id + ';' + element.quantity_tables + ';' + element.quantity_chairs + ';' + element.complementary_service_food_type_id + '\n';
          });
          const blob = new Blob([output], { type: 'text/plain' });
          const fecha = new Date();

@@ -87,7 +87,7 @@ export class PersonRepresentativeComponent implements OnInit {
          const backupData = r as PersonRepresentative[];
          let output = 'id;identification\n';
          backupData.forEach(element => {
-            output += element.id; + element.identification + '\n';
+            output += element.id + ';' + element.identification + '\n';
          });
          const blob = new Blob([output], { type: 'text/plain' });
          const fecha = new Date();

@@ -102,7 +102,7 @@ export class DeclarationItemValueComponent implements OnInit {
          const backupData = r as DeclarationItemValue[];
          let output = 'id;value;declaration_item_id\n';
          backupData.forEach(element => {
-            output += element.id; + element.value + ';' + element.declaration_item_id + '\n';
+            output += element.id + ';' + element.value + ';' + element.declaration_item_id + '\n';
          });
          const blob = new Blob([output], { type: 'text/plain' });
          const fecha = new Date();

@@ -87,7 +87,7 @@ export class AgreementComponent implements OnInit {
          const backupData = r as Agreement[];
          let output = 'id;title;content\n';
          backupData.forEach(element => {
-            output += element.id; + element.title + ';' + element.content + '\n';
+            output += element.id + ';' + element.title + ';' + element.content + '\n';
          });
          const blob = new Blob([output], { type: 'text/plain' });
          const fecha = new Date();

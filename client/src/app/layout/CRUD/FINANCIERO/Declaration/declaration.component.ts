@@ -115,7 +115,7 @@ export class DeclarationComponent implements OnInit {
          const backupData = r as Declaration[];
          let output = 'id;establishment_id;declaration_date;year;max_date_to_pay\n';
          backupData.forEach(element => {
-            output += element.id; + element.establishment_id + ';' + element.declaration_date + ';' + element.year + ';' + element.max_date_to_pay + '\n';
+            output += element.id + ';' + element.establishment_id + ';' + element.declaration_date + ';' + element.year + ';' + element.max_date_to_pay + '\n';
          });
          const blob = new Blob([output], { type: 'text/plain' });
          const fecha = new Date();
