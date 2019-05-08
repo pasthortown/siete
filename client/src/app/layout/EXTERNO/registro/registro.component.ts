@@ -91,6 +91,7 @@ export class RegistroComponent implements OnInit {
    @ViewChild('fotoFachadaInput') fotoFachadaInput;
    @ViewChild('EstablishmentCertificationAttachedFile') EstablishmentCertificationAttachedFile;
   //DATOS RUC
+  editable = true;
   pays: Pay[] = [];
   imContactRuc: Boolean = true;
   roles:any[] = [];
@@ -515,6 +516,18 @@ export class RegistroComponent implements OnInit {
          let date_assigment_alert = '';
          let date1 = new Date();
          const registerState = this.getRegisterState(item.status_register.state_id);
+         if (
+            item.status_register.state_id == 8 ||
+            item.status_register.state_id == 15 ||
+            item.status_register.state_id == 22||
+            item.status_register.state_id == 29 ||
+            item.status_register.state_id == 36 ||
+            item.status_register.state_id == 43
+            ) {
+            this.editable = true;
+         } else {
+            this.editable = false;
+         }
          if (registerState.search('Aprobado') == 0) {
             date1 = new Date(item.status_register.updated_at);
          }
@@ -542,6 +555,7 @@ export class RegistroComponent implements OnInit {
             register_code: item.register.code,
             register_type: item.type.register_category.name + ' / ' + item.type.register_type.name,
             state: registerState,
+            editable: this.editable,
             notes: '<div class="col-12 text-justify">' + item.status_register.justification + '</div>',
          });
      });
