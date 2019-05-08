@@ -289,6 +289,10 @@ const routes: Routes = [
             path: 'tecnico-financiero',
             loadChildren: './INTERNO/tecnico-financiero/tecnico-financiero.module#TecnicoFinancieroModule'
          },
+         {
+            path: 'pagos',
+            loadChildren: './INTERNO/pagos/pagos.module#PagosModule'
+         },
 
          // EXTERNO
          {
