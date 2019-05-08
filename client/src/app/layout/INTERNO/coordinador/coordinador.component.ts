@@ -132,6 +132,7 @@ export class CoordinadorComponent implements OnInit {
    data = [];
   
   //DATOS RUC
+  editable = false;
   imContactRuc: Boolean = true;
   roles:any[] = [];
   terminosCondiciones = false;
