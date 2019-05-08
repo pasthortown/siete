@@ -45,13 +45,48 @@ export class PagosComponent implements OnInit {
     this.payDataService.get_report(this.desde, this.hasta).then( r => {
       const reportData = r as any[];
       console.log(reportData);
-      /*let output = 'id;created_at;updated_at;amount_payed;amount_to_pay;pay_date;payed;code;max_pay_date;ruc_id\n';
+      let output = '';
+      const localidad = '5'; // Guayaquil 1  -   Quito 5
+      const transaccion = 'OCP'; // SIEMPRE OCP
+      const codigo_servicio = 'ZG'; // OC= Orden de Cobro (Débito a Cuenta), ZG= Recaudación con Información (Recaudación a través de Canales con ingreso de información), SC= Recaudación de Colegios (Recaudación a través de Canales con o sin información).
+      const tipo_cuenta = '00'; // 00= Cuenta Corriente, 10= Cuenta Ahorros
+      const numero_cuenta = '        '; // SE DEJA EN BLANCO
+      let valor = ''; // 13 ENTEROS 2 DECIMALES SIN PUNTO DECIMAL
+      let codigo_del_tercero = ''; // 15 CARACTERES
+      const referencia_transaccion = 'VALOR 1 POR 1000    '; // 20 CARACTERES
+      const forma_de_pago = 'RE' // CU= Debito de cuenta, RE= Recaudaciones por canal electronico
+      const moneda = 'USD' // SIEMPRE USD
+      let nombre_del_tercero = ''; // 30 CARACTERES
+      const localidad_retiro = '  '; // 2 CARACTERES NO APLICA DEJAR EN BLANCO
+      const agencia_retiro = '  '; // 2 CARACTERES NO APLICA DEJAR EN BLANCO
+      let tipo_nuc_tercero = ''; // C= Cedula, R= RUC, P= Pasaporte
+      let numero_unico_tercero = ''; // 14 CARACTERES Identificacion del tercero
+      const telefono_tercero = '0000000000'; // 10 CARACTERES Telefono del Tercero
       reportData.forEach(element => {
-         output += element.id + ';' + element.created_at + ';' + element.updated_at + ';' + element.amount_to_pay + ';' + element.pay_date + ';' + element.payed + ';' + element.code + ';' + element.max_pay_date + ';' + element.ruc_id + '\n';
+         valor = element.amount_to_pay.toString();
+         valor = parseFloat(valor).toFixed(2).toString().replace('.', '');
+         for( let i = 0; 15 - valor.length; i ++) {
+           valor = '0' + valor;
+         }
+         output += localidad +
+         transaccion +
+         codigo_servicio +
+         tipo_cuenta +
+         numero_cuenta +
+         valor +
+         codigo_del_tercero +
+         referencia_transaccion +
+         forma_de_pago + moneda +
+         nombre_del_tercero +
+         localidad_retiro +
+         agencia_retiro +
+         tipo_nuc_tercero +
+         numero_unico_tercero +
+         telefono_tercero + '\n';
       });
       const blob = new Blob([output], { type: 'text/plain' });
-      const nombreArchivo = 'reporte_pagos.csv';
-      saveAs(blob, nombreArchivo);*/
+      const nombreArchivo = 'reporte_pagos.txt';
+      saveAs(blob, nombreArchivo);
     }).catch( e => console.log(e) );
   }
 
