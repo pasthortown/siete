@@ -14,11 +14,13 @@ export class Register {
    register_type_id: number;
    capacities_on_register: Capacity[];
    requisites: RegisterRequisite[];
+   editable: Boolean;
    total_spaces: number;
    total_habitations: number;
    status: number;
    constructor() {
       this.id = 0;
+      this.editable = true;
       this.complementary_service_types_on_register = [];
       this.complementary_service_foods_on_register = [];
       this.capacities_on_register = [];
