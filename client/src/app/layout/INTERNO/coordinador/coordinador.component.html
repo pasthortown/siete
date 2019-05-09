@@ -247,7 +247,7 @@
                             groupTypeSelected.representative_rol_name
                           }}" [(ngModel)]="
                             ruc_registro_selected.ruc.person_representative.identification
-                          " (keyup)="checkIdentificationRepresentant()" name="identificacionRepresentante" />
+                          " (keyup)="checkIdentificationRepresentant()" name="identificacionRepresentante" [disabled]="!editable"/>
                     </div>
                     <small *ngIf="identificationRepresentativePersonValidated" id="cedulaRepresentanteHelp"
                       class="form-text text-muted" [innerHTML]="representanteCedulaData"></small>
