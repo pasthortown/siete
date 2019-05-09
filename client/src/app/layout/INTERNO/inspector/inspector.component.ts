@@ -112,6 +112,7 @@ export class InspectorComponent implements OnInit {
    requisitosApprovalStateAttachment: ApprovalStateAttachment = new ApprovalStateAttachment();
    informeApprovalStateAttachment: ApprovalStateAttachment = new ApprovalStateAttachment();
    newRegisterState: RegisterState = new RegisterState();
+   stateTramiteId = 0;
 
    //REGISTROS MINTUR
    registers_mintur = [];
@@ -681,6 +682,7 @@ export class InspectorComponent implements OnInit {
             date_assigment: item.register.date_assigment,
             category: this.getRegisterCategory(item.register.register_type_id),
             status: registerState,
+            status_id: item.states.state_id,
          });
      });
      this.data = data;
@@ -783,7 +785,7 @@ export class InspectorComponent implements OnInit {
     }
     this.newRegisterState.justification = 'Resultados de la Inspección cargados en la fecha ' + this.registerApprovalInspector.date_fullfill.toDateString();
     this.newRegisterState.register_id = this.registerApprovalInspector.register_id;
-    this.newRegisterState.state_id = 14;
+    this.newRegisterState.state_id = this.stateTramiteId + 6;
     this.registerApprovalInspector.id_user = this.user.id;
     this.registerStateDataService.post(this.newRegisterState).then( r1 => {
     }).catch( e => { console.log(e); });
@@ -813,15 +815,16 @@ export class InspectorComponent implements OnInit {
    this.registers_mintur.forEach(element => {
       if (element.ruc.number == event.row.number) {
          this.selectRegisterMintur(element);
-      }
-   });
-   this.idRegister = event.row.registerId;
-   this.getApprovalStates();
-   this.rows.forEach(row => {
-      if (this.idRegister == row.registerId) {
-         row.selected = '<div class="col-12 text-right"><span class="far fa-hand-point-right"></span></div>';
-      } else {
-         row.selected = '';
+         this.idRegister = event.row.registerId;
+         this.stateTramiteId = element.states.state_id;
+         this.getApprovalStates();
+         this.rows.forEach(row => {
+            if (this.idRegister == row.registerId) {
+               row.selected = '<div class="col-12 text-right"><span class="far fa-hand-point-right"></span></div>';
+            } else {
+               row.selected = '';
+            }
+         });
       }
    });
   }

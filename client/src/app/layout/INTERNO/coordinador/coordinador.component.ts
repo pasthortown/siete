@@ -757,20 +757,20 @@ export class CoordinadorComponent implements OnInit {
    this.registers_mintur.forEach(element => {
       if (element.ruc.number == event.row.number) {
          this.selectRegisterMintur(element);
-      }
-      const registerState = this.getRegisterState(element.states.state_id);
-      this.stateTramiteId = element.states.state_id;
-      this.stateTramite = 0;
-      this.canSave = true;
-      if (registerState.search('Aprobado') == 0) {
-         this.stateTramite = 1;
-         this.hasRegisterReady = true;
-         this.canSave = false;
-      }
-      if (registerState.search('Negado') == 0) {
-         this.stateTramite = 2;
-         this.hasRegisterReady = false;
-         this.canSave = false;
+         const registerState = this.getRegisterState(element.states.state_id);
+         this.stateTramiteId = element.states.state_id;
+         this.stateTramite = 0;
+         this.canSave = true;
+         if (registerState.search('Aprobado') == 0) {
+            this.stateTramite = 1;
+            this.hasRegisterReady = true;
+            this.canSave = false;
+         }
+         if (registerState.search('Negado') == 0) {
+            this.stateTramite = 2;
+            this.hasRegisterReady = false;
+            this.canSave = false;
+         }
       }
    });
    this.idRegister = event.row.registerId;
