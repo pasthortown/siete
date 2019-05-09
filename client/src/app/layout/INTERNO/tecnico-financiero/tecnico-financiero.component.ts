@@ -809,6 +809,8 @@ export class TecnicoFinancieroComponent implements OnInit {
  }
 
  guardarInspeccion() {
+   const estado: String = this.stateTramiteId.toString();
+   const digito = estado.substring(estado.length-1, estado.length);
    if ( this.inspectionState == 0) {
      this.toastr.errorToastr('Debe seleccionar un estado de la revisión', 'Revisión, Técnico Financiero');
      return;
@@ -817,13 +819,42 @@ export class TecnicoFinancieroComponent implements OnInit {
    this.registerApprovalFinanciero.date_fullfill = today;
    if ( this.inspectionState == 1) {
      this.registerApprovalFinanciero.value = true;
+     if (digito == '0') {
+      this.newRegisterState.state_id = this.stateTramiteId;
+     }
+     if (digito == '7') {
+      this.newRegisterState.state_id = this.stateTramiteId + 3;
+     }
+     if (digito == '8') {
+      this.newRegisterState.state_id = this.stateTramiteId + 2;
+     }
    }
    if ( this.inspectionState == 2) {
      this.registerApprovalFinanciero.value = false;
+     if (digito == '0') {
+      this.newRegisterState.state_id = this.stateTramiteId;
+     }
+     if (digito == '7') {
+      this.newRegisterState.state_id = this.stateTramiteId + 3;
+     }
+     if (digito == '8') {
+      this.newRegisterState.state_id = this.stateTramiteId + 2;
+     }
+   }
+   if ( this.inspectionState == 3) {
+     this.registerApprovalFinanciero.value = false;
+     if (digito == '0') {
+      this.newRegisterState.state_id = this.stateTramiteId - 2;
+     }
+     if (digito == '7') {
+      this.newRegisterState.state_id = this.stateTramiteId + 1;
+     }
+     if (digito == '8') {
+      this.newRegisterState.state_id = this.stateTramiteId;
+     }
    }
    this.newRegisterState.justification = 'Resultados de la Revisión de Técnico Financiero cargados en la fecha ' + today.toDateString();
    this.newRegisterState.register_id = this.registerApprovalFinanciero.register_id;
-   this.newRegisterState.state_id = this.stateTramiteId + 3;
    this.registerStateDataService.post(this.newRegisterState).then( r1 => {
    }).catch( e => { console.log(e); });
    this.approvalStateDataService.put(this.registerApprovalFinanciero).then( r => {
@@ -888,6 +919,11 @@ export class TecnicoFinancieroComponent implements OnInit {
                  this.inspectionState = 1;
               } else {
                  this.inspectionState = 2;
+                 const estado: String = this.stateTramiteId.toString();
+                 const digito = estado.substring(estado.length-1, estado.length);
+                 if (digito == '8'){
+                    this.inspectionState = 3;
+                 }
               }
               if (approvalStateAttachments.length == 0) {
                  this.inspectionState = 0;

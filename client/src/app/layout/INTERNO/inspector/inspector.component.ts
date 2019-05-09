@@ -781,6 +781,8 @@ export class InspectorComponent implements OnInit {
   }
 
   guardarInspeccion() {
+   const estado: String = this.stateTramiteId.toString();
+   const digito = estado.substring(estado.length-1, estado.length);
     if ( this.inspectionState == 0) {
       this.toastr.errorToastr('Debe seleccionar un estado de la inspección', 'Inspección');
       return;
@@ -788,13 +790,66 @@ export class InspectorComponent implements OnInit {
     const today = new Date();
     if ( this.inspectionState == 1) {
       this.registerApprovalInspector.value = true;
+      if (digito == '4') {
+         this.newRegisterState.state_id = this.stateTramiteId + 6;
+      }
+      if (digito == '5') {
+         this.newRegisterState.state_id = this.stateTramiteId + 5;
+      }
+      if (digito == '6') {
+         this.newRegisterState.state_id = this.stateTramiteId + 4;
+      }
+      if (digito == '0') {
+         this.newRegisterState.state_id = this.stateTramiteId;
+      }
     }
     if ( this.inspectionState == 2) {
       this.registerApprovalInspector.value = false;
+      if (digito == '4') {
+         this.newRegisterState.state_id = this.stateTramiteId + 6;
+      }
+      if (digito == '5') {
+         this.newRegisterState.state_id = this.stateTramiteId + 5;
+      }
+      if (digito == '6') {
+         this.newRegisterState.state_id = this.stateTramiteId + 4;
+      }
+      if (digito == '0') {
+         this.newRegisterState.state_id = this.stateTramiteId;
+      }
+    }
+    if ( this.inspectionState == 3) {
+      this.registerApprovalInspector.value = false;
+      if (digito == '4') {
+         this.newRegisterState.state_id = this.stateTramiteId + 1;
+      }
+      if (digito == '5') {
+         this.newRegisterState.state_id = this.stateTramiteId;
+      }
+      if (digito == '6') {
+         this.newRegisterState.state_id = this.stateTramiteId - 1;
+      }
+      if (digito == '0') {
+         this.newRegisterState.state_id = this.stateTramiteId - 5;
+      }
+    }
+    if ( this.inspectionState == 4) {
+      this.registerApprovalInspector.value = false;
+      if (digito == '4') {
+         this.newRegisterState.state_id = this.stateTramiteId + 2;
+      }
+      if (digito == '5') {
+         this.newRegisterState.state_id = this.stateTramiteId + 1;
+      }
+      if (digito == '6') {
+         this.newRegisterState.state_id = this.stateTramiteId;
+      }
+      if (digito == '0') {
+         this.newRegisterState.state_id = this.stateTramiteId - 4;
+      }
     }
     this.newRegisterState.justification = 'Resultados de la Inspección cargados en la fecha ' + new Date(this.registerApprovalInspector.date_fullfill).toDateString();
     this.newRegisterState.register_id = this.registerApprovalInspector.register_id;
-    this.newRegisterState.state_id = this.stateTramiteId + 6;
     this.registerStateDataService.post(this.newRegisterState).then( r1 => {
     }).catch( e => { console.log(e); });
     this.approvalStateDataService.put(this.registerApprovalInspector).then( r => {
@@ -875,6 +930,14 @@ export class InspectorComponent implements OnInit {
                   this.inspectionState = 1;
                } else {
                   this.inspectionState = 2;
+                  const estado: String = this.stateTramiteId.toString();
+                  const digito = estado.substring(estado.length-1, estado.length);
+                  if (digito == '5'){
+                     this.inspectionState = 3;
+                  }
+                  if (digito == '6'){
+                     this.inspectionState = 4;
+                  }
                }
                if (approvalStateAttachments.length == 0) {
                   this.inspectionState = 0;
