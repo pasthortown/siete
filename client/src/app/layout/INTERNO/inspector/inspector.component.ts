@@ -688,7 +688,17 @@ export class InspectorComponent implements OnInit {
   }
 
   imprimirRequisitos() {
-   
+      let output = 'Requisito;Declarado por el Solicitante;Validado por el Inspector\n';
+      const requisitos = this.rucEstablishmentRegisterSelected.requisites;
+      requisitos.forEach(element => {
+         if (element.requisite_father_code !== '-') {
+            output += element.requisite_name + '\n';
+         }
+         output += 'Requisito;Declarado por el Solicitante;Validado por el Inspector\n';
+      });
+      const blob = new Blob([output], { type: 'text/plain' });
+      const nombreArchivo = 'Formulario_de_requisitos_check_list_' + this.ruc_registro_selected.ruc.number + '.csv';
+      saveAs(blob, nombreArchivo);
   }
 
   validateNotesInspection(): Boolean {
