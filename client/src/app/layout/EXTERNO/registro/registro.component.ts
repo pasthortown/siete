@@ -99,6 +99,7 @@ export class RegistroComponent implements OnInit {
    columnsPays = [];
    dataPays = [];
    pays: Pay[] = [];
+   stateTramiteId = 0;
   //DATOS RUC
   imContactRuc: Boolean = true;
   roles:any[] = [];
@@ -650,21 +651,9 @@ export class RegistroComponent implements OnInit {
          let date1 = new Date();
          const registerState = this.getRegisterState(item.status_register.state_id);
          let editable = true;
-         if (
-            item.status_register.state_id == 11 ||
-            item.status_register.state_id == 21 ||
-            item.status_register.state_id == 31||
-            item.status_register.state_id == 41 ||
-            item.status_register.state_id == 51 ||
-            item.status_register.state_id == 61 ||
-            item.status_register.state_id == 9 ||
-            item.status_register.state_id == 19 ||
-            item.status_register.state_id == 29||
-            item.status_register.state_id == 39 ||
-            item.status_register.state_id == 49 ||
-            item.status_register.state_id == 59 ||
-            item.status_register.state_id == 69
-            ) {
+         const estado: String = item.status_register.state_id.toString();
+         const digito = estado.substring(estado.length-1, estado.length);
+         if (digito == '1' || digito == '9') {
             editable = true;
          } else {
             editable = false;
@@ -697,6 +686,7 @@ export class RegistroComponent implements OnInit {
             register_type: item.type.register_category.name + ' / ' + item.type.register_type.name,
             state: registerState,
             editable: editable,
+            state_id: item.status_register.state_id,
             notes: '<div class="col-12 text-justify">' + item.status_register.justification + '</div>',
          });
      });
@@ -710,6 +700,8 @@ export class RegistroComponent implements OnInit {
          this.selectEstablishmentRegister(element.register, event.row.editable);
       }
    });
+   this.stateTramiteId = event.row.state_id;
+   this.showTramiteState();
    this.rowsRegister.forEach(row => {
       if (row.id == event.row.id) {
          row.selected = '<div class="col-12 text-right"><span class="far fa-hand-point-right"></span></div>';
@@ -717,6 +709,13 @@ export class RegistroComponent implements OnInit {
          row.selected = '';
       }
    });
+  }
+
+  showTramiteState() {
+    const estado: String = this.stateTramiteId.toString();
+    const digito = estado.substring(estado.length-1, estado.length);
+    this.estado_tramite_selected_code = digito;
+    this.getSpecificStates();
   }
 
   validateGroupGivenTipe(): Boolean {

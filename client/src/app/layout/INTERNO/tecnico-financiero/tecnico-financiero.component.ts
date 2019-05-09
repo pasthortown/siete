@@ -536,6 +536,7 @@ export class TecnicoFinancieroComponent implements OnInit {
            register_code: item.register.code,
            register_type: item.type.register_category.name + ' / ' + item.type.register_type.name,
            state: this.getRegisterState(item.status.id),
+           state_id: item.status_register.state_id,
            notes: '<div class="col-12 text-justify">' + item.status_register.justification + '</div>',
         });
     });
@@ -549,6 +550,8 @@ export class TecnicoFinancieroComponent implements OnInit {
         this.selectEstablishmentRegister(element.register);
      }
   });
+  this.stateTramiteId = event.row.state_id;
+  this.showTramiteState();
   this.rowsRegister.forEach(row => {
      if (row.id == event.row.id) {
         row.selected = '<div class="col-12 text-right"><span class="far fa-hand-point-right"></span></div>';
@@ -556,6 +559,13 @@ export class TecnicoFinancieroComponent implements OnInit {
         row.selected = '';
      }
   });
+ }
+
+ showTramiteState() {
+   const estado: String = this.stateTramiteId.toString();
+   const digito = estado.substring(estado.length-1, estado.length);
+   this.estado_tramite_selected_code = digito;
+   this.getSpecificStates();
  }
 
  onChangeTable(config: any, page: any = {page: this.currentPageMinturRegisters, itemsPerPage: this.recordsByPageRegisterMintur}): any {
@@ -813,8 +823,7 @@ export class TecnicoFinancieroComponent implements OnInit {
    }
    this.newRegisterState.justification = 'Resultados de la Revisión de Técnico Financiero cargados en la fecha ' + today.toDateString();
    this.newRegisterState.register_id = this.registerApprovalFinanciero.register_id;
-   this.newRegisterState.state_id = 14;
-   this.registerApprovalFinanciero.id_user = this.user.id;
+   this.newRegisterState.state_id = this.stateTramiteId + 3;
    this.registerStateDataService.post(this.newRegisterState).then( r1 => {
    }).catch( e => { console.log(e); });
    this.approvalStateDataService.put(this.registerApprovalFinanciero).then( r => {

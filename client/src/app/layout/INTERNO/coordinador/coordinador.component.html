@@ -125,6 +125,7 @@
         <option value="0" selected>Pendiente</option>
         <option value="1" selected>Aprobado</option>
         <option value="2" selected>Negado</option>
+        <option value="3" selected>Entregado</option>
       </select>
   </div>
   <div class="col-12 mt-3 mb-2">
@@ -133,7 +134,7 @@
   </div>
   <div class="col-12 text-center mb-3">
       <button type="button" class="btn btn-success" title="Imprimir Registro" (click)="imprimirRegistro()" [disabled]="!hasRegisterReady"><i class="fas fa-file-pdf"></i> Imprimir Registro</button>
-      <button type="button" class="btn btn-success ml-2" title="Guardar Información de Inspección" (click)="guardarTramite()" [disabled]="!canSave"><i class="fas fa-save"></i> Guardar Información</button>
+      <button type="button" class="btn btn-success ml-2" title="Guardar Información de Inspección" (click)="guardarTramite()"><i class="fas fa-save"></i> Guardar Información</button>
       <button type="button" class="btn btn-danger ml-2" title="Cancelar Cambios" (click)="refresh()"><i class="fas fa-times"></i> Cancelar</button>
   </div>
 </div>

@@ -337,9 +337,10 @@ export class CoordinadorComponent implements OnInit {
       const newRegisterState = new RegisterState();
       newRegisterState.justification = 'Inspector removido en la fecha ' + today.toDateString();
       newRegisterState.register_id = this.registerApprovalInspector.register_id;
-      newRegisterState.state_id = 14;
+      newRegisterState.state_id = this.stateTramiteId - 3;
       this.registerStateDataService.post(newRegisterState).then( r1 => {
          this.toastr.warningToastr('Inspector Removido Satisfactoriamente.', 'Asignación de Inspector');
+         this.refresh();
       }).catch( e => { console.log(e); });
      }).catch( e => { console.log(e); });
   }
@@ -352,9 +353,10 @@ export class CoordinadorComponent implements OnInit {
       const newRegisterState = new RegisterState();
       newRegisterState.justification = 'Técnico Financiero asignado en la fecha ' + this.registerApprovalFinanciero.date_assigment.toDateString();
       newRegisterState.register_id = this.registerApprovalFinanciero.register_id;
-      newRegisterState.state_id = 12;
+      newRegisterState.state_id = this.stateTramiteId - 3;
       this.registerStateDataService.post(newRegisterState).then( r1 => {
          this.toastr.successToastr('Técnico Financiero Asignado Satisfactoriamente.', 'Asignación de Técnico Financiero');
+         this.refresh();
       }).catch( e => { console.log(e); });
    }).catch( e => { console.log(e); });
   }
@@ -369,9 +371,10 @@ export class CoordinadorComponent implements OnInit {
     const newRegisterState = new RegisterState();
     newRegisterState.justification = 'Técnico Financiero removido en la fecha ' + today.toDateString();
     newRegisterState.register_id = this.registerApprovalFinanciero.register_id;
-    newRegisterState.state_id = 14;
+    newRegisterState.state_id = this.stateTramiteId + 3;
     this.registerStateDataService.post(newRegisterState).then( r1 => {
        this.toastr.warningToastr('Técnico Financiero Removido Satisfactoriamente.', 'Asignación de Técnico Financiero');
+       this.refresh();
     }).catch( e => { console.log(e); });
    }).catch( e => { console.log(e); });
   }
@@ -591,6 +594,7 @@ export class CoordinadorComponent implements OnInit {
             register_code: item.register.code,
             register_type: item.type.register_category.name + ' / ' + item.type.register_type.name,
             state: this.getRegisterState(item.status.id),
+            state_id: item.status_register.state_id,
             notes: '<div class="col-12 text-justify">' + item.status_register.justification + '</div>',
          });
      });
@@ -604,6 +608,8 @@ export class CoordinadorComponent implements OnInit {
          this.selectEstablishmentRegister(element.register);
       }
    });
+   this.stateTramiteId = event.row.state_id;
+   this.showTramiteState();
    this.rowsRegister.forEach(row => {
       if (row.id == event.row.id) {
          row.selected = '<div class="col-12 text-right"><span class="far fa-hand-point-right"></span></div>';
@@ -611,6 +617,13 @@ export class CoordinadorComponent implements OnInit {
          row.selected = '';
       }
    });
+  }
+
+  showTramiteState() {
+   const estado: String = this.stateTramiteId.toString();
+   const digito = estado.substring(estado.length-1, estado.length);
+   this.estado_tramite_selected_code = digito;
+   this.getSpecificStates();
   }
 
   onChangeTable(config: any, page: any = {page: this.currentPageMinturRegisters, itemsPerPage: this.recordsByPageRegisterMintur}): any {
@@ -861,6 +874,8 @@ export class CoordinadorComponent implements OnInit {
   }
 
   guardarTramite() {
+     const estado: String = this.stateTramiteId.toString();
+     const digito = estado.substring(estado.length-1, estado.length);
      if ( this.stateTramite == 0) {
        this.toastr.errorToastr('Debe seleccionar un estado de trámite', 'Coordinación');
        return;
@@ -885,11 +900,48 @@ export class CoordinadorComponent implements OnInit {
      this.registerApprovalCoordinador.date_fullfill = new Date();
      if( this.stateTramite == 1 ){
         this.registerApprovalCoordinador.value = true;
-        newRegisterState.state_id = 9;
+         if (digito == '0') {
+            newRegisterState.state_id = this.stateTramiteId - 8;
+         }
+         if (digito == '2') {
+            newRegisterState.state_id = this.stateTramiteId;
+         }
+         if (digito == '3') {
+            newRegisterState.state_id = this.stateTramiteId - 1;
+         }
+         if (digito == '9') {
+            newRegisterState.state_id = this.stateTramiteId - 7;
+         }
      }
      if( this.stateTramite == 2 ){
       this.registerApprovalCoordinador.value = false;
-      newRegisterState.state_id = 10;
+      if (digito == '0') {
+         newRegisterState.state_id = this.stateTramiteId - 7;
+      }
+      if (digito == '2') {
+         newRegisterState.state_id = this.stateTramiteId + 1;
+      }
+      if (digito == '3') {
+         newRegisterState.state_id = this.stateTramiteId;
+      }
+      if (digito == '9') {
+         newRegisterState.state_id = this.stateTramiteId - 6;
+      }
+     }
+     if( this.stateTramite == 3 ){
+      this.registerApprovalCoordinador.value = false;
+      if (digito == '0') {
+         newRegisterState.state_id = this.stateTramiteId - 1;
+      }
+      if (digito == '2') {
+         newRegisterState.state_id = this.stateTramiteId + 7;
+      }
+      if (digito == '3') {
+         newRegisterState.state_id = this.stateTramiteId + 6;
+      }
+      if (digito == '9') {
+         newRegisterState.state_id = this.stateTramiteId;
+      }
      }
      newRegisterState.justification = this.registerApprovalCoordinador.notes;
      newRegisterState.register_id = this.idRegister;
