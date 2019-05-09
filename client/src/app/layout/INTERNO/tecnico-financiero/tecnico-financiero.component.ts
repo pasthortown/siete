@@ -721,12 +721,11 @@ export class TecnicoFinancieroComponent implements OnInit {
       this.pay.ruc_id = this.ruc_registro_selected.ruc.id;
       this.pay.amount_payed = -1;
       this.pay.pay_date = null;
-      const today = new Date();
-      this.pay.code = this.ruc_registro_selected.ruc.number + '' + today.getFullYear().toString() + '' + (today.getMonth() + 1).toString() + '' + today.getDate().toString();
-      this.pay.payed = false;   
+      this.pay.code = this.ruc_registro_selected.ruc.number.substring(0, 10) + this.pays.length.toString();
+      this.pay.payed = false;
       this.payDataService.post(this.pay).then( r => {
          this.toastr.successToastr('Información Guardada Satisfactoriamente', 'Revisión, Técnico Financiero');
-         this.refresh();
+         this.getPays();
       }).catch( e => { console.log(e); });
    } else {
       this.payDataService.put(this.pay).then( r => {
