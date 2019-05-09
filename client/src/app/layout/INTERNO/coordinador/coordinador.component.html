@@ -433,20 +433,20 @@
                     <div class="btn-group mr-2" role="group">
                       <button type="button" class="btn btn-primary" title="Actualizar" (click)="
                         getEstablishmentsOnRuc(currentPageEstablishment)
-                        ">
+                        "[disabled]="!editable">
                         <i class="fas fa-sync"></i>
                       </button>
                     </div>
                     <div class="input-group">
                       <div class="input-group-prepend">
-                        <button type="button" class="input-group-text btn btn-success" title="Buscar">
+                        <button type="button" class="input-group-text btn btn-success" title="Buscar"[disabled]="!editable">
                           <span class="fas fa-search"></span>
                         </button>
                       </div>
                       <input *ngIf="config.filtering" placeholder="Buscar..."
                         [ngTableFiltering]="config.filtering"
                         class="form-control"
-                        (input)="onChangeTableEstablishment(config)"/>
+                        (input)="onChangeTableEstablishment(config)" [disabled]="!editable"/>
                     </div>
                   </div>
                 </div>
