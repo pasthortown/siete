@@ -631,7 +631,6 @@ export class InspectorComponent implements OnInit {
    this.registerMinturSelected = new Register();
    this.consultorDataService.get_registers_assigned_inspector_id(this.user.id).then( r => {
       this.registers_mintur = r;
-      console.log(r);
       this.buildDataTable();
    }).catch( e => console.log(e) );
   }
@@ -783,7 +782,7 @@ export class InspectorComponent implements OnInit {
     if ( this.inspectionState == 2) {
       this.registerApprovalInspector.value = false;
     }
-    this.newRegisterState.justification = 'Resultados de la Inspección cargados en la fecha ' + this.registerApprovalInspector.date_fullfill.toDateString();
+    this.newRegisterState.justification = 'Resultados de la Inspección cargados en la fecha ' + new Date(this.registerApprovalInspector.date_fullfill).toDateString();
     this.newRegisterState.register_id = this.registerApprovalInspector.register_id;
     this.newRegisterState.state_id = this.stateTramiteId + 6;
     this.registerApprovalInspector.id_user = this.user.id;
