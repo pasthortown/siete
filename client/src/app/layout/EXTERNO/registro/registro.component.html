@@ -1547,17 +1547,15 @@
                                 <th>Valor Pagado</th>
                                 <th>Valor a Pagar</th>
                                 <th>Fecha de Pago</th>
-                                <th>Fecha Máxima de Pago</th>
                              </tr>
                           </thead>
                           <tbody>
                              <tr *ngFor="let paySelected of pays">
                                 <td>{{paySelected.code}}</td>
                                 <td><span class="badge badge-success" *ngIf="paySelected.payed">Pagado</span><span class="badge badge-danger" *ngIf="!paySelected.payed">No Pagado</span></td>
-                                <td>{{paySelected.amount_payed}}</td>
+                                <td><strong *ngIf="paySelected.amount_payed != -1">{{paySelected.amount_payed}}</strong></td>
                                 <td>{{paySelected.amount_to_pay}}</td>
                                 <td>{{paySelected.pay_date}}</td>
-                                <td>{{paySelected.max_pay_date}}</td>
                              </tr>
                           </tbody>
                        </table>

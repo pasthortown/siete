@@ -68,7 +68,36 @@
 </div>
 <div class="container">
     <div class="col-12">
-        <div *ngIf="reporte!=''" class="alert alert-warning" role="alert" [innerHTML]="reporte">
+        <div *ngIf="mostrar_reporte" class="alert alert-warning" role="alert">
+           <h3 class="col-12 text-left"><strong>REPORTE</strong></h3>
+           <h4 class="col-12 text-center">Pagos Reportados ( {{pagos_reportados.length}} )</h4>
+           <table class="table col-12">
+               <tbody>
+                    <tr *ngFor="let pago of pagos_reportados">
+                        <th>Concepto:</th>
+                        <td>{{pago.referencia_transaccion}}</td>
+                        <th>Código de Orden de Pago:</th>
+                        <td>{{pago.codigo_del_tercero}}</td>
+                        <th>Valor:</th>
+                        <td>{{pago.valor}}</td>
+                    </tr>
+               </tbody>
+           </table>
+           <strong><h4 class="col-12 text-center">Pagos actualizados ( {{pagos_actualizados.length}} )</h4></strong> 
+           <table class="table col-12">
+                <tbody>
+                     <tr *ngFor="let pago of pagos_actualizados">
+                         <th>Concepto:</th>
+                         <td>{{pago.referencia_transaccion}}</td>
+                         <th>Código de Orden de Pago:</th>
+                         <td>{{pago.codigo_del_tercero}}</td>
+                         <th>Valor:</th>
+                         <td>{{pago.valor}}</td>
+                         <th>Pagado:</th>
+                         <td><span class="badge badge-success" *ngIf="pago.payed">Pagado</span><span class="badge badge-danger" *ngIf="!pago.payed">No Pagado</span></td>
+                     </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>

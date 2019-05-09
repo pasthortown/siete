@@ -30,6 +30,13 @@ export class PayService {
       }).catch( error => { this.handledError(error.json()); });
    }
 
+   process_pays(pays: any[]): Promise<any> {
+      return this.http.post(this.url + 'process_pays', JSON.stringify({pays: pays}), this.options).toPromise()
+      .then( r => {
+         return r.json();
+      }).catch( error => { this.handledError(error.json());  });
+   }
+
    get_report(desde: Date, hasta: Date): Promise<any> {
       const data = {desde: desde, hasta: hasta};
       return this.http.post(this.url + 'get_report', JSON.stringify(data), this.options).toPromise()

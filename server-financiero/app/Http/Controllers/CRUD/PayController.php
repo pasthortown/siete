@@ -31,13 +31,50 @@ class PayController extends Controller
 
     function get_report(Request $data)
     {
+      $token = $data->header('api_token'); 
       $result = $data->json()->all();
       $desde = $result['desde'];
       $hasta = $result['hasta'];
-      $toReturn = Pay::where('created_at','>=',$desde)->where('created_at','<=',$hasta)->orderby('created_at','DESC')->get();
+      $pays = Pay::where('created_at','>=',$desde)->where('created_at','<=',$hasta)->orderby('created_at','DESC')->get();
+      $toReturn = [];
+      foreach ($pays as $pay) {
+         $ruc_id = $pay->ruc_id;
+         $ruc = json_decode($this->httpGet('http://localhost:8001/ruc/?id='.$ruc_id, null, null, $token));
+         $user = json_decode($this->httpGet('http://localhost:8000/user/?id='.$ruc->Ruc->contact_user_id, null, null, $token));
+         array_push($toReturn, ["RUC"=>$ruc, "pay"=>$pay, "user"=>$user]);
+      }
       return response()->json($toReturn,200);
     }
     
+    function process_pays(Request $data) {
+      $result = $data->json()->all();
+      $pays = $result['pays'];
+      $toReturn = [];
+      foreach($pays as $pay){
+         $referencia_transaccion = $pay["referencia_transaccion"];
+         $code = $pay["codigo_del_tercero"];
+         $valor = $pay["valor"];
+         $payOnBDD = Pay::where('code', $code)->first();
+         $payed = false;
+         if ($valor >= $payOnBDD->amount_to_pay) {
+            $payed = true;
+         }
+         $amount_to_pay = $payOnBDD->amount_to_pay - $valor;
+         if(!($payOnBDD->payed)) {
+            DB::beginTransaction();
+            $payOnBDD = Pay::where('code', $code)->update([
+               'amount_to_pay'=> $amount_to_pay,
+               'amount_payed'=>$valor,
+               'pay_date'=>date("Y-m-d H:i:s"),
+               'payed'=>$payed,
+            ]);
+            array_push($toReturn, ["referencia_transaccion"=>$pay["referencia_transaccion"], "codigo_del_tercero"=>$pay["codigo_del_tercero"], "valor"=>$pay["valor"], "payed"=>$payed]);
+            DB::commit(); 
+         }
+      }
+      return response()->json($toReturn,200);
+    }
+
     function get_by_ruc_id(Request $data)
     {
        $id = $data['id'];

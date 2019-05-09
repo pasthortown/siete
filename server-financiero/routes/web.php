@@ -72,6 +72,7 @@ $router->group(['middleware' => ['auth']], function () use ($router) {
    //CRUD Pay
    $router->post('/pay', ['uses' => 'PayController@post']);
    $router->post('/pay/get_report', ['uses' => 'PayController@get_report']);
+   $router->post('/pay/process_pays', ['uses' => 'PayController@process_pays']);
    $router->get('/pay', ['uses' => 'PayController@get']);
    $router->get('/pay/paginate', ['uses' => 'PayController@paginate']);
    $router->get('/pay/get_by_ruc_id', ['uses' => 'PayController@get_by_ruc_id']);
