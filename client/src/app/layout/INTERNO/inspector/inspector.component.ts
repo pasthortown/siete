@@ -522,7 +522,7 @@ export class InspectorComponent implements OnInit {
             address: item.establishment.address,
             register_code: item.register.code,
             register_type: item.type.register_category.name + ' / ' + item.type.register_type.name,
-            state: item.status.name,
+            state: this.getRegisterState(item.status.id),
             notes: '<div class="col-12 text-justify">' + item.status_register.justification + '</div>',
          });
      });

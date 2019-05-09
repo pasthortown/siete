@@ -98,6 +98,7 @@ export class CoordinadorComponent implements OnInit {
    @ViewChild('EstablishmentCertificationAttachedFile') EstablishmentCertificationAttachedFile;
    //ASIGNACIONES
    stateTramite: number = 0;
+   stateTramiteId: number = 0;
    inspectores: User[] = [];
    financieros: User[] = [];
    inspectorSelectedId: number = 0;
@@ -318,9 +319,10 @@ export class CoordinadorComponent implements OnInit {
       const newRegisterState = new RegisterState();
       newRegisterState.justification = 'Inspector asignado en la fecha ' + this.registerApprovalInspector.date_assigment.toDateString();
       newRegisterState.register_id = this.registerApprovalInspector.register_id;
-      newRegisterState.state_id = 11;
+      newRegisterState.state_id = this.stateTramiteId + 3;
       this.registerStateDataService.post(newRegisterState).then( r1 => {
          this.toastr.successToastr('Inspector Asignado Satisfactoriamente.', 'Asignación de Inspector');
+         this.refresh();
       }).catch( e => { console.log(e); });
    }).catch( e => { console.log(e); });
   }
@@ -588,7 +590,7 @@ export class CoordinadorComponent implements OnInit {
             address: item.establishment.address,
             register_code: item.register.code,
             register_type: item.type.register_category.name + ' / ' + item.type.register_type.name,
-            state: item.status.name,
+            state: this.getRegisterState(item.status.id),
             notes: '<div class="col-12 text-justify">' + item.status_register.justification + '</div>',
          });
      });
@@ -744,6 +746,7 @@ export class CoordinadorComponent implements OnInit {
             updated_at: item.register.updated_at,
             category: this.getRegisterCategory(item.register.register_type_id),
             status: registerState,
+            status_id: item.states.state_id,
          });
      });
      this.data = data;
@@ -756,6 +759,7 @@ export class CoordinadorComponent implements OnInit {
          this.selectRegisterMintur(element);
       }
       const registerState = this.getRegisterState(element.states.state_id);
+      this.stateTramiteId = element.states.state_id;
       this.stateTramite = 0;
       this.canSave = true;
       if (registerState.search('Aprobado') == 0) {

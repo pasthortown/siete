@@ -99,7 +99,6 @@ export class RegistroComponent implements OnInit {
    columnsPays = [];
    dataPays = [];
    pays: Pay[] = [];
-
   //DATOS RUC
   imContactRuc: Boolean = true;
   roles:any[] = [];
@@ -279,6 +278,13 @@ export class RegistroComponent implements OnInit {
    this.getDeclarationCategories();
    this.getDeclarationItems();
    this.getMaxDeclarationDate();
+  }
+
+  editableTramiteRequerido(): Boolean {
+   if (this.estado_tramite_selected_code == '1' || this.estado_tramite_selected_code == '9') {
+      return true;
+   }
+   return false;
   }
 
   onChangeTablePays(config: any, page: any = {page: this.currentPagePays, itemsPerPage: this.recordsByPagePays}): any {
@@ -645,12 +651,19 @@ export class RegistroComponent implements OnInit {
          const registerState = this.getRegisterState(item.status_register.state_id);
          let editable = true;
          if (
-            item.status_register.state_id == 8 ||
-            item.status_register.state_id == 15 ||
-            item.status_register.state_id == 22||
-            item.status_register.state_id == 29 ||
-            item.status_register.state_id == 36 ||
-            item.status_register.state_id == 43
+            item.status_register.state_id == 11 ||
+            item.status_register.state_id == 21 ||
+            item.status_register.state_id == 31||
+            item.status_register.state_id == 41 ||
+            item.status_register.state_id == 51 ||
+            item.status_register.state_id == 61 ||
+            item.status_register.state_id == 9 ||
+            item.status_register.state_id == 19 ||
+            item.status_register.state_id == 29||
+            item.status_register.state_id == 39 ||
+            item.status_register.state_id == 49 ||
+            item.status_register.state_id == 59 ||
+            item.status_register.state_id == 69
             ) {
             editable = true;
          } else {
@@ -2271,6 +2284,10 @@ export class RegistroComponent implements OnInit {
          this.getSpecificStates();
         }
      });
+  }
+
+  changeTramiteRequerido() {
+   this.estado_tramite_selected_code = '1';
   }
 
   getSpecificStates() {
