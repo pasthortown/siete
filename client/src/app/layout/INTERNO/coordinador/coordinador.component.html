@@ -1094,7 +1094,7 @@
                           *ngIf="rucEstablishmentRegisterSelected.establishment_id == 0"
                           class="ml-2 badge badge-danger">Incorrecto</span>
                         <select class="form-control" id="establishment_id" name="establishment_id"
-                          [(ngModel)]="rucEstablishmentRegisterSelected.establishment_id">
+                          [(ngModel)]="rucEstablishmentRegisterSelected.establishment_id" [disabled]="!editable">
                           <option value="0" selected>Seleccione...</option>
                           <option *ngFor="
                               let establishment of ruc_registro_selected.ruc.establishments
@@ -1132,7 +1132,7 @@
                           <div class="form-group">
                             <label>Estado del Trámite</label>
                             <select class="form-control" id="tramite_state_name" name="tramite_state_name"
-                              (change)="getSpecificStates()" [(ngModel)]="estado_tramite_selected_code">
+                              (change)="getSpecificStates()" [(ngModel)]="estado_tramite_selected_code" [disabled]="!editable">
                               <option value="-" selected>Seleccione...</option>
                               <option *ngFor="
                                 let state of estados_tramites
@@ -1147,7 +1147,7 @@
                             <label>Trámite Requerido</label><span *ngIf="rucEstablishmentRegisterSelected.status == 0"
                               class="ml-2 badge badge-danger">Incorrecto</span>
                             <select class="form-control" id="state_name" name="state_name"
-                              [(ngModel)]="rucEstablishmentRegisterSelected.status">
+                              [(ngModel)]="rucEstablishmentRegisterSelected.status" [disabled]="!editable">
                               <option value="0" selected>Seleccione...</option>
                               <option *ngFor="
                                   let state of specific_states
@@ -1173,7 +1173,7 @@
                             <label>Clasificación</label><span *ngIf="categorySelectedCode == '-'"
                               class="ml-2 badge badge-danger">Incorrecto</span>
                             <select class="form-control" id="register_type_id" name="register_type_id"
-                              (change)="getCategories()" [(ngModel)]="categorySelectedCode">
+                              (change)="getCategories()" [(ngModel)]="categorySelectedCode" [disabled]="!editable">
                               <option value="-" selected>Seleccione...</option>
                               <option *ngFor="
                                   let register_type of clasifications_registers
@@ -1192,7 +1192,7 @@
                             <select class="form-control" id="register_type_id" name="register_type_id"
                               (change)="getAllowedInfo()" [(ngModel)]="
                                 rucEstablishmentRegisterSelected.register_type_id
-                              ">
+                              " [disabled]="!editable">
                               <option value="0" selected>Seleccione...</option>
                               <option *ngFor="
                                   let register_type of categories_registers
@@ -1222,7 +1222,7 @@
                     <div class="col-12">
                       <div class="btn-toolbar" role="toolbar">
                         <div class="btn-group" role="group" aria-label="First group">
-                          <button type="button" title="Agregar" class="btn btn-success ml-2" (click)="addCapacity()">
+                          <button type="button" title="Agregar" class="btn btn-success ml-2" (click)="addCapacity()" [disabled]="!editable">
                             <i class="fas fa-plus-circle"></i>
                           </button>
                           <button type="button" title="Contar Plazas" class="btn btn-warning ml-2"
@@ -1261,7 +1261,7 @@
                             </td>
                             <td>
                               <input type="number" class="form-control" min="0" id="count_space" name="count_space"
-                                placeholder="Cantidad" [(ngModel)]="capacity.quantity" />
+                                placeholder="Cantidad" [(ngModel)]="capacity.quantity" [disabled]="!editable"/>
                               <div class="form-group row mt-3">
                                 <span class="badge badge-info mr-2">Total de Plazas:
                                   {{
@@ -1274,7 +1274,7 @@
                             </td>
                             <td>
                               <select class="form-control" id="capacity_type_id" name="capacity_type_id"
-                                [(ngModel)]="capacity.capacity_type_id" (change)="getMaxBed(capacity)">
+                                [(ngModel)]="capacity.capacity_type_id" (change)="getMaxBed(capacity)" [disabled]="!editable">
                                 <option value="0" selected>Seleccione...</option>
                                 <option *ngFor="
                                     let capacity_type of alowed_capacity_types
@@ -1298,11 +1298,11 @@
                               <div class="btn-toolbar" role="toolbar">
                                 <div class="btn-group" role="group">
                                   <button type="button" title="Agregar" class="btn btn-success"
-                                    (click)="addBed(capacity)">
+                                    (click)="addBed(capacity)" [disabled]="!editable">
                                     <i class="fas fa-plus-circle"></i>
                                   </button>
                                   <button type="button" title="Quitar" class="btn btn-danger"
-                                    (click)="removeBed(capacity)">
+                                    (click)="removeBed(capacity)" [disabled]="!editable">
                                     <i class="fas fa-trash"></i>
                                   </button>
                                   <button type="button" title="Contar Plazas" class="btn btn-warning ml-2"
@@ -1326,11 +1326,11 @@
                             </td>
                             <td>
                               <input type="number" class="form-control" min="0" id="count_bed" name="count_bed"
-                                placeholder="Cantidad" [(ngModel)]="bed.quantity" />
+                                placeholder="Cantidad" [(ngModel)]="bed.quantity" [disabled]="!editable"/>
                             </td>
                             <td>
                               <select class="form-control" id="bed_type_id" name="bed_type_id"
-                                [(ngModel)]="bed.bed_type_id">
+                                [(ngModel)]="bed.bed_type_id" [disabled]="!editable">
                                 <option value="0" selected>Seleccione...</option>
                                 <option *ngFor="
                                             let bed_type of alowed_bed_types
@@ -1357,13 +1357,13 @@
                               <span class="input-group-text">$</span>
                             </div>
                             <input type="number" class="form-control" min="0" step="0.01" id="low_capacity_room_price"
-                              name="low_capacity_room_price" [(ngModel)]="tariff.price" placeholder="Precio" />
+                              name="low_capacity_room_price" [(ngModel)]="tariff.price" placeholder="Precio" [disabled]="!editable"/>
                           </div>
                         </div>
                       </td>
                       <td>
                         <button type="button" title="Eliminar" class="btn btn-danger"
-                          (click)="removeCapacity(capacity)">
+                          (click)="removeCapacity(capacity)" [disabled]="!editable">
                           <i class="fas fa-trash"></i>
                         </button>
                       </td>
@@ -1425,16 +1425,16 @@
                             <td>
                               <input type="number" class="form-control" min="0" id="mesas" name="mesas"
                                 placeholder="Cantidad de Mesas"
-                                [(ngModel)]="complementaryServiceFood.quantity_tables" />
+                                [(ngModel)]="complementaryServiceFood.quantity_tables" [disabled]="!editable"/>
                             </td>
                             <td>
                               <input type="number" class="form-control" min="0" id="sillas" name="sillas"
                                 placeholder="Cantidad de Sillas"
-                                [(ngModel)]="complementaryServiceFood.quantity_chairs" />
+                                [(ngModel)]="complementaryServiceFood.quantity_chairs" [disabled]="!editable"/>
                             </td>
                             <td>
                               <button type="button" title="Eliminar" class="btn btn-danger"
-                                (click)="removeComplementaryFoodService(complementaryServiceFood)">
+                                (click)="removeComplementaryFoodService(complementaryServiceFood)" [disabled]="!editable">
                                 <i class="fas fa-trash"></i>
                               </button>
                             </td>
@@ -1450,7 +1450,7 @@
                       <label class="switch"><input type="checkbox" id="autorized_complementary_adventure_capacities"
                           name="autorized_complementary_adventure_capacities" [(ngModel)]="
                             rucEstablishmentRegisterSelected.autorized_complementary_capacities
-                          " /><span class="slider round"></span></label>
+                          " [disabled]="!editable" /><span class="slider round"></span></label>
                     </div>
                   </div>
                   <div class="form-group row" *ngIf="
@@ -1463,18 +1463,18 @@
                       <div class="input-group">
                         <div class="input-group-prepend">
                           <button type="button" title="Eliminar" class="btn btn-danger"
-                            (click)="removeComplementaryServiceType()">
+                            (click)="removeComplementaryServiceType()" [disabled]="!editable">
                             <i class="fas fa-trash"></i>
                           </button>
                           <button type="button" title="Agregar" class="btn btn-success"
-                            (click)="addComplementaryServiceType()">
+                            (click)="addComplementaryServiceType()" [disabled]="!editable">
                             <i class="fas fa-plus-circle"></i>
                           </button>
                         </div>
                         <select class="form-control" id="complementary_service_type_category_code"
                           name="complementary_service_type_category_code" #categoryFilter (change)="
                             getComplementaryServiceType(categoryFilter.value)
-                          ">
+                          " [disabled]="!editable">
                           <option value="0" selected>Seleccione...</option>
                           <option *ngFor="
                               let complementary_service_type of complementary_service_types_categories
@@ -1485,7 +1485,7 @@
                         <select class="form-control" id="complementary_service_type_id"
                           name="complementary_service_type_id" [(ngModel)]="
                             complementary_service_types_registerSelectedId
-                          ">
+                          " [disabled]="!editable">
                           <option value="0" selected>Seleccione...</option>
                           <option *ngFor="
                               let complementary_service_type of complementary_service_types
@@ -1578,15 +1578,6 @@
               </div>
               <div class="row mt-3" *ngIf="validateRegister()">
                 <div class="col-12 text-center">
-                  <button [disabled]="guardando" type="button" class="btn btn-success" title="Actualizar Información"
-                    (click)="guardarRegistro()">
-                    <i class="fas fa-paper-plane"></i>&nbsp;Actualizar Información
-                  </button>
-                  <button type="button" class="btn btn-danger ml-2" title="Cancelar Cambios" (click)="
-                      refresh()
-                    ">
-                    <i class="fas fa-trash"></i>&nbsp;Cancelar Cambios
-                  </button>
                 </div>
               </div>
             </ng-template>
