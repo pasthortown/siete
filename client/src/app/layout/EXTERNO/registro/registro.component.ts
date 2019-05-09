@@ -369,14 +369,16 @@ export class RegistroComponent implements OnInit {
      this.pays.forEach(item => {
          let state = '';
          let amount_payed = '';
+         let amount_to_pay = '';
          if (item.payed) {
             state = '<span class="badge badge-success">Pagado</span>';
          } else {
             state = '<span class="badge badge-danger">Pago Pendiente</span>';
          }
          if (item.amount_payed != -1) {
-            amount_payed = item.amount_payed.toString();
+            amount_payed = item.amount_payed.toString() + ' USD';
          }
+         amount_to_pay = item.amount_to_pay.toString() + ' USD';
          let payDate = '';
          if (item.pay_date == null || typeof item.pay_date == 'undefined') {
             payDate = '';
@@ -387,7 +389,7 @@ export class RegistroComponent implements OnInit {
             code: item.code,
             state: state,
             amount_payed: amount_payed,
-            amount_to_pay: item.amount_to_pay,
+            amount_to_pay: amount_to_pay,
             pay_date: payDate,
          });
      });
