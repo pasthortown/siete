@@ -101,6 +101,7 @@ export class TecnicoFinancieroComponent implements OnInit {
   @ViewChild('fotoFachadaInput') fotoFachadaInput;
   @ViewChild('EstablishmentCertificationAttachedFile') EstablishmentCertificationAttachedFile;
   //ASIGNACIONES
+  stateTramiteId = 0;
   inspectores: User[] = [];
   financieros: User[] = [];
   financialSelectedId: number = 0;
@@ -692,6 +693,7 @@ export class TecnicoFinancieroComponent implements OnInit {
            date_assigment: item.register.date_assigment,
            category: this.getRegisterCategory(item.register.register_type_id),
            status: registerState,
+           status_id: item.states.state_id,
         });
     });
     this.data = data;
@@ -825,15 +827,16 @@ export class TecnicoFinancieroComponent implements OnInit {
   this.registers_mintur.forEach(element => {
      if (element.ruc.number == event.row.number) {
         this.selectRegisterMintur(element);
-     }
-  });
-  this.idRegister = event.row.registerId;
-  this.getApprovalStates();
-  this.rows.forEach(row => {
-     if (this.idRegister == row.registerId) {
-        row.selected = '<div class="col-12 text-right"><span class="far fa-hand-point-right"></span></div>';
-     } else {
-        row.selected = '';
+        this.stateTramiteId = element.states.state_id;
+        this.idRegister = event.row.registerId;
+        this.getApprovalStates();
+        this.rows.forEach(row => {
+           if (this.idRegister == row.registerId) {
+              row.selected = '<div class="col-12 text-right"><span class="far fa-hand-point-right"></span></div>';
+           } else {
+              row.selected = '';
+           }
+        });
      }
   });
  }
