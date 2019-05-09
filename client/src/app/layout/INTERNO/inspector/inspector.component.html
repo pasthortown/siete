@@ -51,15 +51,15 @@
     <h4>Resultado de la Inspección</h4>
   </div>
   <div class="col-6">
-      <label>Formulario de Requisitos</label>
+      <label>Formulario de Requisitos (Check List)</label>
       <div class="input-group mb-3">
         <div class="input-group-prepend">
-          <button type="button" class="btn btn-secondary" title="Imprimir Formulario de Requisitos" (click)="imprimirRequisitos()"><i class="fas fa-print"></i></button>
-          <button type="button" [disabled]="!validateRequisitesFile()" class="btn btn-secondary" title="Descargar Formulario de Requisitos Cargado" (click)="descargarRequisitos()"><i class="fas fa-download"></i></button>
-          <button type="button" [disabled]="!validateRequisitesFile()" class="btn btn-danger" title="Borrar Formulario de Requisitos Cargado" (click)="borrarRequisitos()"><i class="fas fa-trash"></i></button>
+          <button type="button" class="btn btn-secondary" title="Imprimir Formulario de Requisitos (Check List)" (click)="imprimirRequisitos()"><i class="fas fa-print"></i></button>
+          <button type="button" [disabled]="!validateRequisitesFile()" class="btn btn-secondary" title="Descargar Formulario de Requisitos (Check List) Cargado" (click)="descargarRequisitos()"><i class="fas fa-download"></i></button>
+          <button type="button" [disabled]="!validateRequisitesFile()" class="btn btn-danger" title="Borrar Formulario de Requisitos (Check List) Cargado" (click)="borrarRequisitos()"><i class="fas fa-trash"></i></button>
         </div>
         <input type="file" class="form-control" id="requisitesFile"
-          name="requisitesFile" placeholder="Formulario de Revisión de Requisitos"
+          name="requisitesFile" placeholder="Formulario de Revisión de Requisitos (Check List)"
           (change)="CodeFileRequisitesAttachment($event)">
       </div>
   </div>
