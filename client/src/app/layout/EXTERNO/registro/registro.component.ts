@@ -90,8 +90,17 @@ import { RegisterService } from 'src/app/services/CRUD/ALOJAMIENTO/register.serv
 export class RegistroComponent implements OnInit {
    @ViewChild('fotoFachadaInput') fotoFachadaInput;
    @ViewChild('EstablishmentCertificationAttachedFile') EstablishmentCertificationAttachedFile;
+
+   //PAGOS
+   currentPagePays = 1;
+   lastPagePays = 1;
+   recordsByPagePays = 5;
+   rowsPays = [];
+   columnsPays = [];
+   dataPays = [];
+   pays: Pay[] = [];
+
   //DATOS RUC
-  pays: Pay[] = [];
   imContactRuc: Boolean = true;
   roles:any[] = [];
   terminosCondiciones = false;
@@ -270,6 +279,125 @@ export class RegistroComponent implements OnInit {
    this.getDeclarationCategories();
    this.getDeclarationItems();
    this.getMaxDeclarationDate();
+  }
+
+  onChangeTablePays(config: any, page: any = {page: this.currentPagePays, itemsPerPage: this.recordsByPagePays}): any {
+   if (config.filtering) {
+     Object.assign(this.config.filtering, config.filtering);
+   }
+   if (config.sorting) {
+     Object.assign(this.config.sorting, config.sorting);
+   }
+   const filteredData = this.changeFilterPays(this.dataPays, this.config);
+   const sortedData = this.changeSortPays(filteredData, this.config);
+   this.rowsPays = page && config.paging ? this.changePagePays(page, sortedData) : sortedData;
+  }
+
+  changeFilterPays(data: any, config: any): any {
+   let filteredData: Array<any> = data;
+   this.columnsPays.forEach((column: any) => {
+     if (column.filtering) {
+       filteredData = filteredData.filter((item: any) => {
+         return item[column.name].match(column.filtering.filterString);
+       });
+     }
+   });
+   if (!config.filtering) {
+     return filteredData;
+   }
+   if (config.filtering.columnName) {
+     return filteredData.filter((item:any) =>
+       item[config.filtering.columnName].match(this.config.filtering.filterString));
+   }
+   const tempArray: Array<any> = [];
+   filteredData.forEach((item: any) => {
+     let flag = false;
+     this.columnsPays.forEach((column: any) => {
+       if (item[column.name].toString().match(this.config.filtering.filterString)) {
+         flag = true;
+       }
+     });
+     if (flag) {
+       tempArray.push(item);
+     }
+   });
+   filteredData = tempArray;
+   return filteredData;
+  }
+
+  changeSortPays(data: any, config: any): any {
+   if (!config.sorting) {
+     return data;
+   }
+   const columns = this.config.sorting.columns || [];
+   let columnName: string = void 0;
+   let sort: string = void 0;
+   for (let i = 0; i < columns.length; i++) {
+     if (columns[i].sort !== '' && columns[i].sort !== false) {
+       columnName = columns[i].name;
+       sort = columns[i].sort;
+     }
+   }
+   if (!columnName) {
+     return data;
+   }
+   return data.sort((previous:any, current:any) => {
+     if (previous[columnName] > current[columnName]) {
+       return sort === 'desc' ? -1 : 1;
+     } else if (previous[columnName] < current[columnName]) {
+       return sort === 'asc' ? -1 : 1;
+     }
+     return 0;
+   });
+  }
+
+  changePagePays(page: any, data: Array<any> = this.dataPays):Array<any> {
+   const start = (page.page - 1) * page.itemsPerPage;
+   const end = page.itemsPerPage > -1 ? (start + page.itemsPerPage) : data.length;
+   return data.slice(start, end);
+  }
+
+  buildDataTablePays() {
+     this.columnsPays = [
+        {title: 'Código', name: 'code', filtering: {filterString: '', placeholder: 'Código'}},
+        {title: 'Estado', name: 'state', filtering: {filterString: '', placeholder: 'Estado'}},
+        {title: 'Valor Pagado', name: 'amount_payed'},
+        {title: 'Valor a Pagar', name: 'amount_to_pay'},
+        {title: 'Fecha de Pago', name: 'pay_date', filtering: {filterString: '', placeholder: 'Fecha de Pago'}}
+     ];
+     const data = [];
+     this.pays.forEach(item => {
+         let state = '';
+         let amount_payed = '';
+         let amount_to_pay = '';
+         if (item.payed) {
+            state = '<span class="badge badge-success">Pagado</span>';
+         } else {
+            state = '<span class="badge badge-danger">Pago Pendiente</span>';
+         }
+         if (item.amount_payed != -1) {
+            amount_payed = item.amount_payed.toString() + ' USD';
+         }
+         amount_to_pay = item.amount_to_pay.toString() + ' USD';
+         let payDate = '';
+         if (item.pay_date == null || typeof item.pay_date == 'undefined') {
+            payDate = '';
+         } else {
+            payDate = item.pay_date.toString();
+         }
+         data.push({
+            code: item.code,
+            state: state,
+            amount_payed: amount_payed,
+            amount_to_pay: amount_to_pay,
+            pay_date: payDate,
+         });
+     });
+     this.dataPays = data;
+     this.onChangeTablePays(this.config);
+  }
+
+  onCellClickPays(event) {
   }
 
   onChangeTableEstablishment(config: any, page: any = {page: this.currentPageEstablishment, itemsPerPage: this.recordsByPageEstablishment}): any {
@@ -717,6 +845,7 @@ export class RegistroComponent implements OnInit {
   getPays() {
    this.payDataService.get_by_ruc_number(this.user.ruc).then( r => {
       this.pays = r as Pay[];
+      this.buildDataTablePays();
    }).catch( e => { console.log(e); } );
   }
 
