@@ -131,7 +131,6 @@ export class InspectorComponent implements OnInit {
    data = [];
   
   //DATOS RUC
-  editable = false;
   imContactRuc: Boolean = true;
   roles:any[] = [];
   terminosCondiciones = false;
@@ -680,19 +679,23 @@ export class InspectorComponent implements OnInit {
          if (diffDays > 10) {
             date_assigment_alert = '<div class="col-12 text-center"><span class="badge badge-danger">&nbsp;' + diffDays.toString() + '&nbsp;</span></div>';
          }
-         data.push({
-            selected: '',
-            date_assigment_alert: date_assigment_alert,
-            number: item.ruc.number,
-            registerId: item.register.id,
-            establishment: item.establishment.commercially_known_name,
-            address: item.establishment.address,
-            updated_at: item.register.updated_at,
-            date_assigment: item.register.date_assigment,
-            category: this.getRegisterCategory(item.register.register_type_id),
-            status: registerState,
-            status_id: item.states.state_id,
-         });
+         const estado: String = item.states.state_id.toString();
+         const digito = estado.substring(estado.length-1, estado.length);
+         if ( digito == '4' || digito == '5' || digito == '6' ) {
+            data.push({
+               selected: '',
+               date_assigment_alert: date_assigment_alert,
+               number: item.ruc.number,
+               registerId: item.register.id,
+               establishment: item.establishment.commercially_known_name,
+               address: item.establishment.address,
+               updated_at: item.register.updated_at,
+               date_assigment: item.register.date_assigment,
+               category: this.getRegisterCategory(item.register.register_type_id),
+               status: registerState,
+               status_id: item.states.state_id,
+            });
+         }
      });
      this.data = data;
      this.onChangeTable(this.config);
