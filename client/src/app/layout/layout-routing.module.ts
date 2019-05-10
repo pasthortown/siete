@@ -293,6 +293,10 @@ const routes: Routes = [
             path: 'pagos',
             loadChildren: './INTERNO/pagos/pagos.module#PagosModule'
          },
+         {
+            path: 'pagos-reporte',
+            loadChildren: './INTERNO/pagos-reporte/pagos-reporte.module#PagosReporteModule'
+         },
 
          // EXTERNO
          {
