@@ -22,6 +22,77 @@
             </ul>
          </li>
       </div>
+      <div class="nested-menu">
+         <a class="list-group-item" (click)="addExpandClass('administradorFinanciero')">
+            <span class="fab fa-adn"></span>&nbsp;Administrador Financiero
+         </a>
+         <li class="nested" [class.expand]="showMenu === 'administradorFinanciero'">
+            <ul class="submenu">
+               <li>
+                  <a [routerLink]="['/inner-financial-account-admin']" [routerLinkActive]="['router-link-active']" class="list-group-item">Administración de Cuentas Técnicos Financieros</a>
+               </li>
+               <li>
+                  <a [routerLink]="['/pagos']" [routerLinkActive]="['router-link-active']" class="list-group-item">Pagos</a>
+               </li>
+               <li>
+                  <a [routerLink]="['/pagos-reporte']" [routerLinkActive]="['router-link-active']" class="list-group-item">Pagos Reporte</a>
+               </li>
+            </ul>
+         </li>
+      </div>
+      <div class="nested-menu">
+         <a class="list-group-item" (click)="addExpandClass('administradorRegistroControl')">
+            <span class="fab fa-adn"></span>&nbsp;Administrador Registro y Control
+         </a>
+         <li class="nested" [class.expand]="showMenu === 'administradorRegistroControl'">
+            <ul class="submenu">
+               <li>
+                  <a [routerLink]="['/inner-account-admin']" [routerLinkActive]="['router-link-active']" class="list-group-item">Administración de Cuentas Inernas</a>
+               </li>    
+            </ul>
+         </li>
+      </div>
+
+      <div class="nested-menu">
+         <a class="list-group-item" (click)="addExpandClass('coordinador')">
+            <span class="fa fa-user-circle"></span>&nbsp;Coordinador
+         </a>
+         <li class="nested" [class.expand]="showMenu === 'coordinador'">
+            <ul class="submenu">
+               
+            </ul>
+         </li>
+      </div>
+      <div class="nested-menu">
+         <a class="list-group-item" (click)="addExpandClass('tecnicoFinanciero')">
+            <span class="fa fa-user-circle"></span>&nbsp;Técnico financiero
+         </a>
+         <li class="nested" [class.expand]="showMenu === 'tecnicoFinanciero'">
+            <ul class="submenu">
+               
+            </ul>
+         </li>
+      </div>
+      <div class="nested-menu">
+         <a class="list-group-item" (click)="addExpandClass('inspector')">
+            <span class="fa fa-male"></span>&nbsp;Inspector
+         </a>
+         <li class="nested" [class.expand]="showMenu === 'inspector'">
+            <ul class="submenu">
+               
+            </ul>
+         </li>
+      </div>
+      <div class="nested-menu">
+         <a class="list-group-item" (click)="addExpandClass('gestionPagos')">
+            <span class="fa fa-male"></span>&nbsp;Gestión de Pagos
+         </a>
+         <li class="nested" [class.expand]="showMenu === 'gestionPagos'">
+            <ul class="submenu">
+                   
+            </ul>
+         </li>
+      </div>
 
       <div class="nested-menu">
          <a class="list-group-item" (click)="addExpandClass('bdd auth')">
