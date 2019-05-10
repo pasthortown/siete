@@ -5,7 +5,7 @@
       </a>
       
       <div class="nested-menu">
-         <a class="list-group-item" (click)="addExpandClass('administrador')"*ngIf="isAdmin"||*ngIf="isCoAdminRuc"||*ngIf="isAdminRuc">
+         <a class="list-group-item" (click)="addExpandClass('administrador')" *ngIf="isAdmin || isCoAdminRuc || isAdminRuc">
             <span class="fab fa-adn"></span>&nbsp;Administrador
          </a>
          <li class="nested" [class.expand]="showMenu === 'administrador'">
@@ -109,10 +109,10 @@
       <a [routerLink]="['/coordinador']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="isCoAdminRuc">
          <i class="far fa-user-circle"></i>&nbsp; <span>Coordinador</span>
       </a>
-            <a [routerLink]="['/tecnico-financiero']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="isTecnF">
+      <a [routerLink]="['/tecnico-financiero']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="isTecnF">
          <i class="fa fa-credit-card"></i>&nbsp; <span>Técnico financiero</span>
-            </a>
-      <a [routerLink]="['/approval_state_report_register_alojamiento']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="isInsp">
+      </a>
+      <a [routerLink]="['/inspector']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="isInsp">
          <i class="fa fa-user-secret"></i>&nbsp; <span>Inspector</span>
       </a>
       <a [routerLink]="['/pagos']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="isGestorPag">
