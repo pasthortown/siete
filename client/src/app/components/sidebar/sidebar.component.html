@@ -3,6 +3,26 @@
       <a [routerLink]="['/main']" [routerLinkActive]="['router-link-active']" class="list-group-item">
          <i class="fas fa-tachometer-alt"></i>&nbsp; <span>Main</span>
       </a>
+      
+      <div class="nested-menu">
+         <a class="list-group-item" (click)="addExpandClass('administrador')">
+            <span class="fab fa-adn"></span>&nbsp;Administrador
+         </a>
+         <li class="nested" [class.expand]="showMenu === 'administrador'">
+            <ul class="submenu">
+               <li>
+                  <a [routerLink]="['/account_rol']" [routerLinkActive]="['router-link-active']" class="list-group-item">Roles</a>
+               </li>
+               <li>
+                  <a [routerLink]="['/account_rol_assigment']" [routerLinkActive]="['router-link-active']" class="list-group-item">Asignación de Roles</a>
+               </li>
+               <li>
+                  <a [routerLink]="['/auth_location']" [routerLinkActive]="['router-link-active']" class="list-group-item">Autorización por Localidad</a>
+               </li>
+            </ul>
+         </li>
+      </div>
+
       <div class="nested-menu">
          <a class="list-group-item" (click)="addExpandClass('bdd auth')">
             <span class="fas fa-database"></span>&nbsp;BDD AUTH
