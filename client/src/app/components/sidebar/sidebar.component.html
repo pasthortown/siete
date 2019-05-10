@@ -35,7 +35,7 @@
                   <a [routerLink]="['/pagos']" [routerLinkActive]="['router-link-active']" class="list-group-item">Pagos</a>
                </li>
                <li>
-                  <a [routerLink]="['/pagos-reporte']" [routerLinkActive]="['router-link-active']" class="list-group-item">Pagos Reporte</a>
+                  <a [routerLink]="['/pagos-reporte']" [routerLinkActive]="['router-link-active']" class="list-group-item">Reporte de Pagos</a>
                </li>
             </ul>
          </li>
@@ -52,48 +52,19 @@
             </ul>
          </li>
       </div>
-
-      <div class="nested-menu">
-         <a class="list-group-item" (click)="addExpandClass('coordinador')">
-            <span class="fa fa-user-circle"></span>&nbsp;Coordinador
-         </a>
-         <li class="nested" [class.expand]="showMenu === 'coordinador'">
-            <ul class="submenu">
-               
-            </ul>
-         </li>
-      </div>
-      <div class="nested-menu">
-         <a class="list-group-item" (click)="addExpandClass('tecnicoFinanciero')">
-            <span class="fa fa-user-circle"></span>&nbsp;Técnico financiero
-         </a>
-         <li class="nested" [class.expand]="showMenu === 'tecnicoFinanciero'">
-            <ul class="submenu">
-               
-            </ul>
-         </li>
-      </div>
-      <div class="nested-menu">
-         <a class="list-group-item" (click)="addExpandClass('inspector')">
-            <span class="fa fa-male"></span>&nbsp;Inspector
-         </a>
-         <li class="nested" [class.expand]="showMenu === 'inspector'">
-            <ul class="submenu">
-               
-            </ul>
-         </li>
-      </div>
-      <div class="nested-menu">
-         <a class="list-group-item" (click)="addExpandClass('gestionPagos')">
-            <span class="fa fa-male"></span>&nbsp;Gestión de Pagos
-         </a>
-         <li class="nested" [class.expand]="showMenu === 'gestionPagos'">
-            <ul class="submenu">
-                   
-            </ul>
-         </li>
-      </div>
-
+      <a [routerLink]="['/coordinador']" [routerLinkActive]="['router-link-active']" class="list-group-item">
+         <i class="far fa-user-circle"></i>&nbsp; <span>Coordinador</span>
+      </a>
+            <a [routerLink]="['/tecnico-financiero']" [routerLinkActive]="['router-link-active']" class="list-group-item">
+         <i class="fa fa-credit-card"></i>&nbsp; <span>Técnico financiero</span>
+      </a>
+      <a [routerLink]="['/approval_state_report_register_alojamiento']" [routerLinkActive]="['router-link-active']" class="list-group-item">
+         <i class="fa fa-user-secret"></i>&nbsp; <span>Inspector</span>
+      </a>
+      <a [routerLink]="['/pagos']" [routerLinkActive]="['router-link-active']" class="list-group-item">
+         <i class="far fa-money-bill-alt"></i>&nbsp; <span>Gestión de Pagos</span>
+      </a>
+      
       <div class="nested-menu">
          <a class="list-group-item" (click)="addExpandClass('bdd auth')">
             <span class="fas fa-database"></span>&nbsp;BDD AUTH
@@ -199,8 +170,8 @@
                <li>
                   <a [routerLink]="['/approval_state_attachment_register_alojamiento']" [routerLinkActive]="['router-link-active']" class="list-group-item">ApprovalStateAttachment</a>
                </li>
-               <li>
-                  <a [routerLink]="['/approval_state_report_register_alojamiento']" [routerLinkActive]="['router-link-active']" class="list-group-item">InspectorReport </a>
+               <li>approval_state_report_register_alojamiento
+                  <a [routerLink]="['/']" [routerLinkActive]="['router-link-active']" class="list-group-item">InspectorReport </a>
                </li>
             </ul>
          </li>
