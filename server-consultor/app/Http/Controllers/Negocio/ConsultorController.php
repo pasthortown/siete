@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Validator;
 use Exception;
-use SoapClient;
 use Illuminate\Http\Request;
 
 class ConsultorController extends Controller

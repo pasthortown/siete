@@ -85,6 +85,7 @@ $app->routeMiddleware([
 // $app->register(App\Providers\AppServiceProvider::class);
 $app->register(App\Providers\AuthServiceProvider::class);
 $app->register(Illuminate\Mail\MailServiceProvider::class);
+$app->register(Maatwebsite\Excel\ExcelServiceProvider::class);
 // $app->register(App\Providers\EventServiceProvider::class);
 
 /*
