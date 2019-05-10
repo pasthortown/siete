@@ -3,6 +3,7 @@ import { User } from './../../../models/profile/User';
 import { Component, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrManager } from 'ng6-toastr-notifications';
+import { DinardapService } from './../../../services/negocio/dinardap.service';
 
 @Component({
   selector: 'app-inner-financial-account-admin',
@@ -17,9 +18,14 @@ export class InnerFinancialAccountAdminComponent implements OnInit {
   lastPage = 1;
   recordsByPage = 5;
   ruc = '';
+  CedulaData = '';
+  identificationPersonValidated = false;
+  consumoCedula = false;
+  REGCIVILOK = false;
 
   constructor(private modalService: NgbModal,
               private toastr: ToastrManager,
+              private dinardapDataService: DinardapService,
               private userDataService: UserService) {}
 
   ngOnInit() {
@@ -53,6 +59,10 @@ export class InnerFinancialAccountAdminComponent implements OnInit {
 
   selectAccountRuc(accountRuc) {
     this.account_rucSelected = accountRuc;
+    this.CedulaData = '';
+    this.identificationPersonValidated = false;
+    this.consumoCedula = false;
+    this.REGCIVILOK = false;
   }
 
   newAccountRuc(content) {
@@ -84,6 +94,7 @@ export class InnerFinancialAccountAdminComponent implements OnInit {
   }
 
   openDialog(content) {
+    this.checkIdentification();
     this.modalService.open(content, { centered: true , size: 'lg' }).result.then(( response => {
        if ( response === 'Guardar click' ) {
           if (typeof this.account_rucSelected.id === 'undefined' || this.account_rucSelected.id === 0 ) {
@@ -100,4 +111,55 @@ export class InnerFinancialAccountAdminComponent implements OnInit {
        }
     }), ( r => {}));
   }
+
+  checkIdentification() {
+    this.account_rucSelected.identification = this.account_rucSelected.identification.replace(/[^\d]/, '');
+    if (this.account_rucSelected.identification.length !== 10) {
+       this.identificationPersonValidated = false;
+       this.consumoCedula = false;
+       this.account_rucSelected.name = '';
+      return;
+    }
+    if (this.consumoCedula && this.REGCIVILOK) {
+       return;
+    }
+    this.CedulaData = '<div class=\"progress mb-3\"><div class=\"progress-bar progress-bar-striped progress-bar-animated bg-warning col-12\">Espere...</div></div><div class="col-12 text-center"><strong>Conectándose al Registro Civil...</strong></div>';
+    if (!this.consumoCedula) {
+       this.identificationPersonValidated = true;
+       this.consumoCedula = true;
+       this.dinardapDataService.get_cedula(this.account_rucSelected.identification).then( r => {
+          const registros = r.return.instituciones.datosPrincipales.registros;
+          this.CedulaData = '';
+          this.REGCIVILOK = true;
+          registros.forEach(element => {
+             if (element.campo === 'cedula') {
+                if (element.valor === this.account_rucSelected.identification) {
+                   this.toastr.successToastr('La cédula ingresada es correcta.', 'Registro Civil');
+                   this.identificationPersonValidated = true;
+                } else {
+                   this.toastr.errorToastr('La cédula ingresada no es correcta.', 'Registro Civil');
+                   this.identificationPersonValidated = false;
+                }
+             }
+             if (this.identificationPersonValidated) {
+                if (element.campo === 'nombre') {
+                   this.CedulaData += '<strong>Nombre: </strong> ' + element.valor + '<br/>';
+                   this.account_rucSelected.name = element.valor;
+                }
+                if (element.campo === 'fechaNacimiento') {
+                   this.CedulaData += '<strong>Fecha de Nacimiento: </strong> ' + element.valor + '<br/>';
+                }
+                if (element.campo === 'nacionalidad') {
+                   this.CedulaData += '<strong>Nacionalidad: </strong> ' + element.valor + '<br/>';
+                }
+             }
+          });
+       }).catch( e => {
+          this.toastr.errorToastr('La cédula ingresada no es correcta.', 'Registro Civil');
+          this.CedulaData = '<div class="alert alert-danger" role="alert">El Registro Civil, no respondió. Vuelva a intentarlo.</div>';
+          this.REGCIVILOK = false;
+          this.consumoCedula = false;
+       });
+    }
+   }
 }

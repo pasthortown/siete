@@ -108,12 +108,26 @@
     <div class="modal-body">
         <div class="form-group">
             <label for="name">Nombre Completo</label>
-            <input type="text" class="form-control" id="name" placeholder="Nombre Completo" [(ngModel)]="account_rucSelected.name" />
+            <input type="text" class="form-control" id="name" placeholder="Nombre Completo" [(ngModel)]="account_rucSelected.name" disabled/>
         </div>
         <div class="form-group">
-            <label for="identification">Número de Cédula</label>
-            <input type="text" class="form-control" maxlength="10" id="identification" placeholder="Número de Cédula"
-                [(ngModel)]="account_rucSelected.identification" />
+            <label for="identification">Número de Cédula</label><span
+            *ngIf="!identificationPersonValidated"
+            class="ml-2 badge badge-danger">Incorrecto</span>
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <button type="button" class="btn btn-primary" title="Consultar con Registro Civil"
+                        (click)="checkIdentification()">
+                        <i class="fas fa-sync"></i>
+                    </button>
+                </div>
+                <input type="text" class="form-control" maxlength="10" id="identification" placeholder="Número de Cédula"
+                [(ngModel)]="account_rucSelected.identification" (keyup)="checkIdentification()"/>
+            </div>
+        </div>
+        <div class="col-12 mb-3">
+            <small *ngIf="identificationPersonValidated" id="cedulaRepresentanteHelp"
+            class="form-text text-muted" [innerHTML]="CedulaData"></small>
         </div>
         <div class="form-group">
             <label for="email">Correo Electrónico</label>
