@@ -5,7 +5,7 @@
       </a>
       
       <div class="nested-menu">
-         <a class="list-group-item" (click)="addExpandClass('administrador')">
+         <a class="list-group-item" (click)="addExpandClass('administrador')"*ngIf="isAdmin"||*ngIf="isCoAdminRuc"||*ngIf="isAdminRuc">
             <span class="fab fa-adn"></span>&nbsp;Administrador
          </a>
          <li class="nested" [class.expand]="showMenu === 'administrador'">
@@ -26,7 +26,7 @@
          </li>
       </div>
       <div class="nested-menu">
-         <a class="list-group-item" (click)="addExpandClass('administradorFinanciero')">
+         <a class="list-group-item" (click)="addExpandClass('administradorFinanciero')" *ngIf="isAdminF">
             <span class="fab fa-adn"></span>&nbsp;Administrador Financiero
          </a>
          <li class="nested" [class.expand]="showMenu === 'administradorFinanciero'">
@@ -44,7 +44,7 @@
          </li>
       </div>
       <div class="nested-menu">
-         <a class="list-group-item" (click)="addExpandClass('catalogoFinanciero')">
+         <a class="list-group-item" (click)="addExpandClass('catalogoFinanciero')" *ngIf="isAdminF">
             <span class="fas fa-database"></span>&nbsp;Catálogo Financiero
          </a>
          <li class="nested" [class.expand]="showMenu === 'catalogoFinanciero'">
@@ -62,7 +62,7 @@
          </li>
       </div>
       <div class="nested-menu">
-         <a class="list-group-item" (click)="addExpandClass('administradorRegistroControl')">
+         <a class="list-group-item" (click)="addExpandClass('administradorRegistroControl')" *ngIf="isAdminRegC">
             <span class="fab fa-adn"></span>&nbsp;Administrador Registro y Control
          </a>
          <li class="nested" [class.expand]="showMenu === 'administradorRegistroControl'">
@@ -74,7 +74,7 @@
          </li>
       </div>
       <div *ngIf="isAdmin" class="nested-menu">
-            <a class="list-group-item" (click)="addExpandClass('catalogoAlojamiento')">
+            <a class="list-group-item" (click)="addExpandClass('catalogoAlojamiento')" *ngIf="isAdminRegC">
                <span class="fas fa-database"></span>&nbsp;Catálogo de Alojamiento
             </a>
             <li class="nested" [class.expand]="showMenu === 'catalogoAlojamiento'">
@@ -106,16 +106,16 @@
                  </ul>
             </li>
          </div> 
-      <a [routerLink]="['/coordinador']" [routerLinkActive]="['router-link-active']" class="list-group-item">
+      <a [routerLink]="['/coordinador']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="isCoAdminRuc">
          <i class="far fa-user-circle"></i>&nbsp; <span>Coordinador</span>
       </a>
-            <a [routerLink]="['/tecnico-financiero']" [routerLinkActive]="['router-link-active']" class="list-group-item">
+            <a [routerLink]="['/tecnico-financiero']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="isTecnF">
          <i class="fa fa-credit-card"></i>&nbsp; <span>Técnico financiero</span>
             </a>
-      <a [routerLink]="['/approval_state_report_register_alojamiento']" [routerLinkActive]="['router-link-active']" class="list-group-item">
+      <a [routerLink]="['/approval_state_report_register_alojamiento']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="isInsp">
          <i class="fa fa-user-secret"></i>&nbsp; <span>Inspector</span>
       </a>
-      <a [routerLink]="['/pagos']" [routerLinkActive]="['router-link-active']" class="list-group-item">
+      <a [routerLink]="['/pagos']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="isGestorPag">
          <i class="far fa-money-bill-alt"></i>&nbsp; <span>Gestor de Pagos</span>
       </a>
       <div class="nested-menu">
