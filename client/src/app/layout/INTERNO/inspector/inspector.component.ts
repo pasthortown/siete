@@ -704,13 +704,41 @@ export class InspectorComponent implements OnInit {
      this.onChangeTable(this.config);
   }
 
+  getRequisitesSetByUser() {
+   this.registerDataService.get_requisites_set_by_user(this.idRegister).then( r => {
+      this.rucEstablishmentRegisterSelected.requisites = r as RegisterRequisite[];
+   }).catch( e => { console.log(e); });
+  }
+
   imprimirRequisitos() {
-     
-     const encabezado = [['Soy', 'La', 'Cabecera'], ['Soy', 'La', 'Cabecera']];
-     const cuerpo = [['Tengo', 'Un', 'Buen', 'Cuerpo'], ['Tengo', 'Un', 'Buen', 'Cuerpo'], ['Tengo', 'Un', 'Buen', 'Cuerpo'], ['Tengo', 'Un', 'Buen', 'Cuerpo']];
-     const nombre = 'prueba';
-     this.exporterDataService.excel_file(encabezado, cuerpo).then(r => {
-      window.open(environment.api_exporter + 'download/?file=' + r + '&name=' + nombre + '.xlsx');
+     const cuerpo = [['REQUISITOS PARA CATEGORIA-CLASIFICACIÓN']];
+     this.registerDataService.get_requisites_set_by_user(this.idRegister).then( r => {
+         this.rucEstablishmentRegisterSelected.requisites = r as RegisterRequisite[];
+         this.rucEstablishmentRegisterSelected.requisites.forEach(requisite => {
+            if (requisite.requisite_father_code !== '-') {
+               let fullfillText = 'No Cumple';
+               if (requisite.fullfill) {
+                  fullfillText = 'Cumple';
+               }
+               cuerpo.push([requisite.id.toString(), requisite.requisite_name.toString(), fullfillText, '']);
+            } else {
+               cuerpo.push(['', requisite.requisite_name.toString(), 'Resp. Usuario' , 'Cumple S/N']);
+            }
+         });
+         const today = new Date();
+         const encabezado = [['Día', today.getDate().toString(), 'Mes', (today.getMonth() + 1).toString(), 'Año', today.getFullYear().toString()],
+                             ['Nombre del Establecimiento', ''],
+                             ['Nombre del Propietario', ''],
+                             ['RUC', '', 'Teléfoo', '', 'Correo', ''],
+                             ['Provincia', '', 'Ciudad', ''],
+                             ['Dirección', ''],
+                             ['Número de Habitaciones', '', 'Número de Plazas', ''],
+                             ['Personas que Trabajan en el Establecimiento', 'Hombres', '', 'Mujeres', '', 'Discapacidad', ''],
+                           ];
+         const nombre = 'Prueba_de_Informe';
+         this.exporterDataService.excel_file(encabezado, cuerpo).then(r => {
+            window.open(environment.api_exporter + 'download/?file=' + r + '&name=' + nombre + '.xlsx');
+         }).catch( e => { console.log(e); });
      }).catch( e => { console.log(e); });
   }
 
