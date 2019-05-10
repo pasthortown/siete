@@ -16,6 +16,13 @@ export class SidebarComponent implements OnInit {
   profileImg = 'assets/images/accounts.png';
   roles: any;
   isAdmin = false;
+  isCoord = false;
+  isInsp = false;
+  isAdminF = false;
+  isTecnF = false;
+  isAdminRC = false;
+  isGestionPag = false;
+
 
   @Output() collapsedEvent = new EventEmitter<boolean>();
 
