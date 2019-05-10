@@ -1,3 +1,4 @@
+import { ExporterService } from './../../../services/negocio/exporter.service';
 import { ApprovalStateAttachmentService } from './../../../services/CRUD/ALOJAMIENTO/approvalstateattachment.service';
 import { ApprovalStateService } from './../../../services/CRUD/ALOJAMIENTO/approvalstate.service';
 import { RegisterService } from 'src/app/services/CRUD/ALOJAMIENTO/register.service';
@@ -78,6 +79,7 @@ import { Ng2TableModule } from 'ng2-table/ng2-table';
     RequisiteService,
     ApprovalStateService,
     AgreementService,
+    ExporterService,
     UbicationService,
     RegisterService,
     CapacityTypeService,

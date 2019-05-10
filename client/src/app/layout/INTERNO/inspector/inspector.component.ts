@@ -1,3 +1,4 @@
+import { environment } from 'src/environments/environment';
 import { ApprovalStateAttachmentService } from './../../../services/CRUD/ALOJAMIENTO/approvalstateattachment.service';
 import { ApprovalStateAttachment } from './../../../models/ALOJAMIENTO/ApprovalStateAttachment';
 import { ApprovalStateService } from './../../../services/CRUD/ALOJAMIENTO/approvalstate.service';
@@ -87,6 +88,7 @@ import { EstablishmentPictureService } from 'src/app/services/CRUD/BASE/establis
 import { EstablishmentCertificationAttachmentService } from 'src/app/services/CRUD/BASE/establishmentcertificationattachment.service';
 import { RegisterService } from 'src/app/services/CRUD/ALOJAMIENTO/register.service';
 import { RegisterStateService } from 'src/app/services/CRUD/ALOJAMIENTO/registerstate.service';
+import { ExporterService } from 'src/app/services/negocio/exporter.service';
 
 @Component({
   selector: 'app-registro',
@@ -266,6 +268,7 @@ export class InspectorComponent implements OnInit {
   idRegister: number = 0;
 
   constructor(private toastr: ToastrManager,
+              private exporterDataService: ExporterService,
               private approvalStateDataService: ApprovalStateService,
               private consultorDataService: ConsultorService,
               private userDataService: UserService,
@@ -702,17 +705,13 @@ export class InspectorComponent implements OnInit {
   }
 
   imprimirRequisitos() {
-      let output = 'Requisito;Declarado por el Solicitante;Validado por el Inspector\n';
-      const requisitos = this.rucEstablishmentRegisterSelected.requisites;
-      requisitos.forEach(element => {
-         if (element.requisite_father_code !== '-') {
-            output += element.requisite_name + '\n';
-         }
-         output += 'Requisito;Declarado por el Solicitante;Validado por el Inspector\n';
-      });
-      const blob = new Blob([output], { type: 'text/plain' });
-      const nombreArchivo = 'Formulario_de_requisitos_check_list_' + this.ruc_registro_selected.ruc.number + '.csv';
-      saveAs(blob, nombreArchivo);
+     
+     const encabezado = [['Soy', 'La', 'Cabecera'], ['Soy', 'La', 'Cabecera']];
+     const cuerpo = [['Tengo', 'Un', 'Buen', 'Cuerpo'], ['Tengo', 'Un', 'Buen', 'Cuerpo'], ['Tengo', 'Un', 'Buen', 'Cuerpo'], ['Tengo', 'Un', 'Buen', 'Cuerpo']];
+     const nombre = 'prueba';
+     this.exporterDataService.excel_file(encabezado, cuerpo).then(r => {
+      window.open(environment.api_exporter + 'download/?file=' + r + '&name=' + nombre + '.xlsx');
+     }).catch( e => { console.log(e); });
   }
 
   validateNotesInspection(): Boolean {
