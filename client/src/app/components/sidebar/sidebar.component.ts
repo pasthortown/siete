@@ -16,6 +16,14 @@ export class SidebarComponent implements OnInit {
   profileImg = 'assets/images/accounts.png';
   roles: any;
   isAdmin = false;
+  isAdminRuc = false;
+  isCoAdminRuc = false;
+  isAdminEst = false;
+  isInsp = false;
+  isAdminF = false;
+  isTecnF = false;
+  isAdminRegC = false;
+  isGestorPag = false;
 
   @Output() collapsedEvent = new EventEmitter<boolean>();
 
@@ -82,6 +90,29 @@ export class SidebarComponent implements OnInit {
     this.roles.forEach(element => {
       if(element.name === 'Administrador') {
         this.isAdmin = true;
+      }if(element.name === 'Administrador RUC') {
+        this.isAdminRuc = true;
+      }
+      if(element.name === 'Co-Administrador RUC') {
+        this.isCoAdminRuc = true;
+      }
+      if(element.name === 'Administrador Establecimiento') {
+        this.isAdminEst = true;
+      }
+      if(element.name === 'Inspector') {
+        this.isInsp = true;
+      }
+      if(element.name === 'Técnico Financiero') {
+        this.isTecnF = true;
+      }
+      if(element.name === 'Administrador Financiero') {
+        this.isAdminF = true;
+      }
+      if(element.name === 'Administrador Registro y Control') {
+        this.isAdminRegC = true;
+      }
+      if(element.name === 'Gestor de Pago') {
+        this.isGestorPag = true;
       }
     });
   }
