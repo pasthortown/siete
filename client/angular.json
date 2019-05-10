@@ -31,7 +31,6 @@
               "src/styles/styles.scss"
             ],
             "scripts": [
-              "node_modules/exceljs/dist/exceljs.min.js"
             ]
           },
           "configurations": {
