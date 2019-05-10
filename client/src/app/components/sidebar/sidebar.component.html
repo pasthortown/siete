@@ -41,6 +41,42 @@
          </li>
       </div>
       <div class="nested-menu">
+         <a class="list-group-item" (click)="addExpandClass('catalogoFinanciero')">
+            <span class="fas fa-database"></span>&nbsp;Catálogo Financiero
+         </a>
+         <li class="nested" [class.expand]="showMenu === 'catalogoFinanciero'">
+            <ul class="submenu">
+               <li>
+                  <a [routerLink]="['/declaration']" [routerLinkActive]="['router-link-active']" class="list-group-item">Declaration </a>
+               </li>
+               <li>
+                  <a [routerLink]="['/declaration_item']" [routerLinkActive]="['router-link-active']" class="list-group-item">DeclarationItem </a>
+               </li>
+               <li>
+                  <a [routerLink]="['/declaration_item_category']" [routerLinkActive]="['router-link-active']" class="list-group-item">DeclarationItemCategory </a>
+               </li>
+               <li>
+                  <a [routerLink]="['/state-financiero']" [routerLinkActive]="['router-link-active']" class="list-group-item">State </a>
+               </li>
+               <li>
+                  <a [routerLink]="['/state_declaration']" [routerLinkActive]="['router-link-active']" class="list-group-item">StateDeclaration </a>
+               </li>
+               <li>
+                  <a [routerLink]="['/pay']" [routerLinkActive]="['router-link-active']" class="list-group-item">Pay </a>
+               </li>
+               <li>
+                  <a [routerLink]="['/declaration_item_value']" [routerLinkActive]="['router-link-active']" class="list-group-item">DeclarationItemValue </a>
+               </li>
+               <li>
+                  <a [routerLink]="['/pay_attachment']" [routerLinkActive]="['router-link-active']" class="list-group-item">PayAttachment </a>
+               </li>
+               <li>
+                  <a [routerLink]="['/pay_mass_file_attachment']" [routerLinkActive]="['router-link-active']" class="list-group-item">PayMassFileAttachment </a>
+               </li>
+            </ul>
+         </li>
+      </div>
+      <div class="nested-menu">
          <a class="list-group-item" (click)="addExpandClass('administradorRegistroControl')">
             <span class="fab fa-adn"></span>&nbsp;Administrador Registro y Control
          </a>
@@ -57,14 +93,58 @@
       </a>
             <a [routerLink]="['/tecnico-financiero']" [routerLinkActive]="['router-link-active']" class="list-group-item">
          <i class="fa fa-credit-card"></i>&nbsp; <span>Técnico financiero</span>
-      </a>
+            </a>
       <a [routerLink]="['/approval_state_report_register_alojamiento']" [routerLinkActive]="['router-link-active']" class="list-group-item">
          <i class="fa fa-user-secret"></i>&nbsp; <span>Inspector</span>
       </a>
       <a [routerLink]="['/pagos']" [routerLinkActive]="['router-link-active']" class="list-group-item">
          <i class="far fa-money-bill-alt"></i>&nbsp; <span>Gestión de Pagos</span>
       </a>
-      
+      <div *ngIf="isAdmin" class="nested-menu">
+         <a class="list-group-item" (click)="addExpandClass('catalogoAlojamiento')">
+            <span class="fas fa-database"></span>&nbsp;Catálogo de Alojamiento
+         </a>
+         <li class="nested" [class.expand]="showMenu === 'catalogoAlojamiento'">
+            <ul class="submenu">
+               <li>
+                  <a [routerLink]="['/state-alojamiento']" [routerLinkActive]="['router-link-active']" class="list-group-item">Estado Registro</a>
+               </li>
+               <li>
+                  <a [routerLink]="['/requisite']" [routerLinkActive]="['router-link-active']" class="list-group-item">Requisitos</a>
+               </li>
+               <li>
+                  <a [routerLink]="['/complementary_service_type']" [routerLinkActive]="['router-link-active']" class="list-group-item">Servicios Complementarios</a>
+               </li>
+               <li>
+                  <a [routerLink]="['/register_type']" [routerLinkActive]="['router-link-active']" class="list-group-item">Tipos de Registro </a>
+               </li>
+               <li>
+                  <a [routerLink]="['/tariff_type']" [routerLinkActive]="['router-link-active']" class="list-group-item">Tipos Tarifarios</a>
+               </li>
+               <li>
+                  <a [routerLink]="['/bed_type']" [routerLinkActive]="['router-link-active']" class="list-group-item">Tipos Cama</a>
+               </li>
+               <li>
+                  <a [routerLink]="['/capacity_type']" [routerLinkActive]="['router-link-active']" class="list-group-item">Tipos de Ambiente</a>
+               </li>
+               <li>
+                  <a [routerLink]="['/complementary_service_food_type']" [routerLinkActive]="['router-link-active']" class="list-group-item">Tipos de Capacidades Complementarias </a>
+               </li>
+               <li>
+                  <a [routerLink]="['/approval_register_alojamiento']" [routerLinkActive]="['router-link-active']" class="list-group-item">Approval </a>
+               </li>
+               <li>
+                  <a [routerLink]="['/approval_state_register_alojamiento']" [routerLinkActive]="['router-link-active']" class="list-group-item">ApprovalState </a>
+               </li>
+               <li>
+                  <a [routerLink]="['/approval_state_attachment_register_alojamiento']" [routerLinkActive]="['router-link-active']" class="list-group-item">ApprovalStateAttachment</a>
+               </li>
+               <li>approval_state_report_register_alojamiento
+                  <a [routerLink]="['/']" [routerLinkActive]="['router-link-active']" class="list-group-item">InspectorReport </a>
+               </li>
+            </ul>
+         </li>
+      </div> 
       <div class="nested-menu">
          <a class="list-group-item" (click)="addExpandClass('bdd auth')">
             <span class="fas fa-database"></span>&nbsp;BDD AUTH
