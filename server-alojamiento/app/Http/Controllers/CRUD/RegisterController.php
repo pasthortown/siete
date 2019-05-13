@@ -67,7 +67,7 @@ class RegisterController extends Controller
       $token = $data->header('api_token');
       $number = $data['ruc_number'];
       try{
-         $establishments = json_decode($this->httpGet('http://localhost:8001/establishment/get_by_ruc?size=1000&ruc='.$number, null, null, $token))->data;
+         $establishments = json_decode($this->httpGet(env('API_BASE').'establishment/get_by_ruc?size=1000&ruc='.$number, null, null, $token))->data;
       } catch (Exception $e) {
          $establishments = [];
       }

@@ -230,9 +230,9 @@ class EstablishmentController extends Controller
       $token = $data->header('api_token');
       $respuesta = "0";
       if($contact_user['id'] == 0){
-         $respuesta = $this->httpPost('http://localhost:8000/user/register_user_establishment', json_encode($contact_user), null, $token);
+         $respuesta = $this->httpPost(env('API_AUTH').'user/register_user_establishment', json_encode($contact_user), null, $token);
       }else {
-         $respuesta = $this->httpPut('http://localhost:8000/user/update_user_establishment', json_encode($contact_user), null, $token);
+         $respuesta = $this->httpPut(env('API_AUTH').'user/update_user_establishment', json_encode($contact_user), null, $token);
       }
       if($respuesta == "0"){
          return response()->json("0", 200);
@@ -421,7 +421,7 @@ class EstablishmentController extends Controller
       $id = $data['id'];
       $token = $data->header('api_token');
       $establishment = Establishment::where('id', $id)->first();
-      $contact_user = json_decode($this->httpGet('http://localhost:8000/user/?id='.$establishment->contact_user_id, null, null, $token));
+      $contact_user = json_decode($this->httpGet(env('API_AUTH').'user/?id='.$establishment->contact_user_id, null, null, $token));
       $languages_on_establishment = $establishment->Languages()->get();
       $workers_on_establishment = $establishment->Workers()->get();
       $establishment_certifications_on_establishment = $establishment->EstablishmentCertifications()->get();

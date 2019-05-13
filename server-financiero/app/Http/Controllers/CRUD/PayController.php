@@ -39,8 +39,8 @@ class PayController extends Controller
       $toReturn = [];
       foreach ($pays as $pay) {
          $ruc_id = $pay->ruc_id;
-         $ruc = json_decode($this->httpGet('http://localhost:8001/ruc/?id='.$ruc_id, null, null, $token));
-         $user = json_decode($this->httpGet('http://localhost:8000/user/?id='.$ruc->Ruc->contact_user_id, null, null, $token));
+         $ruc = json_decode($this->httpGet(env('API_BASE').'ruc/?id='.$ruc_id, null, null, $token));
+         $user = json_decode($this->httpGet(env('API_AUTH').'user/?id='.$ruc->Ruc->contact_user_id, null, null, $token));
          array_push($toReturn, ["RUC"=>$ruc, "pay"=>$pay, "user"=>$user]);
       }
       return response()->json($toReturn,200);
@@ -85,7 +85,7 @@ class PayController extends Controller
     {
        $token = $data->header('api_token'); 
        $number = $data['number'];
-       $ruc = json_decode($this->httpGet('http://localhost:8001/ruc/get_by_ruc_number?number='.$number, null, null, $token));
+       $ruc = json_decode($this->httpGet(env('API_BASE').'ruc/get_by_ruc_number?number='.$number, null, null, $token));
        return response()->json(Pay::where('ruc_id', $ruc->id)->orderBy('created_at', 'DESC')->get(),200);
     }
 

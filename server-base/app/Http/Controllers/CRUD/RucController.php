@@ -55,7 +55,7 @@ class RucController extends Controller
       $franchise_chain_names_on_ruc = $ruc->FranchiseChainNames()->get();
       array_push($attach, ["franchise_chain_names_on_ruc"=>$franchise_chain_names_on_ruc]);
       $token = $data->header('api_token');
-      $user = json_decode($this->httpGet('http://localhost:8000/user/?id='.$ruc->contact_user_id, null, null, $token));
+      $user = json_decode($this->httpGet(env('API_AUTH').'user/?id='.$ruc->contact_user_id, null, null, $token));
       return response()->json(["Ruc"=>$ruc, "attach"=>$attach, 'contact_user'=>$user, 'group_given'=>$groupGiven, 'person_representative'=>$representativePerson],200);
     }
 
@@ -164,7 +164,7 @@ class RucController extends Controller
          }
        }
        try{
-          $respuesta = $this->httpPost('http://localhost:8000/user/register_user_coadminruc', json_encode($contact_user), null, $token);
+          $respuesta = $this->httpPost(env('API_AUTH').'user/register_user_coadminruc', json_encode($contact_user), null, $token);
           if($respuesta == "0"){
              return response()->json("0", 200);
           }
@@ -283,7 +283,7 @@ class RucController extends Controller
          }
       }
       try{
-         $respuesta = $this->httpPut('http://localhost:8000/user/update_user_coadminruc', json_encode($contact_user), null, $token);
+         $respuesta = $this->httpPut(env('API_AUTH').'user/update_user_coadminruc', json_encode($contact_user), null, $token);
          if($respuesta == "0"){
             return response()->json("0", 200);
          }
