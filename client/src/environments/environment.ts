@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   api_auth: 'http://ws-pruebas.turismo.gob.ec:8000/',
-  api_dinardap: 'http://ws-pruebas.turismo.gob.ec:9000/',
+  api_dinardap: 'http://ws-interno.turismo.gob.ec:9000/',
   api_consultor: 'http://ws-pruebas.turismo.gob.ec:9001/',
   api_exporter: 'http://ws-pruebas.turismo.gob.ec:9002/',
   api_base: 'http://ws-pruebas.turismo.gob.ec:8001/',
