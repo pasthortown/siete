@@ -1533,7 +1533,7 @@
                       </div>
                     </div>
                     <div class="col-12">
-                      <ngb-accordion #acc="ngbAccordion" activeIds="ngb-panel-0">
+                      <ngb-accordion #acc="ngbAccordion" activeIds="ngb-panel-0" (panelChange)="getRequisitesSetByUser()">
                         <ngb-panel id="requisitos">
                           <ng-template ngbPanelTitle>
                             <span>Visualizar Listado de Requisitos</span>

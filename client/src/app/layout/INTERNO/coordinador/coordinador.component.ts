@@ -626,6 +626,12 @@ export class CoordinadorComponent implements OnInit {
    this.getSpecificStates();
   }
 
+  getRequisitesSetByUser() {
+   this.registerDataService.get_requisites_set_by_user(this.idRegister).then( r => {
+      this.rucEstablishmentRegisterSelected.requisites = r as RegisterRequisite[];
+   }).catch( e => { console.log(e); });
+  }
+
   onChangeTable(config: any, page: any = {page: this.currentPageMinturRegisters, itemsPerPage: this.recordsByPageRegisterMintur}): any {
    if (config.filtering) {
      Object.assign(this.config.filtering, config.filtering);
