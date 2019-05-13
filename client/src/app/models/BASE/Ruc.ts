@@ -16,6 +16,7 @@ export class Ruc {
    contact_user_id: number;
    tax_payer_type_id: number;
    contact_user: User;
+   owner_name: String;
    establishments: Establishment[];
    establishmentsSRI: EstablishmentOnRuc[];
    franchise_chain_names_on_ruc: FranchiseChainName[];
@@ -30,6 +31,7 @@ export class Ruc {
       this.contact_user_id = 0;
       this.contact_user = new User();
       this.number = '';
+      this.owner_name = '';
       this.baised_accounting = false;
    }
 }

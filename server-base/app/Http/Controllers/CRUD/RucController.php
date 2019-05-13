@@ -78,6 +78,7 @@ class RucController extends Controller
              $ruc->id = 1;
           }
           $ruc->number = $result['number'];
+          $ruc->owner_name = $result['owner_name'];
           $ruc->baised_accounting = $result['baised_accounting'];
           $ruc->contact_user_id = $result['contact_user_id'];
           $ruc->tax_payer_type_id = $result['tax_payer_type_id'];
@@ -180,6 +181,7 @@ class RucController extends Controller
           $ruc->number = $result['number'];
           $ruc->baised_accounting = $result['baised_accounting'];
           $ruc->contact_user_id = $contact_user_id;
+          $ruc->owner_name = $result['owner_name'];
           $ruc->tax_payer_type_id = $result['tax_payer_type_id'];
           $ruc->save();
           $franchise_chain_names_on_ruc = $result['franchise_chain_names_on_ruc'];
@@ -293,6 +295,7 @@ class RucController extends Controller
             'number'=>$result['number'],
             'baised_accounting'=>$result['baised_accounting'],
             'contact_user_id'=>$contact_user_id,
+            'owner_name'=>$result['owner_name'],
             'tax_payer_type_id'=>$result['tax_payer_type_id'],
          ]);
          $ruc = Ruc::where('id',$result['id'])->first();
@@ -365,6 +368,7 @@ class RucController extends Controller
              'number'=>$result['number'],
              'baised_accounting'=>$result['baised_accounting'],
              'contact_user_id'=>$result['contact_user_id'],
+             'owner_name'=>$result['owner_name'],
              'tax_payer_type_id'=>$result['tax_payer_type_id'],
           ]);
           $ruc = Ruc::where('id',$result['id'])->first();
@@ -431,6 +435,7 @@ class RucController extends Controller
            Ruc::where('id', $result['id'])->update([
              'number'=>$result['number'],
              'baised_accounting'=>$result['baised_accounting'],
+             'owner_name'=>$result['owner_name'],
              'contact_user_id'=>$result['contact_user_id'],
              'tax_payer_type_id'=>$result['tax_payer_type_id'],
            ]);
@@ -440,6 +445,7 @@ class RucController extends Controller
           $ruc->number = $result['number'];
           $ruc->baised_accounting = $result['baised_accounting'];
           $ruc->contact_user_id = $result['contact_user_id'];
+          $ruc->owner_name = $result['owner_name'];
           $ruc->tax_payer_type_id = $result['tax_payer_type_id'];
           $ruc->save();
          }

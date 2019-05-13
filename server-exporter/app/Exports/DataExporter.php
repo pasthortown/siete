@@ -15,6 +15,6 @@ class DataExporter implements FromArray
 
     public function array(): array
     {
-        return $this->data;
+        return [[3],[5,6,7]];
     }
 }

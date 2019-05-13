@@ -726,19 +726,21 @@ export class InspectorComponent implements OnInit {
             }
          });
          const today = new Date();
-         const encabezado = [['Día', today.getDate().toString(), 'Mes', (today.getMonth() + 1).toString(), 'Año', today.getFullYear().toString()],
-                             ['Nombre del Establecimiento', ''],
-                             ['Nombre del Propietario', ''],
-                             ['RUC', '', 'Teléfoo', '', 'Correo', ''],
+         const contacto = this.userDataService.get(this.registerMinturSelected.establishment.contact_user_id).then(r => {
+            const encabezado = [['Día', today.getDate().toString(), 'Mes', (today.getMonth() + 1).toString(), 'Año', today.getFullYear().toString()],
+                             ['Nombre del Establecimiento', this.registerMinturSelected.establishment.commercially_known_name ],
+                             ['Nombre de Contacto', r.name],
+                             ['RUC', this.registerMinturSelected.ruc.number, 'Teléfono', r.main_phone_number, 'Correo', r.email],
                              ['Provincia', '', 'Ciudad', ''],
-                             ['Dirección', ''],
+                             ['Dirección', this.registerMinturSelected.establishment.address],
                              ['Número de Habitaciones', '', 'Número de Plazas', ''],
                              ['Personas que Trabajan en el Establecimiento', 'Hombres', '', 'Mujeres', '', 'Discapacidad', ''],
                            ];
-         const nombre = 'Prueba_de_Informe';
-         this.exporterDataService.excel_file(encabezado, cuerpo).then(r => {
-            window.open(environment.api_exporter + 'download/?file=' + r + '&name=' + nombre + '.xlsx');
-         }).catch( e => { console.log(e); });
+            const nombre = 'Prueba_de_Informe';
+            this.exporterDataService.excel_file(encabezado, cuerpo).then(r => {
+               window.open(environment.api_exporter + 'download/?file=' + r + '&name=' + nombre + '.xlsx');
+            }).catch( e => { console.log(e); });
+         }).catch( e => {console.log(e);} );
      }).catch( e => { console.log(e); });
   }
 

@@ -12,7 +12,7 @@ class Ruc extends Model
      * @var array
      */
     protected $fillable = [
-       'number','baised_accounting','contact_user_id',
+       'number','baised_accounting','contact_user_id','owner_name',
     ];
 
     /**

@@ -1773,6 +1773,7 @@ export class RegistroComponent implements OnInit {
       this.dinardapDataService.get_cedula(this.ruc_registro_selected.ruc.person_representative.identification).then( r => {
          const registros = r.return.instituciones.datosPrincipales.registros;
          this.representanteCedulaData = '';
+         this.ruc_registro_selected.ruc.owner_name = '';
          this.REGCIVILREPRESENTANTELEGALOK = true;
          registros.forEach(element => {
             if (element.campo === 'cedula') {
@@ -1787,6 +1788,7 @@ export class RegistroComponent implements OnInit {
             if (this.identificationRepresentativePersonValidated) {
                if (element.campo === 'nombre') {
                   this.representanteCedulaData += '<strong>Nombre: </strong> ' + element.valor + '<br/>';
+                  this.ruc_registro_selected.ruc.owner_name = element.valor;
                }
                if (element.campo === 'fechaNacimiento') {
                   this.representanteCedulaData += '<strong>Fecha de Nacimiento: </strong> ' + element.valor + '<br/>';
