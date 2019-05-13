@@ -24,6 +24,7 @@ export class SidebarComponent implements OnInit {
   isTecnF = false;
   isAdminRegC = false;
   isGestorPag = false;
+  isExternal = false;
 
   @Output() collapsedEvent = new EventEmitter<boolean>();
 
@@ -86,6 +87,16 @@ export class SidebarComponent implements OnInit {
   }
 
   checkRols() {
+    this.isAdmin = false;
+    this.isAdminRuc = false;
+    this.isCoAdminRuc = false;
+    this.isAdminEst = false;
+    this.isInsp = false;
+    this.isAdminF = false;
+    this.isTecnF = false;
+    this.isAdminRegC = false;
+    this.isGestorPag = false;
+    this.isExternal = false;
     this.roles = JSON.parse(sessionStorage.getItem('roles'));
     this.roles.forEach(element => {
       if(element.name === 'Administrador') {
@@ -114,6 +125,18 @@ export class SidebarComponent implements OnInit {
       if(element.name === 'Gestor de Pago') {
         this.isGestorPag = true;
       }
+      if (!this.isAdmin &&
+          !this.isAdminRuc &&
+          !this.isCoAdminRuc &&
+          !this.isAdminEst &&
+          !this.isInsp &&
+          !this.isTecnF &&
+          !this.isAdminF &&
+          !this.isAdminRegC &&
+          !this.isGestorPag
+        ) {
+          this.isExternal = true;
+        }
     });
   }
 }
