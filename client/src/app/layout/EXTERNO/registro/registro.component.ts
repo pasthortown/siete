@@ -775,7 +775,7 @@ export class RegistroComponent implements OnInit {
   }
 
   validateRuc(): Boolean {
-     let validateRepresentantLegalId = true;cd
+     let validateRepresentantLegalId = true;
      if(this.ruc_registro_selected.ruc.tax_payer_type_id > 1) {
         validateRepresentantLegalId = this.identificationRepresentativePersonValidated;
         return this.identificationContactValidated &&
