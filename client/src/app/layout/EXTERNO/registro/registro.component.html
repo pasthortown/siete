@@ -982,16 +982,16 @@
                 <div class="col-12">
                   <div class="row">
                     <div class="col-12">
+                      <div class="alert alert-info mt-2 mb-2" role="alert">
+                        <label class="col-12 text-justify"><strong>Atención</strong></label><br />
+                        Seleccione el establecimiento declarado como turístico al que desea asociar la nueva solicitud de trámite.
+                      </div>
+                    </div>
+                    <div class="col-12">
                       <div class="form-group">
                         <label>Establecimiento</label><span
                           *ngIf="rucEstablishmentRegisterSelected.establishment_id == 0"
                           class="ml-2 badge badge-danger">Incorrecto</span>
-                        <div class="col-12">
-                          <div class="alert alert-info mt-2 mb-2" role="alert">
-                            <label class="col-12 text-justify"><strong>Atención</strong></label><br />
-                            Seleccione el establecimiento declarado como turístico al que desea asociar la nueva solicitud de trámite.
-                          </div>
-                        </div>
                         <select class="form-control" id="establishment_id" name="establishment_id"
                           [(ngModel)]="rucEstablishmentRegisterSelected.establishment_id" [disabled]="!rucEstablishmentRegisterSelected.editable">
                           <option value="0" selected>Seleccione...</option>
@@ -1290,6 +1290,12 @@
                   </div>
                   <div class="row" *ngIf="rucEstablishmentRegisterSelected.autorized_complementary_food_capacities">
                     <div class="col-12">
+                      <div class="alert alert-info mt-2 mb-2" role="alert">
+                        <label class="col-12 text-justify"><strong>Atención</strong></label><br />
+                        Seleccione aquellos servicios complementarios que oferta en su establecimiento.
+                      </div>
+                    </div>
+                    <div class="col-12">
                       <table class="table table-hover mt-2">
                         <thead>
                           <th>Seleccionado
@@ -1364,6 +1370,12 @@
                     ">
                     <label class="col-12 col-form-label mb-2"><strong>Servicios Complementarios de
                         Aventura</strong></label>
+                    <div class="col-12">
+                      <div class="alert alert-info mt-2 mb-2" role="alert">
+                        <label class="col-12 text-justify"><strong>Atención</strong></label><br />
+                        Seleccione aquellos servicios complementarios de aventura que oferta en su establecimiento.
+                      </div>
+                    </div>
                     <label class="col-4 col-form-label">Servicios Complementarios de Aventura</label>
                     <div class="col-8">
                       <div class="input-group">
@@ -1674,6 +1686,12 @@
                 </div>
                 <div class="row">
                   <div class="col-12">
+                    <div class="alert alert-info mt-2 mb-2" role="alert">
+                      <label class="col-12 text-justify"><strong>Atención</strong></label><br />
+                      Seleccione el año que va a declarar.
+                    </div>
+                  </div>
+                  <div class="col-12">
                     <div class="form-group">
                       <label>Año a Declarar</label>
                       <input type="number" class="form-control" id="declarationYear" name="declarationYear"
@@ -1682,6 +1700,12 @@
                   </div>
                 </div>
                 <div class="row">
+                  <div class="col-12">
+                    <div class="alert alert-warning mt-2 mb-2" role="alert">
+                      <label class="col-12 text-justify"><strong>Atención</strong></label><br />
+                      Los valores declarados son sú responsabilidad y usted acepta las consecuencias legales que deriven de una declaración incorrecta o fraudulenta.
+                    </div>
+                  </div>
                   <div class="col-12">
                     <table class="table table-hover mt-2">
                       <tbody *ngFor="let declarationItemToShow of declarationItemsToShow">
