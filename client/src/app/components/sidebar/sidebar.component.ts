@@ -25,6 +25,7 @@ export class SidebarComponent implements OnInit {
   isAdminRegC = false;
   isGestorPag = false;
   isExternal = false;
+  isCoordinadorZonal = false;
 
   @Output() collapsedEvent = new EventEmitter<boolean>();
 
@@ -97,6 +98,7 @@ export class SidebarComponent implements OnInit {
     this.isAdminRegC = false;
     this.isGestorPag = false;
     this.isExternal = false;
+    this.isCoordinadorZonal = false;
     this.roles = JSON.parse(sessionStorage.getItem('roles'));
     this.roles.forEach(element => {
       if(element.name === 'Administrador') {
@@ -125,6 +127,9 @@ export class SidebarComponent implements OnInit {
       if(element.name === 'Gestor de Pago') {
         this.isGestorPag = true;
       }
+      if(element.name === 'Coordinador Zonal') {
+        this.isCoordinadorZonal = true;
+      }
       if (!this.isAdmin &&
           !this.isAdminRuc &&
           !this.isCoAdminRuc &&
@@ -133,7 +138,8 @@ export class SidebarComponent implements OnInit {
           !this.isTecnF &&
           !this.isAdminF &&
           !this.isAdminRegC &&
-          !this.isGestorPag
+          !this.isGestorPag &&
+          !this.isCoordinadorZonal
         ) {
           this.isExternal = true;
         }
