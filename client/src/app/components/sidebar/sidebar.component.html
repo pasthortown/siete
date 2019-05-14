@@ -5,7 +5,7 @@
       </a>
       
       <div class="nested-menu">
-         <a class="list-group-item" (click)="addExpandClass('administrador')" *ngIf="isAdmin || isCoAdminRuc || isAdminRuc">
+         <a class="list-group-item" (click)="addExpandClass('administrador')" *ngIf="isAdmin">
             <span class="fab fa-adn"></span>&nbsp;Administrador
          </a>
          <li class="nested" [class.expand]="showMenu === 'administrador'">
@@ -298,9 +298,9 @@
             </ul>
          </li>
       </div>
-      <div *ngIf="isExternal" class="nested-menu">
+      <div *ngIf="isExternal || isAdminRuc || isCoAdminRuc || isAdminEst" class="nested-menu">
          <a class="list-group-item" (click)="addExpandClass('externo')">
-            <span class="fas fa-newspaper"></span>&nbsp;Registros
+            <span class="fas fa-newspaper"></span>&nbsp;Alojamiento
          </a>
          <li class="nested" [class.expand]="showMenu === 'externo'">
             <ul class="submenu">
