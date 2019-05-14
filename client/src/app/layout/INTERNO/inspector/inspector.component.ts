@@ -1058,22 +1058,29 @@ export class InspectorComponent implements OnInit {
   }
 
   validateRuc(): Boolean {
-     let validateRepresentantLegalId = true;
-     if(this.ruc_registro_selected.ruc.tax_payer_type_id > 1) {
-        validateRepresentantLegalId = this.identificationRepresentativePersonValidated;
-     }
-     return this.identificationContactValidated &&
-     this.rucValidated &&
-     this.mainPhoneContactValidated &&
-     this.secondaryPhoneContactValidated &&
-     this.emailContactValidated &&
-     this.validateNombramiento() &&
-     this.validateGroupGivenTipe() &&
-     validateRepresentantLegalId &&
-     this.REGCIVILOK &&
-     this.SRIOK &&
-     this.REGCIVILREPRESENTANTELEGALOK;
-  }
+      let validateRepresentantLegalId = true;
+      if(this.ruc_registro_selected.ruc.tax_payer_type_id > 1) {
+         validateRepresentantLegalId = this.identificationRepresentativePersonValidated;
+         return this.identificationContactValidated &&
+         this.rucValidated &&
+         this.mainPhoneContactValidated &&
+         this.secondaryPhoneContactValidated &&
+         this.emailContactValidated &&
+         this.validateNombramiento() &&
+         this.validateGroupGivenTipe() &&
+         validateRepresentantLegalId &&
+         this.REGCIVILOK &&
+         this.SRIOK &&
+         this.REGCIVILREPRESENTANTELEGALOK;
+      }
+      return this.identificationContactValidated &&
+      this.rucValidated &&
+      this.mainPhoneContactValidated &&
+      this.secondaryPhoneContactValidated &&
+      this.emailContactValidated &&
+      this.REGCIVILOK &&
+      this.SRIOK;
+   }
 
   refresh() {
     this.registerMinturSelected = new Register();
