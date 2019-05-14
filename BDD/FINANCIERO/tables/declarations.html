@@ -120,35 +120,11 @@
 				 <td>
 				  <table border='0' cellspacing='0' cellpadding='0'>
 				   <tr>
-					<td title="approval_state_declaration.declaration_id references declarations.id via approval_state_declaration_declaration_id_foreign">
-						<a href='approval_state_declaration.html'>approval_state_declaration</a><span class='relatedKey'>.declaration_id</span>
-					</td>
-					<td class="constraint detail">
-						approval_state_declaration_declaration_id_foreign <span title='Cascade on delete:&#10;Deletion of parent deletes child'>C</span>
-					</td>
-				   </tr>
-				   <tr>
-					<td title="declaration_attachments.declaration_id references declarations.id via declaration_attachments_declaration_id_foreign">
-						<a href='declaration_attachments.html'>declaration_attachments</a><span class='relatedKey'>.declaration_id</span>
-					</td>
-					<td class="constraint detail">
-						declaration_attachments_declaration_id_foreign <span title='Cascade on delete:&#10;Deletion of parent deletes child'>C</span>
-					</td>
-				   </tr>
-				   <tr>
 					<td title="declaration_declaration_item_value.declaration_id references declarations.id via declaration_declaration_item_value_declaration_id_foreign">
 						<a href='declaration_declaration_item_value.html'>declaration_declaration_item_value</a><span class='relatedKey'>.declaration_id</span>
 					</td>
 					<td class="constraint detail">
 						declaration_declaration_item_value_declaration_id_foreign <span title='Cascade on delete:&#10;Deletion of parent deletes child'>C</span>
-					</td>
-				   </tr>
-				   <tr>
-					<td title="pays.declaration_id references declarations.id via pays_declaration_id_foreign">
-						<a href='pays.html'>pays</a><span class='relatedKey'>.declaration_id</span>
-					</td>
-					<td class="constraint detail">
-						pays_declaration_id_foreign <span title='Cascade on delete:&#10;Deletion of parent deletes child'>C</span>
 					</td>
 				   </tr>
 				   <tr>
@@ -330,28 +306,20 @@
             <div class="tab-content no-padding">            
 				<div class="chart tab-pane active" id="oneDegreeImg-chart" style="position: relative; overflow-x:auto;">					
 					<map id="oneDegreeRelationshipsDiagram" name="oneDegreeRelationshipsDiagram">
-<area shape="rect" id="node1" href="approval_state_declaration.html" title="approval_state_declaration" alt="" coords="393,5,686,181">
-<area shape="rect" id="node2" href="declarations.html" title="declarations" alt="" coords="5,419,312,693">
-<area shape="rect" id="node3" href="declaration_attachments.html" title="declaration_attachments" alt="" coords="361,199,718,345">
-<area shape="rect" id="node4" href="declaration_declaration_item_value.html" title="declaration_declaration_item_value" alt="" coords="356,363,723,539">
-<area shape="rect" id="node5" href="pays.html" title="pays" alt="" coords="447,556,632,703">
-<area shape="rect" id="node6" href="state_declarations.html" title="state_declarations" alt="" coords="432,720,647,896">
+<area shape="rect" id="node1" href="declaration_declaration_item_value.html" title="declaration_declaration_item_value" alt="" coords="356,5,723,181">
+<area shape="rect" id="node2" href="declarations.html" title="declarations" alt="" coords="5,144,312,419">
+<area shape="rect" id="node3" href="state_declarations.html" title="state_declarations" alt="" coords="432,199,647,375">
 </map>
 
 					<a name='diagram'><img id='oneDegreeImg' src='../diagrams/declarations.1degree.png' usemap='#oneDegreeRelationshipsDiagram' class='diagram' border='0' alt='' align='left'></a>							
 				</div>
 				<div class="chart tab-pane " id="twodegreesDegreeImg-chart" style="position: relative; overflow-x:auto;">					
 					<map id="twoDegreesRelationshipsDiagram" name="twoDegreesRelationshipsDiagram">
-<area shape="rect" id="node1" href="approval_state_declaration.html" title="approval_state_declaration" alt="" coords="393,5,686,181">
-<area shape="rect" id="node2" href="approval_states.html" title="approval_states" alt="" coords="63,37,255,125">
-<area shape="rect" id="node3" href="declarations.html" title="declarations" alt="" coords="5,325,312,600">
-<area shape="rect" id="node4" href="declaration_attachments.html" title="declaration_attachments" alt="" coords="361,363,718,509">
-<area shape="rect" id="node5" href="declaration_declaration_item_value.html" title="declaration_declaration_item_value" alt="" coords="356,527,723,703">
-<area shape="rect" id="node6" href="declaration_item_values.html" title="declaration_item_values" alt="" coords="34,617,283,705">
-<area shape="rect" id="node7" href="pay_attachments.html" title="pay_attachments" alt="" coords="767,201,967,289">
-<area shape="rect" id="node8" href="pays.html" title="pays" alt="" coords="447,199,632,345">
-<area shape="rect" id="node9" href="state_declarations.html" title="state_declarations" alt="" coords="432,720,647,896">
-<area shape="rect" id="node10" href="states.html" title="states" alt="" coords="97,781,220,869">
+<area shape="rect" id="node1" href="declaration_declaration_item_value.html" title="declaration_declaration_item_value" alt="" coords="356,15,723,191">
+<area shape="rect" id="node2" href="declarations.html" title="declarations" alt="" coords="5,111,312,385">
+<area shape="rect" id="node3" href="declaration_item_values.html" title="declaration_item_values" alt="" coords="34,5,283,93">
+<area shape="rect" id="node4" href="state_declarations.html" title="state_declarations" alt="" coords="432,255,647,431">
+<area shape="rect" id="node5" href="states.html" title="states" alt="" coords="97,403,220,491">
 </map>
 
 					<a name='diagram'><img id='twodegreesDegreeImg' src='../diagrams/declarations.2degrees.png' usemap='#twoDegreesRelationshipsDiagram' class='diagram' border='0' alt='' align='left'></a>							

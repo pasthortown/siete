@@ -221,9 +221,9 @@
 				 <td></td>
 				</tr>
 				<tr>
-				 <td><span id="annotation">annotation</span></td>
-				 <td>text</td>
-				 <td>2147483647</td>
+				 <td><span id="payed">payed</span></td>
+				 <td>bool</td>
+				 <td>1</td>
 				 <td title='nullable'>√</td>
 				 <td title=''></td>
 				 <td>null</td>
@@ -238,10 +238,10 @@
 				 <td></td>
 				</tr>
 				<tr>
-				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i><span id="declaration_id">declaration_id</span></td>
-				 <td>int4</td>
-				 <td>10</td>
-				 <td title=''></td>
+				 <td><span id="code">code</span></td>
+				 <td>varchar</td>
+				 <td>50</td>
+				 <td title='nullable'>√</td>
 				 <td title=''></td>
 				 <td>null</td>
 				 <td>
@@ -250,21 +250,47 @@
 				 </td>
 				 <td>
 				  <table border='0' cellspacing='0' cellpadding='0'>
-				   <tr>
-					<td title="pays.declaration_id references declarations.id via pays_declaration_id_foreign">
-						<a href='declarations.html'>declarations</a><span class='relatedKey'>.id</span>
-					</td>
-					<td class="constraint detail">
-						pays_declaration_id_foreign <span title='Cascade on delete:&#10;Deletion of parent deletes child'>C</span>
-					</td>
-				   </tr>
+				  </table>					 
+				 </td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td><span id="max_pay_date">max_pay_date</span></td>
+				 <td>timestamp</td>
+				 <td>22</td>
+				 <td title='nullable'>√</td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td>
+				  <table border='0' cellspacing='0' cellpadding='0'>
+				  </table>				 
+				 </td>
+				 <td>
+				  <table border='0' cellspacing='0' cellpadding='0'>
+				  </table>					 
+				 </td>
+				 <td></td>
+				</tr>
+				<tr>
+				 <td><span id="ruc_id">ruc_id</span></td>
+				 <td>int4</td>
+				 <td>10</td>
+				 <td title='nullable'>√</td>
+				 <td title=''></td>
+				 <td>null</td>
+				 <td>
+				  <table border='0' cellspacing='0' cellpadding='0'>
+				  </table>				 
+				 </td>
+				 <td>
+				  <table border='0' cellspacing='0' cellpadding='0'>
 				  </table>					 
 				 </td>
 				 <td></td>
 				</tr>
 								</tbody>
 				</table>
-				<p title='8 columns'>Table contained <span id="recordNumber">0</span> rows<p/>
+				<p title='10 columns'>Table contained <span id="recordNumber">0</span> rows<p/>
 			</div>
 		</div>
 		<div class="box box-primary">		
@@ -318,30 +344,15 @@
 			<h5>Close relationships within degrees of separation</h5>
             <ul class="nav nav-tabs pull-left ui-sortable-handle">
 			  			              <li class="active"><a href="#oneDegreeImg-chart" data-toggle="tab" aria-expanded="true">One</a></li>			  			 
-			  			              <li class=""><a href="#twodegreesDegreeImg-chart" data-toggle="tab" aria-expanded="true">Two degrees</a></li>			  			 
             </ul>
             <div class="tab-content no-padding">            
 				<div class="chart tab-pane active" id="oneDegreeImg-chart" style="position: relative; overflow-x:auto;">					
 					<map id="oneDegreeRelationshipsDiagram" name="oneDegreeRelationshipsDiagram">
-<area shape="rect" id="node1" href="pay_attachments.html" title="pay_attachments" alt="" coords="607,5,895,152">
-<area shape="rect" id="node2" href="pays.html" title="pays" alt="" coords="252,32,563,336">
-<area shape="rect" id="node3" href="declarations.html" title="declarations" alt="" coords="5,240,208,357">
+<area shape="rect" id="node1" href="pay_attachments.html" title="pay_attachments" alt="" coords="339,5,627,152">
+<area shape="rect" id="node2" href="pays.html" title="pays" alt="" coords="5,32,295,395">
 </map>
 
 					<a name='diagram'><img id='oneDegreeImg' src='../diagrams/pays.1degree.png' usemap='#oneDegreeRelationshipsDiagram' class='diagram' border='0' alt='' align='left'></a>							
-				</div>
-				<div class="chart tab-pane " id="twodegreesDegreeImg-chart" style="position: relative; overflow-x:auto;">					
-					<map id="twoDegreesRelationshipsDiagram" name="twoDegreesRelationshipsDiagram">
-<area shape="rect" id="node1" href="approval_state_declaration.html" title="approval_state_declaration" alt="" coords="281,5,551,93">
-<area shape="rect" id="node2" href="declarations.html" title="declarations" alt="" coords="5,213,208,331">
-<area shape="rect" id="node3" href="declaration_attachments.html" title="declaration_attachments" alt="" coords="289,111,543,199">
-<area shape="rect" id="node4" href="declaration_declaration_item_value.html" title="declaration_declaration_item_value" alt="" coords="252,216,580,304">
-<area shape="rect" id="node5" href="pay_attachments.html" title="pay_attachments" alt="" coords="624,295,912,441">
-<area shape="rect" id="node6" href="pays.html" title="pays" alt="" coords="261,321,571,625">
-<area shape="rect" id="node7" href="state_declarations.html" title="state_declarations" alt="" coords="311,643,521,731">
-</map>
-
-					<a name='diagram'><img id='twodegreesDegreeImg' src='../diagrams/pays.2degrees.png' usemap='#twoDegreesRelationshipsDiagram' class='diagram' border='0' alt='' align='left'></a>							
 				</div>
 			  			</div>
 			</div>

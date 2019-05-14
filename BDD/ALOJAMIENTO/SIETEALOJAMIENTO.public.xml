@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<database name="SIETEALOJAMIENTO" schema="public" type="PostgreSQL - 11.2 (Ubuntu 11.2-1.pgdg18.04+1)">
+<database name="SIETEALOJAMIENTO" schema="public" type="PostgreSQL - 11.3">
    <tables>
       <table name="approval_state_attachments" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('approval_state_attachments_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial"/>
@@ -65,7 +65,7 @@
             <column ascending="true" name="id"/>
          </index>
       </table>
-      <table name="bed_capacity" numRows="3" remarks="" schema="public" type="TABLE">
+      <table name="bed_capacity" numRows="2" remarks="" schema="public" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('bed_capacity_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial"/>
          <column autoUpdated="false" digits="0" id="1" name="created_at" nullable="true" remarks="" size="22" type="timestamp"/>
          <column autoUpdated="false" digits="0" id="2" name="updated_at" nullable="true" remarks="" size="22" type="timestamp"/>
@@ -96,7 +96,7 @@
             <column ascending="true" name="id"/>
          </index>
       </table>
-      <table name="beds" numRows="3" remarks="" schema="public" type="TABLE">
+      <table name="beds" numRows="2" remarks="" schema="public" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('beds_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial">
             <child column="bed_id" foreignKey="bed_capacity_bed_id_foreign" implied="false" onDeleteCascade="true" schema="public" table="bed_capacity"/>
          </column>
@@ -111,7 +111,7 @@
             <column ascending="true" name="id"/>
          </index>
       </table>
-      <table name="capacities" numRows="2" remarks="" schema="public" type="TABLE">
+      <table name="capacities" numRows="1" remarks="" schema="public" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('capacities_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial">
             <child column="capacity_id" foreignKey="bed_capacity_capacity_id_foreign" implied="false" onDeleteCascade="true" schema="public" table="bed_capacity"/>
             <child column="capacity_id" foreignKey="capacity_pictures_capacity_id_foreign" implied="false" onDeleteCascade="true" schema="public" table="capacity_pictures"/>
@@ -144,7 +144,7 @@
             <column ascending="true" name="id"/>
          </index>
       </table>
-      <table name="capacity_register" numRows="2" remarks="" schema="public" type="TABLE">
+      <table name="capacity_register" numRows="1" remarks="" schema="public" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('capacity_register_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial"/>
          <column autoUpdated="false" digits="0" id="1" name="created_at" nullable="true" remarks="" size="22" type="timestamp"/>
          <column autoUpdated="false" digits="0" id="2" name="updated_at" nullable="true" remarks="" size="22" type="timestamp"/>
@@ -159,7 +159,7 @@
             <column ascending="true" name="id"/>
          </index>
       </table>
-      <table name="capacity_tariff" numRows="8" remarks="" schema="public" type="TABLE">
+      <table name="capacity_tariff" numRows="4" remarks="" schema="public" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('capacity_tariff_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial"/>
          <column autoUpdated="false" digits="0" id="1" name="created_at" nullable="true" remarks="" size="22" type="timestamp"/>
          <column autoUpdated="false" digits="0" id="2" name="updated_at" nullable="true" remarks="" size="22" type="timestamp"/>
@@ -191,7 +191,7 @@
             <column ascending="true" name="id"/>
          </index>
       </table>
-      <table name="complementary_service_food_register" numRows="3" remarks="" schema="public" type="TABLE">
+      <table name="complementary_service_food_register" numRows="1" remarks="" schema="public" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('complementary_service_food_register_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial"/>
          <column autoUpdated="false" digits="0" id="1" name="created_at" nullable="true" remarks="" size="22" type="timestamp"/>
          <column autoUpdated="false" digits="0" id="2" name="updated_at" nullable="true" remarks="" size="22" type="timestamp"/>
@@ -218,7 +218,7 @@
             <column ascending="true" name="id"/>
          </index>
       </table>
-      <table name="complementary_service_foods" numRows="3" remarks="" schema="public" type="TABLE">
+      <table name="complementary_service_foods" numRows="1" remarks="" schema="public" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('complementary_service_foods_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial">
             <child column="complementary_service_food_id" foreignKey="complementary_service_food_register_complementary_service_food_" implied="false" onDeleteCascade="true" schema="public" table="complementary_service_food_register"/>
          </column>
@@ -264,7 +264,7 @@
             <column ascending="true" name="id"/>
          </index>
       </table>
-      <table name="logs" numRows="12" remarks="" schema="public" type="TABLE">
+      <table name="logs" numRows="10" remarks="" schema="public" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('logs_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial"/>
          <column autoUpdated="false" digits="0" id="1" name="created_at" nullable="true" remarks="" size="22" type="timestamp"/>
          <column autoUpdated="false" digits="0" id="2" name="updated_at" nullable="true" remarks="" size="22" type="timestamp"/>
@@ -376,13 +376,13 @@
             <column ascending="true" name="id"/>
          </index>
       </table>
-      <table name="states" numRows="49" remarks="" schema="public" type="TABLE">
+      <table name="states" numRows="70" remarks="" schema="public" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('states_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial">
             <child column="state_id" foreignKey="register_states_state_id_foreign" implied="false" onDeleteCascade="true" schema="public" table="register_states"/>
          </column>
          <column autoUpdated="false" digits="0" id="1" name="created_at" nullable="true" remarks="" size="22" type="timestamp"/>
          <column autoUpdated="false" digits="0" id="2" name="updated_at" nullable="true" remarks="" size="22" type="timestamp"/>
-         <column autoUpdated="false" digits="0" id="3" name="name" nullable="true" remarks="" size="50" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="3" name="name" nullable="true" remarks="" size="100" type="varchar"/>
          <column autoUpdated="false" digits="0" id="4" name="description" nullable="true" remarks="" size="2147483647" type="text"/>
          <column autoUpdated="false" digits="0" id="5" name="code" nullable="true" remarks="" size="20" type="varchar"/>
          <column autoUpdated="false" digits="0" id="6" name="father_code" nullable="true" remarks="" size="20" type="varchar"/>
@@ -407,7 +407,7 @@
             <column ascending="true" name="id"/>
          </index>
       </table>
-      <table name="tariffs" numRows="8" remarks="" schema="public" type="TABLE">
+      <table name="tariffs" numRows="4" remarks="" schema="public" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('tariffs_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial">
             <child column="tariff_id" foreignKey="capacity_tariff_tariff_id_foreign" implied="false" onDeleteCascade="true" schema="public" table="capacity_tariff"/>
          </column>

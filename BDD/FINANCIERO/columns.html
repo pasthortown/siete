@@ -106,9 +106,9 @@
 				</thead>
 				<tbody>
 					<tr>
-					 <td>approval_state_declaration</td>
+					 <td>declaration_items</td>
 					 <td>Table</td>
-					 <td>updated_at</td>
+					 <td>created_at</td>
 					 <td>timestamp</td>
 					 <td>22</td>
 					 <td title='nullable'>√</td>
@@ -119,7 +119,282 @@
 					<tr>
 					 <td>pays</td>
 					 <td>Table</td>
+					 <td>max_pay_date</td>
+					 <td>timestamp</td>
+					 <td>22</td>
+					 <td title='nullable'>√</td>
+					 <td title=''></td>
+					 <td>null</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>declaration_item_values</td>
+					 <td>Table</td>
+					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>declaration_item_id</td>
+					 <td>int4</td>
+					 <td>10</td>
+					 <td title=''></td>
+					 <td title=''></td>
+					 <td>null</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>logs</td>
+					 <td>Table</td>
+					 <td>date_time</td>
+					 <td>timestamp</td>
+					 <td>22</td>
+					 <td title='nullable'>√</td>
+					 <td title=''></td>
+					 <td>null</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>pay_attachments</td>
+					 <td>Table</td>
+					 <td>pay_attachment_file_name</td>
+					 <td>varchar</td>
+					 <td>50</td>
+					 <td title='nullable'>√</td>
+					 <td title=''></td>
+					 <td>null</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>declaration_item_categories</td>
+					 <td>Table</td>
+					 <td>description</td>
+					 <td>text</td>
+					 <td>2147483647</td>
+					 <td title='nullable'>√</td>
+					 <td title=''></td>
+					 <td>null</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>migrations</td>
+					 <td>Table</td>
+					 <td>migration</td>
+					 <td>varchar</td>
+					 <td>255</td>
+					 <td title=''></td>
+					 <td title=''></td>
+					 <td>null</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>state_declarations</td>
+					 <td>Table</td>
+					 <td>justification</td>
+					 <td>text</td>
+					 <td>2147483647</td>
+					 <td title='nullable'>√</td>
+					 <td title=''></td>
+					 <td>null</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>declaration_items</td>
+					 <td>Table</td>
+					 <td>description</td>
+					 <td>text</td>
+					 <td>2147483647</td>
+					 <td title='nullable'>√</td>
+					 <td title=''></td>
+					 <td>null</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>declaration_item_values</td>
+					 <td>Table</td>
+					 <td>value</td>
+					 <td>float8</td>
+					 <td>17</td>
+					 <td title='nullable'>√</td>
+					 <td title=''></td>
+					 <td>null</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>pay_mass_file_attachments</td>
+					 <td>Table</td>
 					 <td>updated_at</td>
+					 <td>timestamp</td>
+					 <td>22</td>
+					 <td title='nullable'>√</td>
+					 <td title=''></td>
+					 <td>null</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>state_declarations</td>
+					 <td>Table</td>
+					 <td>updated_at</td>
+					 <td>timestamp</td>
+					 <td>22</td>
+					 <td title='nullable'>√</td>
+					 <td title=''></td>
+					 <td>null</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>pay_mass_file_attachments</td>
+					 <td>Table</td>
+					 <td>created_at</td>
+					 <td>timestamp</td>
+					 <td>22</td>
+					 <td title='nullable'>√</td>
+					 <td title=''></td>
+					 <td>null</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>pays</td>
+					 <td>Table</td>
+					 <td>amount_payed</td>
+					 <td>float8</td>
+					 <td>17</td>
+					 <td title='nullable'>√</td>
+					 <td title=''></td>
+					 <td>null</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>pay_mass_file_attachments</td>
+					 <td>Table</td>
+					 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
+					 <td>serial</td>
+					 <td>10</td>
+					 <td title=''></td>
+					 <td title='Automatically updated by the database'>√</td>
+					 <td>nextval(&#39;pay_mass_file_attachments_id_seq&#39;::regclass)</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>pays</td>
+					 <td>Table</td>
+					 <td>code</td>
+					 <td>varchar</td>
+					 <td>50</td>
+					 <td title='nullable'>√</td>
+					 <td title=''></td>
+					 <td>null</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>logs</td>
+					 <td>Table</td>
+					 <td>user_id</td>
+					 <td>int4</td>
+					 <td>10</td>
+					 <td title=''></td>
+					 <td title=''></td>
+					 <td>null</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>declaration_declaration_item_value</td>
+					 <td>Table</td>
+					 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
+					 <td>serial</td>
+					 <td>10</td>
+					 <td title=''></td>
+					 <td title='Automatically updated by the database'>√</td>
+					 <td>nextval(&#39;declaration_declaration_item_value_id_seq&#39;::regclass)</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>pays</td>
+					 <td>Table</td>
+					 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
+					 <td>serial</td>
+					 <td>10</td>
+					 <td title=''></td>
+					 <td title='Automatically updated by the database'>√</td>
+					 <td>nextval(&#39;pays_id_seq&#39;::regclass)</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>states</td>
+					 <td>Table</td>
+					 <td>name</td>
+					 <td>varchar</td>
+					 <td>50</td>
+					 <td title='nullable'>√</td>
+					 <td title=''></td>
+					 <td>null</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>declarations</td>
+					 <td>Table</td>
+					 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
+					 <td>serial</td>
+					 <td>10</td>
+					 <td title=''></td>
+					 <td title='Automatically updated by the database'>√</td>
+					 <td>nextval(&#39;declarations_id_seq&#39;::regclass)</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>pays</td>
+					 <td>Table</td>
+					 <td>amount_to_pay</td>
+					 <td>float8</td>
+					 <td>17</td>
+					 <td title='nullable'>√</td>
+					 <td title=''></td>
+					 <td>null</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>pay_mass_file_attachments</td>
+					 <td>Table</td>
+					 <td>pay_mass_file_attachment_file</td>
+					 <td>text</td>
+					 <td>2147483647</td>
+					 <td title='nullable'>√</td>
+					 <td title=''></td>
+					 <td>null</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>pay_mass_file_attachments</td>
+					 <td>Table</td>
+					 <td>date</td>
+					 <td>timestamp</td>
+					 <td>22</td>
+					 <td title='nullable'>√</td>
+					 <td title=''></td>
+					 <td>null</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>declaration_declaration_item_value</td>
+					 <td>Table</td>
+					 <td>created_at</td>
+					 <td>timestamp</td>
+					 <td>22</td>
+					 <td title='nullable'>√</td>
+					 <td title=''></td>
+					 <td>null</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>pay_attachments</td>
+					 <td>Table</td>
+					 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
+					 <td>serial</td>
+					 <td>10</td>
+					 <td title=''></td>
+					 <td title='Automatically updated by the database'>√</td>
+					 <td>nextval(&#39;pay_attachments_id_seq&#39;::regclass)</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>declarations</td>
+					 <td>Table</td>
+					 <td>created_at</td>
 					 <td>timestamp</td>
 					 <td>22</td>
 					 <td title='nullable'>√</td>
@@ -141,122 +416,12 @@
 					<tr>
 					 <td>declaration_items</td>
 					 <td>Table</td>
-					 <td>created_at</td>
-					 <td>timestamp</td>
-					 <td>22</td>
-					 <td title='nullable'>√</td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>state_declarations</td>
-					 <td>Table</td>
 					 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
 					 <td>serial</td>
 					 <td>10</td>
 					 <td title=''></td>
 					 <td title='Automatically updated by the database'>√</td>
-					 <td>nextval(&#39;state_declarations_id_seq&#39;::regclass)</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>approval_states</td>
-					 <td>Table</td>
-					 <td>value</td>
-					 <td>bool</td>
-					 <td>1</td>
-					 <td title='nullable'>√</td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>state_declarations</td>
-					 <td>Table</td>
-					 <td>justification</td>
-					 <td>text</td>
-					 <td>2147483647</td>
-					 <td title='nullable'>√</td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>states</td>
-					 <td>Table</td>
-					 <td>name</td>
-					 <td>varchar</td>
-					 <td>50</td>
-					 <td title='nullable'>√</td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>declarations</td>
-					 <td>Table</td>
-					 <td>created_at</td>
-					 <td>timestamp</td>
-					 <td>22</td>
-					 <td title='nullable'>√</td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>declaration_attachments</td>
-					 <td>Table</td>
-					 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
-					 <td>serial</td>
-					 <td>10</td>
-					 <td title=''></td>
-					 <td title='Automatically updated by the database'>√</td>
-					 <td>nextval(&#39;declaration_attachments_id_seq&#39;::regclass)</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>state_declarations</td>
-					 <td>Table</td>
-					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>state_id</td>
-					 <td>int4</td>
-					 <td>10</td>
-					 <td title=''></td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>logs</td>
-					 <td>Table</td>
-					 <td>created_at</td>
-					 <td>timestamp</td>
-					 <td>22</td>
-					 <td title='nullable'>√</td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>approvals</td>
-					 <td>Table</td>
-					 <td>name</td>
-					 <td>varchar</td>
-					 <td>50</td>
-					 <td title='nullable'>√</td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>approval_states</td>
-					 <td>Table</td>
-					 <td>date</td>
-					 <td>timestamp</td>
-					 <td>22</td>
-					 <td title='nullable'>√</td>
-					 <td title=''></td>
-					 <td>null</td>
+					 <td>nextval(&#39;declaration_items_id_seq&#39;::regclass)</td>
 					 <td></td>
 					</tr>
 					<tr>
@@ -271,23 +436,12 @@
 					 <td></td>
 					</tr>
 					<tr>
-					 <td>declaration_items</td>
+					 <td>pay_attachments</td>
 					 <td>Table</td>
-					 <td>year</td>
-					 <td>int4</td>
-					 <td>10</td>
+					 <td>updated_at</td>
+					 <td>timestamp</td>
+					 <td>22</td>
 					 <td title='nullable'>√</td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>state_declarations</td>
-					 <td>Table</td>
-					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>declaration_id</td>
-					 <td>int4</td>
-					 <td>10</td>
-					 <td title=''></td>
 					 <td title=''></td>
 					 <td>null</td>
 					 <td></td>
@@ -304,504 +458,9 @@
 					 <td></td>
 					</tr>
 					<tr>
-					 <td>declaration_item_values</td>
-					 <td>Table</td>
-					 <td>created_at</td>
-					 <td>timestamp</td>
-					 <td>22</td>
-					 <td title='nullable'>√</td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>migrations</td>
-					 <td>Table</td>
-					 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
-					 <td>serial</td>
-					 <td>10</td>
-					 <td title=''></td>
-					 <td title='Automatically updated by the database'>√</td>
-					 <td>nextval(&#39;migrations_id_seq&#39;::regclass)</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>declaration_item_values</td>
-					 <td>Table</td>
-					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>declaration_item_id</td>
-					 <td>int4</td>
-					 <td>10</td>
-					 <td title=''></td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>approvals</td>
-					 <td>Table</td>
-					 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
-					 <td>serial</td>
-					 <td>10</td>
-					 <td title=''></td>
-					 <td title='Automatically updated by the database'>√</td>
-					 <td>nextval(&#39;approvals_id_seq&#39;::regclass)</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>declaration_items</td>
-					 <td>Table</td>
-					 <td>tax_payer_type_id</td>
-					 <td>int4</td>
-					 <td>10</td>
-					 <td title='nullable'>√</td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>declaration_items</td>
-					 <td>Table</td>
-					 <td>factor</td>
-					 <td>int4</td>
-					 <td>10</td>
-					 <td title='nullable'>√</td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>declaration_items</td>
-					 <td>Table</td>
-					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>declaration_item_category_id</td>
-					 <td>int4</td>
-					 <td>10</td>
-					 <td title=''></td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>declaration_item_categories</td>
-					 <td>Table</td>
-					 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
-					 <td>serial</td>
-					 <td>10</td>
-					 <td title=''></td>
-					 <td title='Automatically updated by the database'>√</td>
-					 <td>nextval(&#39;declaration_item_categories_id_seq&#39;::regclass)</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>approval_state_declaration</td>
-					 <td>Table</td>
-					 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
-					 <td>serial</td>
-					 <td>10</td>
-					 <td title=''></td>
-					 <td title='Automatically updated by the database'>√</td>
-					 <td>nextval(&#39;approval_state_declaration_id_seq&#39;::regclass)</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>declaration_items</td>
-					 <td>Table</td>
-					 <td>name</td>
-					 <td>varchar</td>
-					 <td>1024</td>
-					 <td title='nullable'>√</td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>migrations</td>
-					 <td>Table</td>
-					 <td>batch</td>
-					 <td>int4</td>
-					 <td>10</td>
-					 <td title=''></td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>declaration_declaration_item_value</td>
-					 <td>Table</td>
-					 <td>updated_at</td>
-					 <td>timestamp</td>
-					 <td>22</td>
-					 <td title='nullable'>√</td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>declaration_attachments</td>
-					 <td>Table</td>
-					 <td>updated_at</td>
-					 <td>timestamp</td>
-					 <td>22</td>
-					 <td title='nullable'>√</td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>pay_attachments</td>
-					 <td>Table</td>
-					 <td>pay_attachment_file_name</td>
-					 <td>varchar</td>
-					 <td>50</td>
-					 <td title='nullable'>√</td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>pay_attachments</td>
-					 <td>Table</td>
-					 <td>updated_at</td>
-					 <td>timestamp</td>
-					 <td>22</td>
-					 <td title='nullable'>√</td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>logs</td>
-					 <td>Table</td>
-					 <td>user_id</td>
-					 <td>int4</td>
-					 <td>10</td>
-					 <td title=''></td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>pays</td>
-					 <td>Table</td>
-					 <td>amount_to_pay</td>
-					 <td>float8</td>
-					 <td>17</td>
-					 <td title='nullable'>√</td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>declarations</td>
-					 <td>Table</td>
-					 <td>declaration_date</td>
-					 <td>timestamp</td>
-					 <td>22</td>
-					 <td title='nullable'>√</td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>pay_attachments</td>
-					 <td>Table</td>
-					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>pay_id</td>
-					 <td>int4</td>
-					 <td>10</td>
-					 <td title=''></td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>declarations</td>
-					 <td>Table</td>
-					 <td>max_date_to_pay</td>
-					 <td>timestamp</td>
-					 <td>22</td>
-					 <td title='nullable'>√</td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>pays</td>
-					 <td>Table</td>
-					 <td>pay_date</td>
-					 <td>timestamp</td>
-					 <td>22</td>
-					 <td title='nullable'>√</td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>pay_attachments</td>
-					 <td>Table</td>
-					 <td>created_at</td>
-					 <td>timestamp</td>
-					 <td>22</td>
-					 <td title='nullable'>√</td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>declarations</td>
-					 <td>Table</td>
-					 <td>year</td>
-					 <td>int4</td>
-					 <td>10</td>
-					 <td title='nullable'>√</td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td></td>
-					</tr>
-					<tr>
 					 <td>states</td>
 					 <td>Table</td>
-					 <td>description</td>
-					 <td>text</td>
-					 <td>2147483647</td>
-					 <td title='nullable'>√</td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>declaration_item_values</td>
-					 <td>Table</td>
-					 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
-					 <td>serial</td>
-					 <td>10</td>
-					 <td title=''></td>
-					 <td title='Automatically updated by the database'>√</td>
-					 <td>nextval(&#39;declaration_item_values_id_seq&#39;::regclass)</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>declarations</td>
-					 <td>Table</td>
 					 <td>updated_at</td>
-					 <td>timestamp</td>
-					 <td>22</td>
-					 <td title='nullable'>√</td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>migrations</td>
-					 <td>Table</td>
-					 <td>migration</td>
-					 <td>varchar</td>
-					 <td>255</td>
-					 <td title=''></td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>declaration_items</td>
-					 <td>Table</td>
-					 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
-					 <td>serial</td>
-					 <td>10</td>
-					 <td title=''></td>
-					 <td title='Automatically updated by the database'>√</td>
-					 <td>nextval(&#39;declaration_items_id_seq&#39;::regclass)</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>declaration_attachments</td>
-					 <td>Table</td>
-					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>declaration_id</td>
-					 <td>int4</td>
-					 <td>10</td>
-					 <td title=''></td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>pays</td>
-					 <td>Table</td>
-					 <td>amount_payed</td>
-					 <td>float8</td>
-					 <td>17</td>
-					 <td title='nullable'>√</td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>declarations</td>
-					 <td>Table</td>
-					 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
-					 <td>serial</td>
-					 <td>10</td>
-					 <td title=''></td>
-					 <td title='Automatically updated by the database'>√</td>
-					 <td>nextval(&#39;declarations_id_seq&#39;::regclass)</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>declaration_attachments</td>
-					 <td>Table</td>
-					 <td>declaration_attachment_file_name</td>
-					 <td>varchar</td>
-					 <td>50</td>
-					 <td title='nullable'>√</td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>approvals</td>
-					 <td>Table</td>
-					 <td>created_at</td>
-					 <td>timestamp</td>
-					 <td>22</td>
-					 <td title='nullable'>√</td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>declaration_items</td>
-					 <td>Table</td>
-					 <td>description</td>
-					 <td>text</td>
-					 <td>2147483647</td>
-					 <td title='nullable'>√</td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>state_declarations</td>
-					 <td>Table</td>
-					 <td>created_at</td>
-					 <td>timestamp</td>
-					 <td>22</td>
-					 <td title='nullable'>√</td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>state_declarations</td>
-					 <td>Table</td>
-					 <td>updated_at</td>
-					 <td>timestamp</td>
-					 <td>22</td>
-					 <td title='nullable'>√</td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>pays</td>
-					 <td>Table</td>
-					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>declaration_id</td>
-					 <td>int4</td>
-					 <td>10</td>
-					 <td title=''></td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>states</td>
-					 <td>Table</td>
-					 <td>created_at</td>
-					 <td>timestamp</td>
-					 <td>22</td>
-					 <td title='nullable'>√</td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>approval_states</td>
-					 <td>Table</td>
-					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>approval_id</td>
-					 <td>int4</td>
-					 <td>10</td>
-					 <td title=''></td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>pay_attachments</td>
-					 <td>Table</td>
-					 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
-					 <td>serial</td>
-					 <td>10</td>
-					 <td title=''></td>
-					 <td title='Automatically updated by the database'>√</td>
-					 <td>nextval(&#39;pay_attachments_id_seq&#39;::regclass)</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>declaration_declaration_item_value</td>
-					 <td>Table</td>
-					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>declaration_id</td>
-					 <td>int4</td>
-					 <td>10</td>
-					 <td title=''></td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>declaration_item_values</td>
-					 <td>Table</td>
-					 <td>updated_at</td>
-					 <td>timestamp</td>
-					 <td>22</td>
-					 <td title='nullable'>√</td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>pays</td>
-					 <td>Table</td>
-					 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
-					 <td>serial</td>
-					 <td>10</td>
-					 <td title=''></td>
-					 <td title='Automatically updated by the database'>√</td>
-					 <td>nextval(&#39;pays_id_seq&#39;::regclass)</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>declarations</td>
-					 <td>Table</td>
-					 <td>establishment_id</td>
-					 <td>int4</td>
-					 <td>10</td>
-					 <td title='nullable'>√</td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>approval_state_declaration</td>
-					 <td>Table</td>
-					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>declaration_id</td>
-					 <td>int4</td>
-					 <td>10</td>
-					 <td title=''></td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>pays</td>
-					 <td>Table</td>
-					 <td>created_at</td>
 					 <td>timestamp</td>
 					 <td>22</td>
 					 <td title='nullable'>√</td>
@@ -821,121 +480,11 @@
 					 <td></td>
 					</tr>
 					<tr>
-					 <td>logs</td>
-					 <td>Table</td>
-					 <td>date_time</td>
-					 <td>timestamp</td>
-					 <td>22</td>
-					 <td title='nullable'>√</td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>approval_state_declaration</td>
-					 <td>Table</td>
-					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>approval_state_id</td>
-					 <td>int4</td>
-					 <td>10</td>
-					 <td title=''></td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td></td>
-					</tr>
-					<tr>
 					 <td>states</td>
 					 <td>Table</td>
-					 <td>updated_at</td>
-					 <td>timestamp</td>
-					 <td>22</td>
-					 <td title='nullable'>√</td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>approvals</td>
-					 <td>Table</td>
-					 <td>updated_at</td>
-					 <td>timestamp</td>
-					 <td>22</td>
-					 <td title='nullable'>√</td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>declaration_item_categories</td>
-					 <td>Table</td>
-					 <td>year</td>
-					 <td>int4</td>
-					 <td>10</td>
-					 <td title='nullable'>√</td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>logs</td>
-					 <td>Table</td>
-					 <td>updated_at</td>
-					 <td>timestamp</td>
-					 <td>22</td>
-					 <td title='nullable'>√</td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>declaration_declaration_item_value</td>
-					 <td>Table</td>
 					 <td>created_at</td>
 					 <td>timestamp</td>
 					 <td>22</td>
-					 <td title='nullable'>√</td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>approval_state_declaration</td>
-					 <td>Table</td>
-					 <td>created_at</td>
-					 <td>timestamp</td>
-					 <td>22</td>
-					 <td title='nullable'>√</td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>declaration_attachments</td>
-					 <td>Table</td>
-					 <td>declaration_attachment_file</td>
-					 <td>text</td>
-					 <td>2147483647</td>
-					 <td title='nullable'>√</td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>declaration_item_categories</td>
-					 <td>Table</td>
-					 <td>updated_at</td>
-					 <td>timestamp</td>
-					 <td>22</td>
-					 <td title='nullable'>√</td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>declaration_item_categories</td>
-					 <td>Table</td>
-					 <td>tax_payer_type_id</td>
-					 <td>int4</td>
-					 <td>10</td>
 					 <td title='nullable'>√</td>
 					 <td title=''></td>
 					 <td>null</td>
@@ -953,7 +502,260 @@
 					 <td></td>
 					</tr>
 					<tr>
+					 <td>migrations</td>
+					 <td>Table</td>
+					 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
+					 <td>serial</td>
+					 <td>10</td>
+					 <td title=''></td>
+					 <td title='Automatically updated by the database'>√</td>
+					 <td>nextval(&#39;migrations_id_seq&#39;::regclass)</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>declarations</td>
+					 <td>Table</td>
+					 <td>establishment_id</td>
+					 <td>int4</td>
+					 <td>10</td>
+					 <td title='nullable'>√</td>
+					 <td title=''></td>
+					 <td>null</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>declaration_item_values</td>
+					 <td>Table</td>
+					 <td>updated_at</td>
+					 <td>timestamp</td>
+					 <td>22</td>
+					 <td title='nullable'>√</td>
+					 <td title=''></td>
+					 <td>null</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>declaration_items</td>
+					 <td>Table</td>
+					 <td>name</td>
+					 <td>varchar</td>
+					 <td>1024</td>
+					 <td title='nullable'>√</td>
+					 <td title=''></td>
+					 <td>null</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>pay_mass_file_attachments</td>
+					 <td>Table</td>
+					 <td>pay_mass_file_attachment_file_name</td>
+					 <td>varchar</td>
+					 <td>50</td>
+					 <td title='nullable'>√</td>
+					 <td title=''></td>
+					 <td>null</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>declarations</td>
+					 <td>Table</td>
+					 <td>year</td>
+					 <td>int4</td>
+					 <td>10</td>
+					 <td title='nullable'>√</td>
+					 <td title=''></td>
+					 <td>null</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>logs</td>
+					 <td>Table</td>
+					 <td>updated_at</td>
+					 <td>timestamp</td>
+					 <td>22</td>
+					 <td title='nullable'>√</td>
+					 <td title=''></td>
+					 <td>null</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>pays</td>
+					 <td>Table</td>
+					 <td>ruc_id</td>
+					 <td>int4</td>
+					 <td>10</td>
+					 <td title='nullable'>√</td>
+					 <td title=''></td>
+					 <td>null</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>pays</td>
+					 <td>Table</td>
+					 <td>created_at</td>
+					 <td>timestamp</td>
+					 <td>22</td>
+					 <td title='nullable'>√</td>
+					 <td title=''></td>
+					 <td>null</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>declaration_items</td>
+					 <td>Table</td>
+					 <td>tax_payer_type_id</td>
+					 <td>int4</td>
+					 <td>10</td>
+					 <td title='nullable'>√</td>
+					 <td title=''></td>
+					 <td>null</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>declaration_item_values</td>
+					 <td>Table</td>
+					 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
+					 <td>serial</td>
+					 <td>10</td>
+					 <td title=''></td>
+					 <td title='Automatically updated by the database'>√</td>
+					 <td>nextval(&#39;declaration_item_values_id_seq&#39;::regclass)</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>declaration_items</td>
+					 <td>Table</td>
+					 <td>year</td>
+					 <td>int4</td>
+					 <td>10</td>
+					 <td title='nullable'>√</td>
+					 <td title=''></td>
+					 <td>null</td>
+					 <td></td>
+					</tr>
+					<tr>
 					 <td>declaration_item_categories</td>
+					 <td>Table</td>
+					 <td>created_at</td>
+					 <td>timestamp</td>
+					 <td>22</td>
+					 <td title='nullable'>√</td>
+					 <td title=''></td>
+					 <td>null</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>declaration_items</td>
+					 <td>Table</td>
+					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>declaration_item_category_id</td>
+					 <td>int4</td>
+					 <td>10</td>
+					 <td title=''></td>
+					 <td title=''></td>
+					 <td>null</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>state_declarations</td>
+					 <td>Table</td>
+					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>state_id</td>
+					 <td>int4</td>
+					 <td>10</td>
+					 <td title=''></td>
+					 <td title=''></td>
+					 <td>null</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>state_declarations</td>
+					 <td>Table</td>
+					 <td>created_at</td>
+					 <td>timestamp</td>
+					 <td>22</td>
+					 <td title='nullable'>√</td>
+					 <td title=''></td>
+					 <td>null</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>declarations</td>
+					 <td>Table</td>
+					 <td>max_date_to_pay</td>
+					 <td>timestamp</td>
+					 <td>22</td>
+					 <td title='nullable'>√</td>
+					 <td title=''></td>
+					 <td>null</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>logs</td>
+					 <td>Table</td>
+					 <td>created_at</td>
+					 <td>timestamp</td>
+					 <td>22</td>
+					 <td title='nullable'>√</td>
+					 <td title=''></td>
+					 <td>null</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>pays</td>
+					 <td>Table</td>
+					 <td>payed</td>
+					 <td>bool</td>
+					 <td>1</td>
+					 <td title='nullable'>√</td>
+					 <td title=''></td>
+					 <td>null</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>states</td>
+					 <td>Table</td>
+					 <td>description</td>
+					 <td>text</td>
+					 <td>2147483647</td>
+					 <td title='nullable'>√</td>
+					 <td title=''></td>
+					 <td>null</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>pay_attachments</td>
+					 <td>Table</td>
+					 <td>pay_attachment_file_type</td>
+					 <td>varchar</td>
+					 <td>50</td>
+					 <td title='nullable'>√</td>
+					 <td title=''></td>
+					 <td>null</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>declaration_item_values</td>
+					 <td>Table</td>
+					 <td>created_at</td>
+					 <td>timestamp</td>
+					 <td>22</td>
+					 <td title='nullable'>√</td>
+					 <td title=''></td>
+					 <td>null</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>declaration_item_categories</td>
+					 <td>Table</td>
+					 <td>updated_at</td>
+					 <td>timestamp</td>
+					 <td>22</td>
+					 <td title='nullable'>√</td>
+					 <td title=''></td>
+					 <td>null</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>pay_attachments</td>
 					 <td>Table</td>
 					 <td>created_at</td>
 					 <td>timestamp</td>
@@ -975,22 +777,55 @@
 					 <td></td>
 					</tr>
 					<tr>
-					 <td>declaration_declaration_item_value</td>
+					 <td>state_declarations</td>
 					 <td>Table</td>
-					 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
-					 <td>serial</td>
-					 <td>10</td>
+					 <td>moment</td>
+					 <td>timestamp</td>
+					 <td>22</td>
+					 <td title='nullable'>√</td>
 					 <td title=''></td>
-					 <td title='Automatically updated by the database'>√</td>
-					 <td>nextval(&#39;declaration_declaration_item_value_id_seq&#39;::regclass)</td>
+					 <td>null</td>
 					 <td></td>
 					</tr>
 					<tr>
-					 <td>approval_states</td>
+					 <td>declaration_declaration_item_value</td>
 					 <td>Table</td>
-					 <td>updated_at</td>
-					 <td>timestamp</td>
-					 <td>22</td>
+					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>declaration_id</td>
+					 <td>int4</td>
+					 <td>10</td>
+					 <td title=''></td>
+					 <td title=''></td>
+					 <td>null</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>migrations</td>
+					 <td>Table</td>
+					 <td>batch</td>
+					 <td>int4</td>
+					 <td>10</td>
+					 <td title=''></td>
+					 <td title=''></td>
+					 <td>null</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>state_declarations</td>
+					 <td>Table</td>
+					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>declaration_id</td>
+					 <td>int4</td>
+					 <td>10</td>
+					 <td title=''></td>
+					 <td title=''></td>
+					 <td>null</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>declaration_item_categories</td>
+					 <td>Table</td>
+					 <td>tax_payer_type_id</td>
+					 <td>int4</td>
+					 <td>10</td>
 					 <td title='nullable'>√</td>
 					 <td title=''></td>
 					 <td>null</td>
@@ -999,34 +834,12 @@
 					<tr>
 					 <td>pays</td>
 					 <td>Table</td>
-					 <td>annotation</td>
-					 <td>text</td>
-					 <td>2147483647</td>
-					 <td title='nullable'>√</td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>declaration_attachments</td>
-					 <td>Table</td>
-					 <td>created_at</td>
+					 <td>pay_date</td>
 					 <td>timestamp</td>
 					 <td>22</td>
 					 <td title='nullable'>√</td>
 					 <td title=''></td>
 					 <td>null</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>approval_states</td>
-					 <td>Table</td>
-					 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
-					 <td>serial</td>
-					 <td>10</td>
-					 <td title=''></td>
-					 <td title='Automatically updated by the database'>√</td>
-					 <td>nextval(&#39;approval_states_id_seq&#39;::regclass)</td>
 					 <td></td>
 					</tr>
 					<tr>
@@ -1041,31 +854,9 @@
 					 <td></td>
 					</tr>
 					<tr>
-					 <td>declaration_item_categories</td>
+					 <td>pay_mass_file_attachments</td>
 					 <td>Table</td>
-					 <td>description</td>
-					 <td>text</td>
-					 <td>2147483647</td>
-					 <td title='nullable'>√</td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>approval_states</td>
-					 <td>Table</td>
-					 <td>created_at</td>
-					 <td>timestamp</td>
-					 <td>22</td>
-					 <td title='nullable'>√</td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>declaration_attachments</td>
-					 <td>Table</td>
-					 <td>declaration_attachment_file_type</td>
+					 <td>pay_mass_file_attachment_file_type</td>
 					 <td>varchar</td>
 					 <td>50</td>
 					 <td title='nullable'>√</td>
@@ -1074,9 +865,64 @@
 					 <td></td>
 					</tr>
 					<tr>
+					 <td>declaration_items</td>
+					 <td>Table</td>
+					 <td>factor</td>
+					 <td>int4</td>
+					 <td>10</td>
+					 <td title='nullable'>√</td>
+					 <td title=''></td>
+					 <td>null</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>declarations</td>
+					 <td>Table</td>
+					 <td>updated_at</td>
+					 <td>timestamp</td>
+					 <td>22</td>
+					 <td title='nullable'>√</td>
+					 <td title=''></td>
+					 <td>null</td>
+					 <td></td>
+					</tr>
+					<tr>
 					 <td>state_declarations</td>
 					 <td>Table</td>
-					 <td>moment</td>
+					 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
+					 <td>serial</td>
+					 <td>10</td>
+					 <td title=''></td>
+					 <td title='Automatically updated by the database'>√</td>
+					 <td>nextval(&#39;state_declarations_id_seq&#39;::regclass)</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>declarations</td>
+					 <td>Table</td>
+					 <td>declaration_date</td>
+					 <td>timestamp</td>
+					 <td>22</td>
+					 <td title='nullable'>√</td>
+					 <td title=''></td>
+					 <td>null</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>declaration_item_categories</td>
+					 <td>Table</td>
+					 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
+					 <td>serial</td>
+					 <td>10</td>
+					 <td title=''></td>
+					 <td title='Automatically updated by the database'>√</td>
+					 <td>nextval(&#39;declaration_item_categories_id_seq&#39;::regclass)</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>declaration_declaration_item_value</td>
+					 <td>Table</td>
+					 <td>updated_at</td>
 					 <td>timestamp</td>
 					 <td>22</td>
 					 <td title='nullable'>√</td>
@@ -1087,20 +933,31 @@
 					<tr>
 					 <td>pay_attachments</td>
 					 <td>Table</td>
-					 <td>pay_attachment_file_type</td>
-					 <td>varchar</td>
-					 <td>50</td>
+					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>pay_id</td>
+					 <td>int4</td>
+					 <td>10</td>
+					 <td title=''></td>
+					 <td title=''></td>
+					 <td>null</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>pays</td>
+					 <td>Table</td>
+					 <td>updated_at</td>
+					 <td>timestamp</td>
+					 <td>22</td>
 					 <td title='nullable'>√</td>
 					 <td title=''></td>
 					 <td>null</td>
 					 <td></td>
 					</tr>
 					<tr>
-					 <td>declaration_item_values</td>
+					 <td>declaration_item_categories</td>
 					 <td>Table</td>
-					 <td>value</td>
-					 <td>float8</td>
-					 <td>17</td>
+					 <td>year</td>
+					 <td>int4</td>
+					 <td>10</td>
 					 <td title='nullable'>√</td>
 					 <td title=''></td>
 					 <td>null</td>

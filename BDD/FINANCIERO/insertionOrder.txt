@@ -1,15 +1,12 @@
 declarations
-approvals
 declaration_item_categories
+pays
 states
 declaration_items
-approval_states
 declaration_item_values
-pays
-declaration_attachments
 pay_attachments
-approval_state_declaration
 declaration_declaration_item_value
 state_declarations
 logs
 migrations
+pay_mass_file_attachments
