@@ -11,7 +11,7 @@ export const environment = {
   api_base: 'http://ws-pruebas.turismo.gob.ec:8001/',
   api_alojamiento: 'http://ws-pruebas.turismo.gob.ec:8002/',
   api_financiero: 'http://ws-pruebas.turismo.gob.ec:8003/',
-  gmapapiKey: 'AIzaSyDJ_x643lM4Ip6adPypKLCI4WYdoUBawZ0',
+  gmapapiKey: 'AIzaSyCGUwCcM-LKjRK4rjbBJ06_GLmX2LaYzfg',
 };
 
 /*
