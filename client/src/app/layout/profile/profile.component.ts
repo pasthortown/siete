@@ -5,6 +5,7 @@ import { User } from './../../models/profile/User';
 import { AuthService } from './../../services/auth.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import Swal from 'sweetalert2';
+import { ToastrManager } from 'ng6-toastr-notifications';
 
 @Component({
   selector: 'app-profile',
@@ -31,6 +32,7 @@ export class ProfileComponent implements OnInit {
   @ViewChild('fotoInput') fotoInput;
 
   constructor(
+    private toastr: ToastrManager,
     private authDataServise: AuthService,
     private profilePictureDataService: ProfilePictureService,
     private userDataService: UserService) {
@@ -62,9 +64,9 @@ export class ProfileComponent implements OnInit {
 
   validateAddress(): Boolean {
     if(typeof this.user.address == 'undefined' || this.user.address == ''){
-      return true;
+      return false;
     }
-    return false;
+    return true;
   }
 
   verificarCambioClaves() {
@@ -100,6 +102,11 @@ export class ProfileComponent implements OnInit {
   }
 
   guardar() {
+    const validated = this.mainPhoneValidated && this.secondaryPhoneValidated && this.validateAddress();
+    if (!validated) {
+      this.toastr.errorToastr('Existe conflicto la información proporcionada.', 'Actualización de Perfil');
+      return;
+    }
     const userData = { id: this.user.id, name: this.user.name };
     sessionStorage.setItem('user', JSON.stringify(userData));
     this.userDataService.put(this.user).then( r => {
