@@ -985,6 +985,11 @@ export class RegistroComponent implements OnInit {
       this.secondaryPhoneContactValidated = true;
       this.emailContactValidated = true;
       this.REGCIVILOK = true;
+   } else {
+      this.checkEmailContactEstablishment();
+      this.checkTelefonoPrincipalContactoEstablecimiento();
+      this.checkTelefonoSecundarioContactoEstablecimiento();
+      this.checkTelefonoSecundarioContactoEstablecimiento();
    }
   }
 
