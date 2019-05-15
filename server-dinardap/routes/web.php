@@ -18,6 +18,7 @@ $router->get('/', function () use ($router) {
 $router->group(['middleware' => []], function () use ($router) {
    $router->post('checkSoap', ['uses' => 'DinardapController@checkSoap']);
    $router->post('cedula', ['uses' => 'DinardapController@Cedula']);
+   $router->post('paquete', ['uses' => 'DinardapController@paquete']);
    $router->post('ruc', ['uses' => 'DinardapController@RUC']);
    $router->post('supercias', ['uses' => 'DinardapController@SuperCIAS']);
 });
