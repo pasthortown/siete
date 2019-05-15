@@ -1234,14 +1234,6 @@ export class CoordinadorComponent implements OnInit {
       this.secondaryPhoneContactValidated = true;
       this.emailContactValidated = true;
       this.REGCIVILOK = true;
-   } else {
-      this.ruc_registro_selected.ruc.contact_user.id = 0;
-      this.ruc_registro_selected.ruc.contact_user = new User();
-      this.identificationContactValidated = false;
-      this.consumoCedula = false;
-      this.mainPhoneContactValidated = false;
-      this.secondaryPhoneContactValidated = false;
-      this.emailContactValidated = false;
    }
   }
 
