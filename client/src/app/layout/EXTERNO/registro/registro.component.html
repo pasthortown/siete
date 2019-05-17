@@ -1,16 +1,6 @@
 <div class="row">
   <div class="col-12 text-right">
-    <h1>Gestión de Información</h1>
-  </div>
-  <div class="col-12 mt-5">
-    <div class="alert alert-warning" role="alert">
-      <label class="col-12 text-justify"><strong>Atención</strong><br />
-        Mantener la información actualizada, es su responsabilidad. <br />
-        Éste sistema utiliza información oficial a partir de las fuentes gubernamentales. Si los datos bloqueados no son
-        correctos,
-        usted debe acercarse a la entidad gubernamental custodia del dato para actualizarlo.
-      </label>
-    </div>
+    <h1>Gestión de Actividades Turísticas</h1>
   </div>
 </div>
 <div class="row">
@@ -36,6 +26,16 @@
   </div>
 </div>
 <div class="row" *ngIf="terminosCondiciones">
+  <div class="col-12 mt-5">
+    <div class="alert alert-warning" role="alert">
+      <label class="col-12 text-justify"><strong>Atención</strong><br />
+        Éste sistema utiliza información oficial a partir de las fuentes gubernamentales. Si los datos bloqueados no son
+        correctos, usted debe acercarse a la entidad gubernamental custodia del dato para actualizarlo.
+      </label>
+    </div>
+  </div>
+</div>
+<div class="row" *ngIf="terminosCondiciones">
   <div class="col-12">
     <div class="row mt-5">
       <div class="col-12 text-left">
@@ -47,11 +47,6 @@
         <ngb-tabset>
           <ngb-tab title="R.U.C." id="tab1">
             <ng-template ngbTabContent>
-              <div class="alert alert-danger mt-3" role="alert" *ngIf="!validateRuc()">
-                <label class="col-12 text-justify"><strong>Atención</strong><br />
-                  La información proporcionada del RUC presenta errores o es incompleta.
-                </label>
-              </div>
               <div class="row mt-3">
                 <h4 class="col-12">
                   <strong>Registro Único de Contribuyente</strong>
@@ -77,7 +72,8 @@
                 <div class="col-12">
                   <div class="alert alert-info mt-2 mb-2" role="alert">
                     <label class="col-12 text-justify"><strong>Atención</strong></label><br />
-                    Los datos del RUC, son obtenidos a partir de los registros del SRI. Si alguno de éstos datos se encuentra desactualizazdo o es incorrecto. Acérquese al SRI para actualizar su información.<br/>
+                    La información presentada a continuación es proporcionada por el Servicio de Rentas Internas, ésta sección tiene carácter informativo, por favor si desea
+                    actualizarla debe realizar el trámite en la entidad correspondiente<br/>
                     <a href="https://srienlinea.sri.gob.ec/" target="_blank">Ir al Sitio Web del SRI</a>
                   </div>
                 </div>
@@ -117,7 +113,7 @@
                 </div>
               </div>
               <div class="row" *ngIf="ruc_registro_selected.ruc.tax_payer_type_id > 1">
-                <div class="col-3">
+                <div class="col-6">
                   <div class="form-group">
                     <label for="group_type_id">Tipo de Personería Jurídica</label><span
                       *ngIf="!validateGroupGivenTipe()" class="ml-2 badge badge-danger">Incorrecto</span>
@@ -134,9 +130,17 @@
                     </select>
                   </div>
                 </div>
-                <div class="col-3">
+                <div class="col-6">
+                  <div class="form-group">
+                    <label for="group_type_id">Número de Expediente de la Superintendencia de Companías</label><span
+                      *ngIf="ruc_registro_selected.ruc.group_given.register_code === ''" class="ml-2 badge badge-danger">Incorrecto</span>
+                    <input type="text" class="form-control" min="0" id="expediente"
+                      name="expediente" (keyup)="checkRegistroSupercias()" placeholder="Número de Expediente de la Superintendencia de Companías" [(ngModel)]="ruc_registro_selected.ruc.group_given.register_code"/>
+                  </div>
+                </div>
+                <div class="col-4">
                   <div class="form-group" *ngIf="ruc_registro_selected.ruc.group_given.group_type_id != 0">
-                    <label>Identificación
+                    <label>Cédula
                       {{ groupTypeSelected.representative_rol_name }}</label><span
                       *ngIf="!identificationRepresentativePersonValidated"
                       class="ml-2 badge badge-danger">Incorrecto</span>
@@ -158,9 +162,9 @@
                       class="form-text text-muted" [innerHTML]="representanteCedulaData"></small>
                   </div>
                 </div>
-                <div class="col-3">
+                <div class="col-4">
                   <div class="form-group" *ngIf="ruc_registro_selected.ruc.group_given.group_type_id != 0">
-                    <label>Fecha de Asignación</label>
+                    <label>Fecha de Nombramiento</label>
                     <input type="date" class="form-control" id="assignment_date" name="assignment_date"
                       placeholder="assignmentDate" [ngModel]="
                           ruc_registro_selected.ruc.person_representative_attachment.assignment_date | date: 'y-MM-dd'
@@ -169,7 +173,7 @@
                         " />
                   </div>
                 </div>
-                <div class="col-3">
+                <div class="col-4">
                   <div class="form-group" *ngIf="ruc_registro_selected.ruc.group_given.group_type_id != 0">
                     <label>Nombramiento Representante del Legal</label><span *ngIf="!validateNombramiento()"
                       class="ml-2 badge badge-danger">Incorrecto</span>
@@ -192,13 +196,13 @@
                 </div>
               </div>
               <div class="row">
-                <div class="col-12">
+                <div class="col-12" *ngIf="false">
                   <div class="alert alert-info mt-2 mb-2" role="alert">
                     <label class="col-12 text-justify"><strong>Atención</strong></label><br />
                     Seleccione los nombres de las Franquicias o Cadenas que se encuentra autorizado a utilizar.
                   </div>
                 </div>
-                <div class="col-12">
+                <div class="col-12" *ngIf="false">
                   <div class="form-group row">
                     <label class="col-12 col-form-label mb-2"><strong>Franquicias y/o Cadenas</strong></label>
                     <label class="col-4 col-form-label">Franquicia y/o Cadena</label>
@@ -242,7 +246,7 @@
                   </div>
                 </div>
               </div>
-              <div class="row">
+              <div class="row" *ngIf="false">
                 <h4 class="col-12"><strong>Datos de Contacto</strong></h4>
                 <div class="col-12">
                   <div class="form-group">
@@ -324,6 +328,15 @@
                           name="email" />
                       </div>
                     </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12">
+                  <div class="alert alert-danger mt-3" role="alert" *ngIf="!validateRuc()">
+                    <label class="col-12 text-justify"><strong>Atención</strong><br />
+                      La información proporcionada del RUC presenta errores o es incompleta.
+                    </label>
                   </div>
                 </div>
               </div>

@@ -1561,7 +1561,6 @@ export class RegistroComponent implements OnInit {
     }
     this.rucData = '<div class=\"progress mb-3\"><div class=\"progress-bar progress-bar-striped progress-bar-animated bg-warning col-12\">Espere...</div></div><div class="col-12 text-center"><strong>Conectándose al SRI...</strong></div>';
     this.ruc_registro_selected.ruc.number = this.ruc_registro_selected.ruc.number.replace(/[^\d]/, '');
-    this.ruc_registro_selected.ruc.group_given.register_code = '12';
     if (this.ruc_registro_selected.ruc.number.length !== 13) {
       this.rucValidated = false;
       this.consumoRuc = false;
@@ -1616,6 +1615,9 @@ export class RegistroComponent implements OnInit {
                if (element.campo === 'razonSocial') {
                   this.rucData += '<strong>Razón Social: </strong> ' + element.valor + '<br/>';
                }
+               if (element.campo === 'actividadEconomicaPrincipal') {
+                  this.rucData += '<strong>Actividad Económica: </strong> ' + element.valor + '<br/>';
+               }
                if (element.campo === 'fechaInicioActividades') {
                   this.rucData += '<strong>Fecha de Inicio de Actividades: </strong> ' + element.valor + '<br/>';
                }
@@ -1648,6 +1650,10 @@ export class RegistroComponent implements OnInit {
          this.SRIOK = false;
       });
    }
+  }
+
+  checkRegistroSupercias() {
+   this.ruc_registro_selected.ruc.group_given.register_code = this.ruc_registro_selected.ruc.group_given.register_code.replace(/[^\d]/, '');
   }
 
   checkCedula() {

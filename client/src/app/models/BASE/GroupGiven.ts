@@ -7,5 +7,6 @@ export class GroupGiven {
 
    constructor() {
       this.group_type_id = 0;
+      this.register_code = '';
    }
 }

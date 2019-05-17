@@ -19,9 +19,8 @@ class WSInternoController extends Controller
             'verify_peer' => false,
             'verify_peer_name' => false,
             'allow_self_signed' => true
-            )
+          )
         );
-        
         $context = stream_context_create($opts);
         $wsdl = "http://jbosstst.turismo.gob.ec:18080/generar-pdf-1.0/GenerarPDF/GenerarDocumentosBean?wsdl";
         

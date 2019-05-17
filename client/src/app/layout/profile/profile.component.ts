@@ -102,6 +102,7 @@ export class ProfileComponent implements OnInit {
   }
 
   guardar() {
+    this.user.address = ' '
     const validated = this.mainPhoneValidated && this.secondaryPhoneValidated && this.validateAddress();
     if (!validated) {
       this.toastr.errorToastr('Existe conflicto la información proporcionada.', 'Actualización de Perfil');

@@ -17,7 +17,7 @@
           </h2>
       </div>
       <div class="form-group">
-        <label for="identification">Número de Cédula</label><span
+        <label for="identification">Número de Cédula del Propietario/Representante Legal</label><span
         *ngIf="!identificationValidated"
         class="ml-2 badge badge-danger"
         >Incorrecto</span>
@@ -47,7 +47,7 @@
           <input type="email" class="form-control" id="email" placeholder="Correo Electrónico" [(ngModel)]="user.email" />
         </div>
       <div class="form-group" *ngIf="identificationValidated && checkEmail()">
-        <label for="ruc">Número de RUC</label><span
+        <label for="ruc">Número de RUC al que pertenece el Establecimiento</label><span
         *ngIf="!rucValidated"
         class="ml-2 badge badge-danger"
         >Incorrecto</span>
