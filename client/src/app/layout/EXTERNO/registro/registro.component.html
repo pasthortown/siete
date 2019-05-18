@@ -112,7 +112,7 @@
                   </div>
                 </div>
               </div>
-              <div class="row">
+              <div class="row" *ngIf="ruc_registro_selected.ruc.tax_payer_type_id > 1">
                 <div class="col-12">
                   <div class="form-group">
                     <label for="group_type_id">Tipo de Personería Jurídica*</label><span
@@ -131,12 +131,21 @@
                   </div>
                 </div>
               </div>
-              <div class="row mt-3">
+              <div class="row mt-3" *ngIf="ruc_registro_selected.ruc.tax_payer_type_id > 1">
                 <h4 class="col-12">
                   <strong>Escritura de Constitución</strong>
                 </h4>
               </div>
               <div class="row">
+                <div class="col-12">
+                  <div class="alert alert-info mt-2 mb-2" role="alert">
+                    <label class="col-12 text-justify"><strong>Atención</strong></label><br />
+                    Usted puede obtener la información correspondiente a esta sección de la Superintendencia de Companías<br/>
+                    <a href="http://appscvsmovil.supercias.gob.ec/portaldedocumentos/consulta_cia_param.zul" target="_blank">Ir al Sitio Web de la Superintendencia de Companías</a>
+                  </div>
+                </div>
+              </div>
+              <div class="row" *ngIf="ruc_registro_selected.ruc.tax_payer_type_id > 1">
                 <div class="col-12">
                   <div class="form-group">
                     <label for="group_type_id">Número de Expediente de la Superintendencia de Companías*</label><span
@@ -146,7 +155,7 @@
                   </div>
                 </div>
               </div>
-              <div class="row mt-3">
+              <div class="row mt-3" *ngIf="ruc_registro_selected.ruc.tax_payer_type_id > 1">
                 <h4 class="col-12">
                   <strong>Representante Legal</strong>
                 </h4>

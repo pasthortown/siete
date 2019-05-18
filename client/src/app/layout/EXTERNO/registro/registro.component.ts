@@ -1909,7 +1909,7 @@ export class RegistroComponent implements OnInit {
   }
 
   checkEstablishmentAddress(): Boolean {
-   if(this.establishment_selected.address_main_street.length < 5 || this.establishment_selected.address_number.length < 5 || this.establishment_selected.address_secondary_street.length < 5) {
+   if(this.establishment_selected.address_main_street.length < 5 || this.establishment_selected.address_number.length < 2 || this.establishment_selected.address_secondary_street.length < 5) {
       this.addressEstablishmentValidated = false;
       return false;
    }
