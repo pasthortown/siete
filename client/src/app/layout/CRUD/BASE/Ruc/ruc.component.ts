@@ -102,7 +102,7 @@ export class RucComponent implements OnInit {
          const backupData = r as Ruc[];
          let output = 'id;number;baised_accounting;contact_user_id;owner_name;tax_payer_type_id\n';
          backupData.forEach(element => {
-            output += element.id; + element.number + ';' + element.baised_accounting + ';' + element.contact_user_id + ';' + element.owner_name + ';' + element.tax_payer_type_id + '\n';
+            output += element.id + ';' + element.number + ';' + element.baised_accounting + ';' + element.contact_user_id + ';' + element.owner_name + ';' + element.tax_payer_type_id + '\n';
          });
          const blob = new Blob([output], { type: 'text/plain' });
          const fecha = new Date();

@@ -92,7 +92,7 @@ export class UbicationComponent implements OnInit {
          const backupData = r as Ubication[];
          let output = 'id;name;code;father_code;gmap_reference_latitude;gmap_reference_longitude\n';
          backupData.forEach(element => {
-            output += element.id; + element.name + ';' + element.code + ';' + element.father_code + ';' + element.gmap_reference_latitude + ';' + element.gmap_reference_longitude + '\n';
+            output += element.id + ';' + element.name + ';' + element.code + ';' + element.father_code + ';' + element.gmap_reference_latitude + ';' + element.gmap_reference_longitude + '\n';
          });
          const blob = new Blob([output], { type: 'text/plain' });
          const fecha = new Date();
