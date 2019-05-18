@@ -140,7 +140,7 @@
                 <div class="col-12">
                   <div class="alert alert-info mt-2 mb-2" role="alert">
                     <label class="col-12 text-justify"><strong>Atención</strong></label><br />
-                    Usted puede obtener la información correspondiente a esta sección de la Superintendencia de Companías<br/>
+                    El número de expediente para ingresar en ésta sección, se lo puede obtener en la página de la Superintendencia de Companías.<br/>
                     <a href="http://appscvsmovil.supercias.gob.ec/portaldedocumentos/consulta_cia_param.zul" target="_blank">Ir al Sitio Web de la Superintendencia de Companías</a>
                   </div>
                 </div>
@@ -188,7 +188,7 @@
                 <div class="col-4">
                   <div class="form-group" *ngIf="ruc_registro_selected.ruc.group_given.group_type_id != 0">
                     <label>Fecha de Nombramiento*</label>
-                    <input type="date" class="form-control" id="assignment_date" name="assignment_date"
+                    <input type="date" class="form-control" id="assignment_date" name="assignment_date" min="15/05/2018" max="15/05/2019"
                       placeholder="assignmentDate" [ngModel]="
                           ruc_registro_selected.ruc.person_representative_attachment.assignment_date | date: 'y-MM-dd'
                         " (ngModelChange)="

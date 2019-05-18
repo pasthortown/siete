@@ -770,10 +770,15 @@ export class RegistroComponent implements OnInit {
    });
   }
 
+  fechasNombramientos() {
+AQUI
+  }
+
   validateRuc(): Boolean {
      let validateRepresentantLegalId = true;
      if(this.ruc_registro_selected.ruc.tax_payer_type_id > 1) {
         validateRepresentantLegalId = this.identificationRepresentativePersonValidated;
+        const validateExpediente = (this.ruc_registro_selected.ruc.group_given.register_code !== '');
         return this.identificationContactValidated &&
          this.rucValidated &&
          this.mainPhoneContactValidated &&
@@ -784,7 +789,8 @@ export class RegistroComponent implements OnInit {
          validateRepresentantLegalId &&
          this.REGCIVILOK &&
          this.SRIOK &&
-         this.REGCIVILREPRESENTANTELEGALOK;
+         this.REGCIVILREPRESENTANTELEGALOK &&
+         validateExpediente;
      }
      return this.identificationContactValidated &&
       this.rucValidated &&
@@ -1170,10 +1176,9 @@ export class RegistroComponent implements OnInit {
    if(!this.SRIOK || !this.REGCIVILOK){
       return;
    }
-   this.ruc_registro_selected.ruc.contact_user.ruc = this.ruc_registro_selected.ruc.number;
    this.ruc_registro_selected.ruc.person_representative_attachment.ruc = this.ruc_registro_selected.ruc.number;
    this.guardando = true;
-   if (typeof this.ruc_registro_selected.ruc.id === 'undefined') {11
+   if (typeof this.ruc_registro_selected.ruc.id === 'undefined') {
       this.rucDataService.register_ruc(this.ruc_registro_selected.ruc).then( r => {
          this.guardando = false;
          if ( r === '0' ) {
