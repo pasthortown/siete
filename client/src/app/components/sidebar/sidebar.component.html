@@ -73,6 +73,53 @@
             </ul>
          </li>
       </div>
+
+      <div *ngIf="isAdmin" class="nested-menu">
+         <a class="list-group-item" (click)="addExpandClass('catalogoAlojamiento')" *ngIf="isAdminRegC">
+            <span class="fas fa-database"></span>&nbsp;Catálogo de Información Base
+         </a>
+         <li class="nested" [class.expand]="showMenu === 'catalogoAlojamiento'">
+            <ul class="submenu">
+               <li>
+                  <a [routerLink]="['/system_name']" [routerLinkActive]="['router-link-active']" class="list-group-item">Sistemas MINTUR Previos</a>
+               </li>
+               <li>
+                  <a [routerLink]="['/language']" [routerLinkActive]="['router-link-active']" class="list-group-item">Lenguajes</a>
+               </li>
+               <li>
+                  <a [routerLink]="['/ubication']" [routerLinkActive]="['router-link-active']" class="list-group-item">Ubicaciones</a>
+               </li>
+               <li>
+                  <a [routerLink]="['/gender']" [routerLinkActive]="['router-link-active']" class="list-group-item">Géneros</a>
+               </li>
+               <li>
+                  <a [routerLink]="['/worker_group']" [routerLinkActive]="['router-link-active']" class="list-group-item">Clasificación Trabajadores</a>
+               </li>
+               <li>
+                  <a [routerLink]="['/establishment_property_type']" [routerLinkActive]="['router-link-active']" class="list-group-item">Tipo de Propiedad</a>
+               </li>
+               <li>
+                  <a [routerLink]="['/group_type']" [routerLinkActive]="['router-link-active']" class="list-group-item">Personería Jurídica</a>
+               </li>
+               <li>
+                  <a [routerLink]="['/tax_payer_type']" [routerLinkActive]="['router-link-active']" class="list-group-item">Tipo Contribuyente</a>
+               </li>
+               <li>
+                  <a [routerLink]="['/establishment_certification_type']" [routerLinkActive]="['router-link-active']" class="list-group-item">Tipos de Certificados</a>
+               </li>
+               <li>
+                  <a [routerLink]="['/ruc_name_type']" [routerLinkActive]="['router-link-active']" class="list-group-item">Tipos de Nombres por Ruc</a>
+               </li>
+               <li>
+                  <a [routerLink]="['/state_base']" [routerLinkActive]="['router-link-active']" class="list-group-item">Estados de Establecimientos</a>
+               </li>
+               <li>
+                  <a [routerLink]="['/agreement']" [routerLinkActive]="['router-link-active']" class="list-group-item">Acuerdos</a>
+               </li>
+              </ul>
+         </li>
+      </div> 
+
       <div *ngIf="isAdmin" class="nested-menu">
             <a class="list-group-item" (click)="addExpandClass('catalogoAlojamiento')" *ngIf="isAdminRegC">
                <span class="fas fa-database"></span>&nbsp;Catálogo de Alojamiento
@@ -159,9 +206,6 @@
                </li>
                <li>
                   <a [routerLink]="['/establishment_property_type']" [routerLinkActive]="['router-link-active']" class="list-group-item">Tipo de Propiedad</a>
-               </li>
-               <li>
-                  <a [routerLink]="['/franchise_chain_name']" [routerLinkActive]="['router-link-active']" class="list-group-item">Franquicias y Cadenas</a>
                </li>
                <li>
                   <a [routerLink]="['/group_type']" [routerLinkActive]="['router-link-active']" class="list-group-item">Personería Jurídica</a>
