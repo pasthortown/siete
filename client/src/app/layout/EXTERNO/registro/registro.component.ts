@@ -1525,6 +1525,9 @@ export class RegistroComponent implements OnInit {
    }
    this.guardando = true;
    this.establishment_selected.ruc_id = this.ruc_registro_selected.ruc.id;
+   if (this.establishment_selected.ruc_name_type_id <= 1 ) {
+      this.establishment_selected.franchise_chain_name = '';
+   }
    this.establishmentDataService.register_establishment_data(this.establishment_selected).then( r => {
       this.guardando = false;
       if ( r === '0' ) {
