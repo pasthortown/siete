@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class FranchiseChainName extends Model
+class FloorAuthorizationCertificate extends Model
 {
     /**
      * The attributes that are mass assignable.
@@ -12,7 +12,7 @@ class FranchiseChainName extends Model
      * @var array
      */
     protected $fillable = [
-       'name',
+       'floor_authorization_certificate_file_type','floor_authorization_certificate_file_name','floor_authorization_certificate_file',
     ];
 
     /**
@@ -24,9 +24,9 @@ class FranchiseChainName extends Model
        
     ];
 
-    function Rucs()
+    function Establishment()
     {
-       return $this->belongsToMany('App\Ruc')->withTimestamps();
+       return $this->belongsTo('App\Establishment');
     }
 
 }

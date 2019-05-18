@@ -23,8 +23,6 @@ class RucController extends Controller
        } else {
           $ruc = Ruc::findOrFail($id);
           $attach = [];
-          $franchise_chain_names_on_ruc = $ruc->FranchiseChainNames()->get();
-          array_push($attach, ["franchise_chain_names_on_ruc"=>$franchise_chain_names_on_ruc]);
           return response()->json(["Ruc"=>$ruc, "attach"=>$attach],200);
        }
     }
@@ -52,8 +50,6 @@ class RucController extends Controller
       if($representativePerson == null){
          $representativePerson = 0;
       }
-      $franchise_chain_names_on_ruc = $ruc->FranchiseChainNames()->get();
-      array_push($attach, ["franchise_chain_names_on_ruc"=>$franchise_chain_names_on_ruc]);
       $token = $data->header('api_token');
       $user = json_decode($this->httpGet(env('API_AUTH').'user/?id='.$ruc->contact_user_id, null, null, $token));
       return response()->json(["Ruc"=>$ruc, "attach"=>$attach, 'contact_user'=>$user, 'group_given'=>$groupGiven, 'person_representative'=>$representativePerson],200);
@@ -83,10 +79,6 @@ class RucController extends Controller
           $ruc->contact_user_id = $result['contact_user_id'];
           $ruc->tax_payer_type_id = $result['tax_payer_type_id'];
           $ruc->save();
-          $franchise_chain_names_on_ruc = $result['franchise_chain_names_on_ruc'];
-          foreach( $franchise_chain_names_on_ruc as $franchise_chain_name) {
-             $ruc->FranchiseChainNames()->attach($franchise_chain_name['id']);
-          }
           DB::commit();
        } catch (Exception $e) {
           return response()->json($e,400);
@@ -184,10 +176,6 @@ class RucController extends Controller
           $ruc->owner_name = $result['owner_name'];
           $ruc->tax_payer_type_id = $result['tax_payer_type_id'];
           $ruc->save();
-          $franchise_chain_names_on_ruc = $result['franchise_chain_names_on_ruc'];
-          foreach( $franchise_chain_names_on_ruc as $franchise_chain_name) {
-             $ruc->FranchiseChainNames()->attach($franchise_chain_name['id']);
-          }
           DB::commit();
           if ($result['tax_payer_type_id'] > 1) {
             $previewGroupGiven = GroupGiven::where('ruc_id', $ruc->id)->first();
@@ -299,30 +287,6 @@ class RucController extends Controller
             'tax_payer_type_id'=>$result['tax_payer_type_id'],
          ]);
          $ruc = Ruc::where('id',$result['id'])->first();
-         $franchise_chain_names_on_ruc = $result['franchise_chain_names_on_ruc'];
-         $franchise_chain_names_on_ruc_old = $ruc->FranchiseChainNames()->get();
-         foreach( $franchise_chain_names_on_ruc_old as $franchise_chain_name_old ) {
-            $delete = true;
-            foreach( $franchise_chain_names_on_ruc as $franchise_chain_name ) {
-               if ( $franchise_chain_name_old->id === $franchise_chain_name['id'] ) {
-                  $delete = false;
-               }
-            }
-            if ( $delete ) {
-               $ruc->FranchiseChainNames()->detach($franchise_chain_name_old->id);
-            }
-         }
-         foreach( $franchise_chain_names_on_ruc as $franchise_chain_name ) {
-            $add = true;
-            foreach( $franchise_chain_names_on_ruc_old as $franchise_chain_name_old) {
-               if ( $franchise_chain_name_old->id === $franchise_chain_name['id'] ) {
-                  $add = false;
-               }
-            }
-            if ( $add ) {
-               $ruc->FranchiseChainNames()->attach($franchise_chain_name['id']);
-            }
-         }
          DB::commit();
          if ($result['tax_payer_type_id'] > 1) {
             $previewGroupGiven = GroupGiven::where('ruc_id', $ruc->id)->first();
@@ -372,30 +336,6 @@ class RucController extends Controller
              'tax_payer_type_id'=>$result['tax_payer_type_id'],
           ]);
           $ruc = Ruc::where('id',$result['id'])->first();
-          $franchise_chain_names_on_ruc = $result['franchise_chain_names_on_ruc'];
-          $franchise_chain_names_on_ruc_old = $ruc->FranchiseChainNames()->get();
-          foreach( $franchise_chain_names_on_ruc_old as $franchise_chain_name_old ) {
-             $delete = true;
-             foreach( $franchise_chain_names_on_ruc as $franchise_chain_name ) {
-                if ( $franchise_chain_name_old->id === $franchise_chain_name['id'] ) {
-                   $delete = false;
-                }
-             }
-             if ( $delete ) {
-                $ruc->FranchiseChainNames()->detach($franchise_chain_name_old->id);
-             }
-          }
-          foreach( $franchise_chain_names_on_ruc as $franchise_chain_name ) {
-             $add = true;
-             foreach( $franchise_chain_names_on_ruc_old as $franchise_chain_name_old) {
-                if ( $franchise_chain_name_old->id === $franchise_chain_name['id'] ) {
-                   $add = false;
-                }
-             }
-             if ( $add ) {
-                $ruc->FranchiseChainNames()->attach($franchise_chain_name['id']);
-             }
-          }
           DB::commit();
        } catch (Exception $e) {
           return response()->json($e,400);
@@ -415,8 +355,6 @@ class RucController extends Controller
        $toReturn = [];
        foreach( $rucs as $ruc) {
           $attach = [];
-          $franchise_chain_names_on_ruc = $ruc->FranchiseChainNames()->get();
-          array_push($attach, ["franchise_chain_names_on_ruc"=>$franchise_chain_names_on_ruc]);
           array_push($toReturn, ["Ruc"=>$ruc, "attach"=>$attach]);
        }
        return response()->json($toReturn,200);
@@ -450,33 +388,6 @@ class RucController extends Controller
           $ruc->save();
          }
          $ruc = Ruc::where('id',$result['id'])->first();
-         $franchise_chain_names_on_ruc = [];
-         foreach($row['attach'] as $attach){
-            $franchise_chain_names_on_ruc = $attach['franchise_chain_names_on_ruc'];
-         }
-         $franchise_chain_names_on_ruc_old = $ruc->FranchiseChainNames()->get();
-         foreach( $franchise_chain_names_on_ruc_old as $franchise_chain_name_old ) {
-            $delete = true;
-            foreach( $franchise_chain_names_on_ruc as $franchise_chain_name ) {
-               if ( $franchise_chain_name_old->id === $franchise_chain_name['id'] ) {
-                  $delete = false;
-               }
-            }
-            if ( $delete ) {
-               $ruc->FranchiseChainNames()->detach($franchise_chain_name_old->id);
-            }
-         }
-         foreach( $franchise_chain_names_on_ruc as $franchise_chain_name ) {
-            $add = true;
-            foreach( $franchise_chain_names_on_ruc_old as $franchise_chain_name_old) {
-               if ( $franchise_chain_name_old->id === $franchise_chain_name['id'] ) {
-                  $add = false;
-               }
-            }
-            if ( $add ) {
-               $ruc->FranchiseChainNames()->attach($franchise_chain_name['id']);
-            }
-         }
        }
        DB::commit();
       } catch (Exception $e) {

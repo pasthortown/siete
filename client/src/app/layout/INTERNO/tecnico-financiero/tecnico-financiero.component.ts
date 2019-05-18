@@ -47,13 +47,11 @@ import { ToastrManager } from 'ng6-toastr-notifications';
 import { saveAs } from 'file-saver/FileSaver';
 import { Establishment } from 'src/app/models/BASE/Establishment';
 import { EstablishmentPropertyType } from 'src/app/models/BASE/EstablishmentPropertyType';
-import { FranchiseChainName } from 'src/app/models/BASE/FranchiseChainName';
 import { TaxPayerType } from 'src/app/models/BASE/TaxPayerType';
 import { EstablishmentCertification } from 'src/app/models/BASE/EstablishmentCertification';
 import { Language } from 'src/app/models/BASE/Language';
 import { RegistroDataCarrier } from 'src/app/models/negocio/RegistroDataCarrier';
 import { TaxPayerTypeService } from 'src/app/services/CRUD/BASE/taxpayertype.service';
-import { FranchiseChainNameService } from 'src/app/services/CRUD/BASE/franchisechainname.service';
 import { RucService } from 'src/app/services/CRUD/BASE/ruc.service';
 import { EstablishmentService } from 'src/app/services/CRUD/BASE/establishment.service';
 import { EstablishmentPropertyTypeService } from 'src/app/services/CRUD/BASE/establishmentpropertytype.service';
@@ -157,7 +155,6 @@ export class TecnicoFinancieroComponent implements OnInit {
  representanteCedulaData = 'CONECTÁNDOSE AL REGISTRO CIVIL...';
  cedulaEstablishmentContactData = 'CONECTÁNDOSE AL REGISTRO CIVIL...';
  tax_payer_types: TaxPayerType[] = [];
- franchises: FranchiseChainName[] = [];
  zonalSelectedCode = '-';
  provinciaSelectedCode = '-';
  cantonSelectedCode = '-';
@@ -169,7 +166,6 @@ export class TecnicoFinancieroComponent implements OnInit {
  emailContactValidated = false;
  mainPhoneContactValidated = false;
  secondaryPhoneContactValidated = true;
- franchises_rucSelectedId = 0;
  user: User = new User();
 
  //DATOS ESTABLECIMIENTO
@@ -283,7 +279,6 @@ export class TecnicoFinancieroComponent implements OnInit {
              private dinardapDataService: DinardapService,
              private registerStateDataService: RegisterStateService,
              private approvalStateAttachmentDataService: ApprovalStateAttachmentService,
-             private franchiseDataService: FranchiseChainNameService,
              private rucDataService: RucService,
              private modalService: NgbModal,
              private agreementDataService: AgreementService,
@@ -1055,7 +1050,6 @@ export class TecnicoFinancieroComponent implements OnInit {
    this.getDeclarationItems();
    this.getMaxDeclarationDate();
    this.getTaxPayerType();
-   this.getFranchise();
    this.getGroupType();
    this.getStates();
    this.getStatesAlojamiento();
@@ -1196,7 +1190,6 @@ getDeclarationItems() {
         this.ruc_registro_selected.ruc.establishments = [];
         this.ruc_registro_selected.ruc.group_given = new GroupGiven();
         this.ruc_registro_selected.ruc.person_representative = new PersonRepresentative();
-        this.ruc_registro_selected.ruc.franchise_chain_names_on_ruc = [];
         this.ruc_registro_selected.ruc.tax_payer_type_id = 0;
         this.ruc_registro_selected.ruc.contact_user_id = 0;
         this.imContactRuc = true;
@@ -1205,7 +1198,6 @@ getDeclarationItems() {
      } else {
         this.ruc_registro_selected.ruc = r.Ruc as Ruc;
         this.ruc_registro_selected.ruc.establishments = [];
-        this.ruc_registro_selected.ruc.franchise_chain_names_on_ruc = r.attach[0].franchise_chain_names_on_ruc as FranchiseChainName[];
         this.ruc_registro_selected.ruc.contact_user = r.contact_user as User;
         this.imContactRuc = (this.ruc_registro_selected.ruc.contact_user.id == this.user.id);
         if (r.group_given == '0') {
@@ -2252,69 +2244,6 @@ getDeclarationItems() {
    this.tax_payer_typeDataService.get().then( r => {
       this.tax_payer_types = r as TaxPayerType[];
    }).catch( e => console.log(e) );
- }
-
- getFranchise() {
-   this.franchises = [];
-   this.franchiseDataService.get().then( r => {
-   this.franchises = r as FranchiseChainName[];
-   }).catch( e => console.log(e) );
- }
-
- getFranchisesOnRuc() {
-   this.ruc_registro_selected.ruc.franchise_chain_names_on_ruc = [];
-   this.rucDataService.get(this.ruc_registro_selected.ruc.id).then( r => {
-     this.ruc_registro_selected.ruc.franchise_chain_names_on_ruc = r.attach[0].franchise_chain_names_on_ruc as FranchiseChainName[];
-   }).catch( e => console.log(e) );
- }
-
- selectFranchise(franchise: FranchiseChainName) {
-   this.franchises_rucSelectedId = franchise.id;
- }
-
- addFranchise() {
-   if (this.franchises_rucSelectedId === 0) {
-      this.toastr.errorToastr('Seleccione un coordinador.', 'Error');
-      return;
-   }
-   this.franchises.forEach(franchise => {
-      if (franchise.id == this.franchises_rucSelectedId) {
-         let existe = false;
-         this.ruc_registro_selected.ruc.franchise_chain_names_on_ruc.forEach(element => {
-            if (element.id == franchise.id) {
-               existe = true;
-            }
-         });
-         if (!existe) {
-            this.ruc_registro_selected.ruc.franchise_chain_names_on_ruc.push(franchise);
-            this.franchises_rucSelectedId = 0;
-         } else {
-            this.toastr.errorToastr('El registro ya existe.', 'Error');
-         }
-      }
-   });
- }
-
- removeFranchise() {
-   if (this.franchises_rucSelectedId === 0) {
-      this.toastr.errorToastr('Seleccione un coordinador.', 'Error');
-      return;
-   }
-   const newFranchises: FranchiseChainName[] = [];
-   let eliminado = false;
-   this.ruc_registro_selected.ruc.franchise_chain_names_on_ruc.forEach(franchise => {
-      if (franchise.id !== this.franchises_rucSelectedId) {
-         newFranchises.push(franchise);
-      } else {
-         eliminado = true;
-      }
-   });
-   if (!eliminado) {
-      this.toastr.errorToastr('Registro no encontrado.', 'Error');
-      return;
-   }
-   this.ruc_registro_selected.ruc.franchise_chain_names_on_ruc = newFranchises;
-   this.franchises_rucSelectedId = 0;
  }
 
  addPreviewRegisterCode() {

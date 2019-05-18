@@ -23,40 +23,10 @@ class UbicationController extends Controller
        }
     }
 
-    function get_by_id_lower(Request $data) {
-      $id = $data['id'];
-      $parroquia = Ubication::where('id', $id)->first();
-      $canton = Ubication::where('code', $parroquia->father_code)->first();
-      $provincia = Ubication::where('code', $canton->father_code)->first();
-      $zonal = Ubication::where('code', $provincia->father_code)->first();
-      return response()->json(["zonal"=>$zonal, "provincia"=>$provincia, "canton"=>$canton, "parroquia"=>$parroquia],200);
-    }
-
     function paginate(Request $data)
     {
        $size = $data['size'];
        return response()->json(Ubication::paginate($size),200);
-    }
-
-    function filtered(Request $data)
-    {
-       $filter = $data['filter'];
-       if($filter === 'all') {
-         return response()->json(Ubication::get(),200);
-       } else {
-         return response()->json(Ubication::where('father_code', $filter)->get(),200);
-       }
-    }
-
-    function filtered_paginate(Request $data)
-    {
-       $size = $data['size'];
-       $filter = $data['filter'];
-       if($filter === 'all') {
-         return response()->json(Ubication::paginate($size),200);
-       } else {
-         return response()->json(Ubication::where('father_code', $filter)->paginate($size),200);
-       }
     }
 
     function post(Request $data)
@@ -74,6 +44,8 @@ class UbicationController extends Controller
           $ubication->name = $result['name'];
           $ubication->code = $result['code'];
           $ubication->father_code = $result['father_code'];
+          $ubication->gmap_reference_latitude = $result['gmap_reference_latitude'];
+          $ubication->gmap_reference_longitude = $result['gmap_reference_longitude'];
           $ubication->save();
           DB::commit();
        } catch (Exception $e) {
@@ -91,6 +63,8 @@ class UbicationController extends Controller
              'name'=>$result['name'],
              'code'=>$result['code'],
              'father_code'=>$result['father_code'],
+             'gmap_reference_latitude'=>$result['gmap_reference_latitude'],
+             'gmap_reference_longitude'=>$result['gmap_reference_longitude'],
           ]);
           DB::commit();
        } catch (Exception $e) {
@@ -130,6 +104,8 @@ class UbicationController extends Controller
              'name'=>$result['name'],
              'code'=>$result['code'],
              'father_code'=>$result['father_code'],
+             'gmap_reference_latitude'=>$result['gmap_reference_latitude'],
+             'gmap_reference_longitude'=>$result['gmap_reference_longitude'],
            ]);
          } else {
           $ubication = new Ubication();
@@ -137,6 +113,8 @@ class UbicationController extends Controller
           $ubication->name = $result['name'];
           $ubication->code = $result['code'];
           $ubication->father_code = $result['father_code'];
+          $ubication->gmap_reference_latitude = $result['gmap_reference_latitude'];
+          $ubication->gmap_reference_longitude = $result['gmap_reference_longitude'];
           $ubication->save();
          }
        }

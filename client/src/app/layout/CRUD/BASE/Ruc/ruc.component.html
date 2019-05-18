@@ -115,36 +115,6 @@
                   </select>
                </div>
             </div>
-            <div class="form-group row">
-               <label class="col-12 col-form-label mb-2"><strong>FranchiseChainNames</strong></label>
-               <label class="col-4 col-form-label">FranchiseChainName</label>
-               <div class="col-8">
-                  <div class="input-group">
-                     <div class="input-group-prepend">
-                        <button type="button" title="Eliminar" class="btn btn-danger" (click)="removeFranchiseChainName()"><i class="fas fa-trash"></i></button>
-                        <button type="button" title="Agregar" class="btn btn-success" (click)="addFranchiseChainName()"><i class="fas fa-plus-circle"></i></button>
-                     </div>
-                     <select class="form-control" id="franchise_chain_name_id" name="franchise_chain_name_id" [(ngModel)]="franchise_chain_names_rucSelectedId">
-                        <option value="0" selected>Seleccione...</option>
-                        <option *ngFor="let franchise_chain_name of franchise_chain_names" value={{franchise_chain_name.id}}>
-                           {{franchise_chain_name.id}}
-                        </option>
-                     </select>
-                  </div>
-               </div>
-               <div class="col-4">
-               </div>
-               <div class="col-8">
-                  <table class="table table-hover mt-2">
-                     <tbody>
-                        <tr *ngFor="let franchise_chain_name of rucSelected.franchise_chain_names_on_ruc" (click)="selectFranchiseChainName(franchise_chain_name)">
-                           <td class="text-right"><span *ngIf="franchise_chain_names_rucSelectedId === franchise_chain_name.id" class="far fa-hand-point-right"></span></td>
-                           <td>{{franchise_chain_name.id}}</td>
-                        </tr>
-                     </tbody>
-                  </table>
-               </div>
-            </div>
          </div>
       </div>
    </div>

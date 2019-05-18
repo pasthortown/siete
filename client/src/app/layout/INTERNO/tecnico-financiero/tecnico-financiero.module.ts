@@ -21,7 +21,6 @@ import { ConsultorService } from 'src/app/services/negocio/consultor.service';
 import { RegisterStateService } from 'src/app/services/CRUD/ALOJAMIENTO/registerstate.service';
 import { WorkerService } from 'src/app/services/CRUD/BASE/worker.service';
 import { TaxPayerTypeService } from 'src/app/services/CRUD/BASE/taxpayertype.service';
-import { FranchiseChainNameService } from 'src/app/services/CRUD/BASE/franchisechainname.service';
 import { RucService } from 'src/app/services/CRUD/BASE/ruc.service';
 import { EstablishmentService } from 'src/app/services/CRUD/BASE/establishment.service';
 import { EstablishmentCertificationService } from 'src/app/services/CRUD/BASE/establishmentcertification.service';
@@ -102,7 +101,6 @@ import { StateService as StateAlojamientoService } from 'src/app/services/CRUD/A
     EstablishmentService,
     WorkerService,
     BedTypeService,
-    FranchiseChainNameService,
     SystemNameService,
     RucService]
 })

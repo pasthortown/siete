@@ -15,6 +15,7 @@ import { WorkerService } from './../../../../services/CRUD/BASE/worker.service';
 import { EstablishmentPropertyTypeService } from './../../../../services/CRUD/BASE/establishmentpropertytype.service';
 import { EstablishmentCertificationService } from './../../../../services/CRUD/BASE/establishmentcertification.service';
 import { RucNameTypeService } from './../../../../services/CRUD/BASE/rucnametype.service';
+import { FloorAuthorizationCertificateService } from './../../../../services/CRUD/BASE/floorauthorizationcertificate.service';
 import { CKEditorModule } from 'ngx-ckeditor';
 
 @NgModule({
@@ -34,6 +35,7 @@ import { CKEditorModule } from 'ngx-ckeditor';
                EstablishmentPropertyTypeService,
                EstablishmentCertificationService,
                RucNameTypeService,
+               FloorAuthorizationCertificateService,
                EstablishmentService
                ]
 })

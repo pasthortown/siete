@@ -7,7 +7,6 @@ import { RucComponent } from './ruc.component';
 import { RucService } from './../../../../services/CRUD/BASE/ruc.service';
 import { environment } from 'src/environments/environment';
 import { TaxPayerTypeService } from './../../../../services/CRUD/BASE/taxpayertype.service';
-import { FranchiseChainNameService } from './../../../../services/CRUD/BASE/franchisechainname.service';
 
 @NgModule({
    imports: [CommonModule,
@@ -17,7 +16,6 @@ import { FranchiseChainNameService } from './../../../../services/CRUD/BASE/fran
    providers: [
                NgbModal,
                TaxPayerTypeService,
-               FranchiseChainNameService,
                RucService
                ]
 })

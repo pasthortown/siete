@@ -34,11 +34,6 @@ class Ruc extends Model
        return $this->belongsTo('App\Establishment');
     }
 
-    function FranchiseChainNames()
-    {
-       return $this->belongsToMany('App\FranchiseChainName')->withTimestamps();
-    }
-
     function GroupGiven()
     {
        return $this->belongsTo('App\GroupGiven');

@@ -19,7 +19,6 @@ import { ConsultorService } from 'src/app/services/negocio/consultor.service';
 
 import { WorkerService } from 'src/app/services/CRUD/BASE/worker.service';
 import { TaxPayerTypeService } from 'src/app/services/CRUD/BASE/taxpayertype.service';
-import { FranchiseChainNameService } from 'src/app/services/CRUD/BASE/franchisechainname.service';
 import { RucService } from 'src/app/services/CRUD/BASE/ruc.service';
 import { EstablishmentService } from 'src/app/services/CRUD/BASE/establishment.service';
 import { EstablishmentCertificationService } from 'src/app/services/CRUD/BASE/establishmentcertification.service';
@@ -92,7 +91,6 @@ import { Ng2TableModule } from 'ng2-table/ng2-table';
     EstablishmentService,
     WorkerService,
     BedTypeService,
-    FranchiseChainNameService,
     SystemNameService,
     RucService]
 })

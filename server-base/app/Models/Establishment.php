@@ -74,4 +74,9 @@ class Establishment extends Model
        return $this->hasOne('App\RucNameType');
     }
 
+    function FloorAuthorizationCertificate()
+    {
+       return $this->hasOne('App\FloorAuthorizationCertificate');
+    }
+
 }

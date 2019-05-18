@@ -28,6 +28,9 @@ import { EstablishmentCertification } from './../../../../models/BASE/Establishm
 import { RucNameTypeService } from './../../../../services/CRUD/BASE/rucnametype.service';
 import { RucNameType } from './../../../../models/BASE/RucNameType';
 
+import { FloorAuthorizationCertificateService } from './../../../../services/CRUD/BASE/floorauthorizationcertificate.service';
+import { FloorAuthorizationCertificate } from './../../../../models/BASE/FloorAuthorizationCertificate';
+
 
 @Component({
    selector: 'app-establishment',
@@ -54,6 +57,7 @@ export class EstablishmentComponent implements OnInit {
    establishment_certifications: EstablishmentCertification[] = [];
    establishment_certifications_establishmentSelectedId: number;
    ruc_name_types: RucNameType[] = [];
+   floor_authorization_certificates: FloorAuthorizationCertificate[] = [];
    constructor(
                private modalService: NgbModal,
                private toastr: ToastrManager,
@@ -65,6 +69,7 @@ export class EstablishmentComponent implements OnInit {
                private establishment_property_typeDataService: EstablishmentPropertyTypeService,
                private establishment_certificationDataService: EstablishmentCertificationService,
                private ruc_name_typeDataService: RucNameTypeService,
+               private floor_authorization_certificateDataService: FloorAuthorizationCertificateService,
                private establishmentDataService: EstablishmentService) {}
 
    ngOnInit() {
@@ -77,6 +82,7 @@ export class EstablishmentComponent implements OnInit {
       this.getEstablishmentPropertyType();
       this.getEstablishmentCertification();
       this.getRucNameType();
+      this.getFloorAuthorizationCertificate();
    }
 
    selectEstablishment(establishment: Establishment) {
@@ -167,6 +173,13 @@ export class EstablishmentComponent implements OnInit {
       }).catch( e => console.log(e) );
    }
 
+   getFloorAuthorizationCertificate() {
+      this.floor_authorization_certificates = [];
+      this.floor_authorization_certificateDataService.get().then( r => {
+         this.floor_authorization_certificates = r as FloorAuthorizationCertificate[];
+      }).catch( e => console.log(e) );
+   }
+
    goToPage(page: number) {
       if ( page < 1 || page > this.lastPage ) {
          this.toastr.errorToastr('La página solicitada no existe.', 'Error');
@@ -192,6 +205,7 @@ export class EstablishmentComponent implements OnInit {
       this.establishmentSelected.establishment_property_type_id = 0;
       this.establishment_certifications_establishmentSelectedId = 0;
       this.establishmentSelected.ruc_name_type_id = 0;
+      this.establishmentSelected.floor_authorization_certificate_id = 0;
       this.establishmentDataService.get_paginate(this.recordsByPage, this.currentPage).then( r => {
          this.establishments = r.data as Establishment[];
          this.lastPage = r.last_page;
@@ -208,6 +222,7 @@ export class EstablishmentComponent implements OnInit {
       this.establishmentSelected.establishment_property_type_id = 0;
       this.establishment_certifications_establishmentSelectedId = 0;
       this.establishmentSelected.ruc_name_type_id = 0;
+      this.establishmentSelected.floor_authorization_certificate_id = 0;
       this.openDialog(content);
    }
 
@@ -262,9 +277,9 @@ export class EstablishmentComponent implements OnInit {
    toCSV() {
       this.establishmentDataService.get().then( r => {
          const backupData = r as Establishment[];
-         let output = 'id;ruc_code_id;commercially_known_name;address_main_street;address_map_latitude;address_map_longitude;url_web;as_turistic_register_date;address_reference;contact_user_id;address_secondary_street;address_number;franchise_chain_name;ruc_id;ubication_id;establishment_property_type_id;ruc_name_type_id\n';
+         let output = 'id;ruc_code_id;commercially_known_name;address_main_street;address_map_latitude;address_map_longitude;url_web;as_turistic_register_date;address_reference;contact_user_id;address_secondary_street;address_number;franchise_chain_name;ruc_id;ubication_id;establishment_property_type_id;ruc_name_type_id;floor_authorization_certificate_id\n';
          backupData.forEach(element => {
-            output += element.id; + element.ruc_code_id + ';' + element.commercially_known_name + ';' + element.address_main_street + ';' + element.address_map_latitude + ';' + element.address_map_longitude + ';' + element.url_web + ';' + element.as_turistic_register_date + ';' + element.address_reference + ';' + element.contact_user_id + ';' + element.address_secondary_street + ';' + element.address_number + ';' + element.franchise_chain_name + ';' + element.ruc_id + ';' + element.ubication_id + ';' + element.establishment_property_type_id + ';' + element.ruc_name_type_id + '\n';
+            output += element.id; + element.ruc_code_id + ';' + element.commercially_known_name + ';' + element.address_main_street + ';' + element.address_map_latitude + ';' + element.address_map_longitude + ';' + element.url_web + ';' + element.as_turistic_register_date + ';' + element.address_reference + ';' + element.contact_user_id + ';' + element.address_secondary_street + ';' + element.address_number + ';' + element.franchise_chain_name + ';' + element.ruc_id + ';' + element.ubication_id + ';' + element.establishment_property_type_id + ';' + element.ruc_name_type_id + ';' + element.floor_authorization_certificate_id + '\n';
          });
          const blob = new Blob([output], { type: 'text/plain' });
          const fecha = new Date();

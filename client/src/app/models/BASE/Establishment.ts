@@ -30,6 +30,7 @@ export class Establishment {
    establishment_property_type_id: number;
    establishment_certifications_on_establishment: EstablishmentCertification[];
    ruc_name_type_id: number;
+   floor_authorization_certificate_id: number;
    constructor() {
       this.id = 0;
       this.contact_user = new User();
@@ -50,5 +51,6 @@ export class Establishment {
       this.url_web = '';
       this.contact_user_id = 0;
       this.ubication_id = 0;
+      this.floor_authorization_certificate_id = 0;
    }
 }

@@ -158,15 +158,6 @@ $router->group(['middleware' => ['auth']], function () use ($router) {
    $router->delete('/establishmentpropertytype', ['uses' => 'EstablishmentPropertyTypeController@delete']);
    $router->post('/establishmentpropertytype/masive_load', ['uses' => 'EstablishmentPropertyTypeController@masiveLoad']);
 
-   //CRUD FranchiseChainName
-   $router->post('/franchisechainname', ['uses' => 'FranchiseChainNameController@post']);
-   $router->get('/franchisechainname', ['uses' => 'FranchiseChainNameController@get']);
-   $router->get('/franchisechainname/paginate', ['uses' => 'FranchiseChainNameController@paginate']);
-   $router->get('/franchisechainname/backup', ['uses' => 'FranchiseChainNameController@backup']);
-   $router->put('/franchisechainname', ['uses' => 'FranchiseChainNameController@put']);
-   $router->delete('/franchisechainname', ['uses' => 'FranchiseChainNameController@delete']);
-   $router->post('/franchisechainname/masive_load', ['uses' => 'FranchiseChainNameController@masiveLoad']);
-
    //CRUD GroupGiven
    $router->post('/groupgiven', ['uses' => 'GroupGivenController@post']);
    $router->get('/groupgiven', ['uses' => 'GroupGivenController@get']);
@@ -249,4 +240,13 @@ $router->group(['middleware' => ['auth']], function () use ($router) {
    $router->put('/agreement', ['uses' => 'AgreementController@put']);
    $router->delete('/agreement', ['uses' => 'AgreementController@delete']);
    $router->post('/agreement/masive_load', ['uses' => 'AgreementController@masiveLoad']);
+
+   //CRUD FloorAuthorizationCertificate
+   $router->post('/floorauthorizationcertificate', ['uses' => 'FloorAuthorizationCertificateController@post']);
+   $router->get('/floorauthorizationcertificate', ['uses' => 'FloorAuthorizationCertificateController@get']);
+   $router->get('/floorauthorizationcertificate/paginate', ['uses' => 'FloorAuthorizationCertificateController@paginate']);
+   $router->get('/floorauthorizationcertificate/backup', ['uses' => 'FloorAuthorizationCertificateController@backup']);
+   $router->put('/floorauthorizationcertificate', ['uses' => 'FloorAuthorizationCertificateController@put']);
+   $router->delete('/floorauthorizationcertificate', ['uses' => 'FloorAuthorizationCertificateController@delete']);
+   $router->post('/floorauthorizationcertificate/masive_load', ['uses' => 'FloorAuthorizationCertificateController@masiveLoad']);
 });

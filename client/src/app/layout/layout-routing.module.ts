@@ -82,16 +82,16 @@ const routes: Routes = [
             loadChildren: './CRUD/BASE/EstablishmentPropertyType/establishmentpropertytype.module#EstablishmentPropertyTypeModule'
          },
          {
-            path: 'franchise_chain_name',
-            loadChildren: './CRUD/BASE/FranchiseChainName/franchisechainname.module#FranchiseChainNameModule'
-         },
-         {
             path: 'group_given',
             loadChildren: './CRUD/BASE/GroupGiven/groupgiven.module#GroupGivenModule'
          },
          {
             path: 'state_base',
             loadChildren: './CRUD/BASE/State/state.module#StateModule'
+         },
+         {
+            path: 'floor_authorization_certificate',
+            loadChildren: './CRUD/BASE/FloorAuthorizationCertificate/floorauthorizationcertificate.module#FloorAuthorizationCertificateModule'
          },
          {
             path: 'establishment_state',

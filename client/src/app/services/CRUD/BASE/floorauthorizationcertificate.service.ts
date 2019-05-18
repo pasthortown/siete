@@ -2,14 +2,14 @@ import { Injectable } from '@angular/core';
 import { Http, RequestOptions, Headers } from '@angular/http';
 import { Router } from '@angular/router';
 import { environment } from './../../../../environments/environment';
-import { FranchiseChainName } from './../../../models/BASE/FranchiseChainName';
+import { FloorAuthorizationCertificate } from './../../../models/BASE/FloorAuthorizationCertificate';
 
 @Injectable({
    providedIn: 'root'
 })
-export class FranchiseChainNameService {
+export class FloorAuthorizationCertificateService {
 
-   url = environment.api_base + 'franchisechainname/';
+   url = environment.api_base + 'floorauthorizationcertificate/';
    options = new RequestOptions();
 
    constructor(private http: Http, private router: Router) {
@@ -51,15 +51,15 @@ export class FranchiseChainNameService {
       }).catch( error => { this.handledError(error.json()); });
    }
 
-   post(franchisechainname: FranchiseChainName): Promise<any> {
-      return this.http.post(this.url, JSON.stringify(franchisechainname), this.options).toPromise()
+   post(floorauthorizationcertificate: FloorAuthorizationCertificate): Promise<any> {
+      return this.http.post(this.url, JSON.stringify(floorauthorizationcertificate), this.options).toPromise()
       .then( r => {
          return r.json();
       }).catch( error => { this.handledError(error.json()); });
    }
 
-   put(franchisechainname: FranchiseChainName): Promise<any> {
-      return this.http.put(this.url, JSON.stringify(franchisechainname), this.options).toPromise()
+   put(floorauthorizationcertificate: FloorAuthorizationCertificate): Promise<any> {
+      return this.http.put(this.url, JSON.stringify(floorauthorizationcertificate), this.options).toPromise()
       .then( r => {
          return r.json();
       }).catch( error => { this.handledError(error.json()); });

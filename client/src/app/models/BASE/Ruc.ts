@@ -2,7 +2,6 @@ import { EstablishmentOnRuc } from './../negocio/EstablishmentOnRuc';
 import { GroupGiven } from './GroupGiven';
 import { PersonRepresentative } from './PersonRepresentative';
 import { User } from './../profile/User';
-import { FranchiseChainName } from './FranchiseChainName';
 import { Establishment } from './Establishment';
 import { PersonRepresentativeAttachment } from './PersonRepresentativeAttachment';
 
@@ -19,14 +18,12 @@ export class Ruc {
    owner_name: String;
    establishments: Establishment[];
    establishmentsSRI: EstablishmentOnRuc[];
-   franchise_chain_names_on_ruc: FranchiseChainName[];
    constructor() {
       this.establishmentsSRI = [];
       this.establishments = [];
       this.group_given = new GroupGiven();
       this.person_representative = new PersonRepresentative();
       this.person_representative_attachment = new PersonRepresentativeAttachment();
-      this.franchise_chain_names_on_ruc = [];
       this.tax_payer_type_id = 0;
       this.contact_user_id = 0;
       this.contact_user = new User();

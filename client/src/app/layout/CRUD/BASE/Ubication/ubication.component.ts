@@ -13,9 +13,6 @@ import { Ubication } from './../../../../models/BASE/Ubication';
 export class UbicationComponent implements OnInit {
    ubications: Ubication[] = [];
    ubicationSelected: Ubication = new Ubication();
-   all_ubications: Ubication[] = [];
-   father_ubications: Ubication[] = [];
-   filter_ubication_father = 'all';
 
    currentPage = 1;
    lastPage = 1;
@@ -27,47 +24,7 @@ export class UbicationComponent implements OnInit {
                private ubicationDataService: UbicationService) {}
 
    ngOnInit() {
-      this.refresh();
-   }
-
-   refresh() {
-      this.getFatherUbications();
-      this.goToPage(this.currentPage);
-   }
-
-   getFatherUbications() {
-      this.father_ubications = [];
-      this.ubicationDataService.get().then( r => {
-         this.all_ubications = r as Ubication[];
-         const response = r as Ubication[];
-         response.forEach(e1 => {
-            let isFather = false;
-            if(e1.father_code === '-') {
-               isFather = true;
-            }
-            this.all_ubications.forEach(e2 => {
-               if(e2.father_code === e1.code) {
-                  isFather = true;
-               }
-            });
-            if(isFather) {
-               this.father_ubications.push(e1);
-            }
-         });
-      }).catch( e => console.log(e) );
-   }
-
-   buildCode(fatherCode: String) {
-      let count = 1;
-      this.all_ubications.forEach(element => {
-         if(element.father_code === fatherCode) {
-            count++;
-         }
-      });
-      if(fatherCode === '-'){
-         return count.toString();
-      }
-      return fatherCode + '.' + count.toString();
+      this.goToPage(1);
    }
 
    selectUbication(ubication: Ubication) {
@@ -83,10 +40,15 @@ export class UbicationComponent implements OnInit {
       this.getUbications();
    }
 
+   gmap_referenceEvent(event) {
+      this.ubicationSelected.gmap_reference_latitude = event.coords.lat;
+      this.ubicationSelected.gmap_reference_longitude = event.coords.lng;
+   }
+
    getUbications() {
       this.ubications = [];
       this.ubicationSelected = new Ubication();
-      this.ubicationDataService.get_filtered_paginate(this.recordsByPage, this.currentPage, this.filter_ubication_father).then( r => {
+      this.ubicationDataService.get_paginate(this.recordsByPage, this.currentPage).then( r => {
          this.ubications = r.data as Ubication[];
          this.lastPage = r.last_page;
       }).catch( e => console.log(e) );
@@ -112,7 +74,7 @@ export class UbicationComponent implements OnInit {
       }
       this.ubicationDataService.delete(this.ubicationSelected.id).then( r => {
          this.toastr.successToastr('Registro Borrado satisfactoriamente.', 'Borrar');
-         this.refresh();
+         this.getUbications();
       }).catch( e => console.log(e) );
    }
 
@@ -128,9 +90,9 @@ export class UbicationComponent implements OnInit {
    toCSV() {
       this.ubicationDataService.get().then( r => {
          const backupData = r as Ubication[];
-         let output = 'id;name;code;father_code;register_date\n';
+         let output = 'id;name;code;father_code;gmap_reference_latitude;gmap_reference_longitude\n';
          backupData.forEach(element => {
-            output += element.id + ';' + element.name + ';' + element.code + ';' + element.father_code + '\n';
+            output += element.id; + element.name + ';' + element.code + ';' + element.father_code + ';' + element.gmap_reference_latitude + ';' + element.gmap_reference_longitude + '\n';
          });
          const blob = new Blob([output], { type: 'text/plain' });
          const fecha = new Date();
@@ -159,12 +121,12 @@ export class UbicationComponent implements OnInit {
             if (typeof this.ubicationSelected.id === 'undefined') {
                this.ubicationDataService.post(this.ubicationSelected).then( r => {
                   this.toastr.successToastr('Datos guardados satisfactoriamente.', 'Nuevo');
-                  this.refresh();
+                  this.getUbications();
                }).catch( e => console.log(e) );
             } else {
                this.ubicationDataService.put(this.ubicationSelected).then( r => {
                   this.toastr.successToastr('Registro actualizado satisfactoriamente.', 'Actualizar');
-                  this.refresh();
+                  this.getUbications();
                }).catch( e => console.log(e) );
             }
          }
