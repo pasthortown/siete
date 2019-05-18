@@ -18,13 +18,16 @@ class CreateEstablishmentsTable extends Migration
           $table->timestamps();
           $table->string('ruc_code_id',3)->nullable($value = true);
           $table->string('commercially_known_name',255)->nullable($value = true);
-          $table->string('address',255)->nullable($value = true);
+          $table->string('address_main_street',255)->nullable($value = true);
           $table->float('address_map_latitude',24,16)->nullable($value = true);
           $table->float('address_map_longitude',24,16)->nullable($value = true);
           $table->string('url_web',255)->nullable($value = true);
           $table->dateTime('as_turistic_register_date')->nullable($value = true);
           $table->longText('address_reference')->nullable($value = true);
           $table->integer('contact_user_id')->nullable($value = true);
+          $table->string('address_secondary_street',255)->nullable($value = true);
+          $table->string('address_number',20)->nullable($value = true);
+          $table->string('franchise_chain_name',50)->nullable($value = true);
           $table->unsignedInteger('ruc_id');
           $table->foreign('ruc_id')->references('id')->on('rucs')->onDelete('cascade');
           $table->unsignedInteger('ubication_id');

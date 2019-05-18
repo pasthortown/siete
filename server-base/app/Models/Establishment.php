@@ -12,7 +12,7 @@ class Establishment extends Model
      * @var array
      */
     protected $fillable = [
-       'ruc_code_id','commercially_known_name','address','address_map_latitude','address_map_longitude','url_web','as_turistic_register_date','address_reference','contact_user_id',
+       'ruc_code_id','commercially_known_name','address_main_street','address_map_latitude','address_map_longitude','url_web','as_turistic_register_date','address_reference','contact_user_id','address_secondary_street','address_number','franchise_chain_name',
     ];
 
     /**

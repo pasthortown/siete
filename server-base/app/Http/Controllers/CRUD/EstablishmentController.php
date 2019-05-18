@@ -62,7 +62,9 @@ class EstablishmentController extends Controller
           }
           $establishment->ruc_code_id = $result['ruc_code_id'];
           $establishment->commercially_known_name = $result['commercially_known_name'];
-          $establishment->address = $result['address'];
+          $establishment->address_main_street = $result['address_main_street'];
+          $establishment->address_secondary_street = $result['address_secondary_street'];
+          $establishment->address_number = $result['address_number'];
           $establishment->address_map_latitude = $result['address_map_latitude'];
           $establishment->address_map_longitude = $result['address_map_longitude'];
           $establishment->url_web = $result['url_web'];
@@ -70,6 +72,7 @@ class EstablishmentController extends Controller
           $establishment->address_reference = $result['address_reference'];
           $establishment->contact_user_id = $result['contact_user_id'];
           $establishment->ruc_id = $result['ruc_id'];
+          $establishment->franchise_chain_name = $result['franchise_chain_name'];
           $establishment->ubication_id = $result['ubication_id'];
           $establishment->establishment_property_type_id = $result['establishment_property_type_id'];
           $establishment->ruc_name_type_id = $result['ruc_name_type_id'];
@@ -105,7 +108,10 @@ class EstablishmentController extends Controller
           $establishment = Establishment::where('id',$result['id'])->update([
              'ruc_code_id'=>$result['ruc_code_id'],
              'commercially_known_name'=>$result['commercially_known_name'],
-             'address'=>$result['address'],
+             'address_main_street'=>$result['address_main_street'],
+             'address_secondary_street'=>$result['address_secondary_street'],
+             'address_number'=>$result['address_number'],
+             'franchise_chain_name'=>$result['franchise_chain_name'],
              'address_map_latitude'=>$result['address_map_latitude'],
              'address_map_longitude'=>$result['address_map_longitude'],
              'url_web'=>$result['url_web'],
@@ -247,7 +253,10 @@ class EstablishmentController extends Controller
             $establishment = Establishment::where('id',$result['id'])->update([
                'ruc_code_id'=>$result['ruc_code_id'],
                'commercially_known_name'=>$result['commercially_known_name'],
-               'address'=>$result['address'],
+               'address_main_street'=>$result['address_main_street'],
+               'address_secondary_street'=>$result['address_secondary_street'],
+               'address_number'=>$result['address_number'],
+               'franchise_chain_name'=>$result['franchise_chain_name'],
                'address_map_latitude'=>$result['address_map_latitude'],
                'address_map_longitude'=>$result['address_map_longitude'],
                'url_web'=>$result['url_web'],
@@ -352,7 +361,10 @@ class EstablishmentController extends Controller
             }
             $establishment->ruc_code_id = $result['ruc_code_id'];
             $establishment->commercially_known_name = $result['commercially_known_name'];
-            $establishment->address = $result['address'];
+            $establishment->address_main_street = $result['address_main_street'];
+            $establishment->address_secondary_street = $result['address_secondary_street'];
+            $establishment->address_number = $result['address_number'];
+            $establishment->franchise_chain_name = $result['franchise_chain_name'];
             $establishment->address_map_latitude = $result['address_map_latitude'];
             $establishment->address_map_longitude = $result['address_map_longitude'];
             $establishment->url_web = $result['url_web'];
@@ -466,7 +478,10 @@ class EstablishmentController extends Controller
            Establishment::where('id', $result['id'])->update([
              'ruc_code_id'=>$result['ruc_code_id'],
              'commercially_known_name'=>$result['commercially_known_name'],
-             'address'=>$result['address'],
+             'address_main_street'=>$result['address_main_street'],
+             'address_secondary_street'=>$result['address_secondary_street'],
+             'address_number'=>$result['address_number'],
+             'franchise_chain_name'=>$result['franchise_chain_name'],             
              'address_map_latitude'=>$result['address_map_latitude'],
              'address_map_longitude'=>$result['address_map_longitude'],
              'url_web'=>$result['url_web'],
@@ -483,7 +498,10 @@ class EstablishmentController extends Controller
           $establishment->id = $result['id'];
           $establishment->ruc_code_id = $result['ruc_code_id'];
           $establishment->commercially_known_name = $result['commercially_known_name'];
-          $establishment->address = $result['address'];
+          $establishment->address_main_street = $result['address_main_street'];
+          $establishment->address_secondary_street = $result['address_secondary_street'];
+          $establishment->address_number = $result['address_number'];
+          $establishment->franchise_chain_name = $result['franchise_chain_name'];
           $establishment->address_map_latitude = $result['address_map_latitude'];
           $establishment->address_map_longitude = $result['address_map_longitude'];
           $establishment->url_web = $result['url_web'];

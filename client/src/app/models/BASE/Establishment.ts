@@ -11,7 +11,10 @@ export class Establishment {
    id: number;
    ruc_code_id: String;
    commercially_known_name: String;
-   address: String;
+   address_main_street: String;
+   address_secondary_street: String;
+   address_number: String;
+   franchise_chain_name: String;
    address_map_latitude: number;
    address_map_longitude: number;
    url_web: String;
@@ -39,6 +42,10 @@ export class Establishment {
       this.ruc_code_id = '-';
       this.establishment_property_type_id = 0;
       this.address_reference = '';
+      this.address_main_street = '';
+      this.address_secondary_street = '';
+      this.address_number = '';
+      this.franchise_chain_name = '';
       this.ruc_name_type_id = 0;
       this.url_web = '';
       this.contact_user_id = 0;

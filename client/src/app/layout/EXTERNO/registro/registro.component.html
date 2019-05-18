@@ -45,7 +45,7 @@
     <div class="row">
       <div class="col-12">
         <ngb-tabset>
-          <ngb-tab title="R.U.C." id="tab1">
+          <ngb-tab title="Información de la Persona Natural/Jurídica" id="tab1">
             <ng-template ngbTabContent>
               <div class="row mt-3">
                 <h4 class="col-12">
@@ -112,10 +112,10 @@
                   </div>
                 </div>
               </div>
-              <div class="row" *ngIf="ruc_registro_selected.ruc.tax_payer_type_id > 1">
-                <div class="col-6">
+              <div class="row">
+                <div class="col-12">
                   <div class="form-group">
-                    <label for="group_type_id">Tipo de Personería Jurídica</label><span
+                    <label for="group_type_id">Tipo de Personería Jurídica*</label><span
                       *ngIf="!validateGroupGivenTipe()" class="ml-2 badge badge-danger">Incorrecto</span>
                     <select class="form-control" id="group_type_id" name="group_type_id"
                       [(ngModel)]="ruc_registro_selected.ruc.group_given.group_type_id" (change)="
@@ -130,18 +130,32 @@
                     </select>
                   </div>
                 </div>
-                <div class="col-6">
+              </div>
+              <div class="row mt-3">
+                <h4 class="col-12">
+                  <strong>Escritura de Constitución</strong>
+                </h4>
+              </div>
+              <div class="row">
+                <div class="col-12">
                   <div class="form-group">
-                    <label for="group_type_id">Número de Expediente de la Superintendencia de Companías</label><span
+                    <label for="group_type_id">Número de Expediente de la Superintendencia de Companías*</label><span
                       *ngIf="ruc_registro_selected.ruc.group_given.register_code === ''" class="ml-2 badge badge-danger">Incorrecto</span>
                     <input type="text" class="form-control" min="0" id="expediente"
                       name="expediente" (keyup)="checkRegistroSupercias()" placeholder="Número de Expediente de la Superintendencia de Companías" [(ngModel)]="ruc_registro_selected.ruc.group_given.register_code"/>
                   </div>
                 </div>
+              </div>
+              <div class="row mt-3">
+                <h4 class="col-12">
+                  <strong>Representante Legal</strong>
+                </h4>
+              </div>
+              <div class="row" *ngIf="ruc_registro_selected.ruc.tax_payer_type_id > 1">
                 <div class="col-4">
                   <div class="form-group" *ngIf="ruc_registro_selected.ruc.group_given.group_type_id != 0">
                     <label>Cédula
-                      {{ groupTypeSelected.representative_rol_name }}</label><span
+                      {{ groupTypeSelected.representative_rol_name }}*</label><span
                       *ngIf="!identificationRepresentativePersonValidated"
                       class="ml-2 badge badge-danger">Incorrecto</span>
                     <div class="input-group mb-3">
@@ -164,7 +178,7 @@
                 </div>
                 <div class="col-4">
                   <div class="form-group" *ngIf="ruc_registro_selected.ruc.group_given.group_type_id != 0">
-                    <label>Fecha de Nombramiento</label>
+                    <label>Fecha de Nombramiento*</label>
                     <input type="date" class="form-control" id="assignment_date" name="assignment_date"
                       placeholder="assignmentDate" [ngModel]="
                           ruc_registro_selected.ruc.person_representative_attachment.assignment_date | date: 'y-MM-dd'
@@ -175,7 +189,7 @@
                 </div>
                 <div class="col-4">
                   <div class="form-group" *ngIf="ruc_registro_selected.ruc.group_given.group_type_id != 0">
-                    <label>Nombramiento Representante del Legal</label><span *ngIf="!validateNombramiento()"
+                    <label>Nombramiento Representante del Legal*</label><span *ngIf="!validateNombramiento()"
                       class="ml-2 badge badge-danger">Incorrecto</span>
                     <div class="input-group">
                       <div class="input-group-prepend">
@@ -355,11 +369,11 @@
               </div>
             </ng-template>
           </ngb-tab>
-          <ngb-tab title="Establecimientos" id="tab2" *ngIf="rucSaved() && SRIOK && REGCIVILOK">
+          <ngb-tab title="Información del Establecimiento" id="tab2" *ngIf="rucSaved() && SRIOK && REGCIVILOK">
             <ng-template ngbTabContent>
               <div class="row mt-3">
                 <h4 class="col-12">
-                  <strong>Establecimientos Registrados</strong>
+                  <strong>Información del Establecimiento</strong>
                 </h4>
               </div>
               <div class="row">
@@ -425,20 +439,19 @@
                 <div class="col-12">
                   <div class="row mt-5">
                     <div class="col-12 text-left">
-                      <h3>Datos del Establecimiento:</h3>
+                      <h3>Datos Generales del Establecimiento:</h3>
                     </div>
                   </div>
                   <div class="row">
                     <div class="col-12">
                       <div class="alert alert-info mt-2 mb-2" role="alert">
                         <label class="col-12 text-justify"><strong>Atención</strong></label><br />
-                        Seleccione el establecimiento que desea declarar como turístico.<br/>
-                        Solamente se otorgará un número de registro a los establecimientos que han sido declarados como turísticos.
+                        A continuación se detalla el listado de los establecimientos que se encuentran vinculados a su RUC, por favor para iniciar el proceso dar click en el establecimiento que desea tramitar.
                       </div>
                     </div>
                     <div class="col-12">
                       <div class="form-group">
-                        <label>Código referente al RUC</label><span *ngIf="establishment_selected.ruc_code_id == '-'"
+                        <label>Listado de Establecimientos Inscritos en el RUC*</label><span *ngIf="establishment_selected.ruc_code_id == '-'"
                           class="ml-2 badge badge-danger">Incorrecto</span>
                         <select class="form-control" id="ruc_code_id" name="ruc_code_id"
                           [(ngModel)]="establishment_selected.ruc_code_id">
@@ -454,7 +467,7 @@
                       <div class="row">
                         <div class="col-3">
                           <div class="form-group">
-                            <label>Tipo de Nombre Comercial</label><span
+                            <label>Tipo de Establecimiento</label><span
                               *ngIf="establishment_selected.ruc_name_type_id == 0"
                               class="ml-2 badge badge-danger">Incorrecto</span>
                             <select class="form-control" id="comercial_name_type_id" name="comercial_name_type_id"
@@ -467,10 +480,12 @@
                               </option>
                             </select>
                           </div>
+                          <!--Si selecciona franquicia o cadena, habilitar un campo para ingressar el nombre de la franquicia o cadena
+                          Nombre Comercial no editable y viene del SRI-->
                         </div>
                         <div class="col-9">
                           <div class="form-group">
-                            <label>Nombre Comercial</label><span *ngIf="!establishmentComercialNameValidated"
+                            <label>Nombre Comercial*</label><span *ngIf="!establishmentComercialNameValidated"
                               class="ml-2 badge badge-danger">Incorrecto</span>
                             <input type="text" class="form-control" id="commercially_known_name"
                               name="commercially_known_name" (keyup)="checkEstablishmentComercialName()"
@@ -481,7 +496,8 @@
                         </div>
                       </div>
                       <div class="form-group">
-                        <label>Tipo de Propiedad sobre el Establecimiento</label><span *ngIf="
+                        <!--Permitir que suba un pdf del Tipo de Uso de Suelo-->
+                        <label>Su local es*</label><span *ngIf="
                             establishment_selected.establishment_property_type_id == 0
                           " class="ml-2 badge badge-danger">Incorrecto</span>
                         <select class="form-control" id="establishment_property_type_id"
@@ -500,7 +516,7 @@
                         <label>Dirección URL de la Página WEB</label><span *ngIf="!urlwebEstablishmentValidated"
                           class="ml-2 badge badge-danger">Incorrecto</span>
                         <input type="text" class="form-control" id="url_web" name="url_web" (keyup)="checkURLWeb()"
-                          placeholder="Dirección URL de la Página WEB" [(ngModel)]="establishment_selected.url_web" />
+                          placeholder="Ejemplo: www.google.com" [(ngModel)]="establishment_selected.url_web" />
                       </div>
                       <div class="row mt-2">
                         <label class="col-12"><strong>Ubicación</strong></label>
@@ -518,7 +534,7 @@
                         </div>
                         <div class="col-4">
                           <div class="form-group">
-                            <label>Provincia</label>
+                            <label>Provincia*</label>
                             <select class="form-control" id="provincia_establishment_id"
                               name="provincia_establishment_id" [(ngModel)]="provinciaEstablishmentSelectedCode"
                               (change)="getCantonesEstablishment()">
@@ -533,7 +549,7 @@
                         </div>
                         <div class="col-4">
                           <div class="form-group">
-                            <label>Cantón</label>
+                            <label>Cantón*</label>
                             <select class="form-control" id="canton_establishment_id" name="canton_establishment_id"
                               [(ngModel)]="cantonEstablishmentSelectedCode" (change)="getParroquiasEstablishment()">
                               <option value="-" selected>Seleccione...</option>
@@ -545,7 +561,7 @@
                         </div>
                         <div class="col-4">
                           <div class="form-group">
-                            <label>Parroquia</label><span *ngIf="establishment_selected.ubication_id == 0"
+                            <label>Parroquia*</label><span *ngIf="establishment_selected.ubication_id == 0"
                               class="ml-2 badge badge-danger">Incorrecto</span>
                             <select class="form-control" id="parroquia_establishment_id"
                               name="parroquia_establishment_id" [(ngModel)]="establishment_selected.ubication_id">
@@ -560,22 +576,38 @@
                         </div>
                       </div>
                       <div class="form-group">
-                        <label>Dirección</label><span *ngIf="!addressEstablishmentValidated"
+                        <label>Dirección*</label><span *ngIf="!addressEstablishmentValidated"
                           class="ml-2 badge badge-danger">Incorrecto</span>
-                        <input type="text" class="form-control" id="address" name="address"
-                          (keyup)="checkEstablishmentAddress()"
-                          placeholder="Calle Principal    Numeración    Calle Intersección"
-                          [(ngModel)]="establishment_selected.address" />
+                          <div class="row">
+                              <div class="col-4">
+                                  <input type="text" class="form-control" id="addressMain" name="addressMain"
+                                  (keyup)="checkEstablishmentAddress()"
+                                  placeholder="Calle Principal"
+                                  [(ngModel)]="establishment_selected.address_main_street" />
+                              </div>
+                              <div class="col-4">
+                                  <input type="text" class="form-control" id="addressNumber" name="addressNumber"
+                                  (keyup)="checkEstablishmentAddress()"
+                                  placeholder="Numeración"
+                                  [(ngModel)]="establishment_selected.address_number" />
+                              </div>
+                              <div class="col-4">
+                                  <input type="text" class="form-control" id="addressSecondary" name="addressSecondary"
+                                  (keyup)="checkEstablishmentAddress()"
+                                  placeholder="Calle Intersección"
+                                  [(ngModel)]="establishment_selected.address_secondary_street" />
+                              </div>
+                            </div>
                       </div>
                       <div class="form-group">
-                        <label>Referencias - ¿Como llegar?</label><span
+                        <label>Referencias* - ¿Como llegar?</label><span
                           *ngIf="establishment_selected.address_reference == ''"
                           class="ml-2 badge badge-danger">Incorrecto</span>
                         <ck-editor id="address_reference" name="address_reference" skin="moono-lisa"
                           [(ngModel)]="establishment_selected.address_reference"></ck-editor>
                       </div>
                       <div class="form-group">
-                        <label>Dirección Georeferenciada</label>
+                        <label>Ubicar el establecimiento en el mapa*</label>
                         <agm-map class="col-12" style="height: 400px;" [latitude]="
                             establishment_selected.address_map_latitude * 1
                           " [longitude]="
@@ -592,7 +624,7 @@
                       <div class="row">
                         <div class="col-12">
                           <div class="form-group">
-                            <label>Foto de la Fachada del Establecimiento</label>
+                            <label>Fotografía de la Fachada del Establecimiento*</label>
                           </div>
                         </div>
                         <div class="col-12 text-center">
@@ -604,96 +636,16 @@
                         </div>
                         <div class="col-12 text-center">
                           <button type="button" class="btn btn-primary" (click)="subirFotoFachada()">
-                            Subir Foto
+                            Subir Fotografía
                           </button>
                           <input [hidden]="true" #fotoFachadaInput type="file" (change)="CodificarArchivo($event)"
                             accept="image/*" />
                         </div>
                       </div>
-                      <div class="row">
-                        <h4 class="col-12"><strong>Datos de Contacto en el Establecimiento</strong></h4>
-                        <div class="col-12">
-                          <div class="alert alert-info mt-2 mb-2" role="alert">
-                            <label class="col-12 text-justify"><strong>Atención</strong></label><br />
-                            El contacto proporcionado, debe ser aquella persona con la que el Ministerio de Turismo tome contacto el momento de la inspección a su establecimiento. No deberá ser el Administrador ni el CoAdministrador del RUC.<br/>
-                            Se asignará una cuenta de acceso al sistema al contacto ingresado, y éste podrá actualizar la información del establecimiento al que pertenece.<br/>
-                            Usted puede cambiar el contacto siempre que lo desee.<br/>
-                            Solamente existirá un contacto por establecimiento.
-                          </div>
-                        </div>
-                        <div class="col-12">
-                          <div class="row">
-                            <div class="col-12">
-                              <div class="form-group">
-                                <label>Cédula de Identidad</label><span
-                                  *ngIf="!identificationContactEstablishmentValidated"
-                                  class="ml-2 badge badge-danger">Incorrecto</span>
-                                <div class="input-group mb-3">
-                                  <div class="input-group-prepend">
-                                    <button type="button" class="btn btn-primary" title="Consultar con Registro Civil"
-                                      (click)="checkCedulaEstablishment()">
-                                      <i class="fas fa-sync"></i>
-                                    </button>
-                                  </div>
-                                  <input type="text" class="form-control" id="cedula" maxlength="10"
-                                    placeholder="Cédula de Identidad" (keyup)="checkCedulaEstablishment()" [(ngModel)]="
-                                      establishment_selected.contact_user
-                                        .identification
-                                    " name="cedula" />
-                                </div>
-                              </div>
-                            </div>
-                            <div class="col-12" *ngIf="identificationContactEstablishmentValidated">
-                              <div class="form-group">
-                                <label>DATOS DE LA CÉDULA</label>
-                                <div class="col-12 text-justify" [innerHTML]="cedulaEstablishmentContactData">
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="row mt-2">
-                            <div class="col-6">
-                              <div class="form-group">
-                                <label>Número de Teléfono Principal</label><span
-                                  *ngIf="!mainPhoneContactEstablishmentValidated"
-                                  class="ml-2 badge badge-danger">Incorrecto</span>
-                                <input type="text" class="form-control" id="mainRucPhoneNumber" maxlength="10"
-                                  placeholder="Número de Teléfono Principal"
-                                  (keyup)="checkTelefonoPrincipalContactoEstablecimiento()" [(ngModel)]="
-                                    establishment_selected.contact_user.main_phone_number
-                                  " name="mainRucPhoneNumber" />
-                              </div>
-                            </div>
-                            <div class="col-6">
-                              <div class="form-group">
-                                <label>Número de Teléfono Secundario</label><span
-                                  *ngIf="!secondaryPhoneContactEstablishmentValidated"
-                                  class="ml-2 badge badge-danger">Incorrecto</span>
-                                <input type="text" class="form-control" id="secondaryRucPhone" maxlength="10"
-                                  (keyup)="checkTelefonoSecundarioContactoEstablecimiento()"
-                                  placeholder="Número de Teléfono Secundario" [(ngModel)]="
-                                    establishment_selected.contact_user.secondary_phone_number
-                                  " name="secondaryRucPhone" />
-                              </div>
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-12">
-                              <div class="form-group">
-                                <label>Correo Electrónico</label><span *ngIf="!emailContactEstablishmentValidated"
-                                  class="ml-2 badge badge-danger">Incorrecto</span>
-                                <input type="email" class="form-control" id="email" maxlength="255"
-                                  (keyup)="checkEmailContactEstablishment()" placeholder="Correo Electrónico"
-                                  [(ngModel)]="establishment_selected.contact_user.email" name="email" />
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
                       <div class="form-group row">
                         <label class="col-12 col-form-label mb-2"><strong>Idiomas de Atención en el
                             Establecimiento</strong></label>
-                        <label class="col-4 col-form-label">Idiomas</label>
+                        <label class="col-4 col-form-label">Idiomas*</label>
                         <div class="col-8">
                           <div class="input-group">
                             <div class="input-group-prepend">
@@ -898,6 +850,77 @@
                           </table>
                         </div>
                       </div>
+                      <div class="row mt-3">
+                          <h4 class="col-12"><strong>Persona de Contacto en el Establecimiento</strong></h4>
+                          <div class="col-12">
+                            <div class="row">
+                              <div class="col-12">
+                                <div class="form-group">
+                                  <label>Cédula de Identidad*</label><span
+                                    *ngIf="!identificationContactEstablishmentValidated"
+                                    class="ml-2 badge badge-danger">Incorrecto</span>
+                                  <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                      <button type="button" class="btn btn-primary" title="Consultar con Registro Civil"
+                                        (click)="checkCedulaEstablishment()">
+                                        <i class="fas fa-sync"></i>
+                                      </button>
+                                    </div>
+                                    <input type="text" class="form-control" id="cedula" maxlength="10"
+                                      placeholder="Cédula de Identidad" (keyup)="checkCedulaEstablishment()" [(ngModel)]="
+                                        establishment_selected.contact_user
+                                          .identification
+                                      " name="cedula" />
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="col-12" *ngIf="identificationContactEstablishmentValidated">
+                                <div class="form-group">
+                                  <label>DATOS DE LA CÉDULA</label>
+                                  <div class="col-12 text-justify" [innerHTML]="cedulaEstablishmentContactData">
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="row mt-2">
+                              <div class="col-6">
+                                <div class="form-group">
+                                  <label>Número de Teléfono Principal*</label><span
+                                    *ngIf="!mainPhoneContactEstablishmentValidated"
+                                    class="ml-2 badge badge-danger">Incorrecto</span>
+                                  <input type="text" class="form-control" id="mainRucPhoneNumber" maxlength="10"
+                                    placeholder="Número de Teléfono Principal Ej: 0999999999"
+                                    (keyup)="checkTelefonoPrincipalContactoEstablecimiento()" [(ngModel)]="
+                                      establishment_selected.contact_user.main_phone_number
+                                    " name="mainRucPhoneNumber" />
+                                </div>
+                              </div>
+                              <div class="col-6">
+                                <div class="form-group">
+                                  <label>Número de Teléfono Secundario</label><span
+                                    *ngIf="!secondaryPhoneContactEstablishmentValidated"
+                                    class="ml-2 badge badge-danger">Incorrecto</span>
+                                  <input type="text" class="form-control" id="secondaryRucPhone" maxlength="10"
+                                    (keyup)="checkTelefonoSecundarioContactoEstablecimiento()"
+                                    placeholder="Número de Teléfono Secundario Ej: 0299999999" [(ngModel)]="
+                                      establishment_selected.contact_user.secondary_phone_number
+                                    " name="secondaryRucPhone" />
+                                </div>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-12">
+                                <div class="form-group">
+                                  <label>Correo Electrónico*</label><span *ngIf="!emailContactEstablishmentValidated"
+                                    class="ml-2 badge badge-danger">Incorrecto</span>
+                                  <input type="email" class="form-control" id="email" maxlength="255"
+                                    (keyup)="checkEmailContactEstablishment()" placeholder="Correo Electrónico"
+                                    [(ngModel)]="establishment_selected.contact_user.email" name="email" />
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                     </div>
                   </div>
                 </div>

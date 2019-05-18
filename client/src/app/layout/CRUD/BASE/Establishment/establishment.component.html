@@ -33,12 +33,15 @@
                <th>Seleccionado</th>
                <th>ruc_code_id</th>
                <th>commercially_known_name</th>
-               <th>address</th>
+               <th>address_main_street</th>
                <th>address_map</th>
                <th>url_web</th>
                <th>as_turistic_register_date</th>
                <th>address_reference</th>
                <th>contact_user_id</th>
+               <th>address_secondary_street</th>
+               <th>address_number</th>
+               <th>franchise_chain_name</th>
             </tr>
          </thead>
          <tbody>
@@ -46,12 +49,15 @@
                <td class="text-right"><span *ngIf="establishmentSelected === establishment" class="far fa-hand-point-right"></span></td>
                <td>{{establishment.ruc_code_id}}</td>
                <td>{{establishment.commercially_known_name}}</td>
-               <td>{{establishment.address}}</td>
+               <td>{{establishment.address_main_street}}</td>
                <td>Lat: {{establishment.address_map_latitude}} Lng: {{establishment.address_map_longitude}}</td>
                <td>{{establishment.url_web}}</td>
                <td>{{establishment.as_turistic_register_date}}</td>
                <td>{{establishment.address_reference}}</td>
                <td>{{establishment.contact_user_id}}</td>
+               <td>{{establishment.address_secondary_street}}</td>
+               <td>{{establishment.address_number}}</td>
+               <td>{{establishment.franchise_chain_name}}</td>
             </tr>
          </tbody>
       </table>
@@ -101,9 +107,9 @@
                </div>
             </div>
             <div class="form-group row">
-               <label for="address" class="col-4 col-form-label">address</label>
+               <label for="address_main_street" class="col-4 col-form-label">address_main_street</label>
                <div class="col-8">
-                  <input type="text" class="form-control" id="address" name="address" placeholder="address" [(ngModel)]="establishmentSelected.address">
+                  <input type="text" class="form-control" id="address_main_street" name="address_main_street" placeholder="addressMainStreet" [(ngModel)]="establishmentSelected.address_main_street">
                </div>
             </div>
             <div class="form-group row">
@@ -136,6 +142,24 @@
                <label for="contact_user_id" class="col-4 col-form-label">contact_user_id</label>
                <div class="col-8">
                   <input type="number" class="form-control" id="contact_user_id" name="contact_user_id" placeholder="contactUserId" [(ngModel)]="establishmentSelected.contact_user_id">
+               </div>
+            </div>
+            <div class="form-group row">
+               <label for="address_secondary_street" class="col-4 col-form-label">address_secondary_street</label>
+               <div class="col-8">
+                  <input type="text" class="form-control" id="address_secondary_street" name="address_secondary_street" placeholder="addressSecondaryStreet" [(ngModel)]="establishmentSelected.address_secondary_street">
+               </div>
+            </div>
+            <div class="form-group row">
+               <label for="address_number" class="col-4 col-form-label">address_number</label>
+               <div class="col-8">
+                  <input type="text" class="form-control" id="address_number" name="address_number" placeholder="addressNumber" [(ngModel)]="establishmentSelected.address_number">
+               </div>
+            </div>
+            <div class="form-group row">
+               <label for="franchise_chain_name" class="col-4 col-form-label">franchise_chain_name</label>
+               <div class="col-8">
+                  <input type="text" class="form-control" id="franchise_chain_name" name="franchise_chain_name" placeholder="franchiseChainName" [(ngModel)]="establishmentSelected.franchise_chain_name">
                </div>
             </div>
             <div class="form-group row">
