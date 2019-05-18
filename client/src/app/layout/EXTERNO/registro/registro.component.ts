@@ -150,6 +150,7 @@ export class RegistroComponent implements OnInit {
   currentPageEstablishment = 1;
   lastPageEstablishment = 1;
   recordsByPageEstablishment = 5;
+  fechaNombramientoOK = false;
   mostrarDataEstablishment = false;
   zonalEstablishmentSelectedCode = '-';
   provinciaEstablishmentSelectedCode = '-';
@@ -770,8 +771,18 @@ export class RegistroComponent implements OnInit {
    });
   }
 
-  fechasNombramientos() {
-AQUI
+  fechasNombramiento() {
+   const today = new Date();
+   const min = new Date(today.getFullYear() - 5, today.getMonth(), today.getDate());
+   if(typeof this.ruc_registro_selected.ruc.person_representative_attachment.assignment_date === 'undefined') {
+      return;
+   }
+   if (new Date(this.ruc_registro_selected.ruc.person_representative_attachment.assignment_date.toString()) > today || new Date(this.ruc_registro_selected.ruc.person_representative_attachment.assignment_date.toString()) < min) {
+      this.fechaNombramientoOK = false;
+   }else {
+      this.fechaNombramientoOK = true;
+   }
+   return {max: today, min: min};
   }
 
   validateRuc(): Boolean {
@@ -790,7 +801,8 @@ AQUI
          this.REGCIVILOK &&
          this.SRIOK &&
          this.REGCIVILREPRESENTANTELEGALOK &&
-         validateExpediente;
+         validateExpediente &&
+         this.fechaNombramientoOK;
      }
      return this.identificationContactValidated &&
       this.rucValidated &&
@@ -802,6 +814,7 @@ AQUI
   }
 
   refresh() {
+    this.fechasNombramiento();
     this.pays = [];
     this.consumoCedula = false;
     this.consumoCedulaEstablishmentContact = false;
@@ -1518,6 +1531,9 @@ AQUI
    if(!this.REGCIVILOKEstablishment) {
       this.toastr.errorToastr('Esperando confirmación del Registro Civil', 'Registro Civil');
    }
+   if(this.establishment_selected_picture.establishment_picture_file === '') {
+      this.toastr.errorToastr('Debe cargar la fotografía de la fachada del establecimiento', 'Fotografía de Fachada del Establecimiento');
+   }
    if(!this.REGCIVILOKEstablishment){
       return;
    }
@@ -1907,7 +1923,7 @@ AQUI
   }
 
   checkEstablishmentAddress(): Boolean {
-   if(this.establishment_selected.address_main_street.length < 5 || this.establishment_selected.address_number.length < 2 || this.establishment_selected.address_secondary_street.length < 5) {
+   if(this.establishment_selected.address_main_street === '' || this.establishment_selected.address_number === '' || this.establishment_selected.address_secondary_street === '') {
       this.addressEstablishmentValidated = false;
       return false;
    }
@@ -2034,6 +2050,7 @@ AQUI
 
   newRegisterEstablishment() {
     this.establishment_selected = new Establishment();
+    this.establishment_selected_picture = new EstablishmentPicture()
     this.establishment_selected.workers_on_establishment = this.getEstablishmentWorkerGroup();
     this.mostrarDataEstablishment = true;
   }

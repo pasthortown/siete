@@ -246,6 +246,7 @@ class EstablishmentController extends Controller
          return response()->json("0", 200);
       }
       $contact_user_id = $respuesta;
+      return json_encode($contact_user_id);
       $ruc = Ruc::where('id', $result['ruc_id'])->first();
       $establishmentPreview = Establishment::where('ruc_id', $result['ruc_id'])->where('ruc_code_id',$result['ruc_code_id'])->first();
       if($establishmentPreview){
@@ -265,7 +266,7 @@ class EstablishmentController extends Controller
                'floor_authorization_certificate_id'=>$result['floor_authorization_certificate_id'],
                //'as_turistic_register_date'=>$result['as_turistic_register_date'],
                'address_reference'=>$result['address_reference'],
-               'contact_user_id'=>$result['contact_user_id'],
+               'contact_user_id'=>$contact_user_id['id'],
                'ruc_id'=>$result['ruc_id'],
                'ubication_id'=>$result['ubication_id'],
                'establishment_property_type_id'=>$result['establishment_property_type_id'],
@@ -373,7 +374,7 @@ class EstablishmentController extends Controller
             $establishment->url_web = $result['url_web'];
             //$establishment->as_turistic_register_date = $result['as_turistic_register_date'];
             $establishment->address_reference = $result['address_reference'];
-            $establishment->contact_user_id = $contact_user_id;
+            $establishment->contact_user_id = $contact_user_id['id'];
             $establishment->ruc_id = $result['ruc_id'];
             $establishment->ubication_id = $result['ubication_id'];
             $establishment->establishment_property_type_id = $result['establishment_property_type_id'];

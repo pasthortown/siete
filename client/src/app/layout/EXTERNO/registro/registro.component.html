@@ -187,8 +187,10 @@
                 </div>
                 <div class="col-4">
                   <div class="form-group" *ngIf="ruc_registro_selected.ruc.group_given.group_type_id != 0">
-                    <label>Fecha de Nombramiento*</label>
-                    <input type="date" class="form-control" id="assignment_date" name="assignment_date" min="15/05/2018" max="15/05/2019"
+                    <label>Fecha de Nombramiento*</label><span
+                    *ngIf="!fechaNombramientoOK"
+                    class="ml-2 badge badge-danger">Incorrecto</span>
+                    <input type="date" class="form-control" id="assignment_date" name="assignment_date" (input)="fechasNombramiento()"
                       placeholder="assignmentDate" [ngModel]="
                           ruc_registro_selected.ruc.person_representative_attachment.assignment_date | date: 'y-MM-dd'
                         " (ngModelChange)="
@@ -593,7 +595,8 @@
                       <div class="row">
                         <div class="col-12">
                           <div class="form-group">
-                            <label>Fotografía de la Fachada del Establecimiento*</label>
+                            <label>Fotografía de la Fachada del Establecimiento*</label><span *ngIf="establishment_selected_picture.establishment_picture_file === ''"
+                            class="ml-2 badge badge-danger">Incorrecto</span>
                           </div>
                         </div>
                         <div class="col-12 text-center">
@@ -909,8 +912,12 @@
               </div>
             </ng-template>
           </ngb-tab>
-          <ngb-tab title="Registros MINTUR" id="tab3"
+          <!--
+            <ngb-tab title="Registros MINTUR" id="tab3"
             *ngIf="rucSaved() && SRIOK && REGCIVILOK && (ruc_registro_selected.ruc.establishments.length > 0)">
+          -->
+          <ngb-tab title="Registros MINTUR" id="tab3"
+            *ngIf="true">
             <ng-template ngbTabContent>
               <div class="row mt-3">
                 <h4 class="col-12">
