@@ -1,3 +1,5 @@
+import { FloorAuthorizationCertificateService } from './../../../services/CRUD/BASE/floorauthorizationcertificate.service';
+import { FloorAuthorizationCertificate } from './../../../models/BASE/FloorAuthorizationCertificate';
 import { PayService } from './../../../services/CRUD/FINANCIERO/pay.service';
 import { DeclarationService } from 'src/app/services/CRUD/FINANCIERO/declaration.service';
 import { DeclarationItemValue } from 'src/app/models/FINANCIERO/DeclarationItemValue';
@@ -99,6 +101,7 @@ export class RegistroComponent implements OnInit {
    pays: Pay[] = [];
    stateTramiteId = 0;
   //DATOS RUC
+  certificadoUsoSuelo: FloorAuthorizationCertificate = new FloorAuthorizationCertificate();
   imContactRuc: Boolean = true;
   roles:any[] = [];
   terminosCondiciones = false;
@@ -238,6 +241,7 @@ export class RegistroComponent implements OnInit {
   maxYear: number = 2019;
   constructor(private toastr: ToastrManager,
               private userDataService: UserService,
+              private floorAuthorizationCertificateDataService: FloorAuthorizationCertificateService,
               private dinardapDataService: DinardapService,
               private rucDataService: RucService,
               private modalService: NgbModal,
@@ -1077,6 +1081,17 @@ export class RegistroComponent implements OnInit {
       this.ruc_registro_selected.ruc.person_representative_attachment.person_representative_attachment_file_name);
   }
 
+  downloadFloorCertification() {
+   this.downloadFile(
+      this.certificadoUsoSuelo.floor_authorization_certificate_file,
+      this.certificadoUsoSuelo.floor_authorization_certificate_file_type,
+      this.certificadoUsoSuelo.floor_authorization_certificate_file_name);
+  }
+
+  borrarFloorCertificado() {
+   this.certificadoUsoSuelo = new FloorAuthorizationCertificate();
+  }
+
   getCapacityTypes() {
    this.alowed_capacity_types = [];
    this.capacityTypeDataService.get_filtered_by_register_type(this.rucEstablishmentRegisterSelected.register_type_id).then( r => {
@@ -1521,6 +1536,10 @@ export class RegistroComponent implements OnInit {
   }
 
   guardarEstablecimiento() {
+   if (this.certificadoUsoSuelo.floor_authorization_certificate_file === ''){
+      this.toastr.errorToastr('Debe cargar el certificado de uso de suelo.', 'Nuevo');
+      return;
+   }
    if (!this.validateWorkers()) {
       this.toastr.errorToastr('Existe conflicto con la información ingresada referente a los Trabajadores en el Establecimiento.', 'Nuevo');
       return;
@@ -1542,29 +1561,62 @@ export class RegistroComponent implements OnInit {
    if (this.establishment_selected.ruc_name_type_id <= 1 ) {
       this.establishment_selected.franchise_chain_name = '';
    }
-   this.establishmentDataService.register_establishment_data(this.establishment_selected).then( r => {
-      this.guardando = false;
-      if ( r === '0' ) {
-         this.toastr.errorToastr('Existe conflicto con el correo de la persona de contacto ingresada.', 'Nuevo');
-         return;
-      }
-      if (typeof this.establishment_selected_picture.id === 'undefined') {
-         this.establishment_selected_picture.establishment_id = r.id;
-         this.establishmentPictureDataService.post(this.establishment_selected_picture).then( r => {
-            this.getEstablishmentsOnRuc(this.currentPageEstablishment);
-            this.toastr.successToastr('Datos guardados satisfactoriamente.', 'Nuevo');
-         }).catch( e => console.log(e) );
-      } else {
-         this.establishmentPictureDataService.put(this.establishment_selected_picture).then( r => {
-            this.getEstablishmentsOnRuc(this.currentPageEstablishment);
-            this.toastr.successToastr('Datos guardados satisfactoriamente.', 'Nuevo');
-         }).catch( e => console.log(e) );
-      }
-   }).catch( e => {
-      this.guardando = false;
-      this.toastr.errorToastr('Existe conflicto con la información ingresada.', 'Nuevo');
-      return;
-   });
+   if (this.certificadoUsoSuelo.id == 0 || typeof this.certificadoUsoSuelo.id == 'undefined') {
+      this.floorAuthorizationCertificateDataService.post(this.certificadoUsoSuelo).then( rsuelo => {
+         const newCertificadoUsoSuelo = rsuelo as FloorAuthorizationCertificate;
+         this.establishment_selected.floor_authorization_certificate_id = newCertificadoUsoSuelo.id;
+         this.establishmentDataService.register_establishment_data(this.establishment_selected).then( r => {
+            this.guardando = false;
+            if ( r === '0' ) {
+               this.toastr.errorToastr('Existe conflicto con el correo de la persona de contacto ingresada.', 'Nuevo');
+               return;
+            }
+            if (typeof this.establishment_selected_picture.id === 'undefined') {
+               this.establishment_selected_picture.establishment_id = r.id;
+               this.establishmentPictureDataService.post(this.establishment_selected_picture).then( r => {
+                  this.getEstablishmentsOnRuc(this.currentPageEstablishment);
+                  this.toastr.successToastr('Datos guardados satisfactoriamente.', 'Nuevo');
+               }).catch( e => console.log(e) );
+            } else {
+               this.establishmentPictureDataService.put(this.establishment_selected_picture).then( r => {
+                  this.getEstablishmentsOnRuc(this.currentPageEstablishment);
+                  this.toastr.successToastr('Datos guardados satisfactoriamente.', 'Nuevo');
+               }).catch( e => console.log(e) );
+            }
+         }).catch( e => {
+            this.guardando = false;
+            this.toastr.errorToastr('Existe conflicto con la información ingresada.', 'Nuevo');
+            return;
+         });
+      }).catch( e => { console.log(e); });
+   } else {
+      this.floorAuthorizationCertificateDataService.put(this.certificadoUsoSuelo).then( rsuelo => {
+         this.establishment_selected.floor_authorization_certificate_id = this.certificadoUsoSuelo.id;
+         this.establishmentDataService.register_establishment_data(this.establishment_selected).then( r => {
+            this.guardando = false;
+            if ( r === '0' ) {
+               this.toastr.errorToastr('Existe conflicto con el correo de la persona de contacto ingresada.', 'Nuevo');
+               return;
+            }
+            if (typeof this.establishment_selected_picture.id === 'undefined') {
+               this.establishment_selected_picture.establishment_id = r.id;
+               this.establishmentPictureDataService.post(this.establishment_selected_picture).then( r => {
+                  this.getEstablishmentsOnRuc(this.currentPageEstablishment);
+                  this.toastr.successToastr('Datos guardados satisfactoriamente.', 'Nuevo');
+               }).catch( e => console.log(e) );
+            } else {
+               this.establishmentPictureDataService.put(this.establishment_selected_picture).then( r => {
+                  this.getEstablishmentsOnRuc(this.currentPageEstablishment);
+                  this.toastr.successToastr('Datos guardados satisfactoriamente.', 'Nuevo');
+               }).catch( e => console.log(e) );
+            }
+         }).catch( e => {
+            this.guardando = false;
+            this.toastr.errorToastr('Existe conflicto con la información ingresada.', 'Nuevo');
+            return;
+         });
+      }).catch( e => { console.log(e); });
+   }
   }
 
   newRegisterRecord() {
@@ -2199,6 +2251,19 @@ export class RegistroComponent implements OnInit {
             element.establishment_certification_attachment.establishment_certification_attachment_file_name = file.name;
          }
       });
+    };
+   }
+  }
+
+  CodificarArchivoFloorCertification(event) {
+   const reader = new FileReader();
+   if (event.target.files && event.target.files.length > 0) {
+    const file = event.target.files[0];
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      this.certificadoUsoSuelo.floor_authorization_certificate_file = reader.result.toString().split(',')[1];
+      this.certificadoUsoSuelo.floor_authorization_certificate_file_type = file.type;
+      this.certificadoUsoSuelo.floor_authorization_certificate_file_name = file.name;
     };
    }
   }

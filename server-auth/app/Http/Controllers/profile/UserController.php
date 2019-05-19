@@ -61,7 +61,7 @@ class UserController extends Controller
       $token = $data->header('api_token');
       $anotherPreviewUser = User::where('email', $result['email'])->first();
       if($anotherPreviewUser){
-         return response()->json("0", 200);
+         return response()->json($anotherPreviewUser->id, 200);
       }
       try{
          DB::beginTransaction();
@@ -91,10 +91,7 @@ class UserController extends Controller
          $accountrolassigment->account_rol_id = 4;
          $accountrolassigment->user_id = $user->id;
          $accountrolassigment->save();
-         $message = "Has sido asignado para gestionar los datos del establecimiento. Tu nueva contraseña es " . $new_password;
-         $subject = "Te damos la bienvenida a " . env('MAIL_FROM_NAME');
          DB::commit();
-         $this->send_mail($result['email'], $user->name, $subject, $message, env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME'));
          return response()->json($user->id,200);
       } catch (Exception $e) {
          return response()->json($e,400);

@@ -821,6 +821,37 @@
                             </tbody>
                           </table>
                         </div>
+                      </div>        
+                      <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label>Certificado de Uso de Suelos*</label><span
+                                  *ngIf="certificadoUsoSuelo.floor_authorization_certificate_file === ''"
+                                  class="ml-2 badge badge-danger">Incorrecto</span>
+                                <div class="input-group">
+                                  <div class="input-group-prepend">
+                                    <button
+                                      [disabled]="certificadoUsoSuelo.floor_authorization_certificate_file === ''"
+                                      type="button" title="Descargar Certificado" class="btn btn-primary" (click)="
+                                            downloadFloorCertification()
+                                          ">
+                                      <i class="fas fa-download"></i>
+                                    </button>
+                                    <button
+                                      [disabled]="certificadoUsoSuelo.floor_authorization_certificate_file === ''"
+                                      type="button" title="Eliminar" class="btn btn-danger"
+                                      (click)="borrarFloorCertificado()">
+                                      <i class="fas fa-trash"></i>
+                                    </button>
+                                  </div>
+                                  <input type="file" class="form-control" (change)="
+                                        CodificarArchivoFloorCertification(
+                                          $event
+                                        )
+                                      " accept="application/pdf" />
+                                </div>
+                            </div>
+                        </div>
                       </div>
                       <div class="row mt-3">
                           <h4 class="col-12"><strong>Persona de Contacto en el Establecimiento</strong></h4>
@@ -912,12 +943,8 @@
               </div>
             </ng-template>
           </ngb-tab>
-          <!--
-            <ngb-tab title="Registros MINTUR" id="tab3"
-            *ngIf="rucSaved() && SRIOK && REGCIVILOK && (ruc_registro_selected.ruc.establishments.length > 0)">
-          -->
           <ngb-tab title="Registros MINTUR" id="tab3"
-            *ngIf="true">
+            *ngIf="rucSaved() && SRIOK && REGCIVILOK && (ruc_registro_selected.ruc.establishments.length > 0)">
             <ng-template ngbTabContent>
               <div class="row mt-3">
                 <h4 class="col-12">
