@@ -1560,6 +1560,11 @@ export class RegistroComponent implements OnInit {
    this.establishment_selected.ruc_id = this.ruc_registro_selected.ruc.id;
    if (this.establishment_selected.ruc_name_type_id <= 1 ) {
       this.establishment_selected.franchise_chain_name = '';
+   } else {
+      if (this.establishment_selected.franchise_chain_name == '') {
+         this.toastr.errorToastr('Escriba el nombre de la Franquicia o Cadena', 'Nuevo');
+         return;
+      }
    }
    if (this.certificadoUsoSuelo.id == 0 || typeof this.certificadoUsoSuelo.id == 'undefined') {
       this.floorAuthorizationCertificateDataService.post(this.certificadoUsoSuelo).then( rsuelo => {
