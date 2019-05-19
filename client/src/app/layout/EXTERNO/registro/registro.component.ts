@@ -2034,9 +2034,16 @@ export class RegistroComponent implements OnInit {
     this.establishment_selected.address_map_longitude = event.coords.lng;
   }
 
+  getCertificadoUsoSuelo() {
+     this.floorAuthorizationCertificateDataService.get(this.establishment_selected.floor_authorization_certificate_id).then( r => {
+      this.certificadoUsoSuelo = r.FloorAuthorizationCertificate as FloorAuthorizationCertificate;
+     }).catch( e => { console.log(e); });
+  }
+
   selectRegisterEstablishment(establishment: Establishment) {
     this.establishmentDataService.get_filtered(establishment.id).then( r => {
       this.establishment_selected = r.establishment as Establishment;
+      this.getCertificadoUsoSuelo();
       this.recoverUbication();
       this.checkEstablishmentAddress();
       this.checkURLWeb();
