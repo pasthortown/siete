@@ -32,3 +32,5 @@ INSERT INTO public.account_rols(
     }catch ( Exception $e) {
       return $e;
     }
+
+    CALCULO DE PLAZAS
