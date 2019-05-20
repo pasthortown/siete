@@ -1060,7 +1060,7 @@
                               let establishment of ruc_registro_selected.ruc.establishments
                             " value="{{ establishment.id }}">
                             {{ establishment.ruc_code_id }} | {{establishment.commercially_known_name}} -
-                            {{ establishment.address }}
+                            {{ establishment.address_main_street }} {{ establishment.address_number }} {{ establishment.address_secondary_street }}
                           </option>
                         </select>
                       </div>
@@ -1381,7 +1381,7 @@
                           <th>Tipo
                           </th>
                           <th>Cantidad de Mesas</th>
-                          <th>Cantidad de Sillas</th>
+                          <th>Cantidad de Plazas</th>
                           <th>Opciones</th>
                         </thead>
                         <tbody>
@@ -1402,7 +1402,7 @@
                                 " [disabled]="!rucEstablishmentRegisterSelected.editable">
                                 <option value="0" selected>Seleccione...</option>
                                 <option *ngFor="
-                                    let complementary_food_service_type of complementaryServiceFoodTypes
+                                    let complementary_food_service_type of complementaryServiceFood.type_of_complementary_service_food
                                   " value="{{ complementary_food_service_type.id }}">
                                   {{ complementary_food_service_type.name }}
                                 </option>
@@ -1411,12 +1411,12 @@
                             <td>
                               <input type="number" class="form-control" min="0" id="mesas" name="mesas"
                                 placeholder="Cantidad de Mesas"
-                                [(ngModel)]="complementaryServiceFood.quantity_tables" [disabled]="!rucEstablishmentRegisterSelected.editable"/>
+                                [(ngModel)]="complementaryServiceFood.quantity_tables" (keyup)="complementaryServiceFood.quantity_chairs = complementaryServiceFood.quantity_tables * 4" [disabled]="!rucEstablishmentRegisterSelected.editable"/>
                             </td>
                             <td>
                               <input type="number" class="form-control" min="0" id="sillas" name="sillas"
-                                placeholder="Cantidad de Sillas"
-                                [(ngModel)]="complementaryServiceFood.quantity_chairs" [disabled]="!rucEstablishmentRegisterSelected.editable"/>
+                                placeholder="Cantidad de Plazas"
+                                [(ngModel)]="complementaryServiceFood.quantity_chairs" [disabled]="true"/>
                             </td>
                             <td>
                               <button type="button" title="Eliminar" class="btn btn-danger"

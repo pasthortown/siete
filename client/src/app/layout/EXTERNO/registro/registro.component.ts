@@ -914,7 +914,33 @@ export class RegistroComponent implements OnInit {
 
   addComplementaryFoodService() {
      const complementaryFoodService = new ComplementaryServiceFood();
-     this.rucEstablishmentRegisterSelected.complementary_service_foods_on_register.push(complementaryFoodService);
+     let agregable = false;
+     this.complementaryServiceFoodTypes.forEach(element1 => {
+        let existe = false;
+        this.rucEstablishmentRegisterSelected.complementary_service_foods_on_register.forEach(element2 => {
+           if(element2.quantity_tables > 0) {
+              agregable = true;
+           }
+            if(element1.id == element2.complementary_service_food_type_id) {
+               existe = true;
+            }
+         });
+         if (!existe) {
+            complementaryFoodService.type_of_complementary_service_food.push(element1);
+         }
+     });
+     if(this.rucEstablishmentRegisterSelected.complementary_service_foods_on_register.length == 0){
+        agregable = true;
+     }
+     if (!agregable){
+      this.toastr.errorToastr('Complete la información, para continuar.', 'Nuevo');
+      return;
+     }
+     if(complementaryFoodService.type_of_complementary_service_food.length > 0) {
+       this.rucEstablishmentRegisterSelected.complementary_service_foods_on_register.push(complementaryFoodService);
+     }else {
+      this.toastr.errorToastr('Usted ha declarado los tipos admitidos.', 'Nuevo');
+     }
   }
 
   selectComplementaryFoodService(complementaryServiceFood: ComplementaryServiceFood) {
