@@ -914,12 +914,12 @@ export class RegistroComponent implements OnInit {
 
   addComplementaryFoodService() {
      const complementaryFoodService = new ComplementaryServiceFood();
-     let agregable = false;
+     let agregable = true;
      this.complementaryServiceFoodTypes.forEach(element1 => {
         let existe = false;
         this.rucEstablishmentRegisterSelected.complementary_service_foods_on_register.forEach(element2 => {
-           if(element2.quantity_tables > 0) {
-              agregable = true;
+           if(element2.quantity_tables == 0) {
+              agregable = false;
            }
             if(element1.id == element2.complementary_service_food_type_id) {
                existe = true;
