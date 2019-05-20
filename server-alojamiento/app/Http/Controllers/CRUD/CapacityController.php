@@ -46,6 +46,8 @@ class CapacityController extends Controller
              $capacity->id = 1;
           }
           $capacity->quantity = $result['quantity'];
+          $capacity->min_spaces = $result['min_spaces'];
+          $capacity->max_spaces = $result['max_spaces'];
           $capacity->capacity_type_id = $result['capacity_type_id'];
           $capacity->save();
           $tariffs_on_capacity = $result['tariffs_on_capacity'];
@@ -70,6 +72,8 @@ class CapacityController extends Controller
           $result = $data->json()->all();
           $capacity = Capacity::where('id',$result['id'])->update([
              'quantity'=>$result['quantity'],
+             'min_spaces'=>$result['min_spaces'],
+             'max_spaces'=>$result['max_spaces'],
              'capacity_type_id'=>$result['capacity_type_id'],
           ]);
           $capacity = Capacity::where('id',$result['id'])->first();
@@ -163,11 +167,15 @@ class CapacityController extends Controller
            Capacity::where('id', $result['id'])->update([
              'quantity'=>$result['quantity'],
              'capacity_type_id'=>$result['capacity_type_id'],
+             'min_spaces'=>$result['min_spaces'],
+             'max_spaces'=>$result['max_spaces'],
            ]);
          } else {
           $capacity = new Capacity();
           $capacity->id = $result['id'];
           $capacity->quantity = $result['quantity'];
+          $capacity->min_spaces = $result['min_spaces'];
+          $capacity->max_spaces = $result['max_spaces'];
           $capacity->capacity_type_id = $result['capacity_type_id'];
           $capacity->save();
          }

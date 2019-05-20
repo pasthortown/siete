@@ -100,6 +100,7 @@ export class RegistroComponent implements OnInit {
    dataPays = [];
    pays: Pay[] = [];
    stateTramiteId = 0;
+   actividadSelected = '-';
   //DATOS RUC
   certificadoUsoSuelo: FloorAuthorizationCertificate = new FloorAuthorizationCertificate();
   imContactRuc: Boolean = true;
@@ -2504,8 +2505,9 @@ export class RegistroComponent implements OnInit {
    this.rucEstablishmentRegisterSelected.total_beds = 0;
    this.rucEstablishmentRegisterSelected.capacities_on_register.forEach(element => {
       element.beds_on_capacity.forEach(bed => {
-         this.rucEstablishmentRegisterSelected.total_beds += bed.quantity;
+         this.rucEstablishmentRegisterSelected.total_beds += bed.quantity * element.quantity;
       });
+
       this.rucEstablishmentRegisterSelected.total_spaces += element.total_spaces * element.quantity;
       this.rucEstablishmentRegisterSelected.total_habitations += element.quantity;
    });

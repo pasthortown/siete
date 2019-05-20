@@ -1128,7 +1128,17 @@
                         </div>
                       </div>
                       <div class="row">
-                        <div class="col-6">
+                        <div class="col-4">
+                          <div class="form-group">
+                            <label>Actividad Turística</label><span *ngIf="actividadSelected == '-'"
+                              class="ml-2 badge badge-danger">Incorrecto</span>
+                            <select class="form-control" id="actividad" name="actividad" [(ngModel)]="actividadSelected">
+                              <option value="-" selected>Seleccione...</option>
+                              <option value="1" selected>Alojamiento Turístico</option>
+                            </select>
+                          </div>
+                        </div>
+                        <div class="col-4">
                           <div class="form-group">
                             <label>Clasificación</label><span *ngIf="categorySelectedCode == '-'"
                               class="ml-2 badge badge-danger">Incorrecto</span>
@@ -1143,7 +1153,7 @@
                             </select>
                           </div>
                         </div>
-                        <div class="col-6">
+                        <div class="col-4">
                           <div class="form-group">
                             <label>Categoría</label><span *ngIf="
                                 rucEstablishmentRegisterSelected.register_type_id ==
@@ -1207,10 +1217,10 @@
                             Seleccionado
                           </th>
                           <th>
-                            Cantidad
+                            Tipo
                           </th>
                           <th>
-                            Tipo
+                            Cantidad
                           </th>
                           <th>
                             Distribución
@@ -1230,6 +1240,17 @@
                               <span *ngIf="capacitySelected == capacity" class="far fa-hand-point-right"></span>
                             </td>
                             <td>
+                              <select class="form-control" id="capacity_type_id" name="capacity_type_id"
+                                [(ngModel)]="capacity.capacity_type_id" (change)="getMaxBed(capacity)" [disabled]="!rucEstablishmentRegisterSelected.editable">
+                                <option value="0" selected>Seleccione...</option>
+                                <option *ngFor="
+                                    let capacity_type of alowed_capacity_types
+                                  " value="{{ capacity_type.id }}">
+                                  {{ capacity_type.name }}
+                                </option>
+                              </select>
+                            </td>
+                            <td>
                               <input type="number" class="form-control" min="0" id="count_space" name="count_space"
                                 placeholder="Cantidad" [(ngModel)]="capacity.quantity" [disabled]="!rucEstablishmentRegisterSelected.editable"/>
                               <div class="form-group row mt-3">
@@ -1241,17 +1262,6 @@
                                     0
                                   ">Incorrecto</span>
                               </div>
-                            </td>
-                            <td>
-                              <select class="form-control" id="capacity_type_id" name="capacity_type_id"
-                                [(ngModel)]="capacity.capacity_type_id" (change)="getMaxBed(capacity)" [disabled]="!rucEstablishmentRegisterSelected.editable">
-                                <option value="0" selected>Seleccione...</option>
-                                <option *ngFor="
-                                    let capacity_type of alowed_capacity_types
-                                  " value="{{ capacity_type.id }}">
-                                  {{ capacity_type.name }}
-                                </option>
-                              </select>
                             </td>
                             <td>
                               <span class="badge badge-info mb-3 mr-2">Plazas por Ambiente:

@@ -33,6 +33,7 @@
                <th>Seleccionado</th>
                <th>Nombre</th>
                <th>Descripción</th>
+               <th>Plazas</th>
                <th>Tipo de Registro</th>
                <th>Cantidad Máxima de Camas</th>
                <th>Ubicación</th>
@@ -43,6 +44,7 @@
                <td class="text-right"><span *ngIf="capacity_typeSelected === capacity_type" class="far fa-hand-point-right"></span></td>
                <td>{{capacity_type.name}}</td>
                <td [innerHTML]="capacity_type.description"></td>
+               <td>{{capacity_type.spaces}}</td>
                <td>
                   <select class="form-control" id="register_type_id" name="register_type_id" disabled [(ngModel)]="capacity_type.register_type_id">
                      <option value="0" selected>Seleccione...</option>
@@ -127,6 +129,12 @@
                   <label for="bed_quantity" class="col-4 col-form-label">Cantidad Máxima de Camas</label>
                   <div class="col-8">
                      <input type="number" class="form-control" id="bed_quantity" name="bed_quantity" placeholder="Cantidad Máxima de Camas" [(ngModel)]="capacity_typeSelected.bed_quantity">
+                  </div>
+               </div>
+               <div class="form-group row">
+                  <label for="spaces" class="col-4 col-form-label">Cantidad Máxima de Plazas</label>
+                  <div class="col-8">
+                     <input type="number" class="form-control" id="spaces" name="spaces" placeholder="spaces" [(ngModel)]="capacity_typeSelected.spaces">
                   </div>
                </div>
                <div class="form-group row">

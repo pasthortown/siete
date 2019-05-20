@@ -12,7 +12,7 @@ class Capacity extends Model
      * @var array
      */
     protected $fillable = [
-       'quantity',
+       'quantity','min_spaces','max_spaces',
     ];
 
     /**

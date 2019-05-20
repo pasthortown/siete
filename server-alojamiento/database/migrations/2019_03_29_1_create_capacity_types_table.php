@@ -20,6 +20,7 @@ class CreateCapacityTypesTable extends Migration
           $table->longText('description')->nullable($value = true);
           $table->integer('bed_quantity')->nullable($value = true);
           $table->boolean('is_island')->nullable($value = true);
+          $table->integer('spaces')->nullable($value = true);
           $table->unsignedInteger('register_type_id');
           $table->foreign('register_type_id')->references('id')->on('register_types')->onDelete('cascade');
        });
