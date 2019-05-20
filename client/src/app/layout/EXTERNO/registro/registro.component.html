@@ -1168,11 +1168,14 @@
                   <div class="form-group row"
                     *ngIf="categorySelectedCode !== '-' && rucEstablishmentRegisterSelected.register_type_id !== 0">
                     <div class="col-12">
-                      <label class="col-form-label mb-2"><strong>Ambientes del Establecimiento</strong><span
-                          class="ml-2 mr-2 badge badge-info">Total de Ambientes:
+                      <label class="col-form-label mb-2"><strong>Capacidades del Establecimiento</strong><span
+                          class="ml-2 mr-2 badge badge-info">Total de Habitaciones:
                           {{
                           rucEstablishmentRegisterSelected.total_habitations
-                        }}</span><span class="mr-2 badge badge-info">Total de Plazas:
+                        }}</span><span class="mr-2 badge badge-info">Total de Camas:
+                            {{
+                              rucEstablishmentRegisterSelected.total_beds
+                            }}</span><span class="mr-2 badge badge-info">Total de Plazas:
                           {{
                             rucEstablishmentRegisterSelected.total_spaces
                           }}</span><span class="badge badge-danger" *ngIf="

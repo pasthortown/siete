@@ -17,6 +17,7 @@ export class Register {
    editable: Boolean;
    total_spaces: number;
    total_habitations: number;
+   total_beds: number;
    status: number;
    constructor() {
       this.id = 0;
@@ -31,6 +32,7 @@ export class Register {
       this.register_type_id = 0;
       this.total_spaces = 0;
       this.total_habitations = 0;
+      this.total_beds = 0;
       this.status = 4;
       this.code = 'PENDIENTE';
    }

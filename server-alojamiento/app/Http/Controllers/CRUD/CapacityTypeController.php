@@ -50,6 +50,7 @@ class CapacityTypeController extends Controller
           $capacitytype->name = $result['name'];
           $capacitytype->description = $result['description'];
           $capacitytype->bed_quantity = $result['bed_quantity'];
+          $capacitytype->is_island = $result['is_island'];
           $capacitytype->register_type_id = $result['register_type_id'];
           $capacitytype->save();
           DB::commit();
@@ -68,6 +69,7 @@ class CapacityTypeController extends Controller
              'name'=>$result['name'],
              'description'=>$result['description'],
              'bed_quantity'=>$result['bed_quantity'],
+             'is_island'=>$result['is_island'],
              'register_type_id'=>$result['register_type_id'],
           ]);
           DB::commit();
@@ -108,6 +110,7 @@ class CapacityTypeController extends Controller
              'name'=>$result['name'],
              'description'=>$result['description'],
              'bed_quantity'=>$result['bed_quantity'],
+             'is_island'=>$result['is_island'],
              'register_type_id'=>$result['register_type_id'],
            ]);
          } else {
@@ -116,6 +119,7 @@ class CapacityTypeController extends Controller
           $capacitytype->name = $result['name'];
           $capacitytype->description = $result['description'];
           $capacitytype->bed_quantity = $result['bed_quantity'];
+          $capacitytype->is_island = $result['is_island'];
           $capacitytype->register_type_id = $result['register_type_id'];
           $capacitytype->save();
          }

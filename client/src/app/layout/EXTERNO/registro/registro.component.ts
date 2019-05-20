@@ -1571,7 +1571,6 @@ export class RegistroComponent implements OnInit {
          const newCertificadoUsoSuelo = rsuelo as FloorAuthorizationCertificate;
          this.establishment_selected.floor_authorization_certificate_id = newCertificadoUsoSuelo.id;
          this.establishmentDataService.register_establishment_data(this.establishment_selected).then( r => {
-            console.log(r);
             this.guardando = false;
             if ( r === '0' ) {
                this.toastr.errorToastr('Existe conflicto con el correo de la persona de contacto ingresada.', 'Nuevo');
@@ -2502,7 +2501,11 @@ export class RegistroComponent implements OnInit {
   calcSpaces() {
    this.rucEstablishmentRegisterSelected.total_spaces = 0;
    this.rucEstablishmentRegisterSelected.total_habitations = 0;
+   this.rucEstablishmentRegisterSelected.total_beds = 0;
    this.rucEstablishmentRegisterSelected.capacities_on_register.forEach(element => {
+      element.beds_on_capacity.forEach(bed => {
+         this.rucEstablishmentRegisterSelected.total_beds += bed.quantity;
+      });
       this.rucEstablishmentRegisterSelected.total_spaces += element.total_spaces * element.quantity;
       this.rucEstablishmentRegisterSelected.total_habitations += element.quantity;
    });
