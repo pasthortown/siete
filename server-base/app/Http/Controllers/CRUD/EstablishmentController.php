@@ -242,9 +242,6 @@ class EstablishmentController extends Controller
       }else {
          $respuesta = $this->httpPut(env('API_AUTH').'user/update_user_establishment', json_encode($contact_user), null, $token);
       }
-      if($respuesta == "0"){
-         return response()->json("0", 200);
-      }
       $contact_user_id = $respuesta;
       $ruc = Ruc::where('id', $result['ruc_id'])->first();
       $establishmentPreview = Establishment::where('ruc_id', $result['ruc_id'])->where('ruc_code_id',$result['ruc_code_id'])->first();

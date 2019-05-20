@@ -1571,6 +1571,7 @@ export class RegistroComponent implements OnInit {
          const newCertificadoUsoSuelo = rsuelo as FloorAuthorizationCertificate;
          this.establishment_selected.floor_authorization_certificate_id = newCertificadoUsoSuelo.id;
          this.establishmentDataService.register_establishment_data(this.establishment_selected).then( r => {
+            console.log(r);
             this.guardando = false;
             if ( r === '0' ) {
                this.toastr.errorToastr('Existe conflicto con el correo de la persona de contacto ingresada.', 'Nuevo');
@@ -1822,9 +1823,6 @@ export class RegistroComponent implements OnInit {
                if (element.campo === 'nombre') {
                   this.cedulaEstablishmentContactData += '<strong>Nombre: </strong> ' + element.valor + '<br/>';
                   this.establishment_selected.contact_user.name = element.valor;
-               }
-               if (element.campo === 'fechaNacimiento') {
-                  this.cedulaEstablishmentContactData += '<strong>Fecha de Nacimiento: </strong> ' + element.valor + '<br/>';
                }
                if (element.campo === 'nacionalidad') {
                   this.cedulaEstablishmentContactData += '<strong>Nacionalidad: </strong> ' + element.valor + '<br/>';
