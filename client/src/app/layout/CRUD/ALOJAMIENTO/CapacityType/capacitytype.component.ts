@@ -50,19 +50,17 @@ export class CapacityTypeComponent implements OnInit {
                continentes.push(element);
             }
          });
-         continentes.forEach(contienente => {
-            let toinsert = contienente.name;
+         continentes.forEach(continente => {
             const categorias = [];
             r.forEach(element => {
-               if (element.father_code == contienente.code) {
+               if (element.father_code == continente.code) {
                   categorias.push(element);
                }
             });
             categorias.forEach(categoria => {
-               toinsert += '/' + categoria.name;
                r.forEach(element => {
-                  if(element.father_code == categoria.code) {
-                     toinsert += '/' + element.name;
+                  if(element.father_code === categoria.code) {
+                     const toinsert = continente.name + '/' + categoria.name +'/' + element.name;
                      this.toShow_register_types.push({id: element.id, name: toinsert});
                   }
                });
