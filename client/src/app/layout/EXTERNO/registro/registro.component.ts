@@ -2160,6 +2160,19 @@ export class RegistroComponent implements OnInit {
       return;
      }
     this.selectRegisterEstablishmentDeclaration(establishment);
+    let registerSelected = new Register();
+    this.ruc_registro_selected.registers.forEach(register => {
+       if (register.establishment.id == establishment.id) {
+         registerSelected = register;
+       }
+    });
+    if (registerSelected.id == 0) {
+      this.rucEstablishmentRegisterSelected = new Register();
+      this.rucEstablishmentRegisterSelected.establishment_id = establishment.id;
+      this.mostrarDataRegister = true;
+    } else {
+      this.selectEstablishmentRegister(registerSelected, false);
+    }
     this.establishmentDataService.get_filtered(establishment.id).then( r => {
       this.establishment_selected = r.establishment as Establishment;
       this.getCertificadoUsoSuelo();
