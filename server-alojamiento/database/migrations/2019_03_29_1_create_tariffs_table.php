@@ -16,9 +16,13 @@ class CreateTariffsTable extends Migration
        Schema::create('tariffs', function (Blueprint $table) {
           $table->increments('id');
           $table->timestamps();
-          $table->double('price',10,2)->nullable($value = true);
+          $table->integer('price')->nullable($value = true);
+          $table->integer('year')->nullable($value = true);
+          $table->integer('id_ruc')->nullable($value = true);
           $table->unsignedInteger('tariff_type_id');
           $table->foreign('tariff_type_id')->references('id')->on('tariff_types')->onDelete('cascade');
+          $table->unsignedInteger('capacity_type_id');
+          $table->foreign('capacity_type_id')->references('id')->on('capacity_types')->onDelete('cascade');
        });
     }
 

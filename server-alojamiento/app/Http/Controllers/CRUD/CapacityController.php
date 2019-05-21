@@ -19,8 +19,6 @@ class CapacityController extends Controller
        } else {
           $capacity = Capacity::findOrFail($id);
           $attach = [];
-          $tariffs_on_capacity = $capacity->Tariffs()->get();
-          array_push($attach, ["tariffs_on_capacity"=>$tariffs_on_capacity]);
           $beds_on_capacity = $capacity->Beds()->get();
           array_push($attach, ["beds_on_capacity"=>$beds_on_capacity]);
           return response()->json(["Capacity"=>$capacity, "attach"=>$attach],200);
@@ -46,14 +44,10 @@ class CapacityController extends Controller
              $capacity->id = 1;
           }
           $capacity->quantity = $result['quantity'];
-          $capacity->min_spaces = $result['min_spaces'];
+          $capacity->max_beds = $result['max_beds'];
           $capacity->max_spaces = $result['max_spaces'];
           $capacity->capacity_type_id = $result['capacity_type_id'];
           $capacity->save();
-          $tariffs_on_capacity = $result['tariffs_on_capacity'];
-          foreach( $tariffs_on_capacity as $tariff) {
-             $capacity->Tariffs()->attach($tariff['id']);
-          }
           $beds_on_capacity = $result['beds_on_capacity'];
           foreach( $beds_on_capacity as $bed) {
              $capacity->Beds()->attach($bed['id']);
@@ -72,35 +66,11 @@ class CapacityController extends Controller
           $result = $data->json()->all();
           $capacity = Capacity::where('id',$result['id'])->update([
              'quantity'=>$result['quantity'],
-             'min_spaces'=>$result['min_spaces'],
+             'max_beds'=>$result['max_beds'],
              'max_spaces'=>$result['max_spaces'],
              'capacity_type_id'=>$result['capacity_type_id'],
           ]);
           $capacity = Capacity::where('id',$result['id'])->first();
-          $tariffs_on_capacity = $result['tariffs_on_capacity'];
-          $tariffs_on_capacity_old = $capacity->Tariffs()->get();
-          foreach( $tariffs_on_capacity_old as $tariff_old ) {
-             $delete = true;
-             foreach( $tariffs_on_capacity as $tariff ) {
-                if ( $tariff_old->id === $tariff['id'] ) {
-                   $delete = false;
-                }
-             }
-             if ( $delete ) {
-                $capacity->Tariffs()->detach($tariff_old->id);
-             }
-          }
-          foreach( $tariffs_on_capacity as $tariff ) {
-             $add = true;
-             foreach( $tariffs_on_capacity_old as $tariff_old) {
-                if ( $tariff_old->id === $tariff['id'] ) {
-                   $add = false;
-                }
-             }
-             if ( $add ) {
-                $capacity->Tariffs()->attach($tariff['id']);
-             }
-          }
           $capacity = Capacity::where('id',$result['id'])->first();
           $beds_on_capacity = $result['beds_on_capacity'];
           $beds_on_capacity_old = $capacity->Beds()->get();
@@ -145,8 +115,6 @@ class CapacityController extends Controller
        $toReturn = [];
        foreach( $capacities as $capacity) {
           $attach = [];
-          $tariffs_on_capacity = $capacity->Tariffs()->get();
-          array_push($attach, ["tariffs_on_capacity"=>$tariffs_on_capacity]);
           $beds_on_capacity = $capacity->Beds()->get();
           array_push($attach, ["beds_on_capacity"=>$beds_on_capacity]);
           array_push($toReturn, ["Capacity"=>$capacity, "attach"=>$attach]);
@@ -167,46 +135,19 @@ class CapacityController extends Controller
            Capacity::where('id', $result['id'])->update([
              'quantity'=>$result['quantity'],
              'capacity_type_id'=>$result['capacity_type_id'],
-             'min_spaces'=>$result['min_spaces'],
+             'max_beds'=>$result['max_beds'],
              'max_spaces'=>$result['max_spaces'],
            ]);
          } else {
           $capacity = new Capacity();
           $capacity->id = $result['id'];
           $capacity->quantity = $result['quantity'];
-          $capacity->min_spaces = $result['min_spaces'];
+          $capacity->max_beds = $result['max_beds'];
           $capacity->max_spaces = $result['max_spaces'];
           $capacity->capacity_type_id = $result['capacity_type_id'];
           $capacity->save();
          }
          $capacity = Capacity::where('id',$result['id'])->first();
-         $tariffs_on_capacity = [];
-         foreach($row['attach'] as $attach){
-            $tariffs_on_capacity = $attach['tariffs_on_capacity'];
-         }
-         $tariffs_on_capacity_old = $capacity->Tariffs()->get();
-         foreach( $tariffs_on_capacity_old as $tariff_old ) {
-            $delete = true;
-            foreach( $tariffs_on_capacity as $tariff ) {
-               if ( $tariff_old->id === $tariff['id'] ) {
-                  $delete = false;
-               }
-            }
-            if ( $delete ) {
-               $capacity->Tariffs()->detach($tariff_old->id);
-            }
-         }
-         foreach( $tariffs_on_capacity as $tariff ) {
-            $add = true;
-            foreach( $tariffs_on_capacity_old as $tariff_old) {
-               if ( $tariff_old->id === $tariff['id'] ) {
-                  $add = false;
-               }
-            }
-            if ( $add ) {
-               $capacity->Tariffs()->attach($tariff['id']);
-            }
-         }
          $capacity = Capacity::where('id',$result['id'])->first();
          $beds_on_capacity = [];
          foreach($row['attach'] as $attach){

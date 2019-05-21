@@ -6,7 +6,6 @@ import { CapacityRoutingModule } from './capacity-routing.module';
 import { CapacityComponent } from './capacity.component';
 import { CapacityService } from './../../../../services/CRUD/ALOJAMIENTO/capacity.service';
 import { environment } from 'src/environments/environment';
-import { TariffService } from './../../../../services/CRUD/ALOJAMIENTO/tariff.service';
 import { BedService } from './../../../../services/CRUD/ALOJAMIENTO/bed.service';
 import { CapacityTypeService } from './../../../../services/CRUD/ALOJAMIENTO/capacitytype.service';
 
@@ -17,7 +16,6 @@ import { CapacityTypeService } from './../../../../services/CRUD/ALOJAMIENTO/cap
    declarations: [CapacityComponent],
    providers: [
                NgbModal,
-               TariffService,
                BedService,
                CapacityTypeService,
                CapacityService

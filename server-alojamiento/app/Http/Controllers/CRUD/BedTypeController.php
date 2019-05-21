@@ -48,7 +48,6 @@ class BedTypeController extends Controller
              $bedtype->id = 1;
           }
           $bedtype->name = $result['name'];
-          $bedtype->spaces = $result['spaces'];
           $bedtype->register_type_id = $result['register_type_id'];
           $bedtype->save();
           DB::commit();
@@ -65,7 +64,6 @@ class BedTypeController extends Controller
           $result = $data->json()->all();
           $bedtype = BedType::where('id',$result['id'])->update([
              'name'=>$result['name'],
-             'spaces'=>$result['spaces'],
              'register_type_id'=>$result['register_type_id'],
           ]);
           DB::commit();
@@ -104,14 +102,12 @@ class BedTypeController extends Controller
          if ($exist) {
            BedType::where('id', $result['id'])->update([
              'name'=>$result['name'],
-             'spaces'=>$result['spaces'],
              'register_type_id'=>$result['register_type_id'],
            ]);
          } else {
           $bedtype = new BedType();
           $bedtype->id = $result['id'];
           $bedtype->name = $result['name'];
-          $bedtype->spaces = $result['spaces'];
           $bedtype->register_type_id = $result['register_type_id'];
           $bedtype->save();
          }

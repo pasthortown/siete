@@ -42,7 +42,10 @@ class TariffController extends Controller
              $tariff->id = 1;
           }
           $tariff->price = $result['price'];
+          $tariff->year = $result['year'];
+          $tariff->id_ruc = $result['id_ruc'];
           $tariff->tariff_type_id = $result['tariff_type_id'];
+          $tariff->capacity_type_id = $result['capacity_type_id'];
           $tariff->save();
           DB::commit();
        } catch (Exception $e) {
@@ -58,7 +61,10 @@ class TariffController extends Controller
           $result = $data->json()->all();
           $tariff = Tariff::where('id',$result['id'])->update([
              'price'=>$result['price'],
+             'year'=>$result['year'],
+             'id_ruc'=>$result['id_ruc'],
              'tariff_type_id'=>$result['tariff_type_id'],
+             'capacity_type_id'=>$result['capacity_type_id'],
           ]);
           DB::commit();
        } catch (Exception $e) {
@@ -96,13 +102,19 @@ class TariffController extends Controller
          if ($exist) {
            Tariff::where('id', $result['id'])->update([
              'price'=>$result['price'],
+             'year'=>$result['year'],
+             'id_ruc'=>$result['id_ruc'],
              'tariff_type_id'=>$result['tariff_type_id'],
+             'capacity_type_id'=>$result['capacity_type_id'],
            ]);
          } else {
           $tariff = new Tariff();
           $tariff->id = $result['id'];
           $tariff->price = $result['price'];
+          $tariff->year = $result['year'];
+          $tariff->id_ruc = $result['id_ruc'];
           $tariff->tariff_type_id = $result['tariff_type_id'];
+          $tariff->capacity_type_id = $result['capacity_type_id'];
           $tariff->save();
          }
        }

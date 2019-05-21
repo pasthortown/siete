@@ -12,7 +12,7 @@ class BedType extends Model
      * @var array
      */
     protected $fillable = [
-       'name','spaces',
+       'name',
     ];
 
     /**

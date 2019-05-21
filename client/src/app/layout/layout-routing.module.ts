@@ -252,6 +252,10 @@ const routes: Routes = [
             loadChildren: './CRUD/FINANCIERO/DeclarationItemValue/declarationitemvalue.module#DeclarationItemValueModule'
          },
          {
+            path: 'declaration_attachment',
+            loadChildren: './CRUD/FINANCIERO/DeclarationAttachment/declarationattachment.module#DeclarationAttachmentModule'
+         },
+         {
             path: 'pay_attachment',
             loadChildren: './CRUD/FINANCIERO/PayAttachment/payattachment.module#PayAttachmentModule'
          },

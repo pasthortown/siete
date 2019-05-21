@@ -108,4 +108,13 @@ $router->group(['middleware' => ['auth']], function () use ($router) {
    $router->put('/paymassfileattachment', ['uses' => 'PayMassFileAttachmentController@put']);
    $router->delete('/paymassfileattachment', ['uses' => 'PayMassFileAttachmentController@delete']);
    $router->post('/paymassfileattachment/masive_load', ['uses' => 'PayMassFileAttachmentController@masiveLoad']);
+
+   //CRUD DeclarationAttachment
+   $router->post('/declarationattachment', ['uses' => 'DeclarationAttachmentController@post']);
+   $router->get('/declarationattachment', ['uses' => 'DeclarationAttachmentController@get']);
+   $router->get('/declarationattachment/paginate', ['uses' => 'DeclarationAttachmentController@paginate']);
+   $router->get('/declarationattachment/backup', ['uses' => 'DeclarationAttachmentController@backup']);
+   $router->put('/declarationattachment', ['uses' => 'DeclarationAttachmentController@put']);
+   $router->delete('/declarationattachment', ['uses' => 'DeclarationAttachmentController@delete']);
+   $router->post('/declarationattachment/masive_load', ['uses' => 'DeclarationAttachmentController@masiveLoad']);
 });

@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Tariff extends Model
+class DeclarationAttachment extends Model
 {
     /**
      * The attributes that are mass assignable.
@@ -12,7 +12,7 @@ class Tariff extends Model
      * @var array
      */
     protected $fillable = [
-       'price','year','id_ruc',
+       'declaration_attachment_file_type','declaration_attachment_file_name','declaration_attachment_file',
     ];
 
     /**
@@ -24,14 +24,9 @@ class Tariff extends Model
        
     ];
 
-    function TariffType()
+    function Declaration()
     {
-       return $this->hasOne('App\TariffType');
-    }
-
-    function CapacityType()
-    {
-       return $this->hasOne('App\CapacityType');
+       return $this->hasOne('App\Declaration');
     }
 
 }

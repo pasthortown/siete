@@ -12,7 +12,7 @@ export class Capacity {
    max_bed: number;
    max_bed_ok: boolean;
    tariffsValidated: boolean;
-   min_spaces: number;
+   max_beds: number;
    max_spaces: number;
    constructor() {
       this.tariffs_on_capacity = [];
@@ -21,6 +21,6 @@ export class Capacity {
       this.capacity_type_id = 0;
       this.tariffsValidated = false;
       this.max_spaces = 0;
-      this.min_spaces = 0;
+      this.max_beds = 0;
    }
 }

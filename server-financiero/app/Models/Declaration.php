@@ -34,11 +34,6 @@ class Declaration extends Model
        return $this->belongsTo('App\StateDeclaration');
     }
 
-    function Pay()
-    {
-       return $this->belongsTo('App\Pay');
-    }
-
     function DeclarationAttachment()
     {
        return $this->belongsTo('App\DeclarationAttachment');

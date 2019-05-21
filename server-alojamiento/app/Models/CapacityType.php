@@ -24,6 +24,11 @@ class CapacityType extends Model
        
     ];
 
+    function Tariffs()
+    {
+       return $this->belongsToMany('App\Tariff')->withTimestamps();
+    }
+
     function Capacity()
     {
        return $this->belongsTo('App\Capacity');

@@ -12,7 +12,7 @@ class Capacity extends Model
      * @var array
      */
     protected $fillable = [
-       'quantity','min_spaces','max_spaces',
+       'quantity','max_beds','max_spaces',
     ];
 
     /**
@@ -27,11 +27,6 @@ class Capacity extends Model
     function Registers()
     {
        return $this->belongsToMany('App\Register')->withTimestamps();
-    }
-
-    function Tariffs()
-    {
-       return $this->belongsToMany('App\Tariff')->withTimestamps();
     }
 
     function Beds()

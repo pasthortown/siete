@@ -4,14 +4,16 @@ export class Tariff {
    tariff_type_id: number;
    tariff_name: string;
    tariff_father_name: string;
-   is_reference: boolean;
-   factor: number;
+   year: number;
+   id_ruc: number;
+   capacity_type_id: number;
    constructor() {
       this.price = 0;
       this.tariff_type_id = 0;
       this.tariff_father_name = '';
       this.tariff_name = '';
-      this.factor = 0;
-      this.is_reference = false;
+      this.id_ruc = 0;
+      this.capacity_type_id = 0;
+      this.year = 0;
    }
 }

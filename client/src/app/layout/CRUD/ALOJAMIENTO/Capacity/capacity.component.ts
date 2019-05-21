@@ -4,9 +4,6 @@ import { ToastrManager } from 'ng6-toastr-notifications';
 import { saveAs } from 'file-saver/FileSaver';
 import { CapacityService } from './../../../../services/CRUD/ALOJAMIENTO/capacity.service';
 import { Capacity } from './../../../../models/ALOJAMIENTO/Capacity';
-import { TariffService } from './../../../../services/CRUD/ALOJAMIENTO/tariff.service';
-import { Tariff } from './../../../../models/ALOJAMIENTO/Tariff';
-
 import { BedService } from './../../../../services/CRUD/ALOJAMIENTO/bed.service';
 import { Bed } from './../../../../models/ALOJAMIENTO/Bed';
 
@@ -27,42 +24,24 @@ export class CapacityComponent implements OnInit {
    lastPage = 1;
    showDialog = false;
    recordsByPage = 5;
-   tariffs: Tariff[] = [];
-   tariffs_capacitySelectedId: number;
    beds: Bed[] = [];
    beds_capacitySelectedId: number;
    capacity_types: CapacityType[] = [];
    constructor(
                private modalService: NgbModal,
                private toastr: ToastrManager,
-               private tariffDataService: TariffService,
                private bedDataService: BedService,
                private capacity_typeDataService: CapacityTypeService,
                private capacityDataService: CapacityService) {}
 
    ngOnInit() {
       this.goToPage(1);
-      this.getTariff();
       this.getBed();
       this.getCapacityType();
    }
 
    selectCapacity(capacity: Capacity) {
       this.capacitySelected = capacity;
-   }
-
-   getTariff() {
-      this.tariffs = [];
-      this.tariffDataService.get().then( r => {
-         this.tariffs = r as Tariff[];
-      }).catch( e => console.log(e) );
-   }
-
-   getTariffsOnCapacity() {
-      this.capacitySelected.tariffs_on_capacity = [];
-      this.capacityDataService.get(this.capacitySelected.id).then( r => {
-         this.capacitySelected.tariffs_on_capacity = r.attach[0].tariffs_on_capacity as Tariff[];
-      }).catch( e => console.log(e) );
    }
 
    getBed() {
@@ -98,7 +77,6 @@ export class CapacityComponent implements OnInit {
    getCapacities() {
       this.capacities = [];
       this.capacitySelected = new Capacity();
-      this.tariffs_capacitySelectedId = 0;
       this.beds_capacitySelectedId = 0;
       this.capacitySelected.capacity_type_id = 0;
       this.capacityDataService.get_paginate(this.recordsByPage, this.currentPage).then( r => {
@@ -109,16 +87,12 @@ export class CapacityComponent implements OnInit {
 
    newCapacity(content) {
       this.capacitySelected = new Capacity();
-      this.tariffs_capacitySelectedId = 0;
       this.beds_capacitySelectedId = 0;
       this.capacitySelected.capacity_type_id = 0;
       this.openDialog(content);
    }
 
    editCapacity(content) {
-      if ( typeof this.capacitySelected.tariffs_on_capacity === 'undefined' ) {
-         this.capacitySelected.tariffs_on_capacity = [];
-      }
       if ( typeof this.capacitySelected.beds_on_capacity === 'undefined' ) {
          this.capacitySelected.beds_on_capacity = [];
       }
@@ -126,8 +100,6 @@ export class CapacityComponent implements OnInit {
          this.toastr.errorToastr('Debe seleccionar un registro.', 'Error');
          return;
       }
-      this.getTariffsOnCapacity();
-      this.tariffs_capacitySelectedId = 0;
       this.getBedsOnCapacity();
       this.beds_capacitySelectedId = 0;
       this.openDialog(content);
@@ -156,9 +128,9 @@ export class CapacityComponent implements OnInit {
    toCSV() {
       this.capacityDataService.get().then( r => {
          const backupData = r as Capacity[];
-         let output = 'id;quantity;capacity_type_id\n';
+         let output = 'id;quantity;max_beds;max_spaces;capacity_type_id\n';
          backupData.forEach(element => {
-            output += element.id + ';' + element.quantity + ';' + element.capacity_type_id + '\n';
+            output += element.id; + element.quantity + ';' + element.max_beds + ';' + element.max_spaces + ';' + element.capacity_type_id + '\n';
          });
          const blob = new Blob([output], { type: 'text/plain' });
          const fecha = new Date();
@@ -179,55 +151,6 @@ export class CapacityComponent implements OnInit {
             }).catch( e => console.log(e) );
          };
       }
-   }
-
-   selectTariff(tariff: Tariff) {
-      this.tariffs_capacitySelectedId = tariff.id;
-   }
-
-   addTariff() {
-      if (this.tariffs_capacitySelectedId === 0) {
-         this.toastr.errorToastr('Seleccione un registro.', 'Error');
-         return;
-      }
-      this.tariffs.forEach(tariff => {
-         if (tariff.id == this.tariffs_capacitySelectedId) {
-            let existe = false;
-            this.capacitySelected.tariffs_on_capacity.forEach(element => {
-               if (element.id == tariff.id) {
-                  existe = true;
-               }
-            });
-            if (!existe) {
-               this.capacitySelected.tariffs_on_capacity.push(tariff);
-               this.tariffs_capacitySelectedId = 0;
-            } else {
-               this.toastr.errorToastr('El registro ya existe.', 'Error');
-            }
-         }
-      });
-   }
-
-   removeTariff() {
-      if (this.tariffs_capacitySelectedId === 0) {
-         this.toastr.errorToastr('Seleccione un registro.', 'Error');
-         return;
-      }
-      const newTariffs: Tariff[] = [];
-      let eliminado = false;
-      this.capacitySelected.tariffs_on_capacity.forEach(tariff => {
-         if (tariff.id !== this.tariffs_capacitySelectedId) {
-            newTariffs.push(tariff);
-         } else {
-            eliminado = true;
-         }
-      });
-      if (!eliminado) {
-         this.toastr.errorToastr('Registro no encontrado.', 'Error');
-         return;
-      }
-      this.capacitySelected.tariffs_on_capacity = newTariffs;
-      this.tariffs_capacitySelectedId = 0;
    }
 
    selectBed(bed: Bed) {

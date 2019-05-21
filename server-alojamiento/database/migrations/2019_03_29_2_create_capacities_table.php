@@ -17,7 +17,7 @@ class CreateCapacitiesTable extends Migration
           $table->increments('id');
           $table->timestamps();
           $table->integer('quantity')->nullable($value = true);
-          $table->integer('min_spaces')->nullable($value = true);
+          $table->integer('max_beds')->nullable($value = true);
           $table->integer('max_spaces')->nullable($value = true);
           $table->unsignedInteger('capacity_type_id');
           $table->foreign('capacity_type_id')->references('id')->on('capacity_types')->onDelete('cascade');

@@ -7,6 +7,7 @@ import { TariffComponent } from './tariff.component';
 import { TariffService } from './../../../../services/CRUD/ALOJAMIENTO/tariff.service';
 import { environment } from 'src/environments/environment';
 import { TariffTypeService } from './../../../../services/CRUD/ALOJAMIENTO/tarifftype.service';
+import { CapacityTypeService } from './../../../../services/CRUD/ALOJAMIENTO/capacitytype.service';
 
 @NgModule({
    imports: [CommonModule,
@@ -16,6 +17,7 @@ import { TariffTypeService } from './../../../../services/CRUD/ALOJAMIENTO/tarif
    providers: [
                NgbModal,
                TariffTypeService,
+               CapacityTypeService,
                TariffService
                ]
 })

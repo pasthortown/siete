@@ -17,7 +17,6 @@ class CreateBedTypesTable extends Migration
           $table->increments('id');
           $table->timestamps();
           $table->string('name',50)->nullable($value = true);
-          $table->integer('spaces')->nullable($value = true);
           $table->unsignedInteger('register_type_id');
           $table->foreign('register_type_id')->references('id')->on('register_types')->onDelete('cascade');
        });

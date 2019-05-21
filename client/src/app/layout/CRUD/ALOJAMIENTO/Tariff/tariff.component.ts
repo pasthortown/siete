@@ -7,6 +7,9 @@ import { Tariff } from './../../../../models/ALOJAMIENTO/Tariff';
 import { TariffTypeService } from './../../../../services/CRUD/ALOJAMIENTO/tarifftype.service';
 import { TariffType } from './../../../../models/ALOJAMIENTO/TariffType';
 
+import { CapacityTypeService } from './../../../../services/CRUD/ALOJAMIENTO/capacitytype.service';
+import { CapacityType } from './../../../../models/ALOJAMIENTO/CapacityType';
+
 
 @Component({
    selector: 'app-tariff',
@@ -22,15 +25,18 @@ export class TariffComponent implements OnInit {
    showDialog = false;
    recordsByPage = 5;
    tariff_types: TariffType[] = [];
+   capacity_types: CapacityType[] = [];
    constructor(
                private modalService: NgbModal,
                private toastr: ToastrManager,
                private tariff_typeDataService: TariffTypeService,
+               private capacity_typeDataService: CapacityTypeService,
                private tariffDataService: TariffService) {}
 
    ngOnInit() {
       this.goToPage(1);
       this.getTariffType();
+      this.getCapacityType();
    }
 
    selectTariff(tariff: Tariff) {
@@ -41,6 +47,13 @@ export class TariffComponent implements OnInit {
       this.tariff_types = [];
       this.tariff_typeDataService.get().then( r => {
          this.tariff_types = r as TariffType[];
+      }).catch( e => console.log(e) );
+   }
+
+   getCapacityType() {
+      this.capacity_types = [];
+      this.capacity_typeDataService.get().then( r => {
+         this.capacity_types = r as CapacityType[];
       }).catch( e => console.log(e) );
    }
 
@@ -57,6 +70,7 @@ export class TariffComponent implements OnInit {
       this.tariffs = [];
       this.tariffSelected = new Tariff();
       this.tariffSelected.tariff_type_id = 0;
+      this.tariffSelected.capacity_type_id = 0;
       this.tariffDataService.get_paginate(this.recordsByPage, this.currentPage).then( r => {
          this.tariffs = r.data as Tariff[];
          this.lastPage = r.last_page;
@@ -66,6 +80,7 @@ export class TariffComponent implements OnInit {
    newTariff(content) {
       this.tariffSelected = new Tariff();
       this.tariffSelected.tariff_type_id = 0;
+      this.tariffSelected.capacity_type_id = 0;
       this.openDialog(content);
    }
 
@@ -100,9 +115,9 @@ export class TariffComponent implements OnInit {
    toCSV() {
       this.tariffDataService.get().then( r => {
          const backupData = r as Tariff[];
-         let output = 'id;price;tariff_type_id\n';
+         let output = 'id;price;year;id_ruc;tariff_type_id;capacity_type_id\n';
          backupData.forEach(element => {
-            output += element.id + ';' + element.price + ';' + element.tariff_type_id + '\n';
+            output += element.id; + element.price + ';' + element.year + ';' + element.id_ruc + ';' + element.tariff_type_id + ';' + element.capacity_type_id + '\n';
          });
          const blob = new Blob([output], { type: 'text/plain' });
          const fecha = new Date();

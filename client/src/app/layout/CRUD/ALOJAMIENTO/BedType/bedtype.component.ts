@@ -147,9 +147,9 @@ export class BedTypeComponent implements OnInit {
    toCSV() {
       this.bed_typeDataService.get().then( r => {
          const backupData = r as BedType[];
-         let output = 'id;name;spaces;register_type_id\n';
+         let output = 'id;name;register_type_id\n';
          backupData.forEach(element => {
-            output += element.id + ';' + element.name + ';' + element.spaces + ';' + element.register_type_id + '\n';
+            output += element.id + ';' + element.name + ';' + element.register_type_id + '\n';
          });
          const blob = new Blob([output], { type: 'text/plain' });
          const fecha = new Date();
