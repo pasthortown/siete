@@ -1,6 +1,6 @@
 <div class="row">
    <h1 class="col-12 text-right">
-      Tipos de Ambiente
+      Tipos de Capacidad
    </h1>
 </div>
 <div class="row">
@@ -103,12 +103,23 @@
                   <ck-editor id="description" name="description" skin="moono-lisa" [(ngModel)]="capacity_typeSelected.description"></ck-editor>
                </div>
             </div>
-            <div class="form-group row">
+               <div class="form-group row">
+                  <label for="register_type_id" class="col-4 col-form-label">Región</label>
+                  <div class="col-8">
+                     <select class="form-control" id="register_type_id" (change)="getRegisterClasificationTypes()" name="register_type_id" [(ngModel)]="region_code">
+                        <option value="-" selected>Seleccione...</option>
+                        <option *ngFor="let register_type of regiones" value={{register_type.code}}>
+                           {{register_type.name}}
+                        </option>
+                     </select>
+                  </div>
+               </div>
+               <div class="form-group row">
                   <label for="register_type_id" class="col-4 col-form-label">Clasificación de Registro</label>
                   <div class="col-8">
-                     <select class="form-control" id="register_type_id" (change)="getRegisterType()" name="register_type_id" [(ngModel)]="register_type_category_selected">
+                     <select class="form-control" id="register_type_id" (change)="getRegisterType()" name="register_type_id" [(ngModel)]="register_type_clasification_selected">
                         <option value="-" selected>Seleccione...</option>
-                        <option *ngFor="let register_type of register_type_categories" value={{register_type.code}}>
+                        <option *ngFor="let register_type of register_type_clasifications" value={{register_type.code}}>
                            {{register_type.name}}
                         </option>
                      </select>
