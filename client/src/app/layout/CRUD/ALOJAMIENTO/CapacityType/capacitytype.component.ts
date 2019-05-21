@@ -69,6 +69,7 @@ export class CapacityTypeComponent implements OnInit {
             });
          });
       }).catch( e => { console.log(e); });
+      console.log(this.toShow_register_types);
    }
 
    selectCapacityType(capacity_type: CapacityType) {

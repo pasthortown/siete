@@ -1,3 +1,5 @@
+import { DeclarationAttachmentService } from './../../../services/CRUD/FINANCIERO/declarationattachment.service';
+import { DeclarationAttachment } from './../../../models/FINANCIERO/DeclarationAttachment';
 import { FloorAuthorizationCertificateService } from './../../../services/CRUD/BASE/floorauthorizationcertificate.service';
 import { FloorAuthorizationCertificate } from './../../../models/BASE/FloorAuthorizationCertificate';
 import { PayService } from './../../../services/CRUD/FINANCIERO/pay.service';
@@ -93,6 +95,7 @@ export class RegistroComponent implements OnInit {
 
    //PAGOS
    currentPagePays = 1;
+   balance: DeclarationAttachment = new DeclarationAttachment();
    lastPagePays = 1;
    recordsByPagePays = 5;
    rowsPays = [];
@@ -247,6 +250,7 @@ export class RegistroComponent implements OnInit {
               private rucDataService: RucService,
               private modalService: NgbModal,
               private payDataService: PayService,
+              private declarationAttachmentDataService: DeclarationAttachmentService,
               private agreementDataService: AgreementService,
               private rucNameTypeDataService: RucNameTypeService,
               private group_typeDataService: GroupTypeService,
@@ -781,6 +785,7 @@ export class RegistroComponent implements OnInit {
   }
 
   validateRuc(): Boolean {
+     this.fechasNombramiento();
      let validateRepresentantLegalId = true;
      if(this.ruc_registro_selected.ruc.tax_payer_type_id > 1) {
         validateRepresentantLegalId = this.identificationRepresentativePersonValidated;
@@ -963,7 +968,6 @@ export class RegistroComponent implements OnInit {
          this.ruc_registro_selected.ruc.number = number;
          this.ruc_registro_selected.ruc.contact_user = new User();
          this.imContactRuc = (this.ruc_registro_selected.ruc.contact_user.id == this.user.id);
-         this.ruc_registro_selected.ruc.establishmentsSRI = [];
          this.ruc_registro_selected.ruc.establishments = [];
          this.ruc_registro_selected.ruc.group_given = new GroupGiven();
          this.ruc_registro_selected.ruc.person_representative = new PersonRepresentative();
@@ -1037,6 +1041,26 @@ export class RegistroComponent implements OnInit {
          this.ruc_registro_selected.ruc.establishments = r.data as Establishment[];
          this.buildDataTableEstablishment();
        }
+       this.dinardapDataService.get_RUC(this.ruc_registro_selected.ruc.number).then( dinardap => {
+         let itemsDetalles = [];
+         if (!Array.isArray(dinardap.return.instituciones.detalle.items)) {
+            itemsDetalles = [dinardap.return.instituciones.detalle.items];
+         } else {
+            itemsDetalles = dinardap.return.instituciones.detalle.items;
+         }
+         itemsDetalles.forEach(element => {
+            element.registros.forEach(localData => {
+               if (localData.campo === 'numeroEstableciminiento') {
+                  const establishmentRuc = localData.valor as String;
+                  establecimientos.forEach(establecimiento => {
+                     if (establecimiento.ruc_code_id == establishmentRuc.trim()) {
+                        //AQUI
+                     }
+                  });
+               }
+            });
+         });
+       }).catch( e => { console.log(e); });
     }).catch( e => { console.log(e); });
   }
 
@@ -1103,6 +1127,17 @@ export class RegistroComponent implements OnInit {
       this.certificadoUsoSuelo.floor_authorization_certificate_file,
       this.certificadoUsoSuelo.floor_authorization_certificate_file_type,
       this.certificadoUsoSuelo.floor_authorization_certificate_file_name);
+  }
+
+  downloadBalance() {
+   this.downloadFile(
+      this.balance.declaration_attachment_file,
+      this.balance.declaration_attachment_file_type,
+      this.balance.declaration_attachment_file_name);
+  }
+
+  borrarBalance() {
+   this.balance = new DeclarationAttachment();
   }
 
   borrarFloorCertificado() {
@@ -1182,6 +1217,14 @@ export class RegistroComponent implements OnInit {
   }
 
   guardarDeclaracion() {
+   if (this.balance.declaration_attachment_file == ''){
+      if (this.ruc_registro_selected.ruc.tax_payer_type_id == 2) {
+         this.toastr.errorToastr('Adjunte el balance individual del establecimiento, suscrito por el representante legal.', 'Declaración');
+      } else {
+         this.toastr.errorToastr('Adjunte el inventario valorado del establecimiento, suscrito por el propietario.', 'Declaración');
+      }
+      return;
+   }
    this.declaration_selected.declaration_item_values_on_declaration = [];
    this.declarationItemsToShow.forEach(element => {
       element.items.forEach(item => {
@@ -1191,15 +1234,35 @@ export class RegistroComponent implements OnInit {
    this.guardando = true;
    this.declaration_selected.establishment_id = this.establishment_declarations_selected.id;
    this.declarationDataService.register_data(this.declaration_selected).then( r => {
-      this.guardando = false;
       if ( r === '0' ) {
          this.toastr.errorToastr('Existe conflicto la información proporcionada.', 'Declaración');
          return;
       }
-      this.toastr.successToastr('Datos guardados satisfactoriamente.', 'Declaración');
-      this.getEstablishmentsOnRuc(this.currentPageEstablishment);
-      this.establishment_declarations_selected = new Establishment();
-      this.mostrarDataDeclaration = false;
+      const declarationSaved = r as Declaration;
+      this.balance.declaration_id = declarationSaved.id;
+      if (this.balance.id == 0) {
+         this.declarationAttachmentDataService.post(this.balance).then( r1 => {
+            this.toastr.successToastr('Datos guardados satisfactoriamente.', 'Declaración');
+            this.getEstablishmentsOnRuc(this.currentPageEstablishment);
+            this.establishment_declarations_selected = new Establishment();
+            this.mostrarDataDeclaration = false;
+            this.guardando = false;
+         }).catch( e => {
+            console.log(e);
+            this.guardando = false;
+         });
+      } else {
+         this.declarationAttachmentDataService.put(this.balance).then( r1 => {
+            this.toastr.successToastr('Datos guardados satisfactoriamente.', 'Declaración');
+            this.getEstablishmentsOnRuc(this.currentPageEstablishment);
+            this.establishment_declarations_selected = new Establishment();
+            this.mostrarDataDeclaration = false;
+            this.guardando = false;
+         }).catch( e => { 
+            console.log(e);
+            this.guardando = false;
+         });
+      }
    }).catch( e => {
       this.guardando = false;
       this.toastr.errorToastr('Existe conflicto la información proporcionada.', 'Declaración');
@@ -1672,7 +1735,6 @@ export class RegistroComponent implements OnInit {
          } else {
             itemsDetalles = r.return.instituciones.detalle.items;
          }
-         this.ruc_registro_selected.ruc.establishmentsSRI = [];
          this.establishment_selected.ruc_code_id = '-';
          itemsDetalles.forEach(element => {
             const establishmentRuc = new EstablishmentOnRuc();
@@ -1689,7 +1751,6 @@ export class RegistroComponent implements OnInit {
                }
             });
             establishmentRuc.direccion = interseccion;
-            this.ruc_registro_selected.ruc.establishmentsSRI.push(establishmentRuc);
          });
          this.rucData = '';
          registros.forEach(element => {
@@ -2290,6 +2351,19 @@ export class RegistroComponent implements OnInit {
       this.certificadoUsoSuelo.floor_authorization_certificate_file = reader.result.toString().split(',')[1];
       this.certificadoUsoSuelo.floor_authorization_certificate_file_type = file.type;
       this.certificadoUsoSuelo.floor_authorization_certificate_file_name = file.name;
+    };
+   }
+  }
+
+  CodificarArchivoBalance(event) {
+   const reader = new FileReader();
+   if (event.target.files && event.target.files.length > 0) {
+    const file = event.target.files[0];
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      this.balance.declaration_attachment_file = reader.result.toString().split(',')[1];
+      this.balance.declaration_attachment_file_type = file.type;
+      this.balance.declaration_attachment_file_name = file.name;
     };
    }
   }
