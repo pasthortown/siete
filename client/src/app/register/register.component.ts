@@ -51,6 +51,16 @@ export class RegisterComponent implements OnInit {
       this.ruc.contact_user = this.user;
       this.busy = this.authDataServise.register(this.user).then( r => {
          this.esperando = false;
+         if (r == 0 ) {
+            Swal.fire({
+               title: 'La información proporcionada no es correcta.',
+               text: 'No es posible crear una nueva cuenta, con la información proporcionada.',
+               type: 'error',
+             })
+             .then( response => {
+               this.router.navigate(['/login']);
+             });
+         }
          Swal.fire({
            title: 'Te damos la bienvenida',
            text: 'Enviamos tu contraseña a tu correo',
