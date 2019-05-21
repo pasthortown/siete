@@ -1197,6 +1197,7 @@ export class RegistroComponent implements OnInit {
   }
 
   getDeclarationsByEstablishment(id: number) {
+   this.declarations = [];
     this.declarationDataService.get_by_establishment(id).then( r => {
        this.declarations = r as Declaration[];
     }).catch( e => { console.log(e); });
@@ -1225,13 +1226,31 @@ export class RegistroComponent implements OnInit {
       });
   }
 
+  validateDeclaration(): Boolean {
+   return true;
+  }
+
   guardarDeclaracion() {
+   if(!this.validateDeclaration) {
+      this.toastr.errorToastr('La información ingresada es incorrecta.', 'Declaración');
+      return;
+   }
    if (this.balance.declaration_attachment_file == ''){
       if (this.ruc_registro_selected.ruc.tax_payer_type_id == 2) {
          this.toastr.errorToastr('Adjunte el balance individual del establecimiento, suscrito por el representante legal.', 'Declaración');
       } else {
          this.toastr.errorToastr('Adjunte el inventario valorado del establecimiento, suscrito por el propietario.', 'Declaración');
       }
+      return;
+   }
+   let previamente_declarado = false;
+   this.declarations.forEach(declaration => {
+      if (declaration.year == this.declaration_selected.year) {
+         previamente_declarado = true;
+      }
+   });
+   if (previamente_declarado) {
+      this.toastr.errorToastr('Usted ya ha declarado previamente el año seleccionado.', 'Declaración');
       return;
    }
    this.declaration_selected.declaration_item_values_on_declaration = [];
@@ -1252,8 +1271,9 @@ export class RegistroComponent implements OnInit {
       if (this.balance.id == 0) {
          this.declarationAttachmentDataService.post(this.balance).then( r1 => {
             this.toastr.successToastr('Datos guardados satisfactoriamente.', 'Declaración');
-            this.getEstablishmentsOnRuc(this.currentPageEstablishment);
+            this.refreshDeclaracion();
             this.establishment_declarations_selected = new Establishment();
+            this.establishment_declarations_selected.id = this.establishment_selected.id;
             this.mostrarDataDeclaration = false;
             this.guardando = false;
          }).catch( e => {
@@ -1263,8 +1283,9 @@ export class RegistroComponent implements OnInit {
       } else {
          this.declarationAttachmentDataService.put(this.balance).then( r1 => {
             this.toastr.successToastr('Datos guardados satisfactoriamente.', 'Declaración');
-            this.getEstablishmentsOnRuc(this.currentPageEstablishment);
+            this.refreshDeclaracion();
             this.establishment_declarations_selected = new Establishment();
+            this.establishment_declarations_selected.id = this.establishment_selected.id;
             this.mostrarDataDeclaration = false;
             this.guardando = false;
          }).catch( e => { 
@@ -1647,6 +1668,7 @@ export class RegistroComponent implements OnInit {
    }
    this.guardando = true;
    this.establishment_selected.ruc_id = this.ruc_registro_selected.ruc.id;
+   this.establishment_declarations_selected = this.establishment_selected;
    if (this.establishment_selected.ruc_name_type_id <= 1 ) {
       this.establishment_selected.franchise_chain_name = '';
    } else {
@@ -1665,15 +1687,16 @@ export class RegistroComponent implements OnInit {
                this.toastr.errorToastr('Existe conflicto con el correo de la persona de contacto ingresada.', 'Nuevo');
                return;
             }
+            this.establishment_declarations_selected.id = r.id;
             if (typeof this.establishment_selected_picture.id === 'undefined') {
                this.establishment_selected_picture.establishment_id = r.id;
                this.establishmentPictureDataService.post(this.establishment_selected_picture).then( r => {
-                  this.getEstablishmentsOnRuc(this.currentPageEstablishment);
+                  this.selectRegisterEstablishment(this.establishment_selected);
                   this.toastr.successToastr('Datos guardados satisfactoriamente.', 'Nuevo');
                }).catch( e => console.log(e) );
             } else {
                this.establishmentPictureDataService.put(this.establishment_selected_picture).then( r => {
-                  this.getEstablishmentsOnRuc(this.currentPageEstablishment);
+                  this.selectRegisterEstablishment(this.establishment_selected);
                   this.toastr.successToastr('Datos guardados satisfactoriamente.', 'Nuevo');
                }).catch( e => console.log(e) );
             }
@@ -1692,15 +1715,16 @@ export class RegistroComponent implements OnInit {
                this.toastr.errorToastr('Existe conflicto con el correo de la persona de contacto ingresada.', 'Nuevo');
                return;
             }
+            this.establishment_declarations_selected.id = r.id;
             if (typeof this.establishment_selected_picture.id === 'undefined') {
                this.establishment_selected_picture.establishment_id = r.id;
                this.establishmentPictureDataService.post(this.establishment_selected_picture).then( r => {
-                  this.getEstablishmentsOnRuc(this.currentPageEstablishment);
+                  this.selectRegisterEstablishment(this.establishment_selected);
                   this.toastr.successToastr('Datos guardados satisfactoriamente.', 'Nuevo');
                }).catch( e => console.log(e) );
             } else {
                this.establishmentPictureDataService.put(this.establishment_selected_picture).then( r => {
-                  this.getEstablishmentsOnRuc(this.currentPageEstablishment);
+                  this.selectRegisterEstablishment(this.establishment_selected);
                   this.toastr.successToastr('Datos guardados satisfactoriamente.', 'Nuevo');
                }).catch( e => console.log(e) );
             }
@@ -2135,6 +2159,7 @@ export class RegistroComponent implements OnInit {
       this.establishment_selected.ruc_code_id = establishment.ruc_code_id;
       return;
      }
+    this.selectRegisterEstablishmentDeclaration(establishment);
     this.establishmentDataService.get_filtered(establishment.id).then( r => {
       this.establishment_selected = r.establishment as Establishment;
       this.getCertificadoUsoSuelo();
@@ -2201,14 +2226,20 @@ export class RegistroComponent implements OnInit {
     }).catch( e => { console.log(e); });
   }
 
+  refreshDeclaracion() {
+     this.selectRegisterEstablishmentDeclaration(this.establishment_selected);
+  }
+
   newRegisterEstablishment() {
     this.establishment_selected = new Establishment();
+    this.establishment_declarations_selected = new Establishment();
     this.establishment_selected_picture = new EstablishmentPicture();
     this.establishment_selected.workers_on_establishment = this.getEstablishmentWorkerGroup();
     this.mostrarDataEstablishment = true;
     this.cedulaEstablishmentContactData = '';
     this.certificadoUsoSuelo = new FloorAuthorizationCertificate();
     this.getCantonesEstablishment();
+    this.declarations = [];
     this.provinciaEstablishmentSelectedCode = '-';
   }
 

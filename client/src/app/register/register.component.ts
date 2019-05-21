@@ -50,7 +50,6 @@ export class RegisterComponent implements OnInit {
       this.user.ruc = this.ruc.number;
       this.ruc.contact_user = this.user;
       this.busy = this.authDataServise.register(this.user).then( r => {
-         console.log(r);
          this.esperando = false;
          if (r == 0 || typeof r == 'undefined') {
             Swal.fire({
