@@ -14,13 +14,16 @@ import { RegisterType } from './../../../../models/ALOJAMIENTO/RegisterType';
    styleUrls: ['./capacitytype.component.scss']
 })
 export class CapacityTypeComponent implements OnInit {
+   regiones: RegisterType[] = [];
+   register_type_clasifications: RegisterType[] = [];
+   register_type_clasification_selected: String = '-';
+   region_code: String = '-';
    capacity_types: CapacityType[] = [];
    capacity_typeSelected: CapacityType = new CapacityType();
-   register_type_categories: RegisterType[] = [];
+   
    all_register_types: RegisterType[] = [];
    toShow_register_types: any[] = [];
-   register_type_category_selected: String = '-';
-
+   
    currentPage = 1;
    lastPage = 1;
    showDialog = false;
@@ -34,56 +37,65 @@ export class CapacityTypeComponent implements OnInit {
 
    ngOnInit() {
       this.goToPage(1);
-      this.getRegisterTypeCategories();
-      this.getAllRegisterTypes();
-   }
-
-   getAllRegisterTypes() {
-      this.all_register_types = [];
-      this.register_typeDataService.get().then( r => {
-         this.all_register_types = r as RegisterType[];
-         this.toShow_register_types = [];
-         this.all_register_types.forEach(element => {
-            if(element.father_code == '-') {
-               this.all_register_types.forEach(elementChild => {
-                  if(elementChild.father_code == element.code) {
-                     this.toShow_register_types.push({id: elementChild.id, toShow: element.name + ' - ' + elementChild.name});
-                  }
-               });
-            }
-         });
-      }).catch( e => {console.log(e);});
-   }
-
-   getRegisterTypeCategoryByChildId(id: number) {
-      this.all_register_types.forEach(element => {
-         let fatherCode: String = '';
-         if(element.id == id) {
-            fatherCode = element.father_code;
-         }
-         this.all_register_types.forEach(element1 => {
-            if(element1.code == fatherCode) {
-               this.register_type_category_selected = element1.code;
-               this.getRegisterType();
-            }
-         });
-      });
+      this.getRegiones();
+      this.buildRegistersToShow();
    }
    
+   buildRegistersToShow() {
+      this.toShow_register_types = [];
+      this.register_typeDataService.get().then(r => {
+         const continentes = [];
+         r.forEach(element => {
+            if (element.father_code == '-') {
+               continentes.push(element);
+            }
+         });
+         continentes.forEach(continente => {
+            const categorias = [];
+            r.forEach(element => {
+               if (element.father_code == continente.code) {
+                  categorias.push(element);
+               }
+            });
+            categorias.forEach(categoria => {
+               r.forEach(element => {
+                  if(element.father_code === categoria.code) {
+                     const toinsert = continente.name + '/' + categoria.name +'/' + element.name;
+                     this.toShow_register_types.push({id: element.id, name: toinsert});
+                  }
+               });
+            });
+         });
+      }).catch( e => { console.log(e); });
+      console.log(this.toShow_register_types);
+   }
+
    selectCapacityType(capacity_type: CapacityType) {
       this.capacity_typeSelected = capacity_type;
    }
 
-   getRegisterTypeCategories() {
-      this.register_type_categories = [];
+   getRegiones() {
+      this.regiones = [];
+      this.register_type_clasifications = [];
+      this.register_types = [];
       this.register_typeDataService.get_filtered('-').then( r => {
-         this.register_type_categories = r as RegisterType[];
+         this.regiones = r as RegisterType[];
       }).catch( e => console.log(e) );
    }
-   
+
+   getRegisterClasificationTypes() {
+      this.register_type_clasifications = [];
+      this.register_types = [];
+      this.register_type_clasification_selected = '-';
+      this.register_typeDataService.get_filtered(this.region_code).then( r => {
+         this.register_type_clasifications = r as RegisterType[];
+      }).catch( e => console.log(e) );
+   }
+
    getRegisterType() {
       this.register_types = [];
-      this.register_typeDataService.get().then( r => {
+      this.capacity_typeSelected.register_type_id = 0;
+      this.register_typeDataService.get_filtered(this.register_type_clasification_selected).then( r => {
          this.register_types = r as RegisterType[];
       }).catch( e => console.log(e) );
    }
@@ -101,7 +113,8 @@ export class CapacityTypeComponent implements OnInit {
       this.capacity_types = [];
       this.capacity_typeSelected = new CapacityType();
       this.capacity_typeSelected.register_type_id = 0;
-      this.register_type_category_selected = '-';
+      this.register_type_clasification_selected = '-';
+      this.region_code = '-';
       this.capacity_typeDataService.get_paginate(this.recordsByPage, this.currentPage).then( r => {
          this.capacity_types = r.data as CapacityType[];
          this.lastPage = r.last_page;
@@ -111,7 +124,8 @@ export class CapacityTypeComponent implements OnInit {
    newCapacityType(content) {
       this.capacity_typeSelected = new CapacityType();
       this.capacity_typeSelected.register_type_id = 0;
-      this.register_type_category_selected = '-';
+      this.register_type_clasification_selected = '-';
+      this.region_code = '-';
       this.openDialog(content);
    }
 

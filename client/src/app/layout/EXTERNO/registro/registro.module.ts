@@ -1,3 +1,4 @@
+import { DeclarationAttachmentService } from './../../../services/CRUD/FINANCIERO/declarationattachment.service';
 import { FloorAuthorizationCertificateService } from './../../../services/CRUD/BASE/floorauthorizationcertificate.service';
 import { PayService } from './../../../services/CRUD/FINANCIERO/pay.service';
 import { RegisterService } from 'src/app/services/CRUD/ALOJAMIENTO/register.service';
@@ -87,6 +88,7 @@ import { Ng2TableModule } from 'ng2-table/ng2-table';
     TariffTypeService,
     PreviewRegisterCodeService,
     EstablishmentCertificationTypeService,
+    DeclarationAttachmentService,
     LanguageService,
     EstablishmentService,
     WorkerService,

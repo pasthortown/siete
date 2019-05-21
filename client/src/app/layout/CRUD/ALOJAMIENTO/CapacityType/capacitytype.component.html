@@ -1,6 +1,6 @@
 <div class="row">
    <h1 class="col-12 text-right">
-      Tipos de Ambiente
+      Tipos de Capacidad
    </h1>
 </div>
 <div class="row">
@@ -36,7 +36,6 @@
                <th>Plazas</th>
                <th>Tipo de Registro</th>
                <th>Cantidad Máxima de Camas</th>
-               <th>Ubicación</th>
             </tr>
          </thead>
          <tbody>
@@ -49,12 +48,11 @@
                   <select class="form-control" id="register_type_id" name="register_type_id" disabled [(ngModel)]="capacity_type.register_type_id">
                      <option value="0" selected>Seleccione...</option>
                      <option *ngFor="let register_type of toShow_register_types" value={{register_type.id}}>
-                        {{register_type.toShow}}
+                        {{register_type.name}}
                      </option>
                   </select>
                </td>
                <td>{{capacity_type.bed_quantity}}</td>
-               <td><label *ngIf="capacity_type.is_island">Galápagos</label><label *ngIf="!capacity_type.is_island">Continente</label></td>
             </tr>
          </tbody>
       </table>
@@ -103,12 +101,23 @@
                   <ck-editor id="description" name="description" skin="moono-lisa" [(ngModel)]="capacity_typeSelected.description"></ck-editor>
                </div>
             </div>
-            <div class="form-group row">
+               <div class="form-group row">
+                  <label for="register_type_id" class="col-4 col-form-label">Región</label>
+                  <div class="col-8">
+                     <select class="form-control" id="register_type_id" (change)="getRegisterClasificationTypes()" name="register_type_id" [(ngModel)]="region_code">
+                        <option value="-" selected>Seleccione...</option>
+                        <option *ngFor="let register_type of regiones" value={{register_type.code}}>
+                           {{register_type.name}}
+                        </option>
+                     </select>
+                  </div>
+               </div>
+               <div class="form-group row">
                   <label for="register_type_id" class="col-4 col-form-label">Clasificación de Registro</label>
                   <div class="col-8">
-                     <select class="form-control" id="register_type_id" (change)="getRegisterType()" name="register_type_id" [(ngModel)]="register_type_category_selected">
+                     <select class="form-control" id="register_type_id" (change)="getRegisterType()" name="register_type_id" [(ngModel)]="register_type_clasification_selected">
                         <option value="-" selected>Seleccione...</option>
-                        <option *ngFor="let register_type of register_type_categories" value={{register_type.code}}>
+                        <option *ngFor="let register_type of register_type_clasifications" value={{register_type.code}}>
                            {{register_type.name}}
                         </option>
                      </select>
@@ -135,12 +144,6 @@
                   <label for="spaces" class="col-4 col-form-label">Cantidad Máxima de Plazas</label>
                   <div class="col-8">
                      <input type="number" class="form-control" id="spaces" name="spaces" placeholder="spaces" [(ngModel)]="capacity_typeSelected.spaces">
-                  </div>
-               </div>
-               <div class="form-group row">
-                  <label for="is_island" class="col-4 col-form-label">Galápagos</label>
-                  <div class="col-8">
-                     <label class="switch"><input type="checkbox"id="is_island" name="is_island" [(ngModel)]="capacity_typeSelected.is_island"><span class="slider round"></span></label>
                   </div>
                </div>
          </div>

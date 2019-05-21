@@ -86,11 +86,11 @@ class AuthController extends Controller
       DB::beginTransaction();
       $previewUserEmail = User::where('email', $email)->first();
       if($previewUserEmail) {
-        return response()->json($e,400);
+        return response()->json(0,400);
       }
       $previewUserRuc = User::where('ruc', $userData['ruc'])->first();
       if($previewUserRuc) {
-        return response()->json($e,400);
+        return response()->json(0,400);
       }
       $user = new User();
       $lastUser = User::orderBy('id')->get()->last();
