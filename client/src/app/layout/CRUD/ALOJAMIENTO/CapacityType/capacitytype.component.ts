@@ -40,6 +40,36 @@ export class CapacityTypeComponent implements OnInit {
       this.getRegiones();
    }
    
+   buildRegistersToShow() {
+      this.toShow_register_types = [];
+      this.register_typeDataService.get().then(r => {
+         const continentes = [];
+         r.forEach(element => {
+            if (element.code = '-') {
+               continentes.push(element);
+            }
+         });
+         continentes.forEach(contienente => {
+            let toinsert = contienente.name;
+            const categorias = [];
+            r.forEach(element => {
+               if (element.father_code == contienente.code) {
+                  categorias.push(element);
+               }
+            });
+            categorias.forEach(categoria => {
+               toinsert += '/' + categoria.name;
+               r.forEach(element => {
+                  if(element.father_code == categoria.code) {
+                     toinsert += '/' + element.name;
+                     this.toShow_register_types.push({id: element.id, name: toinsert});
+                  }
+               });
+            });
+         });
+      }).catch( e => { console.log(e); });
+   }
+
    selectCapacityType(capacity_type: CapacityType) {
       this.capacity_typeSelected = capacity_type;
    }
