@@ -994,23 +994,13 @@ export class CoordinadorComponent implements OnInit {
 
   validateTariffs() {
    this.rucEstablishmentRegisterSelected.capacities_on_register.forEach(capacity => {
-      capacity.tariffsValidated = true;
-      const groups = [];
       capacity.tariffs_on_capacity.forEach(tariff => {
-         if(tariff.is_reference) {
-            groups.push({name: tariff.tariff_father_name, price: tariff.price});
+         if (tariff.price == 0) {
+            return false;
          }
       });
-      groups.forEach(group => {
-         capacity.tariffs_on_capacity.forEach(tariff => {
-            if(capacity.tariffsValidated && !tariff.is_reference && (tariff.tariff_father_name == group.name)) {
-               if (tariff.price > group.price * tariff.factor) {
-                  capacity.tariffsValidated = false;
-               }
-            }
-         });
-      });
    });
+   return true;
   }
 
   validateRuc(): Boolean {
@@ -2665,8 +2655,6 @@ export class CoordinadorComponent implements OnInit {
          newTariff.tariff_father_name = element.father.name;
          newTariff.tariff_name = tariffType.name;
          newTariff.tariff_type_id = tariffType.id;
-         newTariff.is_reference = tariffType.is_reference;
-         newTariff.factor = tariffType.factor;
          toReturn.push(newTariff);
       });
    });
@@ -2705,7 +2693,7 @@ export class CoordinadorComponent implements OnInit {
       beds_declared += bed.quantity;
       this.alowed_bed_types.forEach(bedType => {
          if(bedType.id == bed.bed_type_id) {
-            places = bedType.spaces * bed.quantity;
+            places = bed.quantity;
          }
       });
       capacity.total_spaces += places;
