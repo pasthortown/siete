@@ -408,20 +408,6 @@
                               </div>
                               <div class="row">
                                 <div class="col-12">
-                                  <div class="form-group">
-                                    <label>Listado de Establecimientos Inscritos en el RUC*</label><span *ngIf="establishment_selected.ruc_code_id == '-'"
-                                      class="ml-2 badge badge-danger">Incorrecto</span>
-                                    <select class="form-control" id="ruc_code_id" name="ruc_code_id"
-                                      [(ngModel)]="establishment_selected.ruc_code_id">
-                                      <option value="-" selected>Seleccione...</option>
-                                      <option *ngFor="
-                                          let establishmentRucCode of ruc_registro_selected.ruc.establishmentsSRI
-                                        " value="{{ establishmentRucCode.numero }}">
-                                        {{ establishmentRucCode.numero }} | {{ establishmentRucCode.tipo }} -
-                                        {{ establishmentRucCode.direccion }}
-                                      </option>
-                                    </select>
-                                  </div>
                                   <div class="row">
                                       <div class="col-12">
                                         <div class="form-group">
@@ -536,7 +522,7 @@
                                       </div>
                                     </div>
                                     <div class="col-12 text-center">
-                                      <img class="rounded mb-2" src="data:{{
+                                      <img class="rounded mb-2" *ngIf="establishment_selected_picture.establishment_picture_file !== ''" src="data:{{
                                           establishment_selected_picture.establishment_picture_file_type
                                         }};base64,{{
                                           establishment_selected_picture.establishment_picture_file

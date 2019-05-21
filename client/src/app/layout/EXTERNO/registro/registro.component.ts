@@ -2130,6 +2130,11 @@ export class RegistroComponent implements OnInit {
   }
 
   selectRegisterEstablishment(establishment: Establishment) {
+     if(establishment.id == 0) {
+      this.newRegisterEstablishment();
+      this.establishment_selected.ruc_code_id = establishment.ruc_code_id;
+      return;
+     }
     this.establishmentDataService.get_filtered(establishment.id).then( r => {
       this.establishment_selected = r.establishment as Establishment;
       this.getCertificadoUsoSuelo();
@@ -2198,9 +2203,13 @@ export class RegistroComponent implements OnInit {
 
   newRegisterEstablishment() {
     this.establishment_selected = new Establishment();
-    this.establishment_selected_picture = new EstablishmentPicture()
+    this.establishment_selected_picture = new EstablishmentPicture();
     this.establishment_selected.workers_on_establishment = this.getEstablishmentWorkerGroup();
     this.mostrarDataEstablishment = true;
+    this.cedulaEstablishmentContactData = '';
+    this.certificadoUsoSuelo = new FloorAuthorizationCertificate();
+    this.getCantonesEstablishment();
+    this.provinciaEstablishmentSelectedCode = '-';
   }
 
   newPreviewRegisterCode() {
