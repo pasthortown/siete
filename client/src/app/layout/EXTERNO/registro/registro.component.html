@@ -1232,7 +1232,7 @@
                               </div>
                             </div>
                             <div class="row">
-                              <div class="col-4">
+                              <div class="col-3">
                                 <div class="form-group">
                                   <label>Actividad Turística</label><span *ngIf="actividadSelected == '-'"
                                     class="ml-2 badge badge-danger">Incorrecto</span>
@@ -1242,7 +1242,21 @@
                                   </select>
                                 </div>
                               </div>
-                              <div class="col-4">
+                              <div class="col-3">
+                                <div class="form-group">
+                                  <label>Región</label>
+                                  <select class="form-control" id="register_type_id" name="register_type_id"
+                                    (change)="getClasifications()" [(ngModel)]="regionSelectedCode" [disabled]="!rucEstablishmentRegisterSelected.editable">
+                                    <option value="-" selected>Seleccione...</option>
+                                    <option *ngFor="
+                                        let register_type of regiones
+                                      " value="{{ register_type.code }}">
+                                      {{ register_type.name }}
+                                    </option>
+                                  </select>
+                                </div>
+                              </div>
+                              <div class="col-3">
                                 <div class="form-group">
                                   <label>Clasificación</label><span *ngIf="categorySelectedCode == '-'"
                                     class="ml-2 badge badge-danger">Incorrecto</span>
@@ -1257,7 +1271,7 @@
                                   </select>
                                 </div>
                               </div>
-                              <div class="col-4">
+                              <div class="col-3">
                                 <div class="form-group">
                                   <label>Categoría</label><span *ngIf="
                                       rucEstablishmentRegisterSelected.register_type_id ==
@@ -1284,8 +1298,8 @@
                             <strong>Capacidades del Establecimiento</strong>
                           </h4>
                         </div>
-                        <div class="form-group row"
-                          *ngIf="categorySelectedCode !== '-' && rucEstablishmentRegisterSelected.register_type_id !== 0">
+                        
+                        <div class="row" *ngIf="categorySelectedCode !== '-' && rucEstablishmentRegisterSelected.register_type_id !== 0">
                           <div class="col-12">
                             <label class="col-form-label mb-2"><strong>Habitaciones del Establecimiento</strong><span
                                 class="ml-2 mr-2 badge badge-info">Total de Habitaciones:
@@ -1302,44 +1316,25 @@
                                 ">Incorrecto</span></label>
                           </div>
                           <div class="col-12">
-                            <div class="btn-toolbar" role="toolbar">
-                              <div class="btn-group" role="group" aria-label="First group">
-                                <button type="button" title="Agregar" class="btn btn-success ml-2" (click)="addCapacity()" [disabled]="!rucEstablishmentRegisterSelected.editable">
-                                  <i class="fas fa-plus-circle"></i>
-                                </button>
-                                <button type="button" title="Contar Plazas" class="btn btn-warning ml-2"
-                                  (click)="calcSpaces()">
-                                  <i class="fas fa-bed"></i>
-                                </button>
-                              </div>
-                            </div>
-                            <table class="table table-striped table-hover mt-2">
+                            <table class="table table-hover mt-2">
                               <thead>
                                 <th>
-                                  Seleccionado
+                                  <button type="button" title="Agregar" class="btn btn-success ml-2" (click)="addCapacity()" [disabled]="!rucEstablishmentRegisterSelected.editable">
+                                    <i class="fas fa-plus-circle"></i>
+                                  </button>
                                 </th>
-                                <th>
-                                  Tipo
+                                <th>Tipo
                                 </th>
-                                <th>
-                                  Cantidad
-                                </th>
-                                <th>
-                                  Distribución
-                                </th>
-                                <th>
-                                  Tarifas
-                                </th>
-                                <th>
-                                  Opciones
-                                </th>
+                                <th>Habitaciones</th>
+                                <th>Camas</th>
+                                <th>Plazas</th>
+                                <th>Opciones</th>
                               </thead>
                               <tbody>
-                                <tr *ngFor="
-                                    let capacity of rucEstablishmentRegisterSelected.capacities_on_register
-                                  " (click)="selectCapacity(capacity)">
+                                <tr *ngFor="let capacity of rucEstablishmentRegisterSelected.capacities_on_register" (click)="selectCapacity(capacity)">
                                   <td class="text-right">
-                                    <span *ngIf="capacitySelected == capacity" class="far fa-hand-point-right"></span>
+                                      <span *ngIf="true"
+                                      class="ml-2 badge badge-danger">Incorrecto</span>
                                   </td>
                                   <td>
                                     <select class="form-control" id="capacity_type_id" name="capacity_type_id"
@@ -1353,107 +1348,31 @@
                                     </select>
                                   </td>
                                   <td>
-                                    <input type="number" class="form-control" min="0" id="count_space" name="count_space"
+                                      <input type="number" class="form-control" min="0" id="count_space" name="count_space" (keyup)="calcSpaces()"
                                       placeholder="Cantidad" [(ngModel)]="capacity.quantity" [disabled]="!rucEstablishmentRegisterSelected.editable"/>
-                                    <div class="form-group row mt-3">
-                                      <span class="badge badge-info mr-2">Total de Plazas:
-                                        {{
-                                          capacity.quantity * capacity.total_spaces
-                                        }}</span><span class="badge badge-danger" *ngIf="
-                                          capacity.quantity * capacity.total_spaces ==
-                                          0
-                                        ">Incorrecto</span>
+                                  </td>
+                                  <td>
+                                    <div class="col-12" *ngIf="!capacityEditable">
+                                      <strong>{{capacity.max_bed}}</strong>
                                     </div>
                                   </td>
                                   <td>
-                                    <span class="badge badge-info mb-3 mr-2">Plazas por Habitación:
-                                      {{ capacity.total_spaces }}</span><span class="badge badge-danger mb-3 mr-2"
-                                      *ngIf="capacity.total_spaces == 0">Incorrecto</span><span class="badge badge-info"
-                                      *ngIf="capacity.max_bed_ok">Máximo de Camas:
-                                      {{
-                                      capacity.max_bed
-                                    }}</span>
-                                    <span class="badge badge-danger" *ngIf="!capacity.max_bed_ok">Máximo de Camas:
-                                      {{
-                                      capacity.max_bed
-                                    }}</span>
-                                    <div class="btn-toolbar" role="toolbar">
-                                      <div class="btn-group" role="group">
-                                        <button type="button" title="Agregar" class="btn btn-success"
-                                          (click)="addBed(capacity)" [disabled]="!rucEstablishmentRegisterSelected.editable">
-                                          <i class="fas fa-plus-circle"></i>
-                                        </button>
-                                        <button type="button" title="Quitar" class="btn btn-danger"
-                                          (click)="removeBed(capacity)" [disabled]="!rucEstablishmentRegisterSelected.editable">
-                                          <i class="fas fa-trash"></i>
-                                        </button>
-                                        <button type="button" title="Contar Plazas" class="btn btn-warning ml-2"
-                                          (click)="calcBeds(capacity)">
-                                          <i class="fas fa-bed"></i>
-                                        </button>
-                                      </div>
+                                    <div class="col-12" *ngIf="!capacityEditable">
+                                      <strong>{{capacity.max_spaces}}</strong>
                                     </div>
-                                    <table>
-                                      <thead>
-                                  <th>Seleccionado</th>
-                                  <th>Cantidad</th>
-                                  <th>Tipo</th>
-                                  </thead>
-                              <tbody>
-                                <tr *ngFor="
-                                            let bed of capacity.beds_on_capacity
-                                          " (click)="selectBed(bed)">
-                                  <td>
-                                    <span *ngIf="bedSelected == bed" class="far fa-hand-point-right"></span>
                                   </td>
                                   <td>
-                                    <input type="number" class="form-control" min="0" id="count_bed" name="count_bed"
-                                      placeholder="Cantidad" [(ngModel)]="bed.quantity" [disabled]="!rucEstablishmentRegisterSelected.editable" />
-                                  </td>
-                                  <td>
-                                    <select class="form-control" id="bed_type_id" name="bed_type_id"
-                                      [(ngModel)]="bed.bed_type_id" [disabled]="!rucEstablishmentRegisterSelected.editable">
-                                      <option value="0" selected>Seleccione...</option>
-                                      <option *ngFor="
-                                                  let bed_type of alowed_bed_types
-                                                " value="{{ bed_type.id }}">
-                                        {{ bed_type.name }}
-                                      </option>
-                                    </select>
+                                    <button type="button" title="Eliminar" class="btn btn-danger"
+                                      (click)="removeCapacity(capacity)" [disabled]="!rucEstablishmentRegisterSelected.editable">
+                                      <i class="fas fa-trash"></i>
+                                    </button>
                                   </td>
                                 </tr>
                               </tbody>
                             </table>
-                            </td>
-                            <td>
-                              <span class="badge badge-danger mb-3" *ngIf="
-                                      !capacity.tariffsValidated
-                                      ">Tarifas Incorrectas</span>
-                              <div class="form-group" *ngFor="
-                                        let tariff of capacity.tariffs_on_capacity
-                                      ">
-                                <label>Por {{ tariff.tariff_father_name }} en
-                                  {{ tariff.tariff_name }}</label>
-                                <div class="input-group">
-                                  <div class="input-group-prepend">
-                                    <span class="input-group-text">$</span>
-                                  </div>
-                                  <input type="number" class="form-control" min="0" step="0.01" id="low_capacity_room_price"
-                                    name="low_capacity_room_price" [(ngModel)]="tariff.price" placeholder="Precio" [disabled]="!rucEstablishmentRegisterSelected.editable"/>
-                                </div>
-                              </div>
-                            </td>
-                            <td>
-                              <button type="button" title="Eliminar" class="btn btn-danger"
-                                (click)="removeCapacity(capacity)" [disabled]="!rucEstablishmentRegisterSelected.editable">
-                                <i class="fas fa-trash"></i>
-                              </button>
-                            </td>
-                            </tr>
-                            </tbody>
-                            </table>
                           </div>
                         </div>
+
                         <div class="row" *ngIf="categorySelectedCode !== '-' && rucEstablishmentRegisterSelected.register_type_id !== 0">
                           <div class="col-12">
                             <div class="alert alert-info mt-2 mb-2" role="alert">
@@ -1463,7 +1382,7 @@
                             </div>
                           </div>
                         </div>
-                        <div class="row">
+                        <div class="row" *ngIf="categorySelectedCode !== '-' && rucEstablishmentRegisterSelected.register_type_id !== 0">
                           <div class="col-12">
                             <div class="form-group">
                                 <label><strong>Servicios Complementarios</strong></label>

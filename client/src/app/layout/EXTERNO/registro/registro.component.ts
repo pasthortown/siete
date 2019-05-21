@@ -96,6 +96,7 @@ export class RegistroComponent implements OnInit {
    //PAGOS
    currentPagePays = 1;
    balance: DeclarationAttachment = new DeclarationAttachment();
+   capacityEditable = false;
    lastPagePays = 1;
    recordsByPagePays = 5;
    rowsPays = [];
@@ -104,6 +105,8 @@ export class RegistroComponent implements OnInit {
    pays: Pay[] = [];
    stateTramiteId = 0;
    actividadSelected = '-';
+   regiones = [];
+   regionSelectedCode = '';
   //DATOS RUC
   certificadoUsoSuelo: FloorAuthorizationCertificate = new FloorAuthorizationCertificate();
   imContactRuc: Boolean = true;
@@ -138,7 +141,7 @@ export class RegistroComponent implements OnInit {
   user: User = new User();
   specific_states: State[];
   states: State[];
-
+  
   //DATOS ESTABLECIMIENTO
    config: any = {
       paging: true,
@@ -844,7 +847,7 @@ export class RegistroComponent implements OnInit {
     this.getCertificationTypes();
     this.getWorkerGroups();
     this.getTariffs();
-    this.getClasifications();
+    this.getRegiones();
     this.getEstablishmentCertificationTypesCategories();
     this.getComplementaryServiceTypeCategories();
     this.groupTypeSelected = new GroupType();
@@ -1180,11 +1183,24 @@ export class RegistroComponent implements OnInit {
    }).catch( e => { console.log(e); });
   }
 
+  getRegiones() {
+   this.regiones = [];
+   this.clasifications_registers = [];
+   this.categorySelectedCode = '-';
+   this.regionSelectedCode = '-';
+   this.showRequisites = false;
+   this.rucEstablishmentRegisterSelected.register_type_id = 0;
+   this.register_typeDataService.get_filtered('-').then( r => {
+      this.regiones = r as RegisterType[];
+   }).catch( e => { console.log(e) });
+  }
+
   getClasifications() {
    this.clasifications_registers = [];
    this.categorySelectedCode = '-';
+   this.rucEstablishmentRegisterSelected.register_type_id = 0;
    this.showRequisites = false;
-   this.register_typeDataService.get_filtered('-').then( r => {
+   this.register_typeDataService.get_filtered(this.regionSelectedCode).then( r => {
       this.clasifications_registers = r as RegisterType[];
    }).catch( e => { console.log(e) });
   }
@@ -1584,9 +1600,10 @@ export class RegistroComponent implements OnInit {
   }
 
   getMaxBed(capacity: Capacity) {
-   this.alowed_capacity_types.forEach(element => {
-      if (element.id == capacity.capacity_type_id){
-         capacity.max_bed = element.bed_quantity;
+   this.alowed_capacity_types.forEach(capacityType => {
+      if(capacityType.id == capacity.capacity_type_id) {
+         capacity.max_bed = capacityType.bed_quantity;
+         capacity.max_spaces = capacityType.spaces;
       }
    });
   }
@@ -2168,6 +2185,7 @@ export class RegistroComponent implements OnInit {
     });
     if (registerSelected.id == 0) {
       this.rucEstablishmentRegisterSelected = new Register();
+      this.rucEstablishmentRegisterSelected.status = 0;
       this.rucEstablishmentRegisterSelected.establishment_id = establishment.id;
       this.mostrarDataRegister = true;
     } else {
@@ -2653,17 +2671,22 @@ export class RegistroComponent implements OnInit {
    this.rucEstablishmentRegisterSelected.total_spaces = 0;
    this.rucEstablishmentRegisterSelected.total_habitations = 0;
    this.rucEstablishmentRegisterSelected.total_beds = 0;
-   this.rucEstablishmentRegisterSelected.capacities_on_register.forEach(element => {
-      element.beds_on_capacity.forEach(bed => {
-         this.rucEstablishmentRegisterSelected.total_beds += bed.quantity * element.quantity;
-      });
-
-      this.rucEstablishmentRegisterSelected.total_spaces += element.total_spaces * element.quantity;
-      this.rucEstablishmentRegisterSelected.total_habitations += element.quantity;
-   });
-   this.validateTariffs();
    this.rucEstablishmentRegisterSelected.capacities_on_register.forEach(capacity => {
-      this.calcBeds(capacity);
+      this.capacityEditable = false;
+      this.alowed_capacity_types.forEach(capacityType => {
+         if (capacityType.id == capacity.capacity_type_id) {
+            if (capacityType.spaces == 999) {
+               this.capacityEditable = true;
+            }
+         }
+      });
+      if ( !this.capacityEditable ) {
+         this.rucEstablishmentRegisterSelected.total_spaces += (capacity.max_spaces * capacity.quantity);
+         this.rucEstablishmentRegisterSelected.total_habitations += capacity.quantity;
+         this.rucEstablishmentRegisterSelected.total_beds += (capacity.max_bed * capacity.quantity);
+      } else {
+         //AQUI
+      }
    });
   }
 
