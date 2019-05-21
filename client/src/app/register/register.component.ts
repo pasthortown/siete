@@ -50,8 +50,9 @@ export class RegisterComponent implements OnInit {
       this.user.ruc = this.ruc.number;
       this.ruc.contact_user = this.user;
       this.busy = this.authDataServise.register(this.user).then( r => {
+         console.log(r);
          this.esperando = false;
-         if (r == 0 ) {
+         if (r == 0 || typeof r == 'undefined') {
             Swal.fire({
                title: 'La información proporcionada no es correcta.',
                text: 'No es posible crear una nueva cuenta, con la información proporcionada.',
@@ -60,6 +61,7 @@ export class RegisterComponent implements OnInit {
              .then( response => {
                this.router.navigate(['/login']);
              });
+             return;
          }
          Swal.fire({
            title: 'Te damos la bienvenida',
