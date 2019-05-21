@@ -75,10 +75,10 @@
       </div>
 
       <div *ngIf="isAdmin" class="nested-menu">
-         <a class="list-group-item" (click)="addExpandClass('catalogoAlojamiento')" *ngIf="isAdminRegC">
+         <a class="list-group-item" (click)="addExpandClass('catalogoBase')" *ngIf="isAdminRegC">
             <span class="fas fa-database"></span>&nbsp;Catálogo de Información Base
          </a>
-         <li class="nested" [class.expand]="showMenu === 'catalogoAlojamiento'">
+         <li class="nested" [class.expand]="showMenu === 'catalogoBase'">
             <ul class="submenu">
                <li>
                   <a [routerLink]="['/system_name']" [routerLinkActive]="['router-link-active']" class="list-group-item">Sistemas MINTUR Previos</a>
@@ -119,7 +119,7 @@
               </ul>
          </li>
       </div> 
-
+      
       <div *ngIf="isAdmin" class="nested-menu">
             <a class="list-group-item" (click)="addExpandClass('catalogoAlojamiento')" *ngIf="isAdminRegC">
                <span class="fas fa-database"></span>&nbsp;Catálogo de Alojamiento
