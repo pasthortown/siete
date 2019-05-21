@@ -33,6 +33,8 @@ export class Establishment {
    floor_authorization_certificate_id: number;
    constructor() {
       this.id = 0;
+      this.ruc_id = 0;
+      this.commercially_known_name = '';
       this.contact_user = new User();
       this.preview_register_codes_on_establishment = [];
       this.languages_on_establishment = [];

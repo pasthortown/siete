@@ -294,7 +294,8 @@ export class RegistroComponent implements OnInit {
    return false;
   }
 
-  onChangeTablePays(config: any, page: any = {page: this.currentPagePays, itemsPerPage: this.recordsByPagePays}): any {
+  onChangeTablePays(config: any, event?): any {
+   const page: any = {page: this.currentPageEstablishment, itemsPerPage: this.recordsByPageEstablishment};
    if (config.filtering) {
      Object.assign(this.config.filtering, config.filtering);
    }
@@ -413,7 +414,8 @@ export class RegistroComponent implements OnInit {
   onCellClickPays(event) {
   }
 
-  onChangeTableEstablishment(config: any, page: any = {page: this.currentPageEstablishment, itemsPerPage: this.recordsByPageEstablishment}): any {
+  onChangeTableEstablishment(config: any, event?): any {
+   const page: any = {page: this.currentPageEstablishment, itemsPerPage: this.recordsByPageEstablishment};
    if (config.filtering) {
      Object.assign(this.config.filtering, config.filtering);
    }
@@ -543,7 +545,8 @@ export class RegistroComponent implements OnInit {
    });
   }
 
-  onChangeTableRegister(config: any, page: any = {page: this.currentPageRegister, itemsPerPage: this.recordsByPageRegister}): any {
+  onChangeTableRegister(config: any, event?): any {
+   const page: any = {page: this.currentPageEstablishment, itemsPerPage: this.recordsByPageEstablishment};
    if (config.filtering) {
      Object.assign(this.config.filtering, config.filtering);
    }
@@ -1035,12 +1038,6 @@ export class RegistroComponent implements OnInit {
     this.mostrarDataEstablishment = false;
     this.establishmentDataService.getByRuc(this.ruc_registro_selected.ruc.number, this.recordsByPageEstablishment, currentpage).then( r => {
        const establecimientos = r.data as Establishment[];
-       if(establecimientos.length == 0){
-         this.ruc_registro_selected.ruc.establishments = [];
-       }else {
-         this.ruc_registro_selected.ruc.establishments = r.data as Establishment[];
-         this.buildDataTableEstablishment();
-       }
        this.dinardapDataService.get_RUC(this.ruc_registro_selected.ruc.number).then( dinardap => {
          let itemsDetalles = [];
          if (!Array.isArray(dinardap.return.instituciones.detalle.items)) {
@@ -1052,14 +1049,26 @@ export class RegistroComponent implements OnInit {
             element.registros.forEach(localData => {
                if (localData.campo === 'numeroEstableciminiento') {
                   const establishmentRuc = localData.valor as String;
+                  let existe = false;
                   establecimientos.forEach(establecimiento => {
-                     if (establecimiento.ruc_code_id == establishmentRuc.trim()) {
-                        //AQUI
+                     if (establecimiento.ruc_code_id === establishmentRuc.trim()) {
+                        existe = true;
                      }
                   });
+                  if (!existe) {
+                     const newEstablishment = new Establishment();
+                     newEstablishment.ruc_code_id = establishmentRuc;
+                     establecimientos.push(newEstablishment);
+                  }
                }
             });
          });
+         if(establecimientos.length == 0){
+            this.ruc_registro_selected.ruc.establishments = [];
+          }else {
+            this.ruc_registro_selected.ruc.establishments = r.data as Establishment[];
+            this.buildDataTableEstablishment();
+          }
        }).catch( e => { console.log(e); });
     }).catch( e => { console.log(e); });
   }
