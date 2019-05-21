@@ -38,6 +38,7 @@ export class CapacityTypeComponent implements OnInit {
    ngOnInit() {
       this.goToPage(1);
       this.getRegiones();
+      this.buildRegistersToShow();
    }
    
    buildRegistersToShow() {
@@ -45,7 +46,7 @@ export class CapacityTypeComponent implements OnInit {
       this.register_typeDataService.get().then(r => {
          const continentes = [];
          r.forEach(element => {
-            if (element.code = '-') {
+            if (element.father_code == '-') {
                continentes.push(element);
             }
          });
