@@ -94,6 +94,7 @@ export class RegistroComponent implements OnInit {
    @ViewChild('EstablishmentCertificationAttachedFile') EstablishmentCertificationAttachedFile;
 
    //PAGOS
+   tarifarioResponse: Tariff[] = [];
    tarifarioRack = {cabecera: [], valores: []};
    currentPagePays = 1;
    balance: DeclarationAttachment = new DeclarationAttachment();
@@ -106,7 +107,7 @@ export class RegistroComponent implements OnInit {
    stateTramiteId = 0;
    actividadSelected = '-';
    regiones = [];
-   regionSelectedCode = '';
+   regionSelectedCode = '-';
 
   //DATOS RUC
   certificadoUsoSuelo: FloorAuthorizationCertificate = new FloorAuthorizationCertificate();
@@ -978,9 +979,6 @@ export class RegistroComponent implements OnInit {
          this.checkRuc();
       } else {
          this.ruc_registro_selected.ruc = r.Ruc as Ruc;
-         this.registerDataService.get_tarifario(this.ruc_registro_selected.ruc.id).then( r => {
-            console.log(r);
-         }).catch( e => { console.log(e); });
          this.ruc_registro_selected.ruc.establishments = [];
          this.ruc_registro_selected.ruc.contact_user = r.contact_user as User;
          this.imContactRuc = (this.ruc_registro_selected.ruc.contact_user.id == this.user.id);
@@ -1183,10 +1181,7 @@ export class RegistroComponent implements OnInit {
   getRegiones() {
    this.regiones = [];
    this.clasifications_registers = [];
-   this.categorySelectedCode = '-';
-   this.regionSelectedCode = '-';
    this.showRequisites = false;
-   this.rucEstablishmentRegisterSelected.register_type_id = 0;
    this.register_typeDataService.get_filtered('-').then( r => {
       this.regiones = r as RegisterType[];
    }).catch( e => { console.log(e) });
@@ -1194,8 +1189,6 @@ export class RegistroComponent implements OnInit {
 
   getClasifications() {
    this.clasifications_registers = [];
-   this.categorySelectedCode = '-';
-   this.rucEstablishmentRegisterSelected.register_type_id = 0;
    this.showRequisites = false;
    this.register_typeDataService.get_filtered(this.regionSelectedCode).then( r => {
       this.clasifications_registers = r as RegisterType[];
@@ -2183,6 +2176,28 @@ export class RegistroComponent implements OnInit {
      }).catch( e => { console.log(e); });
   }
 
+  getTarifarioRack(idRuc: number) {
+   this.registerDataService.get_tarifario(idRuc).then( r => {
+      this.tarifarioResponse = r as Tariff[];
+      let max_year = 0;
+      this.tarifarioResponse.forEach(element => {
+         if(element.year > max_year){
+            max_year = element.year;
+         }
+      });
+      this.tarifarioRack.valores.forEach(element => {
+         element.tariffs.forEach(tariffRack => {
+            const tariff = tariffRack.tariff;
+            this.tarifarioResponse.forEach(tariffResponse => {
+               if(tariffResponse.tariff_type_id == tariff.tariff_type_id && tariffResponse.year == max_year && tariffResponse.capacity_type_id == tariff.capacity_type_id) {
+                  tariffRack.tariff.price = tariffResponse.price;
+               }
+            });
+         });
+      });
+   }).catch( e => { console.log(e); });
+  }
+
   selectRegisterEstablishment(establishment: Establishment) {
      if(establishment.id == 0) {
       this.newRegisterEstablishment();
@@ -2461,20 +2476,49 @@ export class RegistroComponent implements OnInit {
    }
   }
 
+  setCategory(type_id: number){
+   let categoryCode = '';
+   this.actividadSelected = '1';
+   this.register_typeDataService.get().then(r => {
+      let types: RegisterType[] = r as RegisterType[];
+      types.forEach(registerType => {
+         if (registerType.id == type_id) {
+            categoryCode = registerType.father_code.toString();
+         }
+      });
+      types.forEach(registerType => {
+         if (categoryCode == registerType.code) {
+            this.regionSelectedCode = registerType.father_code.toString();
+         }
+      });
+      this.clasifications_registers = [];
+      this.register_typeDataService.get_filtered(this.regionSelectedCode).then( r => {
+         this.clasifications_registers = r as RegisterType[];
+         this.categorySelectedCode = categoryCode;
+         this.categories_registers = [];
+         this.register_typeDataService.get_filtered(this.categorySelectedCode).then( r => {
+            this.categories_registers = r as RegisterType[];
+         }).catch( e => { console.log(e) });
+      }).catch( e => { console.log(e) });
+   }).catch( e=> { console.log(e); });
+  }
+
   selectEstablishmentRegister(register: Register, editable: Boolean) {
     this.mostrarDataRegister = false;
     const tarifas: Tariff[] = this.newTariffs();
     this.rucEstablishmentRegisterSelected = new Register();
+    
     this.registerDataService.get_register_data(register.id).then( r => {
-       console.log(r);
        this.rucEstablishmentRegisterSelected = r.register as Register;
+       this.setCategory(this.rucEstablishmentRegisterSelected.register_type_id);
        this.rucEstablishmentRegisterSelected.editable = editable;
        this.getTramiteStatus(this.rucEstablishmentRegisterSelected.status);
        this.rucEstablishmentRegisterSelected.status = r.status.state_id;
-       this.categorySelectedCode = r.register_category.code;
        this.rucEstablishmentRegisterSelected.complementary_service_types_on_register = r.complementary_service_types_on_register as ComplementaryServiceType[];
        this.rucEstablishmentRegisterSelected.complementary_service_foods_on_register = r.complementary_service_foods_on_register as ComplementaryServiceFood[];
        this.rucEstablishmentRegisterSelected.capacities_on_register = r.capacities_on_register as Capacity[];
+       this.calcSpaces();
+       this.getTarifarioRack(this.ruc_registro_selected.ruc.id);
        this.getCategories();
        this.getAllowedInfo();
        this.alowed_capacity_types = [];
@@ -2680,9 +2724,6 @@ export class RegistroComponent implements OnInit {
    if (this.tarifarioRack.valores.length == this.rucEstablishmentRegisterSelected.capacities_on_register.length) {
       for (let i = 0; i<this.rucEstablishmentRegisterSelected.capacities_on_register.length ; i++) {
          this.tarifarioRack.valores[i].idTipoCapacidad = this.rucEstablishmentRegisterSelected.capacities_on_register[i].capacity_type_id;
-         this.tarifarioRack.valores[i].tariffs.forEach(tariffRack => {
-            tariffRack.tariff.price = 0;
-         });
       }
    } else {
       this.tarifarioRack.valores = [];

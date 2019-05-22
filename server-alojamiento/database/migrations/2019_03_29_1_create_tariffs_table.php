@@ -16,7 +16,7 @@ class CreateTariffsTable extends Migration
        Schema::create('tariffs', function (Blueprint $table) {
           $table->increments('id');
           $table->timestamps();
-          $table->integer('price')->nullable($value = true);
+          $table->double('price',8,2)->nullable($value = true);
           $table->integer('year')->nullable($value = true);
           $table->integer('id_ruc')->nullable($value = true);
           $table->unsignedInteger('tariff_type_id');
