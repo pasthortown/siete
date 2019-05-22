@@ -1298,7 +1298,15 @@
                             <strong>Capacidades del Establecimiento</strong>
                           </h4>
                         </div>
-                        
+                        <div class="row" *ngIf="categorySelectedCode !== '-' && rucEstablishmentRegisterSelected.register_type_id !== 0">
+                          <div class="col-12">
+                            <div class="alert alert-info mt-2 mb-2" role="alert">
+                              <label class="col-12 text-justify"><strong>Atención</strong></label><br />
+                              Habitación doble (matrimonial): Permite la pernoctación y alojamiento de dos personas, ocupando una cama doble o dos camas individuales.<br/>
+                              PAX: Referente a pasajeros.
+                            </div>
+                          </div>
+                        </div>
                         <div class="row" *ngIf="categorySelectedCode !== '-' && rucEstablishmentRegisterSelected.register_type_id !== 0">
                           <div class="col-12">
                             <label class="col-form-label mb-2"><strong>Habitaciones del Establecimiento</strong><span
@@ -1333,7 +1341,7 @@
                               <tbody>
                                 <tr *ngFor="let capacity of rucEstablishmentRegisterSelected.capacities_on_register" (click)="selectCapacity(capacity)">
                                   <td class="text-right">
-                                      <span *ngIf="true"
+                                      <span *ngIf="capacity.capacity_type_id == 0 || capacity.quantity == 0"
                                       class="ml-2 badge badge-danger">Incorrecto</span>
                                   </td>
                                   <td>
@@ -1348,17 +1356,25 @@
                                     </select>
                                   </td>
                                   <td>
-                                      <input type="number" class="form-control" min="0" id="count_space" name="count_space" (keyup)="calcSpaces()"
+                                      <input type="number" class="form-control" min="0" max="9999" id="count_space" name="count_space" (keyup)="calcSpaces()"
                                       placeholder="Cantidad" [(ngModel)]="capacity.quantity" [disabled]="!rucEstablishmentRegisterSelected.editable"/>
                                   </td>
                                   <td>
-                                    <div class="col-12" *ngIf="!capacityEditable">
+                                    <div class="col-12" *ngIf="!capacity.editable">
                                       <strong>{{capacity.max_bed}}</strong>
+                                    </div>
+                                    <div class="col-12" *ngIf="capacity.editable">
+                                        <input type="number" class="form-control" min="0" max="9999" id="count_camas" name="count_camas" (keyup)="calcSpaces()"
+                                        placeholder="Cantidad de Camas" [(ngModel)]="capacity.max_bed" [disabled]="!rucEstablishmentRegisterSelected.editable"/>
                                     </div>
                                   </td>
                                   <td>
-                                    <div class="col-12" *ngIf="!capacityEditable">
+                                    <div class="col-12" *ngIf="!capacity.editable">
                                       <strong>{{capacity.max_spaces}}</strong>
+                                    </div>
+                                    <div class="col-12" *ngIf="capacity.editable">
+                                        <input type="number" class="form-control" min="0" max="9999" id="count_plazas" name="count_plazas" (keyup)="calcSpaces()"
+                                        placeholder="Cantidad de Plazas" [(ngModel)]="capacity.max_spaces" [disabled]="!rucEstablishmentRegisterSelected.editable"/>
                                     </div>
                                   </td>
                                   <td>
@@ -1373,15 +1389,12 @@
                           </div>
                         </div>
 
-                        <div class="row" *ngIf="categorySelectedCode !== '-' && rucEstablishmentRegisterSelected.register_type_id !== 0">
-                          <div class="col-12">
-                            <div class="alert alert-info mt-2 mb-2" role="alert">
-                              <label class="col-12 text-justify"><strong>Atención</strong></label><br />
-                              Habitación doble (matrimonial): Permite la pernoctación y alojamiento de dos personas, ocupando una cama doble o dos camas individuales.<br/>
-                              PAX: Referente a pasajeros.
-                            </div>
-                          </div>
+                        <div class="row mt-3" *ngIf="categorySelectedCode !== '-' && rucEstablishmentRegisterSelected.register_type_id !== 0">
+                          <h4 class="col-12">
+                            <strong>Tarifario RACK</strong>
+                          </h4>
                         </div>
+                        
                         <div class="row" *ngIf="categorySelectedCode !== '-' && rucEstablishmentRegisterSelected.register_type_id !== 0">
                           <div class="col-12">
                             <div class="form-group">

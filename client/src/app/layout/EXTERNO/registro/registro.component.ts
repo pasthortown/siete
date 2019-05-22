@@ -96,7 +96,6 @@ export class RegistroComponent implements OnInit {
    //PAGOS
    currentPagePays = 1;
    balance: DeclarationAttachment = new DeclarationAttachment();
-   capacityEditable = false;
    lastPagePays = 1;
    recordsByPagePays = 5;
    rowsPays = [];
@@ -1604,6 +1603,13 @@ export class RegistroComponent implements OnInit {
       if(capacityType.id == capacity.capacity_type_id) {
          capacity.max_bed = capacityType.bed_quantity;
          capacity.max_spaces = capacityType.spaces;
+         if(capacityType.spaces == 999) {
+            capacity.max_bed = 0;
+            capacity.max_spaces = 0;
+            capacity.editable = true;
+         } else {
+            capacity.editable = false;
+         }
       }
    });
   }
@@ -2665,6 +2671,7 @@ export class RegistroComponent implements OnInit {
       }
    });
    this.rucEstablishmentRegisterSelected.capacities_on_register = newCapacities;
+   this.calcSpaces();
   }
 
   calcSpaces() {
@@ -2672,21 +2679,17 @@ export class RegistroComponent implements OnInit {
    this.rucEstablishmentRegisterSelected.total_habitations = 0;
    this.rucEstablishmentRegisterSelected.total_beds = 0;
    this.rucEstablishmentRegisterSelected.capacities_on_register.forEach(capacity => {
-      this.capacityEditable = false;
+      capacity.editable = false;
       this.alowed_capacity_types.forEach(capacityType => {
          if (capacityType.id == capacity.capacity_type_id) {
             if (capacityType.spaces == 999) {
-               this.capacityEditable = true;
+               capacity.editable = true;
             }
          }
       });
-      if ( !this.capacityEditable ) {
-         this.rucEstablishmentRegisterSelected.total_spaces += (capacity.max_spaces * capacity.quantity);
-         this.rucEstablishmentRegisterSelected.total_habitations += capacity.quantity;
-         this.rucEstablishmentRegisterSelected.total_beds += (capacity.max_bed * capacity.quantity);
-      } else {
-         //AQUI
-      }
+      this.rucEstablishmentRegisterSelected.total_spaces += (capacity.max_spaces * capacity.quantity);
+      this.rucEstablishmentRegisterSelected.total_habitations += capacity.quantity;
+      this.rucEstablishmentRegisterSelected.total_beds += (capacity.max_bed * capacity.quantity);
    });
   }
 
