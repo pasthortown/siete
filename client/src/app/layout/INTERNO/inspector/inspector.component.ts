@@ -1032,13 +1032,6 @@ export class InspectorComponent implements OnInit {
   }
 
   validateTariffs() {
-   this.rucEstablishmentRegisterSelected.capacities_on_register.forEach(capacity => {
-      capacity.tariffs_on_capacity.forEach(tariff => {
-         if (tariff.price == 0) {
-            return false;
-         }
-      });
-   });
    return true;
   }
 
@@ -2500,14 +2493,6 @@ export class InspectorComponent implements OnInit {
          this.mostrarDataRegister = true;
          this.rucEstablishmentRegisterSelected.capacities_on_register.forEach(capacity => {
             this.getMaxBed(capacity);
-            capacity.tariffs_on_capacity.forEach(prevTariff => {
-               tarifas.forEach(tariffSchema => {
-                  if (tariffSchema.tariff_type_id == prevTariff.tariff_type_id) {
-                     prevTariff.tariff_father_name = tariffSchema.tariff_father_name;
-                     prevTariff.tariff_name = tariffSchema.tariff_name;
-                  }
-               });
-            });
             this.calcBeds(capacity);
          });
          this.calcSpaces();
@@ -2664,7 +2649,6 @@ export class InspectorComponent implements OnInit {
 
   addCapacity() {
    const newCapacity = new Capacity();
-   newCapacity.tariffs_on_capacity = this.newTariffs();
    this.rucEstablishmentRegisterSelected.total_spaces = 0;
    this.rucEstablishmentRegisterSelected.capacities_on_register.push(newCapacity);
   }
