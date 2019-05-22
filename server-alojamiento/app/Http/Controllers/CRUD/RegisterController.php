@@ -100,6 +100,12 @@ class RegisterController extends Controller
       return response()->json($register,200);
     }
 
+    function get_tarifario(Request $data) {
+      $result = $data->json()->all();
+      $tarifario_rack = Tariff::where('id_ruc', $result['id_ruc'])->get();
+      return response()->json($tarifario_rack,200);
+    }
+
     function get_register_data(Request $data) {
       $id = $data['id'];
       $register = Register::where('id', $id)->first();
@@ -110,20 +116,18 @@ class RegisterController extends Controller
       $capacities = [];
       foreach($capacities_on_register as $capacity_on_register){
          $beds = $capacity_on_register->Beds()->get();
-         $tariffs = $capacity_on_register->Tariffs()->get();
          array_push($capacities, ["quantity"=>$capacity_on_register->quantity,
          "capacity_type_id"=>$capacity_on_register->capacity_type_id,
-         "beds_on_capacity"=>$beds, "tariffs_on_capacity"=>$tariffs]);
+         "beds_on_capacity"=>$beds]);
       }
       $complementary_service_types_on_register = $register->ComplementaryServiceTypes()->get();
       $capacities_on_register = $register->Capacities()->get();
       $capacities = [];
       foreach($capacities_on_register as $capacity_on_register){
          $beds = $capacity_on_register->Beds()->get();
-         $tariffs = $capacity_on_register->Tariffs()->get();
          array_push($capacities, ["quantity"=>$capacity_on_register->quantity,
          "capacity_type_id"=>$capacity_on_register->capacity_type_id,
-         "beds_on_capacity"=>$beds, "tariffs_on_capacity"=>$tariffs]);
+         "beds_on_capacity"=>$beds]);
       }
       $complementary_service_types_on_register = $register->ComplementaryServiceTypes()->get();
       $complementary_service_foods_on_register = $register->ComplementaryServiceFoods()->get();
@@ -140,8 +144,8 @@ class RegisterController extends Controller
     function register_register_data(Request $data) {
       $result = $data->json()->all();
       $id = $result['id'];
+      $tarifario_rack = $result['tarifario_rack'];
       $capacities_on_register = $result['capacities_on_register'];
-      return json_encode($capacities_on_register);
       $complementary_service_types_on_register = $result['complementary_service_types_on_register'];
       if(!$result['autorized_complementary_capacities']){
          $complementary_service_types_on_register = [];
@@ -209,20 +213,30 @@ class RegisterController extends Controller
                $bed->save();
                $capacity->Beds()->attach($bed->id);
             }
-            //AQUI
-            $tariffs_on_capacity = $capacityToRegister['tariffs_on_capacity'];
-            foreach($tariffs_on_capacity as $tariff_to_add) {
-               $tariff = new Tariff();
-               $lastTariff = Tariff::orderBy('id')->get()->last();
-               if($lastTariff) {
-                  $tariff->id = $lastTariff->id + 1;
+            foreach($tarifario_rack as $tarifa) {
+               $previewTariff = Tariff::where('id_ruc', $tarifa['id_ruc'])
+                  ->where('year', $tarifa['year'])
+                  ->where('tariff_type_id', $tarifa['tariff_type_id'])
+                  ->where('capacity_type_id', $tarifa['capacity_type_id'])->first();
+               if(!$previewTariff) {
+                  $tariff = new Tariff();
+                  $lastTariff = Tariff::orderBy('id')->get()->last();
+                  if($lastTariff) {
+                     $tariff->id = $lastTariff->id + 1;
+                  } else {
+                     $tariff->id = 1;
+                  }
+                  $tariff->price = $tarifa['price'];
+                  $tariff->year = $tarifa['year'];
+                  $tariff->id_ruc = $tarifa['id_ruc'];
+                  $tariff->tariff_type_id = $tarifa['tariff_type_id'];
+                  $tariff->capacity_type_id = $tarifa['capacity_type_id'];
+                  $tariff->save();
                } else {
-                  $tariff->id = 1;
+                  $tariff = Tariff::where('id',$previewTariff->id)->update([
+                     'price'=>$tarifa['price'],
+                  ]);
                }
-               $tariff->price = $tariff_to_add['price'];
-               $tariff->tariff_type_id = $tariff_to_add['tariff_type_id'];
-               $tariff->save();
-               $capacity->Tariffs()->attach($tariff->id);
             }
             $register->Capacities()->attach($capacity->id);
          }
@@ -330,19 +344,30 @@ class RegisterController extends Controller
                $bed->save();
                $capacity->Beds()->attach($bed->id);
             }
-            $tariffs_on_capacity = $capacityToRegister['tariffs_on_capacity'];
-            foreach($tariffs_on_capacity as $tariff_to_add) {
-               $tariff = new Tariff();
-               $lastTariff = Tariff::orderBy('id')->get()->last();
-               if($lastTariff) {
-                  $tariff->id = $lastTariff->id + 1;
+            foreach($tarifario_rack as $tarifa) {
+               $previewTariff = Tariff::where('id_ruc', $tarifa['id_ruc'])
+                  ->where('year', $tarifa['year'])
+                  ->where('tariff_type_id', $tarifa['tariff_type_id'])
+                  ->where('capacity_type_id', $tarifa['capacity_type_id'])->first();
+               if(!$previewTariff) {
+                  $tariff = new Tariff();
+                  $lastTariff = Tariff::orderBy('id')->get()->last();
+                  if($lastTariff) {
+                     $tariff->id = $lastTariff->id + 1;
+                  } else {
+                     $tariff->id = 1;
+                  }
+                  $tariff->price = $tarifa['price'];
+                  $tariff->year = $tarifa['year'];
+                  $tariff->id_ruc = $tarifa['id_ruc'];
+                  $tariff->tariff_type_id = $tarifa['tariff_type_id'];
+                  $tariff->capacity_type_id = $tarifa['capacity_type_id'];
+                  $tariff->save();
                } else {
-                  $tariff->id = 1;
+                  $tariff = Tariff::where('id',$previewTariff->id)->update([
+                     'price'=>$tarifa['price'],
+                  ]);
                }
-               $tariff->price = $tariff_to_add['price'];
-               $tariff->tariff_type_id = $tariff_to_add['tariff_type_id'];
-               $tariff->save();
-               $capacity->Tariffs()->attach($tariff->id);
             }
             $register->Capacities()->attach($capacity->id);
          }

@@ -23,6 +23,7 @@ $router->group(['middleware' => ['auth']], function () use ($router) {
    //CRUD Register
    $router->post('/register', ['uses' => 'RegisterController@post']);
    $router->get('/register', ['uses' => 'RegisterController@get']);
+   $router->post('/register/get_tarifario', ['uses' => 'RegisterController@get_tarifario']);
    $router->get('/register/get_requisites_set_by_user', ['uses' => 'RegisterController@get_requisites_set_by_user']);
    $router->get('/register/by_inspector_id', ['uses' => 'RegisterController@by_inspector_id']);
    $router->get('/register/by_financial_id', ['uses' => 'RegisterController@by_financial_id']);

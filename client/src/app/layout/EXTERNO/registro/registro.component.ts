@@ -830,6 +830,7 @@ export class RegistroComponent implements OnInit {
     this.getTaxPayerType();
     this.getGroupType();
     this.getCapacityTypes();
+    this.getTariffs();
     this.getStates();
     this.getRucNameTypes();
     this.getZonalesEstablishment();
@@ -840,7 +841,6 @@ export class RegistroComponent implements OnInit {
     this.getSystemNames();
     this.getCertificationTypes();
     this.getWorkerGroups();
-    this.getTariffs();
     this.getRegiones();
     this.getEstablishmentCertificationTypesCategories();
     this.getComplementaryServiceTypeCategories();
@@ -978,6 +978,9 @@ export class RegistroComponent implements OnInit {
          this.checkRuc();
       } else {
          this.ruc_registro_selected.ruc = r.Ruc as Ruc;
+         this.registerDataService.get_tarifario(this.ruc_registro_selected.ruc.id).then( r => {
+            console.log(r);
+         }).catch( e => { console.log(e); });
          this.ruc_registro_selected.ruc.establishments = [];
          this.ruc_registro_selected.ruc.contact_user = r.contact_user as User;
          this.imContactRuc = (this.ruc_registro_selected.ruc.contact_user.id == this.user.id);
@@ -1359,10 +1362,16 @@ export class RegistroComponent implements OnInit {
 
   guardarRegistro() {
    this.guardando = true;
+   const tariffs: Tariff[] = [];
+   this.tarifarioRack.valores.forEach(tarifRackValor => {
+      tarifRackValor.tariffs.forEach(tariff => {
+         tariffs.push(tariff.tariff);
+      });
+   });
+   this.rucEstablishmentRegisterSelected.tarifario_rack = tariffs;
    this.registerDataService.register_register_data(this.rucEstablishmentRegisterSelected).then( r => {
-      console.log(r);
       this.guardando = false;
-      this.getRegistersOnRuc();
+      this.refresh();
    }).catch( e => {
       this.guardando = false;
       this.toastr.errorToastr('Existe conflicto la información proporcionada.', 'Nuevo');
@@ -1381,7 +1390,6 @@ export class RegistroComponent implements OnInit {
    this.mostrarDataRegister = false;
    this.registerDataService.get_registers_by_ruc(this.user.ruc).then( r => {
       this.ruc_registro_selected.registers = r as any[];
-      this.buildDataTableRegister();
    }).catch( e => { console.log(e); });
   }
 
@@ -2185,7 +2193,7 @@ export class RegistroComponent implements OnInit {
     let registerSelected = new Register();
     this.ruc_registro_selected.registers.forEach(register => {
        if (register.establishment.id == establishment.id) {
-         registerSelected = register;
+         registerSelected = register.register;
        }
     });
     if (registerSelected.id == 0) {
@@ -2458,6 +2466,7 @@ export class RegistroComponent implements OnInit {
     const tarifas: Tariff[] = this.newTariffs();
     this.rucEstablishmentRegisterSelected = new Register();
     this.registerDataService.get_register_data(register.id).then( r => {
+       console.log(r);
        this.rucEstablishmentRegisterSelected = r.register as Register;
        this.rucEstablishmentRegisterSelected.editable = editable;
        this.getTramiteStatus(this.rucEstablishmentRegisterSelected.status);

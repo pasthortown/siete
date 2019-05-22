@@ -37,6 +37,13 @@ export class RegisterService {
       }).catch( error => { this.handledError(error.json());  });
    }
 
+   get_tarifario(id_ruc: number): Promise<any> {
+      return this.http.post(this.url + 'get_tarifario', JSON.stringify({id_ruc: id_ruc}), this.options).toPromise()
+      .then( r => {
+         return r.json();
+      }).catch( error => { this.handledError(error.json()); });
+   }
+
    delete(id: number): Promise<any> {
       return this.http.delete(this.url + '?id=' + id.toString(), this.options).toPromise()
       .then( r => {
