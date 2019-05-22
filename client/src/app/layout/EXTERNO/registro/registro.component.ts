@@ -94,6 +94,7 @@ export class RegistroComponent implements OnInit {
    @ViewChild('EstablishmentCertificationAttachedFile') EstablishmentCertificationAttachedFile;
 
    //PAGOS
+   tarifarioRack = {cabecera: [], valores: []};
    currentPagePays = 1;
    balance: DeclarationAttachment = new DeclarationAttachment();
    lastPagePays = 1;
@@ -106,6 +107,7 @@ export class RegistroComponent implements OnInit {
    actividadSelected = '-';
    regiones = [];
    regionSelectedCode = '';
+
   //DATOS RUC
   certificadoUsoSuelo: FloorAuthorizationCertificate = new FloorAuthorizationCertificate();
   imContactRuc: Boolean = true;
@@ -765,13 +767,6 @@ export class RegistroComponent implements OnInit {
   }
 
   validateTariffs() {
-   this.rucEstablishmentRegisterSelected.capacities_on_register.forEach(capacity => {
-      capacity.tariffs_on_capacity.forEach(tariff => {
-         if (tariff.price == 0) {
-            return false;
-         }
-      });
-   });
    return true;
   }
 
@@ -1391,6 +1386,7 @@ export class RegistroComponent implements OnInit {
 
   getTariffs() {
    this.tarifas = [];
+   this.tarifarioRack = {cabecera: ['Tipo de Habitación'], valores: []};
    this.tariffTypeDataService.get().then( r => {
       const result = r as TariffType[];
       result.forEach(father => {
@@ -1402,9 +1398,11 @@ export class RegistroComponent implements OnInit {
                   tariff_child.push(child);
                }
             });
+            this.tarifarioRack.cabecera.push(tariff_father.name);
             this.tarifas.push({father: tariff_father, childs: tariff_child});
          }
       });
+      console.log(this.tarifas);
    }).catch( e => { console.log(e); });
   }
 
@@ -2475,14 +2473,6 @@ export class RegistroComponent implements OnInit {
          this.mostrarDataRegister = true;
          this.rucEstablishmentRegisterSelected.capacities_on_register.forEach(capacity => {
             this.getMaxBed(capacity);
-            capacity.tariffs_on_capacity.forEach(prevTariff => {
-               tarifas.forEach(tariffSchema => {
-                  if (tariffSchema.tariff_type_id == prevTariff.tariff_type_id) {
-                     prevTariff.tariff_father_name = tariffSchema.tariff_father_name;
-                     prevTariff.tariff_name = tariffSchema.tariff_name;
-                  }
-               });
-            });
             this.calcBeds(capacity);
          });
          this.calcSpaces();
@@ -2643,7 +2633,6 @@ export class RegistroComponent implements OnInit {
 
   addCapacity() {
    const newCapacity = new Capacity();
-   newCapacity.tariffs_on_capacity = this.newTariffs();
    this.rucEstablishmentRegisterSelected.total_spaces = 0;
    this.rucEstablishmentRegisterSelected.capacities_on_register.push(newCapacity);
   }
@@ -2678,6 +2667,21 @@ export class RegistroComponent implements OnInit {
    this.rucEstablishmentRegisterSelected.total_spaces = 0;
    this.rucEstablishmentRegisterSelected.total_habitations = 0;
    this.rucEstablishmentRegisterSelected.total_beds = 0;
+   if (this.tarifarioRack.valores.length == this.rucEstablishmentRegisterSelected.capacities_on_register.length) {
+      for (let i = 0; i<this.rucEstablishmentRegisterSelected.capacities_on_register.length ; i++) {
+         this.tarifarioRack.valores[i].idTipoCapacidad = this.rucEstablishmentRegisterSelected.capacities_on_register[i].capacity_type_id;
+         this.tarifarioRack.valores[i].tariffs.forEach(tariffRack => {
+            tariffRack.childs.forEach(element => {
+               element.price = 0;
+            });
+         });
+      }
+   } else {
+      this.tarifarioRack.valores = [];
+      this.rucEstablishmentRegisterSelected.capacities_on_register.forEach(element => {
+         this.tarifarioRack.valores.push({idTipoCapacidad: element.capacity_type_id, tariffs: this.tarifas});
+      });
+   }
    this.rucEstablishmentRegisterSelected.capacities_on_register.forEach(capacity => {
       capacity.editable = false;
       this.alowed_capacity_types.forEach(capacityType => {
