@@ -141,6 +141,7 @@ class RegisterController extends Controller
       $result = $data->json()->all();
       $id = $result['id'];
       $capacities_on_register = $result['capacities_on_register'];
+      return json_encode($capacities_on_register);
       $complementary_service_types_on_register = $result['complementary_service_types_on_register'];
       if(!$result['autorized_complementary_capacities']){
          $complementary_service_types_on_register = [];
@@ -208,6 +209,7 @@ class RegisterController extends Controller
                $bed->save();
                $capacity->Beds()->attach($bed->id);
             }
+            //AQUI
             $tariffs_on_capacity = $capacityToRegister['tariffs_on_capacity'];
             foreach($tariffs_on_capacity as $tariff_to_add) {
                $tariff = new Tariff();

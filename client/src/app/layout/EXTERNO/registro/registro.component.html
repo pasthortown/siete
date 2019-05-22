@@ -18,7 +18,7 @@
     </ngb-accordion>
     <div class="col-12">
       <div class="form-group mt-3 text-center">
-        <label class="col-12"><strong>He leído y acepto los términos y condiciones</strong></label>
+        <label class="col-12"><strong>He leído, entendido y por lo tanto acepto los términos y condiciones</strong></label>
         <label class="switch"><input type="checkbox" id="baised_accounting" (change)="checkAgreement()"
             name="baised_accounting" [(ngModel)]="terminosCondiciones"><span class="slider round"></span></label>
       </div>
@@ -1387,26 +1387,32 @@
                             </table>
                           </div>
                         </div>
-
+                        <div class="row" *ngIf="categorySelectedCode !== '-' && rucEstablishmentRegisterSelected.register_type_id !== 0 && tarifarioRack.valores.length > 0">
+                          <div class="col-12">
+                            <div class="alert alert-info mt-2 mb-2" role="alert">
+                              <label class="col-12 text-justify"><strong>Atención</strong></label><br />
+                              Para registrar las tarifas en esta tipología de habitación, es necesario que su establecimiento cuente con la declaración de dichas habitaciones, por favor revise la sección Capacidades del establecimiento que se encuentra en la sección anterior
+                            </div>
+                          </div>
+                        </div>
                         <div class="row mt-3" *ngIf="categorySelectedCode !== '-' && rucEstablishmentRegisterSelected.register_type_id !== 0 && tarifarioRack.valores.length > 0">
                           <h4 class="col-12">
                             <strong>Tarifario RACK</strong>
                           </h4>
                         </div>
-                        <div class="row" *ngIf="tarifarioRack.valores.length > 0">
+                        <div class="row" *ngIf="categorySelectedCode !== '-' && rucEstablishmentRegisterSelected.register_type_id !== 0 && tarifarioRack.valores.length > 0">
                           <div class="col-12">
                               <table class="table table-hover mt-2">
                                 <thead>
                                   <th *ngFor="let tariff of tarifarioRack.cabecera">
                                     <div class="row">
-                                      <div class="col-12 text-center">{{tariff}}</div>
+                                      <div class="col-12 text-center">{{tariff.valor}}</div>
                                     </div>
                                   </th>
                                 </thead>
                                 <tbody>
                                   <tr *ngFor="let tariffRack of tarifarioRack.valores">
                                     <td>
-                                      <label>&nbsp;</label>
                                       <select class="form-control" id="capacity_type_id" name="capacity_type_id"
                                         [(ngModel)]="tariffRack.idTipoCapacidad" [disabled]="true">
                                         <option value="0" selected>Seleccione...</option>
@@ -1418,27 +1424,31 @@
                                       </select>
                                     </td>
                                     <td *ngFor="let tariff of tariffRack.tariffs">
-                                      <div class="row">
-                                        <div class="col-6" *ngFor="let child of tariff.childs">
-                                          <div class="form-group">  
-                                              <label>En {{ child.name }}</label>
-                                              <div class="input-group">
-                                                <div class="input-group-prepend">
-                                                  <span class="input-group-text">$</span>
-                                                </div>
-                                                <input type="number" class="form-control" min="0" step="0.01" id="low_capacity_room_price"
-                                                  name="low_capacity_room_price" [(ngModel)]="tariff.price" placeholder="Precio" [disabled]="!rucEstablishmentRegisterSelected.editable"/>
-                                              </div>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                              <span class="input-group-text" id="basic-addon1">USD</span>
+                                            </div>
+                                            <input type="number" class="form-control" min="0" step="0.01" id="low_capacity_room_price"
+                                          name="low_capacity_room_price" [(ngModel)]="tariff.tariff.price" placeholder="Precio" [disabled]="!rucEstablishmentRegisterSelected.editable"/>
                                           </div>
-                                        </div>
-                                      </div>
                                     </td>
                                   </tr>
                                 </tbody>
                               </table>
                           </div>
                         </div>
-                        
+                        <div class="row" *ngIf="categorySelectedCode !== '-' && rucEstablishmentRegisterSelected.register_type_id !== 0 && tarifarioRack.valores.length > 0">
+                          <div class="col-12">
+                            <div class="alert alert-info mt-2 mb-2" role="alert">
+                              <label class="col-12 text-justify"><strong>Atención</strong></label><br />
+                              Estimado Usuario, antes de continuar recuerde lo siguiente:<br/>
+                              - Registrar la Tarifa de habitación por noche incluyendo IVA.<br/>
+                              - Reglamento de Alojamiento, Anexo A, Requisito 20: Exhibir el tarifario rack anual registrado ante la Autoridad Nacional de Turismo.<br/>
+                              - Reglamento de Alojamiento, Disposición General, Tercera: Los establecimientos de alojamiento turístico deberán informar a la Autoridad Nacional de Turismo hasta el primero de diciembre de cada año sobre las tarifas rack o mostrador del año siguiente. Estas considerarán el valor por huésped, por noche, por tipo de habitación y por temporada baja y alta, incluido impuestos; de no hacerlo la Autoridad Nacional de Turismo sancionará conforme a la normativa vigente.<br/>
+                              - El formulario será enviado a su correo electrónico posterior a la validación correspondiente.<br/>
+                            </div>
+                          </div>
+                        </div>
                         <div class="row" *ngIf="categorySelectedCode !== '-' && rucEstablishmentRegisterSelected.register_type_id !== 0">
                           <div class="col-12">
                             <div class="form-group">

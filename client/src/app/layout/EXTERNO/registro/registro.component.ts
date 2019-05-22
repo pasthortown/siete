@@ -1360,6 +1360,7 @@ export class RegistroComponent implements OnInit {
   guardarRegistro() {
    this.guardando = true;
    this.registerDataService.register_register_data(this.rucEstablishmentRegisterSelected).then( r => {
+      console.log(r);
       this.guardando = false;
       this.getRegistersOnRuc();
    }).catch( e => {
@@ -1386,7 +1387,7 @@ export class RegistroComponent implements OnInit {
 
   getTariffs() {
    this.tarifas = [];
-   this.tarifarioRack = {cabecera: ['Tipo de Habitación'], valores: []};
+   this.tarifarioRack = {cabecera: [{valor:'Tipo de Habitación', padre: '', hijo: ''}], valores: []};
    this.tariffTypeDataService.get().then( r => {
       const result = r as TariffType[];
       result.forEach(father => {
@@ -1395,14 +1396,14 @@ export class RegistroComponent implements OnInit {
             const tariff_child: TariffType[] = [];
             result.forEach(child => {
                if(child.father_code == father.code) {
+                  child.is_reference = father.is_reference;
                   tariff_child.push(child);
+                  this.tarifarioRack.cabecera.push({valor:'Tarifa por ' + tariff_father.name + ' en ' + child.name, padre:tariff_father.name, hijo: child.name});
                }
             });
-            this.tarifarioRack.cabecera.push(tariff_father.name);
             this.tarifas.push({father: tariff_father, childs: tariff_child});
          }
       });
-      console.log(this.tarifas);
    }).catch( e => { console.log(e); });
   }
 
@@ -2671,15 +2672,31 @@ export class RegistroComponent implements OnInit {
       for (let i = 0; i<this.rucEstablishmentRegisterSelected.capacities_on_register.length ; i++) {
          this.tarifarioRack.valores[i].idTipoCapacidad = this.rucEstablishmentRegisterSelected.capacities_on_register[i].capacity_type_id;
          this.tarifarioRack.valores[i].tariffs.forEach(tariffRack => {
-            tariffRack.childs.forEach(element => {
-               element.price = 0;
-            });
+            tariffRack.tariff.price = 0;
          });
       }
    } else {
       this.tarifarioRack.valores = [];
-      this.rucEstablishmentRegisterSelected.capacities_on_register.forEach(element => {
-         this.tarifarioRack.valores.push({idTipoCapacidad: element.capacity_type_id, tariffs: this.tarifas});
+      this.rucEstablishmentRegisterSelected.capacities_on_register.forEach(capacity => {
+         const childs = [];
+         let idTipoCapacidad = capacity.capacity_type_id;
+         this.tarifas.forEach(tariffType => {
+            tariffType.childs.forEach(tariffTypeChild => {
+               let nombreDivision = '';
+               nombreDivision = tariffTypeChild.name;
+               const tariff = new Tariff();
+               tariff.tariff_type_id = tariffTypeChild.id;
+               tariff.id_ruc = this.ruc_registro_selected.ruc.id;
+               tariff.price = 0;
+               tariff.capacity_type_id = capacity.capacity_type_id;
+               const today = new Date();
+               tariff.year = today.getFullYear();
+               let newChild = {nombreDivision: nombreDivision, tariff: tariff, isReference: tariffTypeChild.is_reference, padre:'',hijo:''};
+               childs.push(newChild);
+            });
+         });
+         let topush = {idTipoCapacidad: idTipoCapacidad, tariffs: childs};
+         this.tarifarioRack.valores.push(topush);
       });
    }
    this.rucEstablishmentRegisterSelected.capacities_on_register.forEach(capacity => {
