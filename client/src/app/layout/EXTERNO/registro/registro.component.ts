@@ -378,11 +378,11 @@ export class RegistroComponent implements OnInit {
 
   buildDataTablePays() {
      this.columnsPays = [
-        {title: 'Código', name: 'code', filtering: {filterString: '', placeholder: 'Código'}},
-        {title: 'Estado', name: 'state', filtering: {filterString: '', placeholder: 'Estado'}},
+        {title: 'Código', name: 'code', filtering: {filterString: '', placeholder: 'Buscar por Código'}},
+        {title: 'Estado', name: 'state', filtering: {filterString: '', placeholder: 'Buscar por Estado'}},
         {title: 'Valor Pagado', name: 'amount_payed'},
         {title: 'Valor a Pagar', name: 'amount_to_pay'},
-        {title: 'Fecha de Pago', name: 'pay_date', filtering: {filterString: '', placeholder: 'Fecha de Pago'}}
+        {title: 'Fecha de Pago', name: 'pay_date', filtering: {filterString: '', placeholder: 'Buscar por Fecha de Pago'}}
      ];
      const data = [];
      this.pays.forEach(item => {
@@ -503,9 +503,9 @@ export class RegistroComponent implements OnInit {
   buildDataTableEstablishment() {
      this.columnsEstablishment = [
         {title: 'Seleccionado', name: 'selected'},
-        {title: 'Código', name: 'code', filtering: {filterString: '', placeholder: 'Código'}},
-        {title: 'Dirección', name: 'address', filtering: {filterString: '', placeholder: 'Dirección'}},
-        {title: 'Nombre Comercial', name: 'name', filtering: {filterString: '', placeholder: 'Nombre Comercial'}},
+        {title: 'Código', name: 'code', filtering: {filterString: '', placeholder: 'Buscar por Código'}},
+        {title: 'Dirección', name: 'address', filtering: {filterString: '', placeholder: 'Buscar por Dirección'}},
+        {title: 'Nombre Comercial', name: 'name', filtering: {filterString: '', placeholder: 'Buscar por Nombre Comercial'}},
      ];
      const data = [];
      this.ruc_registro_selected.ruc.establishments.forEach(item => {
@@ -652,11 +652,11 @@ export class RegistroComponent implements OnInit {
      this.columnsRegister = [
         {title: 'Seleccionado', name: 'selected'},
         {title: 'Días en Espera', name: 'date_assigment_alert'},
-        {title: 'Código del Establecimiento', name: 'establishment_code', filtering: {filterString: '', placeholder: 'Código del Establecimiento'}},
-        {title: 'Ubicación del Establecimiento', name: 'address', filtering: {filterString: '', placeholder: 'Ubicación del Establecimiento'}},
-        {title: 'Código del Registro', name: 'register_code', filtering: {filterString: '', placeholder: 'Código del Registro'}},
-        {title: 'Categoría', name: 'register_type', filtering: {filterString: '', placeholder: 'Categoría'}},
-        {title: 'Estado', name: 'state', filtering: {filterString: '', placeholder: 'Estado'}},
+        {title: 'Código del Establecimiento', name: 'establishment_code', filtering: {filterString: '', placeholder: 'Buscar por Código del Establecimiento'}},
+        {title: 'Ubicación del Establecimiento', name: 'address', filtering: {filterString: '', placeholder: 'Buscar por Ubicación del Establecimiento'}},
+        {title: 'Código del Registro', name: 'register_code', filtering: {filterString: '', placeholder: 'Buscar por Código del Registro'}},
+        {title: 'Categoría', name: 'register_type', filtering: {filterString: '', placeholder: 'Buscar por Categoría'}},
+        {title: 'Estado', name: 'state', filtering: {filterString: '', placeholder: 'Buscar por Estado'}},
         {title: 'Observaciones', name: 'notes'},
      ];
      const data = []; 
@@ -1343,7 +1343,7 @@ export class RegistroComponent implements OnInit {
             this.toastr.errorToastr('Existe conflicto con el correo de la persona de contacto ingresada.', 'Actualizar');
             return;
          }
-         this.toastr.successToastr('Registro actualizado satisfactoriamente.', 'Actualizar');
+         this.toastr.successToastr('Datos actualizados satisfactoriamente.', 'Actualizar');
          this.refresh();
       }).catch( e => {
          this.guardando = false;
@@ -1655,8 +1655,14 @@ export class RegistroComponent implements OnInit {
    this.genders.forEach(gender => {
       let max = 0;
       this.establishment_selected.workers_on_establishment.forEach(worker => {
-         if (worker.gender_name == gender.name && worker.is_max) {
-            max = worker.count;
+         if (worker.gender_name == gender.name) {
+            this.worker_groups.forEach(workergroup => {
+               if (workergroup.id == worker.worker_group_id) {
+                  if (workergroup.is_max) {
+                     max = worker.count;
+                  }
+               }
+            });
          }
       });
       this.establishment_selected.workers_on_establishment.forEach(worker => {
@@ -2242,6 +2248,7 @@ export class RegistroComponent implements OnInit {
          this.worker_groups.forEach(worker_group => {
             if(worker_group.id == worker.worker_group_id) {
                worker.worker_group_name = worker_group.name;
+               worker.is_max = worker_group.is_max;
             }
          });
       });

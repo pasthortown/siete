@@ -72,7 +72,7 @@
                 <div class="col-12">
                   <div class="alert alert-info mt-2 mb-2" role="alert">
                     <label class="col-12 text-justify"><strong>Atención</strong></label><br />
-                    La información presentada a continuación es proporcionada por el Servicio de Rentas Internas, ésta sección tiene carácter informativo, por favor si desea
+                    La información presentada a continuación es proporcionada por el Servicio de Rentas Internas, esta sección tiene carácter informativo, por favor si desea
                     actualizarla debe realizar el trámite en la entidad correspondiente<br/>
                     <a href="https://srienlinea.sri.gob.ec/" target="_blank">Ir al Sitio Web del SRI</a>
                   </div>
@@ -136,11 +136,11 @@
                   <strong>Escritura de Constitución</strong>
                 </h4>
               </div>
-              <div class="row">
+              <div class="row" *ngIf="ruc_registro_selected.ruc.tax_payer_type_id > 1">
                 <div class="col-12">
                   <div class="alert alert-info mt-2 mb-2" role="alert">
                     <label class="col-12 text-justify"><strong>Atención</strong></label><br />
-                    El número de expediente para ingresar en ésta sección, se lo puede obtener en la página de la Superintendencia de Companías.<br/>
+                    El número de expediente para ingresar en esta sección, se lo puede obtener en la página de la Superintendencia de Companías.<br/>
                     <a href="http://appscvsmovil.supercias.gob.ec/portaldedocumentos/consulta_cia_param.zul" target="_blank">Ir al Sitio Web de la Superintendencia de Companías</a>
                   </div>
                 </div>
@@ -316,9 +316,9 @@
               </div>
               <div class="row mt-3" *ngIf="validateRuc()">
                 <div class="col-12 text-center">
-                  <button [disabled]="guardando" type="button" class="btn btn-success" title="Guardar Datos del RUC"
+                  <button [disabled]="guardando" type="button" class="btn btn-success" title="Guardar Datos"
                     (click)="guardarRUC()">
-                    <i class="fas fa-save"></i>&nbsp;Guardar Datos del RUC
+                    <i class="fas fa-save"></i>&nbsp;Guardar Datos
                   </button>
                   <button type="button" class="btn btn-danger ml-2" title="Cancelar Cambios" (click)="
                         refresh()
@@ -550,7 +550,7 @@
                                       <div class="col-12">
                                         <div class="alert alert-info mt-2 mb-2" role="alert">
                                           <label class="col-12 text-justify"><strong>Atención</strong></label><br />
-                                          Verifíque que los valores ingresados sean números enteros y que no excedan el <strong>TOTAL</strong> permitido por cada uno de los grupos.
+                                          Verifíque que los valores ingresados sean números enteros.
                                         </div>
                                       </div>
                                       <div class="col-12">
@@ -957,8 +957,8 @@
                           <div class="row mt-3" *ngIf="validateEstablecimiento() && rucEstablishmentRegisterSelected.editable">
                             <div class="col-12 text-center">
                               <button type="button" [disabled]="guardando" class="btn btn-success"
-                                title="Guardar Datos del Establecimiento" (click)="guardarEstablecimiento()">
-                                <i class="fas fa-save"></i>&nbsp;Guardar Datos del Establecimiento
+                                title="Guardar Datos" (click)="guardarEstablecimiento()">
+                                <i class="fas fa-save"></i>&nbsp;Guardar Datos
                               </button>
                               <button type="button" class="btn btn-danger ml-2" title="Cancelar Cambios" (click)="
                                   refresh()
@@ -1159,13 +1159,13 @@
                       <div class="col-12">
                         <div class="alert alert-warning mt-2 mb-2" role="alert">
                           <label class="col-12 text-justify"><strong>Declaración Juramentada</strong></label><br />
-                          Declaro bajo juramento que los datos consignados en el presente formulario reflejan la realidad y autorizo al Ministerio de Turismo a verificar el contenido de ésta declaración en cualquier momento, al tiempo que me sujeto, a las sanciones previstas en la ley en caso de falsedad o perjurio.
+                          Declaro bajo juramento que los datos consignados en el presente formulario reflejan la realidad y autorizo al Ministerio de Turismo a verificar el contenido de esta declaración en cualquier momento, al tiempo que me sujeto, a las sanciones previstas en la ley en caso de falsedad o perjurio.
                         </div>
                       </div>
                       <div class="col-12 text-center">
                         <button [disabled]="guardando || !declaration_selected.editable" type="button" class="btn btn-success"
-                          title="Guardar Datos de la Declaración" (click)="guardarDeclaracion()">
-                          <i class="fas fa-paper-plane"></i>&nbsp;Guardar Datos de la Declaración
+                          title="Guardar Datos" (click)="guardarDeclaracion()">
+                          <i class="fas fa-paper-plane"></i>&nbsp;Guardar Datos
                         </button>
                         <button type="button" class="btn btn-danger ml-2" title="Cancelar Cambios" (click)="
                             refresh()
