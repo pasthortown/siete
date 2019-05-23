@@ -378,7 +378,7 @@ export class RegistroComponent implements OnInit {
 
   buildDataTablePays() {
      this.columnsPays = [
-        {title: 'Código', name: 'code', filtering: {filterString: '', placeholder: 'Buscar por Código'}},
+        {title: 'Número de Establecimiento', name: 'code', filtering: {filterString: '', placeholder: 'Buscar por Número de Establecimiento'}},
         {title: 'Estado', name: 'state', filtering: {filterString: '', placeholder: 'Buscar por Estado'}},
         {title: 'Valor Pagado', name: 'amount_payed'},
         {title: 'Valor a Pagar', name: 'amount_to_pay'},
@@ -975,6 +975,8 @@ export class RegistroComponent implements OnInit {
          this.ruc_registro_selected.ruc.tax_payer_type_id = 0;
          this.ruc_registro_selected.ruc.contact_user_id = 0;
          this.imContactRuc = true;
+         this.ruc_registro_selected.ruc.person_representative.identification = this.user.identification;
+         this.checkIdentificationRepresentant();
          this.checkImContactRuc();
          this.checkRuc();
       } else {
@@ -1675,10 +1677,10 @@ export class RegistroComponent implements OnInit {
   }
 
   guardarEstablecimiento() {
-   if (this.certificadoUsoSuelo.floor_authorization_certificate_file === ''){
+   /*if (this.certificadoUsoSuelo.floor_authorization_certificate_file === ''){
       this.toastr.errorToastr('Debe cargar el certificado de uso de suelo.', 'Nuevo');
       return;
-   }
+   }*/
    if (!this.validateWorkers()) {
       this.toastr.errorToastr('Existe conflicto con la información ingresada referente a los Trabajadores en el Establecimiento.', 'Nuevo');
       return;
