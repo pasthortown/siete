@@ -23,7 +23,6 @@ class ConsultorController extends Controller
   }
 
   function get_registers_assigned_inspector_id(Request $data) {
-    $request = $data->json()->all();
     $token = $data->header('api_token');
     $toReturn = [];
     $registers_alojamiento = json_decode($this->httpGet(env('API_ALOJAMIENTO').'register/by_inspector_id?id='.$data['id'],null,null,$token));
@@ -37,7 +36,6 @@ class ConsultorController extends Controller
   }
 
   function get_registers_assigned_financial_id(Request $data) {
-    $request = $data->json()->all();
     $token = $data->header('api_token');
     $toReturn = [];
     $registers_alojamiento = json_decode($this->httpGet(env('API_ALOJAMIENTO').'register/by_financial_id?id='.$data['id'],null,null,$token));
