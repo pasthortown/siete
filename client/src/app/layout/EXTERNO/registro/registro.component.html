@@ -1344,7 +1344,7 @@
                                   </td>
                                   <td>
                                     <div class="col-12" *ngIf="!capacity.editable">
-                                      <strong>{{capacity.max_spaces}}</strong>
+                                      <strong>{{capacity.max_spaces * capacity.quantity}}</strong>
                                     </div>
                                     <div class="col-12" *ngIf="capacity.editable">
                                         <input type="number" class="form-control" min="0" max="9999" id="count_plazas" name="count_plazas" (keyup)="calcSpaces()"
