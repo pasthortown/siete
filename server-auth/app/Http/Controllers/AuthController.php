@@ -176,6 +176,6 @@ class AuthController extends Controller
       $message->to($to, $toAlias)->subject($subject);
       $message->from($fromMail,$fromAlias);
     });
-    return response()->json("Success!",200);
+    return response()->json("Solicitud Procesada. Enviaremos la respuesta a tu correo electrónico en un momento.",200);
   }
 }

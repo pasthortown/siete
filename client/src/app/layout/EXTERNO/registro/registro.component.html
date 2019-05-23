@@ -18,7 +18,7 @@
     </ngb-accordion>
     <div class="col-12">
       <div class="form-group mt-3 text-center">
-        <label class="col-12"><strong>He leído y acepto los términos y condiciones</strong></label>
+        <label class="col-12"><strong>He leído, entendido y por lo tanto acepto los términos y condiciones</strong></label>
         <label class="switch"><input type="checkbox" id="baised_accounting" (change)="checkAgreement()"
             name="baised_accounting" [(ngModel)]="terminosCondiciones"><span class="slider round"></span></label>
       </div>
@@ -72,7 +72,7 @@
                 <div class="col-12">
                   <div class="alert alert-info mt-2 mb-2" role="alert">
                     <label class="col-12 text-justify"><strong>Atención</strong></label><br />
-                    La información presentada a continuación es proporcionada por el Servicio de Rentas Internas, ésta sección tiene carácter informativo, por favor si desea
+                    La información presentada a continuación es proporcionada por el Servicio de Rentas Internas, esta sección tiene carácter informativo, por favor si desea
                     actualizarla debe realizar el trámite en la entidad correspondiente<br/>
                     <a href="https://srienlinea.sri.gob.ec/" target="_blank">Ir al Sitio Web del SRI</a>
                   </div>
@@ -136,11 +136,11 @@
                   <strong>Escritura de Constitución</strong>
                 </h4>
               </div>
-              <div class="row">
+              <div class="row" *ngIf="ruc_registro_selected.ruc.tax_payer_type_id > 1">
                 <div class="col-12">
                   <div class="alert alert-info mt-2 mb-2" role="alert">
                     <label class="col-12 text-justify"><strong>Atención</strong></label><br />
-                    El número de expediente para ingresar en ésta sección, se lo puede obtener en la página de la Superintendencia de Companías.<br/>
+                    El número de expediente para ingresar en esta sección, se lo puede obtener en la página de la Superintendencia de Companías.<br/>
                     <a href="http://appscvsmovil.supercias.gob.ec/portaldedocumentos/consulta_cia_param.zul" target="_blank">Ir al Sitio Web de la Superintendencia de Companías</a>
                   </div>
                 </div>
@@ -174,7 +174,7 @@
                           <i class="fas fa-sync"></i>
                         </button>
                       </div>
-                      <input type="text" class="form-control" id="identificacionRepresentante" maxlength="10"
+                      <input type="text" class="form-control" [disabled]="true" id="identificacionRepresentante" maxlength="10"
                         placeholder="Identificación {{
                             groupTypeSelected.representative_rol_name
                           }}" [(ngModel)]="
@@ -316,9 +316,9 @@
               </div>
               <div class="row mt-3" *ngIf="validateRuc()">
                 <div class="col-12 text-center">
-                  <button [disabled]="guardando" type="button" class="btn btn-success" title="Guardar Datos del RUC"
+                  <button [disabled]="guardando" type="button" class="btn btn-success" title="Guardar Datos"
                     (click)="guardarRUC()">
-                    <i class="fas fa-save"></i>&nbsp;Guardar Datos del RUC
+                    <i class="fas fa-save"></i>&nbsp;Guardar Datos
                   </button>
                   <button type="button" class="btn btn-danger ml-2" title="Cancelar Cambios" (click)="
                         refresh()
@@ -396,7 +396,7 @@
                   </ngb-pagination>
                 </div>
               </div>
-              <ngb-tabset>
+              <ngb-tabset *ngIf="establishment_selected.ruc_code_id !== '-'">
                   <ngb-tab title="Paso 1.- Datos Generales del Establecimiento" id="tab1">
                     <ng-template ngbTabContent>
                         <div class="row" *ngIf="mostrarDataEstablishment">
@@ -417,7 +417,7 @@
                                             name="commercially_known_name" (keyup)="checkEstablishmentComercialName()"
                                             placeholder="Nombre Comercial" [(ngModel)]="
                                               establishment_selected.commercially_known_name
-                                            " />
+                                            " [disabled]="!rucEstablishmentRegisterSelected.editable"/>
                                         </div>
                                       </div>
                                     </div>
@@ -428,7 +428,7 @@
                                           *ngIf="establishment_selected.ruc_name_type_id == 0"
                                           class="ml-2 badge badge-danger">Incorrecto</span>
                                         <select class="form-control" id="comercial_name_type_id" name="comercial_name_type_id"
-                                          [(ngModel)]="establishment_selected.ruc_name_type_id">
+                                          [(ngModel)]="establishment_selected.ruc_name_type_id" [disabled]="!rucEstablishmentRegisterSelected.editable">
                                           <option value="0" selected>Seleccione...</option>
                                           <option *ngFor="
                                           let ruc_name_type of ruc_name_types
@@ -446,7 +446,7 @@
                                           name="franchise_chain_name"
                                           placeholder="Nombre de la Franquicia o Cadena" [(ngModel)]="
                                             establishment_selected.franchise_chain_name
-                                          " />
+                                          " [disabled]="!rucEstablishmentRegisterSelected.editable"/>
                                       </div>
                                     </div>
                                   </div>
@@ -457,7 +457,7 @@
                                     <select class="form-control" id="establishment_property_type_id"
                                       name="establishment_property_type_id" [(ngModel)]="
                                         establishment_selected.establishment_property_type_id
-                                      ">
+                                      " [disabled]="!rucEstablishmentRegisterSelected.editable">
                                       <option value="0" selected>Seleccione...</option>
                                       <option *ngFor="
                                           let establishment_property_type of establishment_property_types
@@ -470,50 +470,8 @@
                                     <label>Dirección URL de la Página WEB</label><span *ngIf="!urlwebEstablishmentValidated"
                                       class="ml-2 badge badge-danger">Incorrecto</span>
                                     <input type="text" class="form-control" id="url_web" name="url_web" (keyup)="checkURLWeb()"
-                                      placeholder="Ejemplo: www.google.com" [(ngModel)]="establishment_selected.url_web" />
+                                      placeholder="Ejemplo: www.google.com" [disabled]="!rucEstablishmentRegisterSelected.editable" [(ngModel)]="establishment_selected.url_web" />
                                   </div>
-                                  <div class="form-group row">
-                                      <label class="col-12 col-form-label mb-2"><strong>Idiomas de Atención en el
-                                          Establecimiento</strong></label>
-                                      <label class="col-4 col-form-label">Idiomas*</label>
-                                      <div class="col-8">
-                                        <div class="input-group">
-                                          <div class="input-group-prepend">
-                                            <button type="button" title="Eliminar" class="btn btn-danger" (click)="removeLanguage()">
-                                              <i class="fas fa-trash"></i>
-                                            </button>
-                                            <button type="button" title="Agregar" class="btn btn-success" (click)="addLanguage()">
-                                              <i class="fas fa-plus-circle"></i>
-                                            </button>
-                                          </div>
-                                          <select class="form-control" id="language_id" name="language_id"
-                                            [(ngModel)]="languages_establishmentSelectedId">
-                                            <option value="0" selected>Seleccione...</option>
-                                            <option *ngFor="let language of languages" value="{{ language.id }}">
-                                              {{ language.name }}
-                                            </option>
-                                          </select>
-                                        </div>
-                                      </div>
-                                      <div class="col-4"></div>
-                                      <div class="col-8">
-                                        <table class="table table-hover mt-2">
-                                          <tbody>
-                                            <tr *ngFor="
-                                                let language of establishment_selected.languages_on_establishment
-                                              " (click)="selectLanguage(language)">
-                                              <td class="text-right">
-                                                <span *ngIf="
-                                                    languages_establishmentSelectedId ===
-                                                    language.id
-                                                  " class="far fa-hand-point-right"></span>
-                                              </td>
-                                              <td>{{ language.name }}</td>
-                                            </tr>
-                                          </tbody>
-                                        </table>
-                                      </div>
-                                    </div>
                                   <div class="row">
                                     <div class="col-12">
                                       <div class="form-group">
@@ -522,13 +480,18 @@
                                       </div>
                                     </div>
                                     <div class="col-12 text-center">
-                                      <img class="rounded mb-2" *ngIf="establishment_selected_picture.establishment_picture_file !== ''" src="data:{{
+                                      <img class="rounded mb-2" *ngIf="establishment_selected_picture.establishment_picture_file !== '' && !rucEstablishmentRegisterSelected.editable" src="data:{{
+                                          establishment_selected_picture.establishment_picture_file_type
+                                        }};base64,{{
+                                          establishment_selected_picture.establishment_picture_file
+                                        }}" height="400px" width="600px" />
+                                      <img class="rounded mb-2" *ngIf="establishment_selected_picture.establishment_picture_file !== '' && rucEstablishmentRegisterSelected.editable" src="data:{{
                                           establishment_selected_picture.establishment_picture_file_type
                                         }};base64,{{
                                           establishment_selected_picture.establishment_picture_file
                                         }}" height="400px" width="600px" (click)="subirFotoFachada()" />
                                     </div>
-                                    <div class="col-12 text-center">
+                                    <div class="col-12 text-center" *ngIf="rucEstablishmentRegisterSelected.editable">
                                       <button type="button" class="btn btn-primary" (click)="subirFotoFachada()">
                                         Subir Fotografía
                                       </button>
@@ -545,7 +508,7 @@
                                       <div class="col-12">
                                         <div class="alert alert-info mt-2 mb-2" role="alert">
                                           <label class="col-12 text-justify"><strong>Atención</strong></label><br />
-                                          Verifíque que los valores ingresados sean números enteros y que no excedan el <strong>TOTAL</strong> permitido por cada uno de los grupos.
+                                          Verifíque que los valores ingresados sean números enteros.
                                         </div>
                                       </div>
                                       <div class="col-12">
@@ -573,7 +536,7 @@
                                                 </td>
                                                 <td>
                                                   <input type="number" class="form-control" min="0" id="worker-count"
-                                                    name="worker-count" placeholder="Cantidad" [(ngModel)]="worker.count" />
+                                                    name="worker-count" [disabled]="!rucEstablishmentRegisterSelected.editable" placeholder="Cantidad" [(ngModel)]="worker.count" />
                                                 </td>
                                               </tr>
                                             </tbody>
@@ -588,7 +551,7 @@
                                   </div>
                                   <div class="row mt-2">
                                     <label class="col-12"><strong>Ubicación</strong></label>
-                                    <div class="col-3" *ngIf="false">
+                                    <div class="col-3" [hidden]="true">
                                       <div class="form-group">
                                         <label>Zonal</label>
                                         <select class="form-control" disabled id="zonal_establishment_id"
@@ -605,7 +568,7 @@
                                         <label>Provincia*</label>
                                         <select class="form-control" id="provincia_establishment_id"
                                           name="provincia_establishment_id" [(ngModel)]="provinciaEstablishmentSelectedCode"
-                                          (change)="getCantonesEstablishment()">
+                                          (change)="getCantonesEstablishment()" [disabled]="!rucEstablishmentRegisterSelected.editable">
                                           <option value="-" selected>Seleccione...</option>
                                           <option *ngFor="
                                               let provincia of provinciasEstablishment
@@ -619,7 +582,7 @@
                                       <div class="form-group">
                                         <label>Cantón*</label>
                                         <select class="form-control" id="canton_establishment_id" name="canton_establishment_id"
-                                          [(ngModel)]="cantonEstablishmentSelectedCode" (change)="getParroquiasEstablishment()">
+                                          [(ngModel)]="cantonEstablishmentSelectedCode" (change)="getParroquiasEstablishment()" [disabled]="!rucEstablishmentRegisterSelected.editable">
                                           <option value="-" selected>Seleccione...</option>
                                           <option *ngFor="let canton of cantonesEstablishment" value="{{ canton.code }}">
                                             {{ canton.name }}
@@ -632,7 +595,7 @@
                                         <label>Parroquia*</label><span *ngIf="establishment_selected.ubication_id == 0"
                                           class="ml-2 badge badge-danger">Incorrecto</span>
                                         <select class="form-control" id="parroquia_establishment_id"
-                                          name="parroquia_establishment_id" [(ngModel)]="establishment_selected.ubication_id">
+                                          name="parroquia_establishment_id" [(ngModel)]="establishment_selected.ubication_id" [disabled]="!rucEstablishmentRegisterSelected.editable">
                                           <option value="0" selected>Seleccione...</option>
                                           <option *ngFor="
                                               let parroquia of parroquiasEstablishment
@@ -653,7 +616,7 @@
                                             <label>Calle Principal</label><span *ngIf="establishment_selected.address_main_street === ''"
                                             class="ml-2 badge badge-danger">Incorrecto</span>
                                             <input type="text" class="form-control" id="addressMain" name="addressMain"
-                                              (keyup)="checkEstablishmentAddress()"
+                                              (keyup)="checkEstablishmentAddress()" [disabled]="!rucEstablishmentRegisterSelected.editable"
                                               placeholder="Calle Principal"
                                               [(ngModel)]="establishment_selected.address_main_street" />
                                         </div>
@@ -663,7 +626,7 @@
                                             <label>Numeración</label><span *ngIf="establishment_selected.address_number === ''"
                                             class="ml-2 badge badge-danger">Incorrecto</span>
                                             <input type="text" class="form-control" id="addressNumber" name="addressNumber"
-                                              (keyup)="checkEstablishmentAddress()"
+                                              (keyup)="checkEstablishmentAddress()" [disabled]="!rucEstablishmentRegisterSelected.editable"
                                               placeholder="Numeración"
                                               [(ngModel)]="establishment_selected.address_number" />
                                         </div>
@@ -673,7 +636,7 @@
                                             <label>Calle Intersección</label><span *ngIf="establishment_selected.address_secondary_street === ''"
                                             class="ml-2 badge badge-danger">Incorrecto</span>
                                             <input type="text" class="form-control" id="addressSecondary" name="addressSecondary"
-                                              (keyup)="checkEstablishmentAddress()"
+                                              (keyup)="checkEstablishmentAddress()" [disabled]="!rucEstablishmentRegisterSelected.editable"
                                               placeholder="Calle Intersección"
                                               [(ngModel)]="establishment_selected.address_secondary_street" />
                                         </div>
@@ -683,12 +646,14 @@
                                     <label>Referencia de Ubicación* - ¿Como llegar?</label><span
                                       *ngIf="establishment_selected.address_reference == ''"
                                       class="ml-2 badge badge-danger">Incorrecto</span>
-                                    <ck-editor id="address_reference" name="address_reference" skin="moono-lisa"
+                                    <ck-editor id="address_reference" *ngIf="rucEstablishmentRegisterSelected.editable" name="address_reference" skin="moono-lisa"
+                                      [(ngModel)]="establishment_selected.address_reference"></ck-editor>
+                                    <ck-editor id="address_reference" [readonly]="true" *ngIf="!rucEstablishmentRegisterSelected.editable" name="address_reference" skin="moono-lisa"
                                       [(ngModel)]="establishment_selected.address_reference"></ck-editor>
                                   </div>
                                   <div class="form-group">
                                     <label>Ubicar el establecimiento en el mapa*</label>
-                                    <agm-map class="col-12" style="height: 400px;" [latitude]="
+                                    <agm-map class="col-12" *ngIf="rucEstablishmentRegisterSelected.editable" style="height: 400px;" [latitude]="
                                         establishment_selected.address_map_latitude * 1
                                       " [longitude]="
                                         establishment_selected.address_map_longitude * 1
@@ -698,6 +663,19 @@
                                         " [longitude]="
                                           establishment_selected.address_map_longitude * 1
                                         " [markerDraggable]="true" (dragEnd)="address_mapEventEstablishment($event)"
+                                        [animation]="'DROP'"></agm-marker>
+                                    </agm-map>
+
+                                    <agm-map class="col-12" *ngIf="!rucEstablishmentRegisterSelected.editable" style="height: 400px;" [latitude]="
+                                        establishment_selected.address_map_latitude * 1
+                                      " [longitude]="
+                                        establishment_selected.address_map_longitude * 1
+                                      " [zoom]="15">
+                                      <agm-marker [latitude]="
+                                          establishment_selected.address_map_latitude * 1
+                                        " [longitude]="
+                                          establishment_selected.address_map_longitude * 1
+                                        "
                                         [animation]="'DROP'"></agm-marker>
                                     </agm-map>
                                   </div>
@@ -730,7 +708,7 @@
                                           <th>
                                             Tipo de Certificado
                                           </th>
-                                          <th>
+                                          <th *ngIf="false">
                                             Adjunto
                                           </th>
                                           <th>
@@ -755,7 +733,7 @@
                                               <select class="form-control" id="certificate_type_id" name="certificate_type_id"
                                                 [(ngModel)]="
                                                   establishment_certification.establishment_certification_type_fatherCode
-                                                " (change)="
+                                                " [disabled]="!rucEstablishmentRegisterSelected.editable" (change)="
                                                   getEstablishmentCertificationTypesSpecific(establishment_certification)
                                                 ">
                                                 <option value="-" selected>Seleccione...</option>
@@ -774,7 +752,7 @@
                                               <select class="form-control" id="certificate_type_id" name="certificate_type_id"
                                                 [(ngModel)]="
                                                   establishment_certification.establishment_certification_type_id
-                                                ">
+                                                " [disabled]="!rucEstablishmentRegisterSelected.editable">
                                                 <option value="0" selected>Seleccione...</option>
                                                 <option *ngFor="
                                                     let establishment_certification_type of establishment_certification.establishment_certification_type_specifics
@@ -787,7 +765,7 @@
                                                 </option>
                                               </select>
                                             </td>
-                                            <td>
+                                            <td *ngIf="false">
                                               <div class="input-group">
                                                 <div class="input-group-prepend">
                                                   <button
@@ -800,13 +778,13 @@
                                                     <i class="fas fa-download"></i>
                                                   </button>
                                                   <button
-                                                    [disabled]="establishment_certification.establishment_certification_attachment.establishment_certification_attachment_file == ''"
+                                                    [disabled]="establishment_certification.establishment_certification_attachment.establishment_certification_attachment_file == '' || !rucEstablishmentRegisterSelected.editable"
                                                     type="button" title="Eliminar" class="btn btn-danger"
                                                     (click)="borrarCertificado(establishment_certification)">
                                                     <i class="fas fa-trash"></i>
                                                   </button>
                                                 </div>
-                                                <input type="file" class="form-control" (change)="
+                                                <input type="file" [disabled]="!rucEstablishmentRegisterSelected.editable" class="form-control" (change)="
                                                       CodificarArchivoEstablishmentCertification(
                                                         $event,
                                                         establishment_certification
@@ -815,7 +793,7 @@
                                               </div>
                                             </td>
                                             <td>
-                                              <button type="button" title="Eliminar" class="btn btn-danger" (click)="
+                                              <button type="button" title="Eliminar" class="btn btn-danger" [disabled]="!rucEstablishmentRegisterSelected.editable" (click)="
                                                   removeEstablishmentCertification(
                                                     establishment_certification
                                                   )
@@ -828,7 +806,7 @@
                                       </table>
                                     </div>
                                   </div>        
-                                  <div class="row">
+                                  <div class="row" *ngIf="false">
                                     <div class="col-12">
                                         <div class="form-group">
                                             <label>Certificado de Uso de Suelos*</label><span
@@ -844,13 +822,13 @@
                                                   <i class="fas fa-download"></i>
                                                 </button>
                                                 <button
-                                                  [disabled]="certificadoUsoSuelo.floor_authorization_certificate_file === ''"
+                                                  [disabled]="certificadoUsoSuelo.floor_authorization_certificate_file === '' || !rucEstablishmentRegisterSelected.editable"
                                                   type="button" title="Eliminar" class="btn btn-danger"
                                                   (click)="borrarFloorCertificado()">
                                                   <i class="fas fa-trash"></i>
                                                 </button>
                                               </div>
-                                              <input type="file" class="form-control" (change)="
+                                              <input type="file" class="form-control" [disabled]="!rucEstablishmentRegisterSelected.editable" (change)="
                                                     CodificarArchivoFloorCertification(
                                                       $event
                                                     )
@@ -876,7 +854,7 @@
                                                   </button>
                                                 </div>
                                                 <input type="text" class="form-control" id="cedula" maxlength="10"
-                                                  placeholder="Cédula de Identidad" (keyup)="checkCedulaEstablishment()" [(ngModel)]="
+                                                  placeholder="Cédula de Identidad" [disabled]="!rucEstablishmentRegisterSelected.editable" (keyup)="checkCedulaEstablishment()" [(ngModel)]="
                                                     establishment_selected.contact_user
                                                       .identification
                                                   " name="cedula" />
@@ -897,7 +875,7 @@
                                               <label>Número de Teléfono Principal*</label><span
                                                 *ngIf="!mainPhoneContactEstablishmentValidated"
                                                 class="ml-2 badge badge-danger">Incorrecto</span>
-                                              <input type="text" class="form-control" id="mainRucPhoneNumber" maxlength="10"
+                                              <input type="text" class="form-control" [disabled]="!rucEstablishmentRegisterSelected.editable" id="mainRucPhoneNumber" maxlength="10"
                                                 placeholder="Número de Teléfono Principal Ej: 0999999999"
                                                 (keyup)="checkTelefonoPrincipalContactoEstablecimiento()" [(ngModel)]="
                                                   establishment_selected.contact_user.main_phone_number
@@ -909,7 +887,7 @@
                                               <label>Número de Teléfono Secundario</label><span
                                                 *ngIf="!secondaryPhoneContactEstablishmentValidated"
                                                 class="ml-2 badge badge-danger">Incorrecto</span>
-                                              <input type="text" class="form-control" id="secondaryRucPhone" maxlength="10"
+                                              <input type="text" class="form-control" [disabled]="!rucEstablishmentRegisterSelected.editable" id="secondaryRucPhone" maxlength="10"
                                                 (keyup)="checkTelefonoSecundarioContactoEstablecimiento()"
                                                 placeholder="Número de Teléfono Secundario Ej: 0299999999" [(ngModel)]="
                                                   establishment_selected.contact_user.secondary_phone_number
@@ -922,7 +900,7 @@
                                             <div class="form-group">
                                               <label>Correo Electrónico*</label><span *ngIf="!emailContactEstablishmentValidated"
                                                 class="ml-2 badge badge-danger">Incorrecto</span>
-                                              <input type="email" class="form-control" id="email" maxlength="255"
+                                              <input type="email" class="form-control" [disabled]="!rucEstablishmentRegisterSelected.editable" id="email" maxlength="255"
                                                 (keyup)="checkEmailContactEstablishment()" placeholder="Correo Electrónico"
                                                 [(ngModel)]="establishment_selected.contact_user.email" name="email" />
                                             </div>
@@ -934,11 +912,11 @@
                               </div>
                             </div>
                           </div>
-                          <div class="row mt-3" *ngIf="validateEstablecimiento()">
+                          <div class="row mt-3" *ngIf="validateEstablecimiento() && rucEstablishmentRegisterSelected.editable">
                             <div class="col-12 text-center">
                               <button type="button" [disabled]="guardando" class="btn btn-success"
-                                title="Guardar Datos del Establecimiento" (click)="guardarEstablecimiento()">
-                                <i class="fas fa-save"></i>&nbsp;Guardar Datos del Establecimiento
+                                title="Guardar Datos" (click)="guardarEstablecimiento()">
+                                <i class="fas fa-save"></i>&nbsp;Guardar Datos
                               </button>
                               <button type="button" class="btn btn-danger ml-2" title="Cancelar Cambios" (click)="
                                   refresh()
@@ -1139,13 +1117,13 @@
                       <div class="col-12">
                         <div class="alert alert-warning mt-2 mb-2" role="alert">
                           <label class="col-12 text-justify"><strong>Declaración Juramentada</strong></label><br />
-                          Declaro bajo juramento que los datos consignados en el presente formulario reflejan la realidad y autorizo al Ministerio de Turismo a verificar el contenido de ésta declaración en cualquier momento, al tiempo que me sujeto, a las sanciones previstas en la ley en caso de falsedad o perjurio.
+                          Declaro bajo juramento que los datos consignados en el presente formulario reflejan la realidad y autorizo al Ministerio de Turismo a verificar el contenido de esta declaración en cualquier momento, al tiempo que me sujeto, a las sanciones previstas en la ley en caso de falsedad o perjurio.
                         </div>
                       </div>
                       <div class="col-12 text-center">
                         <button [disabled]="guardando || !declaration_selected.editable" type="button" class="btn btn-success"
-                          title="Guardar Datos de la Declaración" (click)="guardarDeclaracion()">
-                          <i class="fas fa-paper-plane"></i>&nbsp;Guardar Datos de la Declaración
+                          title="Guardar Datos" (click)="guardarDeclaracion()">
+                          <i class="fas fa-paper-plane"></i>&nbsp;Guardar Datos
                         </button>
                         <button type="button" class="btn btn-danger ml-2" title="Cancelar Cambios" (click)="
                             refresh()
@@ -1236,7 +1214,7 @@
                                 <div class="form-group">
                                   <label>Actividad Turística</label><span *ngIf="actividadSelected == '-'"
                                     class="ml-2 badge badge-danger">Incorrecto</span>
-                                  <select class="form-control" id="actividad" name="actividad" [(ngModel)]="actividadSelected">
+                                  <select class="form-control" id="actividad" name="actividad" [(ngModel)]="actividadSelected" [disabled]="!rucEstablishmentRegisterSelected.editable">
                                     <option value="-" selected>Seleccione...</option>
                                     <option value="1" selected>Alojamiento Turístico</option>
                                   </select>
@@ -1331,7 +1309,7 @@
                                     <i class="fas fa-plus-circle"></i>
                                   </button>
                                 </th>
-                                <th>Tipo</th>
+                                <th>Tipo de Habitación</th>
                                 <th>Habitaciones</th>
                                 <th>Camas</th>
                                 <th>Plazas</th>
@@ -1359,17 +1337,14 @@
                                       placeholder="Cantidad" [(ngModel)]="capacity.quantity" [disabled]="!rucEstablishmentRegisterSelected.editable"/>
                                   </td>
                                   <td>
-                                    <div class="col-12" *ngIf="!capacity.editable">
-                                      <strong>{{capacity.max_bed}}</strong>
-                                    </div>
-                                    <div class="col-12" *ngIf="capacity.editable">
+                                    <div class="col-12">
                                         <input type="number" class="form-control" min="0" max="9999" id="count_camas" name="count_camas" (keyup)="calcSpaces()"
                                         placeholder="Cantidad de Camas" [(ngModel)]="capacity.max_bed" [disabled]="!rucEstablishmentRegisterSelected.editable"/>
                                     </div>
                                   </td>
                                   <td>
                                     <div class="col-12" *ngIf="!capacity.editable">
-                                      <strong>{{capacity.max_spaces}}</strong>
+                                      <strong>{{capacity.max_spaces * capacity.quantity}}</strong>
                                     </div>
                                     <div class="col-12" *ngIf="capacity.editable">
                                         <input type="number" class="form-control" min="0" max="9999" id="count_plazas" name="count_plazas" (keyup)="calcSpaces()"
@@ -1387,26 +1362,32 @@
                             </table>
                           </div>
                         </div>
-
+                        <div class="row" *ngIf="categorySelectedCode !== '-' && rucEstablishmentRegisterSelected.register_type_id !== 0 && tarifarioRack.valores.length > 0">
+                          <div class="col-12">
+                            <div class="alert alert-info mt-2 mb-2" role="alert">
+                              <label class="col-12 text-justify"><strong>Atención</strong></label><br />
+                              Para registrar las tarifas en esta tipología de habitación, es necesario que su establecimiento cuente con la declaración de dichas habitaciones, por favor revise la sección Capacidades del establecimiento que se encuentra en la sección anterior
+                            </div>
+                          </div>
+                        </div>
                         <div class="row mt-3" *ngIf="categorySelectedCode !== '-' && rucEstablishmentRegisterSelected.register_type_id !== 0 && tarifarioRack.valores.length > 0">
                           <h4 class="col-12">
                             <strong>Tarifario RACK</strong>
                           </h4>
                         </div>
-                        <div class="row" *ngIf="tarifarioRack.valores.length > 0">
+                        <div class="row" *ngIf="categorySelectedCode !== '-' && rucEstablishmentRegisterSelected.register_type_id !== 0 && tarifarioRack.valores.length > 0">
                           <div class="col-12">
                               <table class="table table-hover mt-2">
                                 <thead>
                                   <th *ngFor="let tariff of tarifarioRack.cabecera">
                                     <div class="row">
-                                      <div class="col-12 text-center">{{tariff}}</div>
+                                      <div class="col-12 text-center">{{tariff.valor}}</div>
                                     </div>
                                   </th>
                                 </thead>
                                 <tbody>
                                   <tr *ngFor="let tariffRack of tarifarioRack.valores">
                                     <td>
-                                      <label>&nbsp;</label>
                                       <select class="form-control" id="capacity_type_id" name="capacity_type_id"
                                         [(ngModel)]="tariffRack.idTipoCapacidad" [disabled]="true">
                                         <option value="0" selected>Seleccione...</option>
@@ -1418,27 +1399,31 @@
                                       </select>
                                     </td>
                                     <td *ngFor="let tariff of tariffRack.tariffs">
-                                      <div class="row">
-                                        <div class="col-6" *ngFor="let child of tariff.childs">
-                                          <div class="form-group">  
-                                              <label>En {{ child.name }}</label>
-                                              <div class="input-group">
-                                                <div class="input-group-prepend">
-                                                  <span class="input-group-text">$</span>
-                                                </div>
-                                                <input type="number" class="form-control" min="0" step="0.01" id="low_capacity_room_price"
-                                                  name="low_capacity_room_price" [(ngModel)]="tariff.price" placeholder="Precio" [disabled]="!rucEstablishmentRegisterSelected.editable"/>
-                                              </div>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                              <span class="input-group-text" id="basic-addon1">USD</span>
+                                            </div>
+                                            <input type="number" class="form-control" min="0" step="0.01" id="low_capacity_room_price"
+                                          name="low_capacity_room_price" [(ngModel)]="tariff.tariff.price" placeholder="Precio" [disabled]="!rucEstablishmentRegisterSelected.editable"/>
                                           </div>
-                                        </div>
-                                      </div>
                                     </td>
                                   </tr>
                                 </tbody>
                               </table>
                           </div>
                         </div>
-                        
+                        <div class="row" *ngIf="categorySelectedCode !== '-' && rucEstablishmentRegisterSelected.register_type_id !== 0 && tarifarioRack.valores.length > 0">
+                          <div class="col-12">
+                            <div class="alert alert-info mt-2 mb-2" role="alert">
+                              <label class="col-12 text-justify"><strong>Atención</strong></label><br />
+                              Estimado Usuario, antes de continuar recuerde lo siguiente:<br/>
+                              - Registrar la Tarifa de habitación por noche incluyendo IVA.<br/>
+                              - Reglamento de Alojamiento, Anexo A, Requisito 20: Exhibir el tarifario rack anual registrado ante la Autoridad Nacional de Turismo.<br/>
+                              - Reglamento de Alojamiento, Disposición General, Tercera: Los establecimientos de alojamiento turístico deberán informar a la Autoridad Nacional de Turismo hasta el primero de diciembre de cada año sobre las tarifas rack o mostrador del año siguiente. Estas considerarán el valor por huésped, por noche, por tipo de habitación y por temporada baja y alta, incluido impuestos; de no hacerlo la Autoridad Nacional de Turismo sancionará conforme a la normativa vigente.<br/>
+                              - El formulario será enviado a su correo electrónico posterior a la validación correspondiente.<br/>
+                            </div>
+                          </div>
+                        </div>
                         <div class="row" *ngIf="categorySelectedCode !== '-' && rucEstablishmentRegisterSelected.register_type_id !== 0">
                           <div class="col-12">
                             <div class="form-group">
@@ -1466,8 +1451,7 @@
                                     <i class="fas fa-plus-circle"></i>
                                   </button>
                                 </th>
-                                <th>Tipo
-                                </th>
+                                <th>Tipo</th>
                                 <th>Cantidad de Mesas</th>
                                 <th>Cantidad de Plazas</th>
                                 <th>Opciones</th>
@@ -1480,13 +1464,25 @@
                                       class="ml-2 badge badge-danger">Incorrecto</span>
                                   </td>
                                   <td>
-                                    <select class="form-control" id="complementary_service_food_id"
+                                    <select *ngIf="rucEstablishmentRegisterSelected.editable" class="form-control" id="complementary_service_food_id"
                                       name="complementary_service_food_id" [(ngModel)]="
                                       complementaryServiceFood.complementary_service_food_type_id
                                       " [disabled]="!rucEstablishmentRegisterSelected.editable">
                                       <option value="0" selected>Seleccione...</option>
                                       <option *ngFor="
                                           let complementary_food_service_type of complementaryServiceFood.type_of_complementary_service_food
+                                        " value="{{ complementary_food_service_type.id }}">
+                                        {{ complementary_food_service_type.name }}
+                                      </option>
+                                    </select>
+
+                                    <select *ngIf="!rucEstablishmentRegisterSelected.editable" class="form-control" id="complementary_service_food_id"
+                                      name="complementary_service_food_id" [(ngModel)]="
+                                      complementaryServiceFood.complementary_service_food_type_id
+                                      " [disabled]="!rucEstablishmentRegisterSelected.editable">
+                                      <option value="0" selected>Seleccione...</option>
+                                      <option *ngFor="
+                                          let complementary_food_service_type of complementaryServiceFoodTypes
                                         " value="{{ complementary_food_service_type.id }}">
                                         {{ complementary_food_service_type.name }}
                                       </option>
@@ -1515,7 +1511,7 @@
                         </div>
                         <div class="row mt-3" *ngIf="categorySelectedCode !== '-' && rucEstablishmentRegisterSelected.register_type_id !== 0">
                           <h4 class="col-12">
-                            <strong>Modalidades de Turísmo de Aventura</strong>
+                            <strong>Modalidades de Turismo de Aventura</strong>
                           </h4>
                         </div>
                         <div class="form-group"
@@ -1533,7 +1529,7 @@
                           ">
                           <label class="col-12 col-form-label mb-2"><strong>Clases de Modalidades de Turismo de Aventura</strong></label>
                           <div class="col-12">
-                            <div class="input-group">
+                            <div class="input-group" *ngIf="rucEstablishmentRegisterSelected.editable">
                               <div class="input-group-prepend">
                                 <button type="button" title="Eliminar" class="btn btn-danger"
                                   (click)="removeComplementaryServiceType()" [disabled]="!rucEstablishmentRegisterSelected.editable">
@@ -1635,6 +1631,53 @@
                                                         " /><span class="slider round"></span></label>
                                               </td>
                                             </tr>
+                                            <tr>
+                                              <td>
+                                                <label class="col-12 col-form-label mb-2"><strong>Idiomas de Atención en el
+                                                  Establecimiento</strong></label>
+                                              </td>
+                                              <td>
+                                                <div class="form-group row">
+                                                  <div class="col-12">
+                                                    <div class="input-group" *ngIf="rucEstablishmentRegisterSelected.editable">
+                                                      <div class="input-group-prepend">
+                                                        <button type="button" title="Eliminar" class="btn btn-danger" (click)="removeLanguage()">
+                                                          <i class="fas fa-trash"></i>
+                                                        </button>
+                                                        <button type="button" title="Agregar" class="btn btn-success" (click)="addLanguage()">
+                                                          <i class="fas fa-plus-circle"></i>
+                                                        </button>
+                                                      </div>
+                                                      <select class="form-control" id="language_id" name="language_id"
+                                                        [(ngModel)]="languages_establishmentSelectedId">
+                                                        <option value="0" selected>Seleccione...</option>
+                                                        <option *ngFor="let language of languages" value="{{ language.id }}">
+                                                          {{ language.name }}
+                                                        </option>
+                                                      </select>
+                                                    </div>
+                                                  </div>
+                                                  <div class="col-4"></div>
+                                                  <div class="col-8">
+                                                    <table class="table table-hover mt-2">
+                                                      <tbody>
+                                                        <tr *ngFor="
+                                                            let language of establishment_selected.languages_on_establishment
+                                                          " (click)="selectLanguage(language)">
+                                                          <td class="text-right">
+                                                            <span *ngIf="
+                                                                languages_establishmentSelectedId ===
+                                                                language.id
+                                                              " class="far fa-hand-point-right"></span>
+                                                          </td>
+                                                          <td>{{ language.name }}</td>
+                                                        </tr>
+                                                      </tbody>
+                                                    </table>
+                                                  </div>
+                                                </div>
+                                              </td>
+                                            </tr>
                                           </tbody>
                                         </table>
                                       </div>
@@ -1651,7 +1694,7 @@
                       <div class="col-12 text-center">
                         <button [disabled]="guardando" type="button" class="btn btn-success" title="Actualizar Información"
                           (click)="guardarRegistro()">
-                          <i class="fas fa-paper-plane"></i>&nbsp;Actualizar Información
+                          <i class="fas fa-paper-plane"></i>&nbsp;Solicitar Trámite
                         </button>
                         <button type="button" class="btn btn-danger ml-2" title="Cancelar Cambios" (click)="
                             refresh()

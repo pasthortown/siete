@@ -95,6 +95,7 @@ export class CoordinadorComponent implements OnInit {
    @ViewChild('fotoFachadaInput') fotoFachadaInput;
    @ViewChild('EstablishmentCertificationAttachedFile') EstablishmentCertificationAttachedFile;
    //ASIGNACIONES
+   registerIdSelected = 0;
    stateTramite: number = 0;
    stateTramiteId: number = 0;
    inspectores: User[] = [];
@@ -313,7 +314,7 @@ export class CoordinadorComponent implements OnInit {
    this.approvalStateDataService.put(this.registerApprovalInspector).then( r => {
       const newRegisterState = new RegisterState();
       newRegisterState.justification = 'Inspector asignado en la fecha ' + this.registerApprovalInspector.date_assigment.toDateString();
-      newRegisterState.register_id = this.registerApprovalInspector.register_id;
+      newRegisterState.register_id = this.idRegister;
       newRegisterState.state_id = this.stateTramiteId + 3;
       this.registerStateDataService.post(newRegisterState).then( r1 => {
          this.toastr.successToastr('Inspector Asignado Satisfactoriamente.', 'Asignación de Inspector');
@@ -331,7 +332,7 @@ export class CoordinadorComponent implements OnInit {
      this.approvalStateDataService.put(this.registerApprovalInspector).then( r => {
       const newRegisterState = new RegisterState();
       newRegisterState.justification = 'Inspector removido en la fecha ' + today.toDateString();
-      newRegisterState.register_id = this.registerApprovalInspector.register_id;
+      newRegisterState.register_id =  this.idRegister;
       newRegisterState.state_id = this.stateTramiteId - 3;
       this.registerStateDataService.post(newRegisterState).then( r1 => {
          this.toastr.warningToastr('Inspector Removido Satisfactoriamente.', 'Asignación de Inspector');
@@ -347,7 +348,7 @@ export class CoordinadorComponent implements OnInit {
    this.approvalStateDataService.put(this.registerApprovalFinanciero).then( r => {
       const newRegisterState = new RegisterState();
       newRegisterState.justification = 'Técnico Financiero asignado en la fecha ' + this.registerApprovalFinanciero.date_assigment.toDateString();
-      newRegisterState.register_id = this.registerApprovalFinanciero.register_id;
+      newRegisterState.register_id =  this.idRegister;
       newRegisterState.state_id = this.stateTramiteId - 3;
       this.registerStateDataService.post(newRegisterState).then( r1 => {
          this.toastr.successToastr('Técnico Financiero Asignado Satisfactoriamente.', 'Asignación de Técnico Financiero');
@@ -365,7 +366,7 @@ export class CoordinadorComponent implements OnInit {
    this.approvalStateDataService.put(this.registerApprovalFinanciero).then( r => {
     const newRegisterState = new RegisterState();
     newRegisterState.justification = 'Técnico Financiero removido en la fecha ' + today.toDateString();
-    newRegisterState.register_id = this.registerApprovalFinanciero.register_id;
+    newRegisterState.register_id =  this.idRegister;
     newRegisterState.state_id = this.stateTramiteId + 3;
     this.registerStateDataService.post(newRegisterState).then( r1 => {
        this.toastr.warningToastr('Técnico Financiero Removido Satisfactoriamente.', 'Asignación de Técnico Financiero');
@@ -585,7 +586,7 @@ export class CoordinadorComponent implements OnInit {
             selected: '',
             id: item.register.id,
             establishment_code: item.establishment.ruc_code_id,
-            address: item.establishment.address,
+            address: item.establishment.address_main_street + ' ' + item.establishment.address_number + ' ' + item.establishment.address_secondary_street,
             register_code: item.register.code,
             register_type: item.type.register_category.name + ' / ' + item.type.register_type.name,
             state: this.getRegisterState(item.status.id),
@@ -756,7 +757,7 @@ export class CoordinadorComponent implements OnInit {
             number: item.ruc.number,
             registerId: item.register.id,
             establishment: item.establishment.commercially_known_name,
-            address: item.establishment.address,
+            address: item.establishment.address_main_street + ' ' + item.establishment.address_number + item.establishment.address_secondary_street,
             updated_at: item.register.updated_at,
             category: this.getRegisterCategory(item.register.register_type_id),
             status: registerState,

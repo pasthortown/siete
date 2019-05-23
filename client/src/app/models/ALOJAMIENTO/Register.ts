@@ -1,3 +1,4 @@
+import { Tariff } from './Tariff';
 import { ComplementaryServiceType } from './ComplementaryServiceType';
 import { RegisterRequisite } from './RegisterRequisite';
 import { ComplementaryServiceFood } from './ComplementaryServiceFood';
@@ -19,9 +20,11 @@ export class Register {
    total_habitations: number;
    total_beds: number;
    status: number;
+   tarifario_rack: Tariff[];
    constructor() {
       this.id = 0;
       this.editable = true;
+      this.tarifario_rack = [];
       this.complementary_service_types_on_register = [];
       this.complementary_service_foods_on_register = [];
       this.capacities_on_register = [];

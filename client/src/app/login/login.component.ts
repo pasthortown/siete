@@ -56,7 +56,7 @@ export class LoginComponent implements OnInit {
       this.esperando = true;
       this.busy = this.authDataServise.password_recovery_request(this.email).then( r => {
         this.esperando = false;
-        if ( r === 'Success!') {
+        if ( r === 'Solicitud Procesada. Enviaremos la respuesta a tu correo electrónico en un momento.') {
           Swal.fire({
             title: 'Contraseña Recuperada',
             text: 'Para completar el proceso, revisa tu correo',
