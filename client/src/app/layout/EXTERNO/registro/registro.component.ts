@@ -1375,6 +1375,10 @@ export class RegistroComponent implements OnInit {
   }
 
   guardarRegistro() {
+   if (this.certificadoUsoSuelo.floor_authorization_certificate_file === ''){
+      this.toastr.errorToastr('Debe cargar el certificado de uso de suelo.', 'Nuevo');
+      return;
+   }
    this.guardando = true;
    const tariffs: Tariff[] = [];
    this.tarifarioRack.valores.forEach(tarifRackValor => {
@@ -1696,10 +1700,6 @@ export class RegistroComponent implements OnInit {
   }
 
   guardarEstablecimiento() {
-   /*if (this.certificadoUsoSuelo.floor_authorization_certificate_file === ''){
-      this.toastr.errorToastr('Debe cargar el certificado de uso de suelo.', 'Nuevo');
-      return;
-   }*/
    if (!this.validateWorkers()) {
       this.toastr.errorToastr('Existe conflicto con la información ingresada referente a los Trabajadores en el Establecimiento.', 'Nuevo');
       return;
