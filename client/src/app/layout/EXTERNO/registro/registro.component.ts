@@ -312,6 +312,25 @@ export class RegistroComponent implements OnInit {
    this.rowsPays = page && config.paging ? this.changePagePays(page, sortedData) : sortedData;
   }
 
+  validateNombreComercial() {
+     let toReturn = true;
+     const textoAValidar = this.establishment_selected.commercially_known_name.toUpperCase();
+     if(this.establishment_selected.commercially_known_name.length < 1) {
+         toReturn = false;
+         this.establishmentComercialNameValidated = toReturn;
+         return;
+     } 
+     let errorEnNombreDetectado = false;
+     this.register_types.forEach(register_type => {
+        const nombre = register_type.name.toUpperCase();
+        if (textoAValidar.search(nombre) !== -1 && !errorEnNombreDetectado) {
+         errorEnNombreDetectado = true;
+         toReturn = false;
+        }
+     });
+     this.establishmentComercialNameValidated = toReturn;
+  }
+
   changeFilterPays(data: any, config: any): any {
    let filteredData: Array<any> = data;
    this.columnsPays.forEach((column: any) => {
@@ -2109,15 +2128,6 @@ export class RegistroComponent implements OnInit {
    return this.urlwebEstablishmentValidated;
   }
 
-  checkEstablishmentComercialName(): Boolean {
-   if(this.establishment_selected.commercially_known_name.length < 1) {
-      this.establishmentComercialNameValidated = false;
-      return false;
-   }
-   this.establishmentComercialNameValidated = true;
-   return true;
-  }
-
   checkEstablishmentAddress(): Boolean {
    if(this.establishment_selected.address_main_street === '' || this.establishment_selected.address_number === '' || this.establishment_selected.address_secondary_street === '') {
       this.addressEstablishmentValidated = false;
@@ -2233,7 +2243,7 @@ export class RegistroComponent implements OnInit {
       this.recoverUbication();
       this.checkEstablishmentAddress();
       this.checkURLWeb();
-      this.checkEstablishmentComercialName();
+      this.validateNombreComercial();
       this.establishment_selected.contact_user = r.contact_user as User;
       this.checkCedulaEstablishment();
       this.checkTelefonoPrincipalContactoEstablecimiento();
@@ -2305,6 +2315,7 @@ export class RegistroComponent implements OnInit {
     this.establishment_selected.workers_on_establishment = this.getEstablishmentWorkerGroup();
     this.mostrarDataEstablishment = true;
     this.cedulaEstablishmentContactData = '';
+    this.rucEstablishmentRegisterSelected.editable = true;
     this.certificadoUsoSuelo = new FloorAuthorizationCertificate();
     this.getCantonesEstablishment();
     this.declarations = [];

@@ -414,7 +414,7 @@
                                           <label>Nombre Comercial*</label><span *ngIf="!establishmentComercialNameValidated"
                                             class="ml-2 badge badge-danger">Incorrecto</span>
                                           <input type="text" class="form-control" id="commercially_known_name"
-                                            name="commercially_known_name" (keyup)="checkEstablishmentComercialName()"
+                                            name="commercially_known_name" (keyup)="validateNombreComercial()"
                                             placeholder="Nombre Comercial" [(ngModel)]="
                                               establishment_selected.commercially_known_name
                                             " [disabled]="!rucEstablishmentRegisterSelected.editable"/>
