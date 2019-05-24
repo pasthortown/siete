@@ -326,7 +326,7 @@ export class RegistroComponent implements OnInit {
      let errorEnNombreDetectado = false;
      this.register_types.forEach(register_type => {
         const nombre = register_type.name.toUpperCase();
-        if (textoAValidar.search(nombre) !== -1 && !errorEnNombreDetectado) {
+        if (textoAValidar.search(nombre + ' ') !== -1 && !errorEnNombreDetectado) {
          errorEnNombreDetectado = true;
          toReturn = false;
         }
@@ -345,7 +345,7 @@ export class RegistroComponent implements OnInit {
    let errorEnNombreDetectado = false;
    this.register_types.forEach(register_type => {
       const nombre = register_type.name.toUpperCase();
-      if (textoAValidar.search(nombre) !== -1 && !errorEnNombreDetectado) {
+      if (textoAValidar.search(nombre + ' ') !== -1 && !errorEnNombreDetectado) {
        errorEnNombreDetectado = true;
        toReturn = false;
       }
