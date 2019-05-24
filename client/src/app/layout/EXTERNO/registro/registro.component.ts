@@ -378,11 +378,11 @@ export class RegistroComponent implements OnInit {
 
   buildDataTablePays() {
      this.columnsPays = [
-        {title: 'Número de Establecimiento', name: 'code', filtering: {filterString: '', placeholder: 'Buscar por Número de Establecimiento'}},
-        {title: 'Estado', name: 'state', filtering: {filterString: '', placeholder: 'Buscar por Estado'}},
+        {title: 'Código', name: 'code'},
+        {title: 'Estado', name: 'state'},
         {title: 'Valor Pagado', name: 'amount_payed'},
         {title: 'Valor a Pagar', name: 'amount_to_pay'},
-        {title: 'Fecha de Pago', name: 'pay_date', filtering: {filterString: '', placeholder: 'Buscar por Fecha de Pago'}}
+        {title: 'Fecha de Pago', name: 'pay_date'}
      ];
      const data = [];
      this.pays.forEach(item => {
@@ -503,9 +503,9 @@ export class RegistroComponent implements OnInit {
   buildDataTableEstablishment() {
      this.columnsEstablishment = [
         {title: 'Seleccionado', name: 'selected'},
-        {title: 'Código', name: 'code', filtering: {filterString: '', placeholder: 'Buscar por Código'}},
-        {title: 'Dirección', name: 'address', filtering: {filterString: '', placeholder: 'Buscar por Dirección'}},
-        {title: 'Nombre Comercial', name: 'name', filtering: {filterString: '', placeholder: 'Buscar por Nombre Comercial'}},
+        {title: 'Número de Establecimiento', name: 'code'},
+        {title: 'Dirección', name: 'address'},
+        {title: 'Nombre Comercial', name: 'name'},
      ];
      const data = [];
      this.ruc_registro_selected.ruc.establishments.forEach(item => {
@@ -652,11 +652,11 @@ export class RegistroComponent implements OnInit {
      this.columnsRegister = [
         {title: 'Seleccionado', name: 'selected'},
         {title: 'Días en Espera', name: 'date_assigment_alert'},
-        {title: 'Código del Establecimiento', name: 'establishment_code', filtering: {filterString: '', placeholder: 'Buscar por Código del Establecimiento'}},
-        {title: 'Ubicación del Establecimiento', name: 'address', filtering: {filterString: '', placeholder: 'Buscar por Ubicación del Establecimiento'}},
-        {title: 'Código del Registro', name: 'register_code', filtering: {filterString: '', placeholder: 'Buscar por Código del Registro'}},
-        {title: 'Categoría', name: 'register_type', filtering: {filterString: '', placeholder: 'Buscar por Categoría'}},
-        {title: 'Estado', name: 'state', filtering: {filterString: '', placeholder: 'Buscar por Estado'}},
+        {title: 'Código del Establecimiento', name: 'establishment_code'},
+        {title: 'Ubicación del Establecimiento', name: 'address'},
+        {title: 'Código del Registro', name: 'register_code'},
+        {title: 'Categoría', name: 'register_type'},
+        {title: 'Estado', name: 'state'},
         {title: 'Observaciones', name: 'notes'},
      ];
      const data = []; 
