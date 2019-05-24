@@ -440,10 +440,10 @@
                                     </div>
                                     <div class="col-9" *ngIf="establishment_selected.ruc_name_type_id > 1">
                                       <div class="form-group">
-                                        <label>Nombre de la Franquicia o Cadena*</label><span *ngIf="establishment_selected.franchise_chain_name === ''"
+                                        <label>Nombre de la Franquicia o Cadena*</label><span *ngIf="!franchiseChainNameValidated"
                                           class="ml-2 badge badge-danger">Incorrecto</span>
                                         <input type="text" class="form-control" id="franchise_chain_name"
-                                          name="franchise_chain_name"
+                                          name="franchise_chain_name" (keyup)="validateNombreFranquiciaCadena()"
                                           placeholder="Nombre de la Franquicia o Cadena" [(ngModel)]="
                                             establishment_selected.franchise_chain_name
                                           " [disabled]="!rucEstablishmentRegisterSelected.editable"/>

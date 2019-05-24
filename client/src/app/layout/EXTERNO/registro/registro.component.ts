@@ -83,6 +83,7 @@ import { AgreementService } from 'src/app/services/CRUD/BASE/agreement.service';
 import { EstablishmentPictureService } from 'src/app/services/CRUD/BASE/establishmentpicture.service';
 import { EstablishmentCertificationAttachmentService } from 'src/app/services/CRUD/BASE/establishmentcertificationattachment.service';
 import { RegisterService } from 'src/app/services/CRUD/ALOJAMIENTO/register.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-registro',
@@ -108,6 +109,7 @@ export class RegistroComponent implements OnInit {
    actividadSelected = '-';
    regiones = [];
    regionSelectedCode = '-';
+   franchiseChainNameValidated = false;
 
   //DATOS RUC
   certificadoUsoSuelo: FloorAuthorizationCertificate = new FloorAuthorizationCertificate();
@@ -269,6 +271,7 @@ export class RegistroComponent implements OnInit {
               private systemNameDataService: SystemNameService,
               private genderDataService: GenderService,
               private workerGroupDataService: WorkerGroupService,
+              private router: Router,
               private capacityTypeDataService: CapacityTypeService,
               private establishment_certification_typeDataService: EstablishmentCertificationTypeService,
               private establishment_property_typeDataService: EstablishmentPropertyTypeService,
@@ -329,6 +332,25 @@ export class RegistroComponent implements OnInit {
         }
      });
      this.establishmentComercialNameValidated = toReturn;
+  }
+
+  validateNombreFranquiciaCadena() {
+   let toReturn = true;
+   const textoAValidar = this.establishment_selected.commercially_known_name.toUpperCase();
+   if(this.establishment_selected.commercially_known_name.length < 1) {
+       toReturn = false;
+       this.franchiseChainNameValidated = toReturn;
+       return;
+   } 
+   let errorEnNombreDetectado = false;
+   this.register_types.forEach(register_type => {
+      const nombre = register_type.name.toUpperCase();
+      if (textoAValidar.search(nombre) !== -1 && !errorEnNombreDetectado) {
+       errorEnNombreDetectado = true;
+       toReturn = false;
+      }
+   });
+   this.franchiseChainNameValidated = toReturn;
   }
 
   changeFilterPays(data: any, config: any): any {
@@ -1390,6 +1412,8 @@ export class RegistroComponent implements OnInit {
    this.registerDataService.register_register_data(this.rucEstablishmentRegisterSelected).then( r => {
       this.guardando = false;
       this.refresh();
+      this.toastr.successToastr('Solicitud de Registro Enviada, Satisfactoriamente.', 'Nuevo');
+      this.router.navigate(['/main']);
    }).catch( e => {
       this.guardando = false;
       this.toastr.errorToastr('Existe conflicto la información proporcionada.', 'Nuevo');
@@ -1724,6 +1748,10 @@ export class RegistroComponent implements OnInit {
    } else {
       if (this.establishment_selected.franchise_chain_name == '') {
          this.toastr.errorToastr('Escriba el nombre de la Franquicia o Cadena', 'Nuevo');
+         return;
+      }
+      if (!this.franchiseChainNameValidated) {
+         this.toastr.errorToastr('El nombre de la Franquicia o Cadena es Incorrecto', 'Nuevo');
          return;
       }
    }
