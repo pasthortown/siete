@@ -8,6 +8,7 @@ import { TariffService } from './../../../../services/CRUD/ALOJAMIENTO/tariff.se
 import { environment } from 'src/environments/environment';
 import { TariffTypeService } from './../../../../services/CRUD/ALOJAMIENTO/tarifftype.service';
 import { CapacityTypeService } from './../../../../services/CRUD/ALOJAMIENTO/capacitytype.service';
+import { RegisterService } from './../../../../services/CRUD/ALOJAMIENTO/register.service';
 
 @NgModule({
    imports: [CommonModule,
@@ -18,6 +19,7 @@ import { CapacityTypeService } from './../../../../services/CRUD/ALOJAMIENTO/cap
                NgbModal,
                TariffTypeService,
                CapacityTypeService,
+               RegisterService,
                TariffService
                ]
 })

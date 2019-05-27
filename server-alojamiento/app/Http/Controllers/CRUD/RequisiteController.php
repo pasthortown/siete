@@ -51,6 +51,9 @@ class RequisiteController extends Controller
          $requisite->description = $result['description'];
          $requisite->father_code = $result['father_code'];
          $requisite->to_approve = $result['to_approve'];
+         $requisite->mandatory = $result['mandatory'];
+         $requisite->type = $result['type'];
+         $requisite->params = $result['params'];
          $requisite->register_type_id = $result['register_type_id'];
          $requisite->save();
          DB::commit();
@@ -70,6 +73,9 @@ class RequisiteController extends Controller
             'description'=>$result['description'],
             'father_code'=>$result['father_code'],
             'to_approve'=>$result['to_approve'],
+            'mandatory'=>$result['mandatory'],
+            'type'=>$result['type'],
+            'params'=>$result['params'],
             'register_type_id'=>$result['register_type_id'],
          ]);
          DB::commit();
@@ -111,6 +117,9 @@ class RequisiteController extends Controller
              'description'=>$result['description'],
              'father_code'=>$result['father_code'],
              'to_approve'=>$result['to_approve'],
+             'mandatory'=>$result['mandatory'],
+             'type'=>$result['type'],
+             'params'=>$result['params'],
              'register_type_id'=>$result['register_type_id'],
            ]);
          } else {
@@ -120,6 +129,9 @@ class RequisiteController extends Controller
           $requisite->description = $result['description'];
           $requisite->father_code = $result['father_code'];
           $requisite->to_approve = $result['to_approve'];
+          $requisite->mandatory = $result['mandatory'];
+          $requisite->type = $result['type'];
+          $requisite->params = $result['params'];
           $requisite->register_type_id = $result['register_type_id'];
           $requisite->save();
          }

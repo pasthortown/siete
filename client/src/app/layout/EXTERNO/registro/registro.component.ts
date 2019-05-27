@@ -2784,7 +2784,6 @@ export class RegistroComponent implements OnInit {
                nombreDivision = tariffTypeChild.name;
                const tariff = new Tariff();
                tariff.tariff_type_id = tariffTypeChild.id;
-               tariff.id_ruc = this.ruc_registro_selected.ruc.id;
                tariff.price = 0;
                tariff.capacity_type_id = capacity.capacity_type_id;
                const today = new Date();

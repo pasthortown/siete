@@ -12,7 +12,7 @@ class CapacityType extends Model
      * @var array
      */
     protected $fillable = [
-       'name','description','bed_quantity','is_island','spaces',
+       'name','description','bed_quantity','is_island','spaces','editable_beds','editable_spaces',
     ];
 
     /**
@@ -24,9 +24,9 @@ class CapacityType extends Model
        
     ];
 
-    function Tariffs()
+    function Tariff()
     {
-       return $this->belongsToMany('App\Tariff')->withTimestamps();
+       return $this->belongsTo('App\Tariff');
     }
 
     function Capacity()
