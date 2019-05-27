@@ -2222,8 +2222,8 @@ export class RegistroComponent implements OnInit {
      }).catch( e => { console.log(e); });
   }
 
-  getTarifarioRack(idRuc: number) {
-   this.registerDataService.get_tarifario(idRuc).then( r => {
+  getTarifarioRack(register_id: number) {
+   this.registerDataService.get_tarifario(register_id).then( r => {
       this.tarifarioResponse = r as Tariff[];
       let max_year = 0;
       this.tarifarioResponse.forEach(element => {
@@ -2566,7 +2566,7 @@ export class RegistroComponent implements OnInit {
        this.rucEstablishmentRegisterSelected.complementary_service_foods_on_register = r.complementary_service_foods_on_register as ComplementaryServiceFood[];
        this.rucEstablishmentRegisterSelected.capacities_on_register = r.capacities_on_register as Capacity[];
        this.calcSpaces();
-       this.getTarifarioRack(this.ruc_registro_selected.ruc.id);
+       this.getTarifarioRack(register.id);
        this.getCategories();
        this.getAllowedInfo();
        this.alowed_capacity_types = [];
