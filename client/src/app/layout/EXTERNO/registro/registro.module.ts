@@ -18,7 +18,6 @@ import { CKEditorModule } from 'ngx-ckeditor';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgxBarcodeModule } from 'ngx-barcode';
 import { NgxQRCodeModule } from 'ngx-qrcode2';
-
 import { WorkerService } from 'src/app/services/CRUD/BASE/worker.service';
 import { TaxPayerTypeService } from 'src/app/services/CRUD/BASE/taxpayertype.service';
 import { RucService } from 'src/app/services/CRUD/BASE/ruc.service';
@@ -48,6 +47,9 @@ import { DeclarationItemService } from 'src/app/services/CRUD/FINANCIERO/declara
 import { DeclarationItemCategoryService } from 'src/app/services/CRUD/FINANCIERO/declarationitemcategory.service';
 import { DeclarationService } from 'src/app/services/CRUD/FINANCIERO/declaration.service';
 import { Ng2TableModule } from 'ng2-table/ng2-table';
+
+import { ScrollToModule } from '@nicky-lenaers/ngx-scroll-to';
+
 @NgModule({
   imports: [CommonModule,
     CKEditorModule,
@@ -56,6 +58,7 @@ import { Ng2TableModule } from 'ng2-table/ng2-table';
     RegistroRoutingModule,
     NgxQRCodeModule,
     NgbModule,
+    ScrollToModule.forRoot(),
     Ng2TableModule,
     FormsModule],
   declarations: [RegistroComponent],

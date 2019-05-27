@@ -93,6 +93,11 @@ import { Router } from '@angular/router';
 export class RegistroComponent implements OnInit {
    @ViewChild('fotoFachadaInput') fotoFachadaInput;
    @ViewChild('EstablishmentCertificationAttachedFile') EstablishmentCertificationAttachedFile;
+   @ViewChild('pasos') pasosTabSet;
+   @ViewChild('pasosSuperiores') pasosSuperioresTabSet;
+   
+   tabActive = 'paso1';
+   tabActiveSuperior = 'tab1';
 
    //PAGOS
    tarifarioResponse: Tariff[] = [];
@@ -313,6 +318,14 @@ export class RegistroComponent implements OnInit {
    const filteredData = this.changeFilterPays(this.dataPays, this.config);
    const sortedData = this.changeSortPays(filteredData, this.config);
    this.rowsPays = page && config.paging ? this.changePagePays(page, sortedData) : sortedData;
+  }
+
+  changeTabActive(event) {
+   this.tabActive = event.nextId;
+  }
+
+  changeTabActiveSuperior(event) {
+   this.tabActiveSuperior = event.nextId;
   }
 
   validateNombreComercial() {
@@ -1158,6 +1171,10 @@ export class RegistroComponent implements OnInit {
       };
    }
   }
+  
+  scroll(el: HTMLElement) {
+   el.scrollIntoView({behavior: 'smooth'});
+  }
 
   borrarNombramiento() {
    this.ruc_registro_selected.ruc.person_representative_attachment.person_representative_attachment_file = '';
@@ -1757,64 +1774,30 @@ export class RegistroComponent implements OnInit {
          return;
       }
    }
-   if (this.certificadoUsoSuelo.id == 0 || typeof this.certificadoUsoSuelo.id == 'undefined') {
-      this.floorAuthorizationCertificateDataService.post(this.certificadoUsoSuelo).then( rsuelo => {
-         const newCertificadoUsoSuelo = rsuelo as FloorAuthorizationCertificate;
-         this.establishment_selected.floor_authorization_certificate_id = newCertificadoUsoSuelo.id;
-         this.establishmentDataService.register_establishment_data(this.establishment_selected).then( r => {
-            this.guardando = false;
-            if ( r === '0' ) {
-               this.toastr.errorToastr('Existe conflicto con el correo de la persona de contacto ingresada.', 'Nuevo');
-               return;
-            }
-            this.establishment_declarations_selected.id = r.id;
-            if (typeof this.establishment_selected_picture.id === 'undefined') {
-               this.establishment_selected_picture.establishment_id = r.id;
-               this.establishmentPictureDataService.post(this.establishment_selected_picture).then( r => {
-                  this.selectRegisterEstablishment(this.establishment_selected);
-                  this.toastr.successToastr('Datos guardados satisfactoriamente.', 'Nuevo');
-               }).catch( e => console.log(e) );
-            } else {
-               this.establishmentPictureDataService.put(this.establishment_selected_picture).then( r => {
-                  this.selectRegisterEstablishment(this.establishment_selected);
-                  this.toastr.successToastr('Datos guardados satisfactoriamente.', 'Nuevo');
-               }).catch( e => console.log(e) );
-            }
-         }).catch( e => {
-            this.guardando = false;
-            this.toastr.errorToastr('Existe conflicto con la información ingresada.', 'Nuevo');
-            return;
-         });
-      }).catch( e => { console.log(e); });
-   } else {
-      this.floorAuthorizationCertificateDataService.put(this.certificadoUsoSuelo).then( rsuelo => {
-         this.establishment_selected.floor_authorization_certificate_id = this.certificadoUsoSuelo.id;
-         this.establishmentDataService.register_establishment_data(this.establishment_selected).then( r => {
-            this.guardando = false;
-            if ( r === '0' ) {
-               this.toastr.errorToastr('Existe conflicto con el correo de la persona de contacto ingresada.', 'Nuevo');
-               return;
-            }
-            this.establishment_declarations_selected.id = r.id;
-            if (typeof this.establishment_selected_picture.id === 'undefined') {
-               this.establishment_selected_picture.establishment_id = r.id;
-               this.establishmentPictureDataService.post(this.establishment_selected_picture).then( r => {
-                  this.selectRegisterEstablishment(this.establishment_selected);
-                  this.toastr.successToastr('Datos guardados satisfactoriamente.', 'Nuevo');
-               }).catch( e => console.log(e) );
-            } else {
-               this.establishmentPictureDataService.put(this.establishment_selected_picture).then( r => {
-                  this.selectRegisterEstablishment(this.establishment_selected);
-                  this.toastr.successToastr('Datos guardados satisfactoriamente.', 'Nuevo');
-               }).catch( e => console.log(e) );
-            }
-         }).catch( e => {
-            this.guardando = false;
-            this.toastr.errorToastr('Existe conflicto con la información ingresada.', 'Nuevo');
-            return;
-         });
-      }).catch( e => { console.log(e); });
-   }
+   this.establishmentDataService.register_establishment_data(this.establishment_selected).then( r => {
+      this.guardando = false;
+      if ( r === '0' ) {
+         this.toastr.errorToastr('Existe conflicto con el correo de la persona de contacto ingresada.', 'Nuevo');
+         return;
+      }
+      this.establishment_declarations_selected.id = r.id;
+      if (typeof this.establishment_selected_picture.id === 'undefined') {
+         this.establishment_selected_picture.establishment_id = r.id;
+         this.establishmentPictureDataService.post(this.establishment_selected_picture).then( r => {
+            this.selectRegisterEstablishment(this.establishment_selected);
+            this.toastr.successToastr('Datos guardados satisfactoriamente.', 'Nuevo');
+         }).catch( e => console.log(e) );
+      } else {
+         this.establishmentPictureDataService.put(this.establishment_selected_picture).then( r => {
+            this.selectRegisterEstablishment(this.establishment_selected);
+            this.toastr.successToastr('Datos guardados satisfactoriamente.', 'Nuevo');
+         }).catch( e => console.log(e) );
+      }
+   }).catch( e => {
+      this.guardando = false;
+      this.toastr.errorToastr('Existe conflicto con la información ingresada.', 'Nuevo');
+      return;
+   });
   }
 
   newRegisterRecord() {
@@ -2278,6 +2261,7 @@ export class RegistroComponent implements OnInit {
       this.checkCedulaEstablishment();
       this.checkTelefonoPrincipalContactoEstablecimiento();
       this.checkTelefonoSecundarioContactoEstablecimiento();
+      this.validateNombreFranquiciaCadena();
       this.checkEmailContactEstablishment();
       this.buildWorkerGroups();
       this.establishment_selected.workers_on_establishment = r.workers_on_establishment as Worker[];
@@ -2833,14 +2817,26 @@ export class RegistroComponent implements OnInit {
             }
          }
       });
-      this.rucEstablishmentRegisterSelected.total_spaces += (capacity.max_spaces * capacity.quantity);
+      this.rucEstablishmentRegisterSelected.total_spaces += capacity.max_spaces;
       this.rucEstablishmentRegisterSelected.total_habitations += capacity.quantity;
       this.rucEstablishmentRegisterSelected.total_beds += (capacity.max_bed * capacity.quantity);
    });
   }
 
   checkValuesTariffs() {
-     console.log(this.tarifarioRack);
+     this.tarifarioRack.valores.forEach(valor => {
+        valor.tariffs.forEach(tariff => {
+           if (!tariff.isReference) {
+            valor.tariffs.forEach(tariff2 => {
+               if( tariff !== tariff2) {
+                  if (tariff.nombreDivision == tariff2.nombreDivision) {
+                     tariff.tariff.price = tariff2.tariff.price / tariff2.plazasHabitacion;
+                  }
+               }
+            });
+           }
+        });
+     });
   }
 
   calcBeds(capacity: Capacity) {
