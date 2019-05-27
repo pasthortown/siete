@@ -1302,20 +1302,17 @@
                                     </select>
                                   </td>
                                   <td>
-                                      <input type="number" class="form-control" min="0" max="9999" id="count_space" name="count_space" (input)="calcSpaces()"
+                                      <input type="number" class="form-control" min="0" max="9999" id="count_space" name="count_space" (input)="calcSpaces(capacity)"
                                       placeholder="Cantidad" [(ngModel)]="capacity.quantity" [disabled]="!rucEstablishmentRegisterSelected.editable"/>
                                   </td>
                                   <td>
                                     <div class="col-12">
-                                        <input type="number" class="form-control" min="0" max="9999" id="count_camas" name="count_camas" (input)="calcSpaces()"
+                                        <input type="number" class="form-control" min="0" max="9999" id="count_camas" name="count_camas" (input)="calcSpaces(capacity)"
                                         placeholder="Cantidad de Camas" [(ngModel)]="capacity.max_bed" [disabled]="!rucEstablishmentRegisterSelected.editable || !capacity.editable_beds"/>
                                     </div>
                                   </td>
                                   <td>
-                                    <div class="col-12" *ngIf="!capacity.editable">
-                                      <strong>{{capacity.max_spaces * capacity.quantity}}</strong>
-                                    </div>
-                                    <div class="col-12" *ngIf="capacity.editable">
+                                    <div class="col-12">
                                         <input type="number" class="form-control" min="0" max="9999" id="count_plazas" name="count_plazas" (input)="calcSpaces()"
                                         placeholder="Cantidad de Plazas" [(ngModel)]="capacity.max_spaces" [disabled]="!rucEstablishmentRegisterSelected.editable || !capacity.editable_spaces"/>
                                     </div>
@@ -1373,7 +1370,7 @@
                                               <span class="input-group-text" id="basic-addon1">USD</span>
                                             </div>
                                             <input type="number" class="form-control" min="0" step="0.01" id="low_capacity_room_price"
-                                          name="low_capacity_room_price" [(ngModel)]="tariff.tariff.price" placeholder="Precio" [disabled]="!rucEstablishmentRegisterSelected.editable"/>
+                                          name="low_capacity_room_price" (input)="checkValuesTariffs()" [(ngModel)]="tariff.tariff.price" placeholder="Precio" [disabled]="!rucEstablishmentRegisterSelected.editable || !tariff.isReference"/>
                                           </div>
                                     </td>
                                   </tr>

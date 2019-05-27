@@ -1658,6 +1658,8 @@ export class RegistroComponent implements OnInit {
             capacity.editable = true;
          } else {
             capacity.editable = false;
+            capacity.editable_beds = capacityType.editable_beds;
+            capacity.editable_spaces = capacityType.editable_spaces;
          }
       }
    });
@@ -2765,7 +2767,24 @@ export class RegistroComponent implements OnInit {
    this.calcSpaces();
   }
 
-  calcSpaces() {
+  calcSpaces(capacity?) {
+   if(typeof capacity !== 'undefined') {
+      this.alowed_capacity_types.forEach(capacityType => {
+         if (capacityType.id == capacity.capacity_type_id) {
+            if (capacityType.editable_spaces) {
+               capacity.max_spaces = 0;
+            } else {
+               capacity.max_spaces = capacityType.spaces * capacity.quantity;
+            }
+            if (capacity.max_bed > capacityType.bed_quantity){
+               capacity.max_bed = capacityType.bed_quantity;
+            }
+            if (capacity.max_bed == 0){
+               capacity.max_bed = 1;
+            }
+         }
+      });
+   }
    this.rucEstablishmentRegisterSelected.total_spaces = 0;
    this.rucEstablishmentRegisterSelected.total_habitations = 0;
    this.rucEstablishmentRegisterSelected.total_beds = 0;
@@ -2780,6 +2799,13 @@ export class RegistroComponent implements OnInit {
          let idTipoCapacidad = capacity.capacity_type_id;
          this.tarifas.forEach(tariffType => {
             tariffType.childs.forEach(tariffTypeChild => {
+               const es_referencia = tariffType.father.is_reference;
+               let plazasHabitacion = 0;
+               this.alowed_capacity_types.forEach(capacityType => {
+                  if (capacityType.id == idTipoCapacidad) {
+                     plazasHabitacion = capacityType.spaces;
+                  }
+               });
                let nombreDivision = '';
                nombreDivision = tariffTypeChild.name;
                const tariff = new Tariff();
@@ -2788,7 +2814,7 @@ export class RegistroComponent implements OnInit {
                tariff.capacity_type_id = capacity.capacity_type_id;
                const today = new Date();
                tariff.year = today.getFullYear();
-               let newChild = {nombreDivision: nombreDivision, tariff: tariff, isReference: tariffTypeChild.is_reference, padre:'',hijo:''};
+               let newChild = {nombreDivision: nombreDivision, tariff: tariff, isReference: es_referencia, plazasHabitacion: plazasHabitacion};
                childs.push(newChild);
             });
          });
@@ -2811,6 +2837,10 @@ export class RegistroComponent implements OnInit {
       this.rucEstablishmentRegisterSelected.total_habitations += capacity.quantity;
       this.rucEstablishmentRegisterSelected.total_beds += (capacity.max_bed * capacity.quantity);
    });
+  }
+
+  checkValuesTariffs() {
+     console.log(this.tarifarioRack);
   }
 
   calcBeds(capacity: Capacity) {
