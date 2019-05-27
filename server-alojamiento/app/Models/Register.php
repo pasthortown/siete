@@ -54,4 +54,14 @@ class Register extends Model
        return $this->belongsToMany('App\ComplementaryServiceFood')->withTimestamps();
     }
 
+    function ApprovalState()
+    {
+       return $this->belongsTo('App\ApprovalState');
+    }
+
+    function Tariff()
+    {
+       return $this->belongsTo('App\Tariff');
+    }
+
 }

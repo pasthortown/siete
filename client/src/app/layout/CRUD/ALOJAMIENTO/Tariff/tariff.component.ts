@@ -10,6 +10,9 @@ import { TariffType } from './../../../../models/ALOJAMIENTO/TariffType';
 import { CapacityTypeService } from './../../../../services/CRUD/ALOJAMIENTO/capacitytype.service';
 import { CapacityType } from './../../../../models/ALOJAMIENTO/CapacityType';
 
+import { RegisterService } from './../../../../services/CRUD/ALOJAMIENTO/register.service';
+import { Register } from './../../../../models/ALOJAMIENTO/Register';
+
 
 @Component({
    selector: 'app-tariff',
@@ -26,17 +29,20 @@ export class TariffComponent implements OnInit {
    recordsByPage = 5;
    tariff_types: TariffType[] = [];
    capacity_types: CapacityType[] = [];
+   registers: Register[] = [];
    constructor(
                private modalService: NgbModal,
                private toastr: ToastrManager,
                private tariff_typeDataService: TariffTypeService,
                private capacity_typeDataService: CapacityTypeService,
+               private registerDataService: RegisterService,
                private tariffDataService: TariffService) {}
 
    ngOnInit() {
       this.goToPage(1);
       this.getTariffType();
       this.getCapacityType();
+      this.getRegister();
    }
 
    selectTariff(tariff: Tariff) {
@@ -57,6 +63,13 @@ export class TariffComponent implements OnInit {
       }).catch( e => console.log(e) );
    }
 
+   getRegister() {
+      this.registers = [];
+      this.registerDataService.get().then( r => {
+         this.registers = r as Register[];
+      }).catch( e => console.log(e) );
+   }
+
    goToPage(page: number) {
       if ( page < 1 || page > this.lastPage ) {
          this.toastr.errorToastr('La página solicitada no existe.', 'Error');
@@ -71,6 +84,7 @@ export class TariffComponent implements OnInit {
       this.tariffSelected = new Tariff();
       this.tariffSelected.tariff_type_id = 0;
       this.tariffSelected.capacity_type_id = 0;
+      this.tariffSelected.register_id = 0;
       this.tariffDataService.get_paginate(this.recordsByPage, this.currentPage).then( r => {
          this.tariffs = r.data as Tariff[];
          this.lastPage = r.last_page;
@@ -81,6 +95,7 @@ export class TariffComponent implements OnInit {
       this.tariffSelected = new Tariff();
       this.tariffSelected.tariff_type_id = 0;
       this.tariffSelected.capacity_type_id = 0;
+      this.tariffSelected.register_id = 0;
       this.openDialog(content);
    }
 
@@ -115,9 +130,9 @@ export class TariffComponent implements OnInit {
    toCSV() {
       this.tariffDataService.get().then( r => {
          const backupData = r as Tariff[];
-         let output = 'id;price;year;id_ruc;tariff_type_id;capacity_type_id\n';
+         let output = 'id;price;year;tariff_type_id;capacity_type_id;register_id\n';
          backupData.forEach(element => {
-            output += element.id; + element.price + ';' + element.year + ';' + element.id_ruc + ';' + element.tariff_type_id + ';' + element.capacity_type_id + '\n';
+            output += element.id; + element.price + ';' + element.year + ';' + element.tariff_type_id + ';' + element.capacity_type_id + ';' + element.register_id + '\n';
          });
          const blob = new Blob([output], { type: 'text/plain' });
          const fecha = new Date();

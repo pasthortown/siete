@@ -83,6 +83,7 @@ import { AgreementService } from 'src/app/services/CRUD/BASE/agreement.service';
 import { EstablishmentPictureService } from 'src/app/services/CRUD/BASE/establishmentpicture.service';
 import { EstablishmentCertificationAttachmentService } from 'src/app/services/CRUD/BASE/establishmentcertificationattachment.service';
 import { RegisterService } from 'src/app/services/CRUD/ALOJAMIENTO/register.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-registro',
@@ -108,6 +109,7 @@ export class RegistroComponent implements OnInit {
    actividadSelected = '-';
    regiones = [];
    regionSelectedCode = '-';
+   franchiseChainNameValidated = false;
 
   //DATOS RUC
   certificadoUsoSuelo: FloorAuthorizationCertificate = new FloorAuthorizationCertificate();
@@ -269,6 +271,7 @@ export class RegistroComponent implements OnInit {
               private systemNameDataService: SystemNameService,
               private genderDataService: GenderService,
               private workerGroupDataService: WorkerGroupService,
+              private router: Router,
               private capacityTypeDataService: CapacityTypeService,
               private establishment_certification_typeDataService: EstablishmentCertificationTypeService,
               private establishment_property_typeDataService: EstablishmentPropertyTypeService,
@@ -310,6 +313,44 @@ export class RegistroComponent implements OnInit {
    const filteredData = this.changeFilterPays(this.dataPays, this.config);
    const sortedData = this.changeSortPays(filteredData, this.config);
    this.rowsPays = page && config.paging ? this.changePagePays(page, sortedData) : sortedData;
+  }
+
+  validateNombreComercial() {
+     let toReturn = true;
+     const textoAValidar = this.establishment_selected.commercially_known_name.toUpperCase();
+     if(this.establishment_selected.commercially_known_name.length < 1) {
+         toReturn = false;
+         this.establishmentComercialNameValidated = toReturn;
+         return;
+     } 
+     let errorEnNombreDetectado = false;
+     this.register_types.forEach(register_type => {
+        const nombre = register_type.name.toUpperCase();
+        if (textoAValidar.search(nombre + ' ') !== -1 && !errorEnNombreDetectado) {
+         errorEnNombreDetectado = true;
+         toReturn = false;
+        }
+     });
+     this.establishmentComercialNameValidated = toReturn;
+  }
+
+  validateNombreFranquiciaCadena() {
+   let toReturn = true;
+   const textoAValidar = this.establishment_selected.commercially_known_name.toUpperCase();
+   if(this.establishment_selected.commercially_known_name.length < 1) {
+       toReturn = false;
+       this.franchiseChainNameValidated = toReturn;
+       return;
+   } 
+   let errorEnNombreDetectado = false;
+   this.register_types.forEach(register_type => {
+      const nombre = register_type.name.toUpperCase();
+      if (textoAValidar.search(nombre + ' ') !== -1 && !errorEnNombreDetectado) {
+       errorEnNombreDetectado = true;
+       toReturn = false;
+      }
+   });
+   this.franchiseChainNameValidated = toReturn;
   }
 
   changeFilterPays(data: any, config: any): any {
@@ -378,11 +419,11 @@ export class RegistroComponent implements OnInit {
 
   buildDataTablePays() {
      this.columnsPays = [
-        {title: 'Número de Establecimiento', name: 'code', filtering: {filterString: '', placeholder: 'Buscar por Número de Establecimiento'}},
-        {title: 'Estado', name: 'state', filtering: {filterString: '', placeholder: 'Buscar por Estado'}},
+        {title: 'Código', name: 'code'},
+        {title: 'Estado', name: 'state'},
         {title: 'Valor Pagado', name: 'amount_payed'},
         {title: 'Valor a Pagar', name: 'amount_to_pay'},
-        {title: 'Fecha de Pago', name: 'pay_date', filtering: {filterString: '', placeholder: 'Buscar por Fecha de Pago'}}
+        {title: 'Fecha de Pago', name: 'pay_date'}
      ];
      const data = [];
      this.pays.forEach(item => {
@@ -503,9 +544,9 @@ export class RegistroComponent implements OnInit {
   buildDataTableEstablishment() {
      this.columnsEstablishment = [
         {title: 'Seleccionado', name: 'selected'},
-        {title: 'Código', name: 'code', filtering: {filterString: '', placeholder: 'Buscar por Código'}},
-        {title: 'Dirección', name: 'address', filtering: {filterString: '', placeholder: 'Buscar por Dirección'}},
-        {title: 'Nombre Comercial', name: 'name', filtering: {filterString: '', placeholder: 'Buscar por Nombre Comercial'}},
+        {title: 'Número de Establecimiento', name: 'code'},
+        {title: 'Dirección', name: 'address'},
+        {title: 'Nombre Comercial', name: 'name'},
      ];
      const data = [];
      this.ruc_registro_selected.ruc.establishments.forEach(item => {
@@ -652,11 +693,11 @@ export class RegistroComponent implements OnInit {
      this.columnsRegister = [
         {title: 'Seleccionado', name: 'selected'},
         {title: 'Días en Espera', name: 'date_assigment_alert'},
-        {title: 'Código del Establecimiento', name: 'establishment_code', filtering: {filterString: '', placeholder: 'Buscar por Código del Establecimiento'}},
-        {title: 'Ubicación del Establecimiento', name: 'address', filtering: {filterString: '', placeholder: 'Buscar por Ubicación del Establecimiento'}},
-        {title: 'Código del Registro', name: 'register_code', filtering: {filterString: '', placeholder: 'Buscar por Código del Registro'}},
-        {title: 'Categoría', name: 'register_type', filtering: {filterString: '', placeholder: 'Buscar por Categoría'}},
-        {title: 'Estado', name: 'state', filtering: {filterString: '', placeholder: 'Buscar por Estado'}},
+        {title: 'Código del Establecimiento', name: 'establishment_code'},
+        {title: 'Ubicación del Establecimiento', name: 'address'},
+        {title: 'Código del Registro', name: 'register_code'},
+        {title: 'Categoría', name: 'register_type'},
+        {title: 'Estado', name: 'state'},
         {title: 'Observaciones', name: 'notes'},
      ];
      const data = []; 
@@ -1356,6 +1397,10 @@ export class RegistroComponent implements OnInit {
   }
 
   guardarRegistro() {
+   if (this.certificadoUsoSuelo.floor_authorization_certificate_file === ''){
+      this.toastr.errorToastr('Debe cargar el certificado de uso de suelo.', 'Nuevo');
+      return;
+   }
    this.guardando = true;
    const tariffs: Tariff[] = [];
    this.tarifarioRack.valores.forEach(tarifRackValor => {
@@ -1367,6 +1412,8 @@ export class RegistroComponent implements OnInit {
    this.registerDataService.register_register_data(this.rucEstablishmentRegisterSelected).then( r => {
       this.guardando = false;
       this.refresh();
+      this.toastr.successToastr('Solicitud de Registro Enviada, Satisfactoriamente.', 'Nuevo');
+      this.router.navigate(['/main']);
    }).catch( e => {
       this.guardando = false;
       this.toastr.errorToastr('Existe conflicto la información proporcionada.', 'Nuevo');
@@ -1611,6 +1658,8 @@ export class RegistroComponent implements OnInit {
             capacity.editable = true;
          } else {
             capacity.editable = false;
+            capacity.editable_beds = capacityType.editable_beds;
+            capacity.editable_spaces = capacityType.editable_spaces;
          }
       }
    });
@@ -1677,10 +1726,6 @@ export class RegistroComponent implements OnInit {
   }
 
   guardarEstablecimiento() {
-   /*if (this.certificadoUsoSuelo.floor_authorization_certificate_file === ''){
-      this.toastr.errorToastr('Debe cargar el certificado de uso de suelo.', 'Nuevo');
-      return;
-   }*/
    if (!this.validateWorkers()) {
       this.toastr.errorToastr('Existe conflicto con la información ingresada referente a los Trabajadores en el Establecimiento.', 'Nuevo');
       return;
@@ -1705,6 +1750,10 @@ export class RegistroComponent implements OnInit {
    } else {
       if (this.establishment_selected.franchise_chain_name == '') {
          this.toastr.errorToastr('Escriba el nombre de la Franquicia o Cadena', 'Nuevo');
+         return;
+      }
+      if (!this.franchiseChainNameValidated) {
+         this.toastr.errorToastr('El nombre de la Franquicia o Cadena es Incorrecto', 'Nuevo');
          return;
       }
    }
@@ -2109,15 +2158,6 @@ export class RegistroComponent implements OnInit {
    return this.urlwebEstablishmentValidated;
   }
 
-  checkEstablishmentComercialName(): Boolean {
-   if(this.establishment_selected.commercially_known_name.length < 1) {
-      this.establishmentComercialNameValidated = false;
-      return false;
-   }
-   this.establishmentComercialNameValidated = true;
-   return true;
-  }
-
   checkEstablishmentAddress(): Boolean {
    if(this.establishment_selected.address_main_street === '' || this.establishment_selected.address_number === '' || this.establishment_selected.address_secondary_street === '') {
       this.addressEstablishmentValidated = false;
@@ -2184,8 +2224,8 @@ export class RegistroComponent implements OnInit {
      }).catch( e => { console.log(e); });
   }
 
-  getTarifarioRack(idRuc: number) {
-   this.registerDataService.get_tarifario(idRuc).then( r => {
+  getTarifarioRack(register_id: number) {
+   this.registerDataService.get_tarifario(register_id).then( r => {
       this.tarifarioResponse = r as Tariff[];
       let max_year = 0;
       this.tarifarioResponse.forEach(element => {
@@ -2233,7 +2273,7 @@ export class RegistroComponent implements OnInit {
       this.recoverUbication();
       this.checkEstablishmentAddress();
       this.checkURLWeb();
-      this.checkEstablishmentComercialName();
+      this.validateNombreComercial();
       this.establishment_selected.contact_user = r.contact_user as User;
       this.checkCedulaEstablishment();
       this.checkTelefonoPrincipalContactoEstablecimiento();
@@ -2305,6 +2345,7 @@ export class RegistroComponent implements OnInit {
     this.establishment_selected.workers_on_establishment = this.getEstablishmentWorkerGroup();
     this.mostrarDataEstablishment = true;
     this.cedulaEstablishmentContactData = '';
+    this.rucEstablishmentRegisterSelected.editable = true;
     this.certificadoUsoSuelo = new FloorAuthorizationCertificate();
     this.getCantonesEstablishment();
     this.declarations = [];
@@ -2527,7 +2568,7 @@ export class RegistroComponent implements OnInit {
        this.rucEstablishmentRegisterSelected.complementary_service_foods_on_register = r.complementary_service_foods_on_register as ComplementaryServiceFood[];
        this.rucEstablishmentRegisterSelected.capacities_on_register = r.capacities_on_register as Capacity[];
        this.calcSpaces();
-       this.getTarifarioRack(this.ruc_registro_selected.ruc.id);
+       this.getTarifarioRack(register.id);
        this.getCategories();
        this.getAllowedInfo();
        this.alowed_capacity_types = [];
@@ -2726,7 +2767,24 @@ export class RegistroComponent implements OnInit {
    this.calcSpaces();
   }
 
-  calcSpaces() {
+  calcSpaces(capacity?) {
+   if(typeof capacity !== 'undefined') {
+      this.alowed_capacity_types.forEach(capacityType => {
+         if (capacityType.id == capacity.capacity_type_id) {
+            if (capacityType.editable_spaces) {
+               capacity.max_spaces = 0;
+            } else {
+               capacity.max_spaces = capacityType.spaces * capacity.quantity;
+            }
+            if (capacity.max_bed > capacityType.bed_quantity){
+               capacity.max_bed = capacityType.bed_quantity;
+            }
+            if (capacity.max_bed == 0){
+               capacity.max_bed = 1;
+            }
+         }
+      });
+   }
    this.rucEstablishmentRegisterSelected.total_spaces = 0;
    this.rucEstablishmentRegisterSelected.total_habitations = 0;
    this.rucEstablishmentRegisterSelected.total_beds = 0;
@@ -2741,16 +2799,22 @@ export class RegistroComponent implements OnInit {
          let idTipoCapacidad = capacity.capacity_type_id;
          this.tarifas.forEach(tariffType => {
             tariffType.childs.forEach(tariffTypeChild => {
+               const es_referencia = tariffType.father.is_reference;
+               let plazasHabitacion = 0;
+               this.alowed_capacity_types.forEach(capacityType => {
+                  if (capacityType.id == idTipoCapacidad) {
+                     plazasHabitacion = capacityType.spaces;
+                  }
+               });
                let nombreDivision = '';
                nombreDivision = tariffTypeChild.name;
                const tariff = new Tariff();
                tariff.tariff_type_id = tariffTypeChild.id;
-               tariff.id_ruc = this.ruc_registro_selected.ruc.id;
                tariff.price = 0;
                tariff.capacity_type_id = capacity.capacity_type_id;
                const today = new Date();
                tariff.year = today.getFullYear();
-               let newChild = {nombreDivision: nombreDivision, tariff: tariff, isReference: tariffTypeChild.is_reference, padre:'',hijo:''};
+               let newChild = {nombreDivision: nombreDivision, tariff: tariff, isReference: es_referencia, plazasHabitacion: plazasHabitacion};
                childs.push(newChild);
             });
          });
@@ -2762,6 +2826,8 @@ export class RegistroComponent implements OnInit {
       capacity.editable = false;
       this.alowed_capacity_types.forEach(capacityType => {
          if (capacityType.id == capacity.capacity_type_id) {
+            capacity.editable_beds = capacityType.editable_beds;
+            capacity.editable_spaces = capacityType.editable_spaces;
             if (capacityType.spaces == 999) {
                capacity.editable = true;
             }
@@ -2771,6 +2837,10 @@ export class RegistroComponent implements OnInit {
       this.rucEstablishmentRegisterSelected.total_habitations += capacity.quantity;
       this.rucEstablishmentRegisterSelected.total_beds += (capacity.max_bed * capacity.quantity);
    });
+  }
+
+  checkValuesTariffs() {
+     console.log(this.tarifarioRack);
   }
 
   calcBeds(capacity: Capacity) {

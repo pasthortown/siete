@@ -45,7 +45,7 @@
     <div class="row">
       <div class="col-12">
         <ngb-tabset>
-          <ngb-tab title="Información de la Persona Natural/Jurídica" id="tab1">
+          <ngb-tab title="Paso I. Información de la Persona Natural/Jurídica" id="tab1">
             <ng-template ngbTabContent>
               <div class="row mt-3">
                 <h4 class="col-12">
@@ -329,7 +329,7 @@
               </div>
             </ng-template>
           </ngb-tab>
-          <ngb-tab title="Información del Establecimiento" id="tab2" *ngIf="rucSaved() && SRIOK && REGCIVILOK">
+          <ngb-tab title="Paso II. Información del Establecimiento" id="tab2" *ngIf="rucSaved() && SRIOK && REGCIVILOK">
             <ng-template ngbTabContent>
               <div class="row mt-3">
                 <h4 class="col-12">
@@ -414,7 +414,7 @@
                                           <label>Nombre Comercial*</label><span *ngIf="!establishmentComercialNameValidated"
                                             class="ml-2 badge badge-danger">Incorrecto</span>
                                           <input type="text" class="form-control" id="commercially_known_name"
-                                            name="commercially_known_name" (keyup)="checkEstablishmentComercialName()"
+                                            name="commercially_known_name" (keyup)="validateNombreComercial()"
                                             placeholder="Nombre Comercial" [(ngModel)]="
                                               establishment_selected.commercially_known_name
                                             " [disabled]="!rucEstablishmentRegisterSelected.editable"/>
@@ -440,10 +440,10 @@
                                     </div>
                                     <div class="col-9" *ngIf="establishment_selected.ruc_name_type_id > 1">
                                       <div class="form-group">
-                                        <label>Nombre de la Franquicia o Cadena*</label><span *ngIf="establishment_selected.franchise_chain_name === ''"
+                                        <label>Nombre de la Franquicia o Cadena*</label><span *ngIf="!franchiseChainNameValidated"
                                           class="ml-2 badge badge-danger">Incorrecto</span>
                                         <input type="text" class="form-control" id="franchise_chain_name"
-                                          name="franchise_chain_name"
+                                          name="franchise_chain_name" (keyup)="validateNombreFranquiciaCadena()"
                                           placeholder="Nombre de la Franquicia o Cadena" [(ngModel)]="
                                             establishment_selected.franchise_chain_name
                                           " [disabled]="!rucEstablishmentRegisterSelected.editable"/>
@@ -804,37 +804,6 @@
                                           </tr>
                                         </tbody>
                                       </table>
-                                    </div>
-                                  </div>        
-                                  <div class="row" *ngIf="false">
-                                    <div class="col-12">
-                                        <div class="form-group">
-                                            <label>Certificado de Uso de Suelos*</label><span
-                                              *ngIf="certificadoUsoSuelo.floor_authorization_certificate_file === ''"
-                                              class="ml-2 badge badge-danger">Incorrecto</span>
-                                            <div class="input-group">
-                                              <div class="input-group-prepend">
-                                                <button
-                                                  [disabled]="certificadoUsoSuelo.floor_authorization_certificate_file === ''"
-                                                  type="button" title="Descargar Certificado" class="btn btn-primary" (click)="
-                                                        downloadFloorCertification()
-                                                      ">
-                                                  <i class="fas fa-download"></i>
-                                                </button>
-                                                <button
-                                                  [disabled]="certificadoUsoSuelo.floor_authorization_certificate_file === '' || !rucEstablishmentRegisterSelected.editable"
-                                                  type="button" title="Eliminar" class="btn btn-danger"
-                                                  (click)="borrarFloorCertificado()">
-                                                  <i class="fas fa-trash"></i>
-                                                </button>
-                                              </div>
-                                              <input type="file" class="form-control" [disabled]="!rucEstablishmentRegisterSelected.editable" (change)="
-                                                    CodificarArchivoFloorCertification(
-                                                      $event
-                                                    )
-                                                  " accept="application/pdf" />
-                                            </div>
-                                        </div>
                                     </div>
                                   </div>
                                   <div class="row mt-3">
@@ -1333,22 +1302,19 @@
                                     </select>
                                   </td>
                                   <td>
-                                      <input type="number" class="form-control" min="0" max="9999" id="count_space" name="count_space" (keyup)="calcSpaces()"
+                                      <input type="number" class="form-control" min="0" max="9999" id="count_space" name="count_space" (input)="calcSpaces(capacity)"
                                       placeholder="Cantidad" [(ngModel)]="capacity.quantity" [disabled]="!rucEstablishmentRegisterSelected.editable"/>
                                   </td>
                                   <td>
                                     <div class="col-12">
-                                        <input type="number" class="form-control" min="0" max="9999" id="count_camas" name="count_camas" (keyup)="calcSpaces()"
-                                        placeholder="Cantidad de Camas" [(ngModel)]="capacity.max_bed" [disabled]="!rucEstablishmentRegisterSelected.editable"/>
+                                        <input type="number" class="form-control" min="0" max="9999" id="count_camas" name="count_camas" (input)="calcSpaces(capacity)"
+                                        placeholder="Cantidad de Camas" [(ngModel)]="capacity.max_bed" [disabled]="!rucEstablishmentRegisterSelected.editable || !capacity.editable_beds"/>
                                     </div>
                                   </td>
                                   <td>
-                                    <div class="col-12" *ngIf="!capacity.editable">
-                                      <strong>{{capacity.max_spaces * capacity.quantity}}</strong>
-                                    </div>
-                                    <div class="col-12" *ngIf="capacity.editable">
-                                        <input type="number" class="form-control" min="0" max="9999" id="count_plazas" name="count_plazas" (keyup)="calcSpaces()"
-                                        placeholder="Cantidad de Plazas" [(ngModel)]="capacity.max_spaces" [disabled]="!rucEstablishmentRegisterSelected.editable"/>
+                                    <div class="col-12">
+                                        <input type="number" class="form-control" min="0" max="9999" id="count_plazas" name="count_plazas" (input)="calcSpaces()"
+                                        placeholder="Cantidad de Plazas" [(ngModel)]="capacity.max_spaces" [disabled]="!rucEstablishmentRegisterSelected.editable || !capacity.editable_spaces"/>
                                     </div>
                                   </td>
                                   <td>
@@ -1404,7 +1370,7 @@
                                               <span class="input-group-text" id="basic-addon1">USD</span>
                                             </div>
                                             <input type="number" class="form-control" min="0" step="0.01" id="low_capacity_room_price"
-                                          name="low_capacity_room_price" [(ngModel)]="tariff.tariff.price" placeholder="Precio" [disabled]="!rucEstablishmentRegisterSelected.editable"/>
+                                          name="low_capacity_room_price" (input)="checkValuesTariffs()" [(ngModel)]="tariff.tariff.price" placeholder="Precio" [disabled]="!rucEstablishmentRegisterSelected.editable || !tariff.isReference"/>
                                           </div>
                                     </td>
                                   </tr>
@@ -1418,8 +1384,8 @@
                               <label class="col-12 text-justify"><strong>Atención</strong></label><br />
                               Estimado Usuario, antes de continuar recuerde lo siguiente:<br/>
                               - Registrar la Tarifa de habitación por noche incluyendo IVA.<br/>
-                              - Reglamento de Alojamiento, Anexo A, Requisito 20: Exhibir el tarifario rack anual registrado ante la Autoridad Nacional de Turismo.<br/>
-                              - Reglamento de Alojamiento, Disposición General, Tercera: Los establecimientos de alojamiento turístico deberán informar a la Autoridad Nacional de Turismo hasta el primero de diciembre de cada año sobre las tarifas rack o mostrador del año siguiente. Estas considerarán el valor por huésped, por noche, por tipo de habitación y por temporada baja y alta, incluido impuestos; de no hacerlo la Autoridad Nacional de Turismo sancionará conforme a la normativa vigente.<br/>
+                              - Reglamento de Alojamiento, Anexo A, Requisito 20: Exhibir el tarifario rack anual registrado ante la autoridad nacional de turismo.<br/>
+                              - Reglamento de Alojamiento, Disposición General, Tercera: Los establecimientos de alojamiento turístico deberán informar a la autoridad nacional de turismo hasta el primero de diciembre de cada año sobre las tarifas rack o mostrador del año siguiente. Estas considerarán el valor por huésped, por noche, por tipo de habitación y por temporada baja y alta, incluido impuestos; de no hacerlo la autoridad nacional de turismo sancionará conforme a la normativa vigente.<br/>
                               - El formulario será enviado a su correo electrónico posterior a la validación correspondiente.<br/>
                             </div>
                           </div>
@@ -1433,7 +1399,7 @@
                         </div>
                         <div class="form-group"
                           *ngIf="categorySelectedCode !== '-' && rucEstablishmentRegisterSelected.register_type_id !== 0">
-                          <label>¿Su establecimiento cuenta con algún servicio complementario de alojamiento, por ejemplo: Restaurante, Cafetería, Bar, Sala de reuniones o uso múltiple, Sala de recepciones o banquetes?</label>
+                          <label>¿Su establecimiento cuenta con algún servicio de Alimentos y Venvidas complementario de alojamiento?</label>
                           <div class="col-12">
                             <label class="switch"><input type="checkbox" id="autorized_complementary_adventure_capacities"
                                 name="autorized_complementary_adventure_capacities" [(ngModel)]="
@@ -1496,7 +1462,7 @@
                                   <td>
                                     <input type="number" class="form-control" min="0" id="sillas" name="sillas"
                                       placeholder="Cantidad de Plazas"
-                                      [(ngModel)]="complementaryServiceFood.quantity_chairs" [disabled]="true"/>
+                                      [(ngModel)]="complementaryServiceFood.quantity_chairs"/>
                                   </td>
                                   <td>
                                     <button type="button" title="Eliminar" class="btn btn-danger"
@@ -1516,7 +1482,7 @@
                         </div>
                         <div class="form-group"
                           *ngIf="categorySelectedCode !== '-' && rucEstablishmentRegisterSelected.register_type_id !== 0">
-                          <label>¿Su establecimiento oferta alguna modalidad de turismo de aventura, dentro de sus instalaciones?</label>
+                          <label>¿Su establecimiento oferta alguna modalidad de turismo de aventura, dentro de sus linderos?</label>
                           <div class="col-12">
                             <label class="switch"><input type="checkbox" id="autorized_complementary_adventure_capacities"
                                 name="autorized_complementary_adventure_capacities" [(ngModel)]="
@@ -1537,7 +1503,7 @@
                                 </button>
                                 <button type="button" title="Agregar" class="btn btn-success"
                                   (click)="addComplementaryServiceType()" [disabled]="!rucEstablishmentRegisterSelected.editable">
-                                  <i class="fas fa-plus-circle"></i>
+                                  <i class="fas fa-save"></i>
                                 </button>
                               </div>
                               <select class="form-control" id="complementary_service_type_category_code"
@@ -1633,8 +1599,8 @@
                                             </tr>
                                             <tr>
                                               <td>
-                                                <label class="col-12 col-form-label mb-2"><strong>Idiomas de Atención en el
-                                                  Establecimiento</strong></label>
+                                                  <label>Idiomas de Atención en el
+                                                      Establecimiento</label>
                                               </td>
                                               <td>
                                                 <div class="form-group row">
@@ -1645,7 +1611,7 @@
                                                           <i class="fas fa-trash"></i>
                                                         </button>
                                                         <button type="button" title="Agregar" class="btn btn-success" (click)="addLanguage()">
-                                                          <i class="fas fa-plus-circle"></i>
+                                                          <i class="fas fa-save"></i>
                                                         </button>
                                                       </div>
                                                       <select class="form-control" id="language_id" name="language_id"
@@ -1675,6 +1641,37 @@
                                                       </tbody>
                                                     </table>
                                                   </div>
+                                                </div>
+                                              </td>
+                                            </tr>
+                                            <tr>
+                                              <td>
+                                                <label>Certificado de Uso de Suelos*</label><span
+                                                  *ngIf="certificadoUsoSuelo.floor_authorization_certificate_file === ''"
+                                                  class="ml-2 badge badge-danger">Incorrecto</span>
+                                              </td>
+                                              <td>
+                                                <div class="input-group">
+                                                  <div class="input-group-prepend">
+                                                    <button
+                                                      [disabled]="certificadoUsoSuelo.floor_authorization_certificate_file === ''"
+                                                      type="button" title="Descargar Certificado" class="btn btn-primary" (click)="
+                                                            downloadFloorCertification()
+                                                          ">
+                                                      <i class="fas fa-download"></i>
+                                                    </button>
+                                                    <button
+                                                      [disabled]="certificadoUsoSuelo.floor_authorization_certificate_file === '' || !rucEstablishmentRegisterSelected.editable"
+                                                      type="button" title="Eliminar" class="btn btn-danger"
+                                                      (click)="borrarFloorCertificado()">
+                                                      <i class="fas fa-trash"></i>
+                                                    </button>
+                                                  </div>
+                                                  <input type="file" class="form-control" [disabled]="!rucEstablishmentRegisterSelected.editable" (change)="
+                                                        CodificarArchivoFloorCertification(
+                                                          $event
+                                                        )
+                                                      " accept="application/pdf" />
                                                 </div>
                                               </td>
                                             </tr>

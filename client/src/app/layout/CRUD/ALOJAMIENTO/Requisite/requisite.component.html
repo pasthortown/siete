@@ -36,6 +36,8 @@
                <th>Grupo</th>
                <th>Cumplimiento para Aprobar</th>
                <th>Tipo de Registro</th>
+               <th>Obligatorio</th>
+               <th>Tipo HTML</th>
             </tr>
          </thead>
          <tbody>
@@ -53,6 +55,8 @@
                </td>
                <td>{{requisite.to_approve}}</td>
                <td>{{requisite.type_full_name}}</td>
+               <td>{{requisite.mandatory}}</td>
+               <td>{{requisite.type}}</td>
             </tr>
          </tbody>
       </table>
@@ -138,6 +142,24 @@
                         {{register_type.name}}
                      </option>
                   </select>
+               </div>
+            </div>
+            <div class="form-group row">
+               <label for="mandatory" class="col-4 col-form-label">Obligatorio</label>
+               <div class="col-8">
+                  <label class="switch"><input type="checkbox"id="mandatory" name="mandatory" [(ngModel)]="requisiteSelected.mandatory"><span class="slider round"></span></label>
+               </div>
+            </div>
+            <div class="form-group row">
+               <label for="type" class="col-4 col-form-label">Tipo de HTML</label>
+               <div class="col-8">
+                  <input type="text" class="form-control" id="type" name="type" placeholder="Tipo de HTML" [(ngModel)]="requisiteSelected.type">
+               </div>
+            </div>
+            <div class="form-group row">
+               <label for="params" class="col-4 col-form-label">Parámetros HTML</label>
+               <div class="col-8">
+                  <input type="text" class="form-control" id="params" name="params" placeholder="Parámetros HTML" [(ngModel)]="requisiteSelected.params">
                </div>
             </div>
          </div>

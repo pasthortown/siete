@@ -34,6 +34,8 @@
                <th>Nombre</th>
                <th>Descripción</th>
                <th>Plazas</th>
+               <th>Editable Camas</th>
+               <th>Editable Plazas</th>
                <th>Tipo de Registro</th>
                <th>Cantidad Máxima de Camas</th>
             </tr>
@@ -44,6 +46,8 @@
                <td>{{capacity_type.name}}</td>
                <td [innerHTML]="capacity_type.description"></td>
                <td>{{capacity_type.spaces}}</td>
+               <td>{{capacity_type.editable_beds}}</td>
+               <td>{{capacity_type.editable_spaces}}</td>
                <td>
                   <select class="form-control" id="register_type_id" name="register_type_id" disabled [(ngModel)]="capacity_type.register_type_id">
                      <option value="0" selected>Seleccione...</option>
@@ -132,6 +136,18 @@
                            {{register_type.name}}
                         </option>
                      </select>
+                  </div>
+               </div>
+               <div class="form-group row">
+                  <label for="editable_beds" class="col-4 col-form-label">Editable Camas</label>
+                  <div class="col-8">
+                     <label class="switch"><input type="checkbox"id="editable_beds" name="editable_beds" [(ngModel)]="capacity_typeSelected.editable_beds"><span class="slider round"></span></label>
+                  </div>
+               </div>
+               <div class="form-group row">
+                  <label for="editable_spaces" class="col-4 col-form-label">Editable Plazas</label>
+                  <div class="col-8">
+                     <label class="switch"><input type="checkbox"id="editable_spaces" name="editable_spaces" [(ngModel)]="capacity_typeSelected.editable_spaces"><span class="slider round"></span></label>
                   </div>
                </div>
                <div class="form-group row">

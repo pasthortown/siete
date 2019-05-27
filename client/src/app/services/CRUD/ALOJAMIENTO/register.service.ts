@@ -37,8 +37,8 @@ export class RegisterService {
       }).catch( error => { this.handledError(error.json());  });
    }
 
-   get_tarifario(id_ruc: number): Promise<any> {
-      return this.http.post(this.url + 'get_tarifario', JSON.stringify({id_ruc: id_ruc}), this.options).toPromise()
+   get_tarifario(register_id: number): Promise<any> {
+      return this.http.post(this.url + 'get_tarifario', JSON.stringify({register_id: register_id}), this.options).toPromise()
       .then( r => {
          return r.json();
       }).catch( error => { this.handledError(error.json()); });

@@ -12,7 +12,7 @@ class Tariff extends Model
      * @var array
      */
     protected $fillable = [
-       'price','year','id_ruc',
+       'price','year',
     ];
 
     /**
@@ -32,6 +32,11 @@ class Tariff extends Model
     function CapacityType()
     {
        return $this->hasOne('App\CapacityType');
+    }
+
+    function Register()
+    {
+       return $this->hasOne('App\Register');
     }
 
 }

@@ -84,11 +84,13 @@ export class RequisiteComponent implements OnInit {
       this.requisiteSelected = new Requisite();
       this.requisiteSelected.register_type_id = 0;
       this.requisiteDataService.get().then( r => {
+         console.log(r);
+         /*
          r.forEach(element => {
             if (element.father_code == '-') {
                this.requisitesGroups.push(element);
             }
-         });
+         });*/
       }).catch( e => { console.log(e); });
       this.requisiteDataService.get_paginate(this.recordsByPage, this.currentPage).then( r => {
          this.requisites = r.data as Requisite[];
