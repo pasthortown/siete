@@ -2800,6 +2800,8 @@ export class RegistroComponent implements OnInit {
       capacity.editable = false;
       this.alowed_capacity_types.forEach(capacityType => {
          if (capacityType.id == capacity.capacity_type_id) {
+            capacity.editable_beds = capacityType.editable_beds;
+            capacity.editable_spaces = capacityType.editable_spaces;
             if (capacityType.spaces == 999) {
                capacity.editable = true;
             }

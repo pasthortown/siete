@@ -13,6 +13,8 @@ export class Capacity {
    max_beds: number;
    max_spaces: number;
    editable: boolean;
+   editable_beds: Boolean;
+   editable_spaces: Boolean;
    constructor() {
       this.beds_on_capacity = [];
       this.max_bed = 0;
@@ -20,5 +22,7 @@ export class Capacity {
       this.editable = false;
       this.max_spaces = 0;
       this.max_beds = 0;
+      this.editable_beds = true;
+      this.editable_spaces = true;
    }
 }

@@ -1308,7 +1308,7 @@
                                   <td>
                                     <div class="col-12">
                                         <input type="number" class="form-control" min="0" max="9999" id="count_camas" name="count_camas" (input)="calcSpaces()"
-                                        placeholder="Cantidad de Camas" [(ngModel)]="capacity.max_bed" [disabled]="!rucEstablishmentRegisterSelected.editable"/>
+                                        placeholder="Cantidad de Camas" [(ngModel)]="capacity.max_bed" [disabled]="!rucEstablishmentRegisterSelected.editable || !capacity.editable_beds"/>
                                     </div>
                                   </td>
                                   <td>
@@ -1317,7 +1317,7 @@
                                     </div>
                                     <div class="col-12" *ngIf="capacity.editable">
                                         <input type="number" class="form-control" min="0" max="9999" id="count_plazas" name="count_plazas" (input)="calcSpaces()"
-                                        placeholder="Cantidad de Plazas" [(ngModel)]="capacity.max_spaces" [disabled]="!rucEstablishmentRegisterSelected.editable"/>
+                                        placeholder="Cantidad de Plazas" [(ngModel)]="capacity.max_spaces" [disabled]="!rucEstablishmentRegisterSelected.editable || !capacity.editable_spaces"/>
                                     </div>
                                   </td>
                                   <td>
@@ -1602,8 +1602,8 @@
                                             </tr>
                                             <tr>
                                               <td>
-                                                <label class="col-12 col-form-label mb-2"><strong>Idiomas de Atención en el
-                                                  Establecimiento</strong></label>
+                                                  <label>Idiomas de Atención en el
+                                                      Establecimiento</label>
                                               </td>
                                               <td>
                                                 <div class="form-group row">
@@ -1646,6 +1646,8 @@
                                                   </div>
                                                 </div>
                                               </td>
+                                            </tr>
+                                            <tr>
                                               <td>
                                                 <label>Certificado de Uso de Suelos*</label><span
                                                   *ngIf="certificadoUsoSuelo.floor_authorization_certificate_file === ''"
