@@ -16,7 +16,7 @@ class CreateRequisitesTable extends Migration
        Schema::create('requisites', function (Blueprint $table) {
           $table->increments('id');
           $table->timestamps();
-          $table->string('name',100)->nullable($value = true);
+          $table->string('name',2048)->nullable($value = true);
           $table->longText('description')->nullable($value = true);
           $table->string('father_code',20)->nullable($value = true);
           $table->integer('to_approve')->nullable($value = true);
