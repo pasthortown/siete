@@ -32,12 +32,14 @@
             <tr>
                <th>Seleccionado</th>
                <th>fullfill</th>
+               <th>value</th>
             </tr>
          </thead>
          <tbody>
             <tr *ngFor="let register_requisite of register_requisites" (click)="selectRegisterRequisite(register_requisite)">
                <td class="text-right"><span *ngIf="register_requisiteSelected === register_requisite" class="far fa-hand-point-right"></span></td>
                <td>{{register_requisite.fullfill}}</td>
+               <td>{{register_requisite.value}}</td>
             </tr>
          </tbody>
       </table>
@@ -78,6 +80,12 @@
                <label for="fullfill" class="col-4 col-form-label">fullfill</label>
                <div class="col-8">
                   <label class="switch"><input type="checkbox"id="fullfill" name="fullfill" [(ngModel)]="register_requisiteSelected.fullfill"><span class="slider round"></span></label>
+               </div>
+            </div>
+            <div class="form-group row">
+               <label for="value" class="col-4 col-form-label">value</label>
+               <div class="col-8">
+                  <input type="text" class="form-control" id="value" name="value" placeholder="value" [(ngModel)]="register_requisiteSelected.value">
                </div>
             </div>
             <div class="form-group row">

@@ -17,6 +17,7 @@ class CreateRegisterRequisitesTable extends Migration
           $table->increments('id');
           $table->timestamps();
           $table->boolean('fullfill')->nullable($value = true);
+          $table->string('value',2048)->nullable($value = true);
           $table->unsignedInteger('requisite_id');
           $table->foreign('requisite_id')->references('id')->on('requisites')->onDelete('cascade');
           $table->unsignedInteger('register_id');

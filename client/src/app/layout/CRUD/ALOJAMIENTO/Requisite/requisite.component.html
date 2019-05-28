@@ -1,6 +1,6 @@
 <div class="row">
    <h1 class="col-12 text-right">
-      Requisitos
+      Requisite
    </h1>
 </div>
 <div class="row">
@@ -31,32 +31,27 @@
          <thead>
             <tr>
                <th>Seleccionado</th>
-               <th>Nombre</th>
-               <th>Descripción</th>
-               <th>Grupo</th>
-               <th>Cumplimiento para Aprobar</th>
-               <th>Tipo de Registro</th>
-               <th>Obligatorio</th>
-               <th>Tipo HTML</th>
+               <th>name</th>
+               <th>description</th>
+               <th>father_code</th>
+               <th>to_approve</th>
+               <th>mandatory</th>
+               <th>type</th>
+               <th>params</th>
+               <th>code</th>
             </tr>
          </thead>
          <tbody>
             <tr *ngFor="let requisite of requisites" (click)="selectRequisite(requisite)">
                <td class="text-right"><span *ngIf="requisiteSelected === requisite" class="far fa-hand-point-right"></span></td>
                <td>{{requisite.name}}</td>
-               <td [innerHTML]="requisite.description"></td>
-               <td>
-                  <select disabled class="form-control" id="fatherCodeRequisite" name="fatherCodeRequisite" [(ngModel)]="requisite.father_code">
-                     <option value="-" selected>Es un Grupo</option>
-                     <option *ngFor="let requisite of requisites" value={{requisite.id}}>
-                        {{requisite.name}}
-                     </option>
-                  </select>
-               </td>
+               <td>{{requisite.description}}</td>
+               <td>{{requisite.father_code}}</td>
                <td>{{requisite.to_approve}}</td>
-               <td>{{requisite.type_full_name}}</td>
                <td>{{requisite.mandatory}}</td>
                <td>{{requisite.type}}</td>
+               <td>{{requisite.params}}</td>
+               <td>{{requisite.code}}</td>
             </tr>
          </tbody>
       </table>
@@ -94,72 +89,62 @@
       <div class="row">
          <div class="col-12">
             <div class="form-group row">
-               <label for="name" class="col-4 col-form-label">Nombre</label>
+               <label for="name" class="col-4 col-form-label">name</label>
                <div class="col-8">
-                  <input type="text" class="form-control" id="name" name="name" placeholder="Nombre" [(ngModel)]="requisiteSelected.name">
+                  <input type="text" class="form-control" id="name" name="name" placeholder="name" [(ngModel)]="requisiteSelected.name">
                </div>
             </div>
             <div class="form-group row">
-               <label for="description" class="col-4 col-form-label">Descripción</label>
+               <label for="description" class="col-4 col-form-label">description</label>
                <div class="col-8">
                   <ck-editor id="description" name="description" skin="moono-lisa" [(ngModel)]="requisiteSelected.description"></ck-editor>
                </div>
             </div>
             <div class="form-group row">
-               <label for="father_code" class="col-4 col-form-label">Grupo</label>
+               <label for="father_code" class="col-4 col-form-label">father_code</label>
                <div class="col-8">
-                  <select class="form-control" id="GroupfatherCodeRequisite" name="GroupfatherCodeRequisite" [(ngModel)]="requisiteSelected.father_code">
-                     <option value="-" selected>Es un Grupo</option>
-                     <option *ngFor="let requisite of requisitesGroups" value={{requisite.id}}>
-                        {{requisite.name}}
-                     </option>
-                  </select>
+                  <input type="text" class="form-control" id="father_code" name="father_code" placeholder="fatherCode" [(ngModel)]="requisiteSelected.father_code">
                </div>
             </div>
             <div class="form-group row">
-               <label for="to_approve" class="col-4 col-form-label">Cumplimiento para Aprobar</label>
+               <label for="to_approve" class="col-4 col-form-label">to_approve</label>
                <div class="col-8">
-                  <input type="number" class="form-control" id="to_approve" name="to_approve" placeholder="Cumplimiento para Aprobar" [(ngModel)]="requisiteSelected.to_approve">
+                  <input type="number" class="form-control" id="to_approve" name="to_approve" placeholder="toApprove" [(ngModel)]="requisiteSelected.to_approve">
                </div>
             </div>
             <div class="form-group row">
-               <label for="register_type_id" class="col-4 col-form-label">Categoría de Registro</label>
-               <div class="col-8">
-                  <select class="form-control" id="register_type_id" name="register_type_id" [(ngModel)]="category_selected_code" (change)="getRegisterTypeSpecific()">
-                     <option value="-" selected>Seleccione...</option>
-                     <option *ngFor="let register_type of register_types_categories" value={{register_type.code}}>
-                        {{register_type.name}}
-                     </option>
-                  </select>
-               </div>
-            </div>
-            <div class="form-group row">
-               <label for="register_type_id" class="col-4 col-form-label">Clasificación de Registro</label>
-               <div class="col-8">
-                  <select class="form-control" id="register_type_id" name="register_type_id" [(ngModel)]="requisiteSelected.register_type_id">
-                     <option value="0" selected>Seleccione...</option>
-                     <option *ngFor="let register_type of register_types_specific" value={{register_type.id}}>
-                        {{register_type.name}}
-                     </option>
-                  </select>
-               </div>
-            </div>
-            <div class="form-group row">
-               <label for="mandatory" class="col-4 col-form-label">Obligatorio</label>
+               <label for="mandatory" class="col-4 col-form-label">mandatory</label>
                <div class="col-8">
                   <label class="switch"><input type="checkbox"id="mandatory" name="mandatory" [(ngModel)]="requisiteSelected.mandatory"><span class="slider round"></span></label>
                </div>
             </div>
             <div class="form-group row">
-               <label for="type" class="col-4 col-form-label">Tipo de HTML</label>
+               <label for="type" class="col-4 col-form-label">type</label>
                <div class="col-8">
-                  <input type="text" class="form-control" id="type" name="type" placeholder="Tipo de HTML" [(ngModel)]="requisiteSelected.type">
+                  <input type="text" class="form-control" id="type" name="type" placeholder="type" [(ngModel)]="requisiteSelected.type">
                </div>
             </div>
             <div class="form-group row">
-               <label for="params" class="col-4 col-form-label">Parámetros HTML</label>
+               <label for="params" class="col-4 col-form-label">params</label>
                <div class="col-8">
-                  <input type="text" class="form-control" id="params" name="params" placeholder="Parámetros HTML" [(ngModel)]="requisiteSelected.params">
+                  <input type="text" class="form-control" id="params" name="params" placeholder="params" [(ngModel)]="requisiteSelected.params">
+               </div>
+            </div>
+            <div class="form-group row">
+               <label for="code" class="col-4 col-form-label">code</label>
+               <div class="col-8">
+                  <input type="text" class="form-control" id="code" name="code" placeholder="code" [(ngModel)]="requisiteSelected.code">
+               </div>
+            </div>
+            <div class="form-group row">
+               <label for="register_type_id" class="col-4 col-form-label">RegisterType</label>
+               <div class="col-8">
+                  <select class="form-control" id="register_type_id" name="register_type_id" [(ngModel)]="requisiteSelected.register_type_id">
+                     <option value="0" selected>Seleccione...</option>
+                     <option *ngFor="let register_type of register_types" value={{register_type.id}}>
+                        {{register_type.id}}
+                     </option>
+                  </select>
                </div>
             </div>
          </div>

@@ -42,6 +42,7 @@ class RegisterRequisiteController extends Controller
              $registerrequisite->id = 1;
           }
           $registerrequisite->fullfill = $result['fullfill'];
+          $registerrequisite->value = $result['value'];
           $registerrequisite->requisite_id = $result['requisite_id'];
           $registerrequisite->register_id = $result['register_id'];
           $registerrequisite->save();
@@ -59,6 +60,7 @@ class RegisterRequisiteController extends Controller
           $result = $data->json()->all();
           $registerrequisite = RegisterRequisite::where('id',$result['id'])->update([
              'fullfill'=>$result['fullfill'],
+             'value'=>$result['value'],
              'requisite_id'=>$result['requisite_id'],
              'register_id'=>$result['register_id'],
           ]);
@@ -98,12 +100,14 @@ class RegisterRequisiteController extends Controller
          if ($exist) {
            RegisterRequisite::where('id', $result['id'])->update([
              'fullfill'=>$result['fullfill'],
+             'value'=>$result['value'],
              'requisite_id'=>$result['requisite_id'],
              'register_id'=>$result['register_id'],
            ]);
          } else {
           $registerrequisite = new RegisterRequisite();
           $registerrequisite->id = $result['id'];
+          $registerrequisite->value = $result['value'];
           $registerrequisite->fullfill = $result['fullfill'];
           $registerrequisite->requisite_id = $result['requisite_id'];
           $registerrequisite->register_id = $result['register_id'];

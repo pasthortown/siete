@@ -50,6 +50,7 @@ class RequisiteController extends Controller
          $requisite->name = $result['name'];
          $requisite->description = $result['description'];
          $requisite->father_code = $result['father_code'];
+         $requisite->code = $result['code'];
          $requisite->to_approve = $result['to_approve'];
          $requisite->mandatory = $result['mandatory'];
          $requisite->type = $result['type'];
@@ -72,6 +73,7 @@ class RequisiteController extends Controller
             'name'=>$result['name'],
             'description'=>$result['description'],
             'father_code'=>$result['father_code'],
+            'code'=>$result['code'],
             'to_approve'=>$result['to_approve'],
             'mandatory'=>$result['mandatory'],
             'type'=>$result['type'],
@@ -116,6 +118,7 @@ class RequisiteController extends Controller
              'name'=>$result['name'],
              'description'=>$result['description'],
              'father_code'=>$result['father_code'],
+             'code'=>$result['code'],
              'to_approve'=>$result['to_approve'],
              'mandatory'=>$result['mandatory'],
              'type'=>$result['type'],
@@ -128,6 +131,7 @@ class RequisiteController extends Controller
           $requisite->name = $result['name'];
           $requisite->description = $result['description'];
           $requisite->father_code = $result['father_code'];
+          $requisite->code = $result['code'];
           $requisite->to_approve = $result['to_approve'];
           $requisite->mandatory = $result['mandatory'];
           $requisite->type = $result['type'];

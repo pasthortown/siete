@@ -15,7 +15,6 @@ import { RegisterType } from './../../../../models/ALOJAMIENTO/RegisterType';
 })
 export class RequisiteComponent implements OnInit {
    requisites: Requisite[] = [];
-   requisitesGroups: Requisite[] = [];
    requisiteSelected: Requisite = new Requisite();
 
    currentPage = 1;
@@ -23,9 +22,6 @@ export class RequisiteComponent implements OnInit {
    showDialog = false;
    recordsByPage = 5;
    register_types: RegisterType[] = [];
-   register_types_categories: RegisterType[] = [];
-   register_types_specific: RegisterType[] = [];
-   category_selected_code: String = '';
    constructor(
                private modalService: NgbModal,
                private toastr: ToastrManager,
@@ -33,39 +29,18 @@ export class RequisiteComponent implements OnInit {
                private requisiteDataService: RequisiteService) {}
 
    ngOnInit() {
+      this.goToPage(1);
       this.getRegisterType();
    }
 
    selectRequisite(requisite: Requisite) {
       this.requisiteSelected = requisite;
-      this.register_types.forEach(element => {
-         if (this.requisiteSelected.register_type_id == element.id){
-            this.category_selected_code = element.father_code;
-         }
-      });
-      this.getRegisterTypeSpecific();
-   }
-
-   getRegisterTypeSpecific() {
-      this.register_types_specific = [];
-      this.register_types.forEach(element => {
-         if (element.father_code == this.category_selected_code) {
-            this.register_types_specific.push(element);
-         }
-      });
    }
 
    getRegisterType() {
       this.register_types = [];
-      this.register_types_categories = [];
       this.register_typeDataService.get().then( r => {
          this.register_types = r as RegisterType[];
-         this.register_types.forEach(element => {
-            if (element.father_code == '-') {
-               this.register_types_categories.push(element);
-            }
-         });
-         this.goToPage(1);
       }).catch( e => console.log(e) );
    }
 
@@ -80,35 +55,11 @@ export class RequisiteComponent implements OnInit {
 
    getRequisites() {
       this.requisites = [];
-      this.requisitesGroups = [];
       this.requisiteSelected = new Requisite();
       this.requisiteSelected.register_type_id = 0;
-      this.requisiteDataService.get().then( r => {
-         console.log(r);
-         /*
-         r.forEach(element => {
-            if (element.father_code == '-') {
-               this.requisitesGroups.push(element);
-            }
-         });*/
-      }).catch( e => { console.log(e); });
       this.requisiteDataService.get_paginate(this.recordsByPage, this.currentPage).then( r => {
          this.requisites = r.data as Requisite[];
          this.lastPage = r.last_page;
-         this.requisites.forEach(requisite => {
-            let fatherCode: String = '-';
-            this.register_types.forEach(regType => {
-               if (regType.id == requisite.register_type_id) {
-                  requisite.type_full_name = regType.name;
-                  fatherCode = regType.father_code;
-               }
-            });
-            this.register_types.forEach(regType => {
-               if (regType.code == fatherCode) {
-                  requisite.type_full_name = regType.name + ' / ' + requisite.type_full_name;
-               }
-            });
-         });
       }).catch( e => console.log(e) );
    }
 
@@ -149,9 +100,9 @@ export class RequisiteComponent implements OnInit {
    toCSV() {
       this.requisiteDataService.get().then( r => {
          const backupData = r as Requisite[];
-         let output = 'id;name;description;father_code;to_approve;register_type_id\n';
+         let output = 'id;name;description;father_code;to_approve;mandatory;type;params;code;register_type_id\n';
          backupData.forEach(element => {
-            output += element.id + ';' + element.name + ';' + element.description + ';' + element.father_code + ';' + element.to_approve + ';' + element.register_type_id + '\n';
+            output += element.id; + element.name + ';' + element.description + ';' + element.father_code + ';' + element.to_approve + ';' + element.mandatory + ';' + element.type + ';' + element.params + ';' + element.code + ';' + element.register_type_id + '\n';
          });
          const blob = new Blob([output], { type: 'text/plain' });
          const fecha = new Date();
