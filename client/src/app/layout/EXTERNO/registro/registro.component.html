@@ -1393,7 +1393,7 @@
                                               <span class="input-group-text" id="basic-addon1">USD</span>
                                             </div>
                                             <input type="number" class="form-control" min="0" step="0.01" id="low_capacity_room_price"
-                                          name="low_capacity_room_price" (input)="checkValuesTariffs()" [(ngModel)]="tariff.tariff.price" placeholder="Precio" [disabled]="!rucEstablishmentRegisterSelected.editable || !tariff.isReference"/>
+                                          name="low_capacity_room_price" (input)="checkValuesTariffs()" [(ngModel)]="tariff.tariff.price" placeholder="Precio" [disabled]="(!rucEstablishmentRegisterSelected.editable || !tariff.isReference) && tariff.plazasHabitacion !== 999"/>
                                           </div>
                                     </td>
                                   </tr>
