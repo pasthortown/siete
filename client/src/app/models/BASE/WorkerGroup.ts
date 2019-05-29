@@ -3,4 +3,9 @@ export class WorkerGroup {
    name: String;
    description: String;
    is_max: Boolean;
+   constructor() {
+      this.is_max = false;
+      this.name = '';
+      this.description = '';
+   }
 }
