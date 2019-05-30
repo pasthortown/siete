@@ -126,6 +126,9 @@
             </a>
             <li class="nested" [class.expand]="showMenu === 'catalogoAlojamiento'">
                <ul class="submenu">
+                  <li>
+                     <a [routerLink]="['/state-alojamiento']" [routerLinkActive]="['router-link-active']" class="list-group-item">Estado Registro</a>
+                  </li>
                  <li>
                      <a [routerLink]="['/requisite']" [routerLinkActive]="['router-link-active']" class="list-group-item">Requisitos</a>
                   </li>
