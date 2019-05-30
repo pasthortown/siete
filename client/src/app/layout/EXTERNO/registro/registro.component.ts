@@ -1418,6 +1418,23 @@ export class RegistroComponent implements OnInit {
       this.toastr.errorToastr('Debe cargar el certificado de uso de suelo.', 'Nuevo');
       return;
    }
+   let NoApruebaCantidadCamas = false;
+   this.rucEstablishmentRegisterSelected.capacities_on_register.forEach(capacity => {
+      this.alowed_capacity_types.forEach(capacity_type => {
+         if (capacity.capacity_type_id == capacity_type.id) {
+            if (capacity.max_bed> capacity_type.bed_quantity){
+               NoApruebaCantidadCamas = true;
+            }
+            if (capacity.max_bed == 0) {
+               NoApruebaCantidadCamas = true;
+            }
+         }
+      });
+   });
+   if(NoApruebaCantidadCamas){
+      this.toastr.errorToastr('Existe inconsistencia en el valor de las camas ingresadas', 'Nuevo');
+      return;
+   }
    this.guardando = true;
    const tariffs: Tariff[] = [];
    this.tarifarioRack.valores.forEach(tarifRackValor => {
