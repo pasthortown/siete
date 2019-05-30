@@ -1,3 +1,4 @@
+import { MailerService } from './../../../services/negocio/mailer.service';
 import { DeclarationAttachmentService } from './../../../services/CRUD/FINANCIERO/declarationattachment.service';
 import { DeclarationAttachment } from './../../../models/FINANCIERO/DeclarationAttachment';
 import { FloorAuthorizationCertificateService } from './../../../services/CRUD/BASE/floorauthorizationcertificate.service';
@@ -256,6 +257,7 @@ export class RegistroComponent implements OnInit {
   declarationItems: DeclarationItem[] = [];
   maxYear: number = 2019;
   constructor(private toastr: ToastrManager,
+              private mailerDataService: MailerService,
               private userDataService: UserService,
               private floorAuthorizationCertificateDataService: FloorAuthorizationCertificateService,
               private dinardapDataService: DinardapService,
@@ -1466,10 +1468,61 @@ export class RegistroComponent implements OnInit {
    this.registerDataService.register_register_data(this.rucEstablishmentRegisterSelected).then( r => {
       this.certificadoUsoSuelo.register_id = r.id;
       this.guardarCertificadoUsoSuelos();
-      this.guardando = false;
-      this.refresh();
-      this.toastr.successToastr('Solicitud de Registro Enviada, Satisfactoriamente.', 'Nuevo');
-      this.router.navigate(['/main']);
+      const today = new Date();
+      let clasificacion: String = '';
+      let categoria: String = '';
+      this.categories_registers.forEach(categorie_register => {
+         if (categorie_register.id == this.rucEstablishmentRegisterSelected.register_type_id) {
+            categoria = categorie_register.name;
+         }
+      });
+      this.clasifications_registers.forEach(clasification_register => {
+         if (clasification_register.code == this.categorySelectedCode) {
+            clasificacion = clasification_register.name;
+         }
+      });
+      let provinciaName: String = '';
+      this.provinciasEstablishment.forEach(element => {
+         if (element.code == this.provinciaEstablishmentSelectedCode) {
+            provinciaName = element.name;
+         }
+      });
+      let cantonName: String = '';
+      this.cantonesEstablishment.forEach(element => {
+         if (element.code == this.cantonEstablishmentSelectedCode) {
+            cantonName = element.name;
+         }
+      });
+      let parroquiaName: String = '';
+      this.parroquiasEstablishment.forEach(element => {
+         if (element.id == this.establishment_selected.ubication_id) {
+            parroquiaName = element.name;
+         }
+      });
+      const information = {
+         para: this.user.name,
+         tramite: 'Solicitud - Registro',
+         ruc: this.user.identification,
+         nombreComercial: this.establishment_selected.commercially_known_name,
+         fechaSolicitud: today.toLocaleString(),
+         actividad: 'Alojamiento Turístico',
+         clasificacion: clasificacion,
+         categoria: categoria,
+         tipoSolicitud: 'Registro',
+         provincia: provinciaName,
+         canton: cantonName,
+         parroquia: parroquiaName,
+         callePrincipal: this.establishment_selected.address_main_street,
+         calleInterseccion: this.establishment_selected.address_secondary_street,
+         numeracion: this.establishment_selected.address_number,
+         thisYear:today.getFullYear()
+      };
+      this.mailerDataService.sendMail('mail', this.user.email.toString(), 'Información de Detalle de Solicitud', information).then( r => {
+         this.guardando = false;
+         this.refresh();
+         this.toastr.successToastr('Solicitud de Registro Enviada, Satisfactoriamente.', 'Nuevo');
+         this.router.navigate(['/main']);
+      }).catch( e => { console.log(e); });
    }).catch( e => {
       this.guardando = false;
       this.toastr.errorToastr('Existe conflicto la información proporcionada.', 'Nuevo');
