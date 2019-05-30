@@ -2227,9 +2227,7 @@ export class RegistroComponent implements OnInit {
   }
 
   getCertificadoUsoSuelo() {
-     this.floorAuthorizationCertificateDataService.get(this.establishment_selected.floor_authorization_certificate_id).then( r => {
-      this.certificadoUsoSuelo = r.FloorAuthorizationCertificate as FloorAuthorizationCertificate;
-     }).catch( e => { console.log(e); });
+  //this.rucEstablishmentRegisterSelected   
   }
 
   getTarifarioRack(register_id: number) {
@@ -2278,7 +2276,6 @@ export class RegistroComponent implements OnInit {
     }
     this.establishmentDataService.get_filtered(establishment.id).then( r => {
       this.establishment_selected = r.establishment as Establishment;
-      this.getCertificadoUsoSuelo();
       this.recoverUbication();
       this.checkEstablishmentAddress();
       this.checkURLWeb();
@@ -2571,6 +2568,7 @@ export class RegistroComponent implements OnInit {
     
     this.registerDataService.get_register_data(register.id).then( r => {
        this.rucEstablishmentRegisterSelected = r.register as Register;
+       this.getCertificadoUsoSuelo();
        this.setCategory(this.rucEstablishmentRegisterSelected.register_type_id);
        this.rucEstablishmentRegisterSelected.editable = editable;
        this.getTramiteStatus(this.rucEstablishmentRegisterSelected.status);

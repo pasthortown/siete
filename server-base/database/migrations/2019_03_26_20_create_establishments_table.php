@@ -36,8 +36,6 @@ class CreateEstablishmentsTable extends Migration
           $table->foreign('establishment_property_type_id')->references('id')->on('establishment_property_types')->onDelete('cascade');
           $table->unsignedInteger('ruc_name_type_id');
           $table->foreign('ruc_name_type_id')->references('id')->on('ruc_name_types')->onDelete('cascade');
-          $table->unsignedInteger('floor_authorization_certificate_id');
-          $table->foreign('floor_authorization_certificate_id')->references('id')->on('floor_authorization_certificates')->onDelete('cascade');
        });
     }
 

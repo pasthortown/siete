@@ -19,6 +19,7 @@ class CreateFloorAuthorizationCertificatesTable extends Migration
           $table->string('floor_authorization_certificate_file_type',50)->nullable($value = true);
           $table->string('floor_authorization_certificate_file_name',50)->nullable($value = true);
           $table->longText('floor_authorization_certificate_file')->nullable($value = true);
+          $table->integer('register_id')->nullable($value = true);
        });
     }
 
