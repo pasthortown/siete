@@ -130,16 +130,12 @@ class UserController extends Controller
       }
     }
 
-    function register_user_coadminruc(Request $data)
+    function register_user_coadminruc(Request $data) 
     {
        $result = $data->json()->all();
-       $previewUser = User::where('email', $result['email'])->where('ruc', $result['ruc'])->first();
+       $previewUser = User::where('email', $result['email'])->first();
        if($previewUser){
          return response()->json($previewUser->id,200);
-       }
-       $anotherPreviewUser = User::where('email', $result['email'])->first();
-       if($anotherPreviewUser){
-         return response()->json(0,200);
        }
        try{
           DB::beginTransaction();
