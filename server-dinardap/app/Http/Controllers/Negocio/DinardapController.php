@@ -9,81 +9,35 @@ use Illuminate\Http\Request;
 
 class DinardapController extends Controller
 {
-  protected function soap() {
-    $opts = array(
-        'ssl' => array(
-        'verify_peer' => false,
-        'verify_peer_name' => false,
-        'allow_self_signed' => true
-      )
-    );
-  
-    $context = stream_context_create($opts);
-    $wsdl = "http://interoperabilidad.dinardap.gob.ec:7979/interoperador?wsdl";
-  
-    try
-    {
-      $this->client = new SoapClient($wsdl, array(
-        'stream_context' => $context, 'trace' => true,
-        'login' => 'wsmtint', 'password' => '7ZU1X!)nIM')
-      );  
-      return $this->client;
-    }catch ( Exception $e) {
-      return $e;
-    }
-  }
-    
-  public function checkSoap(Request $request) {
-    $parameters = $request->json()->all();
-    $this->client = $this->soap();
-    try
-    {
-      $result = $this->client->getFichaGeneral($parameters);
-      return response()->json($result,200);
-    }catch (Exception $e) {
-      return $e;
-    }
-  }
-
   public function Cedula(Request $request) {
     $data = $request->json()->all();
-    $identificacion = $data['numeroIdentificacion'];
-    $codigoPaquete = 87;
-    $this->client = $this->soap();
-    try
-    {
-      $result = $this->client->getFichaGeneral(["numeroIdentificacion"=>$identificacion, "codigoPaquete"=>$codigoPaquete]);
-      return response()->json($result,200);
-    }catch (Exception $e) {
-      return $e;
-    }
+    $respuesta = $this->httpPost(env('API_DINARDAP').'cedula', json_encode(['numeroIdentificacion'=>$data['numeroIdentificacion']]), null, null);
+    return response()->json($respuesta,200);
   }
 
   public function RUC(Request $request) {
     $data = $request->json()->all();
-    $identificacion = $data['numeroIdentificacion'];
-    $codigoPaquete = 50;
-    $this->client = $this->soap();
-    try
-    {
-      $result = $this->client->getFichaGeneral(["numeroIdentificacion"=>$identificacion, "codigoPaquete"=>$codigoPaquete]);
-      return response()->json($result,200);
-    }catch (Exception $e) {
-      return $e;
-    }
+    $respuesta = $this->httpPost(env('API_DINARDAP').'ruc', json_encode(['numeroIdentificacion'=>$data['numeroIdentificacion']]), null, null);
+    return response()->json($respuesta,200);
   }
 
-  public function SuperCIAS(Request $request) {
-    $data = $request->json()->all();
-    $identificacion = $data['numeroIdentificacion'];
-    $codigoPaquete = 573;
-    $this->client = $this->soap();
-    try
-    {
-      $result = $this->client->getFichaGeneral(["numeroIdentificacion"=>$identificacion, "codigoPaquete"=>$codigoPaquete]);
-      return response()->json($result,200);
-    }catch (Exception $e) {
-      return $e;
+  protected function httpPost($url, $data=NULL, $headers = NULL, $token) {
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_POST, 1);
+    if(!empty($data)){
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
     }
+    $headersSend = array('Content-Type: application/json');
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $headersSend);
+    $response = curl_exec($ch);
+
+    if (curl_error($ch)) {
+        trigger_error('Curl Error:' . curl_error($ch));
+    }
+    curl_close($ch);
+    return $response;
   }
+
 }
