@@ -17,6 +17,7 @@ class CreateRucNameTypesTable extends Migration
           $table->increments('id');
           $table->timestamps();
           $table->string('name',50)->nullable($value = true);
+          $table->longText('description')->nullable($value = true);
        });
     }
 
