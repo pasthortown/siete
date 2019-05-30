@@ -1182,6 +1182,18 @@ export class RegistroComponent implements OnInit {
    this.ruc_registro_selected.ruc.person_representative_attachment.person_representative_attachment_file_name = '';
   }
 
+  guardarCertificadoUsoSuelos() {
+     if(this.certificadoUsoSuelo.id == 0) {
+      this.floorAuthorizationCertificateDataService.post(this.certificadoUsoSuelo).then( r => { 
+
+      }).catch( e => { console.log(e); });
+     } else {
+      this.floorAuthorizationCertificateDataService.put(this.certificadoUsoSuelo).then( r => { 
+
+      }).catch( e => { console.log(e); });
+     }
+  }
+
   descargarNombramiento() {
    this.downloadFile(
       this.ruc_registro_selected.ruc.person_representative_attachment.person_representative_attachment_file,
@@ -1452,6 +1464,8 @@ export class RegistroComponent implements OnInit {
    });
    this.rucEstablishmentRegisterSelected.tarifario_rack = tariffs;
    this.registerDataService.register_register_data(this.rucEstablishmentRegisterSelected).then( r => {
+      this.certificadoUsoSuelo.register_id = r.id;
+      this.guardarCertificadoUsoSuelos();
       this.guardando = false;
       this.refresh();
       this.toastr.successToastr('Solicitud de Registro Enviada, Satisfactoriamente.', 'Nuevo');
@@ -2226,9 +2240,9 @@ export class RegistroComponent implements OnInit {
     this.establishment_selected.address_map_longitude = event.coords.lng;
   }
 
-  getCertificadoUsoSuelo() {
-     this.floorAuthorizationCertificateDataService.get(this.establishment_selected.floor_authorization_certificate_id).then( r => {
-      this.certificadoUsoSuelo = r.FloorAuthorizationCertificate as FloorAuthorizationCertificate;
+  getCertificadoUsoSuelo(register_id: number) {
+     this.floorAuthorizationCertificateDataService.get_by_register_id(register_id).then( r => {
+        this.certificadoUsoSuelo = r as FloorAuthorizationCertificate;
      }).catch( e => { console.log(e); });
   }
 
@@ -2270,6 +2284,7 @@ export class RegistroComponent implements OnInit {
     });
     if (registerSelected.id == 0) {
       this.rucEstablishmentRegisterSelected = new Register();
+      this.certificadoUsoSuelo = new FloorAuthorizationCertificate();
       this.rucEstablishmentRegisterSelected.status = 0;
       this.rucEstablishmentRegisterSelected.establishment_id = establishment.id;
       this.mostrarDataRegister = true;
@@ -2278,7 +2293,6 @@ export class RegistroComponent implements OnInit {
     }
     this.establishmentDataService.get_filtered(establishment.id).then( r => {
       this.establishment_selected = r.establishment as Establishment;
-      this.getCertificadoUsoSuelo();
       this.recoverUbication();
       this.checkEstablishmentAddress();
       this.checkURLWeb();
@@ -2357,7 +2371,6 @@ export class RegistroComponent implements OnInit {
     this.mostrarDataEstablishment = true;
     this.cedulaEstablishmentContactData = '';
     this.rucEstablishmentRegisterSelected.editable = true;
-    this.certificadoUsoSuelo = new FloorAuthorizationCertificate();
     this.getCantonesEstablishment();
     this.declarations = [];
     this.provinciaEstablishmentSelectedCode = '-';
@@ -2568,9 +2581,10 @@ export class RegistroComponent implements OnInit {
     this.mostrarDataRegister = false;
     const tarifas: Tariff[] = this.newTariffs();
     this.rucEstablishmentRegisterSelected = new Register();
-    
+    this.certificadoUsoSuelo = new FloorAuthorizationCertificate();
     this.registerDataService.get_register_data(register.id).then( r => {
        this.rucEstablishmentRegisterSelected = r.register as Register;
+       this.getCertificadoUsoSuelo(this.rucEstablishmentRegisterSelected.id);
        this.setCategory(this.rucEstablishmentRegisterSelected.register_type_id);
        this.rucEstablishmentRegisterSelected.editable = editable;
        this.getTramiteStatus(this.rucEstablishmentRegisterSelected.status);

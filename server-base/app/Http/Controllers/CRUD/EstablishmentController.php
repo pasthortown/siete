@@ -76,7 +76,6 @@ class EstablishmentController extends Controller
           $establishment->ubication_id = $result['ubication_id'];
           $establishment->establishment_property_type_id = $result['establishment_property_type_id'];
           $establishment->ruc_name_type_id = $result['ruc_name_type_id'];
-          $establishment->floor_authorization_certificate_id = $result['floor_authorization_certificate_id'];
           $establishment->save();
           $preview_register_codes_on_establishment = $result['preview_register_codes_on_establishment'];
           foreach( $preview_register_codes_on_establishment as $preview_register_code) {
@@ -122,7 +121,6 @@ class EstablishmentController extends Controller
              'ruc_id'=>$result['ruc_id'],
              'ubication_id'=>$result['ubication_id'],
              'establishment_property_type_id'=>$result['establishment_property_type_id'],
-             'floor_authorization_certificate_id'=>$result['floor_authorization_certificate_id'],
              'ruc_name_type_id'=>$result['ruc_name_type_id'],
           ]);
           $establishment = Establishment::where('id',$result['id'])->first();
@@ -237,11 +235,7 @@ class EstablishmentController extends Controller
       $contact_user = $result['contact_user'];
       $token = $data->header('api_token');
       $respuesta = "0";
-      if($contact_user['id'] == 0){
-         $respuesta = $this->httpPost(env('API_AUTH').'user/register_user_establishment', json_encode($contact_user), null, $token);
-      }else {
-         $respuesta = $this->httpPut(env('API_AUTH').'user/update_user_establishment', json_encode($contact_user), null, $token);
-      }
+      $respuesta = $this->httpPost(env('API_AUTH').'user/register_user_establishment', json_encode($contact_user), null, $token);
       $contact_user_id = $respuesta;
       $ruc = Ruc::where('id', $result['ruc_id'])->first();
       $establishmentPreview = Establishment::where('ruc_id', $result['ruc_id'])->where('ruc_code_id',$result['ruc_code_id'])->first();
@@ -259,7 +253,6 @@ class EstablishmentController extends Controller
                'address_map_latitude'=>$result['address_map_latitude'],
                'address_map_longitude'=>$result['address_map_longitude'],
                'url_web'=>$result['url_web'],
-               'floor_authorization_certificate_id'=>$result['floor_authorization_certificate_id'],
                //'as_turistic_register_date'=>$result['as_turistic_register_date'],
                'address_reference'=>$result['address_reference'],
                'contact_user_id'=>$contact_user_id,
@@ -375,7 +368,6 @@ class EstablishmentController extends Controller
             $establishment->ubication_id = $result['ubication_id'];
             $establishment->establishment_property_type_id = $result['establishment_property_type_id'];
             $establishment->ruc_name_type_id = $result['ruc_name_type_id'];
-            $establishment->floor_authorization_certificate_id = $result['floor_authorization_certificate_id'];
             $establishment->save();
             $languages_on_establishment = $result['languages_on_establishment'];
             foreach( $languages_on_establishment as $language) {
@@ -492,7 +484,6 @@ class EstablishmentController extends Controller
              'ruc_id'=>$result['ruc_id'],
              'ubication_id'=>$result['ubication_id'],
              'establishment_property_type_id'=>$result['establishment_property_type_id'],
-             'floor_authorization_certificate_id'=>$result['floor_authorization_certificate_id'],
              'ruc_name_type_id'=>$result['ruc_name_type_id'],
            ]);
          } else {

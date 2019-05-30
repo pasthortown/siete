@@ -244,6 +244,7 @@ $router->group(['middleware' => ['auth']], function () use ($router) {
    //CRUD FloorAuthorizationCertificate
    $router->post('/floorauthorizationcertificate', ['uses' => 'FloorAuthorizationCertificateController@post']);
    $router->get('/floorauthorizationcertificate', ['uses' => 'FloorAuthorizationCertificateController@get']);
+   $router->get('/floorauthorizationcertificate/get_by_register_id', ['uses' => 'FloorAuthorizationCertificateController@get_by_register_id']);
    $router->get('/floorauthorizationcertificate/paginate', ['uses' => 'FloorAuthorizationCertificateController@paginate']);
    $router->get('/floorauthorizationcertificate/backup', ['uses' => 'FloorAuthorizationCertificateController@backup']);
    $router->put('/floorauthorizationcertificate', ['uses' => 'FloorAuthorizationCertificateController@put']);

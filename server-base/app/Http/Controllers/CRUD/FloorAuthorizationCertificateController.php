@@ -23,6 +23,11 @@ class FloorAuthorizationCertificateController extends Controller
        }
     }
 
+    function get_by_register_id(Request $data) {
+      $register_id = $data['register_id'];
+      return response()->json(FloorAuthorizationCertificate::where('register_id', $register_id)->first(),200);
+    }
+
     function paginate(Request $data)
     {
        $size = $data['size'];
@@ -44,6 +49,7 @@ class FloorAuthorizationCertificateController extends Controller
           $floorauthorizationcertificate->floor_authorization_certificate_file_type = $result['floor_authorization_certificate_file_type'];
           $floorauthorizationcertificate->floor_authorization_certificate_file_name = $result['floor_authorization_certificate_file_name'];
           $floorauthorizationcertificate->floor_authorization_certificate_file = $result['floor_authorization_certificate_file'];
+          $floorauthorizationcertificate->register_id = $result['register_id'];
           $floorauthorizationcertificate->save();
           DB::commit();
        } catch (Exception $e) {
@@ -61,6 +67,7 @@ class FloorAuthorizationCertificateController extends Controller
              'floor_authorization_certificate_file_type'=>$result['floor_authorization_certificate_file_type'],
              'floor_authorization_certificate_file_name'=>$result['floor_authorization_certificate_file_name'],
              'floor_authorization_certificate_file'=>$result['floor_authorization_certificate_file'],
+             'register_id'=>$result['register_id'],
           ]);
           DB::commit();
        } catch (Exception $e) {
@@ -100,6 +107,7 @@ class FloorAuthorizationCertificateController extends Controller
              'floor_authorization_certificate_file_type'=>$result['floor_authorization_certificate_file_type'],
              'floor_authorization_certificate_file_name'=>$result['floor_authorization_certificate_file_name'],
              'floor_authorization_certificate_file'=>$result['floor_authorization_certificate_file'],
+             'register_id'=>$result['register_id'],
            ]);
          } else {
           $floorauthorizationcertificate = new FloorAuthorizationCertificate();
@@ -107,6 +115,7 @@ class FloorAuthorizationCertificateController extends Controller
           $floorauthorizationcertificate->floor_authorization_certificate_file_type = $result['floor_authorization_certificate_file_type'];
           $floorauthorizationcertificate->floor_authorization_certificate_file_name = $result['floor_authorization_certificate_file_name'];
           $floorauthorizationcertificate->floor_authorization_certificate_file = $result['floor_authorization_certificate_file'];
+          $floorauthorizationcertificate->register_id = $result['register_id'];
           $floorauthorizationcertificate->save();
          }
        }

@@ -8,6 +8,7 @@ export class Tariff {
    register_id: number;
    capacity_type_id: number;
    constructor() {
+      this.id = 0;
       this.price = 0;
       this.tariff_type_id = 0;
       this.tariff_father_name = '';

@@ -12,7 +12,7 @@ class FloorAuthorizationCertificate extends Model
      * @var array
      */
     protected $fillable = [
-       'floor_authorization_certificate_file_type','floor_authorization_certificate_file_name','floor_authorization_certificate_file',
+       'floor_authorization_certificate_file_type','floor_authorization_certificate_file_name','floor_authorization_certificate_file','register_id',
     ];
 
     /**
@@ -23,10 +23,5 @@ class FloorAuthorizationCertificate extends Model
     protected $hidden = [
        
     ];
-
-    function Establishment()
-    {
-       return $this->belongsTo('App\Establishment');
-    }
 
 }
