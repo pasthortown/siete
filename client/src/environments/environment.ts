@@ -4,13 +4,13 @@
 
 export const environment = {
   production: false,
-  api_auth: 'http://localhost:8000/',
-  api_dinardap: 'http://localhost:9000/',
-  api_consultor: 'http://localhost:9001/',
-  api_exporter: 'http://localhost:9002/',
-  api_base: 'http://localhost:8001/',
-  api_alojamiento: 'http://localhost:8002/',
-  api_financiero: 'http://localhost:8003/',
+  api_auth: 'http://ws-pruebas.turismo.gob.ec:8000/',
+  api_dinardap: 'http://ws-pruebas.turismo.gob.ec:9000/',
+  api_consultor: 'http://ws-pruebas.turismo.gob.ec:9001/',
+  api_exporter: 'http://ws-pruebas.turismo.gob.ec:9002/',
+  api_base: 'http://ws-pruebas.turismo.gob.ec:8001/',
+  api_alojamiento: 'http://ws-pruebas.turismo.gob.ec:8002/',
+  api_financiero: 'http://ws-pruebas.turismo.gob.ec:8003/',
   gmapapiKey: 'AIzaSyCGUwCcM-LKjRK4rjbBJ06_GLmX2LaYzfg',
 };
 
