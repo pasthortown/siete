@@ -113,7 +113,7 @@ export class RucNameTypeComponent implements OnInit {
    openDialog(content) {
       this.modalService.open(content, { centered: true , size: 'lg' }).result.then(( response => {
          if ( response === 'Guardar click' ) {
-            if (typeof this.ruc_name_typeSelected.id === 'undefined') {
+            if (typeof this.ruc_name_typeSelected.id === 'undefined' || this.ruc_name_typeSelected.id == 0) {
                this.ruc_name_typeDataService.post(this.ruc_name_typeSelected).then( r => {
                   this.toastr.successToastr('Datos guardados satisfactoriamente.', 'Nuevo');
                   this.getRucNameTypes();
