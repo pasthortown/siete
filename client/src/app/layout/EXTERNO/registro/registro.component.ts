@@ -2240,8 +2240,10 @@ export class RegistroComponent implements OnInit {
     this.establishment_selected.address_map_longitude = event.coords.lng;
   }
 
-  getCertificadoUsoSuelo() {
-  //this.rucEstablishmentRegisterSelected   
+  getCertificadoUsoSuelo(register_id: number) {
+     this.floorAuthorizationCertificateDataService.get_by_register_id(register_id).then( r => {
+        this.certificadoUsoSuelo = r as FloorAuthorizationCertificate;
+     }).catch( e => { console.log(e); });
   }
 
   getTarifarioRack(register_id: number) {
@@ -2582,7 +2584,7 @@ export class RegistroComponent implements OnInit {
     this.certificadoUsoSuelo = new FloorAuthorizationCertificate();
     this.registerDataService.get_register_data(register.id).then( r => {
        this.rucEstablishmentRegisterSelected = r.register as Register;
-       this.getCertificadoUsoSuelo();
+       this.getCertificadoUsoSuelo(this.rucEstablishmentRegisterSelected.id);
        this.setCategory(this.rucEstablishmentRegisterSelected.register_type_id);
        this.rucEstablishmentRegisterSelected.editable = editable;
        this.getTramiteStatus(this.rucEstablishmentRegisterSelected.status);

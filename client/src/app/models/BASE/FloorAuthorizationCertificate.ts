@@ -5,6 +5,7 @@ export class FloorAuthorizationCertificate {
    floor_authorization_certificate_file: String;
    register_id: number;
    constructor() {
+      this.id = 0;
       this.floor_authorization_certificate_file = '';
       this.floor_authorization_certificate_file_name = '';
       this.floor_authorization_certificate_file_type = '';
