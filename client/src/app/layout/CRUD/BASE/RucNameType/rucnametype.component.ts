@@ -85,9 +85,9 @@ export class RucNameTypeComponent implements OnInit {
    toCSV() {
       this.ruc_name_typeDataService.get().then( r => {
          const backupData = r as RucNameType[];
-         let output = 'id;name\n';
+         let output = 'id;name;description\n';
          backupData.forEach(element => {
-            output += element.id + ';' + element.name + '\n';
+            output += element.id; + element.name + ';' + element.description + '\n';
          });
          const blob = new Blob([output], { type: 'text/plain' });
          const fecha = new Date();
@@ -111,7 +111,7 @@ export class RucNameTypeComponent implements OnInit {
    }
 
    openDialog(content) {
-      this.modalService.open(content, { centered: true }).result.then(( response => {
+      this.modalService.open(content, { centered: true , size: 'lg' }).result.then(( response => {
          if ( response === 'Guardar click' ) {
             if (typeof this.ruc_name_typeSelected.id === 'undefined') {
                this.ruc_name_typeDataService.post(this.ruc_name_typeSelected).then( r => {

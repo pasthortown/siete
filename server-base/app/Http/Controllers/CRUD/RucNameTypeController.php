@@ -42,6 +42,7 @@ class RucNameTypeController extends Controller
              $rucnametype->id = 1;
           }
           $rucnametype->name = $result['name'];
+          $rucnametype->description = $result['description'];
           $rucnametype->save();
           DB::commit();
        } catch (Exception $e) {
@@ -57,6 +58,7 @@ class RucNameTypeController extends Controller
           $result = $data->json()->all();
           $rucnametype = RucNameType::where('id',$result['id'])->update([
              'name'=>$result['name'],
+             'description'=>$result['description'],
           ]);
           DB::commit();
        } catch (Exception $e) {
@@ -94,11 +96,13 @@ class RucNameTypeController extends Controller
          if ($exist) {
            RucNameType::where('id', $result['id'])->update([
              'name'=>$result['name'],
+             'description'=>$result['description'],
            ]);
          } else {
           $rucnametype = new RucNameType();
           $rucnametype->id = $result['id'];
           $rucnametype->name = $result['name'];
+          $rucnametype->description = $result['description'];
           $rucnametype->save();
          }
        }

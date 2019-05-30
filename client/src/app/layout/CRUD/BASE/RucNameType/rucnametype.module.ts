@@ -6,10 +6,12 @@ import { RucNameTypeRoutingModule } from './rucnametype-routing.module';
 import { RucNameTypeComponent } from './rucnametype.component';
 import { RucNameTypeService } from './../../../../services/CRUD/BASE/rucnametype.service';
 import { environment } from 'src/environments/environment';
+import { CKEditorModule } from 'ngx-ckeditor';
 
 @NgModule({
    imports: [CommonModule,
              RucNameTypeRoutingModule,
+             CKEditorModule,
              FormsModule],
    declarations: [RucNameTypeComponent],
    providers: [

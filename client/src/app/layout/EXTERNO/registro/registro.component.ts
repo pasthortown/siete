@@ -98,7 +98,7 @@ export class RegistroComponent implements OnInit {
    
    tabActive = 'paso1';
    tabActiveSuperior = 'tab1';
-
+   selectedNameType: RucNameType = new RucNameType();
    //PAGOS
    tarifarioResponse: Tariff[] = [];
    tarifarioRack = {cabecera: [], valores: []};
@@ -1366,6 +1366,14 @@ export class RegistroComponent implements OnInit {
    });
   }
 
+  getNameTypeInfo() {
+     this.ruc_name_types.forEach(element => {
+        if (element.id == this.establishment_selected.ruc_name_type_id) {
+           this.selectedNameType = element;
+        }
+     });
+  }
+
   guardarRUC() {
    if (!this.validateRuc()) {
       this.toastr.errorToastr('Existe conflicto con la información ingresada.', 'Nuevo');
@@ -2250,6 +2258,7 @@ export class RegistroComponent implements OnInit {
      if(establishment.id == 0) {
       this.newRegisterEstablishment();
       this.establishment_selected.ruc_code_id = establishment.ruc_code_id;
+      this.selectedNameType = new RucNameType();
       return;
      }
     this.selectRegisterEstablishmentDeclaration(establishment);
@@ -2273,6 +2282,7 @@ export class RegistroComponent implements OnInit {
       this.recoverUbication();
       this.checkEstablishmentAddress();
       this.checkURLWeb();
+      this.getNameTypeInfo();
       this.validateNombreComercial();
       this.establishment_selected.contact_user = r.contact_user as User;
       this.checkCedulaEstablishment();
