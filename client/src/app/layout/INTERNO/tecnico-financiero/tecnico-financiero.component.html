@@ -18,16 +18,18 @@
            </div>
         </div>
       </div>
-      <div class="row">
-        <div class="col-12 mt-2">
-           <ng-table
-              [config]="config"
-              (cellClicked)="onCellClick($event)"
-              (tableChanged)="onChangeTable(config)"
-              [rows]="rows"
-              [columns]="columns">
-            </ng-table>
-        </div>
+      <div style="width: 100%; overflow-x: auto;">
+          <div class="row">
+              <div class="col-12 mt-2">
+                 <ng-table
+                    [config]="config"
+                    (cellClicked)="onCellClick($event)"
+                    (tableChanged)="onChangeTable(config)"
+                    [rows]="rows"
+                    [columns]="columns">
+                  </ng-table>
+              </div>
+            </div>
       </div>
       <div class="row">
         <div class="col-12">
@@ -196,16 +198,18 @@
                         </div>
                       </div>
                     </div>
-                    <div class="row">
-                      <div class="col-12 mt-2">
-                         <ng-table
-                            [config]="config"
-                            (cellClicked)="onCellClickEstablishmentDeclaration($event)"
-                            (tableChanged)="onChangeTableEstablishment(config)"
-                            [rows]="rowsEstablishment"
-                            [columns]="columnsEstablishment">
-                          </ng-table>
-                      </div>
+                    <div style="width: 100%; overflow-x: auto;">
+                        <div class="row">
+                            <div class="col-12 mt-2">
+                               <ng-table
+                                  [config]="config"
+                                  (cellClicked)="onCellClickEstablishmentDeclaration($event)"
+                                  (tableChanged)="onChangeTableEstablishment(config)"
+                                  [rows]="rowsEstablishment"
+                                  [columns]="columnsEstablishment">
+                                </ng-table>
+                            </div>
+                          </div>
                     </div>
                     <div class="row">
                       <div class="col-12">
