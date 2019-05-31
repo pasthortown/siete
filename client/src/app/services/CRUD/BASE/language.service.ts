@@ -30,6 +30,20 @@ export class LanguageService {
       }).catch( error => { this.handledError(error.json()); });
    }
 
+   save_languajes(establishment_id: number, languages_on_establishment: Language[]): Promise<any> {
+      return this.http.post(this.url + 'save_languajes',JSON.stringify({establishment_id: establishment_id, languages_on_establishment: languages_on_establishment}), this.options).toPromise()
+      .then( r => {
+         return r.json();
+      }).catch( error => { this.handledError(error.json());  });
+   }
+
+   get_by_establishment_id(establishment_id: number): Promise<any> {
+      return this.http.get(this.url + 'get_by_establishment_id/?id=' + establishment_id.toString(), this.options).toPromise()
+      .then( r => {
+         return r.json();
+      }).catch( error => { this.handledError(error.json());  });
+   }
+
    get_paginate(size: number, page: number): Promise<any> {
       return this.http.get(this.url + 'paginate?size=' + size.toString() + '&page=' + page.toString(), this.options).toPromise()
       .then( r => {

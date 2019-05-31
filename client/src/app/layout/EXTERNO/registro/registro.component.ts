@@ -1465,6 +1465,9 @@ export class RegistroComponent implements OnInit {
       });
    });
    this.rucEstablishmentRegisterSelected.tarifario_rack = tariffs;
+   this.languageDataService.save_languajes(this.establishment_selected.id, this.establishment_selected.languages_on_establishment).then( r => {
+
+   }).catch( e => { console.log(e); });
    this.registerDataService.register_register_data(this.rucEstablishmentRegisterSelected).then( r => {
       this.certificadoUsoSuelo.register_id = r.id;
       this.guardarCertificadoUsoSuelos();
@@ -2637,6 +2640,9 @@ export class RegistroComponent implements OnInit {
     this.certificadoUsoSuelo = new FloorAuthorizationCertificate();
     this.registerDataService.get_register_data(register.id).then( r => {
        this.rucEstablishmentRegisterSelected = r.register as Register;
+       this.languageDataService.get_by_establishment_id(this.establishment_selected.id).then( r => {
+         this.establishment_selected.languages_on_establishment = r as Language[];
+       }).catch( e => { console.log(e); });
        this.getCertificadoUsoSuelo(this.rucEstablishmentRegisterSelected.id);
        this.setCategory(this.rucEstablishmentRegisterSelected.register_type_id);
        this.rucEstablishmentRegisterSelected.editable = editable;

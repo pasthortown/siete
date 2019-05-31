@@ -262,30 +262,6 @@ class EstablishmentController extends Controller
                'ruc_name_type_id'=>$result['ruc_name_type_id'],
             ]);
             $establishment = Establishment::where('id',$result['id'])->first();
-            $languages_on_establishment = $result['languages_on_establishment'];
-            $languages_on_establishment_old = $establishment->Languages()->get();
-            foreach( $languages_on_establishment_old as $language_old ) {
-               $delete = true;
-               foreach( $languages_on_establishment as $language ) {
-                  if ( $language_old->id === $language['id'] ) {
-                     $delete = false;
-                  }
-               }
-               if ( $delete ) {
-                  $establishment->Languages()->detach($language_old->id);
-               }
-            }
-            foreach( $languages_on_establishment as $language ) {
-               $add = true;
-               foreach( $languages_on_establishment_old as $language_old) {
-                  if ( $language_old->id === $language['id'] ) {
-                     $add = false;
-                  }
-               }
-               if ( $add ) {
-                  $establishment->Languages()->attach($language['id']);
-               }
-            }
             $establishment_certifications_on_establishment_old = $establishment->EstablishmentCertifications()->get();
             foreach( $establishment_certifications_on_establishment_old as $certification_old ) {
                $establishment->EstablishmentCertifications()->detach($certification_old->id);
@@ -369,10 +345,6 @@ class EstablishmentController extends Controller
             $establishment->establishment_property_type_id = $result['establishment_property_type_id'];
             $establishment->ruc_name_type_id = $result['ruc_name_type_id'];
             $establishment->save();
-            $languages_on_establishment = $result['languages_on_establishment'];
-            foreach( $languages_on_establishment as $language) {
-               $establishment->Languages()->attach($language['id']);
-            }
             $establishment_certifications_on_establishment = $result['establishment_certifications_on_establishment'];
             foreach( $establishment_certifications_on_establishment as $establishment_certification_on_establishment) {
                $establishment_certification_attachment = $establishment_certification_on_establishment['establishment_certification_attachment'];
