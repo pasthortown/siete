@@ -17,6 +17,7 @@ import { environment } from 'src/environments/environment';
 import { CKEditorModule } from 'ngx-ckeditor';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgxBarcodeModule } from 'ngx-barcode';
+import { MailerService } from './../../../services/negocio/mailer.service';
 import { NgxQRCodeModule } from 'ngx-qrcode2';
 import { WorkerService } from 'src/app/services/CRUD/BASE/worker.service';
 import { TaxPayerTypeService } from 'src/app/services/CRUD/BASE/taxpayertype.service';
@@ -75,6 +76,7 @@ import { ScrollToModule } from '@nicky-lenaers/ngx-scroll-to';
     EstablishmentPropertyTypeService,
     RequisiteService,
     AgreementService,
+    MailerService,
     UbicationService,
     RegisterService,
     CapacityTypeService,

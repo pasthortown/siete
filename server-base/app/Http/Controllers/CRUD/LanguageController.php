@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 Use Exception;
 use App\Language;
+use App\Establishment;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -21,6 +22,40 @@ class LanguageController extends Controller
           $attach = [];
           return response()->json(["Language"=>$language, "attach"=>$attach],200);
        }
+    }
+
+    function save_languajes(Request $data) {
+      $result = $data->json()->all();
+      $establishment = Establishment::where('id',$result['establishment_id'])->first();
+      $languages_on_establishment = $result['languages_on_establishment'];
+      $languages_on_establishment_old = $establishment->Languages()->get();
+      foreach( $languages_on_establishment_old as $language_old ) {
+         $delete = true;
+         foreach( $languages_on_establishment as $language ) {
+            if ( $language_old->id === $language['id'] ) {
+               $delete = false;
+            }
+         }
+         if ( $delete ) {
+            $establishment->Languages()->detach($language_old->id);
+         }
+      }
+      foreach( $languages_on_establishment as $language ) {
+         $add = true;
+         foreach( $languages_on_establishment_old as $language_old) {
+            if ( $language_old->id === $language['id'] ) {
+               $add = false;
+            }
+         }
+         if ( $add ) {
+            $establishment->Languages()->attach($language['id']);
+         }
+      }
+      return 1;
+    }
+
+    function get_by_establishment_id(Request $data) {
+       return response()->json(Language::where('establishment_id', $data['id'])->get(),200);
     }
 
     function paginate(Request $data)

@@ -93,7 +93,9 @@ $router->group(['middleware' => ['auth']], function () use ($router) {
 
    //CRUD Language
    $router->post('/language', ['uses' => 'LanguageController@post']);
+   $router->post('/language/save_languajes', ['uses' => 'LanguageController@save_languajes']);
    $router->get('/language', ['uses' => 'LanguageController@get']);
+   $router->get('/language/get_by_establishment_id', ['uses' => 'LanguageController@get_by_establishment_id']);
    $router->get('/language/paginate', ['uses' => 'LanguageController@paginate']);
    $router->get('/language/backup', ['uses' => 'LanguageController@backup']);
    $router->put('/language', ['uses' => 'LanguageController@put']);
