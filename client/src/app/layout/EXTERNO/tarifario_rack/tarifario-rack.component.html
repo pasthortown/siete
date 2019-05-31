@@ -3,3 +3,39 @@
         Tarifario Rack
     </h1>
 </div>
+<div class="row">
+    <div class="col-12">
+        <input *ngIf="config.filtering" placeholder="Buscar..."
+                        [ngTableFiltering]="config.filtering"
+                        class="form-control"
+                        (input)="onChangeTableRegister(config)"/>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12 mt-2">
+       <ng-table
+          [config]="config"
+          (cellClicked)="onCellClickRegister($event)"
+          (tableChanged)="onChangeTableRegister(config)"
+          [rows]="rowsRegister"
+          [columns]="columnsRegister">
+        </ng-table>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <ngb-pagination
+        *ngIf="config.paging"
+        [(page)]="currentPageRegister"
+        [pageSize]="recordsByPageRegister"
+        [maxSize]="10"
+        [boundaryLinks]="true"
+        (pageChange)="onChangeTableRegister(config, $event)"
+        [collectionSize]="registers_mintur.length">
+        <ng-template ngbPaginationFirst>Primera</ng-template>
+        <ng-template ngbPaginationPrevious>Anterior</ng-template>
+        <ng-template ngbPaginationNext>Siguiente</ng-template>
+        <ng-template ngbPaginationLast>Última</ng-template>
+      </ngb-pagination>
+    </div>
+  </div>
