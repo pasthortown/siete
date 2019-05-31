@@ -235,7 +235,9 @@ export class TarifarioRackComponent implements OnInit {
    }
 
    selectRegister(register: Register) {
-    console.log(register);
+    this.registerDataService.get_tarifario(register.id).then( r => {
+      console.log(r);
+    }).catch( e => { console.log(e); });
    }
 
    getRegisterState(id: number): String {
