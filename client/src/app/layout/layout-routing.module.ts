@@ -312,6 +312,10 @@ const routes: Routes = [
             loadChildren: './EXTERNO/registro/registro.module#RegistroModule'
          },
          {
+            path: 'tarifario-rack',
+            loadChildren: './EXTERNO/registro/registro.module#RegistroModule'
+         },
+         {
             path: '**',
             redirectTo: 'not-found'
          }
