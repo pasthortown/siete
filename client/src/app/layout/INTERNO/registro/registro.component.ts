@@ -663,7 +663,7 @@ export class RegistroComponent implements OnInit {
             number: item.ruc.number,
             registerId: item.register.id,
             establishment: item.establishment.commercially_known_name,
-            address: item.establishment.address,
+            address: item.establishment.address_main_street + ' ' + item.establishment.address_number + ' ' + item.establishment.address_secondary_street,
             category: this.getRegisterCategory(item.register.register_type_id),
             status: registerState,
          });
