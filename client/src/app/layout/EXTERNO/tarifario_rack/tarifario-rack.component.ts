@@ -48,7 +48,8 @@ export class TarifarioRackComponent implements OnInit {
   categories_registers: RegisterType[] = [];
   categorySelectedCode = '-';
   alowed_bed_types: BedType[] = []; 
-
+  yearSelected = 0;
+  years = [2017, 2018, 2019];
   constructor(private registerDataService: RegisterService,
               private userDataService: UserService,
               private register_typeDataService: RegisterTypeService,
