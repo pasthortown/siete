@@ -38,7 +38,7 @@ class ZonalDataController extends Controller
        $data = json_decode($this->zonales);
        $id = $request['id'];
        if ($id == null) {
-          return response()->json($zonales,200);
+          return response()->json($data,200);
        } else {
            foreach($data as $zonal) {
                if ($id == $zonal->id) {
