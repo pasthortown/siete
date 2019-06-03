@@ -16,7 +16,7 @@
               role="alert"
             >
               Si usted tiene inconvenientes para ingresar al sistema, comuníquese con el Ministerio de Turismo.<br/>
-              <a href="https://www.turismo.gob.ec/category/el-ministerio/" target="_blank">Ir al Sitio Web del Ministerio de Turismo</a>
+              <a href="javascript:void(0)" (click)="openDialog(content)">Visualizar Directorio Telefónico de las Coordinaciones Zonales</a>
             </div>
           </div>
         </div>
@@ -82,3 +82,37 @@
     </div>
   </div>
 </div>
+<ng-template #content let-modal>
+   <div class="modal-header">
+      <h4 class="modal-title">Directorio Telefónico de las Coordinaciones Zonales</h4>
+      <button type="button" class="close" (click)="modal.dismiss('Cross click')">
+         <span>&times;</span>
+      </button>
+   </div>
+   <div class="modal-body">
+      <div class="row">
+         <div class="col-12">
+            <table class="table table-hover">
+              <thead>
+                  <th>Nombre</th>
+                  <th>Teléfono</th>
+                  <th>Dirección</th>
+              </thead>
+              <tbody>
+                <tr *ngFor="let zonal of zonales">
+                  <td>
+                      {{zonal.name}}
+                  </td>
+                  <td>
+                      {{zonal.telefono}}
+                  </td>
+                  <td>
+                     {{zonal.direccion}}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+         </div>
+      </div>
+   </div>
+</ng-template>

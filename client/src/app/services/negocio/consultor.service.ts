@@ -9,6 +9,7 @@ import { environment } from './../../../environments/environment';
 export class ConsultorService {
 
    url = environment.api_consultor;
+   url_base = environment.api_base;
    options = new RequestOptions();
 
    constructor(private http: Http, private router: Router) {
@@ -22,6 +23,20 @@ export class ConsultorService {
       .then( r => {
          return r.json();
       }).catch( error => { this.handledError(error.json());  });
+   }
+
+   get_zonales(id?: number) {
+      if (typeof id == 'undefined'){
+         return this.http.get(this.url_base + 'zonal/', this.options).toPromise()
+         .then( r => {
+            return r.json();
+         }).catch( error => { this.handledError(error.json()); });
+      } else {
+         return this.http.get(this.url_base + 'zonal/?id=' + id.toString(), this.options).toPromise()
+         .then( r => {
+            return r.json();
+         }).catch( error => { this.handledError(error.json()); });
+      }
    }
 
    get_registers_assigned_inspector_id(id: number) {

@@ -1,9 +1,11 @@
+import { ConsultorService } from './../services/negocio/consultor.service';
 import { Router } from '@angular/router';
 import { AuthService } from './../services/auth.service';
 import { Component, OnInit } from '@angular/core';
 import Swal from 'sweetalert2';
 import { ProfilePictureService } from '../services/profile/profilepicture.service';
 import { ProfilePicture } from '../models/profile/ProfilePicture';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
     selector: 'app-login',
@@ -16,13 +18,21 @@ export class LoginComponent implements OnInit {
   email: String = '';
   busy: Promise<any>;
   esperando: boolean;
+  zonales = [];
 
-  constructor(private router: Router, private authDataServise: AuthService, private profilePictureDataService: ProfilePictureService) {}
+  constructor(private consultorDataService: ConsultorService, private router: Router, private modalService: NgbModal, private authDataServise: AuthService, private profilePictureDataService: ProfilePictureService) {}
 
   ngOnInit() {
     this.email = '';
     this.password = '';
     this.esperando = false;
+    this.getZonales();
+  }
+
+  getZonales() {
+    this.consultorDataService.get_zonales().then( r => {
+      this.zonales = r;
+    }).catch( e => { console.log(e); });
   }
 
   login() {
@@ -83,4 +93,10 @@ export class LoginComponent implements OnInit {
       });
     }
   }
+
+  openDialog(content) {
+    this.modalService.open(content, { centered: true }).result.then(( response => {
+       
+    }), ( r => {}));
+ }
 }
