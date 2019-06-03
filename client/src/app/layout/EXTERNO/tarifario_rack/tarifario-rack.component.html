@@ -42,27 +42,23 @@
   <div class="col-12">
     <div class="btn-toolbar" role="toolbar">
       <div class="btn-group mr-2" role="group">
-        <button type="button" class="btn btn-primary" title="Actualizar" (click)="
-          getEstablishmentsOnRuc(currentPageEstablishment)
+        <button type="button" [disabled]="searchingYears" class="btn btn-primary" title="Actualizar" (click)="
+        getTarifarioRack(registerMinturSelected.id)
           ">
           <i class="fas fa-sync"></i>
         </button>
         <button type="button" class="btn btn-success" title="Actualizar" (click)="
-          getEstablishmentsOnRuc(currentPageEstablishment)
+          newTariffRack()
           ">
           <i class="fas fa-file"></i>
         </button>
       </div>
       <div class="input-group">
         <div class="input-group-prepend">
-          <button type="button" class="input-group-text btn btn-success" title="Buscar" (click)="
-          onChangeTableEstablishment(config)
-            ">
-            Año
-          </button>
+          <span class="input-group-text">Año</span>
         </div>
         <select class="form-control" id="yearSelected" name="yearSelected"
-          [(ngModel)]="yearSelected">
+          [(ngModel)]="yearSelected" (change)="seleccionadoYear()">
           <option value="0" selected>Seleccione...</option>
           <option *ngFor="let year of years" value="{{ year }}">
             {{ year }}

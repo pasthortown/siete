@@ -49,7 +49,8 @@ export class TarifarioRackComponent implements OnInit {
   categorySelectedCode = '-';
   alowed_bed_types: BedType[] = []; 
   yearSelected = 0;
-  years = [2017, 2018, 2019];
+  years = [];
+  searchingYears = false;
   constructor(private registerDataService: RegisterService,
               private userDataService: UserService,
               private register_typeDataService: RegisterTypeService,
@@ -312,8 +313,10 @@ export class TarifarioRackComponent implements OnInit {
    }
 
    getTarifarioRack(register_id: number) {
+    this.searchingYears = true;
     this.registerDataService.get_tarifario(register_id).then( r => {
        this.tarifarioResponse = r as Tariff[];
+       this.searchingYears = false;
        let max_year = 0;
        this.tarifarioResponse.forEach(element => {
           if(element.year > max_year){
@@ -330,7 +333,29 @@ export class TarifarioRackComponent implements OnInit {
              });
           });
        });
+       this.years = [];
+       this.tarifarioResponse.forEach(element => {
+          let existe = false;
+          this.years.forEach(year => {
+             if ( year == element.year) {
+                existe = true;
+             }
+          });
+          if (!existe) {
+            this.years.push(element.year);
+          }
+       });
+       this.years.sort();
     }).catch( e => { console.log(e); });
+   }
+
+   newTariffRack() {
+      const today = new Date();
+      console.log("nuevo");
+   }
+
+   seleccionadoYear() {
+      console.log(this.yearSelected);
    }
 
    getAllowedInfo() {

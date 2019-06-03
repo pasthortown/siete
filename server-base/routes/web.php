@@ -19,6 +19,8 @@ $router->group(['middleware' => []], function () use ($router) {
 });
 
 $router->group(['middleware' => ['auth']], function () use ($router) {
+   //CRUD Zonal
+   $router->get('/zonal', ['uses' => 'ZonalDataController@get']);
    //CRUD Ruc
    $router->post('/ruc', ['uses' => 'RucController@post']);
    $router->get('/ruc', ['uses' => 'RucController@get']);
