@@ -23,7 +23,7 @@ import { ToastrManager } from 'ng6-toastr-notifications';
   styleUrls: ['./tarifario-rack.component.scss']
 })
 export class TarifarioRackComponent implements OnInit {
-  alowed_capacity_types: CapacityType[] = [];
+  allowed_capacity_types: CapacityType[] = [];
   registers_mintur = [];
   registerMinturSelected: Register = new Register();
   user: User = new User();
@@ -270,9 +270,9 @@ export class TarifarioRackComponent implements OnInit {
       });
       this.getTarifarioRack(register.id);
       this.getAllowedInfo();
-      this.alowed_capacity_types = [];
+      this.allowed_capacity_types = [];
       this.capacityTypeDataService.get_filtered_by_register_type(this.registerMinturSelected.register_type_id).then( r2 => {
-        this.alowed_capacity_types = r2 as CapacityType[];
+        this.allowed_capacity_types = r2 as CapacityType[];
         this.registerMinturSelected.capacities_on_register.forEach(capacity => {
           this.getMaxBed(capacity);
           this.calcBeds(capacity);
@@ -401,9 +401,9 @@ export class TarifarioRackComponent implements OnInit {
    }
 
    getCapacityTypes() {
-    this.alowed_capacity_types = [];
+    this.allowed_capacity_types = [];
     this.capacityTypeDataService.get_filtered_by_register_type(this.registerMinturSelected.register_type_id).then( r => {
-       this.alowed_capacity_types = r as CapacityType[];
+       this.allowed_capacity_types = r as CapacityType[];
     }).catch( e => { console.log(e); });
    }
 
@@ -415,7 +415,7 @@ export class TarifarioRackComponent implements OnInit {
    }
 
    getMaxBed(capacity: Capacity) {
-    this.alowed_capacity_types.forEach(capacityType => {
+    this.allowed_capacity_types.forEach(capacityType => {
        if(capacityType.id == capacity.capacity_type_id) {
           capacity.max_bed = capacityType.bed_quantity;
           capacity.max_spaces = capacityType.spaces;
@@ -457,7 +457,7 @@ export class TarifarioRackComponent implements OnInit {
 
    calcSpaces(capacity?) {
     if(typeof capacity !== 'undefined') {
-       this.alowed_capacity_types.forEach(capacityType => {
+       this.allowed_capacity_types.forEach(capacityType => {
           if (capacityType.id == capacity.capacity_type_id) {
              if (capacityType.editable_spaces) {
                 capacity.max_spaces = 0;
@@ -489,7 +489,7 @@ export class TarifarioRackComponent implements OnInit {
              tariffType.childs.forEach(tariffTypeChild => {
                 const es_referencia = tariffType.father.is_reference;
                 let plazasHabitacion = 0;
-                this.alowed_capacity_types.forEach(capacityType => {
+                this.allowed_capacity_types.forEach(capacityType => {
                    if (capacityType.id == idTipoCapacidad) {
                       plazasHabitacion = capacityType.spaces;
                    }
@@ -506,12 +506,25 @@ export class TarifarioRackComponent implements OnInit {
                 childs.push(newChild);
              });
           });
-          let topush = {idTipoCapacidad: idTipoCapacidad, tariffs: childs};
+          const editable = capacity.editable;
+          const topush = {idTipoCapacidad: idTipoCapacidad, tariffs: childs, editable: editable};
           this.tarifarioRack.valores.push(topush);
        });
     }
+    this.tarifarioRack.valores.forEach(tariffRackRow => {
+       tariffRackRow.tariffs.forEach(tariff => {
+         this.tarifarioResponse.forEach(tariffResponse => {
+             if(tariff.tariff.capacity_type_id == tariffResponse.capacity_type_id &&
+               tariff.tariff.year == tariffResponse.year &&
+               tariff.tariff.tariff_type_id == tariffResponse.tariff_type_id) {
+                  tariff.tariff.register_id = this.registerMinturSelected.id;
+                  tariff.tariff.price = tariffResponse.price;
+               }
+          });
+       });
+    });
     this.registerMinturSelected.capacities_on_register.forEach(capacity => {
-       this.alowed_capacity_types.forEach(capacityType => {
+       this.allowed_capacity_types.forEach(capacityType => {
           if (capacityType.id == capacity.capacity_type_id) {
              capacity.editable_beds = capacityType.editable_beds;
              capacity.editable_spaces = capacityType.editable_spaces;
@@ -523,4 +536,19 @@ export class TarifarioRackComponent implements OnInit {
     });
    }
  
+   checkValuesTariffs() {
+      this.tarifarioRack.valores.forEach(valor => {
+         valor.tariffs.forEach(tariff => {
+            if (!tariff.isReference) {
+             valor.tariffs.forEach(tariff2 => {
+                if( tariff !== tariff2) {
+                   if (tariff.nombreDivision == tariff2.nombreDivision) {
+                      tariff.tariff.price = tariff2.tariff.price / tariff2.plazasHabitacion;
+                   }
+                }
+             });
+            }
+         });
+      });
+   }
 }

@@ -229,7 +229,7 @@ export class RegistroComponent implements OnInit {
   rack_prices_registerSelectedId = 0;
   establishment_service_offers_registerSelectedId = 0;
   tarifas: any[] = [];
-  alowed_capacity_types: CapacityType[] = [];
+  allowed_capacity_types: CapacityType[] = [];
   complementaryServiceFoodTypes: ComplementaryServiceFoodType[] = [];
   
   //DINARDAP
@@ -1226,9 +1226,9 @@ export class RegistroComponent implements OnInit {
   }
 
   getCapacityTypes() {
-   this.alowed_capacity_types = [];
+   this.allowed_capacity_types = [];
    this.capacityTypeDataService.get_filtered_by_register_type(this.rucEstablishmentRegisterSelected.register_type_id).then( r => {
-      this.alowed_capacity_types = r as CapacityType[];
+      this.allowed_capacity_types = r as CapacityType[];
    }).catch( e => { console.log(e); });
   }
 
@@ -1441,7 +1441,7 @@ export class RegistroComponent implements OnInit {
    }
    let NoApruebaCantidadCamas = false;
    this.rucEstablishmentRegisterSelected.capacities_on_register.forEach(capacity => {
-      this.alowed_capacity_types.forEach(capacity_type => {
+      this.allowed_capacity_types.forEach(capacity_type => {
          if (capacity.capacity_type_id == capacity_type.id) {
             if (capacity.max_bed> capacity_type.bed_quantity){
                NoApruebaCantidadCamas = true;
@@ -1759,7 +1759,7 @@ export class RegistroComponent implements OnInit {
   }
 
   getMaxBed(capacity: Capacity) {
-   this.alowed_capacity_types.forEach(capacityType => {
+   this.allowed_capacity_types.forEach(capacityType => {
       if(capacityType.id == capacity.capacity_type_id) {
          capacity.max_bed = capacityType.bed_quantity;
          capacity.max_spaces = capacityType.spaces;
@@ -2652,9 +2652,9 @@ export class RegistroComponent implements OnInit {
        this.getTarifarioRack(register.id);
        this.getCategories();
        this.getAllowedInfo();
-       this.alowed_capacity_types = [];
+       this.allowed_capacity_types = [];
        this.capacityTypeDataService.get_filtered_by_register_type(this.rucEstablishmentRegisterSelected.register_type_id).then( r2 => {
-         this.alowed_capacity_types = r2 as CapacityType[];
+         this.allowed_capacity_types = r2 as CapacityType[];
          this.mostrarDataRegister = true;
          this.rucEstablishmentRegisterSelected.capacities_on_register.forEach(capacity => {
             this.getMaxBed(capacity);
@@ -2850,7 +2850,7 @@ export class RegistroComponent implements OnInit {
 
   calcSpaces(capacity?) {
    if(typeof capacity !== 'undefined') {
-      this.alowed_capacity_types.forEach(capacityType => {
+      this.allowed_capacity_types.forEach(capacityType => {
          if (capacityType.id == capacity.capacity_type_id) {
             if (capacityType.editable_spaces) {
                capacity.max_spaces = 0;
@@ -2882,7 +2882,7 @@ export class RegistroComponent implements OnInit {
             tariffType.childs.forEach(tariffTypeChild => {
                const es_referencia = tariffType.father.is_reference;
                let plazasHabitacion = 0;
-               this.alowed_capacity_types.forEach(capacityType => {
+               this.allowed_capacity_types.forEach(capacityType => {
                   if (capacityType.id == idTipoCapacidad) {
                      plazasHabitacion = capacityType.spaces;
                   }
@@ -2899,12 +2899,12 @@ export class RegistroComponent implements OnInit {
                childs.push(newChild);
             });
          });
-         let topush = {idTipoCapacidad: idTipoCapacidad, tariffs: childs};
+         const topush = {idTipoCapacidad: idTipoCapacidad, tariffs: childs};
          this.tarifarioRack.valores.push(topush);
       });
    }
    this.rucEstablishmentRegisterSelected.capacities_on_register.forEach(capacity => {
-      this.alowed_capacity_types.forEach(capacityType => {
+      this.allowed_capacity_types.forEach(capacityType => {
          if (capacityType.id == capacity.capacity_type_id) {
             capacity.editable_beds = capacityType.editable_beds;
             capacity.editable_spaces = capacityType.editable_spaces;
