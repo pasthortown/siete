@@ -265,6 +265,9 @@ export class TarifarioRackComponent implements OnInit {
       this.registerMinturSelected = r.register;
       this.registerMinturSelected.status = r.status.state_id;
       this.registerMinturSelected.capacities_on_register = r.capacities_on_register as Capacity[];
+      this.registerMinturSelected.capacities_on_register.forEach(capacity => {
+         capacity.editable = false;
+      });
       this.getTarifarioRack(register.id);
       this.getAllowedInfo();
       this.alowed_capacity_types = [];
@@ -355,7 +358,7 @@ export class TarifarioRackComponent implements OnInit {
       });
       if (year >= max_year) {
          if (year == max_year) {
-            this.toastr.infoToastr('Usted ya registró una declaración correspondiente al año en curso.', 'Información');
+            this.toastr.infoToastr('Usted ya realizó una declaración de Tarifario Rack correspondiente al año en curso.', 'Información');
             this.tarifarioRack.valores.forEach(element => {
                element.tariffs.forEach(tariffRack => {
                   const tariff = tariffRack.tariff;
@@ -375,6 +378,7 @@ export class TarifarioRackComponent implements OnInit {
 
    addCapacity() {
       const newCapacity = new Capacity();
+      newCapacity.editable = true;
       this.registerMinturSelected.total_spaces = 0;
       this.registerMinturSelected.capacities_on_register.push(newCapacity);
    }
@@ -383,7 +387,7 @@ export class TarifarioRackComponent implements OnInit {
       const newCapacities: Capacity[] = [];
       this.registerMinturSelected.total_spaces = 0;
       this.registerMinturSelected.capacities_on_register.forEach(element => {
-         if(capacity !== element) {
+         if (capacity !== element) {
             newCapacities.push(element);
          }
       });
@@ -457,6 +461,7 @@ export class TarifarioRackComponent implements OnInit {
     if(typeof capacity !== 'undefined') {
        this.alowed_capacity_types.forEach(capacityType => {
           if (capacityType.id == capacity.capacity_type_id) {
+            console.log(capacityType);
              if (capacityType.editable_spaces) {
                 capacity.max_spaces = 0;
              } else {
@@ -524,5 +529,4 @@ export class TarifarioRackComponent implements OnInit {
        this.registerMinturSelected.total_beds += (capacity.max_bed * capacity.quantity);
     });
    }
- 
 }
