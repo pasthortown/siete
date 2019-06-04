@@ -39,31 +39,28 @@
 </div>
 <div class="row" *ngIf="registerMinturSelected.id !== 0">
   <div class="col-12">
-    <div class="btn-toolbar" role="toolbar">
-      <div class="btn-group mr-2" role="group">
-        <button type="button" [disabled]="searchingYears" class="btn btn-primary" title="Actualizar" (click)="
-        getTarifarioRack(registerMinturSelected.id)
-          ">
-          <i class="fas fa-sync"></i>
-        </button>
-        <button type="button" class="btn btn-success" title="Actualizar" (click)="
-          newTariffRack()
-          ">
-          <i class="fas fa-file"></i>
-        </button>
-      </div>
-      <div class="input-group">
-        <div class="input-group-prepend">
-          <span class="input-group-text">Año</span>
+    <div class="form-group">
+      <div class="btn-toolbar" role="toolbar">
+        <div class="btn-group mr-2" role="group">
+          <button type="button" [disabled]="searchingYears" class="btn btn-primary" title="Actualizar" (click)="
+          getTarifarioRack(registerMinturSelected.id)
+            ">
+            <i class="fas fa-sync"></i>
+          </button>
+          <button type="button" class="btn btn-success" title="Actualizar" (click)="
+            newTariffRack()
+            ">
+            <i class="fas fa-file"></i>
+          </button>
         </div>
-        <select class="form-control" id="yearSelected" name="yearSelected"
-          [(ngModel)]="yearSelected" (change)="seleccionadoYear()">
-          <option value="0" selected>Seleccione...</option>
-          <option *ngFor="let year of years" value="{{ year }}">
-            {{ year }}
-          </option>
-        </select>
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text">Año</span>
+          </div>
+          <input type="text" [disabled]="true" class="form-control" id="yearSelected" name="yearSelected" [(ngModel)]="yearSelected"/>
+        </div>
       </div>
+      <small class="form-text text-muted ml-2">Último año declarado: {{lastYear}}.</small>  
     </div>
   </div>
 </div>
@@ -102,7 +99,7 @@
                   <table class="table table-hover mt-2">
                     <thead>
                       <th>
-                        <button type="button" title="Agregar" *ngIf="canChangeCapacities" class="btn btn-success ml-2" (click)="addCapacity()">
+                        <button type="button" title="Agregar" [disabled]="!canChangeCapacities" class="btn btn-success ml-2" (click)="addCapacity()">
                           <i class="fas fa-plus-circle"></i>
                         </button>
                       </th>
@@ -119,7 +116,7 @@
                             class="ml-2 badge badge-danger">Incorrecto</span>
                         </td>
                         <td>
-                          <select class="form-control" id="capacity_type_id" name="capacity_type_id"
+                          <select class="form-control" [disabled]="!canChangeCapacities" id="capacity_type_id" name="capacity_type_id"
                             [(ngModel)]="capacity.capacity_type_id" (change)="getMaxBed(capacity)">
                             <option value="0" selected>Seleccione...</option>
                             <option *ngFor="
@@ -135,13 +132,13 @@
                         </td>
                         <td>
                           <div class="col-12">
-                              <input type="number" class="form-control" min="0" max="9999" id="count_camas" name="count_camas" (input)="calcSpaces(capacity)"
+                              <input type="number" [disabled]="!capacity.editable_beds" class="form-control" min="0" max="9999" id="count_camas" name="count_camas" (input)="calcSpaces(capacity)"
                               placeholder="Cantidad de Camas" [(ngModel)]="capacity.max_bed"/>
                           </div>
                         </td>
                         <td>
                           <div class="col-12">
-                              <input type="number" class="form-control" min="0" max="9999" id="count_plazas" name="count_plazas" (input)="calcSpaces()"
+                              <input type="number" [disabled]="!capacity.editable_spaces" class="form-control" min="0" max="9999" id="count_plazas" name="count_plazas" (input)="calcSpaces()"
                               placeholder="Cantidad de Plazas" [(ngModel)]="capacity.max_spaces"/>
                           </div>
                         </td>
@@ -182,7 +179,7 @@
                       <tbody>
                         <tr *ngFor="let tariffRack of tarifarioRack.valores">
                           <td>
-                            <select class="form-control" id="capacity_type_id" name="capacity_type_id"
+                            <select class="form-control" [disabled]="!canChangeTariffsGeneral" id="capacity_type_id" name="capacity_type_id"
                               [(ngModel)]="tariffRack.idTipoCapacidad" [disabled]="true">
                               <option value="0" selected>Seleccione...</option>
                               <option *ngFor="
@@ -198,7 +195,7 @@
                                     <span class="input-group-text" id="basic-addon1">USD</span>
                                   </div>
                                   <input type="number" class="form-control" min="0" step="0.01" id="low_capacity_room_price"
-                                name="low_capacity_room_price" (input)="checkValuesTariffs()" [(ngModel)]="tariff.tariff.price" placeholder="Precio" [disabled]="(!tariff.isReference) && tariff.plazasHabitacion !== 999"/>
+                                name="low_capacity_room_price" (input)="checkValuesTariffs()" [(ngModel)]="tariff.tariff.price" placeholder="Precio" [disabled]="(!canChangeTariffsGeneral || (!tariff.isReference) && tariff.plazasHabitacion !== 999)"/>
                                 </div>
                           </td>
                         </tr>

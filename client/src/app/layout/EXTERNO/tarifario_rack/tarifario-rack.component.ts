@@ -15,6 +15,7 @@ import { Tariff } from 'src/app/models/ALOJAMIENTO/Tariff';
 import { TariffTypeService } from 'src/app/services/CRUD/ALOJAMIENTO/tarifftype.service';
 import { TariffType } from 'src/app/models/ALOJAMIENTO/TariffType';
 import { Capacity } from 'src/app/models/ALOJAMIENTO/Capacity';
+import { ToastrManager } from 'ng6-toastr-notifications';
 
 @Component({
   selector: 'app-tarifario-rack',
@@ -49,10 +50,12 @@ export class TarifarioRackComponent implements OnInit {
   categorySelectedCode = '-';
   alowed_bed_types: BedType[] = []; 
   yearSelected = 0;
-  years = [];
+  lastYear = 0;
   searchingYears = false;
   canChangeCapacities = false;
+  canChangeTariffsGeneral = false;
   constructor(private registerDataService: RegisterService,
+              private toastr: ToastrManager,
               private userDataService: UserService,
               private register_typeDataService: RegisterTypeService,
               private stateDataService: StateService,
@@ -316,6 +319,10 @@ export class TarifarioRackComponent implements OnInit {
    }
 
    getTarifarioRack(register_id: number) {
+    const today = new Date();
+    const month = today.getMonth() + 1;
+    const day = today.getDate();
+    this.yearSelected = today.getFullYear();
     this.searchingYears = true;
     this.registerDataService.get_tarifario(register_id).then( r => {
        this.tarifarioResponse = r as Tariff[];
@@ -326,19 +333,12 @@ export class TarifarioRackComponent implements OnInit {
              max_year = element.year;
           }
        });
-       this.years = [];
+       this.lastYear = 0;
        this.tarifarioResponse.forEach(element => {
-          let existe = false;
-          this.years.forEach(year => {
-             if ( year == element.year) {
-                existe = true;
-             }
-          });
-          if (!existe) {
-            this.years.push(element.year);
+          if (element.year > this.lastYear) {
+             this.lastYear = element.year;
           }
        });
-       this.years.sort();
     }).catch( e => { console.log(e); });
    }
 
@@ -347,30 +347,48 @@ export class TarifarioRackComponent implements OnInit {
       const month = today.getMonth() + 1;
       const day = today.getDate();
       const year = today.getFullYear();
-
+      let max_year = 0;
+      this.tarifarioResponse.forEach(element => {
+         if (element.year > max_year) {
+            max_year = element.year;
+         }
+      });
+      if (year >= max_year) {
+         if (year == max_year) {
+            this.toastr.infoToastr('Usted ya registró una declaración correspondiente al año en curso.', 'Información');
+            this.tarifarioRack.valores.forEach(element => {
+               element.tariffs.forEach(tariffRack => {
+                  const tariff = tariffRack.tariff;
+                  this.tarifarioResponse.forEach(tariffResponse => {
+                     if(tariffResponse.tariff_type_id == tariff.tariff_type_id && tariffResponse.year == this.yearSelected && tariffResponse.capacity_type_id == tariff.capacity_type_id) {
+                        tariffRack.tariff.price = tariffResponse.price;
+                     }
+                  });
+               });
+            });
+         }
+         this.canChangeCapacities = true;
+         this.mostrarDatos = true;
+         this.canChangeTariffsGeneral = true;
+      }
    }
 
-   seleccionadoYear() {
-      const today = new Date();
-      const month = today.getMonth() + 1;
-      const day = today.getDate();
-      const year = today.getFullYear();
-      if (year < this.yearSelected) {
-         this.canChangeCapacities = false;
-      } else {
-         this.canChangeCapacities = true;
-      }
-      this.tarifarioRack.valores.forEach(element => {
-         element.tariffs.forEach(tariffRack => {
-            const tariff = tariffRack.tariff;
-            this.tarifarioResponse.forEach(tariffResponse => {
-               if(tariffResponse.tariff_type_id == tariff.tariff_type_id && tariffResponse.year == this.yearSelected && tariffResponse.capacity_type_id == tariff.capacity_type_id) {
-                  tariffRack.tariff.price = tariffResponse.price;
-               }
-            });
-         });
+   addCapacity() {
+      const newCapacity = new Capacity();
+      this.registerMinturSelected.total_spaces = 0;
+      this.registerMinturSelected.capacities_on_register.push(newCapacity);
+   }
+
+   removeCapacity(capacity: Capacity) {
+      const newCapacities: Capacity[] = [];
+      this.registerMinturSelected.total_spaces = 0;
+      this.registerMinturSelected.capacities_on_register.forEach(element => {
+         if(capacity !== element) {
+            newCapacities.push(element);
+         }
       });
-      this.mostrarDatos = true;
+      this.registerMinturSelected.capacities_on_register = newCapacities;
+      this.calcSpaces();
    }
 
    getAllowedInfo() {
