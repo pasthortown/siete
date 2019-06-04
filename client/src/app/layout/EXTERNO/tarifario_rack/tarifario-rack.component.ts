@@ -51,6 +51,7 @@ export class TarifarioRackComponent implements OnInit {
   yearSelected = 0;
   years = [];
   searchingYears = false;
+  canChangeCapacities = false;
   constructor(private registerDataService: RegisterService,
               private userDataService: UserService,
               private register_typeDataService: RegisterTypeService,
@@ -242,6 +243,8 @@ export class TarifarioRackComponent implements OnInit {
    onCellClickRegister(event) {
     this.registers_mintur.forEach(element => {
        if (element.register.id == event.row.id) {
+          this.yearSelected = 0;
+          this.mostrarDatos = false;
           this.selectRegister(element.register);
        }
     });
@@ -323,16 +326,6 @@ export class TarifarioRackComponent implements OnInit {
              max_year = element.year;
           }
        });
-       this.tarifarioRack.valores.forEach(element => {
-          element.tariffs.forEach(tariffRack => {
-             const tariff = tariffRack.tariff;
-             this.tarifarioResponse.forEach(tariffResponse => {
-                if(tariffResponse.tariff_type_id == tariff.tariff_type_id && tariffResponse.year == max_year && tariffResponse.capacity_type_id == tariff.capacity_type_id) {
-                   tariffRack.tariff.price = tariffResponse.price;
-                }
-             });
-          });
-       });
        this.years = [];
        this.tarifarioResponse.forEach(element => {
           let existe = false;
@@ -351,11 +344,33 @@ export class TarifarioRackComponent implements OnInit {
 
    newTariffRack() {
       const today = new Date();
-      console.log("nuevo");
+      const month = today.getMonth() + 1;
+      const day = today.getDate();
+      const year = today.getFullYear();
+
    }
 
    seleccionadoYear() {
-      console.log(this.yearSelected);
+      const today = new Date();
+      const month = today.getMonth() + 1;
+      const day = today.getDate();
+      const year = today.getFullYear();
+      if (year < this.yearSelected) {
+         this.canChangeCapacities = false;
+      } else {
+         this.canChangeCapacities = true;
+      }
+      this.tarifarioRack.valores.forEach(element => {
+         element.tariffs.forEach(tariffRack => {
+            const tariff = tariffRack.tariff;
+            this.tarifarioResponse.forEach(tariffResponse => {
+               if(tariffResponse.tariff_type_id == tariff.tariff_type_id && tariffResponse.year == this.yearSelected && tariffResponse.capacity_type_id == tariff.capacity_type_id) {
+                  tariffRack.tariff.price = tariffResponse.price;
+               }
+            });
+         });
+      });
+      this.mostrarDatos = true;
    }
 
    getAllowedInfo() {

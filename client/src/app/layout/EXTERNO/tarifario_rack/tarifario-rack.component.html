@@ -37,7 +37,6 @@
         </ngb-pagination>
     </div>
 </div>
-
 <div class="row" *ngIf="registerMinturSelected.id !== 0">
   <div class="col-12">
     <div class="btn-toolbar" role="toolbar">
@@ -68,7 +67,7 @@
     </div>
   </div>
 </div>
-<div style="width: 100%; float: left;" *ngIf="yearSelected !== 0">
+<div style="width: 100%; float: left;" *ngIf="mostrarDatos">
         <div class="row mt-3">
             <h4 class="col-12">
                 <strong>Capacidades del Establecimiento</strong>
@@ -103,7 +102,7 @@
                   <table class="table table-hover mt-2">
                     <thead>
                       <th>
-                        <button type="button" title="Agregar" class="btn btn-success ml-2" (click)="addCapacity()">
+                        <button type="button" title="Agregar" *ngIf="canChangeCapacities" class="btn btn-success ml-2" (click)="addCapacity()">
                           <i class="fas fa-plus-circle"></i>
                         </button>
                       </th>

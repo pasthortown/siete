@@ -1505,7 +1505,7 @@ export class RegistroComponent implements OnInit {
       const information = {
          para: this.user.name,
          tramite: 'Solicitud - Registro',
-         ruc: this.user.identification,
+         ruc: this.user.ruc,
          nombreComercial: this.establishment_selected.commercially_known_name,
          fechaSolicitud: today.toLocaleString(),
          actividad: 'Alojamiento Turístico',
