@@ -95,7 +95,7 @@ export class LoginComponent implements OnInit {
   }
 
   openDialog(content) {
-    this.modalService.open(content, { centered: true }).result.then(( response => {
+    this.modalService.open(content, { centered: true, size: 'lg' }).result.then(( response => {
        
     }), ( r => {}));
  }
