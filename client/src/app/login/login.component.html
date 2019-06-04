@@ -100,14 +100,11 @@
               </thead>
               <tbody>
                 <tr *ngFor="let zonal of zonales">
-                  <td>
-                      {{zonal.name}}
+                  <td [innerHTML]="zonal.name">
                   </td>
-                  <td>
-                      {{zonal.telefono}}
+                  <td [innerHTML]="zonal.telefono">
                   </td>
-                  <td>
-                     {{zonal.direccion}}
+                  <td [innerHTML]="zonal.direccion">
                   </td>
                 </tr>
               </tbody>
