@@ -1285,7 +1285,6 @@ export class RegistroComponent implements OnInit {
 
   selectDeclaration(declaration: Declaration) {
       this.declaration_selected = declaration;
-      this.declaration_selected.editable = false;
       this.mostrarDataDeclaration = true;
       this.declarationItemsToShow = [];
       this.guardando = false;
@@ -1767,9 +1766,7 @@ export class RegistroComponent implements OnInit {
          if(capacityType.spaces == 999) {
             capacity.max_bed = 0;
             capacity.max_spaces = 0;
-            capacity.editable = true;
          } else {
-            capacity.editable = false;
             capacity.editable_beds = capacityType.editable_beds;
             capacity.editable_spaces = capacityType.editable_spaces;
          }
@@ -2907,14 +2904,10 @@ export class RegistroComponent implements OnInit {
       });
    }
    this.rucEstablishmentRegisterSelected.capacities_on_register.forEach(capacity => {
-      capacity.editable = false;
       this.alowed_capacity_types.forEach(capacityType => {
          if (capacityType.id == capacity.capacity_type_id) {
             capacity.editable_beds = capacityType.editable_beds;
             capacity.editable_spaces = capacityType.editable_spaces;
-            if (capacityType.spaces == 999) {
-               capacity.editable = true;
-            }
          }
       });
       this.rucEstablishmentRegisterSelected.total_spaces += capacity.max_spaces;

@@ -422,9 +422,7 @@ export class TarifarioRackComponent implements OnInit {
           if(capacityType.spaces == 999) {
              capacity.max_bed = 0;
              capacity.max_spaces = 0;
-             capacity.editable = true;
           } else {
-             capacity.editable = false;
              capacity.editable_beds = capacityType.editable_beds;
              capacity.editable_spaces = capacityType.editable_spaces;
           }
@@ -461,7 +459,6 @@ export class TarifarioRackComponent implements OnInit {
     if(typeof capacity !== 'undefined') {
        this.alowed_capacity_types.forEach(capacityType => {
           if (capacityType.id == capacity.capacity_type_id) {
-            console.log(capacityType);
              if (capacityType.editable_spaces) {
                 capacity.max_spaces = 0;
              } else {
@@ -514,14 +511,10 @@ export class TarifarioRackComponent implements OnInit {
        });
     }
     this.registerMinturSelected.capacities_on_register.forEach(capacity => {
-       capacity.editable = false;
        this.alowed_capacity_types.forEach(capacityType => {
           if (capacityType.id == capacity.capacity_type_id) {
              capacity.editable_beds = capacityType.editable_beds;
              capacity.editable_spaces = capacityType.editable_spaces;
-             if (capacityType.spaces == 999) {
-                capacity.editable = true;
-             }
           }
        });
        this.registerMinturSelected.total_spaces += capacity.max_spaces;
