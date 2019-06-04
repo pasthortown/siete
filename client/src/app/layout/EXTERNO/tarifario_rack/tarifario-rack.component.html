@@ -110,13 +110,13 @@
                       <th>Opciones</th>
                     </thead>
                     <tbody>
-                      <tr *ngFor="let capacity of registerMinturSelected.capacities_on_register">
+                      <tr *ngFor="let capacity of registerMinturSelected.capacities_on_register" (click)="selectCapacity(capacity)">
                         <td class="text-right">
                             <span *ngIf="capacity.capacity_type_id == 0 || capacity.quantity == 0"
                             class="ml-2 badge badge-danger">Incorrecto</span>
                         </td>
                         <td>
-                          <select class="form-control" [disabled]="!capacity.editable" id="capacity_type_id" name="capacity_type_id"
+                          <select class="form-control" [disabled]="!canChangeCapacities" id="capacity_type_id" name="capacity_type_id"
                             [(ngModel)]="capacity.capacity_type_id" (change)="getMaxBed(capacity)">
                             <option value="0" selected>Seleccione...</option>
                             <option *ngFor="
@@ -132,13 +132,13 @@
                         </td>
                         <td>
                           <div class="col-12">
-                              <input type="number" [disabled]="!capacity.editable_beds || !capacity.editable" class="form-control" min="0" max="9999" id="count_camas" name="count_camas" (input)="calcSpaces(capacity)"
+                              <input type="number" [disabled]="!capacity.editable_beds" class="form-control" min="0" max="9999" id="count_camas" name="count_camas" (input)="calcSpaces(capacity)"
                               placeholder="Cantidad de Camas" [(ngModel)]="capacity.max_bed"/>
                           </div>
                         </td>
                         <td>
                           <div class="col-12">
-                              <input type="number" [disabled]="!capacity.editable_spaces  || !capacity.editable" class="form-control" min="0" max="9999" id="count_plazas" name="count_plazas" (input)="calcSpaces()"
+                              <input type="number" [disabled]="!capacity.editable_spaces" class="form-control" min="0" max="9999" id="count_plazas" name="count_plazas" (input)="calcSpaces()"
                               placeholder="Cantidad de Plazas" [(ngModel)]="capacity.max_spaces"/>
                           </div>
                         </td>
