@@ -29,6 +29,13 @@ class TariffController extends Controller
        return response()->json(Tariff::paginate($size),200);
     }
 
+    function tarifario_rack(Request $data) {
+      $result = $data->json()->all();
+      $tarifario_rack = $result['tarifario_rack'];
+      $capacidades = $result['capacidades'];
+      return response()->json($tarifario_rack, 200);
+    }
+
     function post(Request $data)
     {
        try{
@@ -43,6 +50,7 @@ class TariffController extends Controller
           }
           $tariff->price = $result['price'];
           $tariff->year = $result['year'];
+          $tariff->state_id = $result['state_id'];
           $tariff->tariff_type_id = $result['tariff_type_id'];
           $tariff->capacity_type_id = $result['capacity_type_id'];
           $tariff->register_id = $result['register_id'];
@@ -62,6 +70,7 @@ class TariffController extends Controller
           $tariff = Tariff::where('id',$result['id'])->update([
              'price'=>$result['price'],
              'year'=>$result['year'],
+             'state_id'=>$result['state_id'],
              'tariff_type_id'=>$result['tariff_type_id'],
              'capacity_type_id'=>$result['capacity_type_id'],
              'register_id'=>$result['register_id'],
@@ -103,6 +112,7 @@ class TariffController extends Controller
            Tariff::where('id', $result['id'])->update([
              'price'=>$result['price'],
              'year'=>$result['year'],
+             'state_id'=>$result['state_id'],
              'tariff_type_id'=>$result['tariff_type_id'],
              'capacity_type_id'=>$result['capacity_type_id'],
              'register_id'=>$result['register_id'],
@@ -112,6 +122,7 @@ class TariffController extends Controller
           $tariff->id = $result['id'];
           $tariff->price = $result['price'];
           $tariff->year = $result['year'];
+          $tariff->state_id = $result['state_id'];
           $tariff->tariff_type_id = $result['tariff_type_id'];
           $tariff->capacity_type_id = $result['capacity_type_id'];
           $tariff->register_id = $result['register_id'];

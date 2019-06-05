@@ -130,9 +130,9 @@ export class TariffComponent implements OnInit {
    toCSV() {
       this.tariffDataService.get().then( r => {
          const backupData = r as Tariff[];
-         let output = 'id;price;year;tariff_type_id;capacity_type_id;register_id\n';
+         let output = 'id;price;year;state_id;tariff_type_id;capacity_type_id;register_id\n';
          backupData.forEach(element => {
-            output += element.id; + element.price + ';' + element.year + ';' + element.tariff_type_id + ';' + element.capacity_type_id + ';' + element.register_id + '\n';
+            output += element.id; + element.price + ';' + element.year + ';' + element.state_id + ';' + element.tariff_type_id + ';' + element.capacity_type_id + ';' + element.register_id + '\n';
          });
          const blob = new Blob([output], { type: 'text/plain' });
          const fecha = new Date();

@@ -211,6 +211,10 @@ const routes: Routes = [
             path: 'approval_state_report_register_alojamiento',
             loadChildren: './CRUD/ALOJAMIENTO/ApprovalStateReport/approvalstatereport.module#ApprovalStateReportModule'
          },
+         {
+            path: 'reception_room',
+            loadChildren: './CRUD/ALOJAMIENTO/ReceptionRoom/receptionroom.module#ReceptionRoomModule'
+         },
 
          //AUTH
          {

@@ -18,6 +18,7 @@ class CreateTariffsTable extends Migration
           $table->timestamps();
           $table->double('price',8,2)->nullable($value = true);
           $table->integer('year')->nullable($value = true);
+          $table->integer('state_id')->nullable($value = true);
           $table->unsignedInteger('tariff_type_id');
           $table->foreign('tariff_type_id')->references('id')->on('tariff_types')->onDelete('cascade');
           $table->unsignedInteger('capacity_type_id');

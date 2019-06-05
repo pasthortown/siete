@@ -117,6 +117,15 @@ $router->group(['middleware' => ['auth']], function () use ($router) {
    $router->delete('/tarifftype', ['uses' => 'TariffTypeController@delete']);
    $router->post('/tarifftype/masive_load', ['uses' => 'TariffTypeController@masiveLoad']);
 
+   //CRUD ReceptionRoom
+   $router->post('/receptionroom', ['uses' => 'ReceptionRoomController@post']);
+   $router->get('/receptionroom', ['uses' => 'ReceptionRoomController@get']);
+   $router->get('/receptionroom/paginate', ['uses' => 'ReceptionRoomController@paginate']);
+   $router->get('/receptionroom/backup', ['uses' => 'ReceptionRoomController@backup']);
+   $router->put('/receptionroom', ['uses' => 'ReceptionRoomController@put']);
+   $router->delete('/receptionroom', ['uses' => 'ReceptionRoomController@delete']);
+   $router->post('/receptionroom/masive_load', ['uses' => 'ReceptionRoomController@masiveLoad']);
+   
    //CRUD Tariff
    $router->post('/tariff', ['uses' => 'TariffController@post']);
    $router->get('/tariff', ['uses' => 'TariffController@get']);
@@ -125,6 +134,7 @@ $router->group(['middleware' => ['auth']], function () use ($router) {
    $router->put('/tariff', ['uses' => 'TariffController@put']);
    $router->delete('/tariff', ['uses' => 'TariffController@delete']);
    $router->post('/tariff/masive_load', ['uses' => 'TariffController@masiveLoad']);
+   $router->post('/tariff/tarifario_rack', ['uses' => 'TariffController@tarifario_rack']);
 
    //CRUD Bed
    $router->post('/bed', ['uses' => 'BedController@post']);

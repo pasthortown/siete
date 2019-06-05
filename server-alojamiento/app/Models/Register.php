@@ -64,4 +64,9 @@ class Register extends Model
        return $this->belongsTo('App\Tariff');
     }
 
+    function ReceptionRoom()
+    {
+       return $this->belongsTo('App\ReceptionRoom');
+    }
+
 }

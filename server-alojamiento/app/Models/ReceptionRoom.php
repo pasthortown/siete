@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Tariff extends Model
+class ReceptionRoom extends Model
 {
     /**
      * The attributes that are mass assignable.
@@ -12,7 +12,7 @@ class Tariff extends Model
      * @var array
      */
     protected $fillable = [
-       'price','year','state_id',
+       'quantity','fullfill',
     ];
 
     /**
@@ -23,16 +23,6 @@ class Tariff extends Model
     protected $hidden = [
        
     ];
-
-    function TariffType()
-    {
-       return $this->hasOne('App\TariffType');
-    }
-
-    function CapacityType()
-    {
-       return $this->hasOne('App\CapacityType');
-    }
 
     function Register()
     {
