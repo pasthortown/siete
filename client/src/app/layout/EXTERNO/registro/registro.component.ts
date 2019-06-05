@@ -1056,7 +1056,9 @@ export class RegistroComponent implements OnInit {
             this.ruc_registro_selected.ruc.person_representative = r.person_representative as PersonRepresentative;
          }
          this.ruc_registro_selected.ruc.person_representative_attachment = new PersonRepresentativeAttachment();
-         this.getPersonRepresentativeAttachment(this.ruc_registro_selected.ruc.number);
+         if(this.ruc_registro_selected.ruc.tax_payer_type_id > 1) {
+            this.getPersonRepresentativeAttachment(this.ruc_registro_selected.ruc.number);
+         }
          this.checkRuc();
          this.checkImContactRuc();
          if (!this.imContactRuc) {
