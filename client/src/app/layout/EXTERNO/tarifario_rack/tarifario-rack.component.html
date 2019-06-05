@@ -215,4 +215,23 @@
                   </div>
                 </div>
               </div>
+              <div class="row mt-3">
+                <div class="col-12">
+                  <div class="alert alert-warning mt-2 mb-2" role="alert">
+                    <label class="col-12 text-justify"><strong>Declaración Juramentada</strong></label><br />
+                    Declaro bajo juramento que los datos consignados en el presente formulario reflejan la realidad y autorizo al Ministerio de Turismo a verificar el contenido de esta declaración en cualquier momento, al tiempo que me sujeto, a las sanciones previstas en la ley en caso de falsedad o perjurio.
+                  </div>
+                </div>
+                <div class="col-12 text-center">
+                  <button [disabled]="guardando" type="button" class="btn btn-success"
+                    title="Guardar Datos" (click)="guardar()">
+                    <i class="fas fa-paper-plane"></i>&nbsp;Guardar Datos
+                  </button>
+                  <button type="button" class="btn btn-danger ml-2" title="Cancelar Cambios" (click)="
+                      refresh()
+                    ">
+                    <i class="fas fa-trash"></i>&nbsp;Cancelar Cambios
+                  </button>
+                </div>
+              </div>
 </div>

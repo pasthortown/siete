@@ -54,6 +54,8 @@ export class TarifarioRackComponent implements OnInit {
   searchingYears = false;
   canChangeCapacities = false;
   canChangeTariffsGeneral = false;
+  guardando = false;
+
   constructor(private registerDataService: RegisterService,
               private toastr: ToastrManager,
               private userDataService: UserService,
@@ -72,6 +74,8 @@ export class TarifarioRackComponent implements OnInit {
 
   refresh() {
     this.getRegistersMintur();
+    this.yearSelected = 0;
+    this.mostrarDatos = false;
   }
 
   getStates() {
@@ -258,6 +262,10 @@ export class TarifarioRackComponent implements OnInit {
           row.selected = '';
        }
     });
+   }
+
+   guardar() {
+      alert('guardar');
    }
 
    selectRegister(register: Register) {
