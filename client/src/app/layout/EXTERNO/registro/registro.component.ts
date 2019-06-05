@@ -1130,6 +1130,10 @@ export class RegistroComponent implements OnInit {
   }
 
   getPersonRepresentativeAttachment(ruc_number: String) {
+   if (this.ruc_registro_selected.ruc.tax_payer_type_id <= 1) {
+      this.ruc_registro_selected.ruc.person_representative_attachment = new PersonRepresentativeAttachment();
+      return;
+   }
    this.personRepresentativeAttachmentDataService.get_filtered(ruc_number).then( r => {
       if(r == '0'){
          this.ruc_registro_selected.ruc.person_representative_attachment = new PersonRepresentativeAttachment();

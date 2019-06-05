@@ -10,6 +10,7 @@ export class PersonRepresentativeAttachment {
       this.person_representative_attachment_file_type = '';
       this.person_representative_attachment_file_name = '';
       this.person_representative_attachment_file = '';
+      this.assignment_date = new Date();
       this.ruc = '';
       this.person_representative_id = 0;
    }
