@@ -1,6 +1,9 @@
+import { Router } from '@angular/router';
+import { UserService } from './../services/profile/user.service';
 import { Component, OnInit } from '@angular/core';
 import { ProfilePictureService } from '../services/profile/profilepicture.service';
 import { ProfilePicture } from '../models/profile/ProfilePicture';
+import { User } from '../models/profile/User';
 
 @Component({
     selector: 'app-layout',
@@ -10,10 +13,11 @@ import { ProfilePicture } from '../models/profile/ProfilePicture';
 export class LayoutComponent implements OnInit {
     collapedSideBar: boolean;
     
-    constructor(public profilePictureDataService: ProfilePictureService) {}
+    constructor(public profilePictureDataService: ProfilePictureService, private userDataService: UserService, private router: Router) {}
 
     ngOnInit() {
         this.getProfilePicture();
+        this.getUserInfo();
     }
 
     getProfilePicture() {
@@ -29,5 +33,19 @@ export class LayoutComponent implements OnInit {
 
     receiveCollapsed($event) {
         this.collapedSideBar = $event;
+    }
+
+    getUserInfo() {
+        const userData = JSON.parse(sessionStorage.getItem('user'));
+        this.userDataService.get(userData.id).then( r => {
+          const user = r as User;
+          let redirigirProfile = false;
+          if(user.main_phone_number == '' || typeof user.main_phone_number == 'undefined') {
+            redirigirProfile = true;
+          }
+          if (redirigirProfile) {
+            this.router.navigate(['/profile']);
+          }
+        }).catch( e => { console.log(e); });
     }
 }

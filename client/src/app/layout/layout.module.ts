@@ -8,10 +8,11 @@ import { LayoutComponent } from './layout.component';
 import { NavbarComponent } from '../components/navbar/navbar.component';
 import { SidebarComponent } from '../components/sidebar/sidebar.component';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+import { UserService } from '../services/profile/user.service';
 
 @NgModule({
     imports: [CommonModule, LayoutRoutingModule, NgbDropdownModule, HttpModule],
     declarations: [LayoutComponent, NavbarComponent, SidebarComponent],
-    providers: [ProfilePictureService]
+    providers: [ProfilePictureService, UserService]
 })
 export class LayoutModule {}
