@@ -54,6 +54,7 @@ export class TarifarioRackComponent implements OnInit {
   searchingYears = false;
   canChangeCapacities = false;
   canChangeTariffsGeneral = false;
+  isNewTariff = true;
   guardando = false;
 
   constructor(private registerDataService: RegisterService,
@@ -265,7 +266,11 @@ export class TarifarioRackComponent implements OnInit {
    }
 
    guardar() {
-      alert('guardar');
+      if (this.isNewTariff) {
+         console.log(this.tarifarioRack);
+      } else {
+         console.log(this.tarifarioRack);
+      }
    }
 
    selectRegister(register: Register) {
@@ -367,6 +372,7 @@ export class TarifarioRackComponent implements OnInit {
       if (year >= max_year) {
          if (year == max_year) {
             this.toastr.infoToastr('Usted ya realizó una declaración de Tarifario Rack correspondiente al año en curso.', 'Información');
+            this.isNewTariff = false;
             this.tarifarioRack.valores.forEach(element => {
                element.tariffs.forEach(tariffRack => {
                   const tariff = tariffRack.tariff;
