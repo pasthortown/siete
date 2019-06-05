@@ -157,12 +157,7 @@ class RucController extends Controller
          }
        }
        try{
-          $respuesta = $this->httpPost(env('API_AUTH').'user/register_user_coadminruc', json_encode($contact_user), null, $token);
-          if($respuesta == "0"){
-             return response()->json("0", 200);
-          }
           DB::beginTransaction();
-          $contact_user_id = $respuesta;
           $ruc = new Ruc();
           $lastRuc = Ruc::orderBy('id')->get()->last();
           if($lastRuc) {
@@ -172,7 +167,7 @@ class RucController extends Controller
           }
           $ruc->number = $result['number'];
           $ruc->baised_accounting = $result['baised_accounting'];
-          $ruc->contact_user_id = $contact_user_id;
+          $ruc->contact_user_id = $result['contact_user_id'];
           $ruc->owner_name = $result['owner_name'];
           $ruc->tax_payer_type_id = $result['tax_payer_type_id'];
           $ruc->save();
@@ -273,16 +268,11 @@ class RucController extends Controller
          }
       }
       try{
-         $respuesta = $this->httpPut(env('API_AUTH').'user/update_user_coadminruc', json_encode($contact_user), null, $token);
-         if($respuesta == "0"){
-            return response()->json("0", 200);
-         }
          DB::beginTransaction();
-         $contact_user_id = $respuesta;
          $ruc = Ruc::where('id',$result['id'])->update([
             'number'=>$result['number'],
             'baised_accounting'=>$result['baised_accounting'],
-            'contact_user_id'=>$contact_user_id,
+            'contact_user_id'=>$result['contact_user_id'],
             'owner_name'=>$result['owner_name'],
             'tax_payer_type_id'=>$result['tax_payer_type_id'],
          ]);

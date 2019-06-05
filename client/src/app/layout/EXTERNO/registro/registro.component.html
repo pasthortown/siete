@@ -221,91 +221,6 @@
                   </div>
                 </div>
               </div>
-              <div class="row" *ngIf="false">
-                <h4 class="col-12"><strong>Datos de Contacto</strong></h4>
-                <div class="col-12">
-                  <div class="form-group">
-                    <label>Soy la Persona de Contacto</label>
-                    <div class="col-12">
-                      <label class="switch"><input type="checkbox" id="contactoSoyYo" name="contactoSoyYo"
-                          (change)="checkImContactRuc()" [(ngModel)]="imContactRuc" /><span
-                          class="slider round"></span></label>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-12" *ngIf="!imContactRuc">
-                  <div class="col-12">
-                    <div class="alert alert-warning" role="alert">
-                      <label class="col-12 text-justify"><strong>Atención</strong><br />
-                        Al asignar un contacto diferente a usted, se creará una cuenta de Co-Administrador de Ruc, para que gestione la información que se ingresa en éste sistema.<br/>
-                        Usted puede cambiar el contacto siempre que lo desee.<br/>
-                        Siempre existirá un único Co-Administrador de Ruc.
-                      </label>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-12">
-                      <div class="form-group">
-                        <label>Cédula de Identidad</label><span *ngIf="!identificationContactValidated"
-                          class="ml-2 badge badge-danger">Incorrecto</span>
-                        <div class="input-group mb-3">
-                          <div class="input-group-prepend">
-                            <button type="button" class="btn btn-primary" title="Consultar con Registro Civil"
-                              (click)="checkCedula()">
-                              <i class="fas fa-sync"></i>
-                            </button>
-                          </div>
-                          <input type="text" class="form-control" id="cedula" maxlength="10"
-                            placeholder="Cédula de Identidad" (keyup)="checkCedula()" [(ngModel)]="
-                                ruc_registro_selected.ruc.contact_user
-                                  .identification
-                              " name="cedula" />
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-12" *ngIf="identificationContactValidated">
-                      <div class="form-group">
-                        <label>DATOS DE LA CÉDULA</label>
-                        <div class="col-12 text-justify" [innerHTML]="cedulaData">
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="row mt-2">
-                    <div class="col-6">
-                      <div class="form-group">
-                        <label>Número de Teléfono Principal</label><span *ngIf="!mainPhoneContactValidated"
-                          class="ml-2 badge badge-danger">Incorrecto</span>
-                        <input type="text" class="form-control" id="mainRucPhoneNumber" maxlength="10"
-                          placeholder="Número de Teléfono Principal" (keyup)="checkTelefonoPrincipal()" [(ngModel)]="
-                              ruc_registro_selected.ruc.contact_user.main_phone_number
-                            " name="mainRucPhoneNumber" />
-                      </div>
-                    </div>
-                    <div class="col-6">
-                      <div class="form-group">
-                        <label>Número de Teléfono Secundario</label><span *ngIf="!secondaryPhoneContactValidated"
-                          class="ml-2 badge badge-danger">Incorrecto</span>
-                        <input type="text" class="form-control" id="secondaryRucPhone" maxlength="10"
-                          (keyup)="checkTelefonoSecundario()" placeholder="Número de Teléfono Secundario" [(ngModel)]="
-                              ruc_registro_selected.ruc.contact_user.secondary_phone_number
-                            " name="secondaryRucPhone" />
-                      </div>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-12">
-                      <div class="form-group">
-                        <label>Correo Electrónico</label><span *ngIf="!emailContactValidated"
-                          class="ml-2 badge badge-danger">Incorrecto</span>
-                        <input type="email" class="form-control" id="email" maxlength="255" (keyup)="checkEmail()"
-                          placeholder="Correo Electrónico" [(ngModel)]="ruc_registro_selected.ruc.contact_user.email"
-                          name="email" />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
               <div class="row">
                 <div class="col-12">
                   <div class="alert alert-danger mt-3" role="alert" *ngIf="!validateRuc()">
@@ -334,7 +249,7 @@
               </div>
             </ng-template>
           </ngb-tab>
-          <ngb-tab title="Paso II. Información del Establecimiento" id="tab2" *ngIf="rucSaved() && SRIOK && REGCIVILOK">
+          <ngb-tab title="Paso II. Información del Establecimiento" id="tab2" *ngIf="rucSaved() && SRIOK">
             <ng-template ngbTabContent>
               <div class="row mt-3">
                 <h4 class="col-12">
@@ -1131,7 +1046,7 @@
                   </ng-template>
                 </ngb-tab>
                 <ngb-tab title="Paso 3.- Información Turística del Establecimiento" id="paso3"
-                  *ngIf="rucSaved() && SRIOK && REGCIVILOK && declarations.length > 0">
+                  *ngIf="rucSaved() && SRIOK && declarations.length > 0">
                   <ng-template ngbTabContent>
                     <div class="row" *ngIf="mostrarDataRegister">
                       <div class="col-12">

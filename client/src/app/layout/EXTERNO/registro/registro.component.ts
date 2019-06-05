@@ -119,7 +119,6 @@ export class RegistroComponent implements OnInit {
 
   //DATOS RUC
   certificadoUsoSuelo: FloorAuthorizationCertificate = new FloorAuthorizationCertificate();
-  imContactRuc: Boolean = true;
   roles:any[] = [];
   terminosCondiciones = false;
   terminosCondicionesAgreement: Agreement = new Agreement();
@@ -842,31 +841,22 @@ export class RegistroComponent implements OnInit {
   }
 
   validateRuc(): Boolean {
-     this.fechasNombramiento();
      let validateRepresentantLegalId = true;
+     this.fechaNombramientoOK = true;
      if(this.ruc_registro_selected.ruc.tax_payer_type_id > 1) {
+        this.fechasNombramiento();
         validateRepresentantLegalId = this.identificationRepresentativePersonValidated;
         const validateExpediente = (this.ruc_registro_selected.ruc.group_given.register_code !== '');
-        return this.identificationContactValidated &&
-         this.rucValidated &&
-         this.mainPhoneContactValidated &&
-         this.secondaryPhoneContactValidated &&
-         this.emailContactValidated &&
+        return this.rucValidated &&
          this.validateNombramiento() &&
          this.validateGroupGivenTipe() &&
          validateRepresentantLegalId &&
-         this.REGCIVILOK &&
          this.SRIOK &&
          this.REGCIVILREPRESENTANTELEGALOK &&
          validateExpediente &&
          this.fechaNombramientoOK;
      }
-     return this.identificationContactValidated &&
-      this.rucValidated &&
-      this.mainPhoneContactValidated &&
-      this.secondaryPhoneContactValidated &&
-      this.emailContactValidated &&
-      this.REGCIVILOK &&
+     return this.rucValidated &&
       this.SRIOK;
   }
 
@@ -1024,22 +1014,18 @@ export class RegistroComponent implements OnInit {
          this.ruc_registro_selected.ruc.establishments = [];
          this.ruc_registro_selected.ruc.number = number;
          this.ruc_registro_selected.ruc.contact_user = new User();
-         this.imContactRuc = (this.ruc_registro_selected.ruc.contact_user.id == this.user.id);
          this.ruc_registro_selected.ruc.establishments = [];
          this.ruc_registro_selected.ruc.group_given = new GroupGiven();
          this.ruc_registro_selected.ruc.person_representative = new PersonRepresentative();
          this.ruc_registro_selected.ruc.tax_payer_type_id = 0;
          this.ruc_registro_selected.ruc.contact_user_id = 0;
-         this.imContactRuc = true;
          this.ruc_registro_selected.ruc.person_representative.identification = this.user.identification;
          this.checkIdentificationRepresentant();
-         this.checkImContactRuc();
          this.checkRuc();
       } else {
          this.ruc_registro_selected.ruc = r.Ruc as Ruc;
          this.ruc_registro_selected.ruc.establishments = [];
          this.ruc_registro_selected.ruc.contact_user = r.contact_user as User;
-         this.imContactRuc = (this.ruc_registro_selected.ruc.contact_user.id == this.user.id);
          if (r.group_given == '0') {
             this.ruc_registro_selected.ruc.group_given = new GroupGiven();
          } else {
@@ -1060,35 +1046,10 @@ export class RegistroComponent implements OnInit {
             this.getPersonRepresentativeAttachment(this.ruc_registro_selected.ruc.number);
          }
          this.checkRuc();
-         this.checkImContactRuc();
-         if (!this.imContactRuc) {
-            this.checkCedula();
-         }
-         this.checkEmail();
-         this.checkTelefonoPrincipal();
-         this.checkTelefonoSecundario();
          this.checkIdentificationRepresentant();
          this.getEstablishmentsOnRuc(this.currentPageEstablishment);
       }
    }).catch( e => { console.log(e); });
-  }
-
-  checkImContactRuc() {
-   if (this.imContactRuc) {
-      this.ruc_registro_selected.ruc.contact_user.id = this.user.id;
-      this.ruc_registro_selected.ruc.contact_user = this.user;
-      this.identificationContactValidated = true;
-      this.consumoCedula = true;
-      this.mainPhoneContactValidated = true;
-      this.secondaryPhoneContactValidated = true;
-      this.emailContactValidated = true;
-      this.REGCIVILOK = true;
-   } else {
-      this.checkEmailContactEstablishment();
-      this.checkTelefonoPrincipalContactoEstablecimiento();
-      this.checkTelefonoSecundarioContactoEstablecimiento();
-      this.checkTelefonoSecundarioContactoEstablecimiento();
-   }
   }
 
   getEstablishmentsOnRuc(currentpage: number) {
@@ -1394,6 +1355,7 @@ export class RegistroComponent implements OnInit {
   }
 
   guardarRUC() {
+   this.REGCIVILOK = true;
    if (!this.validateRuc()) {
       this.toastr.errorToastr('Existe conflicto con la información ingresada.', 'Nuevo');
       return;
@@ -2015,9 +1977,6 @@ export class RegistroComponent implements OnInit {
    this.cedulaData = '<div class=\"progress mb-3\"><div class=\"progress-bar progress-bar-striped progress-bar-animated bg-warning col-12\">Espere...</div></div><div class="col-12 text-center"><strong>Conectándose al Registro Civil...</strong></div>';
    if (this.ruc_registro_selected.ruc.contact_user.identification === this.user.identification) {
       this.ruc_registro_selected.ruc.contact_user = this.user;
-      this.checkEmail();
-      this.checkTelefonoPrincipal();
-      this.checkTelefonoSecundario();
    }
    if (!this.consumoCedula) {
       this.consumoCedula = true;
@@ -2160,16 +2119,6 @@ export class RegistroComponent implements OnInit {
    }
   }
 
-  checkTelefonoPrincipal(): Boolean {
-   this.ruc_registro_selected.ruc.contact_user.main_phone_number = this.ruc_registro_selected.ruc.contact_user.main_phone_number.replace(/[^\d]/, '');
-   if (this.ruc_registro_selected.ruc.contact_user.main_phone_number.length < 9) {
-      this.mainPhoneContactValidated = false;
-      return false;
-   }
-   this.mainPhoneContactValidated = true;
-   return true;
-  }
-
   checkTelefonoPrincipalContactoEstablecimiento(): Boolean {
    this.establishment_selected.contact_user.main_phone_number = this.establishment_selected.contact_user.main_phone_number.replace(/[^\d]/, '');
    if (this.establishment_selected.contact_user.main_phone_number.length < 9) {
@@ -2177,16 +2126,6 @@ export class RegistroComponent implements OnInit {
       return false;
    }
    this.mainPhoneContactEstablishmentValidated = true;
-   return true;
-  }
-
-  checkTelefonoSecundario(): Boolean {
-   this.ruc_registro_selected.ruc.contact_user.secondary_phone_number = this.ruc_registro_selected.ruc.contact_user.secondary_phone_number.replace(/[^\d]/, '');
-   if (this.ruc_registro_selected.ruc.contact_user.secondary_phone_number.length > 0 && this.ruc_registro_selected.ruc.contact_user.secondary_phone_number.length < 9) {
-      this.secondaryPhoneContactValidated = false;
-      return false;
-   }
-   this.secondaryPhoneContactValidated = true;
    return true;
   }
 
@@ -2218,12 +2157,6 @@ export class RegistroComponent implements OnInit {
    }
    this.secondaryPhoneEstablishmentValidated = true;
    return true;
-  }
-
-  checkEmail(): Boolean {
-   const isOk = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(this.ruc_registro_selected.ruc.contact_user.email.toString());
-   this.emailContactValidated = isOk;
-   return this.emailContactValidated;
   }
 
   checkEmailContactEstablishment(): Boolean {
