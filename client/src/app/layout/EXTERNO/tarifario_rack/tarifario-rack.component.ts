@@ -279,14 +279,9 @@ export class TarifarioRackComponent implements OnInit {
          });
       });
       this.tariffDataService.tarifario_rack(this.registerMinturSelected.id, tariffs, this.registerMinturSelected.capacities_on_register).then( r => {
-         console.log(r);
+         this.toastr.successToastr('Declaración de Tarifario Rack y Capacidades Receptada Satisfactoriamente.', 'Tarifario Rack o Mostrador');
+         this.refresh();
       }).catch( e => { console.log(e); });
-/*
-      if (this.isNewTariff) {
-         console.log(this.tarifarioRack);
-      } else {
-         console.log(this.tarifarioRack);
-      }*/
    }
 
    selectRegister(register: Register) {
