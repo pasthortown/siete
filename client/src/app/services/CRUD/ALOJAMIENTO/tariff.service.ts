@@ -37,8 +37,8 @@ export class TariffService {
       }).catch( error => { this.handledError(error.json());  });
    }
 
-   tarifario_rack(tarifario_rack, capacidades) {
-      return this.http.post(this.url + 'tarifario_rack', JSON.stringify({tarifario_rack: tarifario_rack, capacidades: capacidades}), this.options).toPromise()
+   tarifario_rack(register_id, tarifario_rack, capacidades) {
+      return this.http.post(this.url + 'tarifario_rack', JSON.stringify({register_id: register_id, tarifario_rack: tarifario_rack, capacidades: capacidades}), this.options).toPromise()
       .then( r => {
          return r.json();
       }).catch( error => { this.handledError(error.json()); });

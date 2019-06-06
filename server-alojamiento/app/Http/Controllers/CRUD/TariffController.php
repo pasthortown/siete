@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 Use Exception;
 use App\Tariff;
+use App\Register;
+use App\Capacity;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -33,8 +35,27 @@ class TariffController extends Controller
       $result = $data->json()->all(); 
       $tarifario_rack = $result['tarifario_rack'];
       $capacidades = $result['capacidades'];
-
-      /*foreach($tarifario_rack as $tarifa) {
+      $register_id = $result['register_id'];
+      $register = Register::where('id', $register_id)->first();
+      $capacities_on_register_old = $register->Capacities()->get();
+      foreach( $capacities_on_register_old as $capacity_old ) {
+         $register->Capacities()->detach($capacity_old->id);
+         Capacity::destroy($capacity_old->id);
+      }
+      foreach($capacidades as $capacityToRegister) {
+         $capacity = new Capacity();
+         $lastCapacity = Capacity::orderBy('id')->get()->last();
+         if($lastCapacity) {
+            $capacity->id = $lastCapacity->id + 1;
+         } else {
+            $capacity->id = 1;
+         }
+         $capacity->quantity = $capacityToRegister['quantity'];
+         $capacity->capacity_type_id = $capacityToRegister['capacity_type_id'];
+         $capacity->save();
+         $register->Capacities()->attach($capacity->id);
+      }
+      foreach($tarifario_rack as $tarifa) {
          if($tarifa['id'] == 0) {
             $tariff = new Tariff();
             $lastTariff = Tariff::orderBy('id')->get()->last();
@@ -61,7 +82,7 @@ class TariffController extends Controller
                'register_id'=>$tarifa['register_id'],
             ]);
          }
-      }*/
+      }
       return response()->json(["Capacidades:"=>$capacidades,"Tarifario Rack:"=>$tarifario_rack], 200);
     }
 

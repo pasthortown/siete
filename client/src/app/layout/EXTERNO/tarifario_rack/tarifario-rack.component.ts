@@ -278,7 +278,7 @@ export class TarifarioRackComponent implements OnInit {
             tariffs.push(tariff.tariff);
          });
       });
-      this.tariffDataService.tarifario_rack(tariffs, this.registerMinturSelected.capacities_on_register).then( r => {
+      this.tariffDataService.tarifario_rack(this.registerMinturSelected.id, tariffs, this.registerMinturSelected.capacities_on_register).then( r => {
          console.log(r);
       }).catch( e => { console.log(e); });
 /*
