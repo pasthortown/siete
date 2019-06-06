@@ -2861,7 +2861,7 @@ export class RegistroComponent implements OnInit {
            if (!tariff.isReference) {
             valor.tariffs.forEach(tariff2 => {
                if( tariff !== tariff2) {
-                  if (tariff.nombreDivision == tariff2.nombreDivision) {
+                  if (tariff.nombreDivision == tariff2.nombreDivision && tariff.plazasHabitacion !== 999) {
                      tariff.tariff.price = tariff2.tariff.price / tariff2.plazasHabitacion;
                   }
                }

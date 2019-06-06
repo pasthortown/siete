@@ -30,10 +30,39 @@ class TariffController extends Controller
     }
 
     function tarifario_rack(Request $data) {
-      $result = $data->json()->all();
+      $result = $data->json()->all(); 
       $tarifario_rack = $result['tarifario_rack'];
       $capacidades = $result['capacidades'];
-      return response()->json($tarifario_rack, 200);
+
+      /*foreach($tarifario_rack as $tarifa) {
+         if($tarifa['id'] == 0) {
+            $tariff = new Tariff();
+            $lastTariff = Tariff::orderBy('id')->get()->last();
+            if($lastTariff) {
+               $tariff->id = $lastTariff->id + 1;
+            } else {
+               $tariff->id = 1;
+            }
+            $tariff->price = $tarifa['price'];
+            $tariff->year = $tarifa['year'];
+            $tariff->register_id = $tarifa['register_id'];
+            $tariff->tariff_type_id = $tarifa['tariff_type_id'];
+            $tariff->capacity_type_id = $tarifa['capacity_type_id'];
+            $tariff->register_id = $register->id;
+            $tariff->state_id = 1;
+            $tariff->save();
+         } else {
+            $tariff = Tariff::where('id',$tarifa['id'])->update([
+               'price'=>$tarifa['price'],
+               'year'=>$tarifa['year'],
+               'state_id'=>1,
+               'tariff_type_id'=>$tarifa['tariff_type_id'],
+               'capacity_type_id'=>$tarifa['capacity_type_id'],
+               'register_id'=>$tarifa['register_id'],
+            ]);
+         }
+      }*/
+      return response()->json(["Capacidades:"=>$capacidades,"Tarifario Rack:"=>$tarifario_rack], 200);
     }
 
     function post(Request $data)

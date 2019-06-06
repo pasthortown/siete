@@ -12,6 +12,7 @@ import { StateService } from 'src/app/services/CRUD/ALOJAMIENTO/state.service';
 import { RegisterTypeService } from 'src/app/services/CRUD/ALOJAMIENTO/registertype.service';
 import { TariffTypeService } from 'src/app/services/CRUD/ALOJAMIENTO/tarifftype.service';
 import { CapacityTypeService } from './../../../services/CRUD/ALOJAMIENTO/capacitytype.service';
+import { TariffService } from 'src/app/services/CRUD/ALOJAMIENTO/tariff.service';
 @NgModule({
   imports: [CommonModule,
     TarifarioRackRoutingModule,
@@ -22,6 +23,7 @@ import { CapacityTypeService } from './../../../services/CRUD/ALOJAMIENTO/capaci
   providers: [RegisterService,
     UserService, 
     StateService, 
+    TariffService,
     RegisterTypeService,
     BedTypeService, 
     TariffTypeService,

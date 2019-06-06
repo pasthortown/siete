@@ -16,6 +16,7 @@ import { TariffTypeService } from 'src/app/services/CRUD/ALOJAMIENTO/tarifftype.
 import { TariffType } from 'src/app/models/ALOJAMIENTO/TariffType';
 import { Capacity } from 'src/app/models/ALOJAMIENTO/Capacity';
 import { ToastrManager } from 'ng6-toastr-notifications';
+import { TariffService } from 'src/app/services/CRUD/ALOJAMIENTO/tariff.service';
 
 @Component({
   selector: 'app-tarifario-rack',
@@ -61,6 +62,7 @@ export class TarifarioRackComponent implements OnInit {
               private toastr: ToastrManager,
               private userDataService: UserService,
               private register_typeDataService: RegisterTypeService,
+              private tariffDataService: TariffService,
               private stateDataService: StateService,
               private capacityTypeDataService: CapacityTypeService,
               private bedTypeDataService: BedTypeService,
@@ -267,19 +269,24 @@ export class TarifarioRackComponent implements OnInit {
 
    guardar() {
       const today = new Date();
-      const month = today.getMonth() + 1;
+      const month = today.getMonth() + 1; 
       const day = today.getDate();
       const year = today.getFullYear();
-      // 1ero de enero al 30 de junio SI no hay declaracion multas año en curso, SI hay declaracion sin multas año en curso
-      // 1ero de julio se habilita el formulario siguiente año
-      // 2 de diciembre al 31 de diciembre jodido tiene multas siguiente año
-      // del 1ero de julio al 2 de diciembre puede declarar fresco sigueinte año
-      // Se puede devolver??
+      const tariffs: Tariff[] = [];
+      this.tarifarioRack.valores.forEach(valor => {
+         valor.tariffs.forEach(tariff => {
+            tariffs.push(tariff.tariff);
+         });
+      });
+      this.tariffDataService.tarifario_rack(tariffs, this.registerMinturSelected.capacities_on_register).then( r => {
+         console.log(r);
+      }).catch( e => { console.log(e); });
+/*
       if (this.isNewTariff) {
          console.log(this.tarifarioRack);
       } else {
          console.log(this.tarifarioRack);
-      }
+      }*/
    }
 
    selectRegister(register: Register) {
@@ -388,6 +395,9 @@ export class TarifarioRackComponent implements OnInit {
                   this.tarifarioResponse.forEach(tariffResponse => {
                      if(tariffResponse.tariff_type_id == tariff.tariff_type_id && tariffResponse.year == this.yearSelected && tariffResponse.capacity_type_id == tariff.capacity_type_id) {
                         tariffRack.tariff.price = tariffResponse.price;
+                        if (tariffResponse.id !== 0) {
+                           tariffRack.tariff.id = tariffResponse.id;
+                        }
                      }
                   });
                });
@@ -542,6 +552,9 @@ export class TarifarioRackComponent implements OnInit {
                tariff.tariff.tariff_type_id == tariffResponse.tariff_type_id) {
                   tariff.tariff.register_id = this.registerMinturSelected.id;
                   tariff.tariff.price = tariffResponse.price;
+                  if (tariffResponse.id !== 0) {
+                     tariff.tariff.id = tariffResponse.id;
+                  }
                }
           });
        });
@@ -565,7 +578,7 @@ export class TarifarioRackComponent implements OnInit {
             if (!tariff.isReference) {
              valor.tariffs.forEach(tariff2 => {
                 if( tariff !== tariff2) {
-                   if (tariff.nombreDivision == tariff2.nombreDivision) {
+                   if (tariff.nombreDivision == tariff2.nombreDivision && tariff.plazasHabitacion !== 999) {
                       tariff.tariff.price = tariff2.tariff.price / tariff2.plazasHabitacion;
                    }
                 }
