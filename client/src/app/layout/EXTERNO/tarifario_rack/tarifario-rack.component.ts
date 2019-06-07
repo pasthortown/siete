@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { BedTypeService } from 'src/app/services/CRUD/ALOJAMIENTO/bedtype.service';
 import { BedType } from './../../../models/ALOJAMIENTO/BedType';
 import { CapacityTypeService } from './../../../services/CRUD/ALOJAMIENTO/capacitytype.service';
@@ -17,6 +18,7 @@ import { TariffType } from 'src/app/models/ALOJAMIENTO/TariffType';
 import { Capacity } from 'src/app/models/ALOJAMIENTO/Capacity';
 import { ToastrManager } from 'ng6-toastr-notifications';
 import { TariffService } from 'src/app/services/CRUD/ALOJAMIENTO/tariff.service';
+import { last } from '@angular/router/src/utils/collection';
 
 @Component({
   selector: 'app-tarifario-rack',
@@ -63,6 +65,7 @@ export class TarifarioRackComponent implements OnInit {
               private userDataService: UserService,
               private register_typeDataService: RegisterTypeService,
               private tariffDataService: TariffService,
+              private router: Router,
               private stateDataService: StateService,
               private capacityTypeDataService: CapacityTypeService,
               private bedTypeDataService: BedTypeService,
@@ -268,19 +271,48 @@ export class TarifarioRackComponent implements OnInit {
    }
 
    guardar() {
-      const today = new Date();
-      const month = today.getMonth() + 1; 
+      let today = new Date();
+      const month = today.getMonth() + 1;
       const day = today.getDate();
       const year = today.getFullYear();
+      if ((month >= 7 && month <= 11 || day == 1 && month == 12) && this.lastYear == year) {
+         this.guardarTarifarioRack(year + 1, 2);
+      }
+      if ((month == 12 && day > 1) && this.lastYear == year) {
+         this.guardarTarifarioRack(year + 1, 3);
+      }
+      if ((month >= 1 && month <=6) && this.lastYear == year) {
+         this.toastr.errorToastr('La declaración de tarifario rack estará disponible desde el 1ero de Julio.', 'Tarifario Rack o Mostrador');
+         return;
+      }
+      if ((month >= 1 && month <=6) && this.lastYear == year - 1) {
+         this.guardarTarifarioRack(year, 5);
+      }
+      if ((month >= 7) && this.lastYear == year - 1) {
+         this.guardarTarifarioRack(year, 6);
+      }
+   }
+
+   guardarTarifarioRack(year: number, estado: number) {
+      // 1 DEVUELTO
+      // 2 SIN MULTA AÑO SIGUIENTE
+      // 3 CON MULTA AÑO SIGUIETE
+      // 4 SIN MULTA AÑO VIGENTE
+      // 5 CON MULTA AÑO VIGENTE
+      // 6 CONCILIAR
       const tariffs: Tariff[] = [];
       this.tarifarioRack.valores.forEach(valor => {
          valor.tariffs.forEach(tariff => {
             tariffs.push(tariff.tariff);
          });
       });
+      tariffs.forEach(element => {
+         element.year = year;
+         element.state_id = estado;
+      });
       this.tariffDataService.tarifario_rack(this.registerMinturSelected.id, tariffs, this.registerMinturSelected.capacities_on_register).then( r => {
          this.toastr.successToastr('Declaración de Tarifario Rack y Capacidades Receptada Satisfactoriamente.', 'Tarifario Rack o Mostrador');
-         this.refresh();
+         this.router.navigate(['/main']);
       }).catch( e => { console.log(e); });
    }
 
@@ -513,6 +545,7 @@ export class TarifarioRackComponent implements OnInit {
        this.registerMinturSelected.capacities_on_register.forEach(capacity => {
           const childs = [];
           let idTipoCapacidad = capacity.capacity_type_id;
+          let editable = capacity.editable;
           this.tarifas.forEach(tariffType => {
              tariffType.childs.forEach(tariffTypeChild => {
                 const es_referencia = tariffType.father.is_reference;
@@ -529,12 +562,45 @@ export class TarifarioRackComponent implements OnInit {
                 tariff.price = 0;
                 tariff.capacity_type_id = capacity.capacity_type_id;
                 const today = new Date();
-                tariff.year = today.getFullYear();
+                tariff.year = today.getFullYear();      
+                if (this.lastYear < today.getFullYear() + 1) {
+                   // AQUI TIEMPOS
+                   // 1 DEVUELTO
+                  // 2 SIN MULTA AÑO SIGUIENTE
+                  // 3 CON MULTA AÑO SIGUIETE
+                  // 4 SIN MULTA AÑO VIGENTE
+                  // 5 CON MULTA AÑO VIGENTE
+                  // 6 CONCILIAR
+                  const month = today.getMonth() + 1;
+                  const day = today.getDate();
+                  const year = today.getFullYear();
+                  if ((month >= 7 && month <= 11 || day == 1 && month == 12) && this.lastYear == year) {
+                     editable = true;
+                     capacity.editable = true;
+                  }
+                  if ((month == 12 && day > 1) && this.lastYear == year) {
+                     editable = true;
+                     capacity.editable = true;
+                  }
+                  if ((month >= 1 && month <=6) && this.lastYear == year) {
+                     editable = false;
+                     capacity.editable = false;
+                     return;
+                  }
+                  if ((month >= 1 && month <=6) && this.lastYear == year - 1) {
+                     editable = true;
+                     capacity.editable = true;
+                  }
+                  if ((month >= 7) && this.lastYear == year - 1) {
+                     editable = false;
+                     capacity.editable = false;
+                     // CONCILIAR
+                  }
+                }
                 let newChild = {nombreDivision: nombreDivision, tariff: tariff, isReference: es_referencia, plazasHabitacion: plazasHabitacion};
                 childs.push(newChild);
              });
           });
-          const editable = capacity.editable;
           const topush = {idTipoCapacidad: idTipoCapacidad, tariffs: childs, editable: editable};
           this.tarifarioRack.valores.push(topush);
        });
