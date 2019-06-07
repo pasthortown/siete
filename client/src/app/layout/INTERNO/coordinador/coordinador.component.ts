@@ -457,7 +457,7 @@ export class CoordinadorComponent implements OnInit {
 
   buildDataTableEstablishment() {
      this.columnsEstablishment = [
-        {title: 'Seleccionado', name: 'selected'},
+        {title: '', name: 'selected'},
         {title: 'Código', name: 'code', filtering: {filterString: '', placeholder: 'Código'}},
         {title: 'Dirección', name: 'address', filtering: {filterString: '', placeholder: 'Dirección'}},
         {title: 'Nombre Comercial', name: 'name', filtering: {filterString: '', placeholder: 'Nombre Comercial'}}
@@ -572,7 +572,7 @@ export class CoordinadorComponent implements OnInit {
 
   buildDataTableRegister() {
      this.columnsRegister = [
-        {title: 'Seleccionado', name: 'selected'},
+        {title: '', name: 'selected'},
         {title: 'Código del Establecimiento', name: 'establishment_code', filtering: {filterString: '', placeholder: 'Código del Establecimiento'}},
         {title: 'Ubicación del Establecimiento', name: 'address', filtering: {filterString: '', placeholder: 'Ubicación del Establecimiento'}},
         {title: 'Código del Registro', name: 'register_code', filtering: {filterString: '', placeholder: 'Código del Registro'}},

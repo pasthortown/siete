@@ -204,7 +204,7 @@ export class TarifarioRackComponent implements OnInit {
  
    buildDataTableRegister() {
       this.columnsRegister = [
-         {title: 'Seleccionado', name: 'selected'},
+         {title: '', name: 'selected'},
          {title: 'Código del Establecimiento', name: 'establishment_code'},
          {title: 'Ubicación del Establecimiento', name: 'address'},
          {title: 'Código del Registro', name: 'register_code'},

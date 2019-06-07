@@ -557,7 +557,7 @@ export class RegistroComponent implements OnInit {
 
   buildDataTableEstablishment() {
      this.columnsEstablishment = [
-        {title: 'Seleccionado', name: 'selected'},
+        {title: '', name: 'selected'},
         {title: 'Número de Establecimiento', name: 'code'},
         {title: 'Dirección', name: 'address'},
         {title: 'Nombre Comercial', name: 'name'},
@@ -705,7 +705,7 @@ export class RegistroComponent implements OnInit {
 
   buildDataTableRegister() {
      this.columnsRegister = [
-        {title: 'Seleccionado', name: 'selected'},
+        {title: '', name: 'selected'},
         {title: 'Días en Espera', name: 'date_assigment_alert'},
         {title: 'Código del Establecimiento', name: 'establishment_code'},
         {title: 'Ubicación del Establecimiento', name: 'address'},
