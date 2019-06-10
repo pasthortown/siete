@@ -54,10 +54,6 @@ class LanguageController extends Controller
       return 1;
     }
 
-    function get_by_establishment_id(Request $data) {
-       return response()->json(Language::where('establishment_id', $data['id'])->get(),200);
-    }
-
     function paginate(Request $data)
     {
        $size = $data['size'];

@@ -21,7 +21,7 @@ export class LoginComponent implements OnInit {
   zonales = [];
 
   constructor(private consultorDataService: ConsultorService, private router: Router, private modalService: NgbModal, private authDataServise: AuthService, private profilePictureDataService: ProfilePictureService) {}
-
+  
   ngOnInit() {
     this.email = '';
     this.password = '';
@@ -46,6 +46,10 @@ export class LoginComponent implements OnInit {
         const userData = { id: r.id, name: r.name };
         sessionStorage.setItem('user', JSON.stringify(userData));
         this.router.navigate(['/main']);
+        const startTime = new Date();
+        const endTime = new Date();
+        endTime.setHours(endTime.getHours() + 2);
+        sessionStorage.setItem('session_time', JSON.stringify({startTime: startTime, endTime: endTime}));
       }).catch( e => {
         this.esperando = false;
         Swal.fire({

@@ -35,7 +35,8 @@ class UbicationController extends Controller
       $canton = Ubication::where('code', $parroquia->father_code)->first();
       $provincia = Ubication::where('code', $canton->father_code)->first();
       $zonal = Ubication::where('code', $provincia->father_code)->first();
-      return response()->json(["zonal"=>$zonal, "provincia"=>$provincia, "canton"=>$canton, "parroquia"=>$parroquia],200);
+      $region = $zonal->code == 8 ? 2 : 1;
+      return response()->json(["region"=>$region, "zonal"=>$zonal, "provincia"=>$provincia, "canton"=>$canton, "parroquia"=>$parroquia],200);
     }
 
     function filtered(Request $data)

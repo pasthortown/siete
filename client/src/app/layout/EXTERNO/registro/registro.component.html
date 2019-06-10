@@ -458,10 +458,20 @@
                                                 </td>
                                                 <td>
                                                   <input type="number" class="form-control" min="0" id="worker-count"
-                                                    name="worker-count" [disabled]="!rucEstablishmentRegisterSelected.editable" placeholder="Cantidad" [(ngModel)]="worker.count" />
+                                                    name="worker-count" [disabled]="!rucEstablishmentRegisterSelected.editable" placeholder="Cantidad" [(ngModel)]="worker.count" (keyup)="refreshTotalWorkers()"/>
                                                 </td>
                                               </tr>
                                             </tbody>
+                                            <thead>
+                                              <th>
+                                              </th>
+                                              <th>
+                                                TOTAL DE TRABAJADORES DEL ESTABLECIMIENTO
+                                              </th>
+                                              <th>
+                                                {{total_workers}}
+                                              </th>
+                                            </thead>
                                           </table>
                                         </div>
                                       </div>
@@ -1110,13 +1120,24 @@
                                   </select>
                                 </div>
                               </div>
-                              <div class="col-6">
+                              <div class="col-3">
                                 <div class="form-group">
                                   <label for="code">Número de Registro</label>
                                   <input disabled type="text" class="form-control" id="code" name="code"
                                     placeholder="Número de Registro" [(ngModel)]="
                                       rucEstablishmentRegisterSelected.code
                                     "/>
+                                </div>
+                              </div>
+                              <div class="col-3">
+                                <div class="form-group">
+                                  <label>Fecha de Registro</label>
+                                  <input disabled type="date" *ngIf="establishment_selected.as_turistic_register_date != null" class="form-control" id="registerDate" name="registerDate"
+                                    placeholder="Fecha de Registro" [ngModel]="
+                                    establishment_selected.as_turistic_register_date | date: 'y-MM-dd'
+                                  " (ngModelChange)="
+                                  establishment_selected.as_turistic_register_date = $event
+                                  "/>
                                 </div>
                               </div>
                             </div>
@@ -1134,7 +1155,7 @@
                               <div class="col-3">
                                 <div class="form-group">
                                   <label>Región</label>
-                                  <select class="form-control" id="register_type_id" name="register_type_id"
+                                  <select class="form-control" disabled id="register_type_id" name="register_type_id"
                                     (change)="getClasifications()" [(ngModel)]="regionSelectedCode" [disabled]="!rucEstablishmentRegisterSelected.editable">
                                     <option value="-" selected>Seleccione...</option>
                                     <option *ngFor="

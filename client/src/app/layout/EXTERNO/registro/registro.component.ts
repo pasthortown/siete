@@ -100,6 +100,8 @@ export class RegistroComponent implements OnInit {
    tabActive = 'paso1';
    tabActiveSuperior = 'tab1';
    selectedNameType: RucNameType = new RucNameType();
+   total_workers = 0;
+
    //PAGOS
    tarifarioResponse: Tariff[] = [];
    tarifarioRack = {cabecera: [], valores: []};
@@ -472,6 +474,15 @@ export class RegistroComponent implements OnInit {
   }
 
   onCellClickPays(event) {
+  }
+  
+  refreshTotalWorkers() {
+   this.total_workers = 0;
+   this.establishment_selected.workers_on_establishment.forEach(element => {
+      if (element.is_max) {
+         this.total_workers += element.count;
+      }
+   });
   }
 
   onChangeTableEstablishment(config: any, event?): any {
@@ -2311,6 +2322,7 @@ export class RegistroComponent implements OnInit {
             }
          });
       });
+      this.refreshTotalWorkers();
       this.establishment_selected.languages_on_establishment = r.languages_on_establishment as Language[];
       this.establishment_selected.establishment_certifications_on_establishment = r.establishment_certifications_on_establishment as EstablishmentCertification[];
       this.establishment_selected.establishment_certifications_on_establishment.forEach(establishment_certification_on_establishment => {
@@ -2342,6 +2354,7 @@ export class RegistroComponent implements OnInit {
 
   recoverUbication() {
     this.ubicationDataService.getByIdLower(this.establishment_selected.ubication_id).then( r => {
+      this.regionSelectedCode = r.region;
       this.zonalEstablishmentSelectedCode = r.zonal.code;
       this.provinciaEstablishmentSelectedCode = r.provincia.code;
       this.cantonEstablishmentSelectedCode = r.canton.code;
@@ -2576,9 +2589,6 @@ export class RegistroComponent implements OnInit {
     this.certificadoUsoSuelo = new FloorAuthorizationCertificate();
     this.registerDataService.get_register_data(register.id).then( r => {
        this.rucEstablishmentRegisterSelected = r.register as Register;
-       this.languageDataService.get_by_establishment_id(this.establishment_selected.id).then( r => {
-         this.establishment_selected.languages_on_establishment = r as Language[];
-       }).catch( e => { console.log(e); });
        this.getCertificadoUsoSuelo(this.rucEstablishmentRegisterSelected.id);
        this.setCategory(this.rucEstablishmentRegisterSelected.register_type_id);
        this.rucEstablishmentRegisterSelected.editable = editable;
