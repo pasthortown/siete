@@ -1591,37 +1591,31 @@ export class RegistroComponent implements OnInit {
    this.requisiteDataService.get_filtered(this.rucEstablishmentRegisterSelected.register_type_id).then( r => {
       this.requisitesByRegisterType = r as Requisite[];
       this.requisitesByRegisterType.forEach(element => {
-         let existe = false;
-         this.rucEstablishmentRegisterSelected.requisites.forEach(element1 => {
-            if (element1.requisite_name == element.name) {
-               existe = true;
-            }
-         });
-         if (!existe) {
-            const newRegisterRequisite = new RegisterRequisite();
-            newRegisterRequisite.requisite_name = element.name;
-            newRegisterRequisite.requisite_id = element.id;
-            newRegisterRequisite.fullfill = true;
-            newRegisterRequisite.requisite_father_code = element.father_code;
-            AllRequisites.push(newRegisterRequisite);
+         const newRegisterRequisite = new RegisterRequisite();
+         newRegisterRequisite.requisite_name = element.name;
+         newRegisterRequisite.requisite_id = element.id;
+         newRegisterRequisite.fullfill = true;
+         newRegisterRequisite.requisite_father_code = element.father_code;
+         newRegisterRequisite.level = element.code.split('.').length;
+         newRegisterRequisite.HTMLtype = element.type;
+         if (newRegisterRequisite.HTMLtype == 'YES / NO') {
+            newRegisterRequisite.value = '0';
          }
+         if (newRegisterRequisite.HTMLtype == 'NUMBER') {
+            newRegisterRequisite.value = '0';
+         }
+         if (newRegisterRequisite.HTMLtype == 'TRUE / FALSE') {
+            newRegisterRequisite.fullfill = false;
+            newRegisterRequisite.value = 'false';
+         }
+         this.rucEstablishmentRegisterSelected.requisites.push(newRegisterRequisite);
       });
       this.showRequisites  = true;
-      const padres = [];
-      AllRequisites.forEach(element => {
-         if (element.requisite_father_code == '-') {
-            padres.push(element);
-         }
-      });
-      padres.forEach(padre => {
-         this.rucEstablishmentRegisterSelected.requisites.push(padre);
-         AllRequisites.forEach(element => {
-            if (element.requisite_father_code == padre.requisite_id.toString()) {
-               this.rucEstablishmentRegisterSelected.requisites.push(element);
-            }
-         });
-      });
    }).catch( e => console.log(e) );
+  }
+
+  changeFullfill(register_requisite: RegisterRequisite) {
+   register_requisite.value = register_requisite.fullfill.toString();
   }
 
   getComplementaryServiceTypeCategories() {

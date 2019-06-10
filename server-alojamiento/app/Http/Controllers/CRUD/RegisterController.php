@@ -251,6 +251,7 @@ class RegisterController extends Controller
             } else {
                $registerrequisite->id = 1;
             }
+            $registerrequisite->value = $requisite_to_add['value'];
             $registerrequisite->fullfill = $requisite_to_add['fullfill'];
             $registerrequisite->requisite_id = $requisite_to_add['requisite_id'];
             $registerrequisite->register_id = $register->id;
@@ -408,6 +409,7 @@ class RegisterController extends Controller
             } else {
                $registerrequisite->id = 1;
             }
+            $registerrequisite->value = $requisite_to_add['value'];
             $registerrequisite->fullfill = $requisite_to_add['fullfill'];
             $registerrequisite->requisite_id = $requisite_to_add['requisite_id'];
             $registerrequisite->register_id = $result['id'];

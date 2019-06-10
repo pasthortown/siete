@@ -1540,28 +1540,62 @@
                               <div class="form-group row">
                                 <div class="col-12">
                                   <table class="table table-hover mt-2">
-                                    <thead>
-                                      <th>Requisito</th>
-                                      <th>Satisfecho</th>
-                                    </thead>
                                     <tbody>
                                       <tr *ngFor="
                                               let register_requisite of rucEstablishmentRegisterSelected.requisites
                                             ">
                                         <td>
                                           <label
-                                            *ngIf="register_requisite.requisite_father_code !== '-'">{{ register_requisite.requisite_name }}</label>
+                                            *ngIf="register_requisite.HTMLtype !== 'GRUPO 0' &&
+                                            register_requisite.HTMLtype !== 'GRUPO 1' &&
+                                            register_requisite.HTMLtype !== 'GRUPO 2' &&
+                                            register_requisite.HTMLtype !== 'GRUPO 3' &&
+                                            register_requisite.HTMLtype !== 'GRUPO 4' && 
+                                            register_requisite.HTMLtype !== 'GRUPO 5'">{{ register_requisite.requisite_name }}</label>
+                                          <h5>
+                                            <strong
+                                            *ngIf="register_requisite.HTMLtype == 'GRUPO 0'">{{ register_requisite.requisite_name }}</strong>
+                                          </h5>
+                                          <h6>
+                                            <strong
+                                              *ngIf="register_requisite.HTMLtype == 'GRUPO 1'">{{ register_requisite.requisite_name }}</strong>  
+                                          </h6>
                                           <strong
-                                            *ngIf="register_requisite.requisite_father_code == '-'">{{ register_requisite.requisite_name }}</strong>
+                                              *ngIf="register_requisite.HTMLtype == 'GRUPO 2'">{{ register_requisite.requisite_name }}</strong>
+                                          <i>
+                                            <strong
+                                              *ngIf="register_requisite.HTMLtype == 'GRUPO 3'">{{ register_requisite.requisite_name }}</strong>
+                                          </i>
+                                          <i>
+                                            <label
+                                              *ngIf="register_requisite.HTMLtype == 'GRUPO 4'">{{ register_requisite.requisite_name }}</label>
+                                          </i>
+                                          <i>
+                                            <label
+                                              *ngIf="register_requisite.HTMLtype == 'GRUPO 5'">{{ register_requisite.requisite_name }}</label>
+                                          </i>
                                         </td>
                                         <td>
                                           <label class="switch"
-                                            *ngIf="register_requisite.requisite_father_code !== '-'"><input
+                                            *ngIf="register_requisite.HTMLtype == 'TRUE / FALSE'"><input
                                               type="checkbox" id="cumple" name="cumple" [(ngModel)]="
-                                                    register_requisite.fullfill
-                                                  " /><span class="slider round"></span></label>
+                                              register_requisite.fullfill
+                                                  " (change)="changeFullfill(register_requisite)" /><span class="slider round"></span></label>
+                                          <select class="form-control" *ngIf="register_requisite.HTMLtype == 'YES / NO'"
+                                          [(ngModel)]="register_requisite.value"
+                                          >
+                                            <option value="0" selected>Seleccione...</option>
+                                            <option value="SI" selected>SI</option>
+                                            <option value="NO" selected>NO</option>
+                                          </select>
+                                          <input type="number" *ngIf="register_requisite.HTMLtype == 'NUMBER'" [(ngModel)]="register_requisite.value" class="form-control" min="0" 
+                                          />
                                         </td>
                                       </tr>
+                                    </tbody>
+                                  </table>
+                                  <table class="table table-hover mt-2">
+                                    <tbody>
                                       <tr>
                                         <td>
                                             <label>Idiomas de Atención en el
