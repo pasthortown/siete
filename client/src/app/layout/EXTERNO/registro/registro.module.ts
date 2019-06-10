@@ -5,6 +5,7 @@ import { RegisterService } from 'src/app/services/CRUD/ALOJAMIENTO/register.serv
 import { EstablishmentPictureService } from 'src/app/services/CRUD/BASE/establishmentpicture.service';
 import { AgreementService } from 'src/app/services/CRUD/BASE/agreement.service';
 import { UserService } from 'src/app/services/profile/user.service';
+import { ReceptionRoomService } from './../../../services/CRUD/ALOJAMIENTO/receptionroom.service';
 import { RegistroComponent } from './registro.component';
 import { RegistroRoutingModule } from './registro-routing.module';
 import { PersonRepresentativeAttachmentService } from 'src/app/services/CRUD/BASE/personrepresentativeattachment.service';
@@ -67,6 +68,7 @@ import { ScrollToModule } from '@nicky-lenaers/ngx-scroll-to';
     UserService,
     DinardapService,
     DeclarationItemService,
+    ReceptionRoomService,
     DeclarationItemCategoryService,
     DeclarationService,
     TaxPayerTypeService,

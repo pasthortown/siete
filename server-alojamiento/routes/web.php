@@ -122,6 +122,7 @@ $router->group(['middleware' => ['auth']], function () use ($router) {
    $router->get('/receptionroom', ['uses' => 'ReceptionRoomController@get']);
    $router->get('/receptionroom/paginate', ['uses' => 'ReceptionRoomController@paginate']);
    $router->get('/receptionroom/backup', ['uses' => 'ReceptionRoomController@backup']);
+   $router->get('/receptionroom/get_by_register_id', ['uses' => 'ReceptionRoomController@get_by_register_id']);
    $router->put('/receptionroom', ['uses' => 'ReceptionRoomController@put']);
    $router->delete('/receptionroom', ['uses' => 'ReceptionRoomController@delete']);
    $router->post('/receptionroom/masive_load', ['uses' => 'ReceptionRoomController@masiveLoad']);

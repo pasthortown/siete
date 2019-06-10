@@ -1355,6 +1355,32 @@
                             </div>
                           </div>
                         </div>
+                        <div class="row" *ngIf="categorySelectedCode !== '-' && rucEstablishmentRegisterSelected.register_type_id !== 0 && false">
+                          <div class="col-12">
+                            <div class="form-group">
+                                <label><strong>Salas de Recepciones</strong></label>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-group"
+                          *ngIf="categorySelectedCode !== '-' && rucEstablishmentRegisterSelected.register_type_id !== 0 && false">
+                          <label>¿Su establecimiento cuenta con alquiler de Salas de Recepciones?</label>
+                          <div class="col-12">
+                              <label class="switch"><input type="checkbox" id="salas_recepciones"
+                                name="salas_recepciones" [(ngModel)]="
+                                salaRecepciones.fullfill
+                                " [disabled]="!rucEstablishmentRegisterSelected.editable"/><span class="slider round"></span></label>
+                          </div>
+                        </div>
+                        <div class="form-group"
+                          *ngIf="salaRecepciones.fullfill && false">
+                          <label>Especifique Cuantas</label>
+                          <div class="col-12">
+                            <input type="number" class="form-control" min="0" id="salasCount" name="salasCount"
+                              placeholder="Cantidad de Salas de Recepciones"
+                              [(ngModel)]="salaRecepciones.quantity" [disabled]="!rucEstablishmentRegisterSelected.editable"/>
+                          </div>
+                        </div>
                         <div class="row" *ngIf="categorySelectedCode !== '-' && rucEstablishmentRegisterSelected.register_type_id !== 0">
                           <div class="col-12">
                             <div class="form-group">

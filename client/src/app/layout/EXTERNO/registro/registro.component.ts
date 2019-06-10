@@ -1,3 +1,4 @@
+import { ReceptionRoomService } from './../../../services/CRUD/ALOJAMIENTO/receptionroom.service';
 import { MailerService } from './../../../services/negocio/mailer.service';
 import { DeclarationAttachmentService } from './../../../services/CRUD/FINANCIERO/declarationattachment.service';
 import { DeclarationAttachment } from './../../../models/FINANCIERO/DeclarationAttachment';
@@ -85,6 +86,7 @@ import { EstablishmentPictureService } from 'src/app/services/CRUD/BASE/establis
 import { EstablishmentCertificationAttachmentService } from 'src/app/services/CRUD/BASE/establishmentcertificationattachment.service';
 import { RegisterService } from 'src/app/services/CRUD/ALOJAMIENTO/register.service';
 import { Router } from '@angular/router';
+import { ReceptionRoom } from 'src/app/models/ALOJAMIENTO/ReceptionRoom';
 
 @Component({
   selector: 'app-registro',
@@ -101,7 +103,7 @@ export class RegistroComponent implements OnInit {
    tabActiveSuperior = 'tab1';
    selectedNameType: RucNameType = new RucNameType();
    total_workers = 0;
-
+   salaRecepciones: ReceptionRoom = new ReceptionRoom();
    //PAGOS
    tarifarioResponse: Tariff[] = [];
    tarifarioRack = {cabecera: [], valores: []};
@@ -265,6 +267,7 @@ export class RegistroComponent implements OnInit {
               private rucDataService: RucService,
               private modalService: NgbModal,
               private payDataService: PayService,
+              private receptionRoomDataService: ReceptionRoomService,
               private declarationAttachmentDataService: DeclarationAttachmentService,
               private agreementDataService: AgreementService,
               private rucNameTypeDataService: RucNameTypeService,
@@ -348,6 +351,19 @@ export class RegistroComponent implements OnInit {
         }
      });
      this.establishmentComercialNameValidated = toReturn;
+  }
+
+  guardarRecepcionRoom(register_id: number) {
+     this.salaRecepciones.register_id = register_id;
+     if (this.salaRecepciones.id == 0 || typeof this.salaRecepciones.id == 'undefined') {
+      this.receptionRoomDataService.post(this.salaRecepciones).then( r => {
+
+      }).catch( e => { console.log(e); });
+     } else {
+      this.receptionRoomDataService.put(this.salaRecepciones).then( r => {
+         
+      }).catch( e => { console.log(e); });
+     }
   }
 
   validateNombreFranquiciaCadena() {
@@ -1448,6 +1464,7 @@ export class RegistroComponent implements OnInit {
    }).catch( e => { console.log(e); });
    this.registerDataService.register_register_data(this.rucEstablishmentRegisterSelected).then( r => {
       this.certificadoUsoSuelo.register_id = r.id;
+      this.guardarRecepcionRoom(r.id);
       this.guardarCertificadoUsoSuelos();
       const today = new Date();
       let clasificacion: String = '';
@@ -2243,6 +2260,12 @@ export class RegistroComponent implements OnInit {
      }).catch( e => { console.log(e); });
   }
 
+  getReceptionRoom(register_id: number) {
+   this.receptionRoomDataService.get_by_register_id(register_id).then( r => {
+      this.salaRecepciones = r as ReceptionRoom;
+   }).catch( e => { console.log(e); });
+  }
+
   getTarifarioRack(register_id: number) {
    this.registerDataService.get_tarifario(register_id).then( r => {
       this.tarifarioResponse = r as Tariff[];
@@ -2584,6 +2607,7 @@ export class RegistroComponent implements OnInit {
     this.registerDataService.get_register_data(register.id).then( r => {
        this.rucEstablishmentRegisterSelected = r.register as Register;
        this.getCertificadoUsoSuelo(this.rucEstablishmentRegisterSelected.id);
+       this.getReceptionRoom(this.rucEstablishmentRegisterSelected.id);
        this.setCategory(this.rucEstablishmentRegisterSelected.register_type_id);
        this.rucEstablishmentRegisterSelected.editable = editable;
        this.getTramiteStatus(this.rucEstablishmentRegisterSelected.status);

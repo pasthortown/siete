@@ -23,6 +23,11 @@ class ReceptionRoomController extends Controller
        }
     }
 
+    function get_by_register_id(Request $data) {
+      $register_id = $data['id'];
+      return ReceptionRoom::where('register_id', $register_id)->first();
+    }
+
     function paginate(Request $data)
     {
        $size = $data['size'];
