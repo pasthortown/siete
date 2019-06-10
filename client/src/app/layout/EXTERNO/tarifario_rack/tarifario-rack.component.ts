@@ -562,7 +562,7 @@ export class TarifarioRackComponent implements OnInit {
                 tariff.price = 0;
                 tariff.capacity_type_id = capacity.capacity_type_id;
                 const today = new Date();
-                tariff.year = today.getFullYear();      
+                tariff.year = today.getFullYear();   
                 if (this.lastYear < today.getFullYear() + 1) {
                    // AQUI TIEMPOS
                    // 1 DEVUELTO
@@ -585,7 +585,6 @@ export class TarifarioRackComponent implements OnInit {
                   if ((month >= 1 && month <=6) && this.lastYear == year) {
                      editable = false;
                      capacity.editable = false;
-                     return;
                   }
                   if ((month >= 1 && month <=6) && this.lastYear == year - 1) {
                      editable = true;
