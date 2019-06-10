@@ -2355,6 +2355,7 @@ export class RegistroComponent implements OnInit {
   recoverUbication() {
     this.ubicationDataService.getByIdLower(this.establishment_selected.ubication_id).then( r => {
       this.regionSelectedCode = r.region;
+      this.getClasifications();
       this.zonalEstablishmentSelectedCode = r.zonal.code;
       this.provinciaEstablishmentSelectedCode = r.provincia.code;
       this.cantonEstablishmentSelectedCode = r.canton.code;
