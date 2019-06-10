@@ -16,14 +16,13 @@ export class LayoutComponent implements OnInit {
     half = false;
     two = false;
     three = false;
-    bye = false;
+    
     constructor(private toastr: ToastrManager, public profilePictureDataService: ProfilePictureService, private userDataService: UserService, private router: Router) {}
 
     ngOnInit() {
         this.half = false;
         this.two = false;
         this.three = false;
-        this.bye = false;
         this.getProfilePicture();
         this.getUserInfo();
         this.checkSessionTime();
@@ -42,6 +41,9 @@ export class LayoutComponent implements OnInit {
 
     checkSessionTime() {
         const session_time = JSON.parse(sessionStorage.getItem('session_time'));
+        if (typeof session_time == 'undefined' || session_time == null){
+            return;
+        }
         const endTime = new Date(session_time.endTime);
         const now = new Date();
         const oneHalf = new Date(session_time.startTime);
@@ -54,33 +56,29 @@ export class LayoutComponent implements OnInit {
         const diffDates = endTime.getTime() - now.getTime();
         const minutosRestantes = Math.round(((diffDates % 86400000) % 3600000) / 60000);
         const horasRestantes = Math.floor((diffDates % 86400000) / 3600000);
-
-        if (now >= endTime && !this.bye) {
-            this.toastr.errorToastr('Su sesión a caducado', 'Sesión');
-            sessionStorage.clear();
-            this.half = true;
-            this.two = true;
-            this.three = true;
-            this.bye = true;
-            this.router.navigate(['/login']);
-        } else {
-            if (now >= threeHalf && !this.three) {
-                this.toastr.warningToastr('Su sesión está próxima a caducar. Tiempo restante: ' + horasRestantes + ' horas ' + minutosRestantes + ' minutos', 'Sesión');
+        if (horasRestantes == 1) {
+            if (minutosRestantes > 20 && minutosRestantes < 30 && !this.three) {
+                this.toastr.infoToastr('Tiempo restante: ' + horasRestantes + ' hora ' + minutosRestantes + ' minutos', 'Sesión');
                 this.three = true;
+            }
+            if (minutosRestantes > 1 && minutosRestantes < 10 && !this.two) {
+                this.toastr.infoToastr('Tiempo restante: ' + horasRestantes + ' hora ' + minutosRestantes + ' minutos', 'Sesión');
+                this.two = true;
+                this.three = true;
+            }
+        }
+        if (horasRestantes == 0) {
+            if (minutosRestantes < 30 && !this.half) {
+                this.toastr.warningToastr('Su sesión está próxima a caducar. Tiempo restante: ' + minutosRestantes + ' minutos', 'Sesión');
                 this.half = true;
                 this.two = true;
-            } else {
-                if (now >= twoHalf && !this.two) {
-                    this.toastr.infoToastr('Tiempo restante: ' + horasRestantes + ' horas ' + minutosRestantes + ' minutos', 'Sesión');
-                    this.two = true;
-                    this.half = true;
-                } else {
-                    if (now >= oneHalf && !this.half) {
-                        this.toastr.infoToastr('Tiempo restante: ' + horasRestantes + ' horas ' + minutosRestantes + ' minutos', 'Sesión');
-                        this.half = true;
-                    }
-                }
+                this.three = true;
             }
+        }
+        if (now >= endTime) {
+            this.toastr.errorToastr('Su sesión a caducado', 'Sesión');
+            sessionStorage.clear();
+            this.router.navigate(['/login']);
         }
         setTimeout(() => {
             this.checkSessionTime();
