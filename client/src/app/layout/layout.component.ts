@@ -13,10 +13,17 @@ import { ToastrManager } from 'ng6-toastr-notifications';
 })
 export class LayoutComponent implements OnInit {
     collapedSideBar: boolean;
-    
+    half = false;
+    two = false;
+    three = false;
+    bye = false;
     constructor(private toastr: ToastrManager, public profilePictureDataService: ProfilePictureService, private userDataService: UserService, private router: Router) {}
 
     ngOnInit() {
+        this.half = false;
+        this.two = false;
+        this.three = false;
+        this.bye = false;
         this.getProfilePicture();
         this.getUserInfo();
         this.checkSessionTime();
@@ -44,19 +51,23 @@ export class LayoutComponent implements OnInit {
         twoHalf.setHours(twoHalf.getHours() + 1);
         threeHalf.setMinutes(threeHalf.getMinutes() + 30);
         threeHalf.setHours(threeHalf.getHours() + 1);
-        if (now >= endTime) {
+        if (now >= endTime && !this.bye) {
             this.toastr.errorToastr('Su sesión a caducado', 'Sesión');
             sessionStorage.clear();
+            this.bye = true;
             this.router.navigate(['/login']);
         } else {
-            if (now >= threeHalf) {
+            if (now >= threeHalf && !this.half) {
                 this.toastr.warningToastr('Su sesión está próxima a caducar. Tiempo restante: 30 minutos.', 'Sesión');
+                this.half = true;
             } else {
-                if (now >= twoHalf) {
+                if (now >= twoHalf && !this.two) {
                     this.toastr.infoToastr('Tiempo restante: 1 hora.', 'Sesión');
+                    this.two = true;
                 } else {
-                    if (now >= oneHalf) {
+                    if (now >= oneHalf && !this.three) {
                         this.toastr.infoToastr('Tiempo restante: 1 hora 30 minutos.', 'Sesión');
+                        this.three = true;
                     }
                 }
             }
