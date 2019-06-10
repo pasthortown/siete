@@ -2288,7 +2288,7 @@ export class RegistroComponent implements OnInit {
     if (registerSelected.id == 0) {
       this.rucEstablishmentRegisterSelected = new Register();
       this.certificadoUsoSuelo = new FloorAuthorizationCertificate();
-      this.rucEstablishmentRegisterSelected.status = 0;
+      this.rucEstablishmentRegisterSelected.status = 11;
       this.rucEstablishmentRegisterSelected.establishment_id = establishment.id;
       this.mostrarDataRegister = true;
     } else {
@@ -2585,7 +2585,6 @@ export class RegistroComponent implements OnInit {
 
   selectEstablishmentRegister(register: Register, editable: Boolean) {
     this.mostrarDataRegister = false;
-    const tarifas: Tariff[] = this.newTariffs();
     this.rucEstablishmentRegisterSelected = new Register();
     this.certificadoUsoSuelo = new FloorAuthorizationCertificate();
     this.registerDataService.get_register_data(register.id).then( r => {

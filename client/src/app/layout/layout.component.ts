@@ -51,23 +51,33 @@ export class LayoutComponent implements OnInit {
         twoHalf.setHours(twoHalf.getHours() + 1);
         threeHalf.setMinutes(threeHalf.getMinutes() + 30);
         threeHalf.setHours(threeHalf.getHours() + 1);
+        const diffDates = endTime.getTime() - now.getTime();
+        const minutosRestantes = Math.round(((diffDates % 86400000) % 3600000) / 60000);
+        const horasRestantes = Math.floor((diffDates % 86400000) / 3600000);
+
         if (now >= endTime && !this.bye) {
             this.toastr.errorToastr('Su sesión a caducado', 'Sesión');
             sessionStorage.clear();
+            this.half = true;
+            this.two = true;
+            this.three = true;
             this.bye = true;
             this.router.navigate(['/login']);
         } else {
-            if (now >= threeHalf && !this.half) {
-                this.toastr.warningToastr('Su sesión está próxima a caducar. Tiempo restante: 30 minutos.', 'Sesión');
+            if (now >= threeHalf && !this.three) {
+                this.toastr.warningToastr('Su sesión está próxima a caducar. Tiempo restante: ' + horasRestantes + ' horas ' + minutosRestantes + ' minutos', 'Sesión');
+                this.three = true;
                 this.half = true;
+                this.two = true;
             } else {
                 if (now >= twoHalf && !this.two) {
-                    this.toastr.infoToastr('Tiempo restante: 1 hora.', 'Sesión');
+                    this.toastr.infoToastr('Tiempo restante: ' + horasRestantes + ' horas ' + minutosRestantes + ' minutos', 'Sesión');
                     this.two = true;
+                    this.half = true;
                 } else {
-                    if (now >= oneHalf && !this.three) {
-                        this.toastr.infoToastr('Tiempo restante: 1 hora 30 minutos.', 'Sesión');
-                        this.three = true;
+                    if (now >= oneHalf && !this.half) {
+                        this.toastr.infoToastr('Tiempo restante: ' + horasRestantes + ' horas ' + minutosRestantes + ' minutos', 'Sesión');
+                        this.half = true;
                     }
                 }
             }
