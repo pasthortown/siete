@@ -6,11 +6,13 @@ export class RegisterRequisite {
    register_id: number;
    requisite_name: String;
    requisite_father_code: String;
+   requisite_code: String;
    mandatory: Boolean;
    level: number;
    HTMLtype: String;
    constructor() {
       this.requisite_name = '';
+      this.requisite_code = '';
       this.mandatory = false;
       this.value = '';
       this.fullfill = true;
