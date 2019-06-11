@@ -1633,7 +1633,7 @@ export class RegistroComponent implements OnInit {
          newRegisterRequisite.HTMLtype = element.type;
          newRegisterRequisite.fullfill = false;
          if (newRegisterRequisite.HTMLtype == 'YES / NO') {
-            newRegisterRequisite.value = 'NO';
+            newRegisterRequisite.value = '0';
          }
          if (newRegisterRequisite.HTMLtype == 'NUMBER') {
             newRegisterRequisite.value = '0';
