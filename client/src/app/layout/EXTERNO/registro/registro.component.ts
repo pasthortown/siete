@@ -1442,12 +1442,16 @@ export class RegistroComponent implements OnInit {
       this.toastr.errorToastr('Debe cargar el certificado de uso de suelo.', 'Nuevo');
       return;
    }
+   let mostradoError = false;
    this.rucEstablishmentRegisterSelected.requisites.forEach(element => {
-      if (element.mandatory && !(element.value == 'true' || element.value == 'SI')) {
+      if (!mostradoError && (element.mandatory && !(element.value == 'true' || element.value == 'SI'))) {
          this.toastr.errorToastr('La repuesta seleccionada en los requisitos obligatorios no corresponde a la admitida para la categoría seleccionada.', 'Normativa');
-         return;
+         mostradoError = true;
       }
    });
+   if (mostradoError) {
+      return;
+   }
    let NoApruebaCantidadCamas = false;
    this.rucEstablishmentRegisterSelected.capacities_on_register.forEach(capacity => {
       this.allowed_capacity_types.forEach(capacity_type => {
