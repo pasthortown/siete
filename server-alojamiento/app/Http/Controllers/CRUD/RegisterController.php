@@ -112,6 +112,7 @@ class RegisterController extends Controller
       $register_type = RegisterType::where('id', $register->register_type_id)->first();
       $register_category = RegisterType::where('code', $register_type->father_code)->first();
       $status_register = RegisterState::where('register_id', $register->id)->orderBy('created_at', 'DESC')->first();
+      $requisites = RegisterRequisite::where('register_id', $register->id)->get();
       $capacities_on_register = $register->Capacities()->get();
       $capacities = [];
       foreach($capacities_on_register as $capacity_on_register){
@@ -132,6 +133,7 @@ class RegisterController extends Controller
       $complementary_service_types_on_register = $register->ComplementaryServiceTypes()->get();
       $complementary_service_foods_on_register = $register->ComplementaryServiceFoods()->get();
       $toReturn = ["register"=>$register,
+                   "requisites"=>$requisites,
                    "status"=>$status_register,
                    "register_category"=>$register_category,
                    "capacities_on_register"=>$capacities,

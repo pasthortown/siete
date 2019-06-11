@@ -918,7 +918,7 @@
                             <table class="table table-hover mt-2">
                               <thead>
                                 <tr>
-                                  <th>Seleccionado</th>
+                                  <th style="text-align: right;"><i class="far fa-check-square"></i></th>
                                   <th>Año</th>
                                   <th>Fecha de Declaración</th>
                                   <th>Estado</th>
@@ -1577,7 +1577,7 @@
                                             register_requisite.HTMLtype !== 'GRUPO 2' &&
                                             register_requisite.HTMLtype !== 'GRUPO 3' &&
                                             register_requisite.HTMLtype !== 'GRUPO 4' && 
-                                            register_requisite.HTMLtype !== 'GRUPO 5'">{{ register_requisite.requisite_name }}</label>
+                                            register_requisite.HTMLtype !== 'GRUPO 5'">{{ register_requisite.requisite_name }}<strong *ngIf="register_requisite.mandatory" style="color: red;">*</strong></label>
                                           <h5>
                                             <strong
                                             *ngIf="register_requisite.HTMLtype == 'GRUPO 0'">{{ register_requisite.requisite_name }}</strong>
@@ -1604,17 +1604,17 @@
                                         <td>
                                           <label class="switch"
                                             *ngIf="register_requisite.HTMLtype == 'TRUE / FALSE'"><input
-                                              type="checkbox" id="cumple" name="cumple" [(ngModel)]="
+                                              type="checkbox" [disabled]="!rucEstablishmentRegisterSelected.editable" id="cumple" name="cumple" [(ngModel)]="
                                               register_requisite.fullfill
                                                   " (change)="changeFullfill(register_requisite)" /><span class="slider round"></span></label>
                                           <select class="form-control" *ngIf="register_requisite.HTMLtype == 'YES / NO'"
-                                          [(ngModel)]="register_requisite.value"
+                                          [(ngModel)]="register_requisite.value" [disabled]="!rucEstablishmentRegisterSelected.editable"
                                           >
                                             <option value="0" selected>Seleccione...</option>
                                             <option value="SI" selected>SI</option>
                                             <option value="NO" selected>NO</option>
                                           </select>
-                                          <input type="number" *ngIf="register_requisite.HTMLtype == 'NUMBER'" [(ngModel)]="register_requisite.value" class="form-control" min="0" 
+                                          <input type="number" *ngIf="register_requisite.HTMLtype == 'NUMBER'" [disabled]="!rucEstablishmentRegisterSelected.editable" [(ngModel)]="register_requisite.value" class="form-control" min="0" 
                                           />
                                         </td>
                                       </tr>

@@ -937,6 +937,7 @@ export class RegistroComponent implements OnInit {
    this.declaration_selected = new Declaration();
    this.mostrarDataDeclaration = true;
    this.guardando = false;
+   this.balance = new DeclarationAttachment();
    this.buildDeclarationItemsToShow();
   }
 
@@ -1279,6 +1280,7 @@ export class RegistroComponent implements OnInit {
 
   selectDeclaration(declaration: Declaration) {
       this.declaration_selected = declaration;
+      this.getDeclarationAttachment(declaration.id);
       this.mostrarDataDeclaration = true;
       this.declarationItemsToShow = [];
       this.guardando = false;
@@ -1297,6 +1299,12 @@ export class RegistroComponent implements OnInit {
             this.declarationItemsToShow.push({Category: category, items: items});
          }
       });
+  }
+
+  getDeclarationAttachment(declaration_id: number) {
+   this.declarationAttachmentDataService.get_by_declaration_id(declaration_id).then( r => {
+      this.balance = r as DeclarationAttachment;
+   }).catch( e => { console.log(e); });
   }
 
   validateDeclaration(): Boolean {
@@ -1434,6 +1442,12 @@ export class RegistroComponent implements OnInit {
       this.toastr.errorToastr('Debe cargar el certificado de uso de suelo.', 'Nuevo');
       return;
    }
+   this.rucEstablishmentRegisterSelected.requisites.forEach(element => {
+      if (element.mandatory && !(element.value == 'true' || element.value == 'SI')) {
+         this.toastr.errorToastr('La repuesta seleccionada en los requisitos obligatorios no corresponde a la admitida para la categoría seleccionada.', 'Normativa');
+         return;
+      }
+   });
    let NoApruebaCantidadCamas = false;
    this.rucEstablishmentRegisterSelected.capacities_on_register.forEach(capacity => {
       this.allowed_capacity_types.forEach(capacity_type => {
@@ -1587,8 +1601,8 @@ export class RegistroComponent implements OnInit {
    }).catch( e => console.log(e) );
   }
 
-  getAllowedInfo() {
-   this.getRequisitesByRegisterType();
+  getAllowedInfo(requisites?: RegisterRequisite[]) {
+   this.getRequisitesByRegisterType(requisites);
    this.getBedTypes();
    this.getCapacityTypes();
   }
@@ -1600,7 +1614,7 @@ export class RegistroComponent implements OnInit {
    }).catch( e => console.log(e) );
   }
 
-  getRequisitesByRegisterType() {
+  getRequisitesByRegisterType(requisites?: RegisterRequisite[]) {
    const AllRequisites = [];
    this.requisitesByRegisterType = [];
    this.rucEstablishmentRegisterSelected.requisites = [];
@@ -1612,27 +1626,44 @@ export class RegistroComponent implements OnInit {
          newRegisterRequisite.requisite_name = element.name;
          newRegisterRequisite.requisite_id = element.id;
          newRegisterRequisite.fullfill = true;
+         newRegisterRequisite.mandatory = element.mandatory
          newRegisterRequisite.requisite_father_code = element.father_code;
          newRegisterRequisite.level = element.code.split('.').length;
          newRegisterRequisite.HTMLtype = element.type;
+         newRegisterRequisite.fullfill = false;
          if (newRegisterRequisite.HTMLtype == 'YES / NO') {
-            newRegisterRequisite.value = '0';
+            newRegisterRequisite.value = 'NO';
          }
          if (newRegisterRequisite.HTMLtype == 'NUMBER') {
             newRegisterRequisite.value = '0';
          }
          if (newRegisterRequisite.HTMLtype == 'TRUE / FALSE') {
-            newRegisterRequisite.fullfill = false;
             newRegisterRequisite.value = 'false';
          }
          this.rucEstablishmentRegisterSelected.requisites.push(newRegisterRequisite);
       });
       this.showRequisites  = true;
+      if (typeof requisites !== 'undefined') {
+         this.rucEstablishmentRegisterSelected.requisites.forEach(requisite => {
+            requisites.forEach(requisite_incomming => {
+               if (requisite.requisite_id == requisite_incomming.requisite_id) {
+                  requisite.value = requisite_incomming.value;
+                  requisite.fullfill = requisite_incomming.fullfill;
+                  requisite.id = requisite_incomming.id;
+                  requisite.register_id = requisite_incomming.register_id;
+               }
+            });
+         });
+      }   
    }).catch( e => console.log(e) );
   }
 
   changeFullfill(register_requisite: RegisterRequisite) {
-   register_requisite.value = register_requisite.fullfill.toString();
+     if (register_requisite.fullfill) {
+      register_requisite.value = 'true';
+     }else {
+      register_requisite.value = 'false';
+     }
   }
 
   getComplementaryServiceTypeCategories() {
@@ -2618,7 +2649,7 @@ export class RegistroComponent implements OnInit {
        this.calcSpaces();
        this.getTarifarioRack(register.id);
        this.getCategories();
-       this.getAllowedInfo();
+       this.getAllowedInfo(r.requisites);
        this.allowed_capacity_types = [];
        this.capacityTypeDataService.get_filtered_by_register_type(this.rucEstablishmentRegisterSelected.register_type_id).then( r2 => {
          this.allowed_capacity_types = r2 as CapacityType[];
@@ -2785,6 +2816,7 @@ export class RegistroComponent implements OnInit {
 
   addCapacity() {
    const newCapacity = new Capacity();
+   newCapacity.editable = true;
    this.rucEstablishmentRegisterSelected.total_spaces = 0;
    this.rucEstablishmentRegisterSelected.capacities_on_register.push(newCapacity);
   }
@@ -2845,6 +2877,7 @@ export class RegistroComponent implements OnInit {
       this.rucEstablishmentRegisterSelected.capacities_on_register.forEach(capacity => {
          const childs = [];
          let idTipoCapacidad = capacity.capacity_type_id;
+         let editable = capacity.editable;
          this.tarifas.forEach(tariffType => {
             tariffType.childs.forEach(tariffTypeChild => {
                const es_referencia = tariffType.father.is_reference;
@@ -2866,7 +2899,7 @@ export class RegistroComponent implements OnInit {
                childs.push(newChild);
             });
          });
-         const topush = {idTipoCapacidad: idTipoCapacidad, tariffs: childs};
+         const topush = {idTipoCapacidad: idTipoCapacidad, tariffs: childs, editable: editable};
          this.tarifarioRack.valores.push(topush);
       });
    }

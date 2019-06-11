@@ -112,6 +112,7 @@ $router->group(['middleware' => ['auth']], function () use ($router) {
    //CRUD DeclarationAttachment
    $router->post('/declarationattachment', ['uses' => 'DeclarationAttachmentController@post']);
    $router->get('/declarationattachment', ['uses' => 'DeclarationAttachmentController@get']);
+   $router->get('/declarationattachment/get_by_declaration_id', ['uses' => 'DeclarationAttachmentController@get_by_declaration_id']);
    $router->get('/declarationattachment/paginate', ['uses' => 'DeclarationAttachmentController@paginate']);
    $router->get('/declarationattachment/backup', ['uses' => 'DeclarationAttachmentController@backup']);
    $router->put('/declarationattachment', ['uses' => 'DeclarationAttachmentController@put']);

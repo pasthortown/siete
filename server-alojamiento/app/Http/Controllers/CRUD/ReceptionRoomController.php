@@ -25,7 +25,7 @@ class ReceptionRoomController extends Controller
 
     function get_by_register_id(Request $data) {
       $register_id = $data['id'];
-      return ReceptionRoom::where('register_id', $register_id)->first();
+      return response()->json(ReceptionRoom::where('register_id', $register_id)->first(),200);
     }
 
     function paginate(Request $data)

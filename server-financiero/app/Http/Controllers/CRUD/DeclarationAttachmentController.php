@@ -29,6 +29,11 @@ class DeclarationAttachmentController extends Controller
        return response()->json(DeclarationAttachment::paginate($size),200);
     }
 
+    function get_by_declaration_id(Request $data) {
+      $declaration_id = $data['id'];
+      return response()->json(DeclarationAttachment::where('declaration_id', $declaration_id)->first(),200);
+    }
+
     function post(Request $data)
     {
        try{
