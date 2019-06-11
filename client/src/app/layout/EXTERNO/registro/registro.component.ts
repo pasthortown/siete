@@ -1661,7 +1661,7 @@ export class RegistroComponent implements OnInit {
   changeFullfill(register_requisite: RegisterRequisite) {
      if (register_requisite.fullfill) {
       register_requisite.value = 'true';
-     }else {
+     } else {
       register_requisite.value = 'false';
      }
   }
