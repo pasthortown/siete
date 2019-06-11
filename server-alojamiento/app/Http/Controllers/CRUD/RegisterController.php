@@ -266,7 +266,7 @@ class RegisterController extends Controller
          } else {
             $registerstate->id = 1;
          }
-         $registerstate->justification = 'Solicitud de Registro Elaborada en la fecha: ' . date('l jS \of F Y h:i:s A');
+         $registerstate->justification = 'Solicitud de Registro Elaborada en la fecha: ' . date('Y-m-d h:i:s A');
          $registerstate->register_id = $register->id;
          $registerstate->state_id = $status_id;
          $registerstate->save();
@@ -424,7 +424,7 @@ class RegisterController extends Controller
          } else {
             $registerstate->id = 1;
          }
-         $registerstate->justification = 'Solicitud de Registro Actualizada en la fecha: ' . date('l jS \of F Y h:i:s A');
+         $registerstate->justification = 'Solicitud de Registro Actualizada en la fecha: ' . date('Y-m-d h:i:s A');
          $registerstate->register_id = $register->id;
          $registerstate->state_id = $status_id;
          $registerstate->save();
