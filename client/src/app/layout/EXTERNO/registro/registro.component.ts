@@ -1620,7 +1620,6 @@ export class RegistroComponent implements OnInit {
   }
 
   getRequisitesByRegisterType(requisites?: RegisterRequisite[]) {
-   const AllRequisites = [];
    this.requisitesByRegisterType = [];
    this.rucEstablishmentRegisterSelected.requisites = [];
    this.showRequisites = false;
@@ -1660,7 +1659,7 @@ export class RegistroComponent implements OnInit {
                }
             });
          });
-      }   
+      }
    }).catch( e => console.log(e) );
   }
 
