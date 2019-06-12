@@ -1660,6 +1660,11 @@ export class RegistroComponent implements OnInit {
             });
          });
       }
+      this.rucEstablishmentRegisterSelected.requisites.sort(function(a, b) {
+         const a_id = a.requisite_id;
+         const b_id = b.requisite_id;
+         return a_id > b_id ? 1 : a_id < b_id ? -1 : 0;
+     });
    }).catch( e => console.log(e) );
   }
 

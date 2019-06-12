@@ -15,7 +15,7 @@ class RequisiteController extends Controller
     {
        $id = $data['id'];
        if ($id == null) {
-          return response()->json(Requisite::get(),200);
+          return response()->json(Requisite::orderBy('id', 'ASC')->get(),200);
        } else {
           $requisite = Requisite::findOrFail($id);
           $attach = [];
@@ -26,7 +26,7 @@ class RequisiteController extends Controller
     function paginate(Request $data)
     {
        $size = $data['size'];
-       return response()->json(Requisite::paginate($size),200);
+       return response()->json(Requisite::orderBy('id', 'ASC')->paginate($size),200);
     }
 
     function filtered(Request $data)

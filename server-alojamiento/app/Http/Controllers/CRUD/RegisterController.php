@@ -112,7 +112,7 @@ class RegisterController extends Controller
       $register_type = RegisterType::where('id', $register->register_type_id)->first();
       $register_category = RegisterType::where('code', $register_type->father_code)->first();
       $status_register = RegisterState::where('register_id', $register->id)->orderBy('created_at', 'DESC')->first();
-      $requisites = RegisterRequisite::where('register_id', $register->id)->get();
+      $requisites = RegisterRequisite::where('register_id', $register->id)->orderBy('requisite_id', 'ASC')->get();
       $capacities_on_register = $register->Capacities()->get();
       $capacities = [];
       foreach($capacities_on_register as $capacity_on_register){
