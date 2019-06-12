@@ -1442,12 +1442,17 @@ export class RegistroComponent implements OnInit {
       this.toastr.errorToastr('Debe cargar el certificado de uso de suelo.', 'Nuevo');
       return;
    }
+   let mostradoError = false;
    this.rucEstablishmentRegisterSelected.requisites.forEach(element => {
-      if (element.mandatory && !(element.value == 'true' || element.value == 'SI')) {
+      if (!mostradoError && (element.mandatory && !(element.value == 'true' || element.value == 'SI'))) {
          this.toastr.errorToastr('La repuesta seleccionada en los requisitos obligatorios no corresponde a la admitida para la categoría seleccionada.', 'Normativa');
+         mostradoError = true;
          return;
       }
    });
+   if (mostradoError) {
+      return;
+   }
    let NoApruebaCantidadCamas = false;
    this.rucEstablishmentRegisterSelected.capacities_on_register.forEach(capacity => {
       this.allowed_capacity_types.forEach(capacity_type => {
@@ -1633,7 +1638,7 @@ export class RegistroComponent implements OnInit {
          newRegisterRequisite.HTMLtype = element.type;
          newRegisterRequisite.fullfill = false;
          if (newRegisterRequisite.HTMLtype == 'YES / NO') {
-            newRegisterRequisite.value = 'NO';
+            newRegisterRequisite.value = '0';
          }
          if (newRegisterRequisite.HTMLtype == 'NUMBER') {
             newRegisterRequisite.value = '0';
@@ -2220,8 +2225,8 @@ export class RegistroComponent implements OnInit {
   }
 
   checkURLWeb():Boolean {
-   const isOk = /^(ftp|https?):\/\/+(www\.)?[a-z0-9\-\.]{3,}\.[a-z]{3}$/.test(this.establishment_selected.url_web.toString());
-   const isOk2 = /^(www\.)?[a-z0-9\-\.]{3,}\.[a-z]{3}$/.test(this.establishment_selected.url_web.toString());
+   const isOk = /^(ftp|https?):\/\/+(www\.)?[a-z0-9\-\.]{2,}\.[a-z]{2}$/.test(this.establishment_selected.url_web.toString());
+   const isOk2 = /^(www\.)?[a-z0-9\-\.]{2,}\.[a-z]{2}$/.test(this.establishment_selected.url_web.toString());
    this.urlwebEstablishmentValidated = isOk || isOk2 || (this.establishment_selected.url_web == '');
    return this.urlwebEstablishmentValidated;
   }
