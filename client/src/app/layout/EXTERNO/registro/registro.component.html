@@ -945,7 +945,7 @@
                           <h3>Datos de la Declaración:</h3>
                         </div>
                       </div>
-                      <div class="row">AQUI
+                      <div class="row">
                         <div class="col-6">
                           <div class="form-group">
                             <label>Año de Obligación de Pago</label>
@@ -953,7 +953,6 @@
                               placeholder="Año a Declarar" [(ngModel)]="declaration_selected.year" [max]="maxYear" [disabled]="!declaration_selected.editable">
                           </div>
                         </div>
-
                         <div class="col-6">
                           <div class="form-group">
                               <label *ngIf="ruc_registro_selected.ruc.tax_payer_type_id == 2">Anexar balance individual del establecimiento, suscrito por el representante legal*</label>
