@@ -1447,7 +1447,12 @@ export class RegistroComponent implements OnInit {
       if (element.HTMLtype == 'TRUE / FALSE' && element.fullfill) {
          element.value = 'true';
       }
-      if (!mostradoError && (element.mandatory && !(element.value == 'true' || element.value == '0'))) {
+      let esgrupo = false;
+      if (element.HTMLtype == "GRUPO 0" || element.HTMLtype == "GRUPO 1" || element.HTMLtype == "GRUPO 2" || element.HTMLtype == "GRUPO 3" || element.HTMLtype == "GRUPO 4" || element.HTMLtype == "GRUPO 5" || element.HTMLtype == "GRUPO 6") {
+         esgrupo = true;
+      }
+      if (!mostradoError && !esgrupo && (element.mandatory && !(element.value == 'true' || element.value == '0'))) {
+         console.log(element);
          this.toastr.errorToastr('La repuesta seleccionada en los requisitos obligatorios no corresponde a la admitida para la categoría seleccionada.', 'Normativa');
          mostradoError = true;
       }
