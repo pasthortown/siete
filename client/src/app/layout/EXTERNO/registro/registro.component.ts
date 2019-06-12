@@ -1444,10 +1444,9 @@ export class RegistroComponent implements OnInit {
    }
    let mostradoError = false;
    this.rucEstablishmentRegisterSelected.requisites.forEach(element => {
-      if (!mostradoError && (element.mandatory && !(element.value == 'true' || element.value == 'SI'))) {
+      if (!mostradoError && (element.mandatory && !(element.value == 'true' || element.value == '0'))) {
          this.toastr.errorToastr('La repuesta seleccionada en los requisitos obligatorios no corresponde a la admitida para la categoría seleccionada.', 'Normativa');
          mostradoError = true;
-         return;
       }
    });
    if (mostradoError) {
