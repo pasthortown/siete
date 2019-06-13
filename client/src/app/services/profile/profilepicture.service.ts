@@ -56,6 +56,6 @@ export class ProfilePictureService {
    }
 
    handledError(error: any) {
-      console.log(error);
+      
    }
 }

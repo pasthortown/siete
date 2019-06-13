@@ -85,6 +85,7 @@ import { EstablishmentPictureService } from 'src/app/services/CRUD/BASE/establis
 import { EstablishmentCertificationAttachmentService } from 'src/app/services/CRUD/BASE/establishmentcertificationattachment.service';
 import { RegisterService } from 'src/app/services/CRUD/ALOJAMIENTO/register.service';
 import { RegisterStateService } from 'src/app/services/CRUD/ALOJAMIENTO/registerstate.service';
+import { ReceptionRoom } from 'src/app/models/ALOJAMIENTO/ReceptionRoom';
 
 @Component({
   selector: 'app-registro',
@@ -94,6 +95,13 @@ import { RegisterStateService } from 'src/app/services/CRUD/ALOJAMIENTO/register
 export class CoordinadorComponent implements OnInit {
    @ViewChild('fotoFachadaInput') fotoFachadaInput;
    @ViewChild('EstablishmentCertificationAttachedFile') EstablishmentCertificationAttachedFile;
+
+   tabActive = 'paso1';
+   tabActiveSuperior = 'tab1';
+   selectedNameType: RucNameType = new RucNameType();
+   total_workers = 0;
+   salaRecepciones: ReceptionRoom = new ReceptionRoom();
+
    //ASIGNACIONES
    registerIdSelected = 0;
    stateTramite: number = 0;
@@ -321,6 +329,14 @@ export class CoordinadorComponent implements OnInit {
          this.refresh();
       }).catch( e => { console.log(e); });
    }).catch( e => { console.log(e); });
+  }
+
+  changeTabActive(event) {
+   this.tabActive = event.nextId;
+  }
+
+  changeTabActiveSuperior(event) {
+   this.tabActiveSuperior = event.nextId;
   }
 
   desasignarInspector() {

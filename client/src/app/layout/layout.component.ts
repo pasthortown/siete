@@ -94,7 +94,7 @@ export class LayoutComponent implements OnInit {
         this.userDataService.get(userData.id).then( r => {
           const user = r as User;
           let redirigirProfile = false;
-          if(user.main_phone_number == '' || typeof user.main_phone_number == 'undefined') {
+          if(user.main_phone_number == '' || typeof user.main_phone_number == 'undefined' || user.main_phone_number == null) {
             redirigirProfile = true;
           }
           if (redirigirProfile) {

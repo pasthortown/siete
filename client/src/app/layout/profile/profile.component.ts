@@ -164,7 +164,10 @@ export class ProfileComponent implements OnInit {
  }
 
   checkTelefonoPrincipal(): Boolean {
-   this.user.main_phone_number = this.user.main_phone_number.replace(/[^\d]/, '');
+   if (this.user.main_phone_number == null) {
+     this.user.main_phone_number = '';
+   }
+    this.user.main_phone_number = this.user.main_phone_number.replace(/[^\d]/, '');
    if (this.user.main_phone_number.length < 9) {
       this.mainPhoneValidated = false;
       return false;
@@ -174,6 +177,9 @@ export class ProfileComponent implements OnInit {
   }
 
   checkTelefonoSecundario(): Boolean {
+    if (this.user.secondary_phone_number == null) {
+      this.user.secondary_phone_number = '';
+    }
    this.user.secondary_phone_number = this.user.secondary_phone_number.replace(/[^\d]/, '');
    if (this.user.secondary_phone_number.length > 0 && this.user.secondary_phone_number.length < 9) {
       this.secondaryPhoneValidated = false;
