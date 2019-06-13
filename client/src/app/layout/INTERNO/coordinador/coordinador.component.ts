@@ -101,6 +101,7 @@ export class CoordinadorComponent implements OnInit {
    selectedNameType: RucNameType = new RucNameType();
    total_workers = 0;
    salaRecepciones: ReceptionRoom = new ReceptionRoom();
+   franchiseChainNameValidated = false;
 
    //ASIGNACIONES
    registerIdSelected = 0;
@@ -462,6 +463,56 @@ export class CoordinadorComponent implements OnInit {
        return sort === 'asc' ? -1 : 1;
      }
      return 0;
+   });
+  }
+
+  checkRegistroSupercias() {
+   this.ruc_registro_selected.ruc.group_given.register_code = this.ruc_registro_selected.ruc.group_given.register_code.replace(/[^\d]/, '');
+  }
+
+  validateNombreComercial() {
+   let toReturn = true;
+   const textoAValidar = this.establishment_selected.commercially_known_name.toUpperCase();
+   if(this.establishment_selected.commercially_known_name.length < 1) {
+       toReturn = false;
+       this.establishmentComercialNameValidated = toReturn;
+       return;
+   } 
+   let errorEnNombreDetectado = false;
+   this.register_types.forEach(register_type => {
+      const nombre = register_type.name.toUpperCase();
+      if (textoAValidar.search(nombre + ' ') !== -1 && !errorEnNombreDetectado) {
+       errorEnNombreDetectado = true;
+       toReturn = false;
+      }
+   });
+   this.establishmentComercialNameValidated = toReturn;
+  }
+
+  validateNombreFranquiciaCadena() {
+   let toReturn = true;
+   const textoAValidar = this.establishment_selected.commercially_known_name.toUpperCase();
+   if(this.establishment_selected.commercially_known_name.length < 1) {
+       toReturn = false;
+       this.franchiseChainNameValidated = toReturn;
+       return;
+   } 
+   let errorEnNombreDetectado = false;
+   this.register_types.forEach(register_type => {
+      const nombre = register_type.name.toUpperCase();
+      if (textoAValidar.search(nombre + ' ') !== -1 && !errorEnNombreDetectado) {
+       errorEnNombreDetectado = true;
+       toReturn = false;
+      }
+   });
+   this.franchiseChainNameValidated = toReturn;
+  }
+
+  getNameTypeInfo() {
+   this.ruc_name_types.forEach(element => {
+      if (element.id == this.establishment_selected.ruc_name_type_id) {
+         this.selectedNameType = element;
+      }
    });
   }
 
