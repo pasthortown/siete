@@ -43,9 +43,9 @@ class UbicationController extends Controller
     {
        $filter = $data['filter'];
        if($filter === 'all') {
-         return response()->json(Ubication::get(),200);
+         return response()->json(Ubication::orderBy('name', 'ASC')->get(),200);
        } else {
-         return response()->json(Ubication::where('father_code', $filter)->get(),200);
+         return response()->json(Ubication::where('father_code', $filter)->orderBy('name', 'ASC')->get(),200);
        }
     }
     function filtered_paginate(Request $data)
