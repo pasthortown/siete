@@ -1268,7 +1268,7 @@ export class RegistroComponent implements OnInit {
             }
          }
       });
-      if ( this.regionSelectedCode !== '1' && esRegitro) {
+      if ( this.regionSelectedCode != '1' && esRegitro) {
          const clasificaciones = [];
          r.forEach(element => {
             if (element.id !== 30 && element.id !== 44) {
