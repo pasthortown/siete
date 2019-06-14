@@ -351,6 +351,9 @@ export class CoordinadorComponent implements OnInit {
   ngOnInit() {
    this.refresh();
    this.getUser();
+   this.getDeclarationCategories();
+   this.getDeclarationItems();
+   this.getMaxDeclarationDate();
   }
 
   editableTramiteRequerido(): Boolean {
@@ -920,23 +923,23 @@ export class CoordinadorComponent implements OnInit {
   }
 
   buildDataTableEstablishment() {
-     this.columnsEstablishment = [
-        {title: '', name: 'selected'},
-        {title: 'Código', name: 'code', filtering: {filterString: '', placeholder: 'Código'}},
-        {title: 'Dirección', name: 'address', filtering: {filterString: '', placeholder: 'Dirección'}},
-        {title: 'Nombre Comercial', name: 'name', filtering: {filterString: '', placeholder: 'Nombre Comercial'}}
-     ];
-     const data = [];
-     this.ruc_registro_selected.ruc.establishments.forEach(item => {
-         data.push({
-            selected: '',
-            code: item.ruc_code_id,
-            address: item.address_main_street + ' ' + item.address_number + ' ' + item.address_secondary_street,
-            name: item.commercially_known_name
-         });
-     });
-     this.dataEstablishment = data;
-     this.onChangeTableEstablishment(this.config);
+   this.columnsEstablishment = [
+      {title: '', name: 'selected'},
+      {title: 'Número de Establecimiento', name: 'code'},
+      {title: 'Dirección', name: 'address'},
+      {title: 'Nombre Comercial', name: 'name'},
+   ];
+   const data = [];
+   this.ruc_registro_selected.ruc.establishments.forEach(item => {
+       data.push({
+          selected: '',
+          code: item.ruc_code_id,
+          address: item.address_main_street + ' ' + item.address_number + ' ' + item.address_secondary_street,
+          name: item.commercially_known_name,
+       });
+   });
+   this.dataEstablishment = data;
+   this.onChangeTableEstablishment(this.config);
   }
 
   onCellClickEstablishment(event) {
@@ -1023,37 +1026,69 @@ export class CoordinadorComponent implements OnInit {
   }
 
   buildDataTableRegister() {
-     this.columnsRegister = [
-        {title: '', name: 'selected'},
-        {title: 'Código del Establecimiento', name: 'establishment_code', filtering: {filterString: '', placeholder: 'Código del Establecimiento'}},
-        {title: 'Ubicación del Establecimiento', name: 'address', filtering: {filterString: '', placeholder: 'Ubicación del Establecimiento'}},
-        {title: 'Código del Registro', name: 'register_code', filtering: {filterString: '', placeholder: 'Código del Registro'}},
-        {title: 'Tipo de Registro', name: 'register_type', filtering: {filterString: '', placeholder: 'Tipo de Registro'}},
-        {title: 'Estado', name: 'state', filtering: {filterString: '', placeholder: 'Estado'}},
-        {title: 'Observaciones', name: 'notes'},
-     ];
-     const data = [];
-     this.ruc_registro_selected.registers.forEach(item => {
-         data.push({
-            selected: '',
-            id: item.register.id,
-            establishment_code: item.establishment.ruc_code_id,
-            address: item.establishment.address_main_street + ' ' + item.establishment.address_number + ' ' + item.establishment.address_secondary_street,
-            register_code: item.register.code,
-            register_type: item.type.register_category.name + ' / ' + item.type.register_type.name,
-            state: this.getRegisterState(item.status.id),
-            state_id: item.status_register.state_id,
-            notes: '<div class="col-12 text-justify">' + item.status_register.justification + '</div>',
-         });
-     });
-     this.dataRegister = data;
-     this.onChangeTableRegister(this.config);
+   this.columnsRegister = [
+      {title: '', name: 'selected'},
+      {title: 'Días en Espera', name: 'date_assigment_alert'},
+      {title: 'Código del Establecimiento', name: 'establishment_code'},
+      {title: 'Ubicación del Establecimiento', name: 'address'},
+      {title: 'Código del Registro', name: 'register_code'},
+      {title: 'Categoría', name: 'register_type'},
+      {title: 'Estado', name: 'state'},
+      {title: 'Observaciones', name: 'notes'},
+   ];
+   const data = []; 
+   this.ruc_registro_selected.registers.forEach(item => {
+       let date_assigment_alert = '';
+       let date1 = new Date();
+       const registerState = this.getRegisterState(item.status_register.state_id);
+       let editable = true;
+       const estado: String = item.status_register.state_id.toString();
+       const digito = estado.substring(estado.length-1, estado.length);
+       if (digito == '1' || digito == '9') {
+          editable = true;
+       } else {
+          editable = false;
+       }
+       if (registerState.search('Aprobado') == 0) {
+          date1 = new Date(item.status_register.updated_at);
+       }
+       if (registerState.search('Negado') == 0) {
+          date1 = new Date(item.status_register.updated_at);
+       }
+       const date2 = new Date(item.register.updated_at);
+       const diffTime = Math.abs(date2.getTime() - date1.getTime());
+       const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+       if (diffDays < 7) {
+          date_assigment_alert = '<div class="col-12 text-center"><span class="badge badge-success">&nbsp;' + diffDays.toString() + '&nbsp;</span></div>';
+       }
+       if (diffDays >= 7 && diffDays <= 10) {
+          date_assigment_alert = '<div class="col-12 text-center"><span class="badge badge-warning">&nbsp;' + diffDays.toString() + '&nbsp;</span></div>';
+       }
+       if (diffDays > 10) {
+          date_assigment_alert = '<div class="col-12 text-center"><span class="badge badge-danger">&nbsp;' + diffDays.toString() + '&nbsp;</span></div>';
+       }
+       data.push({
+          selected: '',
+          id: item.register.id,
+          date_assigment_alert: date_assigment_alert,
+          establishment_code: item.establishment.ruc_code_id,
+          address: item.establishment.address,
+          register_code: item.register.code,
+          register_type: item.type.register_category.name + ' / ' + item.type.register_type.name,
+          state: registerState,
+          editable: editable,
+          state_id: item.status_register.state_id,
+          notes: '<div class="col-12 text-justify">' + item.status_register.justification + '</div>',
+       });
+   });
+   this.dataRegister = data;
+   this.onChangeTableRegister(this.config);
   }
 
   onCellClickRegister(event) {
    this.ruc_registro_selected.registers.forEach(element => {
       if (element.register.id == event.row.id) {
-         this.selectEstablishmentRegister(element.register);
+         this.selectEstablishmentRegister(element.register, event.row.editable);
       }
    });
    this.stateTramiteId = event.row.state_id;
@@ -1450,29 +1485,24 @@ export class CoordinadorComponent implements OnInit {
   }
 
   validateRuc(): Boolean {
-      let validateRepresentantLegalId = true;
-      if(this.ruc_registro_selected.ruc.tax_payer_type_id > 1) {
-         validateRepresentantLegalId = this.identificationRepresentativePersonValidated;
-         return this.identificationContactValidated &&
-         this.rucValidated &&
-         this.mainPhoneContactValidated &&
-         this.secondaryPhoneContactValidated &&
-         this.emailContactValidated &&
-         this.validateNombramiento() &&
-         this.validateGroupGivenTipe() &&
-         validateRepresentantLegalId &&
-         this.REGCIVILOK &&
-         this.SRIOK &&
-         this.REGCIVILREPRESENTANTELEGALOK;
-      }
-      return this.identificationContactValidated &&
-      this.rucValidated &&
-      this.mainPhoneContactValidated &&
-      this.secondaryPhoneContactValidated &&
-      this.emailContactValidated &&
-      this.REGCIVILOK &&
-      this.SRIOK;
+   let validateRepresentantLegalId = true;
+   this.fechaNombramientoOK = true;
+   if(this.ruc_registro_selected.ruc.tax_payer_type_id > 1) {
+      this.fechasNombramiento();
+      validateRepresentantLegalId = this.identificationRepresentativePersonValidated;
+      const validateExpediente = (this.ruc_registro_selected.ruc.group_given.register_code !== '');
+      return this.rucValidated &&
+       this.validateNombramiento() &&
+       this.validateGroupGivenTipe() &&
+       validateRepresentantLegalId &&
+       this.SRIOK &&
+       this.REGCIVILREPRESENTANTELEGALOK &&
+       validateExpediente &&
+       this.fechaNombramientoOK;
    }
+   return this.rucValidated &&
+    this.SRIOK;
+  }
 
   refresh() {
     this.registerMinturSelected = new Register();
@@ -2007,8 +2037,8 @@ export class CoordinadorComponent implements OnInit {
    }).catch( e => console.log(e) );
   }
 
-  getAllowedInfo() {
-   this.getRequisitesByRegisterType();
+  getAllowedInfo(requisites?: RegisterRequisite[]) {
+   this.getRequisitesByRegisterType(requisites);
    this.getBedTypes();
    this.getCapacityTypes();
   }
@@ -2020,44 +2050,52 @@ export class CoordinadorComponent implements OnInit {
    }).catch( e => console.log(e) );
   }
 
-  getRequisitesByRegisterType() {
-   const AllRequisites = [];
+  getRequisitesByRegisterType(requisites?: RegisterRequisite[]) {
    this.requisitesByRegisterType = [];
    this.rucEstablishmentRegisterSelected.requisites = [];
    this.showRequisites = false;
    this.requisiteDataService.get_filtered(this.rucEstablishmentRegisterSelected.register_type_id).then( r => {
       this.requisitesByRegisterType = r as Requisite[];
       this.requisitesByRegisterType.forEach(element => {
-         let existe = false;
-         this.rucEstablishmentRegisterSelected.requisites.forEach(element1 => {
-            if (element1.requisite_name == element.name) {
-               existe = true;
-            }
-         });
-         if (!existe) {
-            const newRegisterRequisite = new RegisterRequisite();
-            newRegisterRequisite.requisite_name = element.name;
-            newRegisterRequisite.requisite_id = element.id;
-            newRegisterRequisite.fullfill = true;
-            newRegisterRequisite.requisite_father_code = element.father_code;
-            AllRequisites.push(newRegisterRequisite);
+         const newRegisterRequisite = new RegisterRequisite();
+         newRegisterRequisite.requisite_name = element.name;
+         newRegisterRequisite.requisite_id = element.id;
+         newRegisterRequisite.fullfill = true;
+         newRegisterRequisite.requisite_code = element.code;
+         newRegisterRequisite.mandatory = element.mandatory;
+         newRegisterRequisite.requisite_father_code = element.father_code;
+         newRegisterRequisite.level = element.code.split('.').length;
+         newRegisterRequisite.HTMLtype = element.type;
+         newRegisterRequisite.fullfill = false;
+         if (newRegisterRequisite.HTMLtype == 'YES / NO') {
+            newRegisterRequisite.value = '0';
          }
+         if (newRegisterRequisite.HTMLtype == 'NUMBER') {
+            newRegisterRequisite.value = '0';
+         }
+         if (newRegisterRequisite.HTMLtype == 'TRUE / FALSE') {
+            newRegisterRequisite.value = 'false';
+         }
+         this.rucEstablishmentRegisterSelected.requisites.push(newRegisterRequisite);
       });
       this.showRequisites  = true;
-      const padres = [];
-      AllRequisites.forEach(element => {
-         if (element.requisite_father_code == '-') {
-            padres.push(element);
-         }
-      });
-      padres.forEach(padre => {
-         this.rucEstablishmentRegisterSelected.requisites.push(padre);
-         AllRequisites.forEach(element => {
-            if (element.requisite_father_code == padre.requisite_id.toString()) {
-               this.rucEstablishmentRegisterSelected.requisites.push(element);
-            }
+      if (typeof requisites !== 'undefined') {
+         this.rucEstablishmentRegisterSelected.requisites.forEach(requisite => {
+            requisites.forEach(requisite_incomming => {
+               if (requisite.requisite_id == requisite_incomming.requisite_id) {
+                  requisite.value = requisite_incomming.value;
+                  requisite.fullfill = requisite_incomming.fullfill;
+                  requisite.id = requisite_incomming.id;
+                  requisite.register_id = requisite_incomming.register_id;
+               }
+            });
          });
-      });
+      }
+      this.rucEstablishmentRegisterSelected.requisites.sort(function(a, b) {
+         const a_id = a.requisite_id;
+         const b_id = b.requisite_id;
+         return a_id > b_id ? 1 : a_id < b_id ? -1 : 0;
+     });
    }).catch( e => console.log(e) );
   }
 
@@ -2904,32 +2942,37 @@ export class CoordinadorComponent implements OnInit {
    }
   }
 
-  selectEstablishmentRegister(register: Register) {
-    this.mostrarDataRegister = false;
-    const tarifas: Tariff[] = this.newTariffs();
-    this.rucEstablishmentRegisterSelected = new Register();
-    this.registerDataService.get_register_data(register.id).then( r => {
-       this.rucEstablishmentRegisterSelected = r.register as Register;
-       this.getTramiteStatus(this.rucEstablishmentRegisterSelected.status);
-       this.rucEstablishmentRegisterSelected.status = r.status.state_id;
-       this.categorySelectedCode = r.register_category.code;
-       this.rucEstablishmentRegisterSelected.complementary_service_types_on_register = r.complementary_service_types_on_register as ComplementaryServiceType[];
-       this.rucEstablishmentRegisterSelected.complementary_service_foods_on_register = r.complementary_service_foods_on_register as ComplementaryServiceFood[];
-       this.rucEstablishmentRegisterSelected.capacities_on_register = r.capacities_on_register as Capacity[];
-       this.getCategories();
-       this.getAllowedInfo();
-       this.alowed_capacity_types = [];
-       this.capacityTypeDataService.get_filtered_by_register_type(this.rucEstablishmentRegisterSelected.register_type_id).then( r2 => {
-         this.alowed_capacity_types = r2 as CapacityType[];
-         this.mostrarDataRegister = true;
-         this.rucEstablishmentRegisterSelected.capacities_on_register.forEach(capacity => {
-            this.getMaxBed(capacity);
-            this.calcBeds(capacity);
-         });
-         this.calcSpaces();
-       }).catch( e => { console.log(e); });
-    }).catch( e => { console.log(e); });
-  }
+  selectEstablishmentRegister(register: Register, editable: Boolean) {
+   this.mostrarDataRegister = false;
+   this.rucEstablishmentRegisterSelected = new Register();
+   this.certificadoUsoSuelo = new FloorAuthorizationCertificate();
+   this.registerDataService.get_register_data(register.id).then( r => {
+      this.rucEstablishmentRegisterSelected = r.register as Register;
+      this.getCertificadoUsoSuelo(this.rucEstablishmentRegisterSelected.id);
+      this.getReceptionRoom(this.rucEstablishmentRegisterSelected.id);
+      this.setCategory(this.rucEstablishmentRegisterSelected.register_type_id);
+      this.rucEstablishmentRegisterSelected.editable = editable;
+      this.getTramiteStatus(this.rucEstablishmentRegisterSelected.status);
+      this.rucEstablishmentRegisterSelected.status = r.status.state_id;
+      this.rucEstablishmentRegisterSelected.complementary_service_types_on_register = r.complementary_service_types_on_register as ComplementaryServiceType[];
+      this.rucEstablishmentRegisterSelected.complementary_service_foods_on_register = r.complementary_service_foods_on_register as ComplementaryServiceFood[];
+      this.rucEstablishmentRegisterSelected.capacities_on_register = r.capacities_on_register as Capacity[];
+      this.calcSpaces();
+      this.getTarifarioRack(register.id);
+      this.getCategories();
+      this.getAllowedInfo(r.requisites);
+      this.allowed_capacity_types = [];
+      this.capacityTypeDataService.get_filtered_by_register_type(this.rucEstablishmentRegisterSelected.register_type_id).then( r2 => {
+        this.allowed_capacity_types = r2 as CapacityType[];
+        this.mostrarDataRegister = true;
+        this.rucEstablishmentRegisterSelected.capacities_on_register.forEach(capacity => {
+           this.getMaxBed(capacity);
+           this.calcBeds(capacity);
+        });
+        this.calcSpaces();
+      }).catch( e => { console.log(e); });
+   }).catch( e => { console.log(e); });
+ }
 
   selectComplementaryServiceType(complementary_service_type: ComplementaryServiceType) {
     this.complementary_service_types_registerSelectedId = complementary_service_type.id;
