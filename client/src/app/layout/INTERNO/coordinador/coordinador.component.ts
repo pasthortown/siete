@@ -3055,7 +3055,6 @@ guardarDeclaracion() {
   }).catch( e => { console.log(e); });
 }
 
-
   selectRegisterEstablishmentDeclaration(establishment: Establishment) {
    this.establishment_declarations_selected = establishment;
    this.getDeclarationsByEstablishment(establishment.id);
