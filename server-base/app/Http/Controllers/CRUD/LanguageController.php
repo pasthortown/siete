@@ -16,7 +16,7 @@ class LanguageController extends Controller
     {
        $id = $data['id'];
        if ($id == null) {
-          return response()->json(Language::get(),200);
+          return response()->json(Language::orderBy("name")->get(),200);
        } else {
           $language = Language::findOrFail($id);
           $attach = [];
