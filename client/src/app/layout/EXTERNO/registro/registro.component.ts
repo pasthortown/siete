@@ -1460,7 +1460,7 @@ export class RegistroComponent implements OnInit {
       this.toastr.errorToastr('Debe cargar el certificado de uso de suelo.', 'Nuevo');
       return;
    }
-   let mostradoError = false; // AQUI
+   let mostradoError = false;
    this.rucEstablishmentRegisterSelected.requisites.forEach(element => {
       if (element.HTMLtype == 'TRUE / FALSE' && element.fullfill) {
          element.value = 'true';
