@@ -103,7 +103,8 @@ export class RegistroComponent implements OnInit {
    tabActiveSuperior = 'tab1';
    selectedNameType: RucNameType = new RucNameType();
    total_workers = 0;
-   salaRecepciones: ReceptionRoom = new ReceptionRoom();
+   salaRecepciones: ReceptionRoom = new ReceptionRoom(); 
+   establecimientos_pendiente = false;
    //PAGOS
    tarifarioResponse: Tariff[] = [];
    tarifarioRack = {cabecera: [], valores: []};
@@ -1083,9 +1084,11 @@ export class RegistroComponent implements OnInit {
   getEstablishmentsOnRuc(currentpage: number) {
     this.establishment_selected = new Establishment();
     this.mostrarDataEstablishment = false;
+    this.establecimientos_pendiente = true;
     this.establishmentDataService.getByRuc(this.ruc_registro_selected.ruc.number, this.recordsByPageEstablishment, currentpage).then( r => {
        const establecimientos = r.data as Establishment[];
        this.dinardapDataService.get_RUC(this.ruc_registro_selected.ruc.number).then( dinardap => {
+         this.establecimientos_pendiente = false;
          let itemsDetalles = [];
          if (!Array.isArray(dinardap.return.instituciones.detalle.items)) {
             itemsDetalles = [dinardap.return.instituciones.detalle.items];

@@ -131,6 +131,7 @@ export class InspectorComponent implements OnInit {
    franchises_rucSelectedId = 0;
    fechaNombramientoOK = false;
    allowed_capacity_types: CapacityType[] = []; 
+   establecimientos_pendiente = false;
 
    //ASIGNACIONES
    inspectores: User[] = [];
@@ -1491,8 +1492,6 @@ export class InspectorComponent implements OnInit {
    this.registerMinturSelected = item;
    this.mostrarDataRegisterMintur = true;
    this.getRuc(this.registerMinturSelected.ruc.number);
-   this.getPays();
-   this.getRegistersOnRuc();
    this.groupTypeSelected = new GroupType();
   }
 
@@ -1709,6 +1708,8 @@ export class InspectorComponent implements OnInit {
       } else {
          this.ruc_registro_selected.ruc = r.Ruc as Ruc;
          this.ruc_registro_selected.ruc.establishments = [];
+         this.getPays();
+         this.getRegistersOnRuc();
          this.ruc_registro_selected.ruc.contact_user = r.contact_user as User;
          if (r.group_given == '0') {
             this.ruc_registro_selected.ruc.group_given = new GroupGiven();
@@ -1729,6 +1730,14 @@ export class InspectorComponent implements OnInit {
          if(this.ruc_registro_selected.ruc.tax_payer_type_id > 1) {
             this.getPersonRepresentativeAttachment(this.ruc_registro_selected.ruc.number);
          }
+         this.consumoCedula = false;
+         this.consumoCedulaEstablishmentContact = false;
+         this.consumoRuc = false;
+         this.consumoCedulaRepresentanteLegal = false;
+         this.SRIOK = false;
+         this.REGCIVILOK = false;
+         this.REGCIVILOKEstablishment = false;
+         this.REGCIVILREPRESENTANTELEGALOK = false;
          this.checkRuc();
          this.checkIdentificationRepresentant();
          this.getEstablishmentsOnRuc(this.currentPageEstablishment);
@@ -1752,9 +1761,11 @@ export class InspectorComponent implements OnInit {
   getEstablishmentsOnRuc(currentpage: number) {
    this.establishment_selected = new Establishment();
    this.mostrarDataEstablishment = false;
+   this.establecimientos_pendiente = true;
    this.establishmentDataService.getByRuc(this.ruc_registro_selected.ruc.number, this.recordsByPageEstablishment, currentpage).then( r => {
       const establecimientos = r.data as Establishment[];
       this.dinardapDataService.get_RUC(this.ruc_registro_selected.ruc.number).then( dinardap => {
+         this.establecimientos_pendiente = false;
         let itemsDetalles = [];
         if (!Array.isArray(dinardap.return.instituciones.detalle.items)) {
            itemsDetalles = [dinardap.return.instituciones.detalle.items];

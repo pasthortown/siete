@@ -113,7 +113,7 @@ export class CoordinadorComponent implements OnInit {
    total_workers = 0;
    salaRecepciones: ReceptionRoom = new ReceptionRoom();
    franchiseChainNameValidated = false;
-
+   establecimientos_pendiente = false;
    
    tarifarioResponse: Tariff[] = [];
    tarifarioRack = {cabecera: [], valores: []};
@@ -1087,7 +1087,7 @@ export class CoordinadorComponent implements OnInit {
   onCellClickRegister(event) {
    this.ruc_registro_selected.registers.forEach(element => {
       if (element.register.id == event.row.id) {
-         this.selectEstablishmentRegister(element.register, event.row.editable);
+         this.selectEstablishmentRegister(element.register, false);
       }
    });
    this.stateTramiteId = event.row.state_id;
@@ -1452,9 +1452,8 @@ export class CoordinadorComponent implements OnInit {
   selectRegisterMintur(item: any) {
    this.registerMinturSelected = item;
    this.mostrarDataRegisterMintur = true;
+   //AQUI
    this.getRuc(this.registerMinturSelected.ruc.number);
-   this.getPays();
-   this.getRegistersOnRuc();
    this.groupTypeSelected = new GroupType();
   }
 
@@ -1674,6 +1673,8 @@ export class CoordinadorComponent implements OnInit {
          this.checkRuc();
       } else {
          this.ruc_registro_selected.ruc = r.Ruc as Ruc;
+         this.getPays();
+         this.getRegistersOnRuc();
          this.ruc_registro_selected.ruc.establishments = [];
          this.ruc_registro_selected.ruc.contact_user = r.contact_user as User;
          if (r.group_given == '0') {
@@ -1695,6 +1696,14 @@ export class CoordinadorComponent implements OnInit {
          if(this.ruc_registro_selected.ruc.tax_payer_type_id > 1) {
             this.getPersonRepresentativeAttachment(this.ruc_registro_selected.ruc.number);
          }
+         this.consumoCedula = false;
+         this.consumoCedulaEstablishmentContact = false;
+         this.consumoRuc = false;
+         this.consumoCedulaRepresentanteLegal = false;
+         this.SRIOK = false;
+         this.REGCIVILOK = false;
+         this.REGCIVILOKEstablishment = false;
+         this.REGCIVILREPRESENTANTELEGALOK = false;
          this.checkRuc();
          this.checkIdentificationRepresentant();
          this.getEstablishmentsOnRuc(this.currentPageEstablishment);
@@ -1718,10 +1727,12 @@ export class CoordinadorComponent implements OnInit {
   getEstablishmentsOnRuc(currentpage: number) {
    this.establishment_selected = new Establishment();
    this.mostrarDataEstablishment = false;
+   this.establecimientos_pendiente = true;
    this.establishmentDataService.getByRuc(this.ruc_registro_selected.ruc.number, this.recordsByPageEstablishment, currentpage).then( r => {
       const establecimientos = r.data as Establishment[];
       this.dinardapDataService.get_RUC(this.ruc_registro_selected.ruc.number).then( dinardap => {
         let itemsDetalles = [];
+        this.establecimientos_pendiente = false;
         if (!Array.isArray(dinardap.return.instituciones.detalle.items)) {
            itemsDetalles = [dinardap.return.instituciones.detalle.items];
         } else {
@@ -2191,7 +2202,7 @@ guardarDeclaracion() {
   getRegistersOnRuc() {
    this.rucEstablishmentRegisterSelected = new Register();
    this.mostrarDataRegister = false;
-   this.registerDataService.get_registers_by_ruc(this.user.ruc).then( r => {
+   this.registerDataService.get_registers_by_ruc(this.ruc_registro_selected.ruc.number).then( r => {
       this.ruc_registro_selected.registers = r as any[];
    }).catch( e => { console.log(e); });
   }
@@ -3082,7 +3093,7 @@ guardarDeclaracion() {
    this.establishment_selected.workers_on_establishment = this.getEstablishmentWorkerGroup();
    this.mostrarDataEstablishment = true;
    this.cedulaEstablishmentContactData = '';
-   this.rucEstablishmentRegisterSelected.editable = true;
+   this.rucEstablishmentRegisterSelected.editable = false;
    this.getCantonesEstablishment();
    this.declarations = [];
    this.provinciaEstablishmentSelectedCode = '-';
@@ -3245,7 +3256,7 @@ guardarDeclaracion() {
       this.getCertificadoUsoSuelo(this.rucEstablishmentRegisterSelected.id);
       this.getReceptionRoom(this.rucEstablishmentRegisterSelected.id);
       this.setCategory(this.rucEstablishmentRegisterSelected.register_type_id);
-      this.rucEstablishmentRegisterSelected.editable = editable;
+      this.rucEstablishmentRegisterSelected.editable = false;
       this.getTramiteStatus(this.rucEstablishmentRegisterSelected.status);
       this.rucEstablishmentRegisterSelected.status = r.status.state_id;
       this.rucEstablishmentRegisterSelected.complementary_service_types_on_register = r.complementary_service_types_on_register as ComplementaryServiceType[];

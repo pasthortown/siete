@@ -262,7 +262,15 @@
                   </div>
                 </div>
               </div>
-              <div class="row mt-2">
+              <div class="row" *ngIf="establecimientos_pendiente">
+                <div class="col-12">
+                  <div class="progress mb-3">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning col-12">Espere...</div>
+                  </div>
+                  <div class="col-12 text-center"><strong>Conectándose al SRI...</strong></div>
+                </div>
+              </div>
+              <div class="row mt-2" *ngIf="!establecimientos_pendiente">
                 <div class="col-12">
                   <div class="btn-toolbar" role="toolbar">
                     <div class="btn-group mr-2" role="group">
@@ -288,7 +296,7 @@
                   </div>
                 </div>
               </div>
-              <div style="width: 100%; overflow-x: auto;">
+              <div style="width: 100%; overflow-x: auto;" *ngIf="!establecimientos_pendiente">
                   <div class="row">
                       <div class="col-12 mt-2">
                          <ng-table
@@ -301,7 +309,7 @@
                       </div>
                     </div>
               </div>
-              <div class="row">
+              <div class="row" *ngIf="!establecimientos_pendiente">
                 <div class="col-12">
                   <ngb-pagination
                     *ngIf="config.paging"
@@ -1542,7 +1550,7 @@
                             </table>
                           </div>
                         </div>
-                        <div class="row" *ngIf="showRequisites">
+                        <div class="row">
                           <label class="col-12 col-form-label mb-2"><strong>Requisitos</strong></label>
                           <div class="col-12">
                             <div class="alert alert-warning" role="alert">

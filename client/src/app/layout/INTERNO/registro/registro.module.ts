@@ -1,3 +1,10 @@
+import { ReceptionRoomService } from './../../../services/CRUD/ALOJAMIENTO/receptionroom.service';
+import { MailerService } from './../../../services/negocio/mailer.service';
+import { DeclarationAttachmentService } from './../../../services/CRUD/FINANCIERO/declarationattachment.service';
+import { FloorAuthorizationCertificateService } from './../../../services/CRUD/BASE/floorauthorizationcertificate.service';
+import { PayService } from './../../../services/CRUD/FINANCIERO/pay.service';
+
+import { ApprovalStateService } from './../../../services/CRUD/ALOJAMIENTO/approvalstate.service';
 import { RegisterService } from 'src/app/services/CRUD/ALOJAMIENTO/register.service';
 import { EstablishmentPictureService } from 'src/app/services/CRUD/BASE/establishmentpicture.service';
 import { AgreementService } from 'src/app/services/CRUD/BASE/agreement.service';
@@ -16,7 +23,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgxBarcodeModule } from 'ngx-barcode';
 import { NgxQRCodeModule } from 'ngx-qrcode2';
 import { ConsultorService } from 'src/app/services/negocio/consultor.service';
-
+import { RegisterStateService } from 'src/app/services/CRUD/ALOJAMIENTO/registerstate.service';
 import { WorkerService } from 'src/app/services/CRUD/BASE/worker.service';
 import { TaxPayerTypeService } from 'src/app/services/CRUD/BASE/taxpayertype.service';
 import { RucService } from 'src/app/services/CRUD/BASE/ruc.service';
@@ -46,6 +53,7 @@ import { DeclarationItemService } from 'src/app/services/CRUD/FINANCIERO/declara
 import { DeclarationItemCategoryService } from 'src/app/services/CRUD/FINANCIERO/declarationitemcategory.service';
 import { DeclarationService } from 'src/app/services/CRUD/FINANCIERO/declaration.service';
 import { Ng2TableModule } from 'ng2-table/ng2-table';
+import { ApprovalStateAttachmentService } from './../../../services/CRUD/ALOJAMIENTO/approvalstateattachment.service';
 
 @NgModule({
   imports: [CommonModule,
@@ -65,15 +73,23 @@ import { Ng2TableModule } from 'ng2-table/ng2-table';
     ConsultorService,
     DeclarationItemCategoryService,
     DeclarationService,
+    ReceptionRoomService,
+    MailerService,
+    DeclarationAttachmentService,
+    FloorAuthorizationCertificateService,
+    PayService,
     TaxPayerTypeService,
     PersonRepresentativeAttachmentService,
     EstablishmentCertificationService,
     ComplementaryServiceFoodTypeService,
     EstablishmentPropertyTypeService,
     RequisiteService,
+    ApprovalStateAttachmentService,
+    ApprovalStateService,
     AgreementService,
     UbicationService,
     RegisterService,
+    RegisterStateService,
     CapacityTypeService,
     EstablishmentCertificationAttachmentService,
     EstablishmentPictureService,
