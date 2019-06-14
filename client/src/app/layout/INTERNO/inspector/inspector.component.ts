@@ -1,3 +1,13 @@
+import { ReceptionRoomService } from './../../../services/CRUD/ALOJAMIENTO/receptionroom.service';
+import { MailerService } from './../../../services/negocio/mailer.service';
+import { DeclarationAttachmentService } from './../../../services/CRUD/FINANCIERO/declarationattachment.service';
+import { FloorAuthorizationCertificateService } from './../../../services/CRUD/BASE/floorauthorizationcertificate.service';
+import { PayService } from './../../../services/CRUD/FINANCIERO/pay.service';
+import { DeclarationAttachment } from './../../../models/FINANCIERO/DeclarationAttachment';
+import { FloorAuthorizationCertificate } from './../../../models/BASE/FloorAuthorizationCertificate';
+import { Router } from '@angular/router';
+import { ReceptionRoom } from 'src/app/models/ALOJAMIENTO/ReceptionRoom';
+
 import { environment } from 'src/environments/environment';
 import { ApprovalStateAttachmentService } from './../../../services/CRUD/ALOJAMIENTO/approvalstateattachment.service';
 import { ApprovalStateAttachment } from './../../../models/ALOJAMIENTO/ApprovalStateAttachment';
@@ -96,6 +106,32 @@ import { ExporterService } from 'src/app/services/negocio/exporter.service';
 export class InspectorComponent implements OnInit {
    @ViewChild('fotoFachadaInput') fotoFachadaInput;
    @ViewChild('EstablishmentCertificationAttachedFile') EstablishmentCertificationAttachedFile;
+   @ViewChild('pasos') pasosTabSet;
+   @ViewChild('pasosSuperiores') pasosSuperioresTabSet;
+   tabActive = 'paso1';
+   tabActiveSuperior = 'tab1';
+   selectedNameType: RucNameType = new RucNameType();
+   total_workers = 0;
+   salaRecepciones: ReceptionRoom = new ReceptionRoom();
+   tarifarioResponse: Tariff[] = [];
+   tarifarioRack = {cabecera: [], valores: []};
+   currentPagePays = 1;
+   balance: DeclarationAttachment = new DeclarationAttachment();
+   lastPagePays = 1;
+   recordsByPagePays = 5;
+   rowsPays = [];
+   columnsPays = [];
+   dataPays = [];
+   pays: Pay[] = [];
+   actividadSelected = '-';
+   regiones = [];
+   regionSelectedCode = '-';
+   franchiseChainNameValidated = false;
+   certificadoUsoSuelo: FloorAuthorizationCertificate = new FloorAuthorizationCertificate();
+   franchises_rucSelectedId = 0;
+   fechaNombramientoOK = false;
+   allowed_capacity_types: CapacityType[] = []; 
+
    //ASIGNACIONES
    inspectores: User[] = [];
    financieros: User[] = [];
@@ -264,6 +300,12 @@ export class InspectorComponent implements OnInit {
   idRegister: number = 0;
 
   constructor(private toastr: ToastrManager,
+              private mailerDataService: MailerService,
+              private floorAuthorizationCertificateDataService: FloorAuthorizationCertificateService,
+              private payDataService: PayService,
+              private receptionRoomDataService: ReceptionRoomService,
+              private declarationAttachmentDataService: DeclarationAttachmentService,
+              private router: Router, 
               private exporterDataService: ExporterService,
               private approvalStateDataService: ApprovalStateService,
               private consultorDataService: ConsultorService,
@@ -306,7 +348,203 @@ export class InspectorComponent implements OnInit {
    this.getUser();
   }
 
-  onChangeTableEstablishment(config: any, page: any = {page: this.currentPageEstablishment, itemsPerPage: this.recordsByPageEstablishment}): any {
+  editableTramiteRequerido(): Boolean {
+   if (this.estado_tramite_selected_code == '1' || this.estado_tramite_selected_code == '9') {
+      return true;
+   }
+   return false;
+  }
+
+  onChangeTablePays(config: any, event?): any {
+   const page: any = {page: this.currentPageEstablishment, itemsPerPage: this.recordsByPageEstablishment};
+   if (config.filtering) {
+     Object.assign(this.config.filtering, config.filtering);
+   }
+   if (config.sorting) {
+     Object.assign(this.config.sorting, config.sorting);
+   }
+   const filteredData = this.changeFilterPays(this.dataPays, this.config);
+   const sortedData = this.changeSortPays(filteredData, this.config);
+   this.rowsPays = page && config.paging ? this.changePagePays(page, sortedData) : sortedData;
+  }
+
+  changeTabActive(event) {
+   this.tabActive = event.nextId;
+  }
+
+  changeTabActiveSuperior(event) {
+   this.tabActiveSuperior = event.nextId;
+  }
+
+  validateNombreComercial() {
+     let toReturn = true;
+     const textoAValidar = this.establishment_selected.commercially_known_name.toUpperCase();
+     if(this.establishment_selected.commercially_known_name.length < 1) {
+         toReturn = false;
+         this.establishmentComercialNameValidated = toReturn;
+         return;
+     } 
+     let errorEnNombreDetectado = false;
+     this.register_types.forEach(register_type => {
+        const nombre = register_type.name.toUpperCase();
+        if (textoAValidar.search(nombre + ' ') !== -1 && !errorEnNombreDetectado) {
+         errorEnNombreDetectado = true;
+         toReturn = false;
+        }
+     });
+     this.establishmentComercialNameValidated = toReturn;
+  }
+
+  guardarRecepcionRoom(register_id: number) {
+     this.salaRecepciones.register_id = register_id;
+     if (this.salaRecepciones.id == 0 || typeof this.salaRecepciones.id == 'undefined') {
+      this.receptionRoomDataService.post(this.salaRecepciones).then( r => {
+
+      }).catch( e => { console.log(e); });
+     } else {
+      this.receptionRoomDataService.put(this.salaRecepciones).then( r => {
+         
+      }).catch( e => { console.log(e); });
+     }
+  }
+
+  validateNombreFranquiciaCadena() {
+   let toReturn = true;
+   const textoAValidar = this.establishment_selected.commercially_known_name.toUpperCase();
+   if(this.establishment_selected.commercially_known_name.length < 1) {
+       toReturn = false;
+       this.franchiseChainNameValidated = toReturn;
+       return;
+   } 
+   let errorEnNombreDetectado = false;
+   this.register_types.forEach(register_type => {
+      const nombre = register_type.name.toUpperCase();
+      if (textoAValidar.search(nombre + ' ') !== -1 && !errorEnNombreDetectado) {
+       errorEnNombreDetectado = true;
+       toReturn = false;
+      }
+   });
+   this.franchiseChainNameValidated = toReturn;
+  }
+
+  changeFilterPays(data: any, config: any): any {
+   let filteredData: Array<any> = data;
+   this.columnsPays.forEach((column: any) => {
+     if (column.filtering) {
+       filteredData = filteredData.filter((item: any) => {
+         return item[column.name].match(column.filtering.filterString);
+       });
+     }
+   });
+   if (!config.filtering) {
+     return filteredData;
+   }
+   if (config.filtering.columnName) {
+     return filteredData.filter((item:any) =>
+       item[config.filtering.columnName].match(this.config.filtering.filterString));
+   }
+   const tempArray: Array<any> = [];
+   filteredData.forEach((item: any) => {
+     let flag = false;
+     this.columnsPays.forEach((column: any) => {
+       if (item[column.name].toString().match(this.config.filtering.filterString)) {
+         flag = true;
+       }
+     });
+     if (flag) {
+       tempArray.push(item);
+     }
+   });
+   filteredData = tempArray;
+   return filteredData;
+  }
+
+  changeSortPays(data: any, config: any): any {
+   if (!config.sorting) {
+     return data;
+   }
+   const columns = this.config.sorting.columns || [];
+   let columnName: string = void 0;
+   let sort: string = void 0;
+   for (let i = 0; i < columns.length; i++) {
+     if (columns[i].sort !== '' && columns[i].sort !== false) {
+       columnName = columns[i].name;
+       sort = columns[i].sort;
+     }
+   }
+   if (!columnName) {
+     return data;
+   }
+   return data.sort((previous:any, current:any) => {
+     if (previous[columnName] > current[columnName]) {
+       return sort === 'desc' ? -1 : 1;
+     } else if (previous[columnName] < current[columnName]) {
+       return sort === 'asc' ? -1 : 1;
+     }
+     return 0;
+   });
+  }
+
+  changePagePays(page: any, data: Array<any> = this.dataPays):Array<any> {
+   const start = (page.page - 1) * page.itemsPerPage;
+   const end = page.itemsPerPage > -1 ? (start + page.itemsPerPage) : data.length;
+   return data.slice(start, end);
+  }
+
+  buildDataTablePays() {
+     this.columnsPays = [
+        {title: 'Código', name: 'code'},
+        {title: 'Estado', name: 'state'},
+        {title: 'Valor Pagado', name: 'amount_payed'},
+        {title: 'Valor a Pagar', name: 'amount_to_pay'},
+        {title: 'Fecha de Pago', name: 'pay_date'}
+     ];
+     const data = [];
+     this.pays.forEach(item => {
+         let state = '';
+         let amount_payed = '';
+         let amount_to_pay = '';
+         if (item.payed) {
+            state = '<span class="badge badge-success">Pagado</span>';
+         } else {
+            state = '<span class="badge badge-danger">Pago Pendiente</span>';
+         }
+         if (item.amount_payed != -1) {
+            amount_payed = item.amount_payed.toString() + ' USD';
+         }
+         amount_to_pay = item.amount_to_pay.toString() + ' USD';
+         let payDate = '';
+         if (item.pay_date == null || typeof item.pay_date == 'undefined') {
+            payDate = '';
+         } else {
+            payDate = item.pay_date.toString();
+         }
+         data.push({
+            code: item.code,
+            state: state,
+            amount_payed: amount_payed,
+            amount_to_pay: amount_to_pay,
+            pay_date: payDate,
+         });
+     });
+     this.dataPays = data;
+     this.onChangeTablePays(this.config);
+  }
+
+  onCellClickPays(event) {
+  }
+
+  refreshTotalWorkers() {
+   this.total_workers = 0;
+   this.establishment_selected.workers_on_establishment.forEach(element => {
+      if (element.is_max) {
+         this.total_workers += element.count;
+      }
+   });
+  }
+
+  onChangeTableEstablishment(config: any, event?): any {
+   const page: any = {page: this.currentPageEstablishment, itemsPerPage: this.recordsByPageEstablishment};
    if (config.filtering) {
      Object.assign(this.config.filtering, config.filtering);
    }
@@ -316,6 +554,228 @@ export class InspectorComponent implements OnInit {
    const filteredData = this.changeFilterEstablishment(this.dataEstablishment, this.config);
    const sortedData = this.changeSortEstablishment(filteredData, this.config);
    this.rowsEstablishment = page && config.paging ? this.changePageEstablishment(page, sortedData) : sortedData;
+  }
+
+  onChangeTableRegister(config: any, event?): any {
+   const page: any = {page: this.currentPageEstablishment, itemsPerPage: this.recordsByPageEstablishment};
+   if (config.filtering) {
+     Object.assign(this.config.filtering, config.filtering);
+   }
+   if (config.sorting) {
+     Object.assign(this.config.sorting, config.sorting);
+   }
+   const filteredData = this.changeFilterRegister(this.dataRegister, this.config);
+   const sortedData = this.changeSortRegister(filteredData, this.config);
+   this.rowsRegister = page && config.paging ? this.changePageRegister(page, sortedData) : sortedData;
+  }
+
+  fechasNombramiento() {
+   const today = new Date();
+   const min = new Date(today.getFullYear() - 5, today.getMonth(), today.getDate());
+   if(typeof this.ruc_registro_selected.ruc.person_representative_attachment.assignment_date === 'undefined') {
+      return;
+   }
+   if (new Date(this.ruc_registro_selected.ruc.person_representative_attachment.assignment_date.toString()) > today || new Date(this.ruc_registro_selected.ruc.person_representative_attachment.assignment_date.toString()) < min) {
+      this.fechaNombramientoOK = false;
+   }else {
+      this.fechaNombramientoOK = true;
+   }
+   return {max: today, min: min};
+  }
+
+  getPays() {
+   this.payDataService.get_by_ruc_number(this.user.ruc).then( r => {
+      this.pays = r as Pay[];
+      this.buildDataTablePays();
+   }).catch( e => { console.log(e); } );
+  }
+
+  scroll(el: HTMLElement) {
+   el.scrollIntoView({behavior: 'smooth'});
+  }
+
+  guardarCertificadoUsoSuelos() {
+     if(this.certificadoUsoSuelo.id == 0) {
+      this.floorAuthorizationCertificateDataService.post(this.certificadoUsoSuelo).then( r => { 
+
+      }).catch( e => { console.log(e); });
+     } else {
+      this.floorAuthorizationCertificateDataService.put(this.certificadoUsoSuelo).then( r => { 
+
+      }).catch( e => { console.log(e); });
+     }
+  }
+
+  downloadFloorCertification() {
+   this.downloadFile(
+      this.certificadoUsoSuelo.floor_authorization_certificate_file,
+      this.certificadoUsoSuelo.floor_authorization_certificate_file_type,
+      this.certificadoUsoSuelo.floor_authorization_certificate_file_name);
+  }
+
+  downloadBalance() {
+   this.downloadFile(
+      this.balance.declaration_attachment_file,
+      this.balance.declaration_attachment_file_type,
+      this.balance.declaration_attachment_file_name);
+  }
+
+  borrarBalance() {
+   this.balance = new DeclarationAttachment();
+  }
+
+  borrarFloorCertificado() {
+   this.certificadoUsoSuelo = new FloorAuthorizationCertificate();
+  }
+
+  getRegiones() {
+   this.regiones = [];
+   this.clasifications_registers = [];
+   this.showRequisites = false;
+   this.register_typeDataService.get_filtered('-').then( r => {
+      this.regiones = r as RegisterType[];
+   }).catch( e => { console.log(e) });
+  }
+
+  getDeclarationAttachment(declaration_id: number) {
+   this.declarationAttachmentDataService.get_by_declaration_id(declaration_id).then( r => {
+      this.balance = r as DeclarationAttachment;
+   }).catch( e => { console.log(e); });
+  }
+
+  validateDeclaration(): Boolean {
+   return true;
+  }
+
+  getNameTypeInfo() {
+     this.ruc_name_types.forEach(element => {
+        if (element.id == this.establishment_selected.ruc_name_type_id) {
+           this.selectedNameType = element;
+        }
+     });
+  }
+
+  changeFullfill(register_requisite: RegisterRequisite) {
+     if (register_requisite.fullfill) {
+      register_requisite.value = 'true';
+     } else {
+      register_requisite.value = 'false';
+     }
+  }
+
+  checkRegistroSupercias() {
+   this.ruc_registro_selected.ruc.group_given.register_code = this.ruc_registro_selected.ruc.group_given.register_code.replace(/[^\d]/, '');
+  }
+
+  getCertificadoUsoSuelo(register_id: number) {
+     this.floorAuthorizationCertificateDataService.get_by_register_id(register_id).then( r => {
+        this.certificadoUsoSuelo = r as FloorAuthorizationCertificate;
+     }).catch( e => { console.log(e); });
+  }
+
+  getReceptionRoom(register_id: number) {
+   this.receptionRoomDataService.get_by_register_id(register_id).then( r => {
+      this.salaRecepciones = r as ReceptionRoom;
+   }).catch( e => { console.log(e); });
+  }
+
+  getTarifarioRack(register_id: number) {
+   this.registerDataService.get_tarifario(register_id).then( r => {
+      this.tarifarioResponse = r as Tariff[];
+      let max_year = 0;
+      this.tarifarioResponse.forEach(element => {
+         if(element.year > max_year){
+            max_year = element.year;
+         }
+      });
+      this.tarifarioRack.valores.forEach(element => {
+         element.tariffs.forEach(tariffRack => {
+            const tariff = tariffRack.tariff;
+            this.tarifarioResponse.forEach(tariffResponse => {
+               if(tariffResponse.tariff_type_id == tariff.tariff_type_id && tariffResponse.year == max_year && tariffResponse.capacity_type_id == tariff.capacity_type_id) {
+                  tariffRack.tariff.price = tariffResponse.price;
+               }
+            });
+         });
+      });
+   }).catch( e => { console.log(e); });
+  }
+
+  refreshDeclaracion() {
+     this.selectRegisterEstablishmentDeclaration(this.establishment_selected);
+  }
+
+  CodificarArchivoFloorCertification(event) {
+   const reader = new FileReader();
+   if (event.target.files && event.target.files.length > 0) {
+    const file = event.target.files[0];
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      this.certificadoUsoSuelo.floor_authorization_certificate_file = reader.result.toString().split(',')[1];
+      this.certificadoUsoSuelo.floor_authorization_certificate_file_type = file.type;
+      this.certificadoUsoSuelo.floor_authorization_certificate_file_name = file.name;
+    };
+   }
+  }
+
+  CodificarArchivoBalance(event) {
+   const reader = new FileReader();
+   if (event.target.files && event.target.files.length > 0) {
+    const file = event.target.files[0];
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      this.balance.declaration_attachment_file = reader.result.toString().split(',')[1];
+      this.balance.declaration_attachment_file_type = file.type;
+      this.balance.declaration_attachment_file_name = file.name;
+    };
+   }
+  }
+
+  setCategory(type_id: number){
+   let categoryCode = '';
+   this.actividadSelected = '1';
+   this.register_typeDataService.get().then(r => {
+      let types: RegisterType[] = r as RegisterType[];
+      types.forEach(registerType => {
+         if (registerType.id == type_id) {
+            categoryCode = registerType.father_code.toString();
+         }
+      });
+      types.forEach(registerType => {
+         if (categoryCode == registerType.code) {
+            this.regionSelectedCode = registerType.father_code.toString();
+         }
+      });
+      this.clasifications_registers = [];
+      this.register_typeDataService.get_filtered(this.regionSelectedCode).then( r => {
+         this.clasifications_registers = r as RegisterType[];
+         this.categorySelectedCode = categoryCode;
+         this.categories_registers = [];
+         this.register_typeDataService.get_filtered(this.categorySelectedCode).then( r => {
+            this.categories_registers = r as RegisterType[];
+         }).catch( e => { console.log(e) });
+      }).catch( e => { console.log(e) });
+   }).catch( e=> { console.log(e); });
+  }
+
+  changeTramiteRequerido() {
+   this.estado_tramite_selected_code = '1';
+  }
+
+  checkValuesTariffs() {
+     this.tarifarioRack.valores.forEach(valor => {
+        valor.tariffs.forEach(tariff => {
+           if (!tariff.isReference) {
+            valor.tariffs.forEach(tariff2 => {
+               if( tariff !== tariff2) {
+                  if (tariff.nombreDivision == tariff2.nombreDivision && tariff.plazasHabitacion !== 999) {
+                     tariff.tariff.price = tariff2.tariff.price / tariff2.plazasHabitacion;
+                  }
+               }
+            });
+           }
+        });
+     });
   }
 
   changeFilterEstablishment(data: any, config: any): any {
@@ -419,18 +879,6 @@ export class InspectorComponent implements OnInit {
          row.selected = '';
       }
    });
-  }
-
-  onChangeTableRegister(config: any, page: any = {page: this.currentPageRegister, itemsPerPage: this.recordsByPageRegister}): any {
-   if (config.filtering) {
-     Object.assign(this.config.filtering, config.filtering);
-   }
-   if (config.sorting) {
-     Object.assign(this.config.sorting, config.sorting);
-   }
-   const filteredData = this.changeFilterRegister(this.dataRegister, this.config);
-   const sortedData = this.changeSortRegister(filteredData, this.config);
-   this.rowsRegister = page && config.paging ? this.changePageRegister(page, sortedData) : sortedData;
   }
 
   changeFilterRegister(data: any, config: any): any {

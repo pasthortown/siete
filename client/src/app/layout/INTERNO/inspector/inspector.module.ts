@@ -1,3 +1,9 @@
+import { ReceptionRoomService } from './../../../services/CRUD/ALOJAMIENTO/receptionroom.service';
+import { MailerService } from './../../../services/negocio/mailer.service';
+import { DeclarationAttachmentService } from './../../../services/CRUD/FINANCIERO/declarationattachment.service';
+import { FloorAuthorizationCertificateService } from './../../../services/CRUD/BASE/floorauthorizationcertificate.service';
+import { PayService } from './../../../services/CRUD/FINANCIERO/pay.service';
+
 import { ExporterService } from './../../../services/negocio/exporter.service';
 import { ApprovalStateAttachmentService } from './../../../services/CRUD/ALOJAMIENTO/approvalstateattachment.service';
 import { ApprovalStateService } from './../../../services/CRUD/ALOJAMIENTO/approvalstate.service';
@@ -78,6 +84,11 @@ import { Ng2TableModule } from 'ng2-table/ng2-table';
     RequisiteService,
     ApprovalStateService,
     AgreementService,
+    ReceptionRoomService,
+    MailerService,
+    DeclarationAttachmentService,
+    FloorAuthorizationCertificateService,
+    PayService,
     ExporterService,
     UbicationService,
     RegisterService,

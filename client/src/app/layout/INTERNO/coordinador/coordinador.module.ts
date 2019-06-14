@@ -1,3 +1,9 @@
+import { ReceptionRoomService } from './../../../services/CRUD/ALOJAMIENTO/receptionroom.service';
+import { MailerService } from './../../../services/negocio/mailer.service';
+import { DeclarationAttachmentService } from './../../../services/CRUD/FINANCIERO/declarationattachment.service';
+import { FloorAuthorizationCertificateService } from './../../../services/CRUD/BASE/floorauthorizationcertificate.service';
+import { PayService } from './../../../services/CRUD/FINANCIERO/pay.service';
+
 import { ApprovalStateService } from './../../../services/CRUD/ALOJAMIENTO/approvalstate.service';
 import { RegisterService } from 'src/app/services/CRUD/ALOJAMIENTO/register.service';
 import { EstablishmentPictureService } from 'src/app/services/CRUD/BASE/establishmentpicture.service';
@@ -67,6 +73,11 @@ import { ApprovalStateAttachmentService } from './../../../services/CRUD/ALOJAMI
     ConsultorService,
     DeclarationItemCategoryService,
     DeclarationService,
+    ReceptionRoomService,
+    MailerService,
+    DeclarationAttachmentService,
+    FloorAuthorizationCertificateService,
+    PayService,
     TaxPayerTypeService,
     PersonRepresentativeAttachmentService,
     EstablishmentCertificationService,
