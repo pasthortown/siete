@@ -2024,6 +2024,9 @@ export class RegistroComponent implements OnInit {
                if (element.campo === 'razonSocial') {
                   this.rucData += '<strong>Razón Social: </strong> ' + element.valor + '<br/>';
                }
+               if (element.campo === 'objetoSocial') {
+                  this.rucData += '<strong>Objeto Social: </strong> ' + element.valor + '<br/>';
+               }
                if (element.campo === 'actividadEconomicaPrincipal') {
                   this.rucData += '<strong>Actividad Económica: </strong> ' + element.valor + '<br/>';
                }
