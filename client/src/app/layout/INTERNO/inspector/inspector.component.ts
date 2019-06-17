@@ -137,6 +137,7 @@ export class InspectorComponent implements OnInit {
    establecimientos_pendiente = false;
    idTramiteEstadoFilter = 0;
    report: ApprovalStateReport = new ApprovalStateReport();
+   estoyVacaciones = false;
    //ASIGNACIONES
    inspectores: User[] = [];
    financieros: User[] = [];
@@ -1385,8 +1386,13 @@ export class InspectorComponent implements OnInit {
     }
     this.newRegisterState.justification = 'Resultados de la Inspección cargados en la fecha ' + new Date(this.registerApprovalInspector.date_fullfill).toDateString();
     this.newRegisterState.register_id = this.registerApprovalInspector.register_id;
+    this.report.approval_state_id = this.registerApprovalInspector.id;
+    if (this.report.id == 0) {
+      this.approvalStateReportDataService.post(this.report).then().catch( e => { console.log(e); });
+    } else {
+      this.approvalStateReportDataService.put(this.report).then().catch( e => { console.log(e); });
+    }
     this.registerStateDataService.post(this.newRegisterState).then( r1 => {
-       //this.report.approval_state_id AQUI
     }).catch( e => { console.log(e); });
     this.approvalStateDataService.put(this.registerApprovalInspector).then( r => {
       this.requisitosApprovalStateAttachment.approval_state_attachment_file_name = 'Formulario_Requisitos_' + this.user.identification + '_' + today.getFullYear().toString() + '_' + (today.getMonth() + 1).toString() + '_' + today.getDate().toString();
@@ -1493,6 +1499,12 @@ export class InspectorComponent implements OnInit {
                   }
                });
                this.registerApprovalInspector = element;
+               this.approvalStateReportDataService.get_by_approval_state_id(element.id).then( r => {
+                  const reporte = r as ApprovalStateReport;
+                  if (typeof reporte.id != 'undefined' || reporte.id != null) {
+                     this.report = reporte;
+                  }
+               }).catch( e => { console.log(e); });
                if (typeof this.registerApprovalInspector.notes == 'undefined' || this.registerApprovalInspector.notes == null) {
                   this.registerApprovalInspector.notes = '';
                }
@@ -1519,6 +1531,21 @@ export class InspectorComponent implements OnInit {
    this.mostrarDataRegisterMintur = true;
    this.getRuc(this.registerMinturSelected.ruc.number);
    this.groupTypeSelected = new GroupType();
+  }
+
+  devolverVacaciones() {
+   this.registerApprovalInspector.id_user = 0;
+   this.registerApprovalInspector.date_assigment = null;
+   this.approvalStateDataService.put(this.registerApprovalInspector).then( r => {
+      const newRegisterState = new RegisterState();
+      newRegisterState.justification = 'El Técnico Zonal no se encuentra disponible por Vacaciones / Fuera de Oficina';
+      newRegisterState.register_id =  this.idRegister;
+      newRegisterState.state_id = this.stateTramiteId - 3;
+      this.registerStateDataService.post(newRegisterState).then( r1 => {
+         this.toastr.warningToastr('Trámite devuelto al Coordinador Zonal, Satisfactoriamente.', 'Devolución por Vacaciones / Fuera de Oficina');
+         this.refresh();
+      }).catch( e => { console.log(e); });
+   }).catch( e => { console.log(e); });
   }
 
   validateGroupGivenTipe(): Boolean {

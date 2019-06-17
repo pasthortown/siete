@@ -23,6 +23,12 @@ class ApprovalStateReportController extends Controller
        }
     }
 
+    function get_by_approval_state_id(Request $data)
+    {
+       $approval_state_id = $data['id'];
+       return response()->json(ApprovalStateReport::where('approval_state_id', $approval_state_id)->first(),200);
+    }
+
     function paginate(Request $data)
     {
        $size = $data['size'];

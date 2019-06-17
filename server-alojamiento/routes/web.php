@@ -226,6 +226,7 @@ $router->group(['middleware' => ['auth']], function () use ($router) {
    $router->post('/approvalstatereport', ['uses' => 'ApprovalStateReportController@post']);
    $router->get('/approvalstatereport', ['uses' => 'ApprovalStateReportController@get']);
    $router->get('/approvalstatereport/paginate', ['uses' => 'ApprovalStateReportController@paginate']);
+   $router->get('/approvalstatereport/get_by_approval_state_id', ['uses' => 'ApprovalStateReportController@get_by_approval_state_id']);
    $router->get('/approvalstatereport/backup', ['uses' => 'ApprovalStateReportController@backup']);
    $router->put('/approvalstatereport', ['uses' => 'ApprovalStateReportController@put']);
    $router->delete('/approvalstatereport', ['uses' => 'ApprovalStateReportController@delete']);

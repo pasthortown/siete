@@ -76,7 +76,7 @@
   <div class="col-12">
     <h4>Resultado de la Inspección</h4>
   </div>
-  <div class="col-6">
+  <div class="col-12">
       <label>Formulario de Requisitos (Check List)</label>
       <div class="input-group mb-3">
         <div class="input-group-prepend">
@@ -90,19 +90,6 @@
       </div>
   </div>
   <div class="col-6">
-      <label>Informe de Inspección</label>
-      <div class="input-group mb-3">
-        <div class="input-group-prepend">
-          <button type="button" class="btn btn-secondary" title="Imprimir Informe" (click)="imprimirInforme()"><i class="fas fa-print"></i></button>
-          <button type="button" [disabled]="!validateInformeFile()" class="btn btn-secondary" title="Descargar Informe Cargado" (click)="descargarInforme()"><i class="fas fa-download"></i></button>
-          <button type="button" [disabled]="!validateInformeFile()" class="btn btn-danger" title="Borrar Informe Cargado" (click)="borrarInforme()"><i class="fas fa-trash"></i></button>
-        </div>
-        <input type="file" class="form-control" id="informeFile"
-          name="informeFile" placeholder="Informe de Inspección"
-          (change)="CodeFileInformeAttachment($event)">
-      </div>
-  </div>
-  <div class="col-6">
       <label>Fecha de la Inspección</label>
       <input type="date" class="form-control" id="date_fullfill" name="date_fullfill" placeholder="Fecha de Inspección"
       [ngModel]="registerApprovalInspector.date_fullfill | date:'y-MM-dd'" 
@@ -111,9 +98,9 @@
   <div class="col-6">
       <label>Estado de la Inspección</label>
       <select class="form-control" id="stateInspection" name="stateInspection" [(ngModel)]="inspectionState">
-        <option value="0" selected>Pendiente</option>
-        <option value="1" selected>Aprobado</option>
-        <option value="2" selected>Negado</option>
+        <option value="0" selected>Solicitud en Trámite</option>
+        <option value="1" selected>Solicitud Aprobada</option>
+        <option value="2" selected>Solicitud Rechazada</option>
         <option value="3" selected>Prórroga de 15 días</option>
         <option value="4" selected>Prórroga de 6 meses</option>
       </select>
@@ -137,12 +124,29 @@
     <ck-editor id="notes" name="notes" skin="moono-lisa" [(ngModel)]="report.recomendation"></ck-editor>
   </div>
   <div class="col-12 mt-3 mb-2">
+    <label>Informe de Inspección</label>
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <button type="button" class="btn btn-secondary" title="Imprimir Informe" (click)="imprimirInforme()"><i class="fas fa-print"></i></button>
+        <button type="button" [disabled]="!validateInformeFile()" class="btn btn-secondary" title="Descargar Informe Cargado" (click)="descargarInforme()"><i class="fas fa-download"></i></button>
+        <button type="button" [disabled]="!validateInformeFile()" class="btn btn-danger" title="Borrar Informe Cargado" (click)="borrarInforme()"><i class="fas fa-trash"></i></button>
+      </div>
+      <input type="file" class="form-control" id="informeFile"
+        name="informeFile" placeholder="Informe de Inspección"
+        (change)="CodeFileInformeAttachment($event)">
+    </div>
+  </div>
+  <div class="col-12 mt-5 mb-2">
     <label class="col-form-label">Observaciones</label>
     <ck-editor id="notes" name="notes" skin="moono-lisa" [(ngModel)]="registerApprovalInspector.notes"></ck-editor>
   </div>
   <div class="col-12 text-center mb-3">
+      <input type="checkbox" name="vacacionesCheck" id="vacacionesCheck" value="Bike" [(ngModel)]="estoyVacaciones"> Estoy de Vacaciones / Fuera de Oficina
+  </div>
+  <div class="col-12 text-center mb-3">
     <button type="button" [disabled]="!validateInspectionInfo()" class="btn btn-success" title="Guardar Información de Inspección" (click)="guardarInspeccion()"><i class="fas fa-save"></i> Guardar Información</button>
     <button type="button" class="btn btn-danger ml-2" title="Cancelar Cambios" (click)="refresh()"><i class="fas fa-times"></i> Cancelar</button>
+    <button type="button" class="btn btn-info ml-5" *ngIf="estoyVacaciones" title="Devolver a Coordinador Zonal" (click)="devolverVacaciones()"><i class="fas fa-couch"></i> Devolver a Coordinador Zonal</button>
   </div>
 </div>
 <div class="row" *ngIf="mostrarDataRegisterMintur">

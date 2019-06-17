@@ -754,11 +754,11 @@ export class CoordinadorComponent implements OnInit {
    this.registerApprovalInspector.date_assigment = new Date();
    this.approvalStateDataService.put(this.registerApprovalInspector).then( r => {
       const newRegisterState = new RegisterState();
-      newRegisterState.justification = 'Inspector asignado en la fecha ' + this.registerApprovalInspector.date_assigment.toDateString();
+      newRegisterState.justification = 'Técinco Sonal asignado en la fecha ' + this.registerApprovalInspector.date_assigment.toDateString();
       newRegisterState.register_id = this.idRegister;
       newRegisterState.state_id = this.stateTramiteId + 3;
       this.registerStateDataService.post(newRegisterState).then( r1 => {
-         this.toastr.successToastr('Inspector Asignado Satisfactoriamente.', 'Asignación de Inspector');
+         this.toastr.successToastr('Técinco Sonal Asignado Satisfactoriamente.', 'Asignación de Técinco Sonal');
          this.refresh();
       }).catch( e => { console.log(e); });
    }).catch( e => { console.log(e); });
@@ -780,11 +780,11 @@ export class CoordinadorComponent implements OnInit {
      this.registerApprovalInspector.date_assigment = null;
      this.approvalStateDataService.put(this.registerApprovalInspector).then( r => {
       const newRegisterState = new RegisterState();
-      newRegisterState.justification = 'Inspector removido en la fecha ' + today.toDateString();
+      newRegisterState.justification = 'Técinco Sonal removido en la fecha ' + today.toDateString();
       newRegisterState.register_id =  this.idRegister;
       newRegisterState.state_id = this.stateTramiteId - 3;
       this.registerStateDataService.post(newRegisterState).then( r1 => {
-         this.toastr.warningToastr('Inspector Removido Satisfactoriamente.', 'Asignación de Inspector');
+         this.toastr.warningToastr('Técinco Sonal Removido Satisfactoriamente.', 'Asignación de Técinco Sonal');
          this.refresh();
       }).catch( e => { console.log(e); });
      }).catch( e => { console.log(e); });
