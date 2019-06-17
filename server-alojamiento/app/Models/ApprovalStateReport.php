@@ -12,7 +12,7 @@ class ApprovalStateReport extends Model
      * @var array
      */
     protected $fillable = [
-       'body','params',
+       'background','actions_done','conclution','recomendation',
     ];
 
     /**

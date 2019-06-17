@@ -100,9 +100,9 @@ export class ApprovalStateReportComponent implements OnInit {
    toCSV() {
       this.approval_state_reportDataService.get().then( r => {
          const backupData = r as ApprovalStateReport[];
-         let output = 'id;body;params;approval_state_id\n';
+         let output = 'id;background;actions_done;conclution;recomendation;approval_state_id\n';
          backupData.forEach(element => {
-            output += element.id + ';' + element.body + ';' + element.params + ';' + element.approval_state_id + '\n';
+            output += element.id + ';' + element.background + ';' + element.actions_done + ';' + element.conclution + ';' + element.recomendation + ';' + element.approval_state_id + '\n';
          });
          const blob = new Blob([output], { type: 'text/plain' });
          const fecha = new Date();

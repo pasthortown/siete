@@ -16,8 +16,10 @@ class CreateApprovalStateReportsTable extends Migration
        Schema::create('approval_state_reports', function (Blueprint $table) {
           $table->increments('id');
           $table->timestamps();
-          $table->longText('body')->nullable($value = true);
-          $table->longText('params')->nullable($value = true);
+          $table->longText('background')->nullable($value = true);
+          $table->longText('actions_done')->nullable($value = true);
+          $table->longText('conclution')->nullable($value = true);
+          $table->longText('recomendation')->nullable($value = true);
           $table->unsignedInteger('approval_state_id');
           $table->foreign('approval_state_id')->references('id')->on('approval_states')->onDelete('cascade');
        });

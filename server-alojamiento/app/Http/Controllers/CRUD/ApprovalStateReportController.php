@@ -41,8 +41,10 @@ class ApprovalStateReportController extends Controller
           } else {
              $approvalstatereport->id = 1;
           }
-          $approvalstatereport->body = $result['body'];
-          $approvalstatereport->params = $result['params'];
+          $approvalstatereport->background = $result['background'];
+          $approvalstatereport->actions_done = $result['actions_done'];
+          $approvalstatereport->conclution = $result['conclution'];
+          $approvalstatereport->recomendation = $result['recomendation'];
           $approvalstatereport->approval_state_id = $result['approval_state_id'];
           $approvalstatereport->save();
           DB::commit();
@@ -58,8 +60,10 @@ class ApprovalStateReportController extends Controller
           DB::beginTransaction();
           $result = $data->json()->all();
           $approvalstatereport = ApprovalStateReport::where('id',$result['id'])->update([
-             'body'=>$result['body'],
-             'params'=>$result['params'],
+             'background'=>$result['background'],
+             'actions_done'=>$result['actions_done'],
+             'conclution'=>$result['conclution'],
+             'recomendation'=>$result['recomendation'],
              'approval_state_id'=>$result['approval_state_id'],
           ]);
           DB::commit();
@@ -97,15 +101,19 @@ class ApprovalStateReportController extends Controller
          $exist = ApprovalStateReport::where('id',$result['id'])->first();
          if ($exist) {
            ApprovalStateReport::where('id', $result['id'])->update([
-             'body'=>$result['body'],
-             'params'=>$result['params'],
+             'background'=>$result['background'],
+             'actions_done'=>$result['actions_done'],
+             'conclution'=>$result['conclution'],
+             'recomendation'=>$result['recomendation'],
              'approval_state_id'=>$result['approval_state_id'],
            ]);
          } else {
           $approvalstatereport = new ApprovalStateReport();
           $approvalstatereport->id = $result['id'];
-          $approvalstatereport->body = $result['body'];
-          $approvalstatereport->params = $result['params'];
+          $approvalstatereport->background = $result['background'];
+          $approvalstatereport->actions_done = $result['actions_done'];
+          $approvalstatereport->conclution = $result['conclution'];
+          $approvalstatereport->recomendation = $result['recomendation'];
           $approvalstatereport->approval_state_id = $result['approval_state_id'];
           $approvalstatereport->save();
          }

@@ -1,3 +1,5 @@
+import { ApprovalStateReportService } from './../../../services/CRUD/ALOJAMIENTO/approvalstatereport.service';
+import { ApprovalStateReport } from './../../../models/ALOJAMIENTO/ApprovalStateReport';
 import { ReceptionRoomService } from './../../../services/CRUD/ALOJAMIENTO/receptionroom.service';
 import { MailerService } from './../../../services/negocio/mailer.service';
 import { DeclarationAttachmentService } from './../../../services/CRUD/FINANCIERO/declarationattachment.service';
@@ -134,6 +136,7 @@ export class InspectorComponent implements OnInit {
    allowed_capacity_types: CapacityType[] = []; 
    establecimientos_pendiente = false;
    idTramiteEstadoFilter = 0;
+   report: ApprovalStateReport = new ApprovalStateReport();
    //ASIGNACIONES
    inspectores: User[] = [];
    financieros: User[] = [];
@@ -304,9 +307,10 @@ export class InspectorComponent implements OnInit {
               private mailerDataService: MailerService,
               private floorAuthorizationCertificateDataService: FloorAuthorizationCertificateService,
               private payDataService: PayService,
+              private approvalStateReportDataService: ApprovalStateReportService,
               private receptionRoomDataService: ReceptionRoomService,
               private declarationAttachmentDataService: DeclarationAttachmentService,
-              private router: Router, 
+              private router: Router,
               private exporterDataService: ExporterService,
               private approvalStateDataService: ApprovalStateService,
               private consultorDataService: ConsultorService,

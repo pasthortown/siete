@@ -130,7 +130,7 @@ export class CapacityComponent implements OnInit {
          const backupData = r as Capacity[];
          let output = 'id;quantity;max_beds;max_spaces;capacity_type_id\n';
          backupData.forEach(element => {
-            output += element.id; + element.quantity + ';' + element.max_beds + ';' + element.max_spaces + ';' + element.capacity_type_id + '\n';
+            output += element.id + ';' + element.quantity + ';' + element.max_beds + ';' + element.max_spaces + ';' + element.capacity_type_id + '\n';
          });
          const blob = new Blob([output], { type: 'text/plain' });
          const fecha = new Date();

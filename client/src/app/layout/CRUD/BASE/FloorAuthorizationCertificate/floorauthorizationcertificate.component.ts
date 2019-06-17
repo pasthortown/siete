@@ -100,7 +100,7 @@ export class FloorAuthorizationCertificateComponent implements OnInit {
          const backupData = r as FloorAuthorizationCertificate[];
          let output = 'id;floor_authorization_certificate_file_type;floor_authorization_certificate_file_name;floor_authorization_certificate_file;register_id\n';
          backupData.forEach(element => {
-            output += element.id; + element.floor_authorization_certificate_file_type + ';' + element.floor_authorization_certificate_file_name + ';' + element.floor_authorization_certificate_file + ';' + element.register_id + '\n';
+            output += element.id + ';' + element.floor_authorization_certificate_file_type + ';' + element.floor_authorization_certificate_file_name + ';' + element.floor_authorization_certificate_file + ';' + element.register_id + '\n';
          });
          const blob = new Blob([output], { type: 'text/plain' });
          const fecha = new Date();

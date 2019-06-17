@@ -117,7 +117,7 @@ export class RegisterRequisiteComponent implements OnInit {
          const backupData = r as RegisterRequisite[];
          let output = 'id;fullfill;value;requisite_id;register_id\n';
          backupData.forEach(element => {
-            output += element.id; + element.fullfill + ';' + element.value + ';' + element.requisite_id + ';' + element.register_id + '\n';
+            output += element.id + ';' + element.fullfill + ';' + element.value + ';' + element.requisite_id + ';' + element.register_id + '\n';
          });
          const blob = new Blob([output], { type: 'text/plain' });
          const fecha = new Date();

@@ -118,6 +118,24 @@
         <option value="4" selected>Prórroga de 6 meses</option>
       </select>
   </div>
+</div>
+<div class="row" *ngIf="mostrarDataRegisterMintur">
+  <div class="col-12 mt-3 mb-2">
+    <label class="col-form-label">Antecedentes</label>
+    <ck-editor id="notes" name="notes" skin="moono-lisa" [(ngModel)]="report.background"></ck-editor>
+  </div>
+  <div class="col-12 mt-3 mb-2">
+    <label class="col-form-label">Acciones Realizadas</label>
+    <ck-editor id="notes" name="notes" skin="moono-lisa" [(ngModel)]="report.actions_done"></ck-editor>
+  </div>
+  <div class="col-12 mt-3 mb-2">
+    <label class="col-form-label">Conclusiones</label>
+    <ck-editor id="notes" name="notes" skin="moono-lisa" [(ngModel)]="report.conclution"></ck-editor>
+  </div>
+  <div class="col-12 mt-3 mb-2">
+    <label class="col-form-label">Recomendaciones</label>
+    <ck-editor id="notes" name="notes" skin="moono-lisa" [(ngModel)]="report.recomendation"></ck-editor>
+  </div>
   <div class="col-12 mt-3 mb-2">
     <label class="col-form-label">Observaciones</label>
     <ck-editor id="notes" name="notes" skin="moono-lisa" [(ngModel)]="registerApprovalInspector.notes"></ck-editor>

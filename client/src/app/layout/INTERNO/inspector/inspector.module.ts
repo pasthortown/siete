@@ -1,3 +1,4 @@
+import { ApprovalStateReportService } from './../../../services/CRUD/ALOJAMIENTO/approvalstatereport.service';
 import { ReceptionRoomService } from './../../../services/CRUD/ALOJAMIENTO/receptionroom.service';
 import { MailerService } from './../../../services/negocio/mailer.service';
 import { DeclarationAttachmentService } from './../../../services/CRUD/FINANCIERO/declarationattachment.service';
@@ -85,6 +86,7 @@ import { Ng2TableModule } from 'ng2-table/ng2-table';
     ApprovalStateService,
     AgreementService,
     ReceptionRoomService,
+    ApprovalStateReportService,
     MailerService,
     DeclarationAttachmentService,
     FloorAuthorizationCertificateService,

@@ -115,7 +115,7 @@ export class DeclarationAttachmentComponent implements OnInit {
          const backupData = r as DeclarationAttachment[];
          let output = 'id;declaration_attachment_file_type;declaration_attachment_file_name;declaration_attachment_file;declaration_id\n';
          backupData.forEach(element => {
-            output += element.id; + element.declaration_attachment_file_type + ';' + element.declaration_attachment_file_name + ';' + element.declaration_attachment_file + ';' + element.declaration_id + '\n';
+            output += element.id + ';' + element.declaration_attachment_file_type + ';' + element.declaration_attachment_file_name + ';' + element.declaration_attachment_file + ';' + element.declaration_id + '\n';
          });
          const blob = new Blob([output], { type: 'text/plain' });
          const fecha = new Date();

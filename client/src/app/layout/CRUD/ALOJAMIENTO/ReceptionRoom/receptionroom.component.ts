@@ -102,7 +102,7 @@ export class ReceptionRoomComponent implements OnInit {
          const backupData = r as ReceptionRoom[];
          let output = 'id;quantity;fullfill;register_id\n';
          backupData.forEach(element => {
-            output += element.id; + element.quantity + ';' + element.fullfill + ';' + element.register_id + '\n';
+            output += element.id + ';' + element.quantity + ';' + element.fullfill + ';' + element.register_id + '\n';
          });
          const blob = new Blob([output], { type: 'text/plain' });
          const fecha = new Date();

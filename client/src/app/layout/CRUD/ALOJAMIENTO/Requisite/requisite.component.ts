@@ -102,7 +102,7 @@ export class RequisiteComponent implements OnInit {
          const backupData = r as Requisite[];
          let output = 'id;name;description;father_code;to_approve;mandatory;type;params;code;register_type_id\n';
          backupData.forEach(element => {
-            output += element.id; + element.name + ';' + element.description + ';' + element.father_code + ';' + element.to_approve + ';' + element.mandatory + ';' + element.type + ';' + element.params + ';' + element.code + ';' + element.register_type_id + '\n';
+            output += element.id + ';' + element.name + ';' + element.description + ';' + element.father_code + ';' + element.to_approve + ';' + element.mandatory + ';' + element.type + ';' + element.params + ';' + element.code + ';' + element.register_type_id + '\n';
          });
          const blob = new Blob([output], { type: 'text/plain' });
          const fecha = new Date();

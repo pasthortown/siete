@@ -31,15 +31,19 @@
          <thead>
             <tr>
                <th>Seleccionado</th>
-               <th>body</th>
-               <th>params</th>
+               <th>background</th>
+               <th>actions_done</th>
+               <th>conclution</th>
+               <th>recomendation</th>
             </tr>
          </thead>
          <tbody>
             <tr *ngFor="let approval_state_report of approval_state_reports" (click)="selectApprovalStateReport(approval_state_report)">
                <td class="text-right"><span *ngIf="approval_state_reportSelected === approval_state_report" class="far fa-hand-point-right"></span></td>
-               <td>{{approval_state_report.body}}</td>
-               <td>{{approval_state_report.params}}</td>
+               <td>{{approval_state_report.background}}</td>
+               <td>{{approval_state_report.actions_done}}</td>
+               <td>{{approval_state_report.conclution}}</td>
+               <td>{{approval_state_report.recomendation}}</td>
             </tr>
          </tbody>
       </table>
@@ -77,15 +81,27 @@
       <div class="row">
          <div class="col-12">
             <div class="form-group row">
-               <label for="body" class="col-4 col-form-label">body</label>
+               <label for="background" class="col-4 col-form-label">background</label>
                <div class="col-8">
-                  <ck-editor id="body" name="body" skin="moono-lisa" [(ngModel)]="approval_state_reportSelected.body"></ck-editor>
+                  <ck-editor id="background" name="background" skin="moono-lisa" [(ngModel)]="approval_state_reportSelected.background"></ck-editor>
                </div>
             </div>
             <div class="form-group row">
-               <label for="params" class="col-4 col-form-label">params</label>
+               <label for="actions_done" class="col-4 col-form-label">actions_done</label>
                <div class="col-8">
-                  <ck-editor id="params" name="params" skin="moono-lisa" [(ngModel)]="approval_state_reportSelected.params"></ck-editor>
+                  <ck-editor id="actions_done" name="actions_done" skin="moono-lisa" [(ngModel)]="approval_state_reportSelected.actions_done"></ck-editor>
+               </div>
+            </div>
+            <div class="form-group row">
+               <label for="conclution" class="col-4 col-form-label">conclution</label>
+               <div class="col-8">
+                  <ck-editor id="conclution" name="conclution" skin="moono-lisa" [(ngModel)]="approval_state_reportSelected.conclution"></ck-editor>
+               </div>
+            </div>
+            <div class="form-group row">
+               <label for="recomendation" class="col-4 col-form-label">recomendation</label>
+               <div class="col-8">
+                  <ck-editor id="recomendation" name="recomendation" skin="moono-lisa" [(ngModel)]="approval_state_reportSelected.recomendation"></ck-editor>
                </div>
             </div>
             <div class="form-group row">
