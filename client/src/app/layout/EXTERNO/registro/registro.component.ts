@@ -305,6 +305,7 @@ export class RegistroComponent implements OnInit {
    this.getDeclarationCategories();
    this.getDeclarationItems();
    this.getMaxDeclarationDate();
+   this.getTramiteStates();
   }
 
   editableTramiteRequerido(): Boolean {

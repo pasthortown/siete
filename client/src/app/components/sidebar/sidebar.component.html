@@ -154,13 +154,13 @@
             </li>
          </div> 
       <a [routerLink]="['/coordinador']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="isCoordinadorZonal">
-         <i class="far fa-user-circle"></i>&nbsp; <span>Coordinador</span>
+         <i class="far fa-user-circle"></i>&nbsp; <span>Coordinador Zonal</span>
       </a>
       <a [routerLink]="['/tecnico-financiero']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="isTecnF">
          <i class="fa fa-credit-card"></i>&nbsp; <span>Técnico financiero</span>
       </a>
       <a [routerLink]="['/inspector']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="isInsp">
-         <i class="fa fa-user-secret"></i>&nbsp; <span>Inspector</span>
+         <i class="fa fa-user-secret"></i>&nbsp; <span>Técnico Zonal</span>
       </a>
       <a [routerLink]="['/pagos']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="isGestorPag">
          <i class="far fa-money-bill-alt"></i>&nbsp; <span>Gestor de Pagos</span>
@@ -316,10 +316,10 @@
                   <a [routerLink]="['/interno-registro']" [routerLinkActive]="['router-link-active']" class="list-group-item">Registro</a>
                </li>
                <li>
-                  <a [routerLink]="['/coordinador']" [routerLinkActive]="['router-link-active']" class="list-group-item">Coordinador</a>
+                  <a [routerLink]="['/coordinador']" [routerLinkActive]="['router-link-active']" class="list-group-item">Coordinador Zonal</a>
                </li>
                <li>
-                  <a [routerLink]="['/inspector']" [routerLinkActive]="['router-link-active']" class="list-group-item">Inspector</a>
+                  <a [routerLink]="['/inspector']" [routerLinkActive]="['router-link-active']" class="list-group-item">Técnico Zonal</a>
                </li>
                <li>
                   <a [routerLink]="['/interno-account-admin']" [routerLinkActive]="['router-link-active']" class="list-group-item">Administración de Cuentas Externas</a>

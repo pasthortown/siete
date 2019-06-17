@@ -15,6 +15,30 @@
              class="form-control"
              (input)="onChangeTable(config)"/>
        </div>
+       <div class="btn-group mr-2" role="group">
+          <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text">
+                  <i class="fas fa-search"></i>&nbsp;Bandejas
+                </span>
+              </div>
+              <select class="form-control" id="filter-tramite-estado" name="filter-tramite-estado" [(ngModel)]="idTramiteEstadoFilter" (change)="filterByTramiteState()">
+                <option value="0" selected>Todas</option>
+                <option *ngFor="let tramite_state of estados_tramites" value="{{tramite_state.id}}">{{tramite_state.name}}</option>
+              </select>
+              <div class="input-group-append" *ngIf="idTramiteEstadoFilter>0">
+                  <select class="form-control" id="filter-tramite-estado" name="filter-tramite-estado" [(ngModel)]="tramite" (change)="filterByTramiteState(tramite)">
+                    <option value="-" selected>Todas</option>
+                    <option value="Registro" selected>Registro</option>
+                    <option value="Reclasificación" selected>Reclasificación</option>
+                    <option value="Recategorización" selected>Recategorización</option>
+                    <option value="Actualización" selected>Actualización</option>
+                    <option value="Inactivación" selected>Inactivación</option>
+                    <option value="Reingreso" selected>Reingreso</option>
+                  </select>
+              </div>
+            </div>
+       </div>
      </div>
   </div>
 </div>

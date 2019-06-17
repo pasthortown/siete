@@ -110,6 +110,7 @@ export class InspectorComponent implements OnInit {
    @ViewChild('pasosSuperiores') pasosSuperioresTabSet;
    tabActive = 'paso1';
    tabActiveSuperior = 'tab1';
+   tramite = '-';
    selectedNameType: RucNameType = new RucNameType();
    total_workers = 0;
    salaRecepciones: ReceptionRoom = new ReceptionRoom();
@@ -132,7 +133,7 @@ export class InspectorComponent implements OnInit {
    fechaNombramientoOK = false;
    allowed_capacity_types: CapacityType[] = []; 
    establecimientos_pendiente = false;
-
+   idTramiteEstadoFilter = 0;
    //ASIGNACIONES
    inspectores: User[] = [];
    financieros: User[] = [];
@@ -349,7 +350,27 @@ export class InspectorComponent implements OnInit {
    this.getDeclarationCategories();
    this.getDeclarationItems();
    this.getMaxDeclarationDate();
+   this.getTramiteStates();
   }
+
+  filterByTramiteState(tramite?: String) {
+   let filtroTexto: String = '';
+     this.estados_tramites.forEach(estado => {
+        if (estado.id == this.idTramiteEstadoFilter) {
+         filtroTexto = estado.name;
+        }
+     });
+     if(typeof tramite !== 'undefined') {
+        if (tramite == '-') {
+         this.config.filtering = {filterString: filtroTexto};
+        } else {
+         this.config.filtering = {filterString: filtroTexto + ' - ' + tramite};
+        }
+     } else {
+      this.config.filtering = {filterString: filtroTexto};
+     }
+     this.onChangeTable(this.config);
+}
 
   editableTramiteRequerido(): Boolean {
    if (this.estado_tramite_selected_code == '1' || this.estado_tramite_selected_code == '9') {
