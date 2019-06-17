@@ -16,9 +16,9 @@ class CreateGroupTypesTable extends Migration
        Schema::create('group_types', function (Blueprint $table) {
           $table->increments('id');
           $table->timestamps();
-          $table->string('name',50)->nullable($value = true);
+          $table->string('name',255)->nullable($value = true);
           $table->longText('description')->nullable($value = true);
-          $table->string('representative_rol_name',100)->nullable($value = true);
+          $table->string('representative_rol_name',255)->nullable($value = true);
           $table->longText('representative_rol_description')->nullable($value = true);
        });
     }

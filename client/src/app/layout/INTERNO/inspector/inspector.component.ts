@@ -1386,6 +1386,7 @@ export class InspectorComponent implements OnInit {
     this.newRegisterState.justification = 'Resultados de la Inspección cargados en la fecha ' + new Date(this.registerApprovalInspector.date_fullfill).toDateString();
     this.newRegisterState.register_id = this.registerApprovalInspector.register_id;
     this.registerStateDataService.post(this.newRegisterState).then( r1 => {
+       //this.report.approval_state_id AQUI
     }).catch( e => { console.log(e); });
     this.approvalStateDataService.put(this.registerApprovalInspector).then( r => {
       this.requisitosApprovalStateAttachment.approval_state_attachment_file_name = 'Formulario_Requisitos_' + this.user.identification + '_' + today.getFullYear().toString() + '_' + (today.getMonth() + 1).toString() + '_' + today.getDate().toString();
