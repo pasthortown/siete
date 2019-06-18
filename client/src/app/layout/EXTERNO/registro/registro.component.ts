@@ -343,12 +343,36 @@ export class RegistroComponent implements OnInit {
          toReturn = false;
          this.establishmentComercialNameValidated = toReturn;
          return;
-     } 
+     }
      let errorEnNombreDetectado = false;
      this.register_types.forEach(register_type => {
         const nombre = register_type.name.toUpperCase();
         if (textoAValidar.search(nombre + ' ') !== -1 && !errorEnNombreDetectado) {
          errorEnNombreDetectado = true;
+         toReturn = false;
+        }
+     });
+     const palabrasNoPermitidas = ['hotel',
+     'hostal',
+     'residencia',
+     'residencial',
+     'hacienda turística',
+     'hacienda turistica',
+     'hostería',
+     'hosteria',
+     'pensión',
+     'pension',
+     'albergue',
+     'lodge',
+     'motel',
+     'campamento',
+     'refugio',
+     'resort '];
+     let errorEnNombreDetectadoListaPalabras = false;
+     palabrasNoPermitidas.forEach(palabraNoPermitida => {
+        const nombre = palabraNoPermitida.toUpperCase();
+        if (textoAValidar.search(nombre) !== -1 && !errorEnNombreDetectadoListaPalabras) {
+         errorEnNombreDetectadoListaPalabras = true;
          toReturn = false;
         }
      });
