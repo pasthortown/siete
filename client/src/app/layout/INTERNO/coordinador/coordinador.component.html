@@ -86,6 +86,11 @@
       </select>
     </div>
   </div>
+  <div class="col-12 mt-3" *ngIf="registerApprovalInspector.notes != '' && !rechazarTramite">
+    <strong>Motivo de devolución</strong>
+      <div class="alert alert-info" role="alert" [innerHTML]="registerApprovalInspector.notes">
+      </div>
+  </div>
   <div class="col-12" *ngIf="isAssigned">
     <div class="col-12" *ngIf="hasRequisites">
       <span class="badge badge-info" style="cursor:pointer;" (click)="descargarRequisitos()"><span class="fas fa-file-pdf" (click)="descargarRequisitos()"></span>&nbsp; Revisión de Requisitos</span> 
@@ -99,16 +104,25 @@
     <div class="col-12" *ngIf="hasInform">
       <small><strong>Fecha de Inspección:</strong>&nbsp;<i>2019-05-04</i></small>
     </div>
-    <div class="col-12" *ngIf="isAssigned">
-      <small><strong>Estado:</strong>&nbsp;
-        <span class="badge badge-success" *ngIf="registerApprovalInspector.value">Aprobado</span>
-        <span class="badge badge-danger" *ngIf="hasInform && (!registerApprovalInspector.value)">Negado</span>
-        <span class="badge badge-warning" *ngIf="!hasInform && !registerApprovalInspector.value">Pendiente</span>
-      </small>
+    <div class="col-12 text-center mb-3" *ngIf="isAssigned && !registerApprovalInspector.value">
+        <button type="button" class="btn btn-success" title="Anterior"
+          (click)="aceptarTramite()">
+          <i class="fas fa-check-double"></i>&nbsp;Aprobar
+        </button>
     </div>
-    <div class="col-12 mt-3" *ngIf="registerApprovalInspector.notes != ''">
-        <div class="alert alert-info" role="alert" [innerHTML]="registerApprovalInspector.notes">
-        </div>
+    <div class="col-12 text-center mb-3" *ngIf="isAssigned && !registerApprovalInspector.value">
+        <input type="checkbox" name="vacacionesCheck" id="vacacionesCheck" value="Bike" [(ngModel)]="rechazarTramite" (change)="rechazarCheck()"> Rechazar y devolver traḿite
+    </div>
+    <div class="col-12 mt-5 mb-2" *ngIf="rechazarTramite && !registerApprovalInspector.value">
+      <label class="col-form-label">Motivo de rechazo y devolución del trámite</label>
+      <ck-editor id="notes" name="notes" skin="moono-lisa" [(ngModel)]="registerApprovalInspector.notes"></ck-editor>
+    </div>
+    <div class="col-12 text-center" *ngIf="isAssigned && !registerApprovalInspector.value">
+        <button type="button" class="btn btn-danger" title="Cancelar Cambios" (click)="
+            confirmarRechazoTramite()
+          " *ngIf="rechazarTramite">
+          <i class="fas fa-trash"></i>&nbsp;Rechazar
+        </button>
     </div>
   </div>
   <div class="col-12" *ngIf="registerApprovalInspector.value">

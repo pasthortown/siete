@@ -136,12 +136,12 @@
         (change)="CodeFileInformeAttachment($event)">
     </div>
   </div>
-  <div class="col-12 mt-5 mb-2">
-    <label class="col-form-label">Observaciones</label>
-    <ck-editor id="notes" name="notes" skin="moono-lisa" [(ngModel)]="registerApprovalInspector.notes"></ck-editor>
-  </div>
   <div class="col-12 text-center mb-3">
-      <input type="checkbox" name="vacacionesCheck" id="vacacionesCheck" value="Bike" [(ngModel)]="estoyVacaciones"> Estoy de Vacaciones / Fuera de Oficina
+      <input type="checkbox" name="vacacionesCheck" id="vacacionesCheck" value="Bike" [(ngModel)]="estoyVacaciones"> Devolver el trámite seleccionado
+  </div>
+  <div class="col-12 mt-5 mb-2" *ngIf="estoyVacaciones">
+    <label class="col-form-label">Motivo de la devolución del trámite</label>
+    <ck-editor id="notes" name="notes" skin="moono-lisa" [(ngModel)]="registerApprovalInspector.notes"></ck-editor>
   </div>
   <div class="col-12 text-center mb-3">
     <button type="button" [disabled]="!validateInspectionInfo()" class="btn btn-success" title="Guardar Información de Inspección" (click)="guardarInspeccion()"><i class="fas fa-save"></i> Guardar Información</button>

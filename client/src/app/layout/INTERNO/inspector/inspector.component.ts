@@ -99,6 +99,7 @@ import { EstablishmentCertificationAttachmentService } from 'src/app/services/CR
 import { RegisterService } from 'src/app/services/CRUD/ALOJAMIENTO/register.service';
 import { RegisterStateService } from 'src/app/services/CRUD/ALOJAMIENTO/registerstate.service';
 import { ExporterService } from 'src/app/services/negocio/exporter.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-registro',
@@ -1343,101 +1344,132 @@ export class InspectorComponent implements OnInit {
   guardarInspeccion() {
    const estado: String = this.stateTramiteId.toString();
    const digito = estado.substring(estado.length-1, estado.length);
-    if ( this.inspectionState == 0) {
+   if ( this.inspectionState == 0) {
       this.toastr.errorToastr('Debe seleccionar un estado de la inspección', 'Inspección');
       return;
-    }
-    const today = new Date();
-    if ( this.inspectionState == 1) {
-      this.registerApprovalInspector.value = true;
-      if (digito == '4') {
-         this.newRegisterState.state_id = this.stateTramiteId + 6;
-      }
-      if (digito == '5') {
-         this.newRegisterState.state_id = this.stateTramiteId + 5;
-      }
-      if (digito == '6') {
-         this.newRegisterState.state_id = this.stateTramiteId + 4;
-      }
-      if (digito == '0') {
-         this.newRegisterState.state_id = this.stateTramiteId;
-      }
-    }
-    if ( this.inspectionState == 2) {
-      this.registerApprovalInspector.value = false;
-      if (digito == '4') {
-         this.newRegisterState.state_id = this.stateTramiteId + 6;
-      }
-      if (digito == '5') {
-         this.newRegisterState.state_id = this.stateTramiteId + 5;
-      }
-      if (digito == '6') {
-         this.newRegisterState.state_id = this.stateTramiteId + 4;
-      }
-      if (digito == '0') {
-         this.newRegisterState.state_id = this.stateTramiteId;
-      }
-    }
-    if ( this.inspectionState == 3) {
-      this.registerApprovalInspector.value = false;
-      if (digito == '4') {
-         this.newRegisterState.state_id = this.stateTramiteId + 1;
-      }
-      if (digito == '5') {
-         this.newRegisterState.state_id = this.stateTramiteId;
-      }
-      if (digito == '6') {
-         this.newRegisterState.state_id = this.stateTramiteId - 1;
-      }
-      if (digito == '0') {
-         this.newRegisterState.state_id = this.stateTramiteId - 5;
-      }
-    }
-    if ( this.inspectionState == 4) {
-      this.registerApprovalInspector.value = false;
-      if (digito == '4') {
-         this.newRegisterState.state_id = this.stateTramiteId + 2;
-      }
-      if (digito == '5') {
-         this.newRegisterState.state_id = this.stateTramiteId + 1;
-      }
-      if (digito == '6') {
-         this.newRegisterState.state_id = this.stateTramiteId;
-      }
-      if (digito == '0') {
-         this.newRegisterState.state_id = this.stateTramiteId - 4;
-      }
-    }
-    this.newRegisterState.justification = 'Resultados de la Inspección cargados en la fecha ' + new Date(this.registerApprovalInspector.date_fullfill).toDateString();
-    this.newRegisterState.register_id = this.registerApprovalInspector.register_id;
-    this.report.approval_state_id = this.registerApprovalInspector.id;
-    if (this.report.id == 0) {
-      this.approvalStateReportDataService.post(this.report).then().catch( e => { console.log(e); });
-    } else {
-      this.approvalStateReportDataService.put(this.report).then().catch( e => { console.log(e); });
-    }
-    this.registerStateDataService.post(this.newRegisterState).then( r1 => {
-    }).catch( e => { console.log(e); });
-    this.approvalStateDataService.put(this.registerApprovalInspector).then( r => {
-      this.requisitosApprovalStateAttachment.approval_state_attachment_file_name = 'Formulario_Requisitos_' + this.user.identification + '_' + today.getFullYear().toString() + '_' + (today.getMonth() + 1).toString() + '_' + today.getDate().toString();
-      this.informeApprovalStateAttachment.approval_state_attachment_file_name = 'Informe_Requisitos_' + this.user.identification + '_' + today.getFullYear().toString() + '_' + (today.getMonth() + 1).toString() + '_' + today.getDate().toString();
-      if (this.requisitosApprovalStateAttachment.id == 0) {
-         this.approvalStateAttachmentDataService.post(this.requisitosApprovalStateAttachment).then( r2 => {
-            this.toastr.successToastr('Inspección Guardada Satisfactoriamente', 'Inspección');
+   }
+   Swal.fire({
+      title: 'Confirmación',
+      text: '¿Está seguro de confirmar el resultado del trámite a su cargo?',
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Si, continuar',
+      cancelButtonText: 'No, cancelar',
+      reverseButtons: true
+    }).then((result) => {
+      if (result.value) {
+         const today = new Date();
+         if ( this.inspectionState == 1) {
+            this.registerApprovalInspector.value = false;
+            if (digito == '4') {
+               this.newRegisterState.state_id = this.stateTramiteId + 6;
+            }
+            if (digito == '5') {
+               this.newRegisterState.state_id = this.stateTramiteId + 5;
+            }
+            if (digito == '6') {
+               this.newRegisterState.state_id = this.stateTramiteId + 4;
+            }
+            if (digito == '0') {
+               this.newRegisterState.state_id = this.stateTramiteId;
+            }
+         }
+         if ( this.inspectionState == 2) {
+            this.registerApprovalInspector.value = false;
+            if (digito == '4') {
+               this.newRegisterState.state_id = this.stateTramiteId + 6;
+            }
+            if (digito == '5') {
+               this.newRegisterState.state_id = this.stateTramiteId + 5;
+            }
+            if (digito == '6') {
+               this.newRegisterState.state_id = this.stateTramiteId + 4;
+            }
+            if (digito == '0') {
+               this.newRegisterState.state_id = this.stateTramiteId;
+            }
+         }
+         if ( this.inspectionState == 3) {
+            this.registerApprovalInspector.value = false;
+            if (digito == '4') {
+               this.newRegisterState.state_id = this.stateTramiteId + 1;
+            }
+            if (digito == '5') {
+               this.newRegisterState.state_id = this.stateTramiteId;
+            }
+            if (digito == '6') {
+               this.newRegisterState.state_id = this.stateTramiteId - 1;
+            }
+            if (digito == '0') {
+               this.newRegisterState.state_id = this.stateTramiteId - 5;
+            }
+         }
+         if ( this.inspectionState == 4) {
+            this.registerApprovalInspector.value = false;
+            if (digito == '4') {
+               this.newRegisterState.state_id = this.stateTramiteId + 2;
+            }
+            if (digito == '5') {
+               this.newRegisterState.state_id = this.stateTramiteId + 1;
+            }
+            if (digito == '6') {
+               this.newRegisterState.state_id = this.stateTramiteId;
+            }
+            if (digito == '0') {
+               this.newRegisterState.state_id = this.stateTramiteId - 4;
+            }
+         }
+         this.newRegisterState.justification = 'Resultados de la Inspección cargados en la fecha ' + new Date(this.registerApprovalInspector.date_fullfill).toDateString();
+         this.newRegisterState.register_id = this.registerApprovalInspector.register_id;
+         this.report.approval_state_id = this.registerApprovalInspector.id;
+         if (this.report.id == 0) {
+            this.approvalStateReportDataService.post(this.report).then().catch( e => { console.log(e); });
+         } else {
+            this.approvalStateReportDataService.put(this.report).then().catch( e => { console.log(e); });
+         }
+         this.registerStateDataService.post(this.newRegisterState).then( r1 => {
          }).catch( e => { console.log(e); });
-       } else {
-         this.approvalStateAttachmentDataService.put(this.requisitosApprovalStateAttachment).then( r2 => {
-            this.toastr.successToastr('Inspección Guardada Satisfactoriamente', 'Inspección');
+         this.approvalStateDataService.put(this.registerApprovalInspector).then( r => {
+            this.requisitosApprovalStateAttachment.approval_state_attachment_file_name = 'Formulario_Requisitos_' + this.user.identification + '_' + today.getFullYear().toString() + '_' + (today.getMonth() + 1).toString() + '_' + today.getDate().toString();
+            this.informeApprovalStateAttachment.approval_state_attachment_file_name = 'Informe_Requisitos_' + this.user.identification + '_' + today.getFullYear().toString() + '_' + (today.getMonth() + 1).toString() + '_' + today.getDate().toString();
+            if (this.requisitosApprovalStateAttachment.id == 0) {
+               this.approvalStateAttachmentDataService.post(this.requisitosApprovalStateAttachment).then( r2 => {
+                  this.toastr.successToastr('Inspección Guardada Satisfactoriamente', 'Inspección');
+                  Swal.fire(
+                     'Confirmado!',
+                     'El resultado del trámite ha sido almacenado',
+                     'success'
+                  );
+               }).catch( e => { console.log(e); });
+            } else {
+               this.approvalStateAttachmentDataService.put(this.requisitosApprovalStateAttachment).then( r2 => {
+                  this.toastr.successToastr('Inspección Guardada Satisfactoriamente', 'Inspección');
+                  Swal.fire(
+                     'Confirmado!',
+                     'El resultado del trámite ha sido almacenado',
+                     'success'
+                  );
+               }).catch( e => { console.log(e); });
+            }
+            if (this.informeApprovalStateAttachment.id == 0) {
+               this.approvalStateAttachmentDataService.post(this.informeApprovalStateAttachment).then( r3 => {
+               }).catch( e => { console.log(e); });
+            } else {
+               this.approvalStateAttachmentDataService.put(this.informeApprovalStateAttachment).then( r3 => {
+               }).catch( e => { console.log(e); });
+            }
          }).catch( e => { console.log(e); });
-       }
-       if (this.informeApprovalStateAttachment.id == 0) {
-         this.approvalStateAttachmentDataService.post(this.informeApprovalStateAttachment).then( r3 => {
-         }).catch( e => { console.log(e); });
-       } else {
-         this.approvalStateAttachmentDataService.put(this.informeApprovalStateAttachment).then( r3 => {
-         }).catch( e => { console.log(e); });
-       }
-    }).catch( e => { console.log(e); });
+      } else if (
+        result.dismiss === Swal.DismissReason.cancel
+      ) {
+        Swal.fire(
+          'Cancelado',
+          '',
+          'error'
+        );
+      }
+    });
+   
   }
 
   onCellClick(event) {
@@ -1558,18 +1590,48 @@ export class InspectorComponent implements OnInit {
   }
 
   devolverVacaciones() {
-   this.registerApprovalInspector.id_user = 0;
-   this.registerApprovalInspector.date_assigment = null;
-   this.approvalStateDataService.put(this.registerApprovalInspector).then( r => {
-      const newRegisterState = new RegisterState();
-      newRegisterState.justification = 'El Técnico Zonal no se encuentra disponible por Vacaciones / Fuera de Oficina';
-      newRegisterState.register_id =  this.idRegister;
-      newRegisterState.state_id = this.stateTramiteId - 3;
-      this.registerStateDataService.post(newRegisterState).then( r1 => {
-         this.toastr.warningToastr('Trámite devuelto al Coordinador Zonal, Satisfactoriamente.', 'Devolución por Vacaciones / Fuera de Oficina');
-         this.refresh();
-      }).catch( e => { console.log(e); });
-   }).catch( e => { console.log(e); });
+     if(this.registerApprovalInspector.notes == '') {
+       this.toastr.errorToastr('Debe indicar la justificación para la devolución del trámite.', 'Devolución por Vacaciones / Fuera de Oficina');
+       return;
+     }
+   Swal.fire({
+      title: 'Confirmación',
+      text: '¿Está seguro de devolver el trámite al Coordinador Zonal?, Recuerde que al hacerlo, la solicitud volverá a la Bandeja del Coordinador Zonal para una nueva asignación.',
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Si, continuar',
+      cancelButtonText: 'No, cancelar',
+      reverseButtons: true
+    }).then((result) => {
+      if (result.value) {
+        Swal.fire(
+          'Trámite Devuelto!',
+          'La solicitud ha sido devuelta al Coordinador Zonal',
+          'success'
+        );
+        this.registerApprovalInspector.id_user = 0;
+        this.registerApprovalInspector.date_assigment = null;
+        this.registerApprovalInspector.notes = '<strong>' + this.user.name + ':</strong> ' + this.registerApprovalInspector.notes;
+        this.approvalStateDataService.put(this.registerApprovalInspector).then( r => {
+            const newRegisterState = new RegisterState();
+            newRegisterState.justification = 'El Técnico Zonal no se encuentra disponible por Vacaciones / Fuera de Oficina';
+            newRegisterState.register_id =  this.idRegister;
+            newRegisterState.state_id = this.stateTramiteId - 3;
+            this.registerStateDataService.post(newRegisterState).then( r1 => {
+               this.toastr.warningToastr('Trámite devuelto al Coordinador Zonal, Satisfactoriamente.', 'Devolución por Vacaciones / Fuera de Oficina');
+               this.refresh();
+            }).catch( e => { console.log(e); });
+        }).catch( e => { console.log(e); });
+      } else if (
+        result.dismiss === Swal.DismissReason.cancel
+      ) {
+        Swal.fire(
+          'Cancelado',
+          '',
+          'error'
+        );
+      }
+    });
   }
 
   validateGroupGivenTipe(): Boolean {

@@ -95,6 +95,7 @@ import { EstablishmentCertificationAttachmentService } from 'src/app/services/CR
 import { RegisterService } from 'src/app/services/CRUD/ALOJAMIENTO/register.service';
 import { RegisterStateService } from 'src/app/services/CRUD/ALOJAMIENTO/registerstate.service';
 import { ReceptionRoom } from 'src/app/models/ALOJAMIENTO/ReceptionRoom';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-registro',
@@ -115,7 +116,8 @@ export class CoordinadorComponent implements OnInit {
    salaRecepciones: ReceptionRoom = new ReceptionRoom();
    franchiseChainNameValidated = false;
    establecimientos_pendiente = false;
-   
+   rechazarTramite = false;
+
    tarifarioResponse: Tariff[] = [];
    tarifarioRack = {cabecera: [], valores: []};
    currentPagePays = 1;
@@ -441,6 +443,71 @@ export class CoordinadorComponent implements OnInit {
    return filteredData;
   }
 
+  aceptarTramite() {
+    Swal.fire({
+      title: 'Confirmación',
+      text: '¿Está seguro de Aprobar el resultado emitido por el Técnico Zonal?',
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Si, continuar',
+      cancelButtonText: 'No, cancelar',
+      reverseButtons: true
+    }).then((result) => {
+      if (result.value) {
+        Swal.fire(
+          'Aprobado!',
+          'El resultado emitido por el Técnico Zonal ha sido aprobado',
+          'success'
+        );
+        this.registerApprovalInspector.value = true;
+      } else if (
+        result.dismiss === Swal.DismissReason.cancel
+      ) {
+        Swal.fire(
+          'Cancelado',
+          '',
+          'error'
+        );
+      }
+    });
+  }
+
+  confirmarRechazoTramite() {
+     if(this.registerApprovalInspector.notes == '') {
+      this.toastr.errorToastr('Debe indicar la justificación para la devolución del trámite.', 'Rechazo de Trámite');
+      return;
+    }
+   Swal.fire({
+      title: 'Confirmación',
+      text: '¿Está seguro de Rechazar el resultado emitido por el Técnico Zonal?',
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Si, continuar',
+      cancelButtonText: 'No, cancelar',
+      reverseButtons: true
+    }).then((result) => {
+      if (result.value) {
+        Swal.fire(
+          'Rechazado!',
+          'El resultado emitido por el Técnico Zonal ha sido rechazado y devuelto al Técnico Zonal para su revisión',
+          'success'
+        );
+      } else if (
+        result.dismiss === Swal.DismissReason.cancel
+      ) {
+        Swal.fire(
+          'Cancelado',
+          '',
+          'error'
+        );
+      }
+    });
+  }
+
+  rechazarCheck() {
+   this.registerApprovalInspector.notes = '';
+  }
+
   changeSortPays(data: any, config: any): any {
    if (!config.sorting) {
      return data;
@@ -752,6 +819,7 @@ export class CoordinadorComponent implements OnInit {
    this.isAssigned = true;
    this.registerApprovalInspector.id_user = this.inspectorSelectedId;
    this.registerApprovalInspector.date_assigment = new Date();
+   this.registerApprovalInspector.notes = '';
    this.approvalStateDataService.put(this.registerApprovalInspector).then( r => {
       const newRegisterState = new RegisterState();
       newRegisterState.justification = 'Técinco Sonal asignado en la fecha ' + this.registerApprovalInspector.date_assigment.toDateString();
