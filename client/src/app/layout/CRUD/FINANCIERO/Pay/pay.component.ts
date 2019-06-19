@@ -85,9 +85,9 @@ export class PayComponent implements OnInit {
    toCSV() {
       this.payDataService.get().then( r => {
          const backupData = r as Pay[];
-         let output = 'id;amount_payed;amount_to_pay;pay_date;payed;code;max_pay_date;ruc_id\n';
+         let output = 'id;amount_payed;amount_to_pay;pay_date;payed;code;max_pay_date;ruc_id;amount_to_pay_taxes;amount_to_pay_base;amount_to_pay_fines;notes\n';
          backupData.forEach(element => {
-            output += element.id + ';' + element.amount_payed + ';' + element.amount_to_pay + ';' + element.pay_date + ';' + element.payed + ';' + element.code + ';' + element.max_pay_date + ';' + element.ruc_id + '\n';
+            output += element.id; + element.amount_payed + ';' + element.amount_to_pay + ';' + element.pay_date + ';' + element.payed + ';' + element.code + ';' + element.max_pay_date + ';' + element.ruc_id + ';' + element.amount_to_pay_taxes + ';' + element.amount_to_pay_base + ';' + element.amount_to_pay_fines + ';' + element.notes + '\n';
          });
          const blob = new Blob([output], { type: 'text/plain' });
          const fecha = new Date();
@@ -111,7 +111,7 @@ export class PayComponent implements OnInit {
    }
 
    openDialog(content) {
-      this.modalService.open(content, { centered: true }).result.then(( response => {
+      this.modalService.open(content, { centered: true , size: 'lg' }).result.then(( response => {
          if ( response === 'Guardar click' ) {
             if (typeof this.paySelected.id === 'undefined') {
                this.payDataService.post(this.paySelected).then( r => {

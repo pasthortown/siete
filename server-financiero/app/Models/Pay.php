@@ -12,7 +12,7 @@ class Pay extends Model
      * @var array
      */
     protected $fillable = [
-       'amount_payed','amount_to_pay','pay_date','payed','code','max_pay_date','ruc_id',
+       'amount_payed','amount_to_pay','pay_date','payed','code','max_pay_date','ruc_id','amount_to_pay_taxes','amount_to_pay_base','amount_to_pay_fines','notes',
     ];
 
     /**

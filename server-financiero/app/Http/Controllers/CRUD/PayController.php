@@ -108,6 +108,10 @@ class PayController extends Controller
           $pay->code = $result['code'];
           $pay->max_pay_date = $result['max_pay_date'];
           $pay->ruc_id = $result['ruc_id'];
+          $pay->amount_to_pay_taxes = $result['amount_to_pay_taxes'];
+          $pay->amount_to_pay_base = $result['amount_to_pay_base'];
+          $pay->amount_to_pay_fines = $result['amount_to_pay_fines'];
+          $pay->notes = $result['notes'];
           $pay->save();
           DB::commit();
        } catch (Exception $e) {
@@ -129,6 +133,10 @@ class PayController extends Controller
              'code'=>$result['code'],
              'max_pay_date'=>$result['max_pay_date'],
              'ruc_id'=>$result['ruc_id'],
+             'amount_to_pay_taxes'=>$result['amount_to_pay_taxes'],
+             'amount_to_pay_base'=>$result['amount_to_pay_base'],
+             'amount_to_pay_fines'=>$result['amount_to_pay_fines'],
+             'notes'=>$result['notes'],
           ]);
           DB::commit();
        } catch (Exception $e) {
@@ -172,6 +180,10 @@ class PayController extends Controller
              'code'=>$result['code'],
              'max_pay_date'=>$result['max_pay_date'],
              'ruc_id'=>$result['ruc_id'],
+             'amount_to_pay_taxes'=>$result['amount_to_pay_taxes'],
+             'amount_to_pay_base'=>$result['amount_to_pay_base'],
+             'amount_to_pay_fines'=>$result['amount_to_pay_fines'],
+             'notes'=>$result['notes'],
            ]);
          } else {
           $pay = new Pay();
@@ -183,6 +195,10 @@ class PayController extends Controller
           $pay->code = $result['code'];
           $pay->max_pay_date = $result['max_pay_date'];
           $pay->ruc_id = $result['ruc_id'];
+          $pay->amount_to_pay_taxes = $result['amount_to_pay_taxes'];
+          $pay->amount_to_pay_base = $result['amount_to_pay_base'];
+          $pay->amount_to_pay_fines = $result['amount_to_pay_fines'];
+          $pay->notes = $result['notes'];
           $pay->save();
          }
        }
