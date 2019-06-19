@@ -1162,58 +1162,59 @@ getDeclarationItems() {
  }
 
  getRuc(number: String) {
-  this.rucDataService.get_filtered(number).then( r => {
-     if ( typeof r.Ruc === 'undefined') {
-        this.ruc_registro_selected.ruc = new Ruc();
-        this.ruc_registro_selected.ruc.establishments = [];
-        this.ruc_registro_selected.ruc.number = number;
-        this.ruc_registro_selected.ruc.contact_user = new User();
-        this.imContactRuc = (this.ruc_registro_selected.ruc.contact_user.id == this.user.id);
-        this.ruc_registro_selected.ruc.establishmentsSRI = [];
-        this.ruc_registro_selected.ruc.establishments = [];
-        this.ruc_registro_selected.ruc.group_given = new GroupGiven();
-        this.ruc_registro_selected.ruc.person_representative = new PersonRepresentative();
-        this.ruc_registro_selected.ruc.tax_payer_type_id = 0;
-        this.ruc_registro_selected.ruc.contact_user_id = 0;
-        this.imContactRuc = true;
-        this.checkImContactRuc();
-        this.checkRuc();
-     } else {
-        this.ruc_registro_selected.ruc = r.Ruc as Ruc;
-        this.ruc_registro_selected.ruc.establishments = [];
-        this.ruc_registro_selected.ruc.contact_user = r.contact_user as User;
-        this.imContactRuc = (this.ruc_registro_selected.ruc.contact_user.id == this.user.id);
-        if (r.group_given == '0') {
-           this.ruc_registro_selected.ruc.group_given = new GroupGiven();
-        } else {
-           this.ruc_registro_selected.ruc.group_given = r.group_given as GroupGiven;
-           this.group_types = [];
-           this.group_typeDataService.get().then( r => {
-              this.group_types = r as GroupType[];
-              this.setGroupTypeSelected(this.ruc_registro_selected.ruc.group_given.group_type_id);
-           }).catch( e => console.log(e) );
-        }
-        if (r.person_representative == '0') {
-           this.ruc_registro_selected.ruc.person_representative = new PersonRepresentative();
-        } else {
-           this.ruc_registro_selected.ruc.person_representative = r.person_representative as PersonRepresentative;
-        }
-        this.ruc_registro_selected.ruc.person_representative_attachment = new PersonRepresentativeAttachment();
-        this.getPersonRepresentativeAttachment(this.ruc_registro_selected.ruc.number);
-        this.checkRuc();
-        this.getPays();
-        this.checkImContactRuc();
-        if (!this.imContactRuc) {
-           this.checkCedula();
-        }
-        this.checkEmail();
-        this.checkTelefonoPrincipal();
-        this.checkTelefonoSecundario();
-        this.checkIdentificationRepresentant();
-        this.getEstablishmentsOnRuc(this.currentPageEstablishment);
-     }
-  }).catch( e => { console.log(e); });
- }
+   this.rucDataService.get_filtered(number).then( r => {
+      if ( typeof r.Ruc === 'undefined') {
+         this.ruc_registro_selected.ruc = new Ruc();
+         this.ruc_registro_selected.ruc.establishments = [];
+         this.ruc_registro_selected.ruc.number = number;
+         this.ruc_registro_selected.ruc.contact_user = new User();
+         this.ruc_registro_selected.ruc.establishments = [];
+         this.ruc_registro_selected.ruc.group_given = new GroupGiven();
+         this.ruc_registro_selected.ruc.person_representative = new PersonRepresentative();
+         this.ruc_registro_selected.ruc.tax_payer_type_id = 0;
+         this.ruc_registro_selected.ruc.contact_user_id = 0;
+         this.ruc_registro_selected.ruc.person_representative.identification = this.user.identification;
+         this.checkIdentificationRepresentant();
+         this.checkRuc();
+      } else {
+         this.ruc_registro_selected.ruc = r.Ruc as Ruc;
+         this.getPays();
+         this.getRegistersOnRuc();
+         this.ruc_registro_selected.ruc.establishments = [];
+         this.ruc_registro_selected.ruc.contact_user = r.contact_user as User;
+         if (r.group_given == '0') {
+            this.ruc_registro_selected.ruc.group_given = new GroupGiven();
+         } else {
+            this.ruc_registro_selected.ruc.group_given = r.group_given as GroupGiven;
+            this.group_types = [];
+            this.group_typeDataService.get().then( r => {
+               this.group_types = r as GroupType[];
+               this.setGroupTypeSelected(this.ruc_registro_selected.ruc.group_given.group_type_id);
+            }).catch( e => console.log(e) );
+         }
+         if (r.person_representative == '0') {
+            this.ruc_registro_selected.ruc.person_representative = new PersonRepresentative();
+         } else {
+            this.ruc_registro_selected.ruc.person_representative = r.person_representative as PersonRepresentative;
+         }
+         this.ruc_registro_selected.ruc.person_representative_attachment = new PersonRepresentativeAttachment();
+         if(this.ruc_registro_selected.ruc.tax_payer_type_id > 1) {
+            this.getPersonRepresentativeAttachment(this.ruc_registro_selected.ruc.number);
+         }
+         this.consumoCedula = false;
+         this.consumoCedulaEstablishmentContact = false;
+         this.consumoRuc = false;
+         this.consumoCedulaRepresentanteLegal = false;
+         this.SRIOK = false;
+         this.REGCIVILOK = false;
+         this.REGCIVILOKEstablishment = false;
+         this.REGCIVILREPRESENTANTELEGALOK = false;
+         this.checkRuc();
+         this.checkIdentificationRepresentant();
+         this.getEstablishmentsOnRuc(this.currentPageEstablishment);
+      }
+   }).catch( e => { console.log(e); });
+  }
 
  selectPay(pay: Pay) {
    this.pay = pay;
