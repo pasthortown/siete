@@ -76,6 +76,11 @@
   <div class="col-12">
     <h4>Resultado de la Inspección</h4>
   </div>
+  <div class="col-12 mt-3" *ngIf="registerApprovalInspector.notes != '' && !rechazarTramite">
+    <strong>Motivo de devolución</strong>
+      <div class="alert alert-info" role="alert" [innerHTML]="registerApprovalInspector.notes">
+      </div>
+  </div>
   <div class="col-12">
       <label>Formulario de Requisitos (Check List)</label>
       <div class="input-group mb-3">
@@ -137,7 +142,7 @@
     </div>
   </div>
   <div class="col-12 text-center mb-3">
-      <input type="checkbox" name="vacacionesCheck" id="vacacionesCheck" value="Bike" [(ngModel)]="estoyVacaciones"> Devolver el trámite seleccionado
+      <input type="checkbox" name="vacacionesCheck" id="vacacionesCheck" value="Bike" [(ngModel)]="estoyVacaciones" (change)= "rechazarCheck()"> Devolver el trámite seleccionado
   </div>
   <div class="col-12 mt-5 mb-2" *ngIf="estoyVacaciones">
     <label class="col-form-label">Motivo de la devolución del trámite</label>

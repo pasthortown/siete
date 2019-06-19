@@ -117,7 +117,7 @@ export class CoordinadorComponent implements OnInit {
    franchiseChainNameValidated = false;
    establecimientos_pendiente = false;
    rechazarTramite = false;
-
+   digito = '';
    tarifarioResponse: Tariff[] = [];
    tarifarioRack = {cabecera: [], valores: []};
    currentPagePays = 1;
@@ -459,7 +459,22 @@ export class CoordinadorComponent implements OnInit {
           'El resultado emitido por el Técnico Zonal ha sido aprobado',
           'success'
         );
-        this.registerApprovalInspector.value = true;
+        this.registerApprovalCoordinador.id_user = this.user.id;
+        this.registerApprovalCoordinador.notes = '';
+        const today = new Date();
+        this.registerApprovalCoordinador.date_assigment = today;
+        this.registerApprovalCoordinador.date_fullfill = today;
+        this.registerApprovalCoordinador.value = this.registerApprovalInspector.value;
+        this.approvalStateDataService.put(this.registerApprovalCoordinador).then( r => {
+          const newRegisterState = new RegisterState();
+          newRegisterState.justification = 'Coordinador Zonal aprueba el estado de inspección en la fecha ' + this.registerApprovalCoordinador.date_assigment.toDateString();
+          newRegisterState.register_id = this.idRegister;
+          newRegisterState.state_id = this.stateTramiteId;
+          this.registerStateDataService.post(newRegisterState).then( r1 => {
+             this.toastr.successToastr('Aprobado el Estado de la Inspección Satisfactoriamente.', 'Aprobación de Coordinador Zonal');
+             this.refresh();
+          }).catch( e => { console.log(e); });
+        }).catch( e => { console.log(e); });
       } else if (
         result.dismiss === Swal.DismissReason.cancel
       ) {
@@ -492,6 +507,19 @@ export class CoordinadorComponent implements OnInit {
           'El resultado emitido por el Técnico Zonal ha sido rechazado y devuelto al Técnico Zonal para su revisión',
           'success'
         );
+        this.isAssigned = true;
+        this.registerApprovalInspector.id_user = this.inspectorSelectedId;
+        this.registerApprovalInspector.date_assigment = new Date();
+        this.approvalStateDataService.put(this.registerApprovalInspector).then( r => {
+          const newRegisterState = new RegisterState();
+          newRegisterState.justification = 'Técinco Zonal asignado en la fecha ' + this.registerApprovalInspector.date_assigment.toDateString();
+          newRegisterState.register_id = this.idRegister;          
+          newRegisterState.state_id = this.stateTramiteId - 6;
+          this.registerStateDataService.post(newRegisterState).then( r1 => {
+             this.toastr.successToastr('Técinco Zonal Asignado Satisfactoriamente.', 'Asignación de Técinco Zonal');
+             this.refresh();
+          }).catch( e => { console.log(e); });
+        }).catch( e => { console.log(e); });
       } else if (
         result.dismiss === Swal.DismissReason.cancel
       ) {
@@ -822,11 +850,11 @@ export class CoordinadorComponent implements OnInit {
    this.registerApprovalInspector.notes = '';
    this.approvalStateDataService.put(this.registerApprovalInspector).then( r => {
       const newRegisterState = new RegisterState();
-      newRegisterState.justification = 'Técinco Sonal asignado en la fecha ' + this.registerApprovalInspector.date_assigment.toDateString();
+      newRegisterState.justification = 'Técinco Zonal asignado en la fecha ' + this.registerApprovalInspector.date_assigment.toDateString();
       newRegisterState.register_id = this.idRegister;
       newRegisterState.state_id = this.stateTramiteId + 3;
       this.registerStateDataService.post(newRegisterState).then( r1 => {
-         this.toastr.successToastr('Técinco Sonal Asignado Satisfactoriamente.', 'Asignación de Técinco Sonal');
+         this.toastr.successToastr('Técinco Zonal Asignado Satisfactoriamente.', 'Asignación de Técinco Zonal');
          this.refresh();
       }).catch( e => { console.log(e); });
    }).catch( e => { console.log(e); });
@@ -848,11 +876,11 @@ export class CoordinadorComponent implements OnInit {
      this.registerApprovalInspector.date_assigment = null;
      this.approvalStateDataService.put(this.registerApprovalInspector).then( r => {
       const newRegisterState = new RegisterState();
-      newRegisterState.justification = 'Técinco Sonal removido en la fecha ' + today.toDateString();
+      newRegisterState.justification = 'Técinco Zonal removido en la fecha ' + today.toDateString();
       newRegisterState.register_id =  this.idRegister;
       newRegisterState.state_id = this.stateTramiteId - 3;
       this.registerStateDataService.post(newRegisterState).then( r1 => {
-         this.toastr.warningToastr('Técinco Sonal Removido Satisfactoriamente.', 'Asignación de Técinco Sonal');
+         this.toastr.warningToastr('Técinco Zonal Removido Satisfactoriamente.', 'Asignación de Técinco Zonal');
          this.refresh();
       }).catch( e => { console.log(e); });
      }).catch( e => { console.log(e); });
@@ -1373,6 +1401,8 @@ export class CoordinadorComponent implements OnInit {
          this.selectRegisterMintur(element);
          const registerState = this.getRegisterState(element.states.state_id);
          this.stateTramiteId = element.states.state_id;
+         const estado: String = this.stateTramiteId.toString();
+         this.digito = estado.substring(estado.length-1, estado.length);
          this.stateTramite = 0;
          this.canSave = true;
          if (registerState.search('Aprobado') == 0) {
@@ -1409,6 +1439,16 @@ export class CoordinadorComponent implements OnInit {
   checkAttachments() {
    this.hasRequisites = false;
    this.hasInform = false;
+   if (this.registerMinturSelected.states.state_id == 11 ||
+      this.registerMinturSelected.states.state_id == 21 ||
+      this.registerMinturSelected.states.state_id == 31 ||
+      this.registerMinturSelected.states.state_id == 41 ||
+      this.registerMinturSelected.states.state_id == 51 ||
+      this.registerMinturSelected.states.state_id == 61
+      ) {
+      this.hasRequisites = false;
+      return;
+   }
    this.approvalStateAttachmentDataService.get_by_register_id(this.idRegister).then( r => {
       r.forEach(approvalStateAttachment => {
          if (approvalStateAttachment.approval_state_attachment_file_name.search('Informe') == 0) {
@@ -1565,7 +1605,6 @@ export class CoordinadorComponent implements OnInit {
   selectRegisterMintur(item: any) {
    this.registerMinturSelected = item;
    this.mostrarDataRegisterMintur = true;
-   //AQUI
    this.getRuc(this.registerMinturSelected.ruc.number);
    this.groupTypeSelected = new GroupType();
   }

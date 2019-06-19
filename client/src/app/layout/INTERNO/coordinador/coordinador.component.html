@@ -77,7 +77,7 @@
     <label class="col-form-label">Técnico Zonal Asignado</label>
     <div class="input-group mb-3">
       <div class="input-group-prepend">
-        <button [disabled]="inspectorSelectedId == 0  || isAssigned || hasRequisites" type="button" title="Asignar" class="btn btn-success" (click)="asignarInspector()"><span class="fas fa-user-plus"></span></button>
+        <button [disabled]="inspectorSelectedId == 0 || isAssigned || hasRequisites" type="button" title="Asignar" class="btn btn-success" (click)="asignarInspector()"><span class="fas fa-user-plus"></span></button>
         <button [disabled]="!isAssigned || hasRequisites" type="button" title="Remover" class="btn btn-danger" (click)="desasignarInspector()"><span class="fas fa-user-minus"></span></button>
       </div>
       <select [disabled]="isAssigned" class="form-control" id="idInspector" name="idInspector" [(ngModel)]="inspectorSelectedId">
@@ -86,7 +86,7 @@
       </select>
     </div>
   </div>
-  <div class="col-12 mt-3" *ngIf="registerApprovalInspector.notes != '' && !rechazarTramite">
+  <div class="col-12 mt-3" *ngIf="registerApprovalInspector.notes != '' && !rechazarTramite && registerMinturSelected.states.state_id != 14">
     <strong>Motivo de devolución</strong>
       <div class="alert alert-info" role="alert" [innerHTML]="registerApprovalInspector.notes">
       </div>
@@ -104,28 +104,38 @@
     <div class="col-12" *ngIf="hasInform">
       <small><strong>Fecha de Inspección:</strong>&nbsp;<i>2019-05-04</i></small>
     </div>
-    <div class="col-12 text-center mb-3" *ngIf="isAssigned && !registerApprovalInspector.value">
+    <div class="col-12" *ngIf="hasInform">
+      <small><strong>Estado Inspección:</strong>&nbsp;
+        <span class="badge badge-success" *ngIf="registerApprovalInspector.value">Aprobado</span> 
+        <span class="badge badge-danger" *ngIf="!registerApprovalInspector.value && hasInform">Rechazado</span> 
+      </small>
+    </div>
+    <div class="col-12 text-center mb-3" *ngIf="isAssigned && digito == '0' && registerApprovalCoordinador.id_user == 0">
         <button type="button" class="btn btn-success" title="Anterior"
           (click)="aceptarTramite()">
-          <i class="fas fa-check-double"></i>&nbsp;Aprobar
+          <i class="fas fa-check-double"></i>&nbsp;Aprobar Estado de Inspección&nbsp;
+          <b *ngIf="registerApprovalInspector.value">Aprobado</b> 
+          <b *ngIf="!registerApprovalInspector.value && hasInform">Rechazado</b>
         </button>
     </div>
-    <div class="col-12 text-center mb-3" *ngIf="isAssigned && !registerApprovalInspector.value">
+    <div class="col-12 text-center mb-3" *ngIf="isAssigned && digito == '0' && registerApprovalCoordinador.id_user == 0">
         <input type="checkbox" name="vacacionesCheck" id="vacacionesCheck" value="Bike" [(ngModel)]="rechazarTramite" (change)="rechazarCheck()"> Rechazar y devolver traḿite
     </div>
-    <div class="col-12 mt-5 mb-2" *ngIf="rechazarTramite && !registerApprovalInspector.value">
+    <div class="col-12 mt-5 mb-2" *ngIf="rechazarTramite && digito == '0' && registerApprovalCoordinador.id_user == 0">
       <label class="col-form-label">Motivo de rechazo y devolución del trámite</label>
       <ck-editor id="notes" name="notes" skin="moono-lisa" [(ngModel)]="registerApprovalInspector.notes"></ck-editor>
     </div>
-    <div class="col-12 text-center" *ngIf="isAssigned && !registerApprovalInspector.value">
+    <div class="col-12 text-center" *ngIf="isAssigned && digito == '0' && registerApprovalCoordinador.id_user == 0">
         <button type="button" class="btn btn-danger" title="Cancelar Cambios" (click)="
             confirmarRechazoTramite()
           " *ngIf="rechazarTramite">
-          <i class="fas fa-trash"></i>&nbsp;Rechazar
+          <i class="fas fa-trash"></i>&nbsp;Rechazar Estado de Inspección&nbsp;
+          <b *ngIf="registerApprovalInspector.value">Aprobado</b> 
+          <b *ngIf="!registerApprovalInspector.value && hasInform">Rechazado</b>
         </button>
     </div>
   </div>
-  <div class="col-12" *ngIf="registerApprovalInspector.value">
+  <div class="col-12" *ngIf="registerApprovalCoordinador.id_user != 0">
       <label class="col-form-label">Técnico Financiero Asignado</label>
       <div class="input-group mb-3">
         <div class="input-group-prepend">

@@ -1274,7 +1274,7 @@ export class InspectorComponent implements OnInit {
   }
 
   validateNotesInspection(): Boolean {
-   return this.registerApprovalInspector.notes.length > 4;
+     return this.report.background.length > 4 && this.report.conclution.length > 4 && this.report.recomendation.length > 4 && this.report.actions_done.length > 4;
   }
   
   validateInspectionInfo(): Boolean {
@@ -1337,6 +1337,10 @@ export class InspectorComponent implements OnInit {
    return !(this.requisitosApprovalStateAttachment.approval_state_attachment_file_name == '');
   }
 
+  rechazarCheck() {
+   this.registerApprovalInspector.notes = '';
+  }
+
   validateInformeFile(): Boolean {
    return !(this.informeApprovalStateAttachment.approval_state_attachment_file_name == '');
   }
@@ -1360,7 +1364,7 @@ export class InspectorComponent implements OnInit {
       if (result.value) {
          const today = new Date();
          if ( this.inspectionState == 1) {
-            this.registerApprovalInspector.value = false;
+            this.registerApprovalInspector.value = true;
             if (digito == '4') {
                this.newRegisterState.state_id = this.stateTramiteId + 6;
             }
@@ -1421,6 +1425,7 @@ export class InspectorComponent implements OnInit {
          }
          this.newRegisterState.justification = 'Resultados de la Inspección cargados en la fecha ' + new Date(this.registerApprovalInspector.date_fullfill).toDateString();
          this.newRegisterState.register_id = this.registerApprovalInspector.register_id;
+         this.registerApprovalInspector.notes = '';
          this.report.approval_state_id = this.registerApprovalInspector.id;
          if (this.report.id == 0) {
             this.approvalStateReportDataService.post(this.report).then().catch( e => { console.log(e); });
@@ -1440,6 +1445,7 @@ export class InspectorComponent implements OnInit {
                      'El resultado del trámite ha sido almacenado',
                      'success'
                   );
+                  this.refresh();
                }).catch( e => { console.log(e); });
             } else {
                this.approvalStateAttachmentDataService.put(this.requisitosApprovalStateAttachment).then( r2 => {
@@ -1449,6 +1455,7 @@ export class InspectorComponent implements OnInit {
                      'El resultado del trámite ha sido almacenado',
                      'success'
                   );
+                  this.refresh();
                }).catch( e => { console.log(e); });
             }
             if (this.informeApprovalStateAttachment.id == 0) {
