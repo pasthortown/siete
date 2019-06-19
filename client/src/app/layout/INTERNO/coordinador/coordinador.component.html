@@ -168,14 +168,14 @@
     </div>
   </div>
 </div>
-<div class="row" *ngIf="registerApprovalInspector.value && registerApprovalFinanciero.notes != ''">
+<div class="row" *ngIf="registerApprovalInspector.value && registerApprovalFinanciero.notes != '' && mostrarDataRegisterMintur">
   <div class="col-12">
       <label>Estado del Trámite</label>
       <select class="form-control" id="stateTramite" name="stateTramite" [(ngModel)]="stateTramite">
         <option value="0" selected>Pendiente</option>
-        <option value="1" selected>Aprobado</option>
-        <option value="2" selected>Negado</option>
-        <option value="3" selected>Entregado</option>
+        <option value="1" selected>Solicitud Aprobada</option>
+        <option value="2" selected>Solicitud Rechazada</option>
+        <option value="3" selected>Documentación Entregada</option>
       </select>
   </div>
   <div class="col-12 mt-3 mb-2">

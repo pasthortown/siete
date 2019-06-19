@@ -1405,13 +1405,18 @@ export class CoordinadorComponent implements OnInit {
          this.digito = estado.substring(estado.length-1, estado.length);
          this.stateTramite = 0;
          this.canSave = true;
-         if (registerState.search('Aprobado') == 0) {
+         if (registerState.search('Solicitud Aprobada') == 0) {
             this.stateTramite = 1;
             this.hasRegisterReady = true;
             this.canSave = false;
          }
-         if (registerState.search('Negado') == 0) {
+         if (registerState.search('Solicitud Rechazada') == 0) {
             this.stateTramite = 2;
+            this.hasRegisterReady = false;
+            this.canSave = false;
+         }
+         if (registerState.search('Documentación Entregada') == 0) {
+            this.stateTramite = 3;
             this.hasRegisterReady = false;
             this.canSave = false;
          }
@@ -1591,6 +1596,7 @@ export class CoordinadorComponent implements OnInit {
      this.approvalStateDataService.put(this.registerApprovalCoordinador).then( r => {
         this.registerDataService.set_register_code(code, this.idRegister).then( r => {
          this.toastr.successToastr('Datos Guardados Satisfactoriamente', 'Coordinación');
+         this.refresh();
         }).catch( e => { console.log(e); });
      }).catch( e => { console.log(e); });
   }
@@ -1610,7 +1616,7 @@ export class CoordinadorComponent implements OnInit {
   }
 
   imprimirRegistro() {
-
+   alert('imprimir');
   }
 
   validateGroupGivenTipe(): Boolean {
@@ -1662,6 +1668,7 @@ export class CoordinadorComponent implements OnInit {
    this.consumoCedulaEstablishmentContact = false;
    this.consumoRuc = false;
    this.consumoCedulaRepresentanteLegal = false;
+   this.mostrarDataRegisterMintur = false;
    this.SRIOK = false;
    this.REGCIVILOK = false;
    this.REGCIVILOKEstablishment = false;
