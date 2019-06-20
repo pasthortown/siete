@@ -573,7 +573,10 @@ export class CoordinadorComponent implements OnInit {
         {title: 'Código', name: 'code'},
         {title: 'Estado', name: 'state'},
         {title: 'Valor Pagado', name: 'amount_payed'},
-        {title: 'Valor a Pagar', name: 'amount_to_pay'},
+        {title: 'Valor a Pagar - Base', name: 'amount_to_pay_base'},
+        {title: 'Valor a Pagar - Multas', name: 'amount_to_pay_fines'},
+        {title: 'Valor a Pagar - Impuestos', name: 'amount_to_pay_taxes'},
+        {title: 'Valor a Pagar - Total', name: 'amount_to_pay'},
         {title: 'Fecha de Pago', name: 'pay_date'}
      ];
      const data = [];
@@ -581,6 +584,9 @@ export class CoordinadorComponent implements OnInit {
          let state = '';
          let amount_payed = '';
          let amount_to_pay = '';
+         let amount_to_pay_base = '';
+         let amount_to_pay_fines = '';
+         let amount_to_pay_taxes = '';
          if (item.payed) {
             state = '<span class="badge badge-success">Pagado</span>';
          } else {
@@ -589,6 +595,9 @@ export class CoordinadorComponent implements OnInit {
          if (item.amount_payed != -1) {
             amount_payed = item.amount_payed.toString() + ' USD';
          }
+         amount_to_pay_base = item.amount_to_pay_base.toString() + ' USD';
+         amount_to_pay_fines = item.amount_to_pay_fines.toString() + ' USD';
+         amount_to_pay_taxes = item.amount_to_pay_taxes.toString() + ' USD';
          amount_to_pay = item.amount_to_pay.toString() + ' USD';
          let payDate = '';
          if (item.pay_date == null || typeof item.pay_date == 'undefined') {
@@ -600,6 +609,9 @@ export class CoordinadorComponent implements OnInit {
             code: item.code,
             state: state,
             amount_payed: amount_payed,
+            amount_to_pay_base: amount_to_pay_base,
+            amount_to_pay_fines: amount_to_pay_fines,
+            amount_to_pay_taxes: amount_to_pay_taxes,
             amount_to_pay: amount_to_pay,
             pay_date: payDate,
          });
