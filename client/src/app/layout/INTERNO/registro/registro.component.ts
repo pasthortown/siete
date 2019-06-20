@@ -95,6 +95,7 @@ import { EstablishmentCertificationAttachmentService } from 'src/app/services/CR
 import { RegisterService } from 'src/app/services/CRUD/ALOJAMIENTO/register.service';
 import { RegisterStateService } from 'src/app/services/CRUD/ALOJAMIENTO/registerstate.service';
 import { ReceptionRoom } from 'src/app/models/ALOJAMIENTO/ReceptionRoom';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-registro',
@@ -106,7 +107,8 @@ export class RegistroComponent implements OnInit {
    @ViewChild('EstablishmentCertificationAttachedFile') EstablishmentCertificationAttachedFile;
    @ViewChild('pasos') pasosTabSet;
    @ViewChild('pasosSuperiores') pasosSuperioresTabSet;
-
+   idTramiteEstadoFilter = 0;
+   tramite = '-';
    tabActive = 'paso1';
    tabActiveSuperior = 'tab1';
    selectedNameType: RucNameType = new RucNameType();
@@ -114,7 +116,8 @@ export class RegistroComponent implements OnInit {
    salaRecepciones: ReceptionRoom = new ReceptionRoom();
    franchiseChainNameValidated = false;
    establecimientos_pendiente = false;
-   
+   rechazarTramite = false;
+   digito = '';
    tarifarioResponse: Tariff[] = [];
    tarifarioRack = {cabecera: [], valores: []};
    currentPagePays = 1;
@@ -356,6 +359,25 @@ export class RegistroComponent implements OnInit {
    this.getTramiteStates();
   }
 
+  filterByTramiteState(tramite?: String) {
+     let filtroTexto: String = '';
+     this.estados_tramites.forEach(estado => {
+        if (estado.id == this.idTramiteEstadoFilter) {
+         filtroTexto = estado.name;
+        }
+     });
+     if(typeof tramite !== 'undefined') {
+        if (tramite == '-') {
+         this.config.filtering = {filterString: filtroTexto};
+        } else {
+         this.config.filtering = {filterString: filtroTexto + ' - ' + tramite};
+        }
+     } else {
+      this.config.filtering = {filterString: filtroTexto};
+     }
+     this.onChangeTable(this.config);
+  }
+
   editableTramiteRequerido(): Boolean {
    if (this.estado_tramite_selected_code == '1' || this.estado_tramite_selected_code == '9') {
       return true;
@@ -421,6 +443,99 @@ export class RegistroComponent implements OnInit {
    return filteredData;
   }
 
+  aceptarTramite() {
+    Swal.fire({
+      title: 'Confirmación',
+      text: '¿Está seguro de Aprobar el resultado emitido por el Técnico Zonal?',
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Si, continuar',
+      cancelButtonText: 'No, cancelar',
+      reverseButtons: true
+    }).then((result) => {
+      if (result.value) {
+        Swal.fire(
+          'Aprobado!',
+          'El resultado emitido por el Técnico Zonal ha sido aprobado',
+          'success'
+        );
+        this.registerApprovalCoordinador.id_user = this.user.id;
+        this.registerApprovalCoordinador.notes = '';
+        const today = new Date();
+        this.registerApprovalCoordinador.date_assigment = today;
+        this.registerApprovalCoordinador.date_fullfill = today;
+        this.registerApprovalCoordinador.value = this.registerApprovalInspector.value;
+        this.approvalStateDataService.put(this.registerApprovalCoordinador).then( r => {
+          const newRegisterState = new RegisterState();
+          newRegisterState.justification = 'Coordinador Zonal aprueba el estado de inspección en la fecha ' + this.registerApprovalCoordinador.date_assigment.toDateString();
+          newRegisterState.register_id = this.idRegister;
+          newRegisterState.state_id = this.stateTramiteId;
+          this.registerStateDataService.post(newRegisterState).then( r1 => {
+             this.toastr.successToastr('Aprobado el Estado de la Inspección Satisfactoriamente.', 'Aprobación de Coordinador Zonal');
+             this.refresh();
+          }).catch( e => { console.log(e); });
+        }).catch( e => { console.log(e); });
+      } else if (
+        result.dismiss === Swal.DismissReason.cancel
+      ) {
+        Swal.fire(
+          'Cancelado',
+          '',
+          'error'
+        );
+      }
+    });
+  }
+
+  confirmarRechazoTramite() {
+     if(this.registerApprovalInspector.notes == '') {
+      this.toastr.errorToastr('Debe indicar la justificación para la devolución del trámite.', 'Rechazo de Trámite');
+      return;
+    }
+   Swal.fire({
+      title: 'Confirmación',
+      text: '¿Está seguro de Rechazar el resultado emitido por el Técnico Zonal?',
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Si, continuar',
+      cancelButtonText: 'No, cancelar',
+      reverseButtons: true
+    }).then((result) => {
+      if (result.value) {
+        Swal.fire(
+          'Rechazado!',
+          'El resultado emitido por el Técnico Zonal ha sido rechazado y devuelto al Técnico Zonal para su revisión',
+          'success'
+        );
+        this.isAssigned = true;
+        this.registerApprovalInspector.id_user = this.inspectorSelectedId;
+        this.registerApprovalInspector.date_assigment = new Date();
+        this.approvalStateDataService.put(this.registerApprovalInspector).then( r => {
+          const newRegisterState = new RegisterState();
+          newRegisterState.justification = 'Técinco Zonal asignado en la fecha ' + this.registerApprovalInspector.date_assigment.toDateString();
+          newRegisterState.register_id = this.idRegister;          
+          newRegisterState.state_id = this.stateTramiteId - 6;
+          this.registerStateDataService.post(newRegisterState).then( r1 => {
+             this.toastr.successToastr('Técinco Zonal Asignado Satisfactoriamente.', 'Asignación de Técinco Zonal');
+             this.refresh();
+          }).catch( e => { console.log(e); });
+        }).catch( e => { console.log(e); });
+      } else if (
+        result.dismiss === Swal.DismissReason.cancel
+      ) {
+        Swal.fire(
+          'Cancelado',
+          '',
+          'error'
+        );
+      }
+    });
+  }
+
+  rechazarCheck() {
+   this.registerApprovalInspector.notes = '';
+  }
+
   changeSortPays(data: any, config: any): any {
    if (!config.sorting) {
      return data;
@@ -454,56 +569,56 @@ export class RegistroComponent implements OnInit {
   }
 
   buildDataTablePays() {
-   this.columnsPays = [
-      {title: 'Código', name: 'code'},
-      {title: 'Estado', name: 'state'},
-      {title: 'Valor Pagado', name: 'amount_payed'},
-      {title: 'Valor a Pagar - Base', name: 'amount_to_pay_base'},
-      {title: 'Valor a Pagar - Multas', name: 'amount_to_pay_fines'},
-      {title: 'Valor a Pagar - Impuestos', name: 'amount_to_pay_taxes'},
-      {title: 'Valor a Pagar - Total', name: 'amount_to_pay'},
-      {title: 'Fecha de Pago', name: 'pay_date'}
-   ];
-   const data = [];
-   this.pays.forEach(item => {
-       let state = '';
-       let amount_payed = '';
-       let amount_to_pay = '';
-       let amount_to_pay_base = '';
-       let amount_to_pay_fines = '';
-       let amount_to_pay_taxes = '';
-       if (item.payed) {
-          state = '<span class="badge badge-success">Pagado</span>';
-       } else {
-          state = '<span class="badge badge-danger">Pago Pendiente</span>';
-       }
-       if (item.amount_payed != -1) {
-          amount_payed = item.amount_payed.toString() + ' USD';
-       }
-       amount_to_pay_base = item.amount_to_pay_base.toString() + ' USD';
-       amount_to_pay_fines = item.amount_to_pay_fines.toString() + ' USD';
-       amount_to_pay_taxes = item.amount_to_pay_taxes.toString() + ' USD';
-       amount_to_pay = item.amount_to_pay.toString() + ' USD';
-       let payDate = '';
-       if (item.pay_date == null || typeof item.pay_date == 'undefined') {
-          payDate = '';
-       } else {
-          payDate = item.pay_date.toString();
-       }
-       data.push({
-          code: item.code,
-          state: state,
-          amount_payed: amount_payed,
-          amount_to_pay_base: amount_to_pay_base,
-          amount_to_pay_fines: amount_to_pay_fines,
-          amount_to_pay_taxes: amount_to_pay_taxes,
-          amount_to_pay: amount_to_pay,
-          pay_date: payDate,
-       });
-   });
-   this.dataPays = data;
-   this.onChangeTablePays(this.config);
-}
+     this.columnsPays = [
+        {title: 'Código', name: 'code'},
+        {title: 'Estado', name: 'state'},
+        {title: 'Valor Pagado', name: 'amount_payed'},
+        {title: 'Valor a Pagar - Base', name: 'amount_to_pay_base'},
+        {title: 'Valor a Pagar - Multas', name: 'amount_to_pay_fines'},
+        {title: 'Valor a Pagar - Impuestos', name: 'amount_to_pay_taxes'},
+        {title: 'Valor a Pagar - Total', name: 'amount_to_pay'},
+        {title: 'Fecha de Pago', name: 'pay_date'}
+     ];
+     const data = [];
+     this.pays.forEach(item => {
+         let state = '';
+         let amount_payed = '';
+         let amount_to_pay = '';
+         let amount_to_pay_base = '';
+         let amount_to_pay_fines = '';
+         let amount_to_pay_taxes = '';
+         if (item.payed) {
+            state = '<span class="badge badge-success">Pagado</span>';
+         } else {
+            state = '<span class="badge badge-danger">Pago Pendiente</span>';
+         }
+         if (item.amount_payed != -1) {
+            amount_payed = item.amount_payed.toString() + ' USD';
+         }
+         amount_to_pay_base = item.amount_to_pay_base.toString() + ' USD';
+         amount_to_pay_fines = item.amount_to_pay_fines.toString() + ' USD';
+         amount_to_pay_taxes = item.amount_to_pay_taxes.toString() + ' USD';
+         amount_to_pay = item.amount_to_pay.toString() + ' USD';
+         let payDate = '';
+         if (item.pay_date == null || typeof item.pay_date == 'undefined') {
+            payDate = '';
+         } else {
+            payDate = item.pay_date.toString();
+         }
+         data.push({
+            code: item.code,
+            state: state,
+            amount_payed: amount_payed,
+            amount_to_pay_base: amount_to_pay_base,
+            amount_to_pay_fines: amount_to_pay_fines,
+            amount_to_pay_taxes: amount_to_pay_taxes,
+            amount_to_pay: amount_to_pay,
+            pay_date: payDate,
+         });
+     });
+     this.dataPays = data;
+     this.onChangeTablePays(this.config);
+  }
 
   onCellClickPays(event) {
   }
@@ -744,13 +859,14 @@ export class RegistroComponent implements OnInit {
    this.isAssigned = true;
    this.registerApprovalInspector.id_user = this.inspectorSelectedId;
    this.registerApprovalInspector.date_assigment = new Date();
+   this.registerApprovalInspector.notes = '';
    this.approvalStateDataService.put(this.registerApprovalInspector).then( r => {
       const newRegisterState = new RegisterState();
-      newRegisterState.justification = 'Inspector asignado en la fecha ' + this.registerApprovalInspector.date_assigment.toDateString();
+      newRegisterState.justification = 'Técinco Zonal asignado en la fecha ' + this.registerApprovalInspector.date_assigment.toDateString();
       newRegisterState.register_id = this.idRegister;
       newRegisterState.state_id = this.stateTramiteId + 3;
       this.registerStateDataService.post(newRegisterState).then( r1 => {
-         this.toastr.successToastr('Inspector Asignado Satisfactoriamente.', 'Asignación de Inspector');
+         this.toastr.successToastr('Técinco Zonal Asignado Satisfactoriamente.', 'Asignación de Técinco Zonal');
          this.refresh();
       }).catch( e => { console.log(e); });
    }).catch( e => { console.log(e); });
@@ -772,11 +888,11 @@ export class RegistroComponent implements OnInit {
      this.registerApprovalInspector.date_assigment = null;
      this.approvalStateDataService.put(this.registerApprovalInspector).then( r => {
       const newRegisterState = new RegisterState();
-      newRegisterState.justification = 'Inspector removido en la fecha ' + today.toDateString();
+      newRegisterState.justification = 'Técinco Zonal removido en la fecha ' + today.toDateString();
       newRegisterState.register_id =  this.idRegister;
       newRegisterState.state_id = this.stateTramiteId - 3;
       this.registerStateDataService.post(newRegisterState).then( r1 => {
-         this.toastr.warningToastr('Inspector Removido Satisfactoriamente.', 'Asignación de Inspector');
+         this.toastr.warningToastr('Técinco Zonal Removido Satisfactoriamente.', 'Asignación de Técinco Zonal');
          this.refresh();
       }).catch( e => { console.log(e); });
      }).catch( e => { console.log(e); });
@@ -1297,15 +1413,22 @@ export class RegistroComponent implements OnInit {
          this.selectRegisterMintur(element);
          const registerState = this.getRegisterState(element.states.state_id);
          this.stateTramiteId = element.states.state_id;
+         const estado: String = this.stateTramiteId.toString();
+         this.digito = estado.substring(estado.length-1, estado.length);
          this.stateTramite = 0;
          this.canSave = true;
-         if (registerState.search('Aprobado') == 0) {
+         if (registerState.search('Solicitud Aprobada') == 0) {
             this.stateTramite = 1;
             this.hasRegisterReady = true;
             this.canSave = false;
          }
-         if (registerState.search('Negado') == 0) {
+         if (registerState.search('Solicitud Rechazada') == 0) {
             this.stateTramite = 2;
+            this.hasRegisterReady = false;
+            this.canSave = false;
+         }
+         if (registerState.search('Documentación Entregada') == 0) {
+            this.stateTramite = 3;
             this.hasRegisterReady = false;
             this.canSave = false;
          }
@@ -1333,6 +1456,16 @@ export class RegistroComponent implements OnInit {
   checkAttachments() {
    this.hasRequisites = false;
    this.hasInform = false;
+   if (this.registerMinturSelected.states.state_id == 11 ||
+      this.registerMinturSelected.states.state_id == 21 ||
+      this.registerMinturSelected.states.state_id == 31 ||
+      this.registerMinturSelected.states.state_id == 41 ||
+      this.registerMinturSelected.states.state_id == 51 ||
+      this.registerMinturSelected.states.state_id == 61
+      ) {
+      this.hasRequisites = false;
+      return;
+   }
    this.approvalStateAttachmentDataService.get_by_register_id(this.idRegister).then( r => {
       r.forEach(approvalStateAttachment => {
          if (approvalStateAttachment.approval_state_attachment_file_name.search('Informe') == 0) {
@@ -1475,6 +1608,7 @@ export class RegistroComponent implements OnInit {
      this.approvalStateDataService.put(this.registerApprovalCoordinador).then( r => {
         this.registerDataService.set_register_code(code, this.idRegister).then( r => {
          this.toastr.successToastr('Datos Guardados Satisfactoriamente', 'Coordinación');
+         this.refresh();
         }).catch( e => { console.log(e); });
      }).catch( e => { console.log(e); });
   }
@@ -1489,13 +1623,12 @@ export class RegistroComponent implements OnInit {
   selectRegisterMintur(item: any) {
    this.registerMinturSelected = item;
    this.mostrarDataRegisterMintur = true;
-   //AQUI
    this.getRuc(this.registerMinturSelected.ruc.number);
    this.groupTypeSelected = new GroupType();
   }
 
   imprimirRegistro() {
-
+   alert('imprimir');
   }
 
   validateGroupGivenTipe(): Boolean {
@@ -1547,6 +1680,7 @@ export class RegistroComponent implements OnInit {
    this.consumoCedulaEstablishmentContact = false;
    this.consumoRuc = false;
    this.consumoCedulaRepresentanteLegal = false;
+   this.mostrarDataRegisterMintur = false;
    this.SRIOK = false;
    this.REGCIVILOK = false;
    this.REGCIVILOKEstablishment = false;
@@ -1569,6 +1703,8 @@ export class RegistroComponent implements OnInit {
    this.getRegiones();
    this.getEstablishmentCertificationTypesCategories();
    this.getComplementaryServiceTypeCategories();
+   this.getInspectores();
+   this.getFinancieros();
    this.groupTypeSelected = new GroupType();
   }
 
@@ -2566,6 +2702,10 @@ guardarDeclaracion() {
   }
 
   guardarEstablecimiento() {
+   if (this.cantonEstablishmentSelectedCode == '2.17.1') {
+      this.toastr.errorToastr('Estimado Usuario, para solicitar el Certificado de Registro de Turismo de establecimientos ubicados en el Cantón Quito, por favor acercarse a las oficinas de "Quito Turismo"', 'Nuevo');
+      return;
+   }
    if (!this.validateWorkers()) {
       this.toastr.errorToastr('Existe conflicto con la información ingresada referente a los Trabajadores en el Establecimiento.', 'Nuevo');
       return;
