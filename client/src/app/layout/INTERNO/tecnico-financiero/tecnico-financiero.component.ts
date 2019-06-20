@@ -1161,6 +1161,10 @@ getDeclarationItems() {
   }).catch( e => { console.log(e); });
  }
 
+ actualizarValorPagar(pay: Pay) {
+    pay.amount_to_pay = (pay.amount_to_pay_base*1) + (pay.amount_to_pay_fines*1) + (pay.amount_to_pay_taxes*1);
+ }
+
  getRuc(number: String) {
    this.rucDataService.get_filtered(number).then( r => {
       if ( typeof r.Ruc === 'undefined') {
@@ -1222,6 +1226,7 @@ getDeclarationItems() {
 
  getPays() {
    this.payDataService.get_by_ruc_id(this.ruc_registro_selected.ruc.id).then( r => {
+      console.log(r);
       this.pays = r as Pay[];
       if (this.pays.length == 0) {
          this.pay = new Pay();

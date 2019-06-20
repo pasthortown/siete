@@ -83,7 +83,10 @@
                     <th>Código</th>
                     <th>Estado</th>
                     <th>Valor Pagado</th>
-                    <th>Valor a Pagar</th>
+                    <th>Valor a Pagar - Base</th>
+                    <th>Valor a Pagar - Multas</th>
+                    <th>Valor a Pagar - Impuestos</th>
+                    <th>Valor a Pagar - Total</th>
                     <th>Fecha de Pago</th>
                  </tr>
               </thead>
@@ -93,6 +96,9 @@
                     <td>{{paySelected.code}}</td>
                     <td><span class="badge badge-success" *ngIf="paySelected.payed">Pagado</span><span class="badge badge-danger" *ngIf="!paySelected.payed">No Pagado</span></td>
                     <td><strong *ngIf="paySelected.amount_payed != -1">{{paySelected.amount_payed}}</strong></td>
+                    <td>{{paySelected.amount_to_pay_base}}</td>
+                    <td>{{paySelected.amount_to_pay_fines}}</td>
+                    <td>{{paySelected.amount_to_pay_taxes}}</td>
                     <td>{{paySelected.amount_to_pay}}</td>
                     <td>{{paySelected.pay_date}}</td>
                  </tr>
@@ -101,21 +107,37 @@
         </div>
      </div>
       <div class="row" *ngIf="mostrarDataRegisterMintur">
-        <div class="col-6">
-            <label>Valor a Pagar</label>
+        <div class="col-3">
+            <label>Valor a Pagar - Base</label>
             <div class="input-group">
-              <input type="number" [disabled]="pay.payed" class="form-control" id="declarationValueToPay" name="declarationValueToPay" placeholder="Valor a Pagar" [(ngModel)]="pay.amount_to_pay" step="0.01">
+              <input type="number" [disabled]="pay.payed" class="form-control" (input)="actualizarValorPagar(pay)" id="declarationValueToPayBase" name="declarationValueToPayBase" placeholder="Valor a Pagar - Base" [(ngModel)]="pay.amount_to_pay_base" step="0.01">
               <div class="input-group-append">
                 <span class="input-group-text">USD</span>
               </div>
             </div>
         </div>
-        <div class="col-6">
-          <label>Estado</label>
-          <div class="col-12">
-            <label class="switch"><input type="checkbox" id="payed" name="payed"
-                [(ngModel)]="pay.payed" disabled /><span
-                class="slider round"></span></label>
+        <div class="col-3">
+          <label>Valor a Pagar - Multas</label>
+          <div class="input-group">
+            <input type="number" [disabled]="pay.payed" class="form-control" (input)="actualizarValorPagar(pay)" id="declarationValueToPayFines" name="declarationValueToPayFines" placeholder="Valor a Pagar - Multas" [(ngModel)]="pay.amount_to_pay_fines" step="0.01">
+            <div class="input-group-append">
+              <span class="input-group-text">USD</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-3">
+          <label>Valor a Pagar - Impuestos</label>
+          <div class="input-group">
+            <input type="number" [disabled]="pay.payed" class="form-control" (input)="actualizarValorPagar(pay)" id="declarationValueToPayTaxes" name="declarationValueToPayTaxes" placeholder="Valor a Pagar - Impuestos" [(ngModel)]="pay.amount_to_pay_taxes" step="0.01">
+            <div class="input-group-append">
+              <span class="input-group-text">USD</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-3">
+          <label>Valor a Pagar - Total</label>
+          <div class="input-group">
+            <h3><strong>{{pay.amount_to_pay | number: '1.2'}} USD</strong></h3>
           </div>
         </div>
       </div>

@@ -20,6 +20,7 @@ export class Pay {
       this.amount_to_pay_taxes = 0;
       this.amount_to_pay_base = 0;
       this.amount_to_pay_fines = 0;
+      this.amount_to_pay = 0;
       this.notes = '';
    }
 }
