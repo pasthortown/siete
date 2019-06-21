@@ -319,6 +319,17 @@ const routes: Routes = [
             path: 'tarifario-rack',
             loadChildren: './EXTERNO/registro/registro.module#RegistroModule'
          },
+
+         //DINARDAP
+
+         {
+            path: 'dinardap-ruc',
+            loadChildren: './CRUD/DINARDAP/Ruc/ruc.module#RucModule'
+         },
+         {
+            path: 'dinardap-identification',
+            loadChildren: './CRUD/DINARDAP/Identification/identification.module#IdentificationModule'
+         },
          {
             path: '**',
             redirectTo: 'not-found'
