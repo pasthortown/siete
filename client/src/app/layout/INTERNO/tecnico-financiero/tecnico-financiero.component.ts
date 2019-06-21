@@ -87,7 +87,7 @@ import { EstablishmentCertificationAttachmentService } from 'src/app/services/CR
 import { RegisterService } from 'src/app/services/CRUD/ALOJAMIENTO/register.service';
 import { RegisterStateService } from 'src/app/services/CRUD/ALOJAMIENTO/registerstate.service';
 import { StateDeclaration } from 'src/app/models/FINANCIERO/StateDeclaration';
-
+import Swal from 'sweetalert2';
 import { StateService as StateAlojamientoService } from 'src/app/services/CRUD/ALOJAMIENTO/state.service';
 import { State as StateAlojamiento } from 'src/app/models/ALOJAMIENTO/State';
 @Component({
@@ -114,6 +114,7 @@ export class TecnicoFinancieroComponent implements OnInit {
   hasInform  = false;
   hasRequisites = false;
   inspectionState = 0;
+  estoyVacaciones = false;
   declarationApprovalStateAttachment: ApprovalStateAttachment = new ApprovalStateAttachment();
   payApprovalStateAttachment: ApprovalStateAttachment = new ApprovalStateAttachment();
   newRegisterState: RegisterState = new RegisterState();
@@ -363,6 +364,55 @@ export class TecnicoFinancieroComponent implements OnInit {
   filteredData = tempArray;
   return filteredData;
  }
+
+ rechazarCheck() {
+   this.registerApprovalFinanciero.notes = '';
+ }
+
+ devolverVacaciones() {
+   if(this.registerApprovalFinanciero.notes == '') {
+     this.toastr.errorToastr('Debe indicar la justificación para la devolución del trámite.', 'Devolución por Vacaciones / Fuera de Oficina');
+     return;
+   }
+ Swal.fire({
+    title: 'Confirmación',
+    text: '¿Está seguro de devolver el trámite al Coordinador Zonal?, Recuerde que al hacerlo, la solicitud volverá a la Bandeja del Coordinador Zonal para una nueva asignación.',
+    type: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Si, continuar',
+    cancelButtonText: 'No, cancelar',
+    reverseButtons: true
+  }).then((result) => {
+    if (result.value) {
+      Swal.fire(
+        'Trámite Devuelto!',
+        'La solicitud ha sido devuelta al Coordinador Zonal',
+        'success'
+      );
+      this.registerApprovalFinanciero.id_user = 0;
+      this.registerApprovalFinanciero.date_assigment = null;
+      this.registerApprovalFinanciero.notes = '<strong>' + this.user.name + ':</strong> ' + this.registerApprovalFinanciero.notes;
+      this.approvalStateDataService.put(this.registerApprovalFinanciero).then( r => {
+          const newRegisterState = new RegisterState();
+          newRegisterState.justification = 'El Técnico Financiero no se encuentra disponible por Vacaciones / Fuera de Oficina';
+          newRegisterState.register_id =  this.idRegister;
+          newRegisterState.state_id = this.stateTramiteId + 3;
+          this.registerStateDataService.post(newRegisterState).then( r1 => {
+             this.toastr.warningToastr('Trámite devuelto al Coordinador Zonal, Satisfactoriamente.', 'Devolución por Vacaciones / Fuera de Oficina');
+             this.refresh();
+          }).catch( e => { console.log(e); });
+      }).catch( e => { console.log(e); });
+    } else if (
+      result.dismiss === Swal.DismissReason.cancel
+    ) {
+      Swal.fire(
+        'Cancelado',
+        '',
+        'error'
+      );
+    }
+  });
+}
 
  changeSortEstablishment(data: any, config: any): any {
   if (!config.sorting) {
@@ -1025,6 +1075,7 @@ export class TecnicoFinancieroComponent implements OnInit {
    this.ruc_registro_selected = new RegistroDataCarrier();
    this.pay = new Pay();
    this.pays = [];
+   this.estoyVacaciones = false;
    this.getDeclarationStates();
    this.getInspectores();
    this.getFinancieros();

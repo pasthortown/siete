@@ -902,6 +902,7 @@ export class CoordinadorComponent implements OnInit {
    this.isAssignedFinancial = true;
    this.registerApprovalFinanciero.id_user = this.financialSelectedId;
    this.registerApprovalFinanciero.date_assigment = new Date();
+   this.registerApprovalFinanciero.notes = '';
    this.approvalStateDataService.put(this.registerApprovalFinanciero).then( r => {
       const newRegisterState = new RegisterState();
       newRegisterState.justification = 'Técnico Financiero asignado en la fecha ' + this.registerApprovalFinanciero.date_assigment.toDateString();

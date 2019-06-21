@@ -48,6 +48,16 @@
           </ngb-pagination>
         </div>
       </div>
+      <div class="col-12 text-center mb-3">
+        <input type="checkbox" name="vacacionesCheck" id="vacacionesCheck" value="Bike" [(ngModel)]="estoyVacaciones" (change)= "rechazarCheck()"> Devolver el trámite seleccionado
+      </div>
+      <div class="col-12 mt-5 mb-2" *ngIf="estoyVacaciones">
+        <label class="col-form-label">Motivo de la devolución del trámite</label>
+        <ck-editor id="notes" name="notes" skin="moono-lisa" [(ngModel)]="registerApprovalFinanciero.notes"></ck-editor>
+      </div>
+      <div class="col-12 text-center mb-3">
+        <button type="button" class="btn btn-info" *ngIf="estoyVacaciones" title="Devolver a Coordinador Zonal" (click)="devolverVacaciones()"><i class="fas fa-couch"></i> Devolver a Coordinador Zonal</button>
+      </div>
       <div class="row" *ngIf="mostrarDataRegisterMintur">
         <div class="col-12">
           <h4>Órdenes de Pagos</h4>

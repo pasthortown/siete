@@ -148,6 +148,11 @@
         </select>
       </div>
   </div>
+  <div class="col-12 mt-3" *ngIf="registerApprovalFinanciero.notes != '' && !rechazarTramite && registerMinturSelected.states.state_id != 17">
+    <strong>Motivo de devolución</strong>
+      <div class="alert alert-info" role="alert" [innerHTML]="registerApprovalFinanciero.notes">
+      </div>
+  </div>
   <div class="col-12" *ngIf="isAssignedFinancial">
     <div class="col-12" *ngIf="isAssignedFinancial">
       <small><strong>Fecha de Asignación:</strong>&nbsp;<i>{{registerApprovalFinanciero.date_assigment | date:'y-MM-dd'}}</i></small>
