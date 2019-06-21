@@ -9,7 +9,7 @@ import { Ruc } from './../../../models/DINARDAP/Ruc';
 })
 export class RucService {
 
-   url = environment.api_dinardap + 'ruc/';
+   url = environment.api_dinardap + 'ruc_data/';
    options = new RequestOptions();
 
    constructor(private http: Http, private router: Router) {

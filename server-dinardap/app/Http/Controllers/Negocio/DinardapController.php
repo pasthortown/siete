@@ -12,13 +12,13 @@ class DinardapController extends Controller
   public function Cedula(Request $request) {
     $data = $request->json()->all();
     $respuesta = $this->httpPost(env('API_DINARDAP').'cedula', json_encode(['numeroIdentificacion'=>$data['numeroIdentificacion']]), null, null);
-    return response()->json($respuesta,200);
+    return response()->json(json_decode($respuesta),200);
   }
 
   public function RUC(Request $request) {
     $data = $request->json()->all();
     $respuesta = $this->httpPost(env('API_DINARDAP').'ruc', json_encode(['numeroIdentificacion'=>$data['numeroIdentificacion']]), null, null);
-    return response()->json($respuesta,200);
+    return response()->json(json_decode($respuesta),200);
   }
 
   protected function httpPost($url, $data=NULL, $headers = NULL, $token) {

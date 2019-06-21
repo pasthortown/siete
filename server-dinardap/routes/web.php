@@ -28,28 +28,14 @@ $router->group(['middleware' => ['auth']], function () use ($router) {
 
    //DINARDAP
 
-   //CRUD ProfilePicture
-   $router->post('/profilepicture', ['uses' => 'ProfilePictureController@post']);
-   $router->get('/profilepicture', ['uses' => 'ProfilePictureController@get']);
-   $router->get('/profilepicture/paginate', ['uses' => 'ProfilePictureController@paginate']);
-   $router->put('/profilepicture', ['uses' => 'ProfilePictureController@put']);
-   $router->delete('/profilepicture', ['uses' => 'ProfilePictureController@delete']);
-
-   //CRUD User
-   $router->post('/user', ['uses' => 'UserController@post']);
-   $router->get('/user', ['uses' => 'UserController@get']);
-   $router->get('/user/paginate', ['uses' => 'UserController@paginate']);
-   $router->put('/user', ['uses' => 'UserController@put']);
-   $router->delete('/user', ['uses' => 'UserController@delete']);
-
    //CRUD Ruc
-   $router->post('/ruc', ['uses' => 'RucController@post']);
-   $router->get('/ruc', ['uses' => 'RucController@get']);
-   $router->get('/ruc/paginate', ['uses' => 'RucController@paginate']);
-   $router->get('/ruc/backup', ['uses' => 'RucController@backup']);
-   $router->put('/ruc', ['uses' => 'RucController@put']);
-   $router->delete('/ruc', ['uses' => 'RucController@delete']);
-   $router->post('/ruc/masive_load', ['uses' => 'RucController@masiveLoad']);
+   $router->post('/ruc_data', ['uses' => 'RucController@post']);
+   $router->get('/ruc_data', ['uses' => 'RucController@get']);
+   $router->get('/ruc_data/paginate', ['uses' => 'RucController@paginate']);
+   $router->get('/ruc_data/backup', ['uses' => 'RucController@backup']);
+   $router->put('/ruc_data', ['uses' => 'RucController@put']);
+   $router->delete('/ruc_data', ['uses' => 'RucController@delete']);
+   $router->post('/ruc_data/masive_load', ['uses' => 'RucController@masiveLoad']);
 
    //CRUD Identification
    $router->post('/identification', ['uses' => 'IdentificationController@post']);
