@@ -1940,6 +1940,10 @@ export class RegistroComponent implements OnInit {
   }
 
   guardarEstablecimiento() {
+   if (this.cantonEstablishmentSelectedCode == '2.17.1') {
+      this.toastr.errorToastr('Estimado Usuario, para solicitar el Certificado de Registro de Turismo de establecimientos ubicados en el Cantón Quito, por favor acercarse a las oficinas de "Quito Turismo"', 'Nuevo');
+      return;
+   }
    if (!this.validateWorkers()) {
       this.toastr.errorToastr('Existe conflicto con la información ingresada referente a los Trabajadores en el Establecimiento.', 'Nuevo');
       return;
