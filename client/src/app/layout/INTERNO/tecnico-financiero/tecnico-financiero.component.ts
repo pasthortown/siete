@@ -785,6 +785,8 @@ export class TecnicoFinancieroComponent implements OnInit {
       this.pay.pay_date = null;
       this.pay.code = this.ruc_registro_selected.ruc.number.substring(0, 10) + this.pays.length.toString();
       this.pay.payed = false;
+
+      //AQUI
       this.payDataService.post(this.pay).then( r => {
          this.toastr.successToastr('Información Guardada Satisfactoriamente', 'Revisión, Técnico Financiero');
          this.getPays();
@@ -1109,7 +1111,7 @@ export class TecnicoFinancieroComponent implements OnInit {
       this.ubications = r as Ubication[];
    }).catch( e => { console.log(e); });
   }
-  
+
  getInspectores() {
   this.inspectores = [];
   this.userDataService.get_by_rol('5').then( r => {

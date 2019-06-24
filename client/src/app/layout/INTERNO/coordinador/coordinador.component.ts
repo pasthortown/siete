@@ -868,7 +868,6 @@ export class CoordinadorComponent implements OnInit {
       this.registerStateDataService.post(newRegisterState).then( r1 => {
       }).catch( e => { console.log(e); });
    }).catch( e => { console.log(e); });
-
    const today = new Date();
    let clasificacion: String = '';
    let categoria: String = '';
@@ -945,10 +944,74 @@ export class CoordinadorComponent implements OnInit {
   }
 
   desasignarInspector() {
+   const today = new Date();
+   let clasificacion: String = '';
+   let categoria: String = '';
+   let category: RegisterType = new RegisterType();
+   this.register_types.forEach(element => {
+      if (this.registerMinturSelected.register.register_type_id == element.id) {
+         category = element;
+         categoria = element.name;
+      }
+   });
+   this.register_types.forEach(element => {
+      if (category.father_code == element.code) {
+         clasificacion = element.name;
+      }
+   });
+   let parroquiaName: String = '';
+   let parroquia: Ubication = new Ubication();
+   this.ubications.forEach(element => {
+      if (element.id == this.registerMinturSelected.establishment.ubication_id) {
+         parroquiaName = element.name;
+         parroquia = element;
+      }
+   });
+   let cantonName: String = '';
+   let canton: Ubication = new Ubication();
+   this.ubications.forEach(element => {
+      if (element.code == parroquia.father_code) {
+         cantonName = element.name;
+         canton = element;
+      }
+   });
+   let provinciaName: String = '';
+   this.ubications.forEach(element => {
+      if (element.code == canton.father_code) {
+         provinciaName = element.name;
+      }
+   });
+   let inspector = new User();
+   this.inspectores.forEach(element => {
+      if (element.id == this.inspectorSelectedId) {
+         inspector = element;
+      }
+   });
+   const information = {
+      para: inspector.name,
+      tramite: 'Registro',
+      ruc: this.ruc_registro_selected.ruc.number,
+      nombreComercial: this.registerMinturSelected.establishment.commercially_known_name,
+      fechaSolicitud: today.toLocaleString(),
+      actividad: 'Alojamiento Turístico',
+      clasificacion: clasificacion,
+      categoria: categoria,
+      tipoSolicitud: 'Registro',
+      provincia: provinciaName,
+      canton: cantonName,
+      parroquia: parroquiaName,
+      callePrincipal: this.registerMinturSelected.establishment.address_main_street,
+      calleInterseccion: this.registerMinturSelected.establishment.address_secondary_street,
+      numeracion: this.registerMinturSelected.establishment.address_number,
+      thisYear:today.getFullYear()
+   };
+   this.mailerDataService.sendMail('desasignacion', inspector.email.toString(), 'Desasignación de trámite', information).then( r => {
+      this.toastr.warningToastr('Técinco Zonal Desasignado Satisfactoriamente.', 'Desasignación de Técinco Zonal');
+      this.refresh();
+   }).catch( e => { console.log(e); });
      this.isAssigned = false;
      this.inspectorSelectedId = 0;
      this.registerApprovalInspector.id_user = 0;
-     const today = new Date();
      this.registerApprovalInspector.date_assigment = null;
      this.approvalStateDataService.put(this.registerApprovalInspector).then( r => {
       const newRegisterState = new RegisterState();
@@ -956,8 +1019,6 @@ export class CoordinadorComponent implements OnInit {
       newRegisterState.register_id =  this.idRegister;
       newRegisterState.state_id = this.stateTramiteId - 3;
       this.registerStateDataService.post(newRegisterState).then( r1 => {
-         this.toastr.warningToastr('Técinco Zonal Removido Satisfactoriamente.', 'Asignación de Técinco Zonal');
-         this.refresh();
       }).catch( e => { console.log(e); });
      }).catch( e => { console.log(e); });
   }
@@ -973,8 +1034,6 @@ export class CoordinadorComponent implements OnInit {
       newRegisterState.register_id =  this.idRegister;
       newRegisterState.state_id = this.stateTramiteId - 3;
       this.registerStateDataService.post(newRegisterState).then( r1 => {
-         this.toastr.successToastr('Técnico Financiero Asignado Satisfactoriamente.', 'Asignación de Técnico Financiero');
-         this.refresh();
       }).catch( e => { console.log(e); });
    }).catch( e => { console.log(e); });
 
@@ -1040,27 +1099,90 @@ export class CoordinadorComponent implements OnInit {
       thisYear:today.getFullYear()
    };
    this.mailerDataService.sendMail('asignacion', financiero.email.toString(), 'Asignación de trámite para su revisión', information).then( r => {
-      this.toastr.successToastr('Técinco Zonal Asignado Satisfactoriamente.', 'Asignación de Técinco Zonal');
+      this.toastr.successToastr('Técinco Financiero Asignado Satisfactoriamente.', 'Asignación de Técinco Financiero');
       this.refresh();
    }).catch( e => { console.log(e); });
   }
 
   desasignarFinanciero() {
+   const today = new Date();
+   let clasificacion: String = '';
+   let categoria: String = '';
+   let category: RegisterType = new RegisterType();
+   this.register_types.forEach(element => {
+      if (this.registerMinturSelected.register.register_type_id == element.id) {
+         category = element;
+         categoria = element.name;
+      }
+   });
+   this.register_types.forEach(element => {
+      if (category.father_code == element.code) {
+         clasificacion = element.name;
+      }
+   });
+   let parroquiaName: String = '';
+   let parroquia: Ubication = new Ubication();
+   this.ubications.forEach(element => {
+      if (element.id == this.registerMinturSelected.establishment.ubication_id) {
+         parroquiaName = element.name;
+         parroquia = element;
+      }
+   });
+   let cantonName: String = '';
+   let canton: Ubication = new Ubication();
+   this.ubications.forEach(element => {
+      if (element.code == parroquia.father_code) {
+         cantonName = element.name;
+         canton = element;
+      }
+   });
+   let provinciaName: String = '';
+   this.ubications.forEach(element => {
+      if (element.code == canton.father_code) {
+         provinciaName = element.name;
+      }
+   });
+   let financiero = new User();
+   this.financieros.forEach(element => {
+      if (element.id == this.financialSelectedId) {
+         financiero = element;
+      }
+   });
+   const information = {
+      para: financiero.name,
+      tramite: 'Registro',
+      ruc: this.ruc_registro_selected.ruc.number,
+      nombreComercial: this.registerMinturSelected.establishment.commercially_known_name,
+      fechaSolicitud: today.toLocaleString(),
+      actividad: 'Alojamiento Turístico',
+      clasificacion: clasificacion,
+      categoria: categoria,
+      tipoSolicitud: 'Registro',
+      provincia: provinciaName,
+      canton: cantonName,
+      parroquia: parroquiaName,
+      callePrincipal: this.registerMinturSelected.establishment.address_main_street,
+      calleInterseccion: this.registerMinturSelected.establishment.address_secondary_street,
+      numeracion: this.registerMinturSelected.establishment.address_number,
+      thisYear:today.getFullYear()
+   };
+   this.mailerDataService.sendMail('desasignacion', financiero.email.toString(), 'Desasignación de trámite', information).then( r => {
+      this.toastr.warningToastr('Técnico Financiero Desasignado Satisfactoriamente.', 'Desasignación de Técnico Financiero');
+      this.refresh();
+   }).catch( e => { console.log(e); });
    this.isAssignedFinancial = false;
    this.financialSelectedId = 0;
    this.registerApprovalFinanciero.id_user = 0;
    this.registerApprovalFinanciero.date_assigment = null;
-   const today = new Date();
    this.approvalStateDataService.put(this.registerApprovalFinanciero).then( r => {
     const newRegisterState = new RegisterState();
     newRegisterState.justification = 'Técnico Financiero removido en la fecha ' + today.toDateString();
     newRegisterState.register_id =  this.idRegister;
     newRegisterState.state_id = this.stateTramiteId + 3;
     this.registerStateDataService.post(newRegisterState).then( r1 => {
-       this.toastr.warningToastr('Técnico Financiero Removido Satisfactoriamente.', 'Asignación de Técnico Financiero');
-       this.refresh();
     }).catch( e => { console.log(e); });
    }).catch( e => { console.log(e); });
+
   }
 
   changeFilterEstablishment(data: any, config: any): any {
