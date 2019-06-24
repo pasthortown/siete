@@ -1,3 +1,4 @@
+import { MailerService } from './../../../services/negocio/mailer.service';
 import { StateDeclarationService } from './../../../services/CRUD/FINANCIERO/statedeclaration.service';
 import { PayService } from './../../../services/CRUD/FINANCIERO/pay.service';
 import { ApprovalStateAttachmentService } from './../../../services/CRUD/ALOJAMIENTO/approvalstateattachment.service';
@@ -275,6 +276,7 @@ export class TecnicoFinancieroComponent implements OnInit {
  constructor(private toastr: ToastrManager,
              private approvalStateDataService: ApprovalStateService,
              private consultorDataService: ConsultorService,
+             private mailerDataService: MailerService,
              private payDataService: PayService,
              private userDataService: UserService,
              private dinardapDataService: DinardapService,
@@ -785,8 +787,20 @@ export class TecnicoFinancieroComponent implements OnInit {
       this.pay.pay_date = null;
       this.pay.code = this.ruc_registro_selected.ruc.number.substring(0, 10) + this.pays.length.toString();
       this.pay.payed = false;
+      const today = new Date();
+      const information = {
+         para: 'inspector.name',//AQUI
+         amount_to_pay_base: this.pay.amount_to_pay_base,
+         amount_to_pay_fines: this.pay.amount_to_pay_fines,
+         amount_to_pay_taxes: this.pay.amount_to_pay_taxes,
+         amount_to_pay: this.pay.amount_to_pay,
+         thisYear: today.getFullYear()
+      };
+      this.mailerDataService.sendMail('rechazo_informe_tz', 'inspector.email'.toString(), 'Rechazo y reasignación de trámite para su revisión', information).then( r => {
+         this.toastr.successToastr('Técinco Zonal Asignado Satisfactoriamente.', 'Asignación de Técinco Zonal');
+         this.refresh();
+      }).catch( e => { console.log(e); });
 
-      //AQUI
       this.payDataService.post(this.pay).then( r => {
          this.toastr.successToastr('Información Guardada Satisfactoriamente', 'Revisión, Técnico Financiero');
          this.getPays();

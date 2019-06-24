@@ -12,6 +12,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { AgmCoreModule } from '@agm/core';
+import { MailerService } from './../../../services/negocio/mailer.service';
 import { environment } from 'src/environments/environment';
 import { CKEditorModule } from 'ngx-ckeditor';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -71,6 +72,7 @@ import { StateService as StateAlojamientoService } from 'src/app/services/CRUD/A
     ApprovalStateAttachmentService,
     DeclarationItemCategoryService,
     DeclarationService,
+    MailerService,
     RegisterStateService,
     TaxPayerTypeService,
     StateAlojamientoService,
