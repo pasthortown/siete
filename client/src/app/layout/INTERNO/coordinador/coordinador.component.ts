@@ -1939,8 +1939,6 @@ export class CoordinadorComponent implements OnInit {
      }).catch( e => { console.log(e); });
      this.approvalStateDataService.put(this.registerApprovalCoordinador).then( r => {
         this.registerDataService.set_register_code(code, this.idRegister).then( r => {
-         this.toastr.successToastr('Datos Guardados Satisfactoriamente', 'Coordinación');
-         this.refresh();
         }).catch( e => { console.log(e); });
      }).catch( e => { console.log(e); });
      if (!enviarMail) {
@@ -2025,8 +2023,8 @@ export class CoordinadorComponent implements OnInit {
             observaciones: observaciones,
             thisYear:today.getFullYear()
          };
-         this.mailerDataService.sendMail('asignacion', r.email.toString(), 'Asignación de trámite para su revisión', information).then( r => {
-            this.toastr.successToastr('Técinco Zonal Asignado Satisfactoriamente.', 'Asignación de Técinco Zonal');
+         this.mailerDataService.sendMail('fin_tramite_cz', r.email.toString(), 'Trámite Atendido', information).then( r => {
+            this.toastr.successToastr('Datos Guardados Satisfactoriamente', 'Coordinación');
             this.refresh();
          }).catch( e => { console.log(e); });
       }).catch( e => { console.log(e); });

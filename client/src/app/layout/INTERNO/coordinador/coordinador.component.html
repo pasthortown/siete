@@ -86,7 +86,7 @@
       </select>
     </div>
   </div>
-  <div class="col-12 mt-3" *ngIf="registerApprovalInspector.notes != '' && !rechazarTramite && registerMinturSelected.states.state_id != 14">
+  <div class="col-12 mt-3" *ngIf="registerApprovalInspector.notes != '' && !rechazarTramite && digito != '4'">
     <strong>Motivo de devolución</strong>
       <div class="alert alert-info" role="alert" [innerHTML]="registerApprovalInspector.notes">
       </div>
@@ -148,8 +148,8 @@
         </select>
       </div>
   </div>
-  <div class="col-12 mt-3" *ngIf="registerApprovalFinanciero.notes != '' && !rechazarTramite && registerMinturSelected.states.state_id != 17">
-    <strong>Motivo de devolución</strong>
+  <div class="col-12 mt-3" *ngIf="registerApprovalFinanciero.notes != '' && !registerApprovalFinanciero.value && !rechazarTramite && digito != '7' && digito != '8'">
+    <strong>Motivo de devolución de trámite</strong>
       <div class="alert alert-info" role="alert" [innerHTML]="registerApprovalFinanciero.notes">
       </div>
   </div>

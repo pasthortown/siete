@@ -1365,6 +1365,9 @@ export class InspectorComponent implements OnInit {
       this.toastr.errorToastr('Debe seleccionar un estado de la inspección', 'Inspección');
       return;
    }
+   let enviarEmailUsuario = false;
+   let prorroga15 = false;
+   let prorroga6 = false;
    Swal.fire({
       title: 'Confirmación',
       text: '¿Está seguro de confirmar el resultado del trámite a su cargo?',
@@ -1408,6 +1411,9 @@ export class InspectorComponent implements OnInit {
          }
          if ( this.inspectionState == 3) {
             this.registerApprovalInspector.value = false;
+            enviarEmailUsuario = true;
+            prorroga15 = true;
+            prorroga6 = false;
             if (digito == '4') {
                this.newRegisterState.state_id = this.stateTramiteId + 1;
             }
@@ -1423,6 +1429,9 @@ export class InspectorComponent implements OnInit {
          }
          if ( this.inspectionState == 4) {
             this.registerApprovalInspector.value = false;
+            enviarEmailUsuario = true;
+            prorroga15 = false;
+            prorroga6 = true;
             if (digito == '4') {
                this.newRegisterState.state_id = this.stateTramiteId + 2;
             }
@@ -1489,7 +1498,82 @@ export class InspectorComponent implements OnInit {
         );
       }
     });
-   
+    if (!enviarEmailUsuario) {
+      return;
+    }
+    const diaHoy = new Date();
+   let clasificacion: String = '';
+   let categoria: String = '';
+   let category: RegisterType = new RegisterType();
+   this.register_types.forEach(element => {
+      if (this.registerMinturSelected.register.register_type_id == element.id) {
+         category = element;
+         categoria = element.name;
+      }
+   });
+   this.register_types.forEach(element => {
+      if (category.father_code == element.code) {
+         clasificacion = element.name;
+      }
+   });
+   let parroquiaName: String = '';
+   let parroquia: Ubication = new Ubication();
+   this.ubications.forEach(element => {
+      if (element.id == this.registerMinturSelected.establishment.ubication_id) {
+         parroquiaName = element.name;
+         parroquia = element;
+      }
+   });
+   let cantonName: String = '';
+   let canton: Ubication = new Ubication();
+   this.ubications.forEach(element => {
+      if (element.code == parroquia.father_code) {
+         cantonName = element.name;
+         canton = element;
+      }
+   });
+   let provinciaName: String = '';
+   this.ubications.forEach(element => {
+      if (element.code == canton.father_code) {
+         provinciaName = element.name;
+      }
+   });
+   let prorroga = '';
+   if (prorroga15) {
+      prorroga = 'Prórroga de 15 días';
+   }
+   if (prorroga6) {
+      prorroga = 'Prórroga de 6 meses';
+   }
+   let observaciones = this.registerApprovalInspector.notes;
+   observaciones = observaciones.replace('<p>', '');
+   observaciones = observaciones.replace('</p>', '');
+   this.userDataService.get(this.registerMinturSelected.establishment.contact_user_id).then( r => {
+      const information = {
+         para: r.name,
+         tramite: 'Registro',
+         ruc: this.ruc_registro_selected.ruc.number,
+         nombreComercial: this.registerMinturSelected.establishment.commercially_known_name,
+         fechaSolicitud: diaHoy.toLocaleString(),
+         actividad: 'Alojamiento Turístico',
+         clasificacion: clasificacion,
+         categoria: categoria,
+         tipoSolicitud: 'Registro',
+         provincia: provinciaName,
+         canton: cantonName,
+         prorroga: prorroga,
+         parroquia: parroquiaName,
+         observaciones: observaciones,
+         callePrincipal: this.registerMinturSelected.establishment.address_main_street,
+         calleInterseccion: this.registerMinturSelected.establishment.address_secondary_street,
+         numeracion: this.registerMinturSelected.establishment.address_number,
+         thisYear:diaHoy.getFullYear()
+      };
+      this.mailerDataService.sendMail('prorroga', r.email.toString(), 'Prórroga en su Trámite', information).then( r => {
+         this.toastr.successToastr('Usuario Notificado Satisfactoriamente.', 'Notificación al Usuario');
+         this.refresh();
+      }).catch( e => { console.log(e); });
+   }).catch( e => {console.log(e); });
   }
 
   onCellClick(event) {
