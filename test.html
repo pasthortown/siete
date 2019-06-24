@@ -7,7 +7,7 @@
     </div>
 </div>
 <p>Estimado/a {{ $information['para'] }}:</p>
-<p>La solicitud de {{ $information['tramite'] }} ha sido {{ $information['estadoTramite'] }}, para mayor información contáctese con la Coordinación Zonal.</p>
+<p>Su solicitud de {{ $information['tramite'] }} se encuentra en <strong>{{ $information['prorroga'] }}</strong>. Para mayor información contáctese con la Coordinación Zonal.</p><br/>
 <h3>INFORMACIÓN DEL ESTABLECIMIENTO</h3>
 <table style="border-collapse: collapse;width: 100%;border: 1px solid #ddd;">
     <tbody>
@@ -33,9 +33,9 @@
             <th>Tipo de Solicitud:</th><td>{{ $information['tipoSolicitud'] }}</td><th></th><td></td>
         </tr>
     </tbody>
-</table><br/>
+</table>
 <h3>OBSERVACIONES</h3>
-<p>{{ $information['observaciones'] }}:</p><br/>
+<p>{{ $information['observaciones'] }}</p>
 <h3>INFORMACIÓN DE LA COORDINACIÓN ZONAL</h3>
 <table style="border-collapse: collapse;width: 100%;border: 1px solid #ddd;">
     <tbody>
