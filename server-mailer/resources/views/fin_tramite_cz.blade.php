@@ -7,7 +7,7 @@
     </div>
 </div>
 <p>Estimado/a {{ $information['para'] }}:</p>
-<p>La solicitud de {{ $information['tramite'] }} ha sido desasignada por su Coordinador Zonal, por favor revise su bandeja en la plataforma SITURIN.</p>
+<p>La solicitud de {{ $information['tramite'] }} ha sido {{ $information['estadoTramite'] }}, para mayor información contáctese con la Coordinación Zonal.</p>
 <h3>INFORMACIÓN DEL ESTABLECIMIENTO</h3>
 <table style="border-collapse: collapse;width: 100%;border: 1px solid #ddd;">
     <tbody>
@@ -31,6 +31,19 @@
         </tr>
         <tr style="background-color: #f2f2f2;">
             <th>Tipo de Solicitud:</th><td>{{ $information['tipoSolicitud'] }}</td><th></th><td></td>
+        </tr>
+    </tbody>
+</table><br/>
+<h3>OBSERVACIONES</h3>
+<p>{{ $information['observaciones'] }}:</p><br/>
+<h3>INFORMACIÓN DE LA COORDINACIÓN ZONAL</h3>
+<table style="border-collapse: collapse;width: 100%;border: 1px solid #ddd;">
+    <tbody>
+        <tr style="background-color: #f2f2f2;">
+            <th>Dirección:</th><td>{{ $information['czDireccion'] }}</td>
+        </tr>
+        <tr style="background-color: #f2f2f2;">
+            <th>Teléfono:</th><td>{{ $information['czTelefono'] }}</td>
         </tr>
     </tbody>
 </table>

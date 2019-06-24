@@ -516,10 +516,78 @@ export class CoordinadorComponent implements OnInit {
           newRegisterState.register_id = this.idRegister;          
           newRegisterState.state_id = this.stateTramiteId - 6;
           this.registerStateDataService.post(newRegisterState).then( r1 => {
-             this.toastr.successToastr('Técinco Zonal Asignado Satisfactoriamente.', 'Asignación de Técinco Zonal');
-             this.refresh();
           }).catch( e => { console.log(e); });
         }).catch( e => { console.log(e); });
+        const today = new Date();
+         let clasificacion: String = '';
+         let categoria: String = '';
+         let category: RegisterType = new RegisterType();
+         this.register_types.forEach(element => {
+            if (this.registerMinturSelected.register.register_type_id == element.id) {
+               category = element;
+               categoria = element.name;
+            }
+         });
+         this.register_types.forEach(element => {
+            if (category.father_code == element.code) {
+               clasificacion = element.name;
+            }
+         });
+         let parroquiaName: String = '';
+         let parroquia: Ubication = new Ubication();
+         this.ubications.forEach(element => {
+            if (element.id == this.registerMinturSelected.establishment.ubication_id) {
+               parroquiaName = element.name;
+               parroquia = element;
+            }
+         });
+         let cantonName: String = '';
+         let canton: Ubication = new Ubication();
+         this.ubications.forEach(element => {
+            if (element.code == parroquia.father_code) {
+               cantonName = element.name;
+               canton = element;
+            }
+         });
+         let provinciaName: String = '';
+         this.ubications.forEach(element => {
+            if (element.code == canton.father_code) {
+               provinciaName = element.name;
+            }
+         });
+         let inspector = new User();
+         this.inspectores.forEach(element => {
+            if (element.id == this.inspectorSelectedId) {
+               inspector = element;
+            }
+         });
+         let motivoRechazo = this.registerApprovalInspector.notes;
+         motivoRechazo = motivoRechazo.replace('<p>', '');
+         motivoRechazo = motivoRechazo.replace('</p>', '');
+         const information = {
+            para: inspector.name,
+            tramite: 'Registro',
+            motivoRechazo: motivoRechazo,
+            ruc: this.ruc_registro_selected.ruc.number,
+            nombreComercial: this.registerMinturSelected.establishment.commercially_known_name,
+            fechaSolicitud: today.toLocaleString(),
+            actividad: 'Alojamiento Turístico',
+            clasificacion: clasificacion,
+            categoria: categoria,
+            tipoSolicitud: 'Registro',
+            provincia: provinciaName,
+            canton: cantonName,
+            parroquia: parroquiaName,
+            callePrincipal: this.registerMinturSelected.establishment.address_main_street,
+            calleInterseccion: this.registerMinturSelected.establishment.address_secondary_street,
+            numeracion: this.registerMinturSelected.establishment.address_number,
+            thisYear:today.getFullYear()
+         };
+         this.mailerDataService.sendMail('rechazo_informe_tz', inspector.email.toString(), 'Rechazo y reasignación de trámite para su revisión', information).then( r => {
+            this.toastr.successToastr('Técinco Zonal Asignado Satisfactoriamente.', 'Asignación de Técinco Zonal');
+            this.refresh();
+         }).catch( e => { console.log(e); });
+         
       } else if (
         result.dismiss === Swal.DismissReason.cancel
       ) {
@@ -1009,18 +1077,18 @@ export class CoordinadorComponent implements OnInit {
       this.toastr.warningToastr('Técinco Zonal Desasignado Satisfactoriamente.', 'Desasignación de Técinco Zonal');
       this.refresh();
    }).catch( e => { console.log(e); });
-     this.isAssigned = false;
-     this.inspectorSelectedId = 0;
-     this.registerApprovalInspector.id_user = 0;
-     this.registerApprovalInspector.date_assigment = null;
-     this.approvalStateDataService.put(this.registerApprovalInspector).then( r => {
-      const newRegisterState = new RegisterState();
-      newRegisterState.justification = 'Técinco Zonal removido en la fecha ' + today.toDateString();
-      newRegisterState.register_id =  this.idRegister;
-      newRegisterState.state_id = this.stateTramiteId - 3;
-      this.registerStateDataService.post(newRegisterState).then( r1 => {
-      }).catch( e => { console.log(e); });
-     }).catch( e => { console.log(e); });
+   this.isAssigned = false;
+   this.inspectorSelectedId = 0;
+   this.registerApprovalInspector.id_user = 0;
+   this.registerApprovalInspector.date_assigment = null;
+   this.approvalStateDataService.put(this.registerApprovalInspector).then( r => {
+   const newRegisterState = new RegisterState();
+   newRegisterState.justification = 'Técinco Zonal removido en la fecha ' + today.toDateString();
+   newRegisterState.register_id =  this.idRegister;
+   newRegisterState.state_id = this.stateTramiteId - 3;
+   this.registerStateDataService.post(newRegisterState).then( r1 => {
+   }).catch( e => { console.log(e); });
+   }).catch( e => { console.log(e); });
   }
 
   asignarFinanciero() {
