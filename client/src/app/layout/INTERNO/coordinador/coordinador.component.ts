@@ -866,9 +866,67 @@ export class CoordinadorComponent implements OnInit {
       newRegisterState.register_id = this.idRegister;
       newRegisterState.state_id = this.stateTramiteId + 3;
       this.registerStateDataService.post(newRegisterState).then( r1 => {
-         this.toastr.successToastr('Técinco Zonal Asignado Satisfactoriamente.', 'Asignación de Técinco Zonal');
-         this.refresh();
       }).catch( e => { console.log(e); });
+   }).catch( e => { console.log(e); });
+
+   const today = new Date();
+   let clasificacion: String = '';
+   let categoria: String = '';
+   this.categories_registers.forEach(categorie_register => {
+      if (categorie_register.id == this.rucEstablishmentRegisterSelected.register_type_id) {
+         categoria = categorie_register.name;
+      }
+   });
+   this.clasifications_registers.forEach(clasification_register => {
+      if (clasification_register.code == this.categorySelectedCode) {
+         clasificacion = clasification_register.name;
+      }
+   });
+   let provinciaName: String = '';
+   this.provinciasEstablishment.forEach(element => {
+      if (element.code == this.provinciaEstablishmentSelectedCode) {
+         provinciaName = element.name;
+      }
+   });
+   let cantonName: String = '';
+   this.cantonesEstablishment.forEach(element => {
+      if (element.code == this.cantonEstablishmentSelectedCode) {
+         cantonName = element.name;
+      }
+   });
+   let parroquiaName: String = '';
+   this.parroquiasEstablishment.forEach(element => {
+      if (element.id == this.establishment_selected.ubication_id) {
+         parroquiaName = element.name;
+      }
+   });
+   let inspector = new User();
+   this.inspectores.forEach(element => {
+      if (element.id == this.inspectorSelectedId) {
+         inspector = element;
+      }
+   });
+   const information = {
+      para: inspector.name,
+      tramite: 'Registro',
+      ruc: this.ruc_registro_selected.ruc.number,
+      nombreComercial: this.establishment_selected.commercially_known_name,
+      fechaSolicitud: today.toLocaleString(),
+      actividad: 'Alojamiento Turístico',
+      clasificacion: clasificacion,
+      categoria: categoria,
+      tipoSolicitud: 'Registro',
+      provincia: provinciaName,
+      canton: cantonName,
+      parroquia: parroquiaName,
+      callePrincipal: this.establishment_selected.address_main_street,
+      calleInterseccion: this.establishment_selected.address_secondary_street,
+      numeracion: this.establishment_selected.address_number,
+      thisYear:today.getFullYear()
+   };
+   this.mailerDataService.sendMail('asignacion', inspector.email.toString(), 'Información de Detalle de Solicitud', information).then( r => {
+      this.toastr.successToastr('Técinco Zonal Asignado Satisfactoriamente.', 'Asignación de Técinco Zonal');
+      this.refresh();
    }).catch( e => { console.log(e); });
   }
 

@@ -26,23 +26,3 @@ class MailerController extends Controller
     return response()->json("Solicitud Procesada. Enviaremos la respuesta a tu correo electrónico en un momento.",200);
   }
 }
-
-
-/*{"tipoMail":"mail",
-"email":"luis.salazar@turismo.gob.ec",
-"subject":"Información de Detalle de Solicitud",
-"information":{"para":"Luis Alfonso Salazar Vaca",
-"tramite":"REGISTRO",
-"ruc":"1720364049",
-"nombreComercial":"LSystems",
-"fechaSolicitud":"2019-05-25",
-"actividad":"Alojamiento Turístico",
-"clasificacion":"Hotel",
-"categoria":"5 Estrellas",
-"tipoSolicitud":"Registro",
-"provincia":"Pichincha",
-"canton":"Quito",
-"parroquia":"San Isidro",
-"callePrincipal":"Los Robles",
-"calleInterseccion":"De los Cardos",
-"numeracion":"E14-16"}}*/
