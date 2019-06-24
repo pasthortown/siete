@@ -1978,11 +1978,27 @@ export class CoordinadorComponent implements OnInit {
          }
       });
       let provinciaName: String = '';
+      let provincia: Ubication = new Ubication();
       this.ubications.forEach(element => {
          if (element.code == canton.father_code) {
             provinciaName = element.name;
+            provincia = element;
          }
       });
+      let zonal: Ubication = new Ubication();
+      this.ubications.forEach(element => {
+         if (element.code == provincia.father_code){
+            zonal = element;
+         }
+      });
+      let datosZonal: any;
+      this.zonales.forEach(element => {
+         if (element.name == zonal.name) {
+            datosZonal = element;
+         }
+      });
+      const czDireccion = datosZonal.direccion.split('>')[1].split('<')[0];
+      const czTelefono = datosZonal.telefono.split('>')[1].split('<')[0];
       let observaciones = this.registerApprovalCoordinador.notes;
       observaciones = observaciones.replace('<p>', '');
       observaciones = observaciones.replace('</p>', '');
@@ -2004,12 +2020,11 @@ export class CoordinadorComponent implements OnInit {
             callePrincipal: this.registerMinturSelected.establishment.address_main_street,
             calleInterseccion: this.registerMinturSelected.establishment.address_secondary_street,
             numeracion: this.registerMinturSelected.establishment.address_number,
-            czDireccion: '',
-            czTelefono: '',
+            czDireccion: czDireccion,
+            czTelefono: czTelefono,
             observaciones: observaciones,
             thisYear:today.getFullYear()
          };
-         //AQUI
          this.mailerDataService.sendMail('asignacion', r.email.toString(), 'Asignación de trámite para su revisión', information).then( r => {
             this.toastr.successToastr('Técinco Zonal Asignado Satisfactoriamente.', 'Asignación de Técinco Zonal');
             this.refresh();

@@ -826,11 +826,27 @@ export class TecnicoFinancieroComponent implements OnInit {
       }
    });
    let provinciaName: String = '';
+   let provincia: Ubication = new Ubication();
    this.ubications.forEach(element => {
       if (element.code == canton.father_code) {
          provinciaName = element.name;
+         provincia = element;
       }
    });
+   let zonal: Ubication = new Ubication();
+   this.ubications.forEach(element => {
+      if (element.code == provincia.father_code){
+         zonal = element;
+      }
+   });
+   let datosZonal: any;
+   this.zonales.forEach(element => {
+      if (element.name == zonal.name) {
+         datosZonal = element;
+      }
+   });
+   const czDireccion = datosZonal.direccion.split('>')[1].split('<')[0];
+   const czTelefono = datosZonal.telefono.split('>')[1].split('<')[0];
    this.userDataService.get(this.registerMinturSelected.establishment.contact_user_id).then( r => {
       const information = {
          para: r.name,
@@ -851,6 +867,8 @@ export class TecnicoFinancieroComponent implements OnInit {
          callePrincipal: this.registerMinturSelected.establishment.address_main_street,
          calleInterseccion: this.registerMinturSelected.establishment.address_secondary_street,
          numeracion: this.registerMinturSelected.establishment.address_number,
+         czDireccion: czDireccion,
+         czTelefono: czTelefono,
          thisYear: today.getFullYear()
       };
       this.mailerDataService.sendMail('pago', r.email.toString(), 'Órden de Pago Registrada', information).then( r => {

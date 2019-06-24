@@ -7,7 +7,7 @@
     </div>
 </div>
 <p>Estimado/a {{ $information['para'] }}:</p>
-<p>Por favor cancele en cualquier agencia o cajero inteligente de Banco Pacífico a nivel nacional, el valor correspondiente a su contribución Uno por Mil.</p>
+<p>Por favor cancele en cualquier agencia o cajero inteligente de Banco Pacífico a nivel nacional, el valor correspondiente a su contribución Uno por Mil, para mayor información contáctese con la Coordinación Zonal.</p>
 <h3>DESCRIPCIÓN DE PAGO</h3>
 <table style="border-collapse: collapse;width: 100%;border: 1px solid #ddd;">
     <tbody>
@@ -60,7 +60,18 @@
             <th>Tipo de Solicitud:</th><td>{{ $information['tipoSolicitud'] }}</td><th></th><td></td>
         </tr>
     </tbody>
-</table><br/>
+</table>
+<h3>INFORMACIÓN DE LA COORDINACIÓN ZONAL</h3>
+<table style="border-collapse: collapse;width: 100%;border: 1px solid #ddd;">
+    <tbody>
+        <tr style="background-color: #f2f2f2;">
+            <th>Dirección:</th><td>{{ $information['czDireccion'] }}</td>
+        </tr>
+        <tr style="background-color: #f2f2f2;">
+            <th>Teléfono:</th><td>{{ $information['czTelefono'] }}</td>
+        </tr>
+    </tbody>
+</table>
 <div style="width:100%; float:left;" >
     <div style="width:25%; float:left;">&nbsp;</div>
     <div style="width:50%; float:left;">

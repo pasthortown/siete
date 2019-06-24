@@ -4,9 +4,11 @@ class SoapTest
 {
   protected function soap() {
     $opts = array(
-        'ssl' => array(
-          'local_cert' => './backup/certificados/dinardapgobec.pem',
-      )
+      'ssl' => array(
+      'verify_peer' => false,
+      'verify_peer_name' => false,
+      'allow_self_signed' => true
+     )
     );
     $context = stream_context_create($opts);
     $wsdl = "https://interoperabilidad.dinardap.gob.ec/interoperador-v2?wsdl";
@@ -29,4 +31,4 @@ class SoapTest
 }
 
 $soapTest = new SoapTest();
-echo $soapTest->Cedula('1720364049', 2112);
+echo $soapTest->Cedula('1720364049001', 2115);
