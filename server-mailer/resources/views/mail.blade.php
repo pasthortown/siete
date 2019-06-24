@@ -33,7 +33,7 @@
             <th>Tipo de Solicitud:</th><td>{{ $information['tipoSolicitud'] }}</td><th></th><td></td>
         </tr>
     </tbody>
-</table>
+</table><br/><br/>
 <div style="width:100%; float:left;" >
     <div style="width:25%; float:left;">&nbsp;</div>
     <div style="width:50%; float:left;">
