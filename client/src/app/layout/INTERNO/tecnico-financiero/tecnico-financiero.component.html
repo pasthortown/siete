@@ -48,7 +48,7 @@
           </ngb-pagination>
         </div>
       </div>
-      <div class="col-12 text-center mb-3">
+      <div class="col-12 text-center mb-3" *ngIf="mostrarDataRegisterMintur">
         <input type="checkbox" name="vacacionesCheck" id="vacacionesCheck" value="Bike" [(ngModel)]="estoyVacaciones" (change)= "rechazarCheck()"> Devolver el trámite seleccionado
       </div>
       <div class="col-12 mt-5 mb-2" *ngIf="estoyVacaciones">

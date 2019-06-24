@@ -21,7 +21,7 @@
             <th>Intereses: </th><td>{{ $information['amount_to_pay_taxes'] }}</td>
         </tr>
         <tr>
-            <th>Total a pagar:</th><td>{{ $information['amount_to_pay'] }}</td>
+            <th>Total a pagar:</th><td><strong style="color: red">{{ $information['amount_to_pay'] }}</strong></td>
         </tr>
     </tbody>
 </table>
@@ -34,6 +34,33 @@
 <li>MIN TURISMO; y </li>
 <li>En el campo código: digite el número de RUC. </li>
 </ol>
+<br/>
+<h3>INFORMACIÓN DEL ESTABLECIMIENTO</h3>
+<table style="border-collapse: collapse;width: 100%;border: 1px solid #ddd;">
+    <tbody>
+        <tr style="background-color: #f2f2f2;">
+            <th>RUC:</th><td>{{ $information['ruc'] }}</td><th>Provincia:</th><td>{{ $information['provincia'] }}</td>
+        </tr>
+        <tr>
+            <th>Nombre Comercial:</th><td>{{ $information['nombreComercial'] }}</td><th>Cantón:</th><td>{{ $information['canton'] }}</td>
+        </tr>
+        <tr style="background-color: #f2f2f2;">
+            <th>Fecha Solicitud:</th><td>{{ $information['fechaSolicitud'] }}</td><th>Parroquia:</th><td>{{ $information['parroquia'] }}</td>
+        </tr>
+        <tr>
+            <th>Actividad:</th><td>{{ $information['actividad'] }}</td><th>Calle Principal:</th><td>{{ $information['callePrincipal'] }}</td>
+        </tr>
+        <tr style="background-color: #f2f2f2;">
+            <th>Clasificación:</th><td>{{ $information['clasificacion'] }}</td><th>Calle Intersección:</th><td>{{ $information['calleInterseccion'] }}</td>
+        </tr>
+        <tr>
+            <th>Categoría:</th><td>{{ $information['categoria'] }}</td><th>Numeración:</th><td>{{ $information['numeracion'] }}</td>
+        </tr>
+        <tr style="background-color: #f2f2f2;">
+            <th>Tipo de Solicitud:</th><td>{{ $information['tipoSolicitud'] }}</td><th></th><td></td>
+        </tr>
+    </tbody>
+</table><br/>
 <div style="width:100%; float:left;" >
     <div style="width:25%; float:left;">&nbsp;</div>
     <div style="width:50%; float:left;">

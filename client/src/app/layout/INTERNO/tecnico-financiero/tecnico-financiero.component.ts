@@ -787,30 +787,76 @@ export class TecnicoFinancieroComponent implements OnInit {
       this.pay.pay_date = null;
       this.pay.code = this.ruc_registro_selected.ruc.number.substring(0, 10) + this.pays.length.toString();
       this.pay.payed = false;
-      const today = new Date();
+      this.payDataService.post(this.pay).then( r => {
+      }).catch( e => { console.log(e); });
+   } else {
+      this.payDataService.put(this.pay).then( r => {
+      }).catch( e => { console.log(e); });
+   }
+   const today = new Date();
+   let clasificacion: String = '';
+   let categoria: String = '';
+   let category: RegisterType = new RegisterType();
+   this.register_types.forEach(element => {
+      if (this.registerMinturSelected.register.register_type_id == element.id) {
+         category = element;
+         categoria = element.name;
+      }
+   });
+   this.register_types.forEach(element => {
+      if (category.father_code == element.code) {
+         clasificacion = element.name;
+      }
+   });
+   let parroquiaName: String = '';
+   let parroquia: Ubication = new Ubication();
+   this.ubications.forEach(element => {
+      if (element.id == this.registerMinturSelected.establishment.ubication_id) {
+         parroquiaName = element.name;
+         parroquia = element;
+      }
+   });
+   let cantonName: String = '';
+   let canton: Ubication = new Ubication();
+   this.ubications.forEach(element => {
+      if (element.code == parroquia.father_code) {
+         cantonName = element.name;
+         canton = element;
+      }
+   });
+   let provinciaName: String = '';
+   this.ubications.forEach(element => {
+      if (element.code == canton.father_code) {
+         provinciaName = element.name;
+      }
+   });
+   this.userDataService.get(this.registerMinturSelected.establishment.contact_user_id).then( r => {
       const information = {
-         para: 'inspector.name',//AQUI
+         para: r.name,
          amount_to_pay_base: this.pay.amount_to_pay_base,
          amount_to_pay_fines: this.pay.amount_to_pay_fines,
          amount_to_pay_taxes: this.pay.amount_to_pay_taxes,
          amount_to_pay: this.pay.amount_to_pay,
+         ruc: this.ruc_registro_selected.ruc.number,
+         nombreComercial: this.registerMinturSelected.establishment.commercially_known_name,
+         fechaSolicitud: today.toLocaleString(),
+         actividad: 'Alojamiento Turístico',
+         clasificacion: clasificacion,
+         categoria: categoria,
+         tipoSolicitud: 'Registro',
+         provincia: provinciaName,
+         canton: cantonName,
+         parroquia: parroquiaName,
+         callePrincipal: this.registerMinturSelected.establishment.address_main_street,
+         calleInterseccion: this.registerMinturSelected.establishment.address_secondary_street,
+         numeracion: this.registerMinturSelected.establishment.address_number,
          thisYear: today.getFullYear()
       };
-      this.mailerDataService.sendMail('rechazo_informe_tz', 'inspector.email'.toString(), 'Rechazo y reasignación de trámite para su revisión', information).then( r => {
-         this.toastr.successToastr('Técinco Zonal Asignado Satisfactoriamente.', 'Asignación de Técinco Zonal');
-         this.refresh();
-      }).catch( e => { console.log(e); });
-
-      this.payDataService.post(this.pay).then( r => {
+      this.mailerDataService.sendMail('pago', r.email.toString(), 'Órden de Pago Registrada', information).then( r => {
          this.toastr.successToastr('Información Guardada Satisfactoriamente', 'Revisión, Técnico Financiero');
          this.getPays();
       }).catch( e => { console.log(e); });
-   } else {
-      this.payDataService.put(this.pay).then( r => {
-         this.toastr.successToastr('Información Actualizada Satisfactoriamente', 'Revisión, Técnico Financiero');
-         this.refresh();
-      }).catch( e => { console.log(e); });
-   }
+   }).catch( e => {console.log(e); });
  }
 
  descargarDeclaracion() {
@@ -1301,7 +1347,6 @@ getDeclarationItems() {
 
  getPays() {
    this.payDataService.get_by_ruc_id(this.ruc_registro_selected.ruc.id).then( r => {
-      console.log(r);
       this.pays = r as Pay[];
       if (this.pays.length == 0) {
          this.pay = new Pay();
