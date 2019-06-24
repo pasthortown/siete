@@ -107,6 +107,7 @@ export class CoordinadorComponent implements OnInit {
    @ViewChild('EstablishmentCertificationAttachedFile') EstablishmentCertificationAttachedFile;
    @ViewChild('pasos') pasosTabSet;
    @ViewChild('pasosSuperiores') pasosSuperioresTabSet;
+   zonales: any[] = [];
    idTramiteEstadoFilter = 0;
    tramite = '-';
    tabActive = 'paso1';
@@ -1922,6 +1923,16 @@ export class CoordinadorComponent implements OnInit {
          newRegisterState.state_id = this.stateTramiteId;
       }
      }
+     let enviarMail = false;
+     let estadoTramite = '';
+     if (this.stateTramite == 1) {
+      enviarMail = true;
+      estadoTramite = 'aprobada';
+     }
+     if (this.stateTramite == 2) {
+      enviarMail = true;
+      estadoTramite = 'rechazada';
+     }
      newRegisterState.justification = this.registerApprovalCoordinador.notes;
      newRegisterState.register_id = this.idRegister;
      this.registerStateDataService.post(newRegisterState).then( r1 => {
@@ -1932,6 +1943,78 @@ export class CoordinadorComponent implements OnInit {
          this.refresh();
         }).catch( e => { console.log(e); });
      }).catch( e => { console.log(e); });
+     if (!enviarMail) {
+      return;
+     }
+     const today = new Date();
+      let clasificacion: String = '';
+      let categoria: String = '';
+      let category: RegisterType = new RegisterType();
+      this.register_types.forEach(element => {
+         if (this.registerMinturSelected.register.register_type_id == element.id) {
+            category = element;
+            categoria = element.name;
+         }
+      });
+      this.register_types.forEach(element => {
+         if (category.father_code == element.code) {
+            clasificacion = element.name;
+         }
+      });
+      let parroquiaName: String = '';
+      let parroquia: Ubication = new Ubication();
+      this.ubications.forEach(element => {
+         if (element.id == this.registerMinturSelected.establishment.ubication_id) {
+            parroquiaName = element.name;
+            parroquia = element;
+         }
+      });
+      let cantonName: String = '';
+      let canton: Ubication = new Ubication();
+      this.ubications.forEach(element => {
+         if (element.code == parroquia.father_code) {
+            cantonName = element.name;
+            canton = element;
+         }
+      });
+      let provinciaName: String = '';
+      this.ubications.forEach(element => {
+         if (element.code == canton.father_code) {
+            provinciaName = element.name;
+         }
+      });
+      let observaciones = this.registerApprovalCoordinador.notes;
+      observaciones = observaciones.replace('<p>', '');
+      observaciones = observaciones.replace('</p>', '');
+      this.userDataService.get(this.registerMinturSelected.establishment.contact_user_id).then( r => {
+         const information = {
+            para: r.name,
+            tramite: 'Registro',
+            estadoTramite: estadoTramite,
+            ruc: this.ruc_registro_selected.ruc.number,
+            nombreComercial: this.registerMinturSelected.establishment.commercially_known_name,
+            fechaSolicitud: today.toLocaleString(),
+            actividad: 'Alojamiento Turístico',
+            clasificacion: clasificacion,
+            categoria: categoria,
+            tipoSolicitud: 'Registro',
+            provincia: provinciaName,
+            canton: cantonName,
+            parroquia: parroquiaName,
+            callePrincipal: this.registerMinturSelected.establishment.address_main_street,
+            calleInterseccion: this.registerMinturSelected.establishment.address_secondary_street,
+            numeracion: this.registerMinturSelected.establishment.address_number,
+            czDireccion: '',
+            czTelefono: '',
+            observaciones: observaciones,
+            thisYear:today.getFullYear()
+         };
+         //AQUI
+         this.mailerDataService.sendMail('asignacion', r.email.toString(), 'Asignación de trámite para su revisión', information).then( r => {
+            this.toastr.successToastr('Técinco Zonal Asignado Satisfactoriamente.', 'Asignación de Técinco Zonal');
+            this.refresh();
+         }).catch( e => { console.log(e); });
+      }).catch( e => { console.log(e); });
   }
 
   getRegisterTypes() {
@@ -2027,7 +2110,14 @@ export class CoordinadorComponent implements OnInit {
    this.getInspectores();
    this.getFinancieros();
    this.getUbications();
+   this.getZonales();
    this.groupTypeSelected = new GroupType();
+  }
+
+  getZonales() {
+   this.consultorDataService.get_zonales().then( r => {
+      this.zonales = r;
+   }).catch( e => { console.log(e); });
   }
 
   getUbications() {

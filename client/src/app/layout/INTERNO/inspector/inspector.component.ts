@@ -112,6 +112,7 @@ export class InspectorComponent implements OnInit {
    @ViewChild('pasos') pasosTabSet;
    @ViewChild('pasosSuperiores') pasosSuperioresTabSet;
    tabActive = 'paso1';
+   zonales: any[] = [];
    tabActiveSuperior = 'tab1';
    tramite = '-';
    selectedNameType: RucNameType = new RucNameType();
@@ -1696,6 +1697,7 @@ export class InspectorComponent implements OnInit {
   }
 
   refresh() {
+   this.getZonales();
    this.fechasNombramiento();
    this.pays = [];
    this.consumoCedula = false;
@@ -1732,6 +1734,12 @@ export class InspectorComponent implements OnInit {
    this.ubications = [];
    this.ubicationDataService.get().then( r => {
       this.ubications = r as Ubication[];
+   }).catch( e => { console.log(e); });
+  }
+
+  getZonales() {
+   this.consultorDataService.get_zonales().then( r => {
+      this.zonales = r;
    }).catch( e => { console.log(e); });
   }
 

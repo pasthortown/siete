@@ -104,6 +104,7 @@ export class TecnicoFinancieroComponent implements OnInit {
   inspectores: User[] = [];
   financieros: User[] = [];
   financialSelectedId: number = 0;
+  zonales: any[] = [];
   registerApprovals: ApprovalState[] = [];
   registerApprovalCoordinador: ApprovalState = new ApprovalState();
   registerApprovalInspector: ApprovalState = new ApprovalState();
@@ -1138,6 +1139,7 @@ export class TecnicoFinancieroComponent implements OnInit {
    this.pay = new Pay();
    this.pays = [];
    this.estoyVacaciones = false;
+   this.getZonales();
    this.getDeclarationStates();
    this.getInspectores();
    this.getFinancieros();
@@ -1163,6 +1165,12 @@ export class TecnicoFinancieroComponent implements OnInit {
    this.getUbications();
    this.getEstablishmentCertificationTypesCategories();
    this.getComplementaryServiceTypeCategories();
+ }
+
+ getZonales() {
+   this.consultorDataService.get_zonales().then( r => {
+      this.zonales = r;
+   }).catch( e => { console.log(e); });
  }
 
  getUbications() {
