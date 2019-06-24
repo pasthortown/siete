@@ -7,7 +7,7 @@
     </div>
 </div>
 <p>Estimado/a {{ $information['para'] }}:</p>
-<p>La solicitud de {{ $information['tramite'] }} ha sido desasignada por su Coordinador Zonal, por favor revise su bandeja en la plataforma SITURIN.</p>
+<p>Su Coordinador Zonal ha rechazado el informe técnico de la inspección realizada al establecimiento ( {{ $information['nombreComercial'] }} ), por favor revise su bandeja en la plataforma SITURIN.</p>
 <h3>INFORMACIÓN DEL ESTABLECIMIENTO</h3>
 <table style="border-collapse: collapse;width: 100%;border: 1px solid #ddd;">
     <tbody>
@@ -34,6 +34,8 @@
         </tr>
     </tbody>
 </table>
+<h3>MOTIVO DE RECHAZO</h3>
+<p>{{ $information['motivoRechazo'] }}</p>
 <div style="width:100%; float:left;" >
     <div style="width:25%; float:left;">&nbsp;</div>
     <div style="width:50%; float:left;">
