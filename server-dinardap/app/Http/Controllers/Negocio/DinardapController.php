@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Validator;
 use Exception;
+use App\Identification;
+use App\Ruc;
 use SoapClient;
 use Illuminate\Http\Request;
 
@@ -12,12 +14,76 @@ class DinardapController extends Controller
   public function Cedula(Request $request) {
     $data = $request->json()->all();
     $respuesta = $this->httpPost(env('API_DINARDAP').'cedula', json_encode(['numeroIdentificacion'=>$data['numeroIdentificacion']]), null, null);
+    $previewData = Identification::where('number', $data['numeroIdentificacion'])->first();
+    if (!$previewData) {
+      $identification = new Identification();
+      $lastIdentification = Identification::orderBy('id')->get()->last();
+      if($lastIdentification) {
+          $identification->id = $lastIdentification->id + 1;
+      } else {
+          $identification->id = 1;
+      }
+      $identification->number = $data['numeroIdentificacion'];
+      $identification->data = $respuesta;
+      $identification->date = date("Y-m-d H:i:s");
+      $identification->save();
+    } else {
+      if ($previewData->data == $respuesta) {
+        $previewData->update([
+          'date'=>date("Y-m-d H:i:s"),
+        ]);
+      } else {
+        $identification = new Identification();
+        $lastIdentification = Identification::orderBy('id')->get()->last();
+        if($lastIdentification) {
+            $identification->id = $lastIdentification->id + 1;
+        } else {
+            $identification->id = 1;
+        }
+        $identification->number = $data['numeroIdentificacion'];
+        $identification->data = $respuesta;
+        $identification->date = date("Y-m-d H:i:s");
+        $identification->save();
+      }
+    }
     return response()->json(json_decode($respuesta),200);
   }
 
   public function RUC(Request $request) {
     $data = $request->json()->all();
     $respuesta = $this->httpPost(env('API_DINARDAP').'ruc', json_encode(['numeroIdentificacion'=>$data['numeroIdentificacion']]), null, null);
+    $previewData = Ruc::where('number', $data['numeroIdentificacion'])->first();
+    if (!$previewData) {
+      $ruc = new Ruc();
+      $lastRuc = Ruc::orderBy('id')->get()->last();
+      if($lastRuc) {
+          $ruc->id = $lastRuc->id + 1;
+      } else {
+          $ruc->id = 1;
+      }
+      $ruc->number = $data['numeroIdentificacion'];
+      $ruc->data = $respuesta;
+      $ruc->date = date("Y-m-d H:i:s");
+      $ruc->save();
+    } else {
+      if ($previewData->data == $respuesta) {
+        $previewData->update([
+          'date'=>date("Y-m-d H:i:s"),
+        ]);
+      } else {
+        $ruc = new Ruc();
+        $lastRuc = Ruc::orderBy('id')->get()->last();
+        if($lastRuc) {
+            $ruc->id = $lastRuc->id + 1;
+        } else {
+            $ruc->id = 1;
+        }
+        $ruc->number = $data['numeroIdentificacion'];
+        $ruc->data = $respuesta;
+        $ruc->date = date("Y-m-d H:i:s");
+        $ruc->save();
+      }
+    }
     return response()->json(json_decode($respuesta),200);
   }
 
