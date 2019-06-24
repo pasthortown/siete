@@ -872,32 +872,38 @@ export class CoordinadorComponent implements OnInit {
    const today = new Date();
    let clasificacion: String = '';
    let categoria: String = '';
-   this.categories_registers.forEach(categorie_register => {
-      if (categorie_register.id == this.rucEstablishmentRegisterSelected.register_type_id) {
-         categoria = categorie_register.name;
+   let category: RegisterType = new RegisterType();
+   this.register_types.forEach(element => {
+      if (this.registerMinturSelected.register.register_type_id == element.id) {
+         category = element;
+         categoria = element.name;
       }
    });
-   this.clasifications_registers.forEach(clasification_register => {
-      if (clasification_register.code == this.categorySelectedCode) {
-         clasificacion = clasification_register.name;
-      }
-   });
-   let provinciaName: String = '';
-   this.provinciasEstablishment.forEach(element => {
-      if (element.code == this.provinciaEstablishmentSelectedCode) {
-         provinciaName = element.name;
-      }
-   });
-   let cantonName: String = '';
-   this.cantonesEstablishment.forEach(element => {
-      if (element.code == this.cantonEstablishmentSelectedCode) {
-         cantonName = element.name;
+   this.register_types.forEach(element => {
+      if (category.father_code == element.code) {
+         clasificacion = element.name;
       }
    });
    let parroquiaName: String = '';
-   this.parroquiasEstablishment.forEach(element => {
-      if (element.id == this.establishment_selected.ubication_id) {
+   let parroquia: Ubication = new Ubication();
+   this.ubications.forEach(element => {
+      if (element.id == this.registerMinturSelected.establishment.ubication_id) {
          parroquiaName = element.name;
+         parroquia = element;
+      }
+   });
+   let cantonName: String = '';
+   let canton: Ubication = new Ubication();
+   this.ubications.forEach(element => {
+      if (element.code == parroquia.father_code) {
+         cantonName = element.name;
+         canton = element;
+      }
+   });
+   let provinciaName: String = '';
+   this.ubications.forEach(element => {
+      if (element.code == canton.father_code) {
+         provinciaName = element.name;
       }
    });
    let inspector = new User();
@@ -910,7 +916,7 @@ export class CoordinadorComponent implements OnInit {
       para: inspector.name,
       tramite: 'Registro',
       ruc: this.ruc_registro_selected.ruc.number,
-      nombreComercial: this.establishment_selected.commercially_known_name,
+      nombreComercial: this.registerMinturSelected.establishment.commercially_known_name,
       fechaSolicitud: today.toLocaleString(),
       actividad: 'Alojamiento Turístico',
       clasificacion: clasificacion,
@@ -919,12 +925,12 @@ export class CoordinadorComponent implements OnInit {
       provincia: provinciaName,
       canton: cantonName,
       parroquia: parroquiaName,
-      callePrincipal: this.establishment_selected.address_main_street,
-      calleInterseccion: this.establishment_selected.address_secondary_street,
-      numeracion: this.establishment_selected.address_number,
+      callePrincipal: this.registerMinturSelected.establishment.address_main_street,
+      calleInterseccion: this.registerMinturSelected.establishment.address_secondary_street,
+      numeracion: this.registerMinturSelected.establishment.address_number,
       thisYear:today.getFullYear()
    };
-   this.mailerDataService.sendMail('asignacion', inspector.email.toString(), 'Información de Detalle de Solicitud', information).then( r => {
+   this.mailerDataService.sendMail('asignacion', inspector.email.toString(), 'Asignación de trámite para su revisión', information).then( r => {
       this.toastr.successToastr('Técinco Zonal Asignado Satisfactoriamente.', 'Asignación de Técinco Zonal');
       this.refresh();
    }).catch( e => { console.log(e); });
@@ -970,6 +976,72 @@ export class CoordinadorComponent implements OnInit {
          this.toastr.successToastr('Técnico Financiero Asignado Satisfactoriamente.', 'Asignación de Técnico Financiero');
          this.refresh();
       }).catch( e => { console.log(e); });
+   }).catch( e => { console.log(e); });
+
+   const today = new Date();
+   let clasificacion: String = '';
+   let categoria: String = '';
+   let category: RegisterType = new RegisterType();
+   this.register_types.forEach(element => {
+      if (this.registerMinturSelected.register.register_type_id == element.id) {
+         category = element;
+         categoria = element.name;
+      }
+   });
+   this.register_types.forEach(element => {
+      if (category.father_code == element.code) {
+         clasificacion = element.name;
+      }
+   });
+   let parroquiaName: String = '';
+   let parroquia: Ubication = new Ubication();
+   this.ubications.forEach(element => {
+      if (element.id == this.registerMinturSelected.establishment.ubication_id) {
+         parroquiaName = element.name;
+         parroquia = element;
+      }
+   });
+   let cantonName: String = '';
+   let canton: Ubication = new Ubication();
+   this.ubications.forEach(element => {
+      if (element.code == parroquia.father_code) {
+         cantonName = element.name;
+         canton = element;
+      }
+   });
+   let provinciaName: String = '';
+   this.ubications.forEach(element => {
+      if (element.code == canton.father_code) {
+         provinciaName = element.name;
+      }
+   });
+   let financiero = new User();
+   this.financieros.forEach(element => {
+      if (element.id == this.financialSelectedId) {
+         financiero = element;
+      }
+   });
+   const information = {
+      para: financiero.name,
+      tramite: 'Registro',
+      ruc: this.ruc_registro_selected.ruc.number,
+      nombreComercial: this.registerMinturSelected.establishment.commercially_known_name,
+      fechaSolicitud: today.toLocaleString(),
+      actividad: 'Alojamiento Turístico',
+      clasificacion: clasificacion,
+      categoria: categoria,
+      tipoSolicitud: 'Registro',
+      provincia: provinciaName,
+      canton: cantonName,
+      parroquia: parroquiaName,
+      callePrincipal: this.registerMinturSelected.establishment.address_main_street,
+      calleInterseccion: this.registerMinturSelected.establishment.address_secondary_street,
+      numeracion: this.registerMinturSelected.establishment.address_number,
+      thisYear:today.getFullYear()
+   };
+   this.mailerDataService.sendMail('asignacion', financiero.email.toString(), 'Asignación de trámite para su revisión', information).then( r => {
+      this.toastr.successToastr('Técinco Zonal Asignado Satisfactoriamente.', 'Asignación de Técinco Zonal');
+      this.refresh();
    }).catch( e => { console.log(e); });
   }
 
@@ -1764,7 +1836,15 @@ export class CoordinadorComponent implements OnInit {
    this.getComplementaryServiceTypeCategories();
    this.getInspectores();
    this.getFinancieros();
+   this.getUbications();
    this.groupTypeSelected = new GroupType();
+  }
+
+  getUbications() {
+   this.ubications = [];
+   this.ubicationDataService.get().then( r => {
+      this.ubications = r as Ubication[];
+   }).catch( e => { console.log(e); });
   }
 
   getInspectores() {

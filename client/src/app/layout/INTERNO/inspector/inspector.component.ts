@@ -1724,9 +1724,17 @@ export class InspectorComponent implements OnInit {
    this.getRegiones();
    this.getEstablishmentCertificationTypesCategories();
    this.getComplementaryServiceTypeCategories();
+   this.getUbications();
    this.groupTypeSelected = new GroupType();
   }
 
+  getUbications() {
+   this.ubications = [];
+   this.ubicationDataService.get().then( r => {
+      this.ubications = r as Ubication[];
+   }).catch( e => { console.log(e); });
+  }
+  
   getInspectores() {
    this.inspectores = [];
    this.userDataService.get_by_rol('5').then( r => {

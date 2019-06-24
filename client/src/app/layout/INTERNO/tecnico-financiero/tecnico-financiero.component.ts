@@ -1098,10 +1098,18 @@ export class TecnicoFinancieroComponent implements OnInit {
    this.getWorkerGroups();
    this.getTariffs();
    this.getClasifications();
+   this.getUbications();
    this.getEstablishmentCertificationTypesCategories();
    this.getComplementaryServiceTypeCategories();
  }
 
+ getUbications() {
+   this.ubications = [];
+   this.ubicationDataService.get().then( r => {
+      this.ubications = r as Ubication[];
+   }).catch( e => { console.log(e); });
+  }
+  
  getInspectores() {
   this.inspectores = [];
   this.userDataService.get_by_rol('5').then( r => {
