@@ -32,4 +32,4 @@ class SoapTest
 }
 
 $soapTest = new SoapTest();
-echo $soapTest->Cedula('1720364049001', 50);
+echo $soapTest->Cedula('1720364049', 87);

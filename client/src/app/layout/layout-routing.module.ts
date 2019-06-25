@@ -319,6 +319,10 @@ const routes: Routes = [
             path: 'tarifario-rack',
             loadChildren: './EXTERNO/registro/registro.module#RegistroModule'
          },
+         {
+            path: 'externo-dashboard',
+            loadChildren: './EXTERNO/dashboard/dashboard.module#DashboardModule'
+         },
 
          //DINARDAP
 
