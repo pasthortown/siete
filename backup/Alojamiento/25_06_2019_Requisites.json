@@ -1,4 +1,5 @@
 [
+    {"__comment": "Hotel 3 estrellas"},  
     {
         "Requisite": {
             "id": 1,
@@ -4198,6 +4199,7 @@
         },
         "attach": []
     },
+    {"__comment": "Hostal 1 estrellas"},
     {
         "Requisite": {
             "id": 218,
@@ -6816,6 +6818,7 @@
         },
         "attach": []
     },
+    {"__comment": "Hostal 2 estrellas"},
     {
         "Requisite": {
             "id": 388,
@@ -9791,6 +9794,7 @@
         },
         "attach": []
     },
+    {"__comment": "Hostal 3 estrellas"},
     {
         "Requisite": {
             "id": 574,
@@ -13174,6 +13178,7 @@
         },
         "attach": []
     },
+    {"__comment": "Hotel 2 estrellas"},
     {
         "Requisite": {
             "id": 776,
@@ -16540,6 +16545,7 @@
         },
         "attach": []
     },
+    {"__comment": "Hotel 4 estrellas"},
     {
         "Requisite": {
             "id": 974,
@@ -20688,7 +20694,7 @@
         },
         "attach": []
     },
-
+    {"__comment": "Hosteria 3 estrellas"},
 
     {"Requisite":{"id": 1218,"created_at":"2019-05-28 20:28:51","updated_at":"2019-05-28 20:28:51","name":"CONDICIONES MÍNIMAS","description":"CONDICIONES MÍNIMAS","father_code":"-","to_approve":4,"mandatory":false ,"type":"GRUPO 0","params":"","code":"1","register_type_id":14},"attach":[]},
     {"Requisite":{"id": 1219,"created_at":"2019-05-28 20:28:51","updated_at":"2019-05-28 20:28:51","name":"CONTAR CON CONDICIONES BÁSICAS DE LIMPIEZA E HIGIENE","description":"CONTAR CON CONDICIONES BÁSICAS DE LIMPIEZA E HIGIENE","father_code":"1","to_approve":1,"mandatory":true,"type":"TRUE / FALSE","params":"","code":"1.1","register_type_id":14},"attach":[]},
@@ -20903,7 +20909,7 @@
     {"Requisite":{"id": 1428,"created_at":"2019-05-28 20:28:51","updated_at":"2019-05-28 20:28:51","name":"¿CUENTA CON TIENDAS VIRTUALES DE PRODUCTOS ECUATORIANOS POR CATÁLOGO SU ESTABLECIMIENTO?","description":"¿CUENTA CON TIENDAS VIRTUALES DE PRODUCTOS ECUATORIANOS POR CATÁLOGO SU ESTABLECIMIENTO?","father_code":"13","to_approve":1,"mandatory":true,"type":"YES / NO","params":"","code":"13.13","register_type_id":14},"attach":[]},
     {"Requisite":{"id": 1429,"created_at":"2019-05-28 20:28:51","updated_at":"2019-05-28 20:28:51","name":"¿CUENTA CON GENERADOR DE EMERGENCIA QUE ABASTEZCA DE ENERGÍA A TODO EL ESTABLECIMIENTO?","description":"¿CUENTA CON GENERADOR DE EMERGENCIA QUE ABASTEZCA DE ENERGÍA A TODO EL ESTABLECIMIENTO?","father_code":"13","to_approve":1,"mandatory":true,"type":"YES / NO","params":"","code":"13.14","register_type_id":14},"attach":[]},
     {"Requisite":{"id": 1430,"created_at":"2019-05-28 20:28:51","updated_at":"2019-05-28 20:28:51","name":"¿CUENTA CON SALÓN LÚDICO O DE ENTRETENIMIENTO?","description":"¿CUENTA CON SALÓN LÚDICO O DE ENTRETENIMIENTO?","father_code":"13","to_approve":1,"mandatory":true,"type":"YES / NO","params":"","code":"13.15","register_type_id":14},"attach":[]},
-
+    {"__comment": "Hosteria 5 estrellas"},
     {"Requisite":{"id": 1431,"created_at":"2019-05-28 20:28:51","updated_at":"2019-05-28 20:28:51","name":"CONDICIONES MÍNIMAS","description":"CONDICIONES MÍNIMAS","father_code":"-","to_approve":4,"mandatory":false,"type":"GRUPO 0","params":"","code":"1","register_type_id":12},"attach":[]},
     {"Requisite":{"id": 1432,"created_at":"2019-05-28 20:28:51","updated_at":"2019-05-28 20:28:51","name":"CONTAR CON CONDICIONES BÁSICAS DE LIMPIEZA E HIGIENE","description":"","father_code":"1","to_approve":1,"mandatory":false,"type":"TRUE / FALSE","params":"","code":"1.1","register_type_id":12},"attach":[]},
     {"Requisite":{"id": 1433,"created_at":"2019-05-28 20:28:51","updated_at":"2019-05-28 20:28:51","name":"CONTAR CON INFRAESTRUCTURA EN PERFECTAS CONDICIONES DE FUNCIONAMIENTO","description":"","father_code":"1","to_approve":3,"mandatory":false,"type":"GRUPO 1","params":"","code":"1.2","register_type_id":12},"attach":[]},
@@ -21132,5 +21138,6 @@
     {"Requisite":{"id": 1656,"created_at":"2019-05-28 20:28:51","updated_at":"2019-05-28 20:28:51","name":"¿CUENTA CON GIMNASIO EN EL ESTABLECIMIENTO?","description":"¿CUENTA CON GIMNASIO EN EL ESTABLECIMIENTO?","father_code":"13","to_approve":1,"mandatory":true,"type":"YES / NO","params":"","code":"13.9","register_type_id":12},"attach":[]},
     {"Requisite":{"id": 1657,"created_at":"2019-05-28 20:28:51","updated_at":"2019-05-28 20:28:51","name":"¿CUENTA CON EXPOSICIONES DE COLECCIÓN DE ARTE PERMANENTES O TEMPORALES EN SU ESTABLECIMIENTO?","description":"¿CUENTA CON EXPOSICIONES DE COLECCIÓN DE ARTE PERMANENTES O TEMPORALES EN SU ESTABLECIMIENTO?","father_code":"13","to_approve":1,"mandatory":true,"type":"YES / NO","params":"","code":"13.10","register_type_id":12},"attach":[]},
     {"Requisite":{"id": 1658,"created_at":"2019-05-28 20:28:51","updated_at":"2019-05-28 20:28:51","name":"¿CUENTA CON TIENDAS VIRTUALES DE PRODUCTOS ECUATORIANOS POR CATÁLOGO SU ESTABLECIMIENTO?","description":"¿CUENTA CON TIENDAS VIRTUALES DE PRODUCTOS ECUATORIANOS POR CATÁLOGO SU ESTABLECIMIENTO?","father_code":"13","to_approve":1,"mandatory":true,"type":"YES / NO","params":"","code":"13.11","register_type_id":12},"attach":[]},
-    {"Requisite":{"id": 1659,"created_at":"2019-05-28 20:28:51","updated_at":"2019-05-28 20:28:51","name":"¿CUENTA CON SALÓN LÚDICO O DE ENTRETENIMIENTO?","description":"¿CUENTA CON SALÓN LÚDICO O DE ENTRETENIMIENTO?","father_code":"13","to_approve":1,"mandatory":true,"type":"YES / NO","params":"","code":"13.12","register_type_id":12},"attach":[]}    
+    {"Requisite":{"id": 1659,"created_at":"2019-05-28 20:28:51","updated_at":"2019-05-28 20:28:51","name":"¿CUENTA CON SALÓN LÚDICO O DE ENTRETENIMIENTO?","description":"¿CUENTA CON SALÓN LÚDICO O DE ENTRETENIMIENTO?","father_code":"13","to_approve":1,"mandatory":true,"type":"YES / NO","params":"","code":"13.12","register_type_id":12},"attach":[]},
+  {"__comment": "bla, bla, ..."}  
 ]
