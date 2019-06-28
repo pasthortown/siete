@@ -17,7 +17,7 @@ export class DinardapService {
    }
 
    get_cedula(identificacion: String): Promise<any> {
-      const data = {'numeroIdentificacion': identificacion};
+      const data = {'identificacion': identificacion};
       return this.http.post(this.url + 'cedula', JSON.stringify(data), this.options).toPromise()
       .then( r => {
          return r.json();
@@ -25,7 +25,7 @@ export class DinardapService {
    }
 
    get_RUC(numero: String): Promise<any> {
-      const data = {'numeroIdentificacion': numero};
+      const data = {'RUC': numero};
       return this.http.post(this.url + 'ruc', JSON.stringify(data), this.options).toPromise()
       .then( r => {
          return r.json();

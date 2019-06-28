@@ -29,11 +29,13 @@
           class="form-text text-muted" [innerHTML]="CedulaData"></small>
       </div>
       <div class="form-group" *ngIf="identificationValidated && REGCIVILOK && consumoCedula">
-        <label for="identification">Fecha de Nacimiento</label><span
+        <label for="identification" *ngIf="aleatorio == 0">Fecha de Nacimiento</label>
+        <label for="identification" *ngIf="aleatorio == 1">Fecha de Expiración de Documento de Identidad</label>
+        <label for="identification" *ngIf="aleatorio == 2">Fecha de Expedición de Documento de Identidad</label><span
         *ngIf="!identidadConfirmada"
         class="ml-2 badge badge-danger"
         >Identidad No Confirmada</span>
-        <input type="text" class="form-control" id="fechaNacimiento" [(ngModel)]="fechaNacimiento" placeholder="Fecha de Nacimiento: DIA/MES/AÑO   -  Ejempo: 15/09/1986" (input)="confirmarIdentidad()">
+        <input type="text" class="form-control" id="fechaIngresada" [(ngModel)]="fechaIngresada" placeholder="Fecha: DIA/MES/AÑO   -  Ejempo: 15/09/1986" (input)="confirmarIdentidad()">
       </div>
       <div class="form-group" *ngIf="identidadConfirmada">
           <label for="name">Nombre Completo</label>

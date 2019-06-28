@@ -19,11 +19,10 @@ export class RegisterComponent implements OnInit {
   ruc: Ruc = new Ruc();
   busy: Promise<any>;
   esperando: Boolean;
+  rucInactive = true;
   identificationValidated = false;
   consumoCedula = false;
   cedulaNombre = '';
-  cedulaFechaNacimiento = 'porValidar';
-  fechaNacimiento = '';
   identidadConfirmada = false;
   rucValidated = false;
   consumoRuc = false;
@@ -32,6 +31,12 @@ export class RegisterComponent implements OnInit {
   CedulaData = '';
   REGCIVILOK = false;
   SRIOK = false;
+  fechaExpedicion = 'porValidar';
+  fechaExpiracion = 'porValidar';
+  fechaNacimiento = 'porValidar';
+  fechaIngresada = '';
+
+  aleatorio = 0;
 
   constructor(private router: Router,
     private authDataServise: AuthService,
@@ -90,7 +95,7 @@ export class RegisterComponent implements OnInit {
     if (this.user.identification.length !== 10) {
        this.identificationValidated = false;
        this.consumoCedula = false;
-       this.fechaNacimiento = '';
+       this.fechaIngresada = '';
        this.identidadConfirmada = false;
        return;
     }
@@ -102,7 +107,7 @@ export class RegisterComponent implements OnInit {
        this.identificationValidated = true;
        this.consumoCedula = true;
        this.dinardapDataService.get_cedula(this.user.identification).then( r => {
-          const registros = r.return.instituciones.datosPrincipales.registros;
+          const registros = r.entidades.entidad.filas.fila.columnas.columna;
           this.CedulaData = '';
           this.REGCIVILOK = true;
           registros.forEach(element => {
@@ -120,10 +125,17 @@ export class RegisterComponent implements OnInit {
                    this.user.name= element.valor;
                 }
                 if (element.campo === 'fechaNacimiento') {
-                   this.cedulaFechaNacimiento = element.valor;
+                   this.fechaNacimiento = element.valor;
+                }
+                if (element.campo === 'fechaExpiracion') {
+                   this.fechaExpiracion = element.valor;
+                }
+                if (element.campo === 'fechaExpedicion') {
+                   this.fechaExpedicion = element.valor;
                 }
              }
           });
+          this.aleatorio = Math.floor(Math.random() * 3);
        }).catch( e => {
          this.toastr.errorToastr('La cédula ingresada no es correcta.', 'Registro Civil');
          this.CedulaData = '<div class="alert alert-danger" role="alert">El Registro Civil, no respondió. Vuelva a intentarlo.</div>';
@@ -147,8 +159,23 @@ export class RegisterComponent implements OnInit {
     if (!this.consumoRuc && this.identificationValidated) {
       this.rucValidated = true;
       this.consumoRuc = true;
+      this.rucInactive = true;
       this.dinardapDataService.get_RUC(this.ruc.number).then( r => {
-         const registros = r.return.instituciones.datosPrincipales.registros;
+         const sri_ruc_registros = r.sri_ruc.original.entidades.entidad.filas.fila.columnas.columna;
+         sri_ruc_registros.forEach(element => {
+            if (element.campo === 'estadoContribuyente') {
+               if (element.valor === 'ACTIVO') {
+                  this.rucInactive = false;
+               } else {
+                  this.toastr.errorToastr('El RUC ingresado no es Activo.', 'SRI');
+                  this.rucInactive = true;
+               }
+            }
+         });
+         if (this.rucInactive) {
+            return;
+         }
+         const registros = r.sri_establecimientos.original.entidades.entidad.filas.fila.columnas.columna;
          this.rucData = '';
          this.SRIOK = true;
          registros.forEach(element => {
@@ -162,7 +189,7 @@ export class RegisterComponent implements OnInit {
                }
             }
             if (this.rucValidated) {
-               if (element.campo === 'razonSocial') {
+               if (element.campo === 'nombreFantasiaComercial') {
                   this.rucData = '<strong>Razón Social: </strong> ' + element.valor;
                }
             }
@@ -183,15 +210,29 @@ export class RegisterComponent implements OnInit {
   }
 
    confirmarIdentidad() {
-     if (this.fechaNacimiento == '' || this.cedulaFechaNacimiento == '') {
-       return false;
-     }
-     if( this.cedulaFechaNacimiento == this.fechaNacimiento) {
-       this.identidadConfirmada = true;
-       return true;
-     }
-     this.identidadConfirmada = false;
-     this.cedulaNombre = '';
-     return false;
+      if (this.fechaIngresada == '') {
+        return false;
+      }
+      if (this.aleatorio == 0) {
+         if( this.fechaIngresada == this.fechaNacimiento) {
+            this.identidadConfirmada = true;
+            return true;
+         }
+      }
+      if (this.aleatorio == 1) {
+         if( this.fechaIngresada == this.fechaExpiracion) {
+            this.identidadConfirmada = true;
+            return true;
+         }
+      }
+      if (this.aleatorio == 2) {
+         if( this.fechaIngresada == this.fechaExpedicion) {
+            this.identidadConfirmada = true;
+            return true;
+         }
+      }
+      this.identidadConfirmada = false;
+      this.cedulaNombre = '';
+      return false;
    }
 }
