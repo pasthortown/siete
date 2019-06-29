@@ -13,8 +13,8 @@ class DinardapController extends Controller
 {
   public function Cedula(Request $request) {
     $data = $request->json()->all();
-    $respuesta = $this->httpPost(env('API_DINARDAP').'cedula', json_encode(['numeroIdentificacion'=>$data['numeroIdentificacion']]), null, null);
-    $previewData = Identification::where('number', $data['numeroIdentificacion'])->first();
+    $respuesta = $this->httpPost(env('API_DINARDAP').'cedula', json_encode(['identificacion'=>$data['identificacion']]), null, null);
+    $previewData = Identification::where('number', $data['identificacion'])->first();
     if (!$previewData) {
       $identification = new Identification();
       $lastIdentification = Identification::orderBy('id')->get()->last();
@@ -23,7 +23,7 @@ class DinardapController extends Controller
       } else {
           $identification->id = 1;
       }
-      $identification->number = $data['numeroIdentificacion'];
+      $identification->number = $data['identificacion'];
       $identification->data = $respuesta;
       $identification->date = date("Y-m-d H:i:s");
       $identification->save();
@@ -40,7 +40,7 @@ class DinardapController extends Controller
         } else {
             $identification->id = 1;
         }
-        $identification->number = $data['numeroIdentificacion'];
+        $identification->number = $data['identificacion'];
         $identification->data = $respuesta;
         $identification->date = date("Y-m-d H:i:s");
         $identification->save();
@@ -51,8 +51,8 @@ class DinardapController extends Controller
 
   public function RUC(Request $request) {
     $data = $request->json()->all();
-    $respuesta = $this->httpPost(env('API_DINARDAP').'ruc', json_encode(['numeroIdentificacion'=>$data['numeroIdentificacion']]), null, null);
-    $previewData = Ruc::where('number', $data['numeroIdentificacion'])->first();
+    $respuesta = $this->httpPost(env('API_DINARDAP').'ruc', json_encode(['RUC'=>$data['RUC']]), null, null);
+    $previewData = Ruc::where('number', $data['RUC'])->first();
     if (!$previewData) {
       $ruc = new Ruc();
       $lastRuc = Ruc::orderBy('id')->get()->last();
@@ -61,7 +61,7 @@ class DinardapController extends Controller
       } else {
           $ruc->id = 1;
       }
-      $ruc->number = $data['numeroIdentificacion'];
+      $ruc->number = $data['RUC'];
       $ruc->data = $respuesta;
       $ruc->date = date("Y-m-d H:i:s");
       $ruc->save();
@@ -78,7 +78,7 @@ class DinardapController extends Controller
         } else {
             $ruc->id = 1;
         }
-        $ruc->number = $data['numeroIdentificacion'];
+        $ruc->number = $data['RUC'];
         $ruc->data = $respuesta;
         $ruc->date = date("Y-m-d H:i:s");
         $ruc->save();
