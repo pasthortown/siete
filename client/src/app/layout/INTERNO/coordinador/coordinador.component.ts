@@ -2336,30 +2336,43 @@ export class CoordinadorComponent implements OnInit {
    this.establishmentDataService.getByRuc(this.ruc_registro_selected.ruc.number, this.recordsByPageEstablishment, currentpage).then( r => {
       const establecimientos = r.data as Establishment[];
       this.dinardapDataService.get_RUC(this.ruc_registro_selected.ruc.number).then( dinardap => {
-        let itemsDetalles = [];
         this.establecimientos_pendiente = false;
-        if (!Array.isArray(dinardap.return.instituciones.detalle.items)) {
-           itemsDetalles = [dinardap.return.instituciones.detalle.items];
+        let itemsDetalles = [];
+        if (!Array.isArray(dinardap.sri_establecimientos.original.entidades.entidad.filas.fila)) {
+           itemsDetalles = [dinardap.sri_establecimientos.original.entidades.entidad.filas.fila];
         } else {
-           itemsDetalles = dinardap.return.instituciones.detalle.items;
+           itemsDetalles = dinardap.sri_establecimientos.original.entidades.entidad.filas.fila;
         }
         itemsDetalles.forEach(element => {
-           element.registros.forEach(localData => {
-              if (localData.campo === 'numeroEstableciminiento') {
-                 const establishmentRuc = localData.valor as String;
-                 let existe = false;
+           let existe = false;
+           let establishmentRucNum = '';
+           element.columnas.columna.forEach(localData => {
+              if (localData.campo === 'numeroEstablecimiento') {
+                 establishmentRucNum = localData.valor as string;
                  establecimientos.forEach(establecimiento => {
-                    if (establecimiento.ruc_code_id === establishmentRuc.trim()) {
+                    if (establecimiento.ruc_code_id === establishmentRucNum.trim()) {
                        existe = true;
+                       console.log(establecimiento);
                     }
                  });
-                 if (!existe) {
-                    const newEstablishment = new Establishment();
-                    newEstablishment.ruc_code_id = establishmentRuc;
-                    establecimientos.push(newEstablishment);
-                 }
               }
            });
+           if (!existe) {
+              const newEstablishment = new Establishment();
+              newEstablishment.ruc_code_id = establishmentRucNum;
+              element.columnas.columna.forEach(localData => {
+                 if (localData.campo === 'calle') {
+                    newEstablishment.address_main_street = localData.valor;
+                 }
+                 if (localData.campo === 'numero') {
+                    newEstablishment.address_number = localData.valor;
+                 }
+                 if (localData.campo === 'interseccion') {
+                    newEstablishment.address_secondary_street = localData.valor;
+                 }
+              });
+              establecimientos.push(newEstablishment);
+           }
         });
         if(establecimientos.length == 0){
            this.ruc_registro_selected.ruc.establishments = [];
@@ -3313,7 +3326,7 @@ guardarDeclaracion() {
       this.identificationContactValidated = true;
       this.dinardapDataService.get_cedula(this.ruc_registro_selected.ruc.contact_user.identification).then( r => {
          this.REGCIVILOK = true;
-         const registros = r.return.instituciones.datosPrincipales.registros;
+         const registros = r.entidades.entidad.filas.fila.columnas.columna;
          this.cedulaData = '';
          registros.forEach(element => {
             if (element.campo === 'cedula') {
@@ -3366,7 +3379,7 @@ guardarDeclaracion() {
       this.identificationContactEstablishmentValidated = true;
       this.consumoCedulaEstablishmentContact = true;
       this.dinardapDataService.get_cedula(this.establishment_selected.contact_user.identification).then( r => {
-         const registros = r.return.instituciones.datosPrincipales.registros;
+         const registros = r.entidades.entidad.filas.fila.columnas.columna;
          this.cedulaEstablishmentContactData = '';
          this.REGCIVILOKEstablishment = true;
          registros.forEach(element => {
@@ -3413,7 +3426,7 @@ guardarDeclaracion() {
       this.identificationRepresentativePersonValidated = true;
       this.consumoCedulaRepresentanteLegal = true;
       this.dinardapDataService.get_cedula(this.ruc_registro_selected.ruc.person_representative.identification).then( r => {
-         const registros = r.return.instituciones.datosPrincipales.registros;
+         const registros = r.entidades.entidad.filas.fila.columnas.columna;
          this.representanteCedulaData = '';
          this.ruc_registro_selected.ruc.owner_name = '';
          this.REGCIVILREPRESENTANTELEGALOK = true;
@@ -3448,7 +3461,6 @@ guardarDeclaracion() {
       });
    }
   }
-
 
   checkTelefonoPrincipal(): Boolean {
    this.ruc_registro_selected.ruc.contact_user.main_phone_number = this.ruc_registro_selected.ruc.contact_user.main_phone_number.replace(/[^\d]/, '');

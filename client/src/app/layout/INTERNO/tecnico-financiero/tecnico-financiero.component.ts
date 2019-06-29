@@ -2104,154 +2104,159 @@ getDeclarationItems() {
  }
 
  checkCedula() {
-  this.ruc_registro_selected.ruc.contact_user.identification = this.ruc_registro_selected.ruc.contact_user.identification.replace(/[^\d]/, '');
-  if (this.ruc_registro_selected.ruc.contact_user.identification.length !== 10) {
-     this.identificationContactValidated = false;
-     this.consumoCedula = false;
-     return;
+   this.ruc_registro_selected.ruc.contact_user.identification = this.ruc_registro_selected.ruc.contact_user.identification.replace(/[^\d]/, '');
+   if (this.ruc_registro_selected.ruc.contact_user.identification.length !== 10) {
+      this.identificationContactValidated = false;
+      this.consumoCedula = false;
+      return;
+   }
+   if (this.consumoCedula && this.REGCIVILOK) {
+      return;
+   }
+   this.cedulaData = '<div class=\"progress mb-3\"><div class=\"progress-bar progress-bar-striped progress-bar-animated bg-warning col-12\">Espere...</div></div><div class="col-12 text-center"><strong>Conectándose al Registro Civil...</strong></div>';
+   if (this.ruc_registro_selected.ruc.contact_user.identification === this.user.identification) {
+      this.ruc_registro_selected.ruc.contact_user = this.user;
+   }
+   if (!this.consumoCedula) {
+      this.consumoCedula = true;
+      this.identificationContactValidated = true;
+      this.dinardapDataService.get_cedula(this.ruc_registro_selected.ruc.contact_user.identification).then( r => {
+         this.REGCIVILOK = true;
+         const registros = r.entidades.entidad.filas.fila.columnas.columna;
+         this.cedulaData = '';
+         registros.forEach(element => {
+            if (element.campo === 'cedula') {
+               if (element.valor === this.ruc_registro_selected.ruc.contact_user.identification) {
+                  this.toastr.successToastr('La cédula ingresada es correcta.', 'Registro Civil');
+                  this.identificationContactValidated = true;
+               } else {
+                  this.toastr.errorToastr('La cédula ingresada no es correcta.', 'Registro Civil');
+                  this.identificationContactValidated = false;
+               }
+            }
+            if (this.identificationContactValidated) {
+               if (element.campo === 'nombre') {
+                  this.ruc_registro_selected.ruc.contact_user.name = element.valor;
+                  this.cedulaData += '<strong>Nombre: </strong> ' + element.valor + '<br/>';
+               }
+               if (element.campo === 'fechaNacimiento') {
+                  this.cedulaData += '<strong>Fecha de Nacimiento: </strong> ' + element.valor + '<br/>';
+               }
+               if (element.campo === 'nacionalidad') {
+                  this.cedulaData += '<strong>Nacionalidad: </strong> ' + element.valor + '<br/>';
+               }
+            }
+         });
+      }).catch( e => {
+         this.toastr.errorToastr('La cédula ingresada no es correcta.', 'Registro Civil');
+         this.cedulaData = '<div class="alert alert-danger" role="alert">El Registro Civil, no respondió. Vuelva a intentarlo.</div>';
+         this.REGCIVILOK = false;
+         this.consumoCedula = false;
+      });
+   }
   }
-  if (this.consumoCedula && this.REGCIVILOK) {
-     return;
-  }
-  this.cedulaData = '<div class=\"progress mb-3\"><div class=\"progress-bar progress-bar-striped progress-bar-animated bg-warning col-12\">Espere...</div></div><div class="col-12 text-center"><strong>Conectándose al Registro Civil...</strong></div>';
-  if (this.ruc_registro_selected.ruc.contact_user.identification === this.user.identification) {
-     this.ruc_registro_selected.ruc.contact_user = this.user;
-     this.checkEmail();
-     this.checkTelefonoPrincipal();
-     this.checkTelefonoSecundario();
-  }
-  if (!this.consumoCedula) {
-     this.consumoCedula = true;
-     this.identificationContactValidated = true;
-     this.dinardapDataService.get_cedula(this.ruc_registro_selected.ruc.contact_user.identification).then( r => {
-        this.REGCIVILOK = true;
-        const registros = r.return.instituciones.datosPrincipales.registros;
-        this.cedulaData = '';
-        registros.forEach(element => {
-           if (element.campo === 'cedula') {
-              if (element.valor === this.ruc_registro_selected.ruc.contact_user.identification) {
-                 this.identificationContactValidated = true;
-              } else {
-                 this.identificationContactValidated = false;
-              }
-           }
-           if (this.identificationContactValidated) {
-              if (element.campo === 'nombre') {
-                 this.ruc_registro_selected.ruc.contact_user.name = element.valor;
-                 this.cedulaData += '<strong>Nombre: </strong> ' + element.valor + '<br/>';
-              }
-              if (element.campo === 'fechaNacimiento') {
-                 this.cedulaData += '<strong>Fecha de Nacimiento: </strong> ' + element.valor + '<br/>';
-              }
-              if (element.campo === 'nacionalidad') {
-                 this.cedulaData += '<strong>Nacionalidad: </strong> ' + element.valor + '<br/>';
-              }
-           }
-        });
-     }).catch( e => {
-        this.cedulaData = '<div class="alert alert-danger" role="alert">El Registro Civil, no respondió. Vuelva a intentarlo.</div>';
-        this.REGCIVILOK = false;
-        this.consumoCedula = false;
-     });
-  }
- }
 
  rucSaved(): Boolean {
   return typeof this.ruc_registro_selected.ruc.id !== 'undefined';
  }
 
  checkCedulaEstablishment() {
-  this.establishment_selected.contact_user.identification = this.establishment_selected.contact_user.identification.replace(/[^\d]/, '');
-  if (this.establishment_selected.contact_user.identification.length !== 10) {
-     this.identificationContactEstablishmentValidated = false;
-     this.consumoCedulaEstablishmentContact = false;
-     return;
+   this.establishment_selected.contact_user.identification = this.establishment_selected.contact_user.identification.replace(/[^\d]/, '');
+   if (this.establishment_selected.contact_user.identification.length !== 10) {
+      this.identificationContactEstablishmentValidated = false;
+      this.consumoCedulaEstablishmentContact = false;
+      return;
+   }
+   if (this.consumoCedulaEstablishmentContact && this.REGCIVILOKEstablishment) {
+      return;
+   }
+   this.cedulaEstablishmentContactData = '<div class=\"progress mb-3\"><div class=\"progress-bar progress-bar-striped progress-bar-animated bg-warning col-12\">Espere...</div></div><div class="col-12 text-center"><strong>Conectándose al Registro Civil...</strong></div>';
+   if (!this.consumoCedulaEstablishmentContact) {
+      this.identificationContactEstablishmentValidated = true;
+      this.consumoCedulaEstablishmentContact = true;
+      this.dinardapDataService.get_cedula(this.establishment_selected.contact_user.identification).then( r => {
+         const registros = r.entidades.entidad.filas.fila.columnas.columna;
+         this.cedulaEstablishmentContactData = '';
+         this.REGCIVILOKEstablishment = true;
+         registros.forEach(element => {
+            if (element.campo === 'cedula') {
+               if (element.valor === this.establishment_selected.contact_user.identification) {
+                  this.toastr.successToastr('La cédula ingresada es correcta.', 'Registro Civil');
+                  this.identificationContactEstablishmentValidated = true;
+               } else {
+                  this.toastr.errorToastr('La cédula ingresada no es correcta.', 'Registro Civil');
+                  this.identificationContactEstablishmentValidated = false;
+               }
+            }
+            if (this.identificationContactEstablishmentValidated) {
+               if (element.campo === 'nombre') {
+                  this.cedulaEstablishmentContactData += '<strong>Nombre: </strong> ' + element.valor + '<br/>';
+                  this.establishment_selected.contact_user.name = element.valor;
+               }
+               if (element.campo === 'nacionalidad') {
+                  this.cedulaEstablishmentContactData += '<strong>Nacionalidad: </strong> ' + element.valor + '<br/>';
+               }
+            }
+         });
+      }).catch( e => {
+         this.toastr.errorToastr('La cédula ingresada no es correcta.', 'Registro Civil');
+         this.cedulaEstablishmentContactData = '<div class="alert alert-danger" role="alert">El Registro Civil, no respondió. Vuelva a intentarlo.</div>';
+         this.REGCIVILOKEstablishment = false;
+         this.consumoCedulaEstablishmentContact = false;
+      });
+   }
   }
-  if (this.consumoCedulaEstablishmentContact && this.REGCIVILOKEstablishment) {
-     return;
-  }
-  this.cedulaEstablishmentContactData = '<div class=\"progress mb-3\"><div class=\"progress-bar progress-bar-striped progress-bar-animated bg-warning col-12\">Espere...</div></div><div class="col-12 text-center"><strong>Conectándose al Registro Civil...</strong></div>';
-  if (!this.consumoCedulaEstablishmentContact) {
-     this.identificationContactEstablishmentValidated = true;
-     this.consumoCedulaEstablishmentContact = true;
-     this.dinardapDataService.get_cedula(this.establishment_selected.contact_user.identification).then( r => {
-        const registros = r.return.instituciones.datosPrincipales.registros;
-        this.cedulaEstablishmentContactData = '';
-        this.REGCIVILOKEstablishment = true;
-        registros.forEach(element => {
-           if (element.campo === 'cedula') {
-              if (element.valor === this.establishment_selected.contact_user.identification) {
-                 this.identificationContactEstablishmentValidated = true;
-              } else {
-                 this.identificationContactEstablishmentValidated = false;
-              }
-           }
-           if (this.identificationContactEstablishmentValidated) {
-              if (element.campo === 'nombre') {
-                 this.cedulaEstablishmentContactData += '<strong>Nombre: </strong> ' + element.valor + '<br/>';
-                 this.establishment_selected.contact_user.name = element.valor;
-              }
-              if (element.campo === 'fechaNacimiento') {
-                 this.cedulaEstablishmentContactData += '<strong>Fecha de Nacimiento: </strong> ' + element.valor + '<br/>';
-              }
-              if (element.campo === 'nacionalidad') {
-                 this.cedulaEstablishmentContactData += '<strong>Nacionalidad: </strong> ' + element.valor + '<br/>';
-              }
-           }
-        });
-     }).catch( e => {
-        this.cedulaEstablishmentContactData = '<div class="alert alert-danger" role="alert">El Registro Civil, no respondió. Vuelva a intentarlo.</div>';
-        this.REGCIVILOKEstablishment = false;
-        this.consumoCedulaEstablishmentContact = false;
-     });
-  }
- }
 
- checkIdentificationRepresentant() {
-  this.ruc_registro_selected.ruc.person_representative.identification = this.ruc_registro_selected.ruc.person_representative.identification.replace(/[^\d]/, '');
-  if (this.ruc_registro_selected.ruc.person_representative.identification.length !== 10) {
-     this.identificationRepresentativePersonValidated = false;
-     this.consumoCedulaRepresentanteLegal = false;
-    return;
-  }
-  if (this.consumoCedulaRepresentanteLegal && this.REGCIVILREPRESENTANTELEGALOK) {
+  checkIdentificationRepresentant() {
+   this.ruc_registro_selected.ruc.person_representative.identification = this.ruc_registro_selected.ruc.person_representative.identification.replace(/[^\d]/, '');
+   if (this.ruc_registro_selected.ruc.person_representative.identification.length !== 10) {
+      this.identificationRepresentativePersonValidated = false;
+      this.consumoCedulaRepresentanteLegal = false;
      return;
+   }
+   if (this.consumoCedulaRepresentanteLegal && this.REGCIVILREPRESENTANTELEGALOK) {
+      return;
+   }
+   this.representanteCedulaData = '<div class=\"progress mb-3\"><div class=\"progress-bar progress-bar-striped progress-bar-animated bg-warning col-12\">Espere...</div></div><div class="col-12 text-center"><strong>Conectándose al Registro Civil...</strong></div>';
+   if (!this.consumoCedulaRepresentanteLegal) {
+      this.identificationRepresentativePersonValidated = true;
+      this.consumoCedulaRepresentanteLegal = true;
+      this.dinardapDataService.get_cedula(this.ruc_registro_selected.ruc.person_representative.identification).then( r => {
+         const registros = r.entidades.entidad.filas.fila.columnas.columna;
+         this.representanteCedulaData = '';
+         this.ruc_registro_selected.ruc.owner_name = '';
+         this.REGCIVILREPRESENTANTELEGALOK = true;
+         registros.forEach(element => {
+            if (element.campo === 'cedula') {
+               if (element.valor === this.ruc_registro_selected.ruc.person_representative.identification) {
+                  this.toastr.successToastr('La cédula ingresada es correcta.', 'Registro Civil');
+                  this.identificationRepresentativePersonValidated = true;
+               } else {
+                  this.toastr.errorToastr('La cédula ingresada no es correcta.', 'Registro Civil');
+                  this.identificationRepresentativePersonValidated = false;
+               }
+            }
+            if (this.identificationRepresentativePersonValidated) {
+               if (element.campo === 'nombre') {
+                  this.representanteCedulaData += '<strong>Nombre: </strong> ' + element.valor + '<br/>';
+                  this.ruc_registro_selected.ruc.owner_name = element.valor;
+               }
+               if (element.campo === 'fechaNacimiento') {
+                  this.representanteCedulaData += '<strong>Fecha de Nacimiento: </strong> ' + element.valor + '<br/>';
+               }
+               if (element.campo === 'nacionalidad') {
+                  this.representanteCedulaData += '<strong>Nacionalidad: </strong> ' + element.valor + '<br/>';
+               }
+            }
+         });
+      }).catch( e => {
+         this.toastr.errorToastr('La cédula ingresada no es correcta.', 'Registro Civil');
+         this.representanteCedulaData = '<div class="alert alert-danger" role="alert">El Registro Civil, no respondió. Vuelva a intentarlo.</div>';
+         this.REGCIVILREPRESENTANTELEGALOK = false;
+         this.consumoCedulaRepresentanteLegal = false;
+      });
+   }
   }
-  this.representanteCedulaData = '<div class=\"progress mb-3\"><div class=\"progress-bar progress-bar-striped progress-bar-animated bg-warning col-12\">Espere...</div></div><div class="col-12 text-center"><strong>Conectándose al Registro Civil...</strong></div>';
-  if (!this.consumoCedulaRepresentanteLegal) {
-     this.identificationRepresentativePersonValidated = true;
-     this.consumoCedulaRepresentanteLegal = true;
-     this.dinardapDataService.get_cedula(this.ruc_registro_selected.ruc.person_representative.identification).then( r => {
-        const registros = r.return.instituciones.datosPrincipales.registros;
-        this.representanteCedulaData = '';
-        this.REGCIVILREPRESENTANTELEGALOK = true;
-        registros.forEach(element => {
-           if (element.campo === 'cedula') {
-              if (element.valor === this.ruc_registro_selected.ruc.person_representative.identification) {
-                 this.identificationRepresentativePersonValidated = true;
-              } else {
-                 this.identificationRepresentativePersonValidated = false;
-              }
-           }
-           if (this.identificationRepresentativePersonValidated) {
-              if (element.campo === 'nombre') {
-                 this.representanteCedulaData += '<strong>Nombre: </strong> ' + element.valor + '<br/>';
-              }
-              if (element.campo === 'fechaNacimiento') {
-                 this.representanteCedulaData += '<strong>Fecha de Nacimiento: </strong> ' + element.valor + '<br/>';
-              }
-              if (element.campo === 'nacionalidad') {
-                 this.representanteCedulaData += '<strong>Nacionalidad: </strong> ' + element.valor + '<br/>';
-              }
-           }
-        });
-     }).catch( e => {
-        this.representanteCedulaData = '<div class="alert alert-danger" role="alert">El Registro Civil, no respondió. Vuelva a intentarlo.</div>';
-        this.REGCIVILREPRESENTANTELEGALOK = false;
-        this.consumoCedulaRepresentanteLegal = false;
-     });
-  }
- }
 
  checkTelefonoPrincipal(): Boolean {
   this.ruc_registro_selected.ruc.contact_user.main_phone_number = this.ruc_registro_selected.ruc.contact_user.main_phone_number.replace(/[^\d]/, '');

@@ -175,7 +175,13 @@ export class RegisterComponent implements OnInit {
          if (this.rucInactive) {
             return;
          }
-         const registros = r.sri_establecimientos.original.entidades.entidad.filas.fila.columnas.columna;
+         let itemsDetalles = [];
+         if (!Array.isArray(r.sri_establecimientos.original.entidades.entidad.filas.fila)) {
+            itemsDetalles = [r.sri_establecimientos.original.entidades.entidad.filas.fila];
+         } else {
+            itemsDetalles = r.sri_establecimientos.original.entidades.entidad.filas.fila;
+         }
+         const registros = itemsDetalles[0].columnas.columna;
          this.rucData = '';
          this.SRIOK = true;
          registros.forEach(element => {
@@ -189,9 +195,7 @@ export class RegisterComponent implements OnInit {
                }
             }
             if (this.rucValidated) {
-               if (element.campo === 'nombreFantasiaComercial') {
-                  this.rucData = '<strong>Razón Social: </strong> ' + element.valor;
-               }
+               this.rucData = '<strong>Estado del RUC: </strong> CONFIRMADO';
             }
          });
       }).catch( e => {
