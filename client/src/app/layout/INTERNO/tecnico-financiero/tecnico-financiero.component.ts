@@ -450,24 +450,26 @@ export class TecnicoFinancieroComponent implements OnInit {
  }
 
  buildDataTableEstablishment() {
-    this.columnsEstablishment = [
-       {title: '', name: 'selected'},
-       {title: 'Código', name: 'code', filtering: {filterString: '', placeholder: 'Código'}},
-       {title: 'Dirección', name: 'address', filtering: {filterString: '', placeholder: 'Dirección'}},
-       {title: 'Nombre Comercial', name: 'name', filtering: {filterString: '', placeholder: 'Nombre Comercial'}}
-    ];
-    const data = [];
-    this.ruc_registro_selected.ruc.establishments.forEach(item => {
-        data.push({
-           selected: '',
-           code: item.ruc_code_id,
-           address: item.address_main_street + ' ' + item.address_number + ' ' + item.address_secondary_street,
-           name: item.commercially_known_name
-        });
-    });
-    this.dataEstablishment = data;
-    this.onChangeTableEstablishment(this.config);
- }
+     this.columnsEstablishment = [
+        {title: '', name: 'selected'},
+        {title: 'Número de Establecimiento', name: 'code'},
+        {title: 'Dirección', name: 'address'},
+        {title: 'Nombre Comercial', name: 'name'},
+        {title: 'Estado', name: 'sri_state'},
+     ];
+     const data = [];
+     this.ruc_registro_selected.ruc.establishments.forEach(item => {
+         data.push({
+            selected: '',
+            code: item.ruc_code_id,
+            address: item.address_main_street + ' ' + item.address_number + ' ' + item.address_secondary_street,
+            name: item.commercially_known_name,
+            sri_state: item.sri_state,
+         });
+     });
+     this.dataEstablishment = data;
+     this.onChangeTableEstablishment(this.config);
+  }
 
  onCellClickEstablishment(event) {
   this.ruc_registro_selected.ruc.establishments.forEach(element => {

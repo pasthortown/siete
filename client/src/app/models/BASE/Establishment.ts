@@ -30,6 +30,7 @@ export class Establishment {
    establishment_property_type_id: number;
    establishment_certifications_on_establishment: EstablishmentCertification[];
    ruc_name_type_id: number;
+   sri_state: String;
    constructor() {
       this.id = 0;
       this.ruc_id = 0;
@@ -52,5 +53,6 @@ export class Establishment {
       this.url_web = '';
       this.contact_user_id = 0;
       this.ubication_id = 0;
+      this.sri_state = '';
    }
 }

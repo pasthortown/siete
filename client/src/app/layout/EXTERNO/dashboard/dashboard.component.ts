@@ -1085,6 +1085,7 @@ export class DashboardComponent implements OnInit {
       {title: 'Número de Establecimiento', name: 'code'},
       {title: 'Dirección', name: 'address'},
       {title: 'Nombre Comercial', name: 'name'},
+      {title: 'Estado', name: 'sri_state'},
    ];
    const data = [];
    this.ruc_registro_selected.ruc.establishments.forEach(item => {
@@ -1093,6 +1094,7 @@ export class DashboardComponent implements OnInit {
           code: item.ruc_code_id,
           address: item.address_main_street + ' ' + item.address_number + ' ' + item.address_secondary_street,
           name: item.commercially_known_name,
+          sri_state: item.sri_state,
        });
    });
    this.dataEstablishment = data;
@@ -1915,59 +1917,56 @@ export class DashboardComponent implements OnInit {
   }
 
   getEstablishmentsOnRuc(currentpage: number) {
-   this.establishment_selected = new Establishment();
-   this.mostrarDataEstablishment = false;
-   this.establecimientos_pendiente = true;
-   this.establishmentDataService.getByRuc(this.ruc_registro_selected.ruc.number, this.recordsByPageEstablishment, currentpage).then( r => {
-      const establecimientos = r.data as Establishment[];
-      this.dinardapDataService.get_RUC(this.ruc_registro_selected.ruc.number).then( dinardap => {
-        this.establecimientos_pendiente = false;
-        let itemsDetalles = [];
-        if (!Array.isArray(dinardap.sri_establecimientos.original.entidades.entidad.filas.fila)) {
-           itemsDetalles = [dinardap.sri_establecimientos.original.entidades.entidad.filas.fila];
-        } else {
-           itemsDetalles = dinardap.sri_establecimientos.original.entidades.entidad.filas.fila;
-        }
-        itemsDetalles.forEach(element => {
-           let existe = false;
-           let establishmentRucNum = '';
-           element.columnas.columna.forEach(localData => {
-              if (localData.campo === 'numeroEstablecimiento') {
-                 establishmentRucNum = localData.valor as string;
-                 establecimientos.forEach(establecimiento => {
-                    if (establecimiento.ruc_code_id === establishmentRucNum.trim()) {
-                       existe = true;
-                       console.log(establecimiento);
-                    }
-                 });
-              }
-           });
-           if (!existe) {
-              const newEstablishment = new Establishment();
-              newEstablishment.ruc_code_id = establishmentRucNum;
-              element.columnas.columna.forEach(localData => {
-                 if (localData.campo === 'calle') {
-                    newEstablishment.address_main_street = localData.valor;
-                 }
-                 if (localData.campo === 'numero') {
-                    newEstablishment.address_number = localData.valor;
-                 }
-                 if (localData.campo === 'interseccion') {
-                    newEstablishment.address_secondary_street = localData.valor;
-                 }
-              });
-              establecimientos.push(newEstablishment);
-           }
-        });
-        if(establecimientos.length == 0){
-           this.ruc_registro_selected.ruc.establishments = [];
-         }else {
-           this.ruc_registro_selected.ruc.establishments = r.data as Establishment[];
-           this.buildDataTableEstablishment();
+    this.establishment_selected = new Establishment();
+    this.mostrarDataEstablishment = false;
+    this.establecimientos_pendiente = true;
+    this.establishmentDataService.getByRuc(this.ruc_registro_selected.ruc.number, this.recordsByPageEstablishment, currentpage).then( r => {
+       const establecimientos = r.data as Establishment[];
+       this.dinardapDataService.get_RUC(this.ruc_registro_selected.ruc.number).then( dinardap => {
+         this.establecimientos_pendiente = false;
+         let itemsDetalles = [];
+         if (!Array.isArray(dinardap.sri_establecimientos.original.entidades.entidad.filas.fila)) {
+            itemsDetalles = [dinardap.sri_establecimientos.original.entidades.entidad.filas.fila];
+         } else {
+            itemsDetalles = dinardap.sri_establecimientos.original.entidades.entidad.filas.fila;
          }
-      }).catch( e => { console.log(e); });
-   }).catch( e => { console.log(e); });
- }
+         itemsDetalles.forEach(sri_establecimiento => {
+            let existe = false;
+            const newEstablishment = new Establishment();
+            sri_establecimiento.columnas.columna.forEach(sriData => {
+               if (sriData.campo === 'estadoEstablecimiento') {
+                  newEstablishment.sri_state = sriData.valor as string;
+               }
+               if (sriData.campo === 'calle') {
+                  newEstablishment.address_main_street = sriData.valor;
+               }
+               if (sriData.campo === 'numero') {
+                  newEstablishment.address_number = sriData.valor;
+               }
+               if (sriData.campo === 'interseccion') {
+                  newEstablishment.address_secondary_street = sriData.valor;
+               }
+               if (sriData.campo === 'numeroEstablecimiento') {
+                  newEstablishment.ruc_code_id = sriData.valor as string;
+               }
+            });
+            establecimientos.forEach(establecimiento => {
+               if (establecimiento.ruc_code_id === newEstablishment.ruc_code_id.trim()) {
+                  existe = true;
+                  establecimiento.sri_state = newEstablishment.sri_state;
+               }
+            });
+            if (!existe) {
+               establecimientos.push(newEstablishment);
+            }
+         });
+         if(establecimientos.length == 0){
+            this.ruc_registro_selected.ruc.establishments = [];
+         }
+         this.buildDataTableEstablishment();
+       }).catch( e => { console.log(e); });
+    }).catch( e => { console.log(e); });
+  }
 
  getPersonRepresentativeAttachment(ruc_number: String) {
    if (this.ruc_registro_selected.ruc.tax_payer_type_id <= 1) {
