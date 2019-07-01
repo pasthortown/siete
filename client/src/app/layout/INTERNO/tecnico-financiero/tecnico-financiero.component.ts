@@ -111,6 +111,10 @@ export class TecnicoFinancieroComponent implements OnInit {
   financieros: User[] = [];
   financialSelectedId: number = 0;
   zonales: any[] = [];
+  totalPayBase = 0;
+  totalPayFines = 0;
+  totalPayTaxes = 0;
+  totalPayToPay = 0;
   registerApprovals: ApprovalState[] = [];
   registerApprovalCoordinador: ApprovalState = new ApprovalState();
   registerApprovalInspector: ApprovalState = new ApprovalState();
@@ -911,16 +915,16 @@ calcularUnoxMil() {
 
  enviarEmailPago() {
     let payCodes = '';
-    let totalPayBase = 0;
-    let totalPayFines = 0;
-    let totalPayTaxes = 0;
-    let totalPayToPay = 0;
+    this.totalPayBase = 0;
+    this.totalPayFines = 0;
+    this.totalPayTaxes = 0;
+    this.totalPayToPay = 0;
     this.pays.forEach(pay => {
        if (!pay.payed) {
-         totalPayToPay += pay.amount_to_pay*1;
-         totalPayBase += pay.amount_to_pay_base*1;
-         totalPayFines += pay.amount_to_pay_fines*1;
-         totalPayFines += pay.amount_to_pay_taxes*1;
+         this.totalPayToPay += pay.amount_to_pay*1;
+         this.totalPayBase += pay.amount_to_pay_base*1;
+         this.totalPayFines += pay.amount_to_pay_fines*1;
+         this.totalPayTaxes += pay.amount_to_pay_taxes*1;
          payCodes += pay.code + ', ';
        }
     });
@@ -981,10 +985,10 @@ calcularUnoxMil() {
    this.userDataService.get(this.registerMinturSelected.establishment.contact_user_id).then( r => {
       const information = {
          para: r.name,
-         amount_to_pay_base: totalPayBase,
-         amount_to_pay_fines: totalPayFines,
-         amount_to_pay_taxes: totalPayTaxes,
-         amount_to_pay: totalPayToPay,
+         amount_to_pay_base: this.totalPayBase,
+         amount_to_pay_fines: this.totalPayFines,
+         amount_to_pay_taxes: this.totalPayTaxes,
+         amount_to_pay: this.totalPayToPay,
          ruc: this.ruc_registro_selected.ruc.number,
          nombreComercial: this.registerMinturSelected.establishment.commercially_known_name,
          fechaSolicitud: today.toLocaleString(),
@@ -1817,6 +1821,7 @@ calcTaxes(declaration: Declaration) {
 encerarDeclaracion(paySelected) {
    paySelected.amount_to_pay_fines = 0;
    paySelected.amount_to_pay_taxes = 0;
+   paySelected.amount_to_pay = paySelected.amount_to_pay_base + paySelected.amount_to_pay_fines + paySelected.amount_to_pay_taxes;
 }
 
   getDeclarationAttachment(declaration_id: number) {

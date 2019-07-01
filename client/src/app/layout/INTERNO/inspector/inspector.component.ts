@@ -415,6 +415,7 @@ export class InspectorComponent implements OnInit {
    } else {
       this.mostrarMotivoTramite = true;
    }
+   this.tipo_tramite = 'REGISTRO';
    this.registerProcedureDataService.get_by_register_id(this.idRegister.toString()).then( r => {
       if (typeof r.id != 'undefined') {
          this.motivoTramite = r.justification;
