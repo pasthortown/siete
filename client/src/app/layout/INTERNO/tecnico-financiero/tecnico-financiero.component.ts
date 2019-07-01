@@ -895,7 +895,6 @@ calcularUnoxMil() {
    this.pay.payed = false;
    this.payDataService.post(this.pay).then( r => {
       this.getPays();
-      this.enviarEmailPago(this.pay);
    }).catch( e => { console.log(e); });
  }
 
@@ -907,11 +906,25 @@ calcularUnoxMil() {
    paySelected.payed = false;
    this.payDataService.post(paySelected).then( r => {
       this.getPays();
-      this.enviarEmailPago(paySelected);
    }).catch( e => { console.log(e); });
  }
 
- enviarEmailPago(paySelected: Pay) {
+ enviarEmailPago() {
+    let payCodes = '';
+    let totalPayBase = 0;
+    let totalPayFines = 0;
+    let totalPayTaxes = 0;
+    let totalPayToPay = 0;
+    this.pays.forEach(pay => {
+       if (!pay.payed) {
+         totalPayToPay += pay.amount_to_pay*1;
+         totalPayBase += pay.amount_to_pay_base*1;
+         totalPayFines += pay.amount_to_pay_fines*1;
+         totalPayFines += pay.amount_to_pay_taxes*1;
+         payCodes += pay.code + ', ';
+       }
+    });
+    payCodes = payCodes.trim().substr(0,payCodes.length - 1);
    const today = new Date();
    let clasificacion: String = '';
    let categoria: String = '';
@@ -968,10 +981,10 @@ calcularUnoxMil() {
    this.userDataService.get(this.registerMinturSelected.establishment.contact_user_id).then( r => {
       const information = {
          para: r.name,
-         amount_to_pay_base: paySelected.amount_to_pay_base,
-         amount_to_pay_fines: paySelected.amount_to_pay_fines,
-         amount_to_pay_taxes: paySelected.amount_to_pay_taxes,
-         amount_to_pay: paySelected.amount_to_pay,
+         amount_to_pay_base: totalPayBase,
+         amount_to_pay_fines: totalPayFines,
+         amount_to_pay_taxes: totalPayTaxes,
+         amount_to_pay: totalPayToPay,
          ruc: this.ruc_registro_selected.ruc.number,
          nombreComercial: this.registerMinturSelected.establishment.commercially_known_name,
          fechaSolicitud: today.toLocaleString(),
@@ -982,6 +995,7 @@ calcularUnoxMil() {
          provincia: provinciaName,
          canton: cantonName,
          parroquia: parroquiaName,
+         payCodes: payCodes,
          callePrincipal: this.registerMinturSelected.establishment.address_main_street,
          calleInterseccion: this.registerMinturSelected.establishment.address_secondary_street,
          numeracion: this.registerMinturSelected.establishment.address_number,
@@ -1796,8 +1810,13 @@ calcTaxes(declaration: Declaration) {
    newPayCalc.amount_to_pay_fines = impuestoCausado * moraCalculado;
    newPayCalc.amount_to_pay_taxes = impuestoCausado * interesNominal;
    newPayCalc.amount_to_pay = newPayCalc.amount_to_pay_base + newPayCalc.amount_to_pay_fines + newPayCalc.amount_to_pay_taxes;
-   newPayCalc.code = new Date(declaration.declaration_date.toString()).getFullYear().toString();
+   newPayCalc.code = declaration.year.toString();
    this.pays_calc.push(newPayCalc);
+}
+
+encerarDeclaracion(paySelected) {
+   paySelected.amount_to_pay_fines = 0;
+   paySelected.amount_to_pay_taxes = 0;
 }
 
   getDeclarationAttachment(declaration_id: number) {
