@@ -271,7 +271,7 @@
                   </div>
                 </div>
               </div>
-              <div class="row">
+              <div class="row" *ngIf="SRIOK">
                 <div class="col-12">
                   <div class="alert alert-danger mt-3" role="alert" *ngIf="!validateRuc()">
                     <label class="col-12 text-justify"><strong>Atención</strong><br />
@@ -280,7 +280,7 @@
                   </div>
                 </div>
               </div>
-              <div class="row mt-3">
+              <div class="row mt-3" *ngIf="SRIOK">
                 <div class="col-12 text-center">
                   <button [disabled]="guardando" *ngIf="validateRuc()" type="button" class="btn btn-success" title="Guardar Datos"
                     (click)="guardarRUC()">
