@@ -3461,8 +3461,8 @@ guardarDeclaracion() {
       this.getReceptionRoom(this.rucEstablishmentRegisterSelected.id);
       this.setCategory(this.rucEstablishmentRegisterSelected.register_type_id);
       this.rucEstablishmentRegisterSelected.editable = false;
-      this.getTramiteStatus(this.rucEstablishmentRegisterSelected.status);
       this.rucEstablishmentRegisterSelected.status = r.status.state_id;
+      this.getTramiteStatus(this.rucEstablishmentRegisterSelected.status);
       this.rucEstablishmentRegisterSelected.complementary_service_types_on_register = r.complementary_service_types_on_register as ComplementaryServiceType[];
       this.rucEstablishmentRegisterSelected.complementary_service_foods_on_register = r.complementary_service_foods_on_register as ComplementaryServiceFood[];
       this.rucEstablishmentRegisterSelected.capacities_on_register = r.capacities_on_register as Capacity[];

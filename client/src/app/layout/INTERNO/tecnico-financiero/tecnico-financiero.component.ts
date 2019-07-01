@@ -2634,8 +2634,8 @@ removeLanguage() {
    this.rucEstablishmentRegisterSelected = new Register();
    this.registerDataService.get_register_data(register.id).then( r => {
       this.rucEstablishmentRegisterSelected = r.register as Register;
-      this.getTramiteStatus(this.rucEstablishmentRegisterSelected.status);
       this.rucEstablishmentRegisterSelected.status = r.status.state_id;
+      this.getTramiteStatus(this.rucEstablishmentRegisterSelected.status);
       this.categorySelectedCode = r.register_category.code;
       this.rucEstablishmentRegisterSelected.complementary_service_types_on_register = r.complementary_service_types_on_register as ComplementaryServiceType[];
       this.rucEstablishmentRegisterSelected.complementary_service_foods_on_register = r.complementary_service_foods_on_register as ComplementaryServiceFood[];
