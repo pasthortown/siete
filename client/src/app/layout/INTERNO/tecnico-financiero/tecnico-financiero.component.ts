@@ -930,7 +930,7 @@ calcularUnoxMil() {
     });
     payCodes = payCodes.trim().substr(0,payCodes.length - 1);
    const today = new Date();
-   let clasificacion: String = ' ';
+   let clasificacion: String = '';
    let categoria: String = '';
    let category: RegisterType = new RegisterType();
    this.register_types.forEach(element => {
