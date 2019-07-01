@@ -422,7 +422,7 @@ export class InspectorComponent implements OnInit {
             if (typeof r2.activity != 'undefined') {
                this.as_turistic_date = new Date(r2.as_turistic_date.toString());
             }
-            this.tipo_tramite = '';
+            this.tipo_tramite = 'REGISTRO';
             const primerdigito = estado.substring(0, 1);
             if (primerdigito == '1') {
                this.tipo_tramite = 'REGISTRO';
