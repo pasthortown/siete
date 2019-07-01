@@ -3280,8 +3280,18 @@ guardarDeclaracion() {
 
   selectRegisterEstablishment(establishment: Establishment) {
    if(establishment.id == 0) {
+    if (establishment.sri_state == 'CERRADO') {
+       this.toastr.errorToastr('El establecimeinto seleccionado se encuentra en estado CERRADO.', 'Estado de Establecimiento');
+       return;
+    }
     this.newRegisterEstablishment();
     this.establishment_selected.ruc_code_id = establishment.ruc_code_id;
+    this.establishment_selected.commercially_known_name = establishment.commercially_known_name;
+    this.establishment_selected.address_main_street = establishment.address_main_street;
+    this.establishment_selected.address_number = establishment.address_number;
+    this.establishment_selected.address_secondary_street = establishment.address_secondary_street;
+    this.establishment_selected.sri_state = establishment.sri_state;
+    this.checkEstablishmentAddress();
     this.selectedNameType = new RucNameType();
     return;
    }
@@ -3350,7 +3360,6 @@ guardarDeclaracion() {
      this.establishment_selected_picture = r as EstablishmentPicture;
   }).catch( e => { console.log(e); });
 }
-
 
   selectRegisterEstablishmentDeclaration(establishment: Establishment) {
    this.establishment_declarations_selected = establishment;
