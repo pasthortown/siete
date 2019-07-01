@@ -528,11 +528,11 @@ export class RegistroComponent implements OnInit {
         this.registerApprovalInspector.date_assigment = new Date();
         this.approvalStateDataService.put(this.registerApprovalInspector).then( r => {
           const newRegisterState = new RegisterState();
-          newRegisterState.justification = 'Técinco Zonal asignado en la fecha ' + this.registerApprovalInspector.date_assigment.toDateString();
+          newRegisterState.justification = 'Técnico Zonal asignado en la fecha ' + this.registerApprovalInspector.date_assigment.toDateString();
           newRegisterState.register_id = this.idRegister;          
           newRegisterState.state_id = this.stateTramiteId - 6;
           this.registerStateDataService.post(newRegisterState).then( r1 => {
-             this.toastr.successToastr('Técinco Zonal Asignado Satisfactoriamente.', 'Asignación de Técinco Zonal');
+             this.toastr.successToastr('Técnico Zonal Asignado Satisfactoriamente.', 'Asignación de Técnico Zonal');
              this.refresh();
           }).catch( e => { console.log(e); });
         }).catch( e => { console.log(e); });
@@ -878,11 +878,11 @@ export class RegistroComponent implements OnInit {
    this.registerApprovalInspector.notes = '';
    this.approvalStateDataService.put(this.registerApprovalInspector).then( r => {
       const newRegisterState = new RegisterState();
-      newRegisterState.justification = 'Técinco Zonal asignado en la fecha ' + this.registerApprovalInspector.date_assigment.toDateString();
+      newRegisterState.justification = 'Técnico Zonal asignado en la fecha ' + this.registerApprovalInspector.date_assigment.toDateString();
       newRegisterState.register_id = this.idRegister;
       newRegisterState.state_id = this.stateTramiteId + 3;
       this.registerStateDataService.post(newRegisterState).then( r1 => {
-         this.toastr.successToastr('Técinco Zonal Asignado Satisfactoriamente.', 'Asignación de Técinco Zonal');
+         this.toastr.successToastr('Técnico Zonal Asignado Satisfactoriamente.', 'Asignación de Técnico Zonal');
          this.refresh();
       }).catch( e => { console.log(e); });
    }).catch( e => { console.log(e); });
@@ -904,11 +904,11 @@ export class RegistroComponent implements OnInit {
      this.registerApprovalInspector.date_assigment = null;
      this.approvalStateDataService.put(this.registerApprovalInspector).then( r => {
       const newRegisterState = new RegisterState();
-      newRegisterState.justification = 'Técinco Zonal removido en la fecha ' + today.toDateString();
+      newRegisterState.justification = 'Técnico Zonal removido en la fecha ' + today.toDateString();
       newRegisterState.register_id =  this.idRegister;
       newRegisterState.state_id = this.stateTramiteId - 3;
       this.registerStateDataService.post(newRegisterState).then( r1 => {
-         this.toastr.warningToastr('Técinco Zonal Removido Satisfactoriamente.', 'Asignación de Técinco Zonal');
+         this.toastr.warningToastr('Técnico Zonal Removido Satisfactoriamente.', 'Asignación de Técnico Zonal');
          this.refresh();
       }).catch( e => { console.log(e); });
      }).catch( e => { console.log(e); });

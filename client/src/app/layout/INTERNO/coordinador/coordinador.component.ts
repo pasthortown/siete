@@ -554,7 +554,7 @@ export class CoordinadorComponent implements OnInit {
         this.registerApprovalInspector.date_assigment = new Date();
         this.approvalStateDataService.put(this.registerApprovalInspector).then( r => {
           const newRegisterState = new RegisterState();
-          newRegisterState.justification = 'Técinco Zonal asignado en la fecha ' + this.registerApprovalInspector.date_assigment.toDateString();
+          newRegisterState.justification = 'Técnico Zonal asignado en la fecha ' + this.registerApprovalInspector.date_assigment.toDateString();
           newRegisterState.register_id = this.idRegister;          
           newRegisterState.state_id = this.stateTramiteId - 6;
           this.registerStateDataService.post(newRegisterState).then( r1 => {
@@ -626,7 +626,7 @@ export class CoordinadorComponent implements OnInit {
             thisYear:today.getFullYear()
          };
          this.mailerDataService.sendMail('rechazo_informe_tz', inspector.email.toString(), 'Rechazo y reasignación de trámite para su revisión', information).then( r => {
-            this.toastr.successToastr('Técinco Zonal Asignado Satisfactoriamente.', 'Asignación de Técinco Zonal');
+            this.toastr.successToastr('Técnico Zonal Asignado Satisfactoriamente.', 'Asignación de Técnico Zonal');
             this.refresh();
          }).catch( e => { console.log(e); });
          
@@ -988,7 +988,7 @@ export class CoordinadorComponent implements OnInit {
    this.registerApprovalInspector.notes = '';
    this.approvalStateDataService.put(this.registerApprovalInspector).then( r => {
       const newRegisterState = new RegisterState();
-      newRegisterState.justification = 'Técinco Zonal asignado en la fecha ' + this.registerApprovalInspector.date_assigment.toDateString();
+      newRegisterState.justification = 'Técnico Zonal asignado en la fecha ' + this.registerApprovalInspector.date_assigment.toDateString();
       newRegisterState.register_id = this.idRegister;
       newRegisterState.state_id = this.stateTramiteId + 3;
       this.asignandoInspector = false;
@@ -1083,7 +1083,7 @@ export class CoordinadorComponent implements OnInit {
          pdfBase64: pdfBase64,
       };
       this.mailerDataService.sendMail('asignacion', inspector.email.toString(), 'Asignación de trámite para su revisión', information).then( r => {
-         this.toastr.successToastr('Técinco Zonal Asignado Satisfactoriamente.', 'Asignación de Técinco Zonal');
+         this.toastr.successToastr('Técnico Zonal Asignado Satisfactoriamente.', 'Asignación de Técnico Zonal');
          this.refresh();
       }).catch( e => { console.log(e); });
    }).catch( e => { console.log(e); });
@@ -1161,7 +1161,7 @@ export class CoordinadorComponent implements OnInit {
       thisYear:today.getFullYear()
    };
    this.mailerDataService.sendMail('desasignacion', inspector.email.toString(), 'Desasignación de trámite', information).then( r => {
-      this.toastr.warningToastr('Técinco Zonal Desasignado Satisfactoriamente.', 'Desasignación de Técinco Zonal');
+      this.toastr.warningToastr('Técnico Zonal Desasignado Satisfactoriamente.', 'Desasignación de Técnico Zonal');
       this.refresh();
    }).catch( e => { console.log(e); });
    this.isAssigned = false;
@@ -1170,7 +1170,7 @@ export class CoordinadorComponent implements OnInit {
    this.registerApprovalInspector.date_assigment = null;
    this.approvalStateDataService.put(this.registerApprovalInspector).then( r => {
    const newRegisterState = new RegisterState();
-   newRegisterState.justification = 'Técinco Zonal removido en la fecha ' + today.toDateString();
+   newRegisterState.justification = 'Técnico Zonal removido en la fecha ' + today.toDateString();
    newRegisterState.register_id =  this.idRegister;
    newRegisterState.state_id = this.stateTramiteId - 3;
    this.desasignandoInspector = true;
@@ -1282,7 +1282,7 @@ export class CoordinadorComponent implements OnInit {
             pdfBase64: pdfBase64,
          };
          this.mailerDataService.sendMail('asignacion', financiero.email.toString(), 'Asignación de trámite para su revisión', information).then( r => {
-            this.toastr.successToastr('Técinco Financiero Asignado Satisfactoriamente.', 'Asignación de Técinco Financiero');
+            this.toastr.successToastr('Técnico Financiero Asignado Satisfactoriamente.', 'Asignación de Técnico Financiero');
             this.refresh();
          }).catch( e => { console.log(e); });
       }).catch( e => { console.log(e); });
