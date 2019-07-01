@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Validator;
 use Exception;
+use App\Identification;
+use App\Ruc;
 use Illuminate\Http\Request;
 
 class DinardapController extends Controller
@@ -97,15 +99,81 @@ class DinardapController extends Controller
     $identificacion = ["nombre"=>"identificacion", "valor"=>$data["RUC"]];
     $parameters = array($codigoPaquete, $identificacion);
 	$sri_ruc_contactos = $this->connect($parameters);
-	return response()->json(["sri_ruc"=>$sri_ruc, "sri_establecimientos"=>$sri_establecimientos, "sri_ruc_completo"=>$sri_ruc_completo, "sri_ruc_datos"=>$sri_ruc_datos, "sri_ruc_contactos"=>$sri_ruc_contactos, "sri_ubicaciones_geograficas"=>$sri_ubicaciones_geograficas],200);
+	$respuesta = ["sri_ruc"=>$sri_ruc, "sri_establecimientos"=>$sri_establecimientos, "sri_ruc_completo"=>$sri_ruc_completo, "sri_ruc_datos"=>$sri_ruc_datos, "sri_ruc_contactos"=>$sri_ruc_contactos, "sri_ubicaciones_geograficas"=>$sri_ubicaciones_geograficas];
+	$previewData = Ruc::where('number', $data['RUC'])->first();
+    if (!$previewData) {
+      $ruc = new Ruc();
+      $lastRuc = Ruc::orderBy('id')->get()->last();
+      if($lastRuc) {
+          $ruc->id = $lastRuc->id + 1;
+      } else {
+          $ruc->id = 1;
+      }
+      $ruc->number = $data['RUC'];
+      $ruc->data = json_encode($respuesta);
+      $ruc->date = date("Y-m-d H:i:s");
+      $ruc->save();
+    } else {
+      if ($previewData->data == json_encode($respuesta)) {
+        $previewData->update([
+          'date'=>date("Y-m-d H:i:s"),
+        ]);
+      } else {
+        $ruc = new Ruc();
+        $lastRuc = Ruc::orderBy('id')->get()->last();
+        if($lastRuc) {
+            $ruc->id = $lastRuc->id + 1;
+        } else {
+            $ruc->id = 1;
+        }
+        $ruc->number = $data['RUC'];
+        $ruc->data = json_encode($respuesta);
+        $ruc->date = date("Y-m-d H:i:s");
+        $ruc->save();
+      }
+    }
+    return response()->json($respuesta,200);
   }
 
   public function cedula(Request $request) {
 	$data = $request->json()->all();
     $codigoPaquete = ["nombre"=>"codigoPaquete", "valor"=>"2112"];
     $identificacion = ["nombre"=>"identificacion", "valor"=>$data["identificacion"]];
-    $parameters = array($codigoPaquete, $identificacion);
-    return $this->connect($parameters);
+	$parameters = array($codigoPaquete, $identificacion);
+	$respuesta = $this->connect($parameters);
+	$previewData = Identification::where('number', $data['identificacion'])->first();
+    if (!$previewData) {
+      $identification = new Identification();
+      $lastIdentification = Identification::orderBy('id')->get()->last();
+      if($lastIdentification) {
+          $identification->id = $lastIdentification->id + 1;
+      } else {
+          $identification->id = 1;
+      }
+      $identification->number = $data['identificacion'];
+      $identification->data = json_encode($respuesta);
+      $identification->date = date("Y-m-d H:i:s");
+      $identification->save();
+    } else {
+      if ($previewData->data == json_encode($respuesta)) {
+        $previewData->update([
+          'date'=>date("Y-m-d H:i:s"),
+        ]);
+      } else {
+        $identification = new Identification();
+        $lastIdentification = Identification::orderBy('id')->get()->last();
+        if($lastIdentification) {
+            $identification->id = $lastIdentification->id + 1;
+        } else {
+            $identification->id = 1;
+        }
+        $identification->number = $data['identificacion'];
+        $identification->data = json_encode($respuesta);
+        $identification->date = date("Y-m-d H:i:s");
+        $identification->save();
+      }
+    }
+	return response()->json($respuesta,200);
   }
 
   public function super_cias(Request $request) {
