@@ -2332,56 +2332,57 @@ export class CoordinadorComponent implements OnInit {
   }
 
   getEstablishmentsOnRuc(currentpage: number) {
-    this.establishment_selected = new Establishment();
-    this.mostrarDataEstablishment = false;
-    this.establecimientos_pendiente = true;
-    this.establishmentDataService.getByRuc(this.ruc_registro_selected.ruc.number, this.recordsByPageEstablishment, currentpage).then( r => {
-       const establecimientos = r.data as Establishment[];
-       this.dinardapDataService.get_RUC(this.ruc_registro_selected.ruc.number).then( dinardap => {
-         this.establecimientos_pendiente = false;
-         let itemsDetalles = [];
-         if (!Array.isArray(dinardap.sri_establecimientos.original.entidades.entidad.filas.fila)) {
-            itemsDetalles = [dinardap.sri_establecimientos.original.entidades.entidad.filas.fila];
-         } else {
-            itemsDetalles = dinardap.sri_establecimientos.original.entidades.entidad.filas.fila;
-         }
-         itemsDetalles.forEach(sri_establecimiento => {
-            let existe = false;
-            const newEstablishment = new Establishment();
-            sri_establecimiento.columnas.columna.forEach(sriData => {
-               if (sriData.campo === 'estadoEstablecimiento') {
-                  newEstablishment.sri_state = sriData.valor as string;
-               }
-               if (sriData.campo === 'calle') {
-                  newEstablishment.address_main_street = sriData.valor;
-               }
-               if (sriData.campo === 'numero') {
-                  newEstablishment.address_number = sriData.valor;
-               }
-               if (sriData.campo === 'interseccion') {
-                  newEstablishment.address_secondary_street = sriData.valor;
-               }
-               if (sriData.campo === 'numeroEstablecimiento') {
-                  newEstablishment.ruc_code_id = sriData.valor as string;
-               }
-            });
-            establecimientos.forEach(establecimiento => {
-               if (establecimiento.ruc_code_id === newEstablishment.ruc_code_id.trim()) {
-                  existe = true;
-                  establecimiento.sri_state = newEstablishment.sri_state;
-               }
-            });
-            if (!existe) {
-               establecimientos.push(newEstablishment);
-            }
-         });
-         if(establecimientos.length == 0){
-            this.ruc_registro_selected.ruc.establishments = [];
-         }
-         this.buildDataTableEstablishment();
-       }).catch( e => { console.log(e); });
-    }).catch( e => { console.log(e); });
-  }
+   this.establishment_selected = new Establishment();
+   this.mostrarDataEstablishment = false;
+   this.establecimientos_pendiente = true;
+   this.establishmentDataService.getByRuc(this.ruc_registro_selected.ruc.number, this.recordsByPageEstablishment, currentpage).then( r => {
+      const establecimientos = r.data as Establishment[];
+      this.dinardapDataService.get_RUC(this.ruc_registro_selected.ruc.number).then( dinardap => {
+        this.establecimientos_pendiente = false;
+        let itemsDetalles = [];
+        if (!Array.isArray(dinardap.sri_establecimientos.original.entidades.entidad.filas.fila)) {
+           itemsDetalles = [dinardap.sri_establecimientos.original.entidades.entidad.filas.fila];
+        } else {
+           itemsDetalles = dinardap.sri_establecimientos.original.entidades.entidad.filas.fila;
+        }
+        itemsDetalles.forEach(sri_establecimiento => {
+           let existe = false;
+           const newEstablishment = new Establishment();
+           sri_establecimiento.columnas.columna.forEach(sriData => {
+              if (sriData.campo === 'estadoEstablecimiento') {
+                 newEstablishment.sri_state = sriData.valor as string;
+              }
+              if (sriData.campo === 'calle') {
+                 newEstablishment.address_main_street = sriData.valor;
+              }
+              if (sriData.campo === 'numero') {
+                 newEstablishment.address_number = sriData.valor;
+              }
+              if (sriData.campo === 'interseccion') {
+                 newEstablishment.address_secondary_street = sriData.valor;
+              }
+              if (sriData.campo === 'numeroEstablecimiento') {
+                 newEstablishment.ruc_code_id = sriData.valor as string;
+              }
+           });
+           establecimientos.forEach(establecimiento => {
+              if (establecimiento.ruc_code_id === newEstablishment.ruc_code_id.trim()) {
+                 existe = true;
+                 establecimiento.sri_state = newEstablishment.sri_state;
+              }
+           });
+           if (!existe) {
+              establecimientos.push(newEstablishment);
+           }
+           this.ruc_registro_selected.ruc.establishments = establecimientos;
+        });
+        if(establecimientos.length == 0){
+           this.ruc_registro_selected.ruc.establishments = [];
+        }
+        this.buildDataTableEstablishment();
+      }).catch( e => { console.log(e); });
+   }).catch( e => { console.log(e); });
+ }
 
  getPersonRepresentativeAttachment(ruc_number: String) {
    if (this.ruc_registro_selected.ruc.tax_payer_type_id <= 1) {
@@ -3209,102 +3210,91 @@ guardarDeclaracion() {
   }
 
   checkRuc() {
-   if (this.consumoRuc && this.SRIOK) {
-     return;
+    if (this.consumoRuc && this.SRIOK) {
+      return;
+    }
+    this.rucData = '<div class=\"progress mb-3\"><div class=\"progress-bar progress-bar-striped progress-bar-animated bg-warning col-12\">Espere...</div></div><div class="col-12 text-center"><strong>Conectándose al SRI...</strong></div>';
+    this.ruc_registro_selected.ruc.number = this.ruc_registro_selected.ruc.number.replace(/[^\d]/, '');
+    if (this.ruc_registro_selected.ruc.number.length !== 13) {
+      this.rucValidated = false;
+      this.consumoRuc = false;
+      this.ruc_registro_selected.ruc.baised_accounting = false;
+      this.ruc_registro_selected.ruc.tax_payer_type_id = 1;
+      return;
+    }
+    if (!this.consumoRuc) {
+      this.consumoRuc = true;
+      this.rucValidated = true;
+      this.dinardapDataService.get_RUC(this.ruc_registro_selected.ruc.number).then( r => {
+         this.SRIOK = true; 
+         this.rucValidated = true;
+         let itemsDetalles = [];
+         if (!Array.isArray(r.sri_establecimientos.original.entidades.entidad.filas.fila)) {
+            itemsDetalles = [r.sri_establecimientos.original.entidades.entidad.filas.fila];
+         } else {
+            itemsDetalles = r.sri_establecimientos.original.entidades.entidad.filas.fila;
+         }
+         this.establishment_selected.ruc_code_id = '-';
+         this.rucData = 'PENDIENTE';
+         this.toastr.successToastr('El RUC ingresado es correcto.', 'SRI');
+         this.rucValidated = true;
+         this.ruc_registro_selected.ruc.baised_accounting = false;
+         console.log(r);
+         this.ruc_registro_selected.ruc.tax_payer_type_id = 1;
+         /*          AQUI 
+         registros.forEach(element => {
+            if (element.campo === 'numeroRuc') {
+               if (element.valor === this.ruc_registro_selected.ruc.number) {
+                  this.toastr.successToastr('El RUC ingresado es correcto.', 'SRI');
+                  this.rucValidated = true;
+               } else {
+                  this.toastr.errorToastr('El RUC ingresado no es correcto.', 'SRI');
+                  this.rucValidated = false;
+               }
+            }
+            if (this.rucValidated) {
+               if (element.campo === 'razonSocial') {
+                  this.rucData += '<strong>Razón Social: </strong> ' + element.valor + '<br/>';
+               }
+               if (element.campo === 'objetoSocial') {
+                  this.rucData += '<strong>Objeto Social: </strong> ' + element.valor + '<br/>';
+               }
+               if (element.campo === 'actividadEconomicaPrincipal') {
+                  this.rucData += '<strong>Actividad Económica: </strong> ' + element.valor + '<br/>';
+               }
+               if (element.campo === 'fechaInicioActividades') {
+                  this.rucData += '<strong>Fecha de Inicio de Actividades: </strong> ' + element.valor + '<br/>';
+               }
+               if (element.campo === 'fechaActualizacion') {
+                  this.rucData += '<strong>Fecha de Actualización: </strong> ' + element.valor + '<br/>';
+               }
+               if (element.campo === 'obligado') {
+                  if (element.valor === 'N') {
+                     this.ruc_registro_selected.ruc.baised_accounting = false;
+                     this.rucData += '<strong>Obligado a Llevar Contabilidad: </strong> NO<br/>';
+                  } else {
+                     this.ruc_registro_selected.ruc.baised_accounting = true;
+                     this.rucData += '<strong>Obligado a Llevar Contabilidad: </strong> SI<br/>';
+                  }
+               }
+               if (element.campo === 'tipoContribuyente') {
+                  if (element.valor === 'PERSONAS NATURALES') {
+                     this.ruc_registro_selected.ruc.tax_payer_type_id = 1;
+                  } else {
+                     this.ruc_registro_selected.ruc.tax_payer_type_id = 2;
+                  }
+                  this.rucData += '<strong>Tipo de Contribuyente: </strong> ' + element.valor + '<br/>';
+               }
+            }
+         });*/
+      }).catch( e => {
+         this.toastr.errorToastr('El RUC ingresado no es correcto.', 'SRI');
+         this.rucData = '<div class="alert alert-danger" role="alert">El SRI, no respondió. Vuelva a intentarlo.</div>';
+         this.consumoRuc = false;
+         this.SRIOK = false;
+      });
    }
-   this.rucData = '<div class=\"progress mb-3\"><div class=\"progress-bar progress-bar-striped progress-bar-animated bg-warning col-12\">Espere...</div></div><div class="col-12 text-center"><strong>Conectándose al SRI...</strong></div>';
-   this.ruc_registro_selected.ruc.number = this.ruc_registro_selected.ruc.number.replace(/[^\d]/, '');
-   if (this.ruc_registro_selected.ruc.number.length !== 13) {
-     this.rucValidated = false;
-     this.consumoRuc = false;
-     this.ruc_registro_selected.ruc.baised_accounting = false;
-     this.ruc_registro_selected.ruc.tax_payer_type_id = 1;
-     return;
-   }
-   if (!this.consumoRuc) {
-     this.consumoRuc = true;
-     this.rucValidated = true;
-     this.dinardapDataService.get_RUC(this.ruc_registro_selected.ruc.number).then( r => {
-        this.SRIOK = true;
-        this.rucValidated = true;
-        const registros = r.return.instituciones.datosPrincipales.registros;
-        let itemsDetalles = [];
-        if (!Array.isArray(r.return.instituciones.detalle.items)) {
-           itemsDetalles = [r.return.instituciones.detalle.items];
-        } else {
-           itemsDetalles = r.return.instituciones.detalle.items;
-        }
-        this.establishment_selected.ruc_code_id = '-';
-        itemsDetalles.forEach(element => {
-           const establishmentRuc = new EstablishmentOnRuc();
-           let interseccion = '';
-           element.registros.forEach(localData => {
-              if (localData.campo === 'numeroEstableciminiento') {
-                 establishmentRuc.numero = localData.valor;
-              }
-              if (localData.campo === 'interseccion') {
-                 interseccion = localData.valor;
-              }
-              if (localData.campo === 'tipoEstablecimiento') {
-                 establishmentRuc.tipo = localData.valor;
-              }
-           });
-           establishmentRuc.direccion = interseccion;
-        });
-        this.rucData = '';
-        registros.forEach(element => {
-           if (element.campo === 'numeroRuc') {
-              if (element.valor === this.ruc_registro_selected.ruc.number) {
-                 this.toastr.successToastr('El RUC ingresado es correcto.', 'SRI');
-                 this.rucValidated = true;
-              } else {
-                 this.toastr.errorToastr('El RUC ingresado no es correcto.', 'SRI');
-                 this.rucValidated = false;
-              }
-           }
-           if (this.rucValidated) {
-              if (element.campo === 'razonSocial') {
-                 this.rucData += '<strong>Razón Social: </strong> ' + element.valor + '<br/>';
-              }
-              if (element.campo === 'objetoSocial') {
-               this.rucData += '<strong>Objeto Social: </strong> ' + element.valor + '<br/>';
-              }
-              if (element.campo === 'actividadEconomicaPrincipal') {
-                 this.rucData += '<strong>Actividad Económica: </strong> ' + element.valor + '<br/>';
-              }
-              if (element.campo === 'fechaInicioActividades') {
-                 this.rucData += '<strong>Fecha de Inicio de Actividades: </strong> ' + element.valor + '<br/>';
-              }
-              if (element.campo === 'fechaActualizacion') {
-                 this.rucData += '<strong>Fecha de Actualización: </strong> ' + element.valor + '<br/>';
-              }
-              if (element.campo === 'obligado') {
-                 if (element.valor === 'N') {
-                    this.ruc_registro_selected.ruc.baised_accounting = false;
-                    this.rucData += '<strong>Obligado a Llevar Contabilidad: </strong> NO<br/>';
-                 } else {
-                    this.ruc_registro_selected.ruc.baised_accounting = true;
-                    this.rucData += '<strong>Obligado a Llevar Contabilidad: </strong> SI<br/>';
-                 }
-              }
-              if (element.campo === 'tipoContribuyente') {
-                 if (element.valor === 'PERSONAS NATURALES') {
-                    this.ruc_registro_selected.ruc.tax_payer_type_id = 1;
-                 } else {
-                    this.ruc_registro_selected.ruc.tax_payer_type_id = 2;
-                 }
-                 this.rucData += '<strong>Tipo de Contribuyente: </strong> ' + element.valor + '<br/>';
-              }
-           }
-        });
-     }).catch( e => {
-        this.toastr.errorToastr('El RUC ingresado no es correcto.', 'SRI');
-        this.rucData = '<div class="alert alert-danger" role="alert">El SRI, no respondió. Vuelva a intentarlo.</div>';
-        this.consumoRuc = false;
-        this.SRIOK = false;
-     });
   }
- }
 
  checkCedula() {
    this.ruc_registro_selected.ruc.contact_user.identification = this.ruc_registro_selected.ruc.contact_user.identification.replace(/[^\d]/, '');
@@ -3325,7 +3315,7 @@ guardarDeclaracion() {
       this.identificationContactValidated = true;
       this.dinardapDataService.get_cedula(this.ruc_registro_selected.ruc.contact_user.identification).then( r => {
          this.REGCIVILOK = true;
-         const registros = r.entidades.entidad.filas.fila.columnas.columna;
+         const registros = r.original.entidades.entidad.filas.fila.columnas.columna;
          this.cedulaData = '';
          registros.forEach(element => {
             if (element.campo === 'cedula') {
@@ -3378,7 +3368,7 @@ guardarDeclaracion() {
       this.identificationContactEstablishmentValidated = true;
       this.consumoCedulaEstablishmentContact = true;
       this.dinardapDataService.get_cedula(this.establishment_selected.contact_user.identification).then( r => {
-         const registros = r.entidades.entidad.filas.fila.columnas.columna;
+         const registros = r.original.entidades.entidad.filas.fila.columnas.columna;
          this.cedulaEstablishmentContactData = '';
          this.REGCIVILOKEstablishment = true;
          registros.forEach(element => {
@@ -3425,7 +3415,7 @@ guardarDeclaracion() {
       this.identificationRepresentativePersonValidated = true;
       this.consumoCedulaRepresentanteLegal = true;
       this.dinardapDataService.get_cedula(this.ruc_registro_selected.ruc.person_representative.identification).then( r => {
-         const registros = r.entidades.entidad.filas.fila.columnas.columna;
+         const registros = r.original.entidades.entidad.filas.fila.columnas.columna;
          this.representanteCedulaData = '';
          this.ruc_registro_selected.ruc.owner_name = '';
          this.REGCIVILREPRESENTANTELEGALOK = true;

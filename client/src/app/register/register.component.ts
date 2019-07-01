@@ -107,7 +107,7 @@ export class RegisterComponent implements OnInit {
        this.identificationValidated = true;
        this.consumoCedula = true;
        this.dinardapDataService.get_cedula(this.user.identification).then( r => {
-          const registros = r.entidades.entidad.filas.fila.columnas.columna;
+          const registros = r.original.entidades.entidad.filas.fila.columnas.columna;
           this.CedulaData = '';
           this.REGCIVILOK = true;
           registros.forEach(element => {

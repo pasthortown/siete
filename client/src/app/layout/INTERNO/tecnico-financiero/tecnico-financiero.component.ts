@@ -2124,7 +2124,7 @@ getDeclarationItems() {
       this.identificationContactValidated = true;
       this.dinardapDataService.get_cedula(this.ruc_registro_selected.ruc.contact_user.identification).then( r => {
          this.REGCIVILOK = true;
-         const registros = r.entidades.entidad.filas.fila.columnas.columna;
+         const registros = r.original.entidades.entidad.filas.fila.columnas.columna;
          this.cedulaData = '';
          registros.forEach(element => {
             if (element.campo === 'cedula') {
@@ -2177,7 +2177,7 @@ getDeclarationItems() {
       this.identificationContactEstablishmentValidated = true;
       this.consumoCedulaEstablishmentContact = true;
       this.dinardapDataService.get_cedula(this.establishment_selected.contact_user.identification).then( r => {
-         const registros = r.entidades.entidad.filas.fila.columnas.columna;
+         const registros = r.original.entidades.entidad.filas.fila.columnas.columna;
          this.cedulaEstablishmentContactData = '';
          this.REGCIVILOKEstablishment = true;
          registros.forEach(element => {
@@ -2224,7 +2224,7 @@ getDeclarationItems() {
       this.identificationRepresentativePersonValidated = true;
       this.consumoCedulaRepresentanteLegal = true;
       this.dinardapDataService.get_cedula(this.ruc_registro_selected.ruc.person_representative.identification).then( r => {
-         const registros = r.entidades.entidad.filas.fila.columnas.columna;
+         const registros = r.original.entidades.entidad.filas.fila.columnas.columna;
          this.representanteCedulaData = '';
          this.ruc_registro_selected.ruc.owner_name = '';
          this.REGCIVILREPRESENTANTELEGALOK = true;

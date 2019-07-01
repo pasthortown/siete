@@ -1163,6 +1163,7 @@ export class RegistroComponent implements OnInit {
             if (!existe) {
                establecimientos.push(newEstablishment);
             }
+            this.ruc_registro_selected.ruc.establishments = establecimientos;
          });
          if(establecimientos.length == 0){
             this.ruc_registro_selected.ruc.establishments = [];
@@ -2128,7 +2129,7 @@ export class RegistroComponent implements OnInit {
       this.identificationContactValidated = true;
       this.dinardapDataService.get_cedula(this.ruc_registro_selected.ruc.contact_user.identification).then( r => {
          this.REGCIVILOK = true;
-         const registros = r.entidades.entidad.filas.fila.columnas.columna;
+         const registros = r.original.entidades.entidad.filas.fila.columnas.columna;
          this.cedulaData = '';
          registros.forEach(element => {
             if (element.campo === 'cedula') {
@@ -2181,7 +2182,7 @@ export class RegistroComponent implements OnInit {
       this.identificationContactEstablishmentValidated = true;
       this.consumoCedulaEstablishmentContact = true;
       this.dinardapDataService.get_cedula(this.establishment_selected.contact_user.identification).then( r => {
-         const registros = r.entidades.entidad.filas.fila.columnas.columna;
+         const registros = r.original.entidades.entidad.filas.fila.columnas.columna;
          this.cedulaEstablishmentContactData = '';
          this.REGCIVILOKEstablishment = true;
          registros.forEach(element => {
@@ -2228,7 +2229,7 @@ export class RegistroComponent implements OnInit {
       this.identificationRepresentativePersonValidated = true;
       this.consumoCedulaRepresentanteLegal = true;
       this.dinardapDataService.get_cedula(this.ruc_registro_selected.ruc.person_representative.identification).then( r => {
-         const registros = r.entidades.entidad.filas.fila.columnas.columna;
+         const registros = r.original.entidades.entidad.filas.fila.columnas.columna;
          this.representanteCedulaData = '';
          this.ruc_registro_selected.ruc.owner_name = '';
          this.REGCIVILREPRESENTANTELEGALOK = true;
