@@ -1449,11 +1449,21 @@ export class RegistroComponent implements OnInit {
   }
 
   validateDeclaration(): Boolean {
-   return true;
+     let toReturn = true;
+   this.declaration_selected.declaration_item_values_on_declaration.forEach( element => {
+      if(element.value<0) {
+         toReturn = false;
+      }
+   });
+   return toReturn;
   }
 
   guardarDeclaracion() {
    if(!this.validateDeclaration) {
+      this.toastr.errorToastr('La información ingresada es incorrecta.', 'Declaración');
+      return;
+   }
+   if(this.totalunoxmil <0) {
       this.toastr.errorToastr('La información ingresada es incorrecta.', 'Declaración');
       return;
    }
