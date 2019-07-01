@@ -48,6 +48,20 @@ class EstablishmentController extends Controller
       return response()->json(Establishment::where('ruc_id', $ruc->id)->paginate($size),200);
     }
 
+    function set_register_date(Request $data) {
+      $result = $data->json()->all();
+      try{
+         DB::beginTransaction();
+         $establishment = Establishment::where('id', $result['id'])->update([
+            'as_turistic_register_date'=> date("Y-m-d H:i:s"),
+         ]);
+         DB::commit();
+      } catch (Exception $e) {
+         return response()->json($e,400);
+      }
+      return response()->json($establishment,200);
+    }
+
     function post(Request $data)
     {
        try{
@@ -253,7 +267,6 @@ class EstablishmentController extends Controller
                'address_map_latitude'=>$result['address_map_latitude'],
                'address_map_longitude'=>$result['address_map_longitude'],
                'url_web'=>$result['url_web'],
-               //'as_turistic_register_date'=>$result['as_turistic_register_date'],
                'address_reference'=>$result['address_reference'],
                'contact_user_id'=>$contact_user_id,
                'ruc_id'=>$result['ruc_id'],
@@ -337,7 +350,6 @@ class EstablishmentController extends Controller
             $establishment->address_map_latitude = $result['address_map_latitude'];
             $establishment->address_map_longitude = $result['address_map_longitude'];
             $establishment->url_web = $result['url_web'];
-            //$establishment->as_turistic_register_date = $result['as_turistic_register_date'];
             $establishment->address_reference = $result['address_reference'];
             $establishment->contact_user_id = $contact_user_id;
             $establishment->ruc_id = $result['ruc_id'];

@@ -52,6 +52,7 @@ $router->group(['middleware' => ['auth']], function () use ($router) {
    $router->get('/establishment/paginate', ['uses' => 'EstablishmentController@paginate']);
    $router->get('/establishment/backup', ['uses' => 'EstablishmentController@backup']);
    $router->get('/establishment/filtered', ['uses' => 'EstablishmentController@filtered']);
+   $router->post('/establishment/set_register_date', ['uses' => 'EstablishmentController@set_register_date']);
    $router->put('/establishment', ['uses' => 'EstablishmentController@put']);
    $router->delete('/establishment', ['uses' => 'EstablishmentController@delete']);
    $router->post('/establishment/masive_load', ['uses' => 'EstablishmentController@masiveLoad']);

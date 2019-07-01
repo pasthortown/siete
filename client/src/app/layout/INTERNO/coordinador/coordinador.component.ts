@@ -1942,6 +1942,8 @@ export class CoordinadorComponent implements OnInit {
      this.approvalStateDataService.put(this.registerApprovalCoordinador).then( r => {
         this.registerDataService.set_register_code(code, this.idRegister).then( r => {
         }).catch( e => { console.log(e); });
+        this.establishmentDataService.set_register_date(establishmentId).then( r => {
+        }).catch( e => { console.log(e); });
      }).catch( e => { console.log(e); });
      if (!enviarMail) {
       return;
