@@ -2422,7 +2422,7 @@ export class RegistroComponent implements OnInit {
   selectRegisterEstablishment(establishment: Establishment) {
      if(establishment.id == 0) {
       if (establishment.sri_state == 'CERRADO') {
-         this.toastr.errorToastr('El establecimeinto seleccionado se encuentra en estado CERRADO.', 'Estado de Establecimiento');
+         this.toastr.errorToastr('El sistema ha detectado que el establecimeinto del establecimiento seleccionado, en el SRI es CERRADO.', 'Estado de Establecimiento');
          return;
       }
       this.newRegisterEstablishment();

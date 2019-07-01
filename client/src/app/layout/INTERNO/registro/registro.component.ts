@@ -1366,7 +1366,7 @@ export class RegistroComponent implements OnInit {
         {title: 'Establecimiento', name: 'establishment'},
         {title: 'Dirección', name: 'address'},
         {title: 'Categoría', name: 'category'},
-        {title: 'Estado', name: 'status'},
+        {title: 'Bandeja', name: 'status'},
         {title: 'Fecha de Solicitud', name: 'updated_at'},
      ];
      const data = [];
@@ -3189,10 +3189,10 @@ guardarDeclaracion() {
 
   selectRegisterEstablishment(establishment: Establishment) {
    if(establishment.id == 0) {
-    if (establishment.sri_state == 'CERRADO') {
-       this.toastr.errorToastr('El establecimeinto seleccionado se encuentra en estado CERRADO.', 'Estado de Establecimiento');
-       return;
-    }
+      if (establishment.sri_state == 'CERRADO') {
+         this.toastr.errorToastr('El sistema ha detectado que el establecimeinto del establecimiento seleccionado, en el SRI es CERRADO.', 'Estado de Establecimiento');
+         return;
+      }
     this.newRegisterEstablishment();
     this.establishment_selected.ruc_code_id = establishment.ruc_code_id;
     this.establishment_selected.commercially_known_name = establishment.commercially_known_name;

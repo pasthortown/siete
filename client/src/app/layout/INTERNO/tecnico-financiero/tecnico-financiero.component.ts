@@ -715,7 +715,7 @@ export class TecnicoFinancieroComponent implements OnInit {
        {title: 'Establecimiento', name: 'establishment'},
        {title: 'Dirección', name: 'address'},
        {title: 'Categoría', name: 'category'},
-       {title: 'Estado', name: 'status'},
+       {title: 'Bandeja', name: 'status'},
        {title: 'Fecha de Solicitud', name: 'updated_at'},
        {title: 'Fecha de Asignación', name: 'date_assigment'},
     ];
