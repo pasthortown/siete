@@ -1917,57 +1917,60 @@ export class DashboardComponent implements OnInit {
   }
 
   getEstablishmentsOnRuc(currentpage: number) {
-   this.establishment_selected = new Establishment();
-   this.mostrarDataEstablishment = false;
-   this.establecimientos_pendiente = true;
-   this.establishmentDataService.getByRuc(this.ruc_registro_selected.ruc.number, this.recordsByPageEstablishment, currentpage).then( r => {
-      const establecimientos = r.data as Establishment[];
-      this.dinardapDataService.get_RUC(this.ruc_registro_selected.ruc.number).then( dinardap => {
-        this.establecimientos_pendiente = false;
-        let itemsDetalles = [];
-        if (!Array.isArray(dinardap.sri_establecimientos.original.entidades.entidad.filas.fila)) {
-           itemsDetalles = [dinardap.sri_establecimientos.original.entidades.entidad.filas.fila];
-        } else {
-           itemsDetalles = dinardap.sri_establecimientos.original.entidades.entidad.filas.fila;
-        }
-        itemsDetalles.forEach(sri_establecimiento => {
-           let existe = false;
-           const newEstablishment = new Establishment();
-           sri_establecimiento.columnas.columna.forEach(sriData => {
-              if (sriData.campo === 'estadoEstablecimiento') {
-                 newEstablishment.sri_state = sriData.valor as string;
-              }
-              if (sriData.campo === 'calle') {
-                 newEstablishment.address_main_street = sriData.valor;
-              }
-              if (sriData.campo === 'numero') {
-                 newEstablishment.address_number = sriData.valor;
-              }
-              if (sriData.campo === 'interseccion') {
-                 newEstablishment.address_secondary_street = sriData.valor;
-              }
-              if (sriData.campo === 'numeroEstablecimiento') {
-                 newEstablishment.ruc_code_id = sriData.valor as string;
-              }
-           });
-           establecimientos.forEach(establecimiento => {
-              if (establecimiento.ruc_code_id === newEstablishment.ruc_code_id.trim()) {
-                 existe = true;
-                 establecimiento.sri_state = newEstablishment.sri_state;
-              }
-           });
-           if (!existe) {
-              establecimientos.push(newEstablishment);
-           }
-           this.ruc_registro_selected.ruc.establishments = establecimientos;
-        });
-        if(establecimientos.length == 0){
-           this.ruc_registro_selected.ruc.establishments = [];
-        }
-        this.buildDataTableEstablishment();
-      }).catch( e => { console.log(e); });
-   }).catch( e => { console.log(e); });
- }
+    this.establishment_selected = new Establishment();
+    this.mostrarDataEstablishment = false;
+    this.establecimientos_pendiente = true;
+    this.establishmentDataService.getByRuc(this.ruc_registro_selected.ruc.number, this.recordsByPageEstablishment, currentpage).then( r => {
+       const establecimientos = r.data as Establishment[];
+       this.dinardapDataService.get_RUC(this.ruc_registro_selected.ruc.number).then( dinardap => {
+         this.establecimientos_pendiente = false;
+         let itemsDetalles = [];
+         if (!Array.isArray(dinardap.sri_establecimientos.original.entidades.entidad.filas.fila)) {
+            itemsDetalles = [dinardap.sri_establecimientos.original.entidades.entidad.filas.fila];
+         } else {
+            itemsDetalles = dinardap.sri_establecimientos.original.entidades.entidad.filas.fila;
+         }
+         itemsDetalles.forEach(sri_establecimiento => {
+            let existe = false;
+            const newEstablishment = new Establishment();
+            sri_establecimiento.columnas.columna.forEach(sriData => {
+               if (sriData.campo === 'estadoEstablecimiento') {
+                  newEstablishment.sri_state = sriData.valor as string;
+               }
+               if (sriData.campo === 'calle') {
+                  newEstablishment.address_main_street = sriData.valor;
+               }
+               if (sriData.campo === 'numero') {
+                  newEstablishment.address_number = sriData.valor;
+               }
+               if (sriData.campo === 'interseccion') {
+                  newEstablishment.address_secondary_street = sriData.valor;
+               }
+               if (sriData.campo === 'numeroEstablecimiento') {
+                  newEstablishment.ruc_code_id = sriData.valor as string;
+               }
+               if (sriData.campo === 'nombreFantasiaComercial') {
+                  newEstablishment.commercially_known_name = sriData.valor as string;
+               }
+            });
+            establecimientos.forEach(establecimiento => {
+               if (establecimiento.ruc_code_id === newEstablishment.ruc_code_id.trim()) {
+                  existe = true;
+                  establecimiento.sri_state = newEstablishment.sri_state;
+               }
+            });
+            if (!existe) {
+               establecimientos.push(newEstablishment);
+            }
+            this.ruc_registro_selected.ruc.establishments = establecimientos;
+         });
+         if(establecimientos.length == 0){
+            this.ruc_registro_selected.ruc.establishments = [];
+         }
+         this.buildDataTableEstablishment();
+       }).catch( e => { console.log(e); });
+    }).catch( e => { console.log(e); });
+  }
 
  getPersonRepresentativeAttachment(ruc_number: String) {
    if (this.ruc_registro_selected.ruc.tax_payer_type_id <= 1) {

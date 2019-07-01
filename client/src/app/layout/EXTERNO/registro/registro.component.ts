@@ -336,7 +336,7 @@ export class RegistroComponent implements OnInit {
    this.tabActiveSuperior = event.nextId;
   }
 
-  validateNombreComercial() {
+  validateNombreComercial(): Boolean {
      let toReturn = true;
      const textoAValidar = this.establishment_selected.commercially_known_name.toUpperCase();
      if(this.establishment_selected.commercially_known_name.length < 1) {
@@ -377,6 +377,7 @@ export class RegistroComponent implements OnInit {
         }
      });
      this.establishmentComercialNameValidated = toReturn;
+     return toReturn;
   }
 
   guardarRecepcionRoom(register_id: number) {
@@ -1152,6 +1153,9 @@ export class RegistroComponent implements OnInit {
                }
                if (sriData.campo === 'numeroEstablecimiento') {
                   newEstablishment.ruc_code_id = sriData.valor as string;
+               }
+               if (sriData.campo === 'nombreFantasiaComercial') {
+                  newEstablishment.commercially_known_name = sriData.valor as string;
                }
             });
             establecimientos.forEach(establecimiento => {
