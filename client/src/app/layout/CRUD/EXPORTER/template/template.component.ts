@@ -130,17 +130,16 @@ export class templateComponent implements OnInit {
       }), ( r => {}));
    }
 
-   descargarPDF() {
-      this.exporterDataService.pdf_file('<h1>Hola</h1>').then( r => {
+   descargarPDF(html: string, title: string) {
+      this.exporterDataService.pdf_file(html).then( r => {
          const byteCharacters = atob(r);
-         console.log(r);
          const byteNumbers = new Array(byteCharacters.length);
          for (let i = 0; i < byteCharacters.length; i++) {
             byteNumbers[i] = byteCharacters.charCodeAt(i);
          }
          const byteArray = new Uint8Array(byteNumbers);
-         const blob = new Blob([byteArray], { type: 'application/octet-stream'});
-         saveAs(blob, 'document.pdf');
+         const blob = new Blob([byteArray], { type: 'application/pdf'});
+         saveAs(blob, title + '.pdf');
       }).catch( e => { console.log(e); });
    }
 }

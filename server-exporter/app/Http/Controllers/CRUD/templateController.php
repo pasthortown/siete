@@ -42,6 +42,7 @@ class templateController extends Controller
              $template->id = 1;
           }
           $template->body = $result['body'];
+          $template->title = $result['title'];
           $template->save();
           DB::commit();
        } catch (Exception $e) {
@@ -57,6 +58,7 @@ class templateController extends Controller
           $result = $data->json()->all();
           $template = template::where('id',$result['id'])->update([
              'body'=>$result['body'],
+             'title'=>$result['title'],
           ]);
           DB::commit();
        } catch (Exception $e) {
@@ -94,11 +96,13 @@ class templateController extends Controller
          if ($exist) {
            template::where('id', $result['id'])->update([
              'body'=>$result['body'],
+             'title'=>$result['title'],
            ]);
          } else {
           $template = new template();
           $template->id = $result['id'];
           $template->body = $result['body'];
+          $template->title = $result['title'];
           $template->save();
          }
        }

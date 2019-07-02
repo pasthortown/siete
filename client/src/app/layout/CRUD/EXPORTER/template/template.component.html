@@ -1,6 +1,6 @@
 <div class="row">
    <h1 class="col-12 text-right">
-      template
+      Plantillas PDF
    </h1>
 </div>
 <div class="row">
@@ -31,13 +31,15 @@
          <thead>
             <tr>
                <th>Seleccionado</th>
-               <th>title</th>
+               <th>Nombre PDF</th>
+               <th>Opciones</th>
             </tr>
          </thead>
          <tbody>
             <tr *ngFor="let template of templates" (click)="selecttemplate(template)">
                <td class="text-right"><span *ngIf="templateSelected === template" class="far fa-hand-point-right"></span></td>
                <td>{{template.title}}</td>
+               <td><button type="button" class="btn btn-dark" (click)="descargarPDF(template.body, template.title)"><span class="far fa-file-pdf"></span>&nbsp;Descargar</button></td>
             </tr>
          </tbody>
       </table>
@@ -75,9 +77,9 @@
       <div class="row">
          <div class="col-12">
             <div class="form-group row">
-               <label for="title" class="col-4 col-form-label">Título</label>
+               <label for="title" class="col-4 col-form-label">Nombre PDF</label>
                <div class="col-8">
-                  <input type="text" class="form-control" id="title" name="title" placeholder="Título" [(ngModel)]="templateSelected.title">
+                  <input type="text" class="form-control" id="title" name="title" placeholder="Nombre PDF" [(ngModel)]="templateSelected.title">
                </div>
             </div>
          </div>
@@ -85,7 +87,7 @@
             <div class="form-group row">
                <label for="body" class="col-12 col-form-label">Texto de la Plantilla</label>
                <div class="col-12">
-                  <ck-editor id="body" name="body" skin="moono-lisa" [(ngModel)]="templateSelected.body"></ck-editor>
+                  <textarea class="form-control" style="height: 500px;" id="body" name="body" skin="moono-lisa" [(ngModel)]="templateSelected.body"></textarea>
                </div>
             </div>
          </div>
@@ -93,7 +95,9 @@
             <div class="form-group row">
                <label for="body" class="col-12 col-form-label">Vista Previa</label>
                <div class="col-12">
-                  <div class="form-control" [innerHTML]="templateSelected.body">
+                  <div class="form-control" style="overflow-y: auto; height: 500px;">
+                     <div [innerHTML]="templateSelected.body">
+                     </div>
                   </div>
                </div>
             </div>
@@ -101,6 +105,7 @@
       </div>
    </div>
    <div class="modal-footer">
+      <button type="button" class="btn btn-dark" (click)="descargarPDF(templateSelected.body, templateSelected.title)"><span class="far fa-file-pdf"></span>&nbsp;Descargar</button>
       <button type="button" class="btn btn-outline-success" (click)="modal.close('Guardar click')">Guardar</button>
       <button type="button" class="btn btn-outline-danger" (click)="modal.close('Cancelar click')">Cancelar</button>
    </div>
