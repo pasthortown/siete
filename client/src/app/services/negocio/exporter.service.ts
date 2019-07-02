@@ -18,7 +18,7 @@ export class ExporterService {
 
    pdf_file(html: string) {
       const data = {html: html};
-      return this.http.post('http://172.17.0.2:8080/download/pdf', JSON.stringify(data), this.options).toPromise()
+      return this.http.post(this.url + 'download/pdf', JSON.stringify(data), this.options).toPromise()
       .then( r => {
          return r.json();
       }).catch( error => { this.handledError(error.json()); });

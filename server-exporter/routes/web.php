@@ -24,5 +24,15 @@ $router->group(['middleware' => []], function () use ($router) {
 });
 
 $router->group(['middleware' => ['auth']], function () use ($router) {
-   
+
+   //EXPORTER
+
+   //CRUD template
+   $router->post('/template', ['uses' => 'templateController@post']);
+   $router->get('/template', ['uses' => 'templateController@get']);
+   $router->get('/template/paginate', ['uses' => 'templateController@paginate']);
+   $router->get('/template/backup', ['uses' => 'templateController@backup']);
+   $router->put('/template', ['uses' => 'templateController@put']);
+   $router->delete('/template', ['uses' => 'templateController@delete']);
+   $router->post('/template/masive_load', ['uses' => 'templateController@masiveLoad']);
 });

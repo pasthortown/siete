@@ -42,6 +42,7 @@ export class BedComponent implements OnInit {
    descargarPDF() {
       this.exporterDataService.pdf_file('<h1>Hola</h1>').then( r => {
          const byteCharacters = atob(r);
+         console.log(r);
          const byteNumbers = new Array(byteCharacters.length);
          for (let i = 0; i < byteCharacters.length; i++) {
             byteNumbers[i] = byteCharacters.charCodeAt(i);

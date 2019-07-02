@@ -1,0 +1,1 @@
+{"moduleName":"EXPORTER","modelos":[{"MigrationIndex":0,"Columns":[{"name":"body","type":"longText","size":0,"group":"fillable","hasSize":false,"canNull":true,"unique":false}],"RelationShip":[],"Table":{"namePlural":"templates","nameSingular":"template"},"MigrationStatus":"","ModelStatus":"","ControllerStatus":"","estilo":"seleccionadoModelo","esAdjunto":false}],"relaciones":[]}
