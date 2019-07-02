@@ -115,7 +115,7 @@ export class templateComponent implements OnInit {
    openDialog(content) {
       this.modalService.open(content, { centered: true , size: 'lg' }).result.then(( response => {
          if ( response === 'Guardar click' ) {
-            if (typeof this.templateSelected.id === 'undefined') {
+            if (typeof this.templateSelected.id === 'undefined' || this.templateSelected.id === 0) {
                this.templateDataService.post(this.templateSelected).then( r => {
                   this.toastr.successToastr('Datos guardados satisfactoriamente.', 'Nuevo');
                   this.gettemplates();
@@ -130,8 +130,8 @@ export class templateComponent implements OnInit {
       }), ( r => {}));
    }
 
-   descargarPDF(html: string, title: string) {
-      this.exporterDataService.pdf_file(html, title, 'portrait').then( r => {
+   descargarPDF(html: string, title: string, orientation: string) {
+      this.exporterDataService.pdf_file(html, title, orientation).then( r => {
          const byteCharacters = atob(r);
          const byteNumbers = new Array(byteCharacters.length);
          for (let i = 0; i < byteCharacters.length; i++) {

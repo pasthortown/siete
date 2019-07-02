@@ -12,7 +12,7 @@ class template extends Model
      * @var array
      */
     protected $fillable = [
-       'body','title',
+       'body','title','orientation',
     ];
 
     /**

@@ -18,6 +18,7 @@ class CreatetemplatesTable extends Migration
           $table->timestamps();
           $table->longText('body')->nullable($value = true);
           $table->string('title',1024)->nullable($value = true);
+          $table->string('orientation',50)->nullable($value = true);
        });
     }
 

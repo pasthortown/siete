@@ -13,17 +13,49 @@ use Illuminate\Support\Facades\App;
 class ExporterController extends Controller
 {
 
-  function mintur_style ($content, $title) {
+  function pdf_file(Request $data) {
+    $request = $data->json()->all();
+    $html_content = $request['html'];
+    try {
+      $params = $request['params'];
+    } catch (Exception $e) {
+      $params = [];
+    }
+    if (!$params) {
+      $params = [];
+    }
+    $title = $request['title'];
+    $pdf_content = $this->build_content($html_content, $params);
+    $html = $this->mintur_style($pdf_content, $title);
+    $orientation = $request['orientation'];
+    $pdf = App::make('dompdf.wrapper');
+    $pdf->setPaper('A4', $orientation);
+    $pdf->setOptions(['dpi' => 150, 'defaultFont' => 'courier']);
+    $pdf->loadHTML($html);
+    $bytes = $pdf->output();
+    $toReturn = base64_encode($bytes);
+    return response()->json($toReturn, 200);
+  }
+
+  protected function build_content($content, $params) {
+    $toReturn = $content;
+    foreach ($params as $key => $value) {
+      $toReturn = str_ireplace($key, $value, $toReturn);
+    }
+    return $toReturn;
+  }
+
+  protected function mintur_style ($content, $title) {
     $html = '<html>';
     $html .= '   <head>';
     $html .= '      <style>';
     // Define the margins of your page URLD
     $html .= '         @page { margin: 0px 0px 0px 0px;}';
-    $html .= '         header { position: fixed; top: 0px; left: 0px; right: 0px; height: 300px; z-index: -1;}';
-    $html .= '         footer { position: fixed; bottom: 0px; left: 0px; right: 0px; background-color: #999999; text-align: center; height: 175px; z-index: -1;}';
-    $html .= '         fondo { position: fixed; top:0px; left:0px; right:0px; z-index: -1;}';
-    $html .= '         p { position: fixed; top: 325px; left:150px; right: 100px; bottom: 200px; page-break-after: always; z-index: 1;}';
-    $html .= '         p:last-child { position: fixed; top: 325px; left:150px; right: 100px; bottom: 200px; page-break-after: never; z-index: 1;}';
+    $html .= '         header { position: fixed; top: 0px; left: 0px; right: 0px; height: 300px; z-index: -1; }';
+    $html .= '         footer { position: fixed; bottom: 0px; left: 0px; right: 0px; background-color: #999999; text-align: center; height: 175px; z-index: -1;  ';
+    $html .= '         fondo { position: fixed; top:0px; left:0px; right:0px; z-index: -1; }';
+    $html .= '         pagina { position: fixed; top: 325px; left:150px; right: 100px; bottom: 200px; page-break-after: always; z-index: 1; }';
+    $html .= '         pagina:last-child { position: fixed; top: 325px; left:150px; right: 100px; bottom: 200px; page-break-after: never; z-index: 1; }';
     $html .= '      </style>';
     $html .= '   </head>';
     $html .= '   <body>';
@@ -45,21 +77,6 @@ class ExporterController extends Controller
     $html .= '   </body>';
     $html .= '</html>';
     return $html;
-  }
-
-  function pdf_file(Request $data) {
-    $request = $data->json()->all();
-    $html_content = $request['html'];
-    $title = $request['title'];
-    $html = $this->mintur_style($html_content, $title);
-    $orientation = $request['orientation'];
-    $pdf = App::make('dompdf.wrapper');
-    $pdf->setPaper('A4', $orientation);
-    $pdf->setOptions(['dpi' => 150, 'defaultFont' => 'courier']);
-    $pdf->loadHTML($html);
-    $bytes = $pdf->output();
-    $toReturn = base64_encode($bytes);
-    return response()->json($toReturn, 200);
   }
 
   function excel_file(Request $data) {

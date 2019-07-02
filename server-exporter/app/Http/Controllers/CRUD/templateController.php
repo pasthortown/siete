@@ -43,6 +43,7 @@ class templateController extends Controller
           }
           $template->body = $result['body'];
           $template->title = $result['title'];
+          $template->orientation = $result['orientation'];
           $template->save();
           DB::commit();
        } catch (Exception $e) {
@@ -59,6 +60,7 @@ class templateController extends Controller
           $template = template::where('id',$result['id'])->update([
              'body'=>$result['body'],
              'title'=>$result['title'],
+             'orientation'=>$result['orientation'],
           ]);
           DB::commit();
        } catch (Exception $e) {
@@ -97,12 +99,14 @@ class templateController extends Controller
            template::where('id', $result['id'])->update([
              'body'=>$result['body'],
              'title'=>$result['title'],
+             'orientation'=>$result['orientation'],
            ]);
          } else {
           $template = new template();
           $template->id = $result['id'];
           $template->body = $result['body'];
           $template->title = $result['title'];
+          $template->orientation = $result['orientation'];
           $template->save();
          }
        }
