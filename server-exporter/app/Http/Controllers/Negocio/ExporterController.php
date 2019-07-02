@@ -52,7 +52,7 @@ class ExporterController extends Controller
     // Define the margins of your page URLD
     $html .= '         @page { margin: 0px 0px 0px 0px;}';
     $html .= '         header { position: fixed; top: 0px; left: 0px; right: 0px; height: 300px; z-index: -1; }';
-    $html .= '         footer { position: fixed; bottom: 0px; left: 0px; right: 0px; background-color: #999999; text-align: center; height: 175px; z-index: -1;  ';
+    $html .= '         footer { position: fixed; bottom: 0px; left: 0px; right: 0px; background-color: #999999; text-align: center; height: 175px; z-index: -1;}';
     $html .= '         fondo { position: fixed; top:0px; left:0px; right:0px; z-index: -1; }';
     $html .= '         pagina { position: fixed; top: 325px; left:150px; right: 100px; bottom: 200px; page-break-after: always; z-index: 1; }';
     $html .= '         pagina:last-child { position: fixed; top: 325px; left:150px; right: 100px; bottom: 200px; page-break-after: never; z-index: 1; }';
