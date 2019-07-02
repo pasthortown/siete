@@ -17,6 +17,7 @@ class CreatetemplatesTable extends Migration
           $table->increments('id');
           $table->timestamps();
           $table->longText('body')->nullable($value = true);
+          $table->string('title',1024)->nullable($value = true);
        });
     }
 

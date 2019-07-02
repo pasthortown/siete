@@ -334,6 +334,14 @@ const routes: Routes = [
             path: 'dinardap-identification',
             loadChildren: './CRUD/DINARDAP/Identification/identification.module#IdentificationModule'
          },
+
+         //EXPORTER
+
+         {
+            path: 'template',
+            loadChildren: './CRUD/EXPORTER/template/template.module#templateModule'
+         },
+         
          {
             path: '**',
             redirectTo: 'not-found'
