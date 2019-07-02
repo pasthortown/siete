@@ -16,8 +16,8 @@ export class ExporterService {
       this.options.headers.append('api_token', sessionStorage.getItem('api_token'));
    }
 
-   pdf_file(html: string) {
-      const data = {html: html};
+   pdf_file(html: string, title: string, orientation: string) {
+      const data = {html: html, orientation: orientation, title: title};
       return this.http.post(this.url + 'download/pdf', JSON.stringify(data), this.options).toPromise()
       .then( r => {
          return r.json();

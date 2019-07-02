@@ -131,7 +131,7 @@ export class templateComponent implements OnInit {
    }
 
    descargarPDF(html: string, title: string) {
-      this.exporterDataService.pdf_file(html).then( r => {
+      this.exporterDataService.pdf_file(html, title, 'portrait').then( r => {
          const byteCharacters = atob(r);
          const byteNumbers = new Array(byteCharacters.length);
          for (let i = 0; i < byteCharacters.length; i++) {
