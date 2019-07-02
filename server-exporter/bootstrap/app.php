@@ -87,6 +87,8 @@ $app->register(App\Providers\AuthServiceProvider::class);
 $app->register(Illuminate\Mail\MailServiceProvider::class);
 $app->register(Maatwebsite\Excel\ExcelServiceProvider::class);
 $app->register(GrahamCampbell\Flysystem\FlysystemServiceProvider::class);
+$app->register(\Barryvdh\DomPDF\ServiceProvider::class);
+$app->configure('dompdf');
 // $app->register(App\Providers\EventServiceProvider::class);
 
 /*

@@ -7,6 +7,7 @@ import { BedComponent } from './bed.component';
 import { BedService } from './../../../../services/CRUD/ALOJAMIENTO/bed.service';
 import { environment } from 'src/environments/environment';
 import { BedTypeService } from './../../../../services/CRUD/ALOJAMIENTO/bedtype.service';
+import { ExporterService } from 'src/app/services/negocio/exporter.service';
 
 @NgModule({
    imports: [CommonModule,
@@ -16,7 +17,8 @@ import { BedTypeService } from './../../../../services/CRUD/ALOJAMIENTO/bedtype.
    providers: [
                NgbModal,
                BedTypeService,
-               BedService
+               BedService,
+               ExporterService
                ]
 })
 export class BedModule {}

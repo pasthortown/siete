@@ -8,6 +8,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\App;
 
 class ExporterController extends Controller
 {
@@ -22,6 +23,16 @@ class ExporterController extends Controller
     $uniqueId = uniqid();
     Excel::store($export, $uniqueId.'.xlsx', 'local');
     return response()->json($uniqueId.'.xlsx',200);
+  }
+
+  function pdf_file(Request $data) {
+    $request = $data->json()->all();
+    $html = $request['html'];
+    $pdf = App::make('dompdf.wrapper');
+    $pdf->loadHTML($html);
+    $bytes = $pdf->stream();
+    $toReturn = base64_encode($bytes);
+    return response()->json($toReturn, 200);
   }
 
   function download(Request $data) {

@@ -16,6 +16,14 @@ export class ExporterService {
       this.options.headers.append('api_token', sessionStorage.getItem('api_token'));
    }
 
+   pdf_file(html: string) {
+      const data = {html: html};
+      return this.http.post('http://172.17.0.2:8080/download/pdf', JSON.stringify(data), this.options).toPromise()
+      .then( r => {
+         return r.json();
+      }).catch( error => { this.handledError(error.json()); });
+   }
+
    excel_file(header: any[], body: any[]) {
       const data = {header: header, body: body};
       return this.http.post(this.url + 'download/excel_file', JSON.stringify(data), this.options).toPromise()
