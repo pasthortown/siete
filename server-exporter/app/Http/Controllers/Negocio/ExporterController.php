@@ -56,8 +56,10 @@ class ExporterController extends Controller
 
   protected function build_content($content, $params) {
     $toReturn = $content;
-    foreach ($params as $key => $value) {
-      $toReturn = str_ireplace($key, $value, $toReturn);
+    foreach ($params as $param) {
+      foreach($param as $key => $value) {
+         $toReturn = str_ireplace('##'.$key.'##', $value, $toReturn);
+      }
     }
     return $toReturn;
   }
