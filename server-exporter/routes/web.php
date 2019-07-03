@@ -17,10 +17,7 @@ $router->get('/', function () use ($router) {
 
 $router->group(['middleware' => []], function () use ($router) {
    $router->post('download/excel_file', ['uses' => 'ExporterController@excel_file']);
-   $router->get('download/', ['uses' => 'ExporterController@download']);
-   $router->post('download/notificacion', ['uses' => 'WSInternoController@CrearNotificacion']);
-   $router->post('download/pdf', ['uses' => 'ExporterController@pdf_file']);
-   
+   $router->post('download/pdf', ['uses' => 'ExporterController@pdf_file']);   
 });
 
 $router->group(['middleware' => ['auth']], function () use ($router) {

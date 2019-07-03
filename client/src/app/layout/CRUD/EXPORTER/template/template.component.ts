@@ -142,4 +142,15 @@ export class templateComponent implements OnInit {
          saveAs(blob, title + '.pdf');
       }).catch( e => { console.log(e); });
    }
+
+   getPDFdata(html: string) {
+      const vars = html.split('##');
+      let data = 'const params = [';
+      for( let i = 1; i < vars.length -1 ; i = i + 2) {
+         data += '{' + vars[i] + ': ' + vars[i] + '},\n';
+      }
+      data = data.substr(0, data.length -2);
+      data += '];';
+      return data;
+   }
 }

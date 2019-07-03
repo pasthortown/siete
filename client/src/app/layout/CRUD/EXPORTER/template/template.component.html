@@ -39,7 +39,9 @@
             <tr *ngFor="let template of templates" (click)="selecttemplate(template)">
                <td class="text-right"><span *ngIf="templateSelected === template" class="far fa-hand-point-right"></span></td>
                <td>{{template.title}}</td>
-               <td><button type="button" class="btn btn-dark" (click)="descargarPDF(template.body, template.title, template.orientation)"><span class="far fa-file-pdf"></span>&nbsp;Descargar</button></td>
+               <td>
+                  <button type="button" class="btn btn-dark" (click)="descargarPDF(template.body, template.title, template.orientation)"><span class="far fa-file-pdf"></span>&nbsp;Descargar</button>
+               </td>
             </tr>
          </tbody>
       </table>
@@ -106,12 +108,18 @@
          </div>
          <div class="col-12">
             <div class="form-group row">
-               <label for="body" class="col-12 col-form-label">Vista Previa</label>
+               <label for="title" class="col-12 col-form-label">Código</label>
                <div class="col-12">
-                  <div class="form-control" style="overflow-y: auto; height: 500px;">
-                     <div [innerHTML]="templateSelected.body">
-                     </div>
-                  </div>
+                  <input type="text" class="form-control" id="codigo" name="codigo" placeholder="Código" readonly [ngModel]="templateSelected.id">
+               </div>
+            </div>
+         </div>
+         <div class="col-12">
+            <div class="form-group row">
+               <label for="body" class="col-12 col-form-label">Parámetros</label>
+               <div class="col-12">
+                  <textarea class="form-control" style="overflow-y: auto; height: 500px;" [ngModel]="getPDFdata(templateSelected.body)">
+                  </textarea>
                </div>
             </div>
          </div>
