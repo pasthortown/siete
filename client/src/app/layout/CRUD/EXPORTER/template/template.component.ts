@@ -139,8 +139,7 @@ export class templateComponent implements OnInit {
          {representante_legal: 'Luis Alfonso Salazar Vaca'},
          {direccion_establecimiento: 'Los Robles E14-16 y Cardos'},
          {Registro: '1'}];
-         console.log(this.getPDFQRdata(params));
-      this.exporterDataService.pdf_file(html, title, orientation, true, this.getPDFQRdata(params)).then( r => {
+      this.exporterDataService.pdf_file(html, title, orientation, true, this.getPDFQRdata(params), params).then( r => {
          const byteCharacters = atob(r);
          const byteNumbers = new Array(byteCharacters.length);
          for (let i = 0; i < byteCharacters.length; i++) {
