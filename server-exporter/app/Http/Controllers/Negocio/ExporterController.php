@@ -67,12 +67,12 @@ class ExporterController extends Controller
     $html .= '   <head>';
     $html .= '      <style>';
     // Define the margins of your page URLD
-    $html .= '         @page { margin: 0px 0px 0px 0px;}';
+    $html .= '         @page { margin: 0px 0px 0px 0px}';
     $html .= '         header { position: fixed; top: 0px; left: 0px; right: 0px; height: 300px; z-index: -1; }';
-    $html .= '         footer { position: fixed; bottom: 0px; left: 0px; right: 0px; text-align: center; height: 175px; z-index: -1; background-color:#999999;}';
+    $html .= '         footer { position: fixed; bottom: 0px; left: 0px; right: 0px; text-align: center; height: 175px; z-index: -1; }';
     $html .= '         p { word-spacing: 5px; width:100%; text-align:justify; }';
-    $html .= '         pagina { position: fixed; top: 325px; left:150px; right: 100px; bottom: 200px; page-break-after: always; z-index: 1; }';
-    $html .= '         pagina:last-child { position: fixed; top: 325px; left:150px; right: 100px; bottom: 200px; page-break-after: never; z-index: 1; }';
+    $html .= '         pagina { page-break-after:always; z-index:1; }';
+    $html .= '         pagina:last-child(page-break-after:never; z-index:1; }';
     $html .= '      </style>';
     $html .= '   </head>';
     $html .= '   <body>';
@@ -85,7 +85,6 @@ class ExporterController extends Controller
     $html .= '         <h2 style="position: fixed; left:0px; right:0px; top:250px; font-family: Arial, Helvetica, sans-serif; text-align:center;">'. $title .'</h2>';
     $html .= '      </header>';
     $html .= '      <footer>';
-
     $html .= '      </footer>';
     $html .= '      <main>';
     $html .= $content;
