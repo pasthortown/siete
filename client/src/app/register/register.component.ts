@@ -165,37 +165,15 @@ export class RegisterComponent implements OnInit {
          sri_ruc_registros.forEach(element => {
             if (element.campo === 'estadoContribuyente') {
                if (element.valor === 'ACTIVO') {
+                  this.rucData = '<strong>Estado del RUC: </strong> CONFIRMADO';
                   this.rucInactive = false;
+                  this.SRIOK = true;
                } else {
                   this.toastr.errorToastr('El RUC ingresado no es Activo.', 'SRI');
+                  this.rucData = 'RUC INACTIVO';
                   this.rucInactive = true;
+                  this.SRIOK = false;
                }
-            }
-         });
-         if (this.rucInactive) {
-            return;
-         }
-         let itemsDetalles = [];
-         if (!Array.isArray(r.sri_establecimientos.original.entidades.entidad.filas.fila)) {
-            itemsDetalles = [r.sri_establecimientos.original.entidades.entidad.filas.fila];
-         } else {
-            itemsDetalles = r.sri_establecimientos.original.entidades.entidad.filas.fila;
-         }
-         const registros = itemsDetalles[0].columnas.columna;
-         this.rucData = '';
-         this.SRIOK = true;
-         registros.forEach(element => {
-            if (element.campo === 'numeroRuc') {
-               if (element.valor === this.ruc.number) {
-                  this.toastr.successToastr('El RUC ingresado es correcto.', 'SRI');
-                  this.rucValidated = true;
-               } else {
-                  this.toastr.errorToastr('El RUC ingresado no es correcto.', 'SRI');
-                  this.rucValidated = false;
-               }
-            }
-            if (this.rucValidated) {
-               this.rucData = '<strong>Estado del RUC: </strong> CONFIRMADO';
             }
          });
       }).catch( e => {

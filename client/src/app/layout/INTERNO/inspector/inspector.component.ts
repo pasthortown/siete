@@ -2886,91 +2886,80 @@ guardarDeclaracion() {
   }
 
   checkRuc() {
-    if (this.consumoRuc && this.SRIOK) {
-      return;
-    }
-    this.rucData = '<div class=\"progress mb-3\"><div class=\"progress-bar progress-bar-striped progress-bar-animated bg-warning col-12\">Espere...</div></div><div class="col-12 text-center"><strong>Conectándose al SRI...</strong></div>';
-    this.ruc_registro_selected.ruc.number = this.ruc_registro_selected.ruc.number.replace(/[^\d]/, '');
-    if (this.ruc_registro_selected.ruc.number.length !== 13) {
-      this.rucValidated = false;
-      this.consumoRuc = false;
-      this.ruc_registro_selected.ruc.baised_accounting = false;
-      this.ruc_registro_selected.ruc.tax_payer_type_id = 1;
-      return;
-    }
-    if (!this.consumoRuc) {
-      this.consumoRuc = true;
-      this.rucValidated = true;
-      this.dinardapDataService.get_RUC(this.ruc_registro_selected.ruc.number).then( r => {
-         this.SRIOK = true; 
-         this.rucValidated = true;
-         let itemsDetalles = [];
-         if (!Array.isArray(r.sri_establecimientos.original.entidades.entidad.filas.fila)) {
-            itemsDetalles = [r.sri_establecimientos.original.entidades.entidad.filas.fila];
-         } else {
-            itemsDetalles = r.sri_establecimientos.original.entidades.entidad.filas.fila;
-         }
-         this.establishment_selected.ruc_code_id = '-';
-         this.rucData = 'PENDIENTE';
-         this.toastr.successToastr('El RUC ingresado es correcto.', 'SRI');
-         this.rucValidated = true;
-         this.ruc_registro_selected.ruc.baised_accounting = false;
-         console.log(r);
-         this.ruc_registro_selected.ruc.tax_payer_type_id = 1;
-         /*          AQUI 
-         registros.forEach(element => {
-            if (element.campo === 'numeroRuc') {
-               if (element.valor === this.ruc_registro_selected.ruc.number) {
-                  this.toastr.successToastr('El RUC ingresado es correcto.', 'SRI');
-                  this.rucValidated = true;
-               } else {
-                  this.toastr.errorToastr('El RUC ingresado no es correcto.', 'SRI');
-                  this.rucValidated = false;
-               }
-            }
-            if (this.rucValidated) {
-               if (element.campo === 'razonSocial') {
-                  this.rucData += '<strong>Razón Social: </strong> ' + element.valor + '<br/>';
-               }
-               if (element.campo === 'objetoSocial') {
-                  this.rucData += '<strong>Objeto Social: </strong> ' + element.valor + '<br/>';
-               }
-               if (element.campo === 'actividadEconomicaPrincipal') {
-                  this.rucData += '<strong>Actividad Económica: </strong> ' + element.valor + '<br/>';
-               }
-               if (element.campo === 'fechaInicioActividades') {
-                  this.rucData += '<strong>Fecha de Inicio de Actividades: </strong> ' + element.valor + '<br/>';
-               }
-               if (element.campo === 'fechaActualizacion') {
-                  this.rucData += '<strong>Fecha de Actualización: </strong> ' + element.valor + '<br/>';
-               }
-               if (element.campo === 'obligado') {
-                  if (element.valor === 'N') {
-                     this.ruc_registro_selected.ruc.baised_accounting = false;
-                     this.rucData += '<strong>Obligado a Llevar Contabilidad: </strong> NO<br/>';
-                  } else {
-                     this.ruc_registro_selected.ruc.baised_accounting = true;
-                     this.rucData += '<strong>Obligado a Llevar Contabilidad: </strong> SI<br/>';
-                  }
-               }
-               if (element.campo === 'tipoContribuyente') {
-                  if (element.valor === 'PERSONAS NATURALES') {
-                     this.ruc_registro_selected.ruc.tax_payer_type_id = 1;
-                  } else {
-                     this.ruc_registro_selected.ruc.tax_payer_type_id = 2;
-                  }
-                  this.rucData += '<strong>Tipo de Contribuyente: </strong> ' + element.valor + '<br/>';
-               }
-            }
-         });*/
-      }).catch( e => {
-         this.toastr.errorToastr('El RUC ingresado no es correcto.', 'SRI');
-         this.rucData = '<div class="alert alert-danger" role="alert">El SRI, no respondió. Vuelva a intentarlo.</div>';
-         this.consumoRuc = false;
-         this.SRIOK = false;
-      });
+   if (this.consumoRuc && this.SRIOK) {
+     return;
    }
+   this.rucData = '<div class=\"progress mb-3\"><div class=\"progress-bar progress-bar-striped progress-bar-animated bg-warning col-12\">Espere...</div></div><div class="col-12 text-center"><strong>Conectándose al SRI...</strong></div>';
+   this.ruc_registro_selected.ruc.number = this.ruc_registro_selected.ruc.number.replace(/[^\d]/, '');
+   if (this.ruc_registro_selected.ruc.number.length !== 13) {
+     this.rucValidated = false;
+     this.consumoRuc = false;
+     this.ruc_registro_selected.ruc.baised_accounting = false;
+     this.ruc_registro_selected.ruc.tax_payer_type_id = 1;
+     return;
+   }
+   if (!this.consumoRuc) {
+     this.consumoRuc = true;
+     this.rucValidated = true;
+     this.dinardapDataService.get_RUC(this.ruc_registro_selected.ruc.number).then( r => {
+        this.SRIOK = true; 
+        this.rucValidated = true;
+        const itemsDetalles_SRI_RUC = r.sri_ruc.original.entidades.entidad.filas.fila.columnas.columna;
+        const itemsDetalles_SRI_AE = r.sri_actividad_economica.original.entidades.entidad.filas.fila;
+        this.establishment_selected.ruc_code_id = '-';
+        this.rucData = '';
+        let actividad_economica = '<table class="table"><tbody><tr><th colspan="2">Actividades Económicas:</th></tr>';
+        itemsDetalles_SRI_AE.forEach(fila => {
+           fila.columnas.columna.forEach(element => {
+              if (element.campo == 'actividadEconomica'){
+                 actividad_economica += '<tr><th></th><td>'+ element.valor +'</td></tr>';
+              }
+           });
+        });
+        actividad_economica += '</tbody></table>';
+        this.rucData = actividad_economica;
+        itemsDetalles_SRI_RUC.forEach(element => {
+           /*if (element.campo === 'razonSocial') {
+              this.rucData += '<strong>Razón Social: </strong> ' + element.valor + '<br/>';
+           }
+           if (element.campo === 'objetoSocial') {
+              this.rucData += '<strong>Objeto Social: </strong> ' + element.valor + '<br/>';
+           }*/
+           if (element.campo == 'estadoContribuyente') {
+              this.rucData += '<strong>Estado Contribuyente: </strong> ' + element.valor + '<br/>';
+           }
+           if (element.campo == 'fechaInscripcionRuc') {
+              this.rucData += '<strong>Fecha de Inscripción del RUC: </strong> ' + element.valor + '<br/>';
+           }
+           if (element.campo == 'fechaActualizacion') {
+              this.rucData += '<strong>Fecha de Actualización: </strong> ' + element.valor + '<br/>';
+           }
+           if (element.campo == 'obligado') {
+              if (element.valor == 'N') {
+                 this.ruc_registro_selected.ruc.baised_accounting = false;
+                 this.rucData += '<strong>Obligado a Llevar Contabilidad: </strong> NO<br/>';
+              } else {
+                 this.ruc_registro_selected.ruc.baised_accounting = true;
+                 this.rucData += '<strong>Obligado a Llevar Contabilidad: </strong> SI<br/>';
+              }
+           }
+           if (element.campo == 'personaSociedad') {
+              if (element.valor == 'PNL') {
+                 this.ruc_registro_selected.ruc.tax_payer_type_id = 1;
+              } else {
+                 this.ruc_registro_selected.ruc.tax_payer_type_id = 2;
+              }
+              this.rucData += '<strong>Tipo de Contribuyente: </strong> ' + element.valor + '<br/>';
+           }
+        });
+     }).catch( e => {
+        console.log(e);
+        this.rucData = '<div class="alert alert-danger" role="alert">El SRI, no respondió. Vuelva a intentarlo.</div>';
+        this.consumoRuc = false;
+        this.SRIOK = false;
+     });
   }
+ }
 
  checkCedula() {
    this.ruc_registro_selected.ruc.contact_user.identification = this.ruc_registro_selected.ruc.contact_user.identification.replace(/[^\d]/, '');

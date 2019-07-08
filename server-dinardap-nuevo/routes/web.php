@@ -20,7 +20,7 @@ $router->group(['middleware' => []], function () use ($router) {
    $router->post('cedula', ['uses' => 'DinardapController@Cedula']);
    $router->post('paquete', ['uses' => 'DinardapController@paquete']);
    $router->post('ruc', ['uses' => 'DinardapController@RUC']);
-   $router->post('supercias', ['uses' => 'DinardapController@SuperCIAS']);
+   $router->post('supercias', ['uses' => 'DinardapController@super_cias']);
 });
 
 $router->group(['middleware' => ['auth']], function () use ($router) {
