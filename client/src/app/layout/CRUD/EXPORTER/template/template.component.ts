@@ -139,7 +139,7 @@ export class templateComponent implements OnInit {
          {representante_legal: 'Luis Alfonso Salazar Vaca'},
          {direccion_establecimiento: 'Los Robles E14-16 y Cardos'},
          {Registro: '1'}];
-      this.exporterDataService.pdf_file(html, title, orientation, true, this.getPDFQRdata(params), params).then( r => {
+      this.exporterDataService.pdf_file(html, title, orientation, true, this.exporterDataService.getPDFQRdata(params), params).then( r => {
          const byteCharacters = atob(r);
          const byteNumbers = new Array(byteCharacters.length);
          for (let i = 0; i < byteCharacters.length; i++) {
@@ -159,19 +159,6 @@ export class templateComponent implements OnInit {
       }
       data = data.substr(0, data.length -2);
       data += '];';
-      return data;
-   }
-
-   getPDFQRdata(params: any[]) {
-      let data = '';
-      params.forEach(element => {
-         let strelement = JSON.stringify(element);
-         data += strelement.split('{')[1].split('}')[0] + '\n';
-      });
-      data = data.substr(0, data.length - 1);
-      data = data.split('"').join('');
-      data = data.split('_').join(' ');
-      data = data.split(':').join(': ');
       return data;
    }
 }

@@ -5,14 +5,53 @@ namespace App\Http\Controllers;
 use App\Exports\DataExporter;
 use Validator;
 use Exception;
+use App\template;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\App;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class ExporterController extends Controller
 {
+
+  function pdf_template(Request $data) {
+    $request = $data->json()->all();
+    $template = template::where('id', $request['template_id'])->first();
+    $html_content = $template['body'];
+    try {
+      $qr = $request['qr'];
+    } catch (Exception $e) {
+      $qr = false;
+    }
+    try {
+      $qr_content = $request['qr_content'];
+    } catch (Exception $e) {
+      $qr_content = '';
+    }
+    try {
+      $params = $request['params'];
+    } catch (Exception $e) {
+      $params = [];
+    }
+    if (!$params) {
+      $params = [];
+    }
+    $title = $template['title'];
+    $pdf_content = $this->build_content($html_content, $params);
+    $html = $this->mintur_style($pdf_content, $title, $qr, $qr_content);
+    $orientation = $template['orientation'];
+    $pdf = App::make('dompdf.wrapper');
+    $pdf->setPaper('A4', $orientation);
+    $pdf->setOptions(['dpi' => 150, 'defaultFont' => 'courier']);
+    $pdf->loadHTML($html);
+    $bytes = $pdf->output();
+    $toReturn = base64_encode($bytes);
+    return response()->json($toReturn, 200);
+  }
 
   function qrcode($content) {
     return base64_encode(QrCode::format('png')

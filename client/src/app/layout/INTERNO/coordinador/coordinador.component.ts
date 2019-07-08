@@ -96,6 +96,7 @@ import { RegisterService } from 'src/app/services/CRUD/ALOJAMIENTO/register.serv
 import { RegisterStateService } from 'src/app/services/CRUD/ALOJAMIENTO/registerstate.service';
 import { ReceptionRoom } from 'src/app/models/ALOJAMIENTO/ReceptionRoom';
 import Swal from 'sweetalert2';
+import { ExporterService } from 'src/app/services/negocio/exporter.service';
 
 @Component({
   selector: 'app-registro',
@@ -319,6 +320,7 @@ export class CoordinadorComponent implements OnInit {
               private consultorDataService: ConsultorService,
               private userDataService: UserService,
               private registerStateDataService: RegisterStateService,
+              private exporterDataService: ExporterService,
               private dinardapDataService: DinardapService,
               private rucDataService: RucService,
               private approvalStateAttachmentDataService: ApprovalStateAttachmentService,
@@ -384,6 +386,28 @@ export class CoordinadorComponent implements OnInit {
       return true;
    }
    return false;
+  }
+
+  descargarPlantilla(template_id: number) {
+   const params = [{ciudad: 'Quito'},
+      {fecha: new Date().toLocaleString()},
+      {codigo: 'codigo'},
+      {nombre_comercial: 'LSYSTEMS'},
+      {propietario: 'Luis Salazar'},
+      {representante_legal: 'Luis Salazar'},
+      {direccion_establecimiento: 'LEJISISISIMOS'},
+      {Registro: '1'}];
+
+   this.exporterDataService.template(template_id, true, this.exporterDataService.getPDFQRdata(params), params).then( r => {
+      const byteCharacters = atob(r);
+      const byteNumbers = new Array(byteCharacters.length);
+      for (let i = 0; i < byteCharacters.length; i++) {
+         byteNumbers[i] = byteCharacters.charCodeAt(i);
+      }
+      const byteArray = new Uint8Array(byteNumbers);
+      const blob = new Blob([byteArray], { type: 'application/pdf'});
+      saveAs(blob, 'prueba.pdf');
+   }).catch( e => { console.log(e); });
   }
 
   onChangeTablePays(config: any, event?): any {

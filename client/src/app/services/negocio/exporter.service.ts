@@ -16,7 +16,29 @@ export class ExporterService {
       this.options.headers.append('api_token', sessionStorage.getItem('api_token'));
    }
 
-   pdf_file(html: string, title: string, orientation: string, qr?: Boolean, qr_content?: string, params?: any[]) {
+   template(template_id: number, qr?: Boolean, qr_content?: string, params?: any[]): Promise<any> {
+      let data = null;
+      if(typeof qr != 'undefined') {
+         if(typeof params != 'undefined') {
+            data = {template_id: template_id, params: params, qr: qr, qr_content: qr_content};
+         } else {
+            data = {template_id: template_id, qr: qr, qr_content: qr_content};
+         }
+      } else {
+         if(typeof params != 'undefined') {
+            data = {template_id: template_id, params: params};
+         } else {
+            data = {template_id: template_id};   
+         }
+         
+      }
+      return this.http.post(this.url + 'download/template', JSON.stringify(data), this.options).toPromise()
+      .then( r => {
+         return r.json();
+      }).catch( error => { this.handledError(error.json()); });
+   }
+
+   pdf_file(html: string, title: string, orientation: string, qr?: Boolean, qr_content?: string, params?: any[]): Promise<any> {
       let data = null;
       if(typeof qr != 'undefined') {
          if(typeof params != 'undefined') {
@@ -38,12 +60,25 @@ export class ExporterService {
       }).catch( error => { this.handledError(error.json()); });
    }
 
-   excel_file(header: any[], body: any[]) {
+   excel_file(header: any[], body: any[]): Promise<any> {
       const data = {header: header, body: body};
       return this.http.post(this.url + 'download/excel_file', JSON.stringify(data), this.options).toPromise()
       .then( r => {
          return r.json();
       }).catch( error => { this.handledError(error.json()); });
+   }
+
+   getPDFQRdata(params: any[]): string {
+      let data = '';
+      params.forEach(element => {
+         let strelement = JSON.stringify(element).toUpperCase();
+         data += strelement.split('{')[1].split('}')[0] + '\n';
+      });
+      data = data.substr(0, data.length - 1);
+      data = data.split('"').join('');
+      data = data.split('_').join(' ');
+      data = data.split(':').join(': ');
+      return data;
    }
 
    handledError(error: any) {

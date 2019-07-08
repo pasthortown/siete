@@ -17,7 +17,8 @@ $router->get('/', function () use ($router) {
 
 $router->group(['middleware' => []], function () use ($router) {
    $router->post('download/excel_file', ['uses' => 'ExporterController@excel_file']);
-   $router->post('download/pdf', ['uses' => 'ExporterController@pdf_file']);   
+   $router->post('download/pdf', ['uses' => 'ExporterController@pdf_file']);
+   $router->post('download/template', ['uses' => 'ExporterController@pdf_template']);
 });
 
 $router->group(['middleware' => ['auth']], function () use ($router) {
