@@ -191,6 +191,7 @@ export class CoordinadorComponent implements OnInit {
   rucs_registrados: RegistroDataCarrier[] = [];
   ruc_registro_selected: RegistroDataCarrier = new RegistroDataCarrier();
   rucData = 'CONECTÁNDOSE AL SRI...';
+  superciasData = 'CONECTÁNDOSE A LA SUPERINTENDENCIA DE COMPANÍAS...';
   cedulaData = 'CONECTÁNDOSE AL REGISTRO CIVIL...';
   representanteCedulaData = 'CONECTÁNDOSE AL REGISTRO CIVIL...';
   cedulaEstablishmentContactData = 'CONECTÁNDOSE AL REGISTRO CIVIL...';
@@ -386,28 +387,6 @@ export class CoordinadorComponent implements OnInit {
       return true;
    }
    return false;
-  }
-
-  descargarPlantilla(template_id: number) {
-   const params = [{ciudad: 'Quito'},
-      {fecha: new Date().toLocaleString()},
-      {codigo: 'codigo'},
-      {nombre_comercial: 'LSYSTEMS'},
-      {propietario: 'Luis Salazar'},
-      {representante_legal: 'Luis Salazar'},
-      {direccion_establecimiento: 'LEJISISISIMOS'},
-      {Registro: '1'}];
-
-   this.exporterDataService.template(template_id, true, this.exporterDataService.getPDFQRdata(params), params).then( r => {
-      const byteCharacters = atob(r);
-      const byteNumbers = new Array(byteCharacters.length);
-      for (let i = 0; i < byteCharacters.length; i++) {
-         byteNumbers[i] = byteCharacters.charCodeAt(i);
-      }
-      const byteArray = new Uint8Array(byteNumbers);
-      const blob = new Blob([byteArray], { type: 'application/pdf'});
-      saveAs(blob, 'prueba.pdf');
-   }).catch( e => { console.log(e); });
   }
 
   onChangeTablePays(config: any, event?): any {
@@ -3254,6 +3233,20 @@ guardarDeclaracion() {
    if (!this.consumoRuc) {
      this.consumoRuc = true;
      this.rucValidated = true;
+     this.dinardapDataService.get_super_cias(this.ruc_registro_selected.ruc.number).then( r => {
+      this.superciasData = '';
+         if (r.companias !== 0) {
+            const companias = r.companias.original.entidades.entidad.filas.fila.columnas.columna;
+            companias.forEach(element => {
+               if (element.campo == 'expediente') {
+                  this.superciasData += '<strong>Número de Expediente: </strong> ' + element.valor + '<br/>';
+               }
+               if (element.campo == 'objeto_social') {
+                  this.superciasData += '<strong>Objeto Social: </strong> ' + element.valor + '<br/>';
+               }
+            });  
+         }
+   }).catch( e => { console.log(e); });
      this.dinardapDataService.get_RUC(this.ruc_registro_selected.ruc.number).then( r => {
         this.SRIOK = true; 
         this.rucValidated = true;

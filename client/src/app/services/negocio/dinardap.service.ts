@@ -32,6 +32,14 @@ export class DinardapService {
       }).catch( error => { this.handledError(error.json());  });
    }
 
+   get_super_cias(numero: String): Promise<any> {
+      const data = {'identificacion': numero};
+      return this.http.post(this.url + 'supercias', JSON.stringify(data), this.options).toPromise()
+      .then( r => {
+         return r.json();
+      }).catch( error => { this.handledError(error.json());  });
+   }
+
    handledError(error: any) {
       console.log(error);
    }

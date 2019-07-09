@@ -23,6 +23,7 @@ export class AccountAdminComponent implements OnInit {
   consumoCedula = false;
   REGCIVILOK = false;
   rucData = '';
+  superciasData = '';
   rucValidated = false;
   consumoRuc = false;
   SRIOK = false;
@@ -186,6 +187,20 @@ export class AccountAdminComponent implements OnInit {
       if (!this.consumoRuc) {
         this.consumoRuc = true;
         this.rucValidated = true;
+        this.dinardapDataService.get_super_cias(this.account_rucSelected.ruc).then( r => {
+         this.superciasData = '';
+         if (r.companias !== 0) {
+            const companias = r.companias.original.entidades.entidad.filas.fila.columnas.columna;
+            companias.forEach(element => {
+               if (element.campo == 'expediente') {
+                  this.superciasData += '<strong>Número de Expediente: </strong> ' + element.valor + '<br/>';
+               }
+               if (element.campo == 'objeto_social') {
+                  this.superciasData += '<strong>Objeto Social: </strong> ' + element.valor + '<br/>';
+               }
+            });  
+         }
+      }).catch( e => { console.log(e); });
         this.dinardapDataService.get_RUC(this.account_rucSelected.ruc).then( r => {
            this.SRIOK = true; 
            this.rucValidated = true;

@@ -130,8 +130,13 @@
                 </div>
                 <div class="col-12" *ngIf="rucValidated">
                   <div class="form-group">
-                    <label>DATOS DEL RUC</label>
+                    <label>DATOS DEL SRI</label>
                     <div class="col-12 text-justify" [innerHTML]="rucData">
+                    </div>
+                  </div>
+                  <div class="form-group" *ngIf="ruc_registro_selected.ruc.tax_payer_type_id > 1">
+                    <label>DATOS DE LA SUPERINTENDENCIA DE COMPANÍAS</label>
+                    <div class="col-12 text-justify" [innerHTML]="supercias">
                     </div>
                   </div>
                 </div>
