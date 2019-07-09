@@ -2043,13 +2043,17 @@ export class RegistroComponent implements OnInit {
       this.dinardapDataService.get_super_cias(this.ruc_registro_selected.ruc.number).then( r => {
          this.superciasData = '';
          if (r.companias !== 0) {
-            const companias = r.companias.original.entidades.entidad.filas.fila.columnas.columna;
-            companias.forEach(element => {
-               if (element.campo == 'expediente') {
-                  this.superciasData += '<strong>Número de Expediente: </strong> ' + element.valor + '<br/>';
-               }
-               if (element.campo == 'objeto_social') {
-                  this.superciasData += '<strong>Objeto Social: </strong> ' + element.valor + '<br/>';
+            const companias = r.companias.original.entidades.entidad;
+            companias.forEach(entidad => {
+               if (entidad.nombre == 'Superintendencia de Compañias Datos Companía') {
+                  entidad.filas.fila.columnas.columna.forEach(element => {
+                     if (element.campo == 'expediente') {
+                        this.superciasData += '<strong>Número de Expediente: </strong> ' + element.valor + '<br/>';
+                     }
+                     if (element.campo == 'objeto_social') {
+                        this.superciasData += '<strong>Objeto Social: </strong> ' + element.valor + '<br/>';
+                     }   
+                  });
                }
             });  
          }
