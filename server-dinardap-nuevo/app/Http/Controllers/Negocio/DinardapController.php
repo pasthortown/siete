@@ -80,8 +80,15 @@ class DinardapController extends Controller
     //SRI RUC
     $codigoPaquete = ["nombre" => "codigoPaquete", "valor" => "2114"];
     $identificacion = ["nombre" => "identificacion", "valor" => $data["RUC"]];
-    $parameters = array($codigoPaquete, $identificacion);
+    $fuenteDatos = ["nombre" => "fuenteDatos", "valor" => " "];
+    $parameters = array($codigoPaquete, $identificacion, $fuenteDatos);
     $sri_ruc = $this->connect($parameters);
+    //SRI RUC COMPLETO
+    $codigoPaquete = ["nombre" => "codigoPaquete", "valor" => "2116"];
+    $identificacion = ["nombre" => "identificacion", "valor" => $data["RUC"]];
+    $fuenteDatos = ["nombre" => "fuenteDatos", "valor" => " "];
+    $parameters = array($codigoPaquete, $identificacion, $fuenteDatos);
+    $sri_ruc_completo = $this->connect($parameters);
     //SRI ESTABLECIMIENTOS
     $codigoPaquete = ["nombre" => "codigoPaquete", "valor" => "2115"];
     $identificacion = ["nombre" => "identificacion", "valor" => $data["RUC"]];
@@ -94,7 +101,7 @@ class DinardapController extends Controller
     $sri_actividad_economica = $this->connect($parameters);
     //SRI RAZON SOCIAL       
     $codigoPaquete = ["nombre" => "codigoPaquete", "valor" => "2225"];
-    $identificacion = ["nombre" => "ruc", "valor" => $data["RUC"]];
+    $identificacion = ["nombre" => "identificacion", "valor" => $data["RUC"]];
     $parameters = array($codigoPaquete, $identificacion);
     $sri_razon_social = $this->connect($parameters);
     //SRI RUC DATOS
@@ -107,7 +114,7 @@ class DinardapController extends Controller
     $identificacion = ["nombre" => "identificacion", "valor" => $data["RUC"]];
     $parameters = array($codigoPaquete, $identificacion);
     $sri_ruc_contactos = $this->connect($parameters);
-    $respuesta = ["sri_ruc" => $sri_ruc, "sri_establecimientos" => $sri_establecimientos, "sri_razon_social" => $sri_razon_social, "sri_actividad_economica" => $sri_actividad_economica, "sri_ruc_datos" => $sri_ruc_datos, "sri_ruc_contactos" => $sri_ruc_contactos, "sri_ubicaciones_geograficas" => $sri_ubicaciones_geograficas];
+    $respuesta = ["sri_ruc_completo" => $sri_ruc_completo, "sri_ruc" => $sri_ruc, "sri_establecimientos" => $sri_establecimientos, "sri_razon_social" => $sri_razon_social, "sri_actividad_economica" => $sri_actividad_economica, "sri_ruc_datos" => $sri_ruc_datos, "sri_ruc_contactos" => $sri_ruc_contactos, "sri_ubicaciones_geograficas" => $sri_ubicaciones_geograficas];
     $previewData = Ruc::where('number', $data['RUC'])->first();
     if (!$previewData) {
       $ruc = new Ruc();
@@ -195,12 +202,12 @@ class DinardapController extends Controller
   {
     $data = $request->json()->all();
     $codigoPaquete = ["nombre" => "codigoPaquete", "valor" => "2119"];
-    $identificacion = ["nombre" => "ruc", "valor" => $data["identificacion"]];
+    $identificacion = ["nombre" => "identificacion", "valor" => $data["identificacion"]];
     $parameters = array($codigoPaquete, $identificacion);
     $companias = $this->connect($parameters);
     $data = $request->json()->all();
     $codigoPaquete = ["nombre" => "codigoPaquete", "valor" => "2120"];
-    $identificacion = ["nombre" => "ruc", "valor" => $data["identificacion"]];
+    $identificacion = ["nombre" => "identificacion", "valor" => $data["identificacion"]];
     $parameters = array($codigoPaquete, $identificacion);
     $administrador = $this->connect($parameters);
     return response()->json(["companias" => $companias, "administrador" => $administrador], 200);

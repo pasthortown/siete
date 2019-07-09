@@ -2033,42 +2033,65 @@ getDeclarationItems() {
         this.SRIOK = true; 
         this.rucValidated = true;
         const itemsDetalles_SRI_RUC = r.sri_ruc.original.entidades.entidad.filas.fila.columnas.columna;
-        const itemsDetalles_SRI_AE = r.sri_actividad_economica.original.entidades.entidad.filas.fila;
+        const itemsDetalles_SRI_RUC_COMPLETO = r.sri_ruc_completo.original.entidades.entidad;
         this.establishment_selected.ruc_code_id = '-';
         this.rucData = '';
-        let actividad_economica = '<table class="table"><tbody><tr><th colspan="2">Actividades Económicas:</th></tr>';
-        itemsDetalles_SRI_AE.forEach(fila => {
-           fila.columnas.columna.forEach(element => {
-              if (element.campo == 'actividadEconomica'){
-                 actividad_economica += '<tr><th></th><td>'+ element.valor +'</td></tr>';
-              }
-           });
-        });
-        actividad_economica += '</tbody></table>';
-        this.rucData = actividad_economica;
-        itemsDetalles_SRI_RUC.forEach(element => {
-           /*if (element.campo === 'razonSocial') {
-              this.rucData += '<strong>Razón Social: </strong> ' + element.valor + '<br/>';
+        let datosGenerales = '';
+        let datosRL = '';
+        let datosAE = '';
+        let datosContactoSRI = '';
+        itemsDetalles_SRI_RUC_COMPLETO.forEach(entidad => {
+           if (entidad.nombre == 'Actividad Economica') {
+              const AE = entidad.filas.fila.columnas.columna;
+              AE.forEach(element => {
+                 if (element.campo == 'actividadGeneral') {
+                    datosAE += '<strong>Actividad Económica: </strong> ' + element.valor + '<br/>';
+                 }
+              });
            }
-           if (element.campo === 'objetoSocial') {
-              this.rucData += '<strong>Objeto Social: </strong> ' + element.valor + '<br/>';
-           }*/
+           if (entidad.nombre == 'Contribuyente Datos Completo') {
+              const DC = entidad.filas.fila.columnas.columna;
+              DC.forEach(element => {
+                 if (element.campo == 'razonSocial') {
+                    datosGenerales += '<strong>Razón Social: </strong> ' + element.valor + '<br/>';
+                 }
+                 if (element.campo == 'email') {
+                    datosContactoSRI += '<strong>Correo Electrónico - Registrado en SRI: </strong> ' + element.valor + '<br/>';
+                 }
+                 if (element.campo == 'telefonoDomicilio') {
+                    datosContactoSRI += '<strong>Teléfono Domicilio - Registrado en SRI: </strong> ' + element.valor + '<br/>';
+                 }
+              });
+           }
+           if (entidad.nombre == 'Representante Legal') {
+              const RL = entidad.filas.fila.columnas.columna;
+              RL.forEach(element => {
+                 if (element.campo == 'identificacion') {
+                    datosRL += '<strong>Identificación Representante Legal: </strong> ' + element.valor + '<br/>';
+                 }
+                 if (element.campo == 'nombre') {
+                    datosRL += '<strong>Nombre Representante Legal: </strong> ' + element.valor + '<br/>';
+                 }
+              });
+           }
+        });
+        itemsDetalles_SRI_RUC.forEach(element => {
            if (element.campo == 'estadoContribuyente') {
-              this.rucData += '<strong>Estado Contribuyente: </strong> ' + element.valor + '<br/>';
+              datosGenerales += '<strong>Estado Contribuyente: </strong> ' + element.valor + '<br/>';
            }
            if (element.campo == 'fechaInscripcionRuc') {
-              this.rucData += '<strong>Fecha de Inscripción del RUC: </strong> ' + element.valor + '<br/>';
+              datosGenerales += '<strong>Fecha de Inscripción del RUC: </strong> ' + element.valor + '<br/>';
            }
            if (element.campo == 'fechaActualizacion') {
-              this.rucData += '<strong>Fecha de Actualización: </strong> ' + element.valor + '<br/>';
+              datosGenerales += '<strong>Fecha de Actualización: </strong> ' + element.valor + '<br/>';
            }
            if (element.campo == 'obligado') {
               if (element.valor == 'N') {
                  this.ruc_registro_selected.ruc.baised_accounting = false;
-                 this.rucData += '<strong>Obligado a Llevar Contabilidad: </strong> NO<br/>';
+                 datosGenerales += '<strong>Obligado a Llevar Contabilidad: </strong> NO<br/>';
               } else {
                  this.ruc_registro_selected.ruc.baised_accounting = true;
-                 this.rucData += '<strong>Obligado a Llevar Contabilidad: </strong> SI<br/>';
+                 datosGenerales += '<strong>Obligado a Llevar Contabilidad: </strong> SI<br/>';
               }
            }
            if (element.campo == 'personaSociedad') {
@@ -2077,7 +2100,11 @@ getDeclarationItems() {
               } else {
                  this.ruc_registro_selected.ruc.tax_payer_type_id = 2;
               }
-              this.rucData += '<strong>Tipo de Contribuyente: </strong> ' + element.valor + '<br/>';
+              datosGenerales += '<strong>Tipo de Contribuyente: </strong> ' + element.valor + '<br/>';
+           }
+           this.rucData = datosGenerales + datosAE + datosContactoSRI;
+           if (this.ruc_registro_selected.ruc.tax_payer_type_id != 1) {
+              this.rucData += datosRL;
            }
         });
      }).catch( e => {
