@@ -645,6 +645,10 @@ export class RegistroComponent implements OnInit {
   }
 
   onCellClickEstablishment(event) {
+   if (event.row.name == ''){
+      this.toastr.errorToastr('El establecimiento seleccionado, no tiene nombre comercial. Acérquese al SRI para registrar el nombre comercial del establecimiento.', 'Datos - SRI');
+      return;
+   } 
    this.ruc_registro_selected.ruc.establishments.forEach(element => {
       if (element.ruc_code_id == event.row.code) {
          this.selectRegisterEstablishment(element);
@@ -1144,19 +1148,35 @@ export class RegistroComponent implements OnInit {
                   newEstablishment.sri_state = sriData.valor as string;
                }
                if (sriData.campo === 'calle') {
-                  newEstablishment.address_main_street = sriData.valor;
+                  if (JSON.stringify(sriData.valor) !== '{}') {
+                     newEstablishment.address_main_street = sriData.valor;   
+                  } else {
+                     newEstablishment.address_main_street = '';
+                  }
                }
                if (sriData.campo === 'numero') {
-                  newEstablishment.address_number = sriData.valor;
+                  if (JSON.stringify(sriData.valor) !== '{}') {
+                     newEstablishment.address_number = sriData.valor;
+                  } else {
+                     newEstablishment.address_number = '';
+                  }
                }
                if (sriData.campo === 'interseccion') {
-                  newEstablishment.address_secondary_street = sriData.valor;
+                  if (JSON.stringify(sriData.valor) !== '{}') {
+                     newEstablishment.address_secondary_street = sriData.valor;
+                  } else {
+                     newEstablishment.address_secondary_street = '';
+                  }
                }
                if (sriData.campo === 'numeroEstablecimiento') {
                   newEstablishment.ruc_code_id = sriData.valor as string;
                }
                if (sriData.campo === 'nombreFantasiaComercial') {
-                  newEstablishment.commercially_known_name = sriData.valor as string;
+                  if (JSON.stringify(sriData.valor) !== '{}') {
+                     newEstablishment.commercially_known_name = sriData.valor as string;
+                  } else {
+                     newEstablishment.commercially_known_name = '';
+                  }
                }
             });
             establecimientos.forEach(establecimiento => {

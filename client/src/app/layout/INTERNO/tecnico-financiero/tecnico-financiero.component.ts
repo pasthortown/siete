@@ -472,20 +472,24 @@ export class TecnicoFinancieroComponent implements OnInit {
      this.onChangeTableEstablishment(this.config);
   }
 
- onCellClickEstablishment(event) {
-  this.ruc_registro_selected.ruc.establishments.forEach(element => {
-     if (element.ruc_code_id == event.row.code) {
-        this.selectRegisterEstablishment(element);
-     }
-  });
-  this.rowsEstablishment.forEach(row => {
-     if (row.code == event.row.code) {
-        row.selected = '<div class="col-12 text-right"><span class="far fa-hand-point-right"></span></div>';
-     } else {
-        row.selected = '';
-     }
-  });
- }
+  onCellClickEstablishment(event) {
+   if (event.row.name == ''){
+      this.toastr.errorToastr('El establecimiento seleccionado, no tiene nombre comercial. Acérquese al SRI para registrar el nombre comercial del establecimiento.', 'Datos - SRI');
+      return;
+   }
+   this.ruc_registro_selected.ruc.establishments.forEach(element => {
+      if (element.ruc_code_id == event.row.code) {
+         this.selectRegisterEstablishment(element);
+      }
+   });
+   this.rowsEstablishment.forEach(row => {
+      if (row.code == event.row.code) {
+         row.selected = '<div class="col-12 text-right"><span class="far fa-hand-point-right"></span></div>';
+      } else {
+         row.selected = '';
+      }
+   });
+  }
 
  onChangeTableRegister(config: any, page: any = {page: this.currentPageRegister, itemsPerPage: this.recordsByPageRegister}): any {
   if (config.filtering) {
