@@ -2049,6 +2049,9 @@ export class RegistroComponent implements OnInit {
                   entidad.filas.fila.columnas.columna.forEach(element => {
                      if (element.campo == 'expediente') {
                         this.superciasData += '<strong>Número de Expediente: </strong> ' + element.valor + '<br/>';
+                        if (JSON.stringify(element.valor) !== '{}') {
+                           this.ruc_registro_selected.ruc.group_given.register_code = element.valor;
+                         }
                      }
                      if (element.campo == 'objeto_social') {
                         this.superciasData += '<strong>Objeto Social: </strong> ' + element.valor + '<br/>';
@@ -2085,10 +2088,14 @@ export class RegistroComponent implements OnInit {
                      datosGenerales += '<strong>Razón Social: </strong> ' + element.valor + '<br/>';
                   }
                   if (element.campo == 'email') {
-                     datosContactoSRI += '<strong>Correo Electrónico - Registrado en SRI: </strong> ' + element.valor + '<br/>';
+                     if (JSON.stringify(element.valor) !== '{}') {
+                        datosContactoSRI += '<strong>Correo Electrónico - Registrado en SRI: </strong> ' + element.valor + '<br/>';
+                     }
                   }
                   if (element.campo == 'telefonoDomicilio') {
-                     datosContactoSRI += '<strong>Teléfono Domicilio - Registrado en SRI: </strong> ' + element.valor + '<br/>';
+                     if (JSON.stringify(element.valor) !== '{}') {
+                        datosContactoSRI += '<strong>Teléfono Domicilio - Registrado en SRI: </strong> ' + element.valor + '<br/>';
+                     }
                   }
                });
             }
@@ -2097,6 +2104,12 @@ export class RegistroComponent implements OnInit {
                RL.forEach(element => {
                   if (element.campo == 'identificacion') {
                      datosRL += '<strong>Identificación Representante Legal: </strong> ' + element.valor + '<br/>';
+                     if (JSON.stringify(element.valor) !== '{}') {
+                        this.ruc_registro_selected.ruc.person_representative.identification = element.valor;
+                        this.consumoCedulaRepresentanteLegal = false;
+                        this.REGCIVILREPRESENTANTELEGALOK = false;
+                        this.checkIdentificationRepresentant();
+                     }
                   }
                   if (element.campo == 'nombre') {
                      datosRL += '<strong>Nombre Representante Legal: </strong> ' + element.valor + '<br/>';

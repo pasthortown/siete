@@ -2031,23 +2031,26 @@ getDeclarationItems() {
      this.consumoRuc = true;
      this.rucValidated = true;
      this.dinardapDataService.get_super_cias(this.ruc_registro_selected.ruc.number).then( r => {
-      this.superciasData = '';
-      if (r.companias !== 0) {
-         const companias = r.companias.original.entidades.entidad;
-         companias.forEach(entidad => {
-            if (entidad.nombre == 'Superintendencia de Compañias Datos Companía') {
-               entidad.filas.fila.columnas.columna.forEach(element => {
-                  if (element.campo == 'expediente') {
-                     this.superciasData += '<strong>Número de Expediente: </strong> ' + element.valor + '<br/>';
-                  }
-                  if (element.campo == 'objeto_social') {
-                     this.superciasData += '<strong>Objeto Social: </strong> ' + element.valor + '<br/>';
-                  }   
-               });
-            }
-         });  
-      }
-   }).catch( e => { console.log(e); });
+        this.superciasData = '';
+        if (r.companias !== 0) {
+           const companias = r.companias.original.entidades.entidad;
+           companias.forEach(entidad => {
+              if (entidad.nombre == 'Superintendencia de Compañias Datos Companía') {
+                 entidad.filas.fila.columnas.columna.forEach(element => {
+                    if (element.campo == 'expediente') {
+                       this.superciasData += '<strong>Número de Expediente: </strong> ' + element.valor + '<br/>';
+                       if (JSON.stringify(element.valor) !== '{}') {
+                          this.ruc_registro_selected.ruc.group_given.register_code = element.valor;
+                        }
+                    }
+                    if (element.campo == 'objeto_social') {
+                       this.superciasData += '<strong>Objeto Social: </strong> ' + element.valor + '<br/>';
+                    }   
+                 });
+              }
+           });  
+        }
+     }).catch( e => { console.log(e); });
      this.dinardapDataService.get_RUC(this.ruc_registro_selected.ruc.number).then( r => {
         this.SRIOK = true; 
         this.rucValidated = true;
@@ -2075,10 +2078,14 @@ getDeclarationItems() {
                     datosGenerales += '<strong>Razón Social: </strong> ' + element.valor + '<br/>';
                  }
                  if (element.campo == 'email') {
-                    datosContactoSRI += '<strong>Correo Electrónico - Registrado en SRI: </strong> ' + element.valor + '<br/>';
+                    if (JSON.stringify(element.valor) !== '{}') {
+                       datosContactoSRI += '<strong>Correo Electrónico - Registrado en SRI: </strong> ' + element.valor + '<br/>';
+                    }
                  }
                  if (element.campo == 'telefonoDomicilio') {
-                    datosContactoSRI += '<strong>Teléfono Domicilio - Registrado en SRI: </strong> ' + element.valor + '<br/>';
+                    if (JSON.stringify(element.valor) !== '{}') {
+                       datosContactoSRI += '<strong>Teléfono Domicilio - Registrado en SRI: </strong> ' + element.valor + '<br/>';
+                    }
                  }
               });
            }
@@ -2087,6 +2094,12 @@ getDeclarationItems() {
               RL.forEach(element => {
                  if (element.campo == 'identificacion') {
                     datosRL += '<strong>Identificación Representante Legal: </strong> ' + element.valor + '<br/>';
+                    if (JSON.stringify(element.valor) !== '{}') {
+                       this.ruc_registro_selected.ruc.person_representative.identification = element.valor;
+                       this.consumoCedulaRepresentanteLegal = false;
+                       this.REGCIVILREPRESENTANTELEGALOK = false;
+                       this.checkIdentificationRepresentant();
+                    }
                  }
                  if (element.campo == 'nombre') {
                     datosRL += '<strong>Nombre Representante Legal: </strong> ' + element.valor + '<br/>';
