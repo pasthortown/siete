@@ -43,12 +43,12 @@
         </div>
       <div class="form-group" *ngIf="identidadConfirmada">
           <label for="email">Correo Electrónico</label><span
-          *ngIf="!checkEmail()"
+          *ngIf="!emailContactValidated"
           class="ml-2 badge badge-danger"
           >Incorrecto</span>
-          <input type="email" class="form-control" id="email" placeholder="Correo Electrónico" [(ngModel)]="user.email" />
+          <input type="email" class="form-control" id="email" placeholder="Correo Electrónico" (input)="checkEmail()" [(ngModel)]="user.email" />
         </div>
-      <div class="form-group" *ngIf="identificationValidated && checkEmail()">
+      <div class="form-group" *ngIf="identificationValidated && emailContactValidated">
         <label for="ruc">Número de RUC al que pertenece el Establecimiento</label><span
         *ngIf="!rucValidated"
         class="ml-2 badge badge-danger"
