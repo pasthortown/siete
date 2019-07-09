@@ -110,6 +110,7 @@ export class RegisterComponent implements OnInit {
           const registros = r.original.entidades.entidad.filas.fila.columnas.columna;
           this.CedulaData = '';
           this.REGCIVILOK = true;
+          let sorteo = [];
           registros.forEach(element => {
              if (element.campo === 'cedula') {
                 if (element.valor === this.user.identification) {
@@ -125,17 +126,27 @@ export class RegisterComponent implements OnInit {
                    this.user.name= element.valor;
                 }
                 if (element.campo === 'fechaNacimiento') {
+                  if (JSON.stringify(element.valor) !== '{}') {
+                     sorteo.push(0);
+                   }
                    this.fechaNacimiento = element.valor;
                 }
                 if (element.campo === 'fechaExpiracion') {
-                   this.fechaExpiracion = element.valor;
+                  if (JSON.stringify(element.valor) !== '{}') {
+                     sorteo.push(1);
+                   } 
+                  this.fechaExpiracion = element.valor;
                 }
                 if (element.campo === 'fechaExpedicion') {
+                  if (JSON.stringify(element.valor) !== '{}') {
+                     sorteo.push(2);
+                   }
                    this.fechaExpedicion = element.valor;
                 }
              }
           });
-          this.aleatorio = Math.floor(Math.random() * 3);
+          const indice = Math.floor(Math.random() * sorteo.length);
+          this.aleatorio = sorteo[indice];
        }).catch( e => {
          this.toastr.errorToastr('La cédula ingresada no es correcta.', 'Registro Civil');
          this.CedulaData = '<div class="alert alert-danger" role="alert">El Registro Civil, no respondió. Vuelva a intentarlo.</div>';
