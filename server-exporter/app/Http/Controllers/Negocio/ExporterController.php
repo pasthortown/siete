@@ -18,6 +18,100 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 class ExporterController extends Controller
 {
 
+  function pdf_tarifario_rack(Request $data) {
+    $request = $data->json()->all();
+    $html_content = '<pagina><div style="width:100%; height:350px;"></div><div style="width:100%; margin-left: 150px; margin-right:100px;">';
+    $html_content .= 'Tarifario';
+    $html_content .= '</div></pagina>';
+    try {
+      $qr = $request['qr'];
+    } catch (Exception $e) {
+      $qr = false;
+    }
+    try {
+      $qr_content = $request['qr_content'];
+    } catch (Exception $e) {
+      $qr_content = '';
+    }
+    try {
+      $params = $request['params'];
+    } catch (Exception $e) {
+      $params = [];
+    }
+    if (!$params) {
+      $params = [];
+    }
+    $title = 'TARIFARIO RACK O MOSTRADOR';
+    $pdf_content = $this->build_content($html_content, $params);
+    $html = $this->mintur_style($pdf_content, $title, $qr, $qr_content);
+    $orientation = 'portrait';
+    $pdf = App::make('dompdf.wrapper');
+    $pdf->setPaper('A4', $orientation);
+    $pdf->setOptions(['dpi' => 150, 'defaultFont' => 'courier']);
+    $pdf->loadHTML($html);
+    $bytes = $pdf->output();
+    $toReturn = base64_encode($bytes);
+    return response()->json($toReturn, 200);
+  }
+
+  function pdf_checklist(Request $data) {
+    $request = $data->json()->all();
+    $html_content = '<pagina><div style="width:100%; height:350px;"></div><div style="width:100%; margin-left: 150px; margin-right:100px;">';
+    $html_content .= '<table style="width: 100%; border: 1px solid black; border-collapse: collapse; text-align: left;"><tr>';
+    $html_content .= '<th style="border: 1px solid black;">Día</th><td style="border: 1px solid black;">##dia##</td><th style="border: 1px solid black;">Mes</th><td colspan="2" style="border: 1px solid black;">##mes##</td><th style="border: 1px solid black;">Año</th><td style="border: 1px solid black;">##year##</td></tr>';
+    $html_content .= '<tr><th style="border: 1px solid black;">Nombre del Establecimiento</th><td colspan="6" style="border: 1px solid black;">##nombre_establecimiento##</td></tr>';
+    $html_content .= '<tr><th style="border: 1px solid black;">Nombre del Propietario</th><td colspan="6" style="border: 1px solid black;">##nombre_propietario##</td></tr>';
+    $html_content .= '<tr><th style="border: 1px solid black;">RUC</th><td style="border: 1px solid black;">##ruc##</td><th style="border: 1px solid black;">Teléfono</th><td style="border: 1px solid black;">##telefono##</td><th style="border: 1px solid black;">Correo Electrónico</th><td colspan="2" style="border: 1px solid black;">##correo_electronico##</td></tr>';
+    $html_content .= '<tr><th style="border: 1px solid black;">Provincia</th><td colspan="2" style="border: 1px solid black;">##provincia##</td><th style="border: 1px solid black;">Ciudad</th><td colspan="3" style="border: 1px solid black;">##ciudad##</td></tr>';
+    $html_content .= '<tr><th style="border: 1px solid black;">Dirección</th><td colspan="6" style="border: 1px solid black;">##direccion##</td></tr>';
+    $html_content .= '<tr><th style="border: 1px solid black;">Número de Habitaciones</th><td colspan="2" style="border: 1px solid black;">##numero_habitaciones##</td><th colspan="2" style="border: 1px solid black;">Número de Plazas</th><td colspan="2" style="border: 1px solid black;">##numero_plazas##</td></tr>';
+    $html_content .= '<tr><th style="border: 1px solid black;">Personal que Trabaja en el Establecimiento</th><th style="border: 1px solid black;">Hombres</th><td style="border: 1px solid black;">##hombres##</td><th style="border: 1px solid black;">Mujeres</th><td style="border: 1px solid black;">##mujeres##</td><th style="border: 1px solid black;">Discapacidad</th><td style="border: 1px solid black;">##discapacidad##</td></tr></table><br/><br/><br/>';
+    $html_content .= '<h3 style="text-transform: uppercase; width: 100%; text-align: center;">REQUISITOS PARA ##clasificacion## - ##categoria##</h3><br/><br/><br/>';
+    $html_content .= '<table style="text-align: left; width:100%;">';
+    $html_content .= '<tr><th><br />Servidor Público<br /><br /></th><th></th><th><br />Propietario/Gerente/Administrador<br /><br /></th></tr>';
+    $html_content .= '<tr><td style="width:40%;"><table style="text-align: left; width:100%;">';
+    $html_content .= '<tr><th style="border-bottom: 1px solid black;">Firma:</th></tr>';
+    $html_content .= '<tr><th style="border-bottom: 1px solid black;"><br />Nombre:</th></tr>';
+    $html_content .= '<tr><th style="border-bottom: 1px solid black;"><br />Documento de Identidad:</th></tr>';
+    $html_content .= '<tr><th style="border-bottom: 1px solid black;"><br />Coordinación Zonal:</th></tr>';
+    $html_content .= '</table></td><td style="width:20%;"></td><td style="width:40%;"><table style="text-align: left; width:100%;">';
+    $html_content .= '<tr><th style="border-bottom: 1px solid black;">Firma:</th></tr>';
+    $html_content .= '<tr><th style="border-bottom: 1px solid black;"><br />Nombre:</th></tr>';
+    $html_content .= '<tr><th style="border-bottom: 1px solid black;"><br />Documento de Identidad:</th></tr>';
+    $html_content .= '<tr><th style="border-bottom: 1px solid black;"><br />Fecha y Hora:</th></tr>';
+    $html_content .= '</table></td></tr></table>';
+    $html_content .= '</div></pagina>';
+    try {
+      $qr = $request['qr'];
+    } catch (Exception $e) {
+      $qr = false;
+    }
+    try {
+      $qr_content = $request['qr_content'];
+    } catch (Exception $e) {
+      $qr_content = '';
+    }
+    try {
+      $params = $request['params'];
+    } catch (Exception $e) {
+      $params = [];
+    }
+    if (!$params) {
+      $params = [];
+    }
+    $title = 'MATRIZ DE CONTROL - ALOJAMIENTO TURÍSTICO';
+    $pdf_content = $this->build_content($html_content, $params);
+    $html = $this->mintur_style($pdf_content, $title, $qr, $qr_content);
+    $orientation = 'portrait';
+    $pdf = App::make('dompdf.wrapper');
+    $pdf->setPaper('A4', $orientation);
+    $pdf->setOptions(['dpi' => 150, 'defaultFont' => 'courier']);
+    $pdf->loadHTML($html);
+    $bytes = $pdf->output();
+    $toReturn = base64_encode($bytes);
+    return response()->json($toReturn, 200);
+  }
+
   function pdf_template(Request $data) {
     $request = $data->json()->all();
     $template = template::where('id', $request['template_id'])->first();

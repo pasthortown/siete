@@ -389,6 +389,32 @@ export class CoordinadorComponent implements OnInit {
    return false;
   }
 
+  descargarPDF() {
+     this.exporterDataService.getPDFNormativa().then( r => {
+      const byteCharacters = atob(r);
+      const byteNumbers = new Array(byteCharacters.length);
+      for (let i = 0; i < byteCharacters.length; i++) {
+         byteNumbers[i] = byteCharacters.charCodeAt(i);
+      }
+      const byteArray = new Uint8Array(byteNumbers);
+      const blob = new Blob([byteArray], { type: 'application/pdf'});
+      saveAs(blob, 'checklist.pdf');
+     }).catch( e => { console.log(e); });
+  }
+
+  descargarPDFTarifario() {
+   this.exporterDataService.getPDFTarifarioRack().then( r => {
+    const byteCharacters = atob(r);
+    const byteNumbers = new Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+       byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+    const byteArray = new Uint8Array(byteNumbers);
+    const blob = new Blob([byteArray], { type: 'application/pdf'});
+    saveAs(blob, 'tarifario.pdf');
+   }).catch( e => { console.log(e); });
+  }
+
   onChangeTablePays(config: any, event?): any {
    const page: any = {page: this.currentPageEstablishment, itemsPerPage: this.recordsByPageEstablishment};
    if (config.filtering) {

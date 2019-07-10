@@ -38,6 +38,50 @@ export class ExporterService {
       }).catch( error => { this.handledError(error.json()); });
    }
 
+   getPDFTarifarioRack(qr?: Boolean, qr_content?: string, params?: any[]): Promise<any> {
+      let data = null;
+      if(typeof qr != 'undefined') {
+         if(typeof params != 'undefined') {
+            data = {params: params, qr: qr, qr_content: qr_content};
+         } else {
+            data = {qr: qr, qr_content: qr_content};
+         }
+      } else {
+         if(typeof params != 'undefined') {
+            data = {params: params};
+         } else {
+            data = {};   
+         }
+         
+      }
+      return this.http.post(this.url + 'download/pdf_tarifario_rack', JSON.stringify(data), this.options).toPromise()
+      .then( r => {
+         return r.json();
+      }).catch( error => { this.handledError(error.json()); });
+   }
+
+   getPDFNormativa(qr?: Boolean, qr_content?: string, params?: any[]): Promise<any> {
+      let data = null;
+      if(typeof qr != 'undefined') {
+         if(typeof params != 'undefined') {
+            data = {params: params, qr: qr, qr_content: qr_content};
+         } else {
+            data = {qr: qr, qr_content: qr_content};
+         }
+      } else {
+         if(typeof params != 'undefined') {
+            data = {params: params};
+         } else {
+            data = {};   
+         }
+         
+      }
+      return this.http.post(this.url + 'download/pdf_checklist', JSON.stringify(data), this.options).toPromise()
+      .then( r => {
+         return r.json();
+      }).catch( error => { this.handledError(error.json()); });
+   }
+
    pdf_file(html: string, title: string, orientation: string, qr?: Boolean, qr_content?: string, params?: any[]): Promise<any> {
       let data = null;
       if(typeof qr != 'undefined') {
