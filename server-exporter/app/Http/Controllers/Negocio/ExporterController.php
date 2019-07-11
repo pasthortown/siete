@@ -54,9 +54,72 @@ class ExporterController extends Controller
     return response()->json($toReturn, 200);
   }
 
+  protected function buildPagesChecklist($requisites) {
+    $toReturn = '';
+    $paginas = 0;
+    $requisitosImpresos = 0;
+    $requisitesPerPage = 30;
+    $pageContent = '<table style="width: 100%; border: 1px solid black; border-collapse: collapse; text-align: left;">';
+    $pageContent .= '<tr><th style="border: 1px solid black;">Código</th><th style="border: 1px solid black;">Descripción</th><th style="border: 1px solid black;">Usuario</th><th style="border: 1px solid black;">Verificación</th></tr>';
+    foreach ($requisites as $requisite) {
+      if ($requisite['HTMLtype'] == 'GRUPO 0') {
+        $pageContent .= '<tr style="background-color:yellow;"><td></td><th style="border: 1px solid black; font-size: 16px;" colspan="3">'. $requisite['requisite_name'] .'</th></tr>';
+      }
+      if ($requisite['HTMLtype'] == 'GRUPO 1') {
+        $pageContent .= '<tr style="background-color:LightGray;"><td></td><th style="border: 1px solid black; font-size: 16px;" colspan="3">'. $requisite['requisite_name'] .'</th></tr>';
+      }
+      if ($requisite['HTMLtype'] == 'GRUPO 2') {
+        $pageContent .= '<tr style="background-color:LightGray;"><td></td><th style="border: 1px solid black; font-size: 16px;" colspan="3">'. $requisite['requisite_name'] .'</th></tr>';
+      }
+      if ($requisite['HTMLtype'] == 'GRUPO 3') {
+        $pageContent .= '<tr style="background-color:LightGray;"><td></td><th style="border: 1px solid black; font-size: 16px;" colspan="3">'. $requisite['requisite_name'] .'</th></tr>';
+      }
+      if ($requisite['HTMLtype'] == 'GRUPO 4') {
+        $pageContent .= '<tr style="background-color:LightGray;"><td></td><th style="border: 1px solid black; font-size: 16px;" colspan="3">'. $requisite['requisite_name'] .'</th></tr>';
+      }
+      if ($requisite['HTMLtype'] == 'GRUPO 5') {
+        $pageContent .= '<tr style="background-color:LightGray;"><td></td><th style="border: 1px solid black; font-size: 16px;" colspan="3">'. $requisite['requisite_name'] .'</th></tr>';
+      }
+      if ($requisite['HTMLtype'] == 'TRUE / FALSE') {
+        $pageContent .= '<tr><th style="border: 1px solid black;">' . $requisite['requisite_id'] . '</th><td style="border: 1px solid black; font-size: 14px;">'. $requisite['requisite_name'] .'</td><td style="border: 1px solid black;">' . $requisite['value'] . '</td><td style="border: 1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>';
+      }
+      if ($requisite['HTMLtype'] == 'YES / NO') {
+        $pageContent .= '<tr><th style="border: 1px solid black;">' . $requisite['requisite_id'] . '</th><td style="border: 1px solid black; font-size: 14px;">'. $requisite['requisite_name'] .'</td><td style="border: 1px solid black;">' . $requisite['value'] . '</td><td style="border: 1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>';
+      }
+      if ($requisite['HTMLtype'] == 'NUMBER') {
+        $pageContent .= '<tr><th style="border: 1px solid black;">' . $requisite['requisite_id'] . '</th><td style="border: 1px solid black; font-size: 14px;">'. $requisite['requisite_name'] .'</td><td style="border: 1px solid black;">' . $requisite['value'] . '</td><td style="border: 1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>';
+      }
+      $requisitosImpresos++;
+      if($requisitosImpresos % $requisitesPerPage == 0) {
+        $paginas++;
+        $pageContent .= '</table>';
+        $toReturn .= '<pagina><div style="width:100%; height:200px;"></div><div style="width:100%; margin-left: 150px; margin-right:100px;">';
+        $toReturn .= $pageContent;
+        $toReturn .= '</div></pagina>';
+        $pageContent = '<table style="width: 100%; border: 1px solid black; border-collapse: collapse; text-align: left;">';
+        $pageContent .= '<tr><th style="border: 1px solid black;">Código</th><th style="border: 1px solid black;">Descripción</th><th style="border: 1px solid black;">Usuario</th><th style="border: 1px solid black;">Verificación</th></tr>';
+      }
+    }
+    if ($paginas * $requisitesPerPage < sizeof($requisites)) {
+      $currIndex = $paginas * $requisitesPerPage;
+      $pageContent = '<table style="width: 100%; border: 1px solid black; border-collapse: collapse; text-align: left;">';
+      $pageContent .= '<tr><th style="border: 1px solid black;">Código</th><th style="border: 1px solid black;">Descripción</th><th style="border: 1px solid black;">Usuario</th><th style="border: 1px solid black;">Verificación</th></tr>';
+      for($i = $currIndex ; $i < sizeof($requisites) ; $i++) {
+        $requisite = $requisites[$i];
+        $pageContent .= '<tr><th style="border: 1px solid black; font-size: 14px;">' . $requisite['requisite_id'] . '</th><td style="border: 1px solid black;">'. $requisite['requisite_name'] .'</td><td style="border: 1px solid black;">' . $requisite['value'] . '</td><td style="border: 1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>';
+      }
+      $pageContent .= '</table>';
+      $toReturn .= '<pagina><div style="width:100%; height:200px;"></div><div style="width:100%; margin-left: 150px; margin-right:100px;">';
+      $toReturn .= $pageContent;
+      $toReturn .= '</div></pagina>';
+    }
+    return $toReturn;
+  }
+
   function pdf_checklist(Request $data) {
     $request = $data->json()->all();
-    $html_content = '<pagina><div style="width:100%; height:350px;"></div><div style="width:100%; margin-left: 150px; margin-right:100px;">';
+    $html_content = '<pagina><div style="width:100%; height:200px;"></div><div style="width:100%; margin-left: 150px; margin-right:100px;">';
+    $html_content .= '<h3 style="text-transform: uppercase; width: 100%; text-align: center;">MATRIZ DE CONTROL - ALOJAMIENTO TURÍSTICO</h3><br/><br/>';
     $html_content .= '<table style="width: 100%; border: 1px solid black; border-collapse: collapse; text-align: left;"><tr>';
     $html_content .= '<th style="border: 1px solid black;">Día</th><td style="border: 1px solid black;">##dia##</td><th style="border: 1px solid black;">Mes</th><td colspan="2" style="border: 1px solid black;">##mes##</td><th style="border: 1px solid black;">Año</th><td style="border: 1px solid black;">##year##</td></tr>';
     $html_content .= '<tr><th style="border: 1px solid black;">Nombre del Establecimiento</th><td colspan="6" style="border: 1px solid black;">##nombre_establecimiento##</td></tr>';
@@ -81,6 +144,8 @@ class ExporterController extends Controller
     $html_content .= '<tr><th style="border-bottom: 1px solid black;"><br />Fecha y Hora:</th></tr>';
     $html_content .= '</table></td></tr></table>';
     $html_content .= '</div></pagina>';
+    $requisites = $request['requisites'];
+    $html_content .= $this->buildPagesChecklist($requisites);
     try {
       $qr = $request['qr'];
     } catch (Exception $e) {
@@ -99,7 +164,7 @@ class ExporterController extends Controller
     if (!$params) {
       $params = [];
     }
-    $title = 'MATRIZ DE CONTROL - ALOJAMIENTO TURÍSTICO';
+    $title = '';
     $pdf_content = $this->build_content($html_content, $params);
     $html = $this->mintur_style($pdf_content, $title, $qr, $qr_content);
     $orientation = 'portrait';
@@ -147,7 +212,7 @@ class ExporterController extends Controller
     return response()->json($toReturn, 200);
   }
 
-  function qrcode($content) {
+  protected function qrcode($content) {
     return base64_encode(QrCode::format('png')
       ->size(190)->margin(0)->backgroundColor(255,255,255)->color(0, 0, 0)
       ->generate($content));
@@ -195,6 +260,24 @@ class ExporterController extends Controller
       }
     }
     return $toReturn;
+  }
+
+  protected function httpGet($url, $data=NULL, $headers = NULL, $token) {
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    if(!empty($data)){
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+    }
+    $headersSend = array();
+    array_push($headersSend, 'api_token:'.$token);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $headersSend);
+    $response = curl_exec($ch);
+    if (curl_error($ch)) {
+        trigger_error('Curl Error:' . curl_error($ch));
+    }
+    curl_close($ch);
+    return $response;
   }
 
   protected function mintur_style ($content, $title, $qr, $qr_content) {

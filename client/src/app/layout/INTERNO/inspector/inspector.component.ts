@@ -1302,10 +1302,20 @@ export class InspectorComponent implements OnInit {
   }
 
   descargarRequisitos() {
-   this.downloadFile(
+   /*this.downloadFile(
       this.requisitosApprovalStateAttachment.approval_state_attachment_file,
       this.requisitosApprovalStateAttachment.approval_state_attachment_file_type,
       this.requisitosApprovalStateAttachment.approval_state_attachment_file_name);
+   this.exporterDataService.getPDFNormativa().then( r => {
+         const byteCharacters = atob(r);
+         const byteNumbers = new Array(byteCharacters.length);
+         for (let i = 0; i < byteCharacters.length; i++) {
+            byteNumbers[i] = byteCharacters.charCodeAt(i);
+         }
+         const byteArray = new Uint8Array(byteNumbers);
+         const blob = new Blob([byteArray], { type: 'application/pdf'});
+         saveAs(blob, 'checklist.pdf');
+        }).catch( e => { console.log(e); });*/
   }
 
   borrarRequisitos() {

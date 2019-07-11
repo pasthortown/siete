@@ -1,7 +1,7 @@
 <div class="row">
   <h1 class="col-12 text-right">
      Registros - MINTUR
-  </h1><button (click)="descargarPDF()">Descargar CheckList</button><button (click)="descargarPDFTarifario()">Descargar Tarifario</button>
+  </h1><button (click)="descargarPDFTarifario()">Descargar Tarifario</button><button (click)="descargarRequisitos()">Descargar Normativa</button>
 </div>
 <div class="row">
   <div class="col-12">
@@ -380,6 +380,12 @@
                         name="person_representative_attachment_file" placeholder="Nombramiento Representante del Legal"
                         (change)="CodeFilePersonRepresentativeAttachment($event)">
                     </div>
+                    <small class="col-12">
+                      <div class="alert alert-info mt-2 mb-2" role="alert">
+                        <label class="col-12 text-justify"><strong>Información</strong></label><br />
+                        <p>Verifique que el nombre del archivo que está cargando sea de longitud menor a 25 caracteres</p>
+                      </div>
+                    </small>
                   </div>
                 </div>
               </div>
@@ -884,6 +890,12 @@
                                                       )
                                                     " accept="application/pdf" />
                                               </div>
+                                              <small class="col-12">
+                                                <div class="alert alert-info mt-2 mb-2" role="alert">
+                                                  <label class="col-12 text-justify"><strong>Información</strong></label><br />
+                                                  <p>Verifique que el nombre del archivo que está cargando sea de longitud menor a 25 caracteres</p>
+                                                </div>
+                                              </small>
                                             </td>
                                             <td>
                                               <button type="button" title="Eliminar" class="btn btn-danger" [disabled]="true" (click)="
@@ -1132,6 +1144,12 @@
                                       )
                                     " accept="application/pdf" />
                               </div>
+                              <small class="col-12">
+                                <div class="alert alert-info mt-2 mb-2" role="alert">
+                                  <label class="col-12 text-justify"><strong>Información</strong></label><br />
+                                  <p>Verifique que el nombre del archivo que está cargando sea de longitud menor a 25 caracteres</p>
+                                </div>
+                              </small>
                           </div>
                       </div>
                       </div>
@@ -1691,7 +1709,8 @@
                               <label class="col-12 text-justify"><strong>Atención</strong><br />
                                 Los requisitos listados a continuación serán revisados
                                 por el inspector del Ministerio de Turismo el día de
-                                la visita a su establecimiento. Asegúrese que su establecimiento cumpla con aquellos seleccionados.
+                                la visita a su establecimiento. Asegúrese que su establecimiento cumpla con aquellos seleccionados.<br/><br/>
+                                Los requisitos marcados con <strong style="color:red;">*</strong> son obligatorios.
                               </label>
                             </div>
                           </div>
@@ -1838,6 +1857,12 @@
                                                   )
                                                 " accept="application/pdf" />
                                           </div>
+                                          <small class="col-12">
+                                            <div class="alert alert-info mt-2 mb-2" role="alert">
+                                              <label class="col-12 text-justify"><strong>Información</strong></label><br />
+                                              <p>Verifique que el nombre del archivo que está cargando sea de longitud menor a 25 caracteres</p>
+                                            </div>
+                                          </small>
                                         </td>
                                       </tr>
                                     </tbody>

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http, RequestOptions, Headers } from '@angular/http';
 import { Router } from '@angular/router';
 import { environment } from './../../../environments/environment';
+import { Requisite } from 'src/app/models/ALOJAMIENTO/Requisite';
 
 @Injectable({
    providedIn: 'root'
@@ -38,19 +39,19 @@ export class ExporterService {
       }).catch( error => { this.handledError(error.json()); });
    }
 
-   getPDFTarifarioRack(qr?: Boolean, qr_content?: string, params?: any[]): Promise<any> {
+   getPDFTarifarioRack(body: any[], qr?: Boolean, qr_content?: string, params?: any[]): Promise<any> {
       let data = null;
       if(typeof qr != 'undefined') {
          if(typeof params != 'undefined') {
-            data = {params: params, qr: qr, qr_content: qr_content};
+            data = {body: body, params: params, qr: qr, qr_content: qr_content};
          } else {
-            data = {qr: qr, qr_content: qr_content};
+            data = {body: body, qr: qr, qr_content: qr_content};
          }
       } else {
          if(typeof params != 'undefined') {
-            data = {params: params};
+            data = {body: body, params: params};
          } else {
-            data = {};   
+            data = {body: body};   
          }
          
       }
@@ -60,19 +61,19 @@ export class ExporterService {
       }).catch( error => { this.handledError(error.json()); });
    }
 
-   getPDFNormativa(qr?: Boolean, qr_content?: string, params?: any[]): Promise<any> {
+   getPDFNormativa(requisites: any[], qr?: Boolean, qr_content?: string, params?: any[]): Promise<any> {
       let data = null;
       if(typeof qr != 'undefined') {
          if(typeof params != 'undefined') {
-            data = {params: params, qr: qr, qr_content: qr_content};
+            data = {requisites: requisites, params: params, qr: qr, qr_content: qr_content};
          } else {
-            data = {qr: qr, qr_content: qr_content};
+            data = {requisites: requisites, qr: qr, qr_content: qr_content};
          }
       } else {
          if(typeof params != 'undefined') {
-            data = {params: params};
+            data = {requisites: requisites, params: params};
          } else {
-            data = {};   
+            data = {requisites: requisites};   
          }
          
       }
