@@ -3501,8 +3501,9 @@ guardarDeclaracion() {
   checkIdentificationRepresentant() {
    this.ruc_registro_selected.ruc.person_representative.identification = this.ruc_registro_selected.ruc.person_representative.identification.replace(/[^\d]/, '');
    if (this.ruc_registro_selected.ruc.person_representative.identification.length !== 10) {
-      this.identificationRepresentativePersonValidated = false;
-      this.consumoCedulaRepresentanteLegal = false;
+      this.identificationRepresentativePersonValidated = true;
+      this.consumoCedulaRepresentanteLegal = true;
+      this.REGCIVILREPRESENTANTELEGALOK = true;
      return;
    }
    if (this.consumoCedulaRepresentanteLegal && this.REGCIVILREPRESENTANTELEGALOK) {
