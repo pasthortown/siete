@@ -86,6 +86,8 @@ class ExporterController extends Controller
       $params = [];
     }
     $title = 'TARIFARIO RACK O MOSTRADOR';
+    $html_content .= '<br/><br/>';
+    $html_content .= $this->build_table_tarifario([]);
     $pdf_content = $this->build_content($html_content, $params);
     $html = $this->mintur_style($pdf_content, $title, $qr, $qr_content);
     $orientation = 'portrait';
