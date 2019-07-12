@@ -173,6 +173,10 @@ class ExporterController extends Controller
     $html_content .= '<tr><th>Local</th><td>##local##</td><td></td><th colspan="2">Correo Electrónico</th><td>##correo_electronico##</td><td></td></tr>';
     $html_content .= '<tr><th>Página WEB</th><td colspan="8">##pagina_web##</td></tr>';
     $html_content .= '<tr><td colspan="9" style="text-align:justify;">NOTA: Velar por el cumplimiento  de lo dispuesto en el Reglamento General  a la Ley de Turismo Art. 49.- \"Registro y razón social.- El Ministerio de Turismo no concederá el registro, a establecimientos o sujetos pasivos cuya denominación o razón social guarde identidad o similitud\"</td></tr>';
+    $html_content .= '</table></div></pagina>';
+    $html_content = '<pagina><div style="width:100%; height:200px;"></div><div style="width:100%; margin-left: 150px; margin-right:100px;">';
+    $html_content .= '<table style="width: 100%; border: 1px solid black; border-collapse: collapse; text-align: left;">';
+    
     $html_content .= '<tr style="background-color:yellow;"><th colspan="9">DATOS DE UBICACIÓN DEL ESTABLECIMIENTO</th></tr>';
     $html_content .= '<tr style="background-color:yellow;"><th></th><th>INFORMACIÓN USUARIO</th><th>INFORMACIÓN TÉCNICO ZONAL</th><th colspan="2"></th><th>INFORMACIÓN USUARIO</th><th>INFORMACIÓN TÉCNICO ZONAL</th></tr>';
     $html_content .= '<tr><th>Provincia</th><td>##provincia##</td><td></td><th colspan="2">Calle Principal</th><td>##calle_principal##</td><td></td></tr>';
