@@ -19,18 +19,29 @@ class ExporterController extends Controller
 {
 
   protected function build_table_tarifario($tariffs) {
-        
+    $html_content = '<table style="width: 100%; border: 1px solid black; border-collapse: collapse; text-align: left;">';
+    $html_content .= '<tr style="background-color:yellow;"><th colspan="10" style="border: 1px solid black; text-align: center;">TARIFARIO RACK O MOSTRADOR</th></tr>';
+    $html_content .= '<tr style="background-color:yellow;"><th style="border: 1px solid black;" colspan="5">INFORMACIÓN USUARIO</th><th style="border: 1px solid black;" colspan="5">INFORMACIÓN TÉCNICO ZONAL</th></tr>';
+    $html_content .= '<tr style="background-color:yellow;"><th style="border: 1px solid black;">TIPO DE HABITACIÓN</th><th style="border: 1px solid black;">TARIFA POR HABITACIÓN TEMPORADA ALTA</th><th style="border: 1px solid black;">TARIFA POR HABITACIÓN TEMPORADA BAJA</th><th style="border: 1px solid black;">TARIFA POR PERSONA TEMPORADA ALTA</th><th style="border: 1px solid black;">TARIFA POR PERSONA TEMPORADA BAJA</th><th style="border: 1px solid black;">TIPO DE HABITACIÓN</th><th style="border: 1px solid black;">TARIFA POR HABITACIÓN TEMPORADA ALTA</th><th style="border: 1px solid black;">TARIFA POR HABITACIÓN TEMPORADA BAJA</th><th style="border: 1px solid black;">TARIFA POR PERSONA TEMPORADA ALTA</th><th style="border: 1px solid black;">TARIFA POR PERSONA TEMPORADA BAJA</th></tr>';
+    $html_content = '</table>';
+    return $html_content;
   }
 
   protected function build_table_capacidades($capacidades) {
     $html_content = '<table style="width: 100%; border: 1px solid black; border-collapse: collapse; text-align: left;">';
-    $html_content .= '<tr style="background-color:yellow;"><th colspan="5" style="border: 1px solid black; text-align: center;">CAPACIDADES DEL ESTABLECIMIENTO1</th></tr>';
+    $html_content .= '<tr style="background-color:yellow;"><th colspan="5" style="border: 1px solid black; text-align: center;">CAPACIDADES DEL ESTABLECIMIENTO</th></tr>';
     $html_content .= '<tr style="background-color:yellow;"><th style="border: 1px solid black;"></th><th style="border: 1px solid black;" colspan="2">INFORMACIÓN USUARIO</th><th style="border: 1px solid black;" colspan="2">INFORMACIÓN TÉCNICO ZONAL</th></tr>';
     $html_content .= '<tr style="background-color:yellow;"><th style="border: 1px solid black;">TIPO DE HABITACIÓN</th><th style="border: 1px solid black;">HABITACIONES</th><th style="border: 1px solid black;">PLAZAS</th><th style="border: 1px solid black;">HABITACIONES</th><th style="border: 1px solid black;">PLAZAS</th></tr>';
+    $html_content = '</table>';
+    return $html_content;
   }
 
   protected function build_table_personal($personal) {
-
+    $html_content = '<table style="width: 100%; border: 1px solid black; border-collapse: collapse; text-align: left;">';
+    $html_content .= '<tr style="background-color:yellow;"><th colspan="3" style="border: 1px solid black; text-align: center;">PERSONAL DEL ESTABLECIMIENTO</th></tr>';
+    $html_content .= '<tr style="background-color:yellow;"><th style="border: 1px solid black;"></th><th style="border: 1px solid black;">INFORMACIÓN USUARIO</th><th style="border: 1px solid black;">INFORMACIÓN TÉCNICO ZONAL</th></tr>';
+    $html_content = '</table>';
+    return $html_content;
   }
 
   function pdf_tarifario_rack(Request $data) {
@@ -214,7 +225,6 @@ class ExporterController extends Controller
     $html_content .= '<tr><th colspan="9">Georeferencia</th></tr>';
     $html_content .= '<tr><td colspan="9" style="text-align:center;"><img style="margin:10px;" src="data:image/png;base64,'.$this->qrcodelocation(-0.2138248,-78.5063691).'"/></td></tr>';
     $html_content .= '</table>';
-    $html_content .= '<h3 style="text-transform: uppercase; width: 100%; text-align: center;">REQUISITOS PARA ##clasificacion## - ##categoria##</h3><br/><br/>';
     $html_content .= '<table style="text-align: left; width:100%;">';
     $html_content .= '<tr><th><br />Servidor Público<br /><br /></th><th></th><th><br />Propietario/Gerente/Administrador<br /><br /></th></tr>';
     $html_content .= '<tr><td style="width:40%;"><table style="text-align: left; width:100%;">';
@@ -229,6 +239,16 @@ class ExporterController extends Controller
     $html_content .= '<tr><th style="border-bottom: 1px solid black;"><br />Fecha y Hora:</th></tr>';
     $html_content .= '</table></td></tr></table>';
     $html_content .= '</div></pagina>';
+    $html_content .= '<pagina><div style="width:100%; height:200px;"></div><div style="width:100%; margin-left: 150px; margin-right:100px;">';
+    $html_content .= $this->build_table_capacidades([]);
+    $html_content .= '<br/><br/>';
+    $html_content .= $this->build_table_tarifario([]);
+    $html_content .= '<br/><br/>';
+    $html_content .= $this->build_table_personal([]);
+    $html_content .= '<br/><br/>';
+    $html_content .= '<h3 style="text-transform: uppercase; width: 100%; text-align: center;">REQUISITOS PARA ##clasificacion## - ##categoria##</h3><br/><br/>';
+    $html_content .= '</div></pagina>';
+    
     $requisites = $request['requisites'];
     $html_content .= $this->buildPagesChecklist($requisites);
     try {

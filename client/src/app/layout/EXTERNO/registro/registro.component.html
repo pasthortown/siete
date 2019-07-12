@@ -492,7 +492,7 @@
                                                 </td>
                                                 <td>
                                                   <input type="number" class="form-control" min="0" id="worker-count"
-                                                    name="worker-count" [disabled]="!rucEstablishmentRegisterSelected.editable" placeholder="Cantidad" [(ngModel)]="worker.count" (keyup)="refreshTotalWorkers()"/>
+                                                    name="worker-count" [disabled]="!rucEstablishmentRegisterSelected.editable" placeholder="Cantidad" [(ngModel)]="worker.count" (input)="refreshTotalWorkers()"/>
                                                 </td>
                                               </tr>
                                             </tbody>
