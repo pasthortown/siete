@@ -178,14 +178,13 @@ class ExporterController extends Controller
     $html_content .= '<tr><th style="border: 1px solid black;">Provincia</th><td style="border: 1px solid black;">##provincia##</td><td style="border: 1px solid black;"></td><th colspan="2" style="border: 1px solid black;">Calle Principal</th><td colspan="2" style="border: 1px solid black;">##calle_principal##</td><td colspan="2" style="border: 1px solid black;"></td></tr>';
     $html_content .= '<tr><th style="border: 1px solid black;">Cantón</th><td style="border: 1px solid black;">##canton##</td><td style="border: 1px solid black;"></td><th colspan="2" style="border: 1px solid black;">Numeración</th><td colspan="2" style="border: 1px solid black;">##numeracion##</td><td colspan="2" style="border: 1px solid black;"></td></tr>';
     $html_content .= '<tr><th style="border: 1px solid black;">Parroquia</th><td style="border: 1px solid black;">##parroquia##</td><td style="border: 1px solid black;"></td><th colspan="2" style="border: 1px solid black;">Calle Secundaria</th><td colspan="2" style="border: 1px solid black;">##calle_secundaria##</td><td colspan="2" style="border: 1px solid black;"></td></tr>';
-    $html_content .= '<tr><th style="border: 1px solid black;">Referencia Ubicación</th><td colspan="8">##referencia_ubicacion##</td></tr>';
+    $html_content .= '<tr><th style="border: 1px solid black;">Referencia Ubicación</th><td colspan="8" style="border: 1px solid black;">##referencia_ubicacion##</td></tr>';
     $html_content .= '<tr><th colspan="9">Georeferencia</th></tr>';
     $html_content .= '<tr><td colspan="9" style="text-align:center;"><img style="margin:10px;" src="data:image/png;base64,'.$this->qrcodelocation(-0.2138248,-78.5063691).'"/></td></tr>';
     $html_content .= '</table>';
-
     $html_content .= '<h3 style="text-transform: uppercase; width: 100%; text-align: center;">REQUISITOS PARA ##clasificacion## - ##categoria##</h3><br/><br/>';
     $html_content .= '<table style="text-align: left; width:100%;">';
-    $html_content .= '<tr><th style="border-bottom: 1px solid black;"><br />Servidor Público<br /><br /></th><th style="border-bottom: 1px solid black;"></th><th style="border-bottom: 1px solid black;"><br />Propietario/Gerente/Administrador<br /><br /></th></tr>';
+    $html_content .= '<tr><th><br />Servidor Público<br /><br /></th><th></th><th><br />Propietario/Gerente/Administrador<br /><br /></th></tr>';
     $html_content .= '<tr><td style="width:40%;"><table style="text-align: left; width:100%;">';
     $html_content .= '<tr><th style="border-bottom: 1px solid black;">Firma:</th></tr>';
     $html_content .= '<tr><th style="border-bottom: 1px solid black;"><br />Nombre:</th></tr>';
