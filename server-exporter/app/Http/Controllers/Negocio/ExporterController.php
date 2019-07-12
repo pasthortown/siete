@@ -21,7 +21,24 @@ class ExporterController extends Controller
   function pdf_tarifario_rack(Request $data) {
     $request = $data->json()->all();
     $html_content = '<pagina><div style="width:100%; height:350px;"></div><div style="width:100%; margin-left: 150px; margin-right:100px;">';
-    $html_content .= 'Tarifario';
+    $html_content .= '<p style="text-align:right;"><strong>##canton## , ##fecha##<br/><br/></strong></p><p style="text-align: justify">Conforme a lo determinado en la disposición general tercera del Reglamento General de Alojamiento "Los establecimientos de alojamiento deberán informar a la autoridad nacional de turismo hasta el primero de diciembre de cada año sobre las tarifas rack o mostrador del año siguiente. Estas considerarán el valor por huésped por noche por tipo de habitación y por temporada alta y baja, incluido impuesto; de no hacerlo la Autoridad Nacional de Turismo sancionar conforme a la normativa vigente", para el cumplimiento se procede a detallar a continuación, la siguiente información:</p>';
+    $html_content .= '<table style="margin:auto; text-align: left; width:50%;">';
+    $html_content .= '<tr><td colspan="2" style="text-align:center;"><strong>DATOS GENERALES<br /></strong></td></tr>';
+    $html_content .= '<tr><th>NOMBRE COMERCIAL:</th><th style="border-bottom: 1px solid black;">##nombre_comercial##</th></tr>';
+    $html_content .= '<tr><th>RUC:</th><th style="border-bottom: 1px solid black;">##ruc##</th></tr>';
+    $html_content .= '<tr><th>PROPIETARIO:</th><th style="border-bottom: 1px solid black;">##propietario##</th></tr>';
+    $html_content .= '<tr><th>REPRESENTANTE LEGAL:</th><th style="border-bottom: 1px solid black;">##representante_legal##</th></tr>';
+    $html_content .= '<tr><th>DIRECCIÓN:</th><th style="border-bottom: 1px solid black;">##direccion##</th></tr>';
+    $html_content .= '<tr><th>CANTON:</th><th style="border-bottom: 1px solid black;">##canton##</th></tr>';
+    $html_content .= '<tr><th>CLASIFICACIÓN:</th><th style="border-bottom: 1px solid black;">##clasificacion##</th></tr>';
+    $html_content .= '<tr><th>CATEGORÍA:</th><th style="border-bottom: 1px solid black;">##categoria##</th></tr>';
+    $html_content .= '</table>';
+    $html_content .= '<p style="text-align:left;">LISTADO DE TARIFAS:</p><p style="text-align:left;"><strong>*Precios incluyen IVA</strong><br /><br /></p>';
+    $html_content .= '<table style="margin:auto; text-align: center; width:50%;">';
+    $html_content .= '<tr><td style="border-bottom: 1px solid black;"></td></tr>';
+    $html_content .= '<tr><td><strong>##nombre_coordinador_Zonal##</strong></td></tr>';
+    $html_content .= '<tr><td><strong>Coordinación Zonal:##zonal##</strong></td></tr>';
+    $html_content .= '</table>';
     $html_content .= '</div></pagina>';
     try {
       $qr = $request['qr'];
