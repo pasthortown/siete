@@ -158,37 +158,39 @@ class ExporterController extends Controller
     $request = $data->json()->all();
     $html_content = '<pagina><div style="width:100%; height:200px;"></div><div style="width:100%; margin-left: 150px; margin-right:100px;">';
     $html_content .= '<h3 style="text-transform: uppercase; width: 100%; text-align: center;">MATRIZ DE CONTROL - ALOJAMIENTO TURÍSTICO</h3><br/><br/>';
-    $html_content .= '<table style="width: 100%; border: 1px solid black; border-collapse: collapse; text-align: left;">';
-    $html_content .= '<tr style="background-color: yellow;"><th colspan="3">Nombre Técnico Zonal</th><th colspan="6">Fecha Inspección</th></tr>';
-    $html_content .= '<tr><td colspan="3">##nombre_tecnico_zonal##</td><th>Día</th><td>##dia##</td><th>Mes</th><td>##mes##</td><th>Año</th><td>##year##</td></tr>';
-    $html_content .= '<tr style="background-color:yellow;"><th colspan="9">DATOS GENERALES DEL ESTABLECIMIENTO</th></tr>';
-    $html_content .= '<tr style="background-color:yellow;"><th></th><th>INFORMACIÓN USUARIO</th><th>INFORMACIÓN TÉCNICO ZONAL</th><th colspan="2"></th><th>INFORMACIÓN USUARIO</th><th>INFORMACIÓN TÉCNICO ZONAL</th></tr>';
-    $html_content .= '<tr><th>Nombre Comercial</th><td>##nombre_comercial##</td><td></td><th colspan="2">Número de Registro</th><td>##numero_registro##</td><td></td></tr>';
-    $html_content .= '<tr><th>RUC</th><td>##ruc##</td><td></td><th colspan="2">Fecha de Registro</th><td>##fecha_registro##</td><td></td></tr>';
-    $html_content .= '<tr><th>Actividad</th><td>##actividad##</td><td></td><th colspan="2">Tipo de Trámite</th><td>##tipo_tramite##</td><td></td></tr>';
-    $html_content .= '<tr><th>Categoría</th><td>##categoria##</td><td></td><th colspan="2">Clasificación</th><td>##clasificacion##</td><td></td></tr>';
-    $html_content .= '<tr><th>Tipo de Establecimiento</th><td>##categoria##</td><td></td><th colspan="2">Nombre Franquicia o Cadena</th><td>##franquicia_cadena##</td><td></td></tr>';
-    $html_content .= '<tr><th>Representante Legal</th><td>##representante_legal##</td><td></td><th colspan="2">Contacto Establecimiento</th><td>##contacto_establecimiento##</td><td></td></tr>';
-    $html_content .= '<tr><th>Teléfonno Principal</th><td>##telefono_principal##</td><td></td><th colspan="2">Teléfono Secundario</th><td>##telefono_secundario##</td><td></td></tr>';
-    $html_content .= '<tr><th>Local</th><td>##local##</td><td></td><th colspan="2">Correo Electrónico</th><td>##correo_electronico##</td><td></td></tr>';
-    $html_content .= '<tr><th>Página WEB</th><td colspan="8">##pagina_web##</td></tr>';
+    $html_content .= '<table style="width: 100%; border: 1px solid black; border-collapse: collapse; text-align: left; font-size:14px;">';
+    $html_content .= '<tr style="background-color: yellow;"><th colspan="3" style="border-bottom: 1px solid black;">Nombre Técnico Zonal</th><th colspan="6" style="border-bottom: 1px solid black;">Fecha Inspección</th></tr>';
+    $html_content .= '<tr><td colspan="3" style="border-bottom: 1px solid black;">##nombre_tecnico_zonal##</td><th style="border-bottom: 1px solid black;">Día</th><td style="border-bottom: 1px solid black;">##dia##</td><th style="border-bottom: 1px solid black;">Mes</th><td style="border-bottom: 1px solid black;">##mes##</td><th style="border-bottom: 1px solid black;">Año</th><td style="border-bottom: 1px solid black;">##year##</td></tr>';
+    $html_content .= '<tr style="background-color:yellow; text-align:center;"><th colspan="9" style="border-bottom: 1px solid black;">DATOS GENERALES DEL ESTABLECIMIENTO</th></tr>';
+    $html_content .= '<tr style="background-color:yellow;"><th style="border-bottom: 1px solid black;"></th><th style="border-bottom: 1px solid black;">INFORMACIÓN USUARIO</th><th style="border-bottom: 1px solid black;">INFORMACIÓN TÉCNICO ZONAL</th><th colspan="2" style="border-bottom: 1px solid black;"></th><th colspan="2" style="border-bottom: 1px solid black;">INFORMACIÓN USUARIO</th><th colspan="2">INFORMACIÓN TÉCNICO ZONAL</th></tr>';
+    $html_content .= '<tr><th style="border-bottom: 1px solid black;">Nombre Comercial</th><td style="border-bottom: 1px solid black;">##nombre_comercial##</td><td style="border-bottom: 1px solid black;"></td><th colspan="2" style="border-bottom: 1px solid black;">Número de Registro</th><td colspan="2" style="border-bottom: 1px solid black;">##numero_registro##</td><td colspan="2" style="border-bottom: 1px solid black;"></td></tr>';
+    $html_content .= '<tr><th style="border-bottom: 1px solid black;">RUC</th><td style="border-bottom: 1px solid black;">##ruc##</td><td style="border-bottom: 1px solid black;"></td><th colspan="2">Fecha de Registro</th><td style="border-bottom: 1px solid black;">##fecha_registro##</td><td style="border-bottom: 1px solid black;"></td></tr>';
+    $html_content .= '<tr><th style="border-bottom: 1px solid black;">Actividad</th><td style="border-bottom: 1px solid black;">##actividad##</td><td style="border-bottom: 1px solid black;"></td><th colspan="2">Tipo de Trámite</th><td colspan="2" style="border-bottom: 1px solid black;">##tipo_tramite##</td><td colspan="2" style="border-bottom: 1px solid black;"></td></tr>';
+    $html_content .= '<tr><th style="border-bottom: 1px solid black;">Categoría</th><td style="border-bottom: 1px solid black;">##categoria##</td><td style="border-bottom: 1px solid black;"></td><th colspan="2" style="border-bottom: 1px solid black;">Clasificación</th><td colspan="2" style="border-bottom: 1px solid black;">##clasificacion##</td><td colspan="2" style="border-bottom: 1px solid black;"></td></tr>';
+    $html_content .= '<tr><th style="border-bottom: 1px solid black;">Tipo de Establecimiento</th><td style="border-bottom: 1px solid black;">##categoria##</td><td style="border-bottom: 1px solid black;"></td><th colspan="2" style="border-bottom: 1px solid black;">Nombre Franquicia o Cadena</th><td colspan="2" style="border-bottom: 1px solid black;">##franquicia_cadena##</td><td colspan="2" style="border-bottom: 1px solid black;"></td></tr>';
+    $html_content .= '<tr><th style="border-bottom: 1px solid black;">Representante Legal</th><td style="border-bottom: 1px solid black;">##representante_legal##</td><td style="border-bottom: 1px solid black;"></td><th colspan="2" style="border-bottom: 1px solid black;">Contacto Establecimiento</th><td colspan="2" style="border-bottom: 1px solid black;">##contacto_establecimiento##</td><td colspan="2" style="border-bottom: 1px solid black;"></td></tr>';
+    $html_content .= '<tr><th style="border-bottom: 1px solid black;">Teléfonno Principal</th><td style="border-bottom: 1px solid black;">##telefono_principal##</td><td style="border-bottom: 1px solid black;"></td><th colspan="2" style="border-bottom: 1px solid black;">Teléfono Secundario</th><td colspan="2" style="border-bottom: 1px solid black;">##telefono_secundario##</td><td style="border-bottom: 1px solid black;" colspan="2"></td></tr>';
+    $html_content .= '<tr><th style="border-bottom: 1px solid black;">Local</th><td style="border-bottom: 1px solid black;">##local##</td><td style="border-bottom: 1px solid black;"></td><th colspan="2" style="border-bottom: 1px solid black;">Correo Electrónico</th><td colspan="2" style="border-bottom: 1px solid black;">##correo_electronico##</td><td colspan="2" style="border-bottom: 1px solid black;"></td></tr>';
+    $html_content .= '<tr><th style="border-bottom: 1px solid black;">Página WEB</th><td colspan="8">##pagina_web##</td></tr>';
     $html_content .= '<tr><td colspan="9" style="text-align:justify;">NOTA: Velar por el cumplimiento  de lo dispuesto en el Reglamento General  a la Ley de Turismo Art. 49.- \"Registro y razón social.- El Ministerio de Turismo no concederá el registro, a establecimientos o sujetos pasivos cuya denominación o razón social guarde identidad o similitud\"</td></tr>';
     $html_content .= '</table></div></pagina>';
+
+    /*
     $html_content = '<pagina><div style="width:100%; height:200px;"></div><div style="width:100%; margin-left: 150px; margin-right:100px;">';
     $html_content .= '<table style="width: 100%; border: 1px solid black; border-collapse: collapse; text-align: left;">';
-    
+
     $html_content .= '<tr style="background-color:yellow;"><th colspan="9">DATOS DE UBICACIÓN DEL ESTABLECIMIENTO</th></tr>';
-    $html_content .= '<tr style="background-color:yellow;"><th></th><th>INFORMACIÓN USUARIO</th><th>INFORMACIÓN TÉCNICO ZONAL</th><th colspan="2"></th><th>INFORMACIÓN USUARIO</th><th>INFORMACIÓN TÉCNICO ZONAL</th></tr>';
-    $html_content .= '<tr><th>Provincia</th><td>##provincia##</td><td></td><th colspan="2">Calle Principal</th><td>##calle_principal##</td><td></td></tr>';
-    $html_content .= '<tr><th>Cantón</th><td>##canton##</td><td></td><th colspan="2">Numeración</th><td>##numeracion##</td><td></td></tr>';
-    $html_content .= '<tr><th>Parroquia</th><td>##parroquia##</td><td></td><th colspan="2">Calle Secundaria</th><td>##calle_secundaria##</td><td></td></tr>';
-    $html_content .= '<tr><th>Referencia Ubicación</th><td colspan="8">##referencia_ubicacion##</td></tr>';
+    $html_content .= '<tr style="background-color:yellow;"><th style="border-bottom: 1px solid black;"></th><th style="border-bottom: 1px solid black;">INFORMACIÓN USUARIO</th><th style="border-bottom: 1px solid black;">INFORMACIÓN TÉCNICO ZONAL</th><th colspan="2"></th><th style="border-bottom: 1px solid black;">INFORMACIÓN USUARIO</th><th style="border-bottom: 1px solid black;">INFORMACIÓN TÉCNICO ZONAL</th></tr>';
+    $html_content .= '<tr><th style="border-bottom: 1px solid black;">Provincia</th><td style="border-bottom: 1px solid black;">##provincia##</td><td style="border-bottom: 1px solid black;"></td><th colspan="2">Calle Principal</th><td style="border-bottom: 1px solid black;">##calle_principal##</td><td style="border-bottom: 1px solid black;"></td></tr>';
+    $html_content .= '<tr><th style="border-bottom: 1px solid black;">Cantón</th><td style="border-bottom: 1px solid black;">##canton##</td><td style="border-bottom: 1px solid black;"></td><th colspan="2">Numeración</th><td style="border-bottom: 1px solid black;">##numeracion##</td><td style="border-bottom: 1px solid black;"></td></tr>';
+    $html_content .= '<tr><th style="border-bottom: 1px solid black;">Parroquia</th><td style="border-bottom: 1px solid black;">##parroquia##</td><td style="border-bottom: 1px solid black;"></td><th colspan="2">Calle Secundaria</th><td style="border-bottom: 1px solid black;">##calle_secundaria##</td><td style="border-bottom: 1px solid black;"></td></tr>';
+    $html_content .= '<tr><th style="border-bottom: 1px solid black;">Referencia Ubicación</th><td colspan="8">##referencia_ubicacion##</td></tr>';
     $html_content .= '<tr><th colspan="9">Georeferencia</th></tr>';
     $html_content .= '<tr><td colspan="9" style="text-align:center;"><img src="data:image/png;base64,'.$this->qrcodelocation(-0.2138248,-78.5063691).'"/>></td></tr>';
     $html_content .= '</table>';
     $html_content .= '<h3 style="text-transform: uppercase; width: 100%; text-align: center;">REQUISITOS PARA ##clasificacion## - ##categoria##</h3><br/><br/>';
     $html_content .= '<table style="text-align: left; width:100%;">';
-    $html_content .= '<tr><th><br />Servidor Público<br /><br /></th><th></th><th><br />Propietario/Gerente/Administrador<br /><br /></th></tr>';
+    $html_content .= '<tr><th style="border-bottom: 1px solid black;"><br />Servidor Público<br /><br /></th><th style="border-bottom: 1px solid black;"></th><th style="border-bottom: 1px solid black;"><br />Propietario/Gerente/Administrador<br /><br /></th></tr>';
     $html_content .= '<tr><td style="width:40%;"><table style="text-align: left; width:100%;">';
     $html_content .= '<tr><th style="border-bottom: 1px solid black;">Firma:</th></tr>';
     $html_content .= '<tr><th style="border-bottom: 1px solid black;"><br />Nombre:</th></tr>';
@@ -200,7 +202,7 @@ class ExporterController extends Controller
     $html_content .= '<tr><th style="border-bottom: 1px solid black;"><br />Documento de Identidad:</th></tr>';
     $html_content .= '<tr><th style="border-bottom: 1px solid black;"><br />Fecha y Hora:</th></tr>';
     $html_content .= '</table></td></tr></table>';
-    $html_content .= '</div></pagina>';
+    $html_content .= '</div></pagina>';*/
     $requisites = $request['requisites'];
     $html_content .= $this->buildPagesChecklist($requisites);
     try {
