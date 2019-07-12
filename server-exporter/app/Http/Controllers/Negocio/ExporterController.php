@@ -225,6 +225,7 @@ class ExporterController extends Controller
     $html_content .= '<tr><th colspan="9">Georeferencia</th></tr>';
     $html_content .= '<tr><td colspan="9" style="text-align:center;"><img style="margin:10px;" src="data:image/png;base64,'.$this->qrcodelocation(-0.2138248,-78.5063691).'"/></td></tr>';
     $html_content .= '</table>';
+    $html_content .= '<br/><br/>';
     $html_content .= '<table style="text-align: left; width:100%;">';
     $html_content .= '<tr><th><br />Servidor Público<br /><br /></th><th></th><th><br />Propietario/Gerente/Administrador<br /><br /></th></tr>';
     $html_content .= '<tr><td style="width:40%;"><table style="text-align: left; width:100%;">';
