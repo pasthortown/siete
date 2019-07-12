@@ -19,11 +19,14 @@ class ExporterController extends Controller
 {
 
   protected function build_table_tarifario($tariffs) {
-
+        
   }
 
   protected function build_table_capacidades($capacidades) {
-
+    $html_content = '<table style="width: 100%; border: 1px solid black; border-collapse: collapse; text-align: left;">';
+    $html_content .= '<tr style="background-color:yellow;"><th colspan="5" style="border: 1px solid black; text-align: center;">CAPACIDADES DEL ESTABLECIMIENTO1</th></tr>';
+    $html_content .= '<tr style="background-color:yellow;"><th style="border: 1px solid black;"></th><th style="border: 1px solid black;" colspan="2">INFORMACIÓN USUARIO</th><th style="border: 1px solid black;" colspan="2">INFORMACIÓN TÉCNICO ZONAL</th></tr>';
+    $html_content .= '<tr style="background-color:yellow;"><th style="border: 1px solid black;">TIPO DE HABITACIÓN</th><th style="border: 1px solid black;">HABITACIONES</th><th style="border: 1px solid black;">PLAZAS</th><th style="border: 1px solid black;">HABITACIONES</th><th style="border: 1px solid black;">PLAZAS</th></tr>';
   }
 
   protected function build_table_personal($personal) {
