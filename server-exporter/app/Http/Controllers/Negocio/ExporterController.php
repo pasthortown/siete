@@ -18,6 +18,18 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 class ExporterController extends Controller
 {
 
+  protected function build_table_tarifario($tariffs) {
+
+  }
+
+  protected function build_table_capacidades($capacidades) {
+
+  }
+
+  protected function build_table_personal($personal) {
+
+  }
+
   function pdf_tarifario_rack(Request $data) {
     $request = $data->json()->all();
     $html_content = '<pagina><div style="width:100%; height:350px;"></div><div style="width:100%; margin-left: 150px; margin-right:100px;">';
