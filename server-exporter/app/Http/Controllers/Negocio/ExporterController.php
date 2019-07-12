@@ -224,7 +224,17 @@ class ExporterController extends Controller
     $html_content .= '<tr><th style="border: 1px solid black;">Parroquia</th><td style="border: 1px solid black;">##parroquia##</td><td style="border: 1px solid black;"></td><th colspan="2" style="border: 1px solid black;">Calle Secundaria</th><td colspan="2" style="border: 1px solid black;">##calle_secundaria##</td><td colspan="2" style="border: 1px solid black;"></td></tr>';
     $html_content .= '<tr><th style="border: 1px solid black;">Referencia Ubicación</th><td colspan="8" style="border: 1px solid black;">##referencia_ubicacion##</td></tr>';
     $html_content .= '<tr><th colspan="9">Georeferencia</th></tr>';
-    $html_content .= '<tr><td colspan="9" style="text-align:center;"><img style="margin:10px;" src="data:image/png;base64,'.$this->qrcodelocation(-0.2138248,-78.5063691).'"/></td></tr>';
+    try {
+      $latitud = $request['latitud'];
+    } catch (Exception $e) {
+      $latitud = -0.2138248;
+    }
+    try {
+      $longitud = $request['longitud'];
+    } catch (Exception $e) {
+      $longitud = -78.5063691;
+    }
+    $html_content .= '<tr><td colspan="9" style="text-align:center;"><img style="margin:10px;" src="data:image/png;base64,'.$this->qrcodelocation($latitud,$longitud).'"/></td></tr>';
     $html_content .= '</table>';
     $html_content .= '<br/><br/>';
     $html_content .= '<table style="text-align: left; width:100%;">';
