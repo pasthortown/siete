@@ -179,7 +179,7 @@ class ExporterController extends Controller
     $html_content .= '<tr><th style="border: 1px solid black;">Cantón</th><td style="border: 1px solid black;">##canton##</td><td style="border: 1px solid black;"></td><th colspan="2" style="border: 1px solid black;">Numeración</th><td colspan="2" style="border: 1px solid black;">##numeracion##</td><td colspan="2" style="border: 1px solid black;"></td></tr>';
     $html_content .= '<tr><th style="border: 1px solid black;">Parroquia</th><td style="border: 1px solid black;">##parroquia##</td><td style="border: 1px solid black;"></td><th colspan="2" style="border: 1px solid black;">Calle Secundaria</th><td colspan="2" style="border: 1px solid black;">##calle_secundaria##</td><td colspan="2" style="border: 1px solid black;"></td></tr>';
     $html_content .= '<tr><th style="border: 1px solid black;">Referencia Ubicación</th><td colspan="8">##referencia_ubicacion##</td></tr>';
-    $html_content .= '<tr><th colspan="9" style="border: 1px solid black;">Georeferencia</th></tr>';
+    $html_content .= '<tr><th colspan="9">Georeferencia</th></tr>';
     $html_content .= '<tr><td colspan="9" style="text-align:center;"><img style="margin:10px;" src="data:image/png;base64,'.$this->qrcodelocation(-0.2138248,-78.5063691).'"/></td></tr>';
     $html_content .= '</table>';
 
