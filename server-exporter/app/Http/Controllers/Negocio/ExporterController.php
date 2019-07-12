@@ -23,7 +23,7 @@ class ExporterController extends Controller
     $html_content .= '<tr style="background-color:yellow;"><th colspan="10" style="border: 1px solid black; text-align: center;">TARIFARIO RACK O MOSTRADOR</th></tr>';
     $html_content .= '<tr style="background-color:yellow;"><th style="border: 1px solid black;" colspan="5">INFORMACIÓN USUARIO</th><th style="border: 1px solid black;" colspan="5">INFORMACIÓN TÉCNICO ZONAL</th></tr>';
     $html_content .= '<tr style="background-color:yellow;"><th style="border: 1px solid black;">TIPO DE HABITACIÓN</th><th style="border: 1px solid black;">TARIFA POR HABITACIÓN TEMPORADA ALTA</th><th style="border: 1px solid black;">TARIFA POR HABITACIÓN TEMPORADA BAJA</th><th style="border: 1px solid black;">TARIFA POR PERSONA TEMPORADA ALTA</th><th style="border: 1px solid black;">TARIFA POR PERSONA TEMPORADA BAJA</th><th style="border: 1px solid black;">TIPO DE HABITACIÓN</th><th style="border: 1px solid black;">TARIFA POR HABITACIÓN TEMPORADA ALTA</th><th style="border: 1px solid black;">TARIFA POR HABITACIÓN TEMPORADA BAJA</th><th style="border: 1px solid black;">TARIFA POR PERSONA TEMPORADA ALTA</th><th style="border: 1px solid black;">TARIFA POR PERSONA TEMPORADA BAJA</th></tr>';
-    $html_content = '</table>';
+    $html_content .= '</table>';
     return $html_content;
   }
 
@@ -32,7 +32,7 @@ class ExporterController extends Controller
     $html_content .= '<tr style="background-color:yellow;"><th colspan="5" style="border: 1px solid black; text-align: center;">CAPACIDADES DEL ESTABLECIMIENTO</th></tr>';
     $html_content .= '<tr style="background-color:yellow;"><th style="border: 1px solid black;"></th><th style="border: 1px solid black;" colspan="2">INFORMACIÓN USUARIO</th><th style="border: 1px solid black;" colspan="2">INFORMACIÓN TÉCNICO ZONAL</th></tr>';
     $html_content .= '<tr style="background-color:yellow;"><th style="border: 1px solid black;">TIPO DE HABITACIÓN</th><th style="border: 1px solid black;">HABITACIONES</th><th style="border: 1px solid black;">PLAZAS</th><th style="border: 1px solid black;">HABITACIONES</th><th style="border: 1px solid black;">PLAZAS</th></tr>';
-    $html_content = '</table>';
+    $html_content .= '</table>';
     return $html_content;
   }
 
@@ -40,7 +40,7 @@ class ExporterController extends Controller
     $html_content = '<table style="width: 100%; border: 1px solid black; border-collapse: collapse; text-align: left;">';
     $html_content .= '<tr style="background-color:yellow;"><th colspan="3" style="border: 1px solid black; text-align: center;">PERSONAL DEL ESTABLECIMIENTO</th></tr>';
     $html_content .= '<tr style="background-color:yellow;"><th style="border: 1px solid black;"></th><th style="border: 1px solid black;">INFORMACIÓN USUARIO</th><th style="border: 1px solid black;">INFORMACIÓN TÉCNICO ZONAL</th></tr>';
-    $html_content = '</table>';
+    $html_content .= '</table>';
     return $html_content;
   }
 
