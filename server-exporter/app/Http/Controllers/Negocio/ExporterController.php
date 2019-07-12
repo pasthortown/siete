@@ -67,6 +67,9 @@ class ExporterController extends Controller
     $html_content .= '<tr><td><strong>Coordinación Zonal:##zonal##</strong></td></tr>';
     $html_content .= '</table>';
     $html_content .= '</div></pagina>';
+    $html_content .= '<pagina><div style="width:100%; height:200px;"></div><div style="width:100%; margin-left: 150px; margin-right:100px;">';
+    $html_content .= $this->build_table_tarifario([]);
+    $html_content .= '</div></pagina>';
     try {
       $qr = $request['qr'];
     } catch (Exception $e) {
@@ -86,8 +89,7 @@ class ExporterController extends Controller
       $params = [];
     }
     $title = 'TARIFARIO RACK O MOSTRADOR';
-    $html_content .= '<br/><br/>';
-    $html_content .= $this->build_table_tarifario([]);
+    
     $pdf_content = $this->build_content($html_content, $params);
     $html = $this->mintur_style($pdf_content, $title, $qr, $qr_content);
     $orientation = 'portrait';
