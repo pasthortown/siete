@@ -59,7 +59,7 @@ class ExporterController extends Controller
     $html_content .= '<tr><th style="border: 1px solid black;">CLASIFICACIÓN:</th><th style="border: 1px solid black;">##clasificacion##</th><th style="border: 1px solid black;">CATEGORÍA:</th><th style="border: 1px solid black;">##categoria##</th></tr>';
     $html_content .= '</table><br/>';
     $html_content .= $this->build_table_tarifario([]);
-    $html_content .= '<p style="text-align:left; font-size:14px;"><strong>*Precios incluyen IVA</strong><br /><br /></p>';
+    $html_content .= '<p style="text-align:left; font-size:14px;"><strong><i>*Precios incluyen IVA</i></strong><br /><br /></p>';
     $html_content .= '<table style="margin:auto; text-align: center; width:50%;">';
     $html_content .= '<tr><td style="border-bottom: 1px solid black;"></td></tr>';
     $html_content .= '<tr><td><strong>##nombre_coordinador_Zonal##</strong></td></tr>';
