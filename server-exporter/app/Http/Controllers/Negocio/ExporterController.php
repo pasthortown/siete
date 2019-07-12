@@ -21,7 +21,7 @@ class ExporterController extends Controller
   protected function build_table_tarifario($tariffs) {
     $html_content = '<table style="width: 100%; border: 1px solid black; border-collapse: collapse; text-align: left; font-size:14px;">';
     $html_content .= '<tr style="background-color:yellow;"><th colspan="9" style="border: 1px solid black; text-align: center;">TARIFARIO RACK O MOSTRADOR</th></tr>';
-    $html_content .= '<tr style="background-color:yellow; text-align: center;"><th style="border: 1px solid black;" colspan="5">INFORMACIÓN USUARIO</th><th style="border: 1px solid black;" colspan="4">INFORMACIÓN TÉCNICO ZONAL</th></tr>';
+    $html_content .= '<tr style="background-color:yellow; text-align: center;"><th style="border: 1px solid black;"></th><th style="border: 1px solid black;" colspan="4">INFORMACIÓN USUARIO</th><th style="border: 1px solid black;" colspan="4">INFORMACIÓN TÉCNICO ZONAL</th></tr>';
     $html_content .= '<tr style="background-color:yellow;"><th style="border: 1px solid black;">TIPO DE HABITACIÓN</th><th style="border: 1px solid black;">TARIFA POR HABITACIÓN TEMPORADA ALTA</th><th style="border: 1px solid black;">TARIFA POR HABITACIÓN TEMPORADA BAJA</th><th style="border: 1px solid black;">TARIFA POR PERSONA TEMPORADA ALTA</th><th style="border: 1px solid black;">TARIFA POR PERSONA TEMPORADA BAJA</th><th style="border: 1px solid black;">TARIFA POR HABITACIÓN TEMPORADA ALTA</th><th style="border: 1px solid black;">TARIFA POR HABITACIÓN TEMPORADA BAJA</th><th style="border: 1px solid black;">TARIFA POR PERSONA TEMPORADA ALTA</th><th style="border: 1px solid black;">TARIFA POR PERSONA TEMPORADA BAJA</th></tr>';
     $html_content .= '</table>';
     return $html_content;
