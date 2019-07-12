@@ -60,15 +60,16 @@ class ExporterController extends Controller
     $html_content .= '<tr><th>CLASIFICACIÓN:</th><th style="border-bottom: 1px solid black;">##clasificacion##</th></tr>';
     $html_content .= '<tr><th>CATEGORÍA:</th><th style="border-bottom: 1px solid black;">##categoria##</th></tr>';
     $html_content .= '</table>';
-    $html_content .= '<p style="text-align:left;">LISTADO DE TARIFAS:</p><p style="text-align:left;"><strong>*Precios incluyen IVA</strong><br /><br /></p>';
+    $html_content .= '</div></pagina>';
+    $html_content .= '<pagina><div style="width:100%; height:350px;"></div><div style="width:100%; margin-left: 150px; margin-right:100px;">';
+    $html_content .= $this->build_table_tarifario([]);
+    $html_content .= '<p style="text-align:left;"><strong>*Precios incluyen IVA</strong><br /><br /></p>';
     $html_content .= '<table style="margin:auto; text-align: center; width:50%;">';
     $html_content .= '<tr><td style="border-bottom: 1px solid black;"></td></tr>';
     $html_content .= '<tr><td><strong>##nombre_coordinador_Zonal##</strong></td></tr>';
     $html_content .= '<tr><td><strong>Coordinación Zonal:##zonal##</strong></td></tr>';
     $html_content .= '</table>';
-    $html_content .= '</div></pagina>';
-    $html_content .= '<pagina><div style="width:100%; height:200px;"></div><div style="width:100%; margin-left: 150px; margin-right:100px;">';
-    $html_content .= $this->build_table_tarifario([]);
+    
     $html_content .= '</div></pagina>';
     try {
       $qr = $request['qr'];
