@@ -35,7 +35,7 @@
         *ngIf="!identidadConfirmada"
         class="ml-2 badge badge-danger"
         >Identidad No Confirmada</span>
-        <input type="text" class="form-control" id="fechaIngresada" [(ngModel)]="fechaIngresada" placeholder="Fecha: DIA/MES/AÑO   -  Ejempo: 15/09/1986" (input)="confirmarIdentidad()">
+        <input type="text" class="form-control" id="fechaIngresada" [(ngModel)]="fechaIngresada" placeholder="Fecha: DIA/MES/AÑO   -  Ejemplo: 15/09/1986" (input)="confirmarIdentidad()">
       </div>
       <div class="form-group" *ngIf="identidadConfirmada">
           <label for="name">Nombre Completo</label>
