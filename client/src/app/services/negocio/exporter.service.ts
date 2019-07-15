@@ -61,19 +61,19 @@ export class ExporterService {
       }).catch( error => { this.handledError(error.json()); });
    }
 
-   getPDFNormativa(requisites: any[], capacities: any[], tariffs: any[], personal: any[], latitude: number, longitude: number, qr?: Boolean, qr_content?: string, params?: any[]): Promise<any> {
+   getPDFNormativa(requisites: any[], capacities: any[], tariffs: any[], personal: any[], latitud: number, longitud: number, qr?: Boolean, qr_content?: string, params?: any[]): Promise<any> {
       let data = null;
       if(typeof qr != 'undefined') {
          if(typeof params != 'undefined') {
-            data = {requisites: requisites, capacities: capacities, tariffs: tariffs, personal: personal, latitude: latitude, longitude: longitude, params: params, qr: qr, qr_content: qr_content};
+            data = {requisites: requisites, capacities: capacities, tariffs: tariffs, personal: personal, latitud: latitud, longitud: longitud, params: params, qr: qr, qr_content: qr_content};
          } else {
-            data = {requisites: requisites, capacities: capacities, tariffs: tariffs, personal: personal, latitude: latitude, longitude: longitude, qr: qr, qr_content: qr_content};
+            data = {requisites: requisites, capacities: capacities, tariffs: tariffs, personal: personal, latitud: latitud, longitud: longitud, qr: qr, qr_content: qr_content};
          }
       } else {
          if(typeof params != 'undefined') {
-            data = {requisites: requisites, capacities: capacities, tariffs: tariffs, personal: personal, latitude: latitude, longitude: longitude,  params: params};
+            data = {requisites: requisites, capacities: capacities, tariffs: tariffs, personal: personal, latitud: latitud, longitud: longitud,  params: params};
          } else {
-            data = {requisites: requisites, capacities: capacities, tariffs: tariffs, personal: personal, latitude: latitude, longitude: longitude};   
+            data = {requisites: requisites, capacities: capacities, tariffs: tariffs, personal: personal, latitud: latitud, longitud: longitud};   
          }
          
       }
