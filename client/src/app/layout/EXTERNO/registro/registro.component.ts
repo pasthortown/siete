@@ -2502,6 +2502,7 @@ export class RegistroComponent implements OnInit {
       this.establishment_selected.address_secondary_street = establishment.address_secondary_street;
       this.establishment_selected.sri_state = establishment.sri_state;
       this.checkEstablishmentAddress();
+      this.validateNombreComercial();
       this.selectedNameType = new RucNameType();
       return;
      }

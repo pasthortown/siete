@@ -388,11 +388,11 @@
                                   <div class="row">
                                       <div class="col-12">
                                         <div class="form-group">
-                                          <label>Nombre Comercial*</label><span *ngIf="!validateNombreComercial()"
+                                          <label>Nombre Comercial*</label><span *ngIf="!establishmentComercialNameValidated"
                                             class="ml-2 badge badge-danger">Incorrecto</span>
-                                          <input type="text" disabled class="form-control" id="commercially_known_name"
+                                          <input type="text" disabled class="form-control" (input)="validateNombreComercial()" id="commercially_known_name"
                                             name="commercially_known_name"
-                                            placeholder="Nombre Comercial" [(ngModel)]="
+                                            placeholder="Nombre Comercial"  (input)="validateNombreComercial()" [(ngModel)]="
                                               establishment_selected.commercially_known_name
                                             " [disabled]="!rucEstablishmentRegisterSelected.editable"/>
                                             <small class="col-12">
@@ -889,7 +889,7 @@
                                               <label>Correo Electrónico*</label><span *ngIf="!emailContactEstablishmentValidated"
                                                 class="ml-2 badge badge-danger">Incorrecto</span>
                                               <input type="email" class="form-control" [disabled]="false" id="email" maxlength="255"
-                                                (keyup)="checkEmailContactEstablishment()" placeholder="Correo Electrónico"
+                                                (input)="checkEmailContactEstablishment()" placeholder="Correo Electrónico"
                                                 [(ngModel)]="establishment_selected.contact_user.email" name="email" />
                                             </div>
                                           </div>
