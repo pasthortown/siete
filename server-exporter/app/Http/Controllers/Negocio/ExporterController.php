@@ -61,7 +61,7 @@ class ExporterController extends Controller
     $html_content .= '<tr style="background-color:yellow; text-align: center;"><th style="border: 1px solid black;">GÉNERO</th><th style="border: 1px solid black;">DESCRIPCIÓN</th><th style="border: 1px solid black;">INFORMACIÓN USUARIO</th><th style="border: 1px solid black;">INFORMACIÓN TÉCNICO ZONAL</th></tr>';
     $total = 0;
     foreach($personal as $grupo) {
-      if ($grupo['worker_group_name'] == 'TOTAL de empleados del establecimiento') {
+      if ($grupo['worker_group_name'] == "TOTAL de empleados del establecimiento") {
         $html_content .= '<tr style="background-color:gray;"><th style="border: 1px solid black;">' . $grupo['gender_name'] . '</th><th style="border: 1px solid black;">' . $grupo['worker_group_name'] . '</th><th style="border: 1px solid black;">' . $grupo['count'] . '</th><td style="border: 1px solid black;"></td></tr>';
         $total += $grupo['count'];
       } else {
