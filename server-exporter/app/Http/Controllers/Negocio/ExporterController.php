@@ -172,7 +172,7 @@ class ExporterController extends Controller
       if($requisitosImpresos % $requisitesPerPage == 0) {
         $paginas++;
         $pageContent .= '</table>';
-        $toReturn .= '<pagina><div style="width:100%; height:200px;"></div><div style="width:100%; margin-left: 150px; margin-right:100px;">';
+        $toReturn .= '<pagina><div style="width:100%; height:350px;"></div><div style="width:100%; margin-left: 150px; margin-right:100px;">';
         $toReturn .= $pageContent;
         $toReturn .= '</div></pagina>';
         $pageContent = '<table style="width: 100%; border: 1px solid black; border-collapse: collapse; text-align: left;">';
@@ -220,7 +220,7 @@ class ExporterController extends Controller
         }
       }
       $pageContent .= '</table>';
-      $toReturn .= '<pagina><div style="width:100%; height:200px;"></div><div style="width:100%; margin-left: 150px; margin-right:100px;">';
+      $toReturn .= '<pagina><div style="width:100%; height:350px;"></div><div style="width:100%; margin-left: 150px; margin-right:100px;">';
       $toReturn .= $pageContent;
       $toReturn .= '</div></pagina>';
     }
@@ -229,7 +229,7 @@ class ExporterController extends Controller
 
   function pdf_checklist(Request $data) {
     $request = $data->json()->all();
-    $html_content = '<pagina><div style="width:100%; height:200px;"></div><div style="width:100%; margin-left: 150px; margin-right:100px;">';
+    $html_content = '<pagina><div style="width:100%; height:350px;"></div><div style="width:100%; margin-left: 150px; margin-right:100px;">';
     $html_content .= '<h3 style="text-transform: uppercase; width: 100%; text-align: center;">MATRIZ DE CONTROL - ALOJAMIENTO TURÍSTICO</h3><br/><br/>';
     $html_content .= '<table style="width: 100%; border: 1px solid black; border-collapse: collapse; text-align: left; font-size:14px;">';
     $html_content .= '<tr style="background-color: yellow;"><th colspan="3" style="border: 1px solid black;">Nombre Técnico Zonal</th><th colspan="6" style="border: 1px solid black;">Fecha Inspección</th></tr>';
@@ -240,7 +240,7 @@ class ExporterController extends Controller
     $html_content .= '<tr><th style="border: 1px solid black;">RUC</th><td style="border: 1px solid black;">##ruc##</td><td style="border: 1px solid black;"></td><th style="border: 1px solid black;" colspan="2">Fecha de Registro</th><td style="border: 1px solid black;" colspan="2">##fecha_registro##</td><td colspan="2" style="border: 1px solid black;"></td></tr>';
     $html_content .= '<tr><th style="border: 1px solid black;">Actividad</th><td style="border: 1px solid black;">##actividad##</td><td style="border: 1px solid black;"></td><th colspan="2">Tipo de Trámite</th><td colspan="2" style="border: 1px solid black;">##tipo_tramite##</td><td colspan="2" style="border: 1px solid black;"></td></tr>';
     $html_content .= '<tr><th style="border: 1px solid black;">Categoría</th><td style="border: 1px solid black;">##categoria##</td><td style="border: 1px solid black;"></td><th colspan="2" style="border: 1px solid black;">Clasificación</th><td colspan="2" style="border: 1px solid black;">##clasificacion##</td><td colspan="2" style="border: 1px solid black;"></td></tr>';
-    $html_content .= '<tr><th style="border: 1px solid black;">Tipo de Establecimiento</th><td style="border: 1px solid black;">##categoria##</td><td style="border: 1px solid black;"></td><th colspan="2" style="border: 1px solid black;">Nombre Franquicia o Cadena</th><td colspan="2" style="border: 1px solid black;">##franquicia_cadena##</td><td colspan="2" style="border: 1px solid black;"></td></tr>';
+    $html_content .= '<tr><th style="border: 1px solid black;">Tipo de Establecimiento</th><td style="border: 1px solid black;">##tipo_establecimiento##</td><td style="border: 1px solid black;"></td><th colspan="2" style="border: 1px solid black;">Nombre Franquicia o Cadena</th><td colspan="2" style="border: 1px solid black;">##franquicia_cadena##</td><td colspan="2" style="border: 1px solid black;"></td></tr>';
     $html_content .= '<tr><th style="border: 1px solid black;">Representante Legal</th><td style="border: 1px solid black;">##representante_legal##</td><td style="border: 1px solid black;"></td><th colspan="2" style="border: 1px solid black;">Contacto Establecimiento</th><td colspan="2" style="border: 1px solid black;">##contacto_establecimiento##</td><td colspan="2" style="border: 1px solid black;"></td></tr>';
     $html_content .= '<tr><th style="border: 1px solid black;">Teléfonno Principal</th><td style="border: 1px solid black;">##telefono_principal##</td><td style="border: 1px solid black;"></td><th colspan="2" style="border: 1px solid black;">Teléfono Secundario</th><td colspan="2" style="border: 1px solid black;">##telefono_secundario##</td><td style="border: 1px solid black;" colspan="2"></td></tr>';
     $html_content .= '<tr><th style="border: 1px solid black;">Local</th><td style="border: 1px solid black;">##local##</td><td style="border: 1px solid black;"></td><th colspan="2" style="border: 1px solid black;">Correo Electrónico</th><td colspan="2" style="border: 1px solid black;">##correo_electronico##</td><td colspan="2" style="border: 1px solid black;"></td></tr>';
@@ -280,7 +280,7 @@ class ExporterController extends Controller
     $html_content .= '<tr><th style="border-bottom: 1px solid black;"><br />Fecha y Hora:</th></tr>';
     $html_content .= '</table></td></tr></table>';
     $html_content .= '</div></pagina>';
-    $html_content .= '<pagina><div style="width:100%; height:200px;"></div><div style="width:100%; margin-left: 150px; margin-right:100px;">';
+    $html_content .= '<pagina><div style="width:100%; height:350px;"></div><div style="width:100%; margin-left: 150px; margin-right:100px;">';
     $html_content .= $this->build_table_capacidades($request['capacities']);
     $html_content .= '<br/><br/>';
     $html_content .= $this->build_table_tarifario($request['tariffs']);

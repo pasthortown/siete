@@ -2559,16 +2559,16 @@ export class CoordinadorComponent implements OnInit {
          });
          tariffs.push(newTariff);
       });
-   this.exporterDataService.getPDFNormativa(this.rucEstablishmentRegisterSelected.requisites, capacities, tariffs, this.establishment_selected.workers_on_establishment, this.establishment_selected.address_map_latitude, this.establishment_selected.address_map_longitude).then( r => {
-      const byteCharacters = atob(r);
-      const byteNumbers = new Array(byteCharacters.length);
-      for (let i = 0; i < byteCharacters.length; i++) {
-         byteNumbers[i] = byteCharacters.charCodeAt(i);
-      }
-      const byteArray = new Uint8Array(byteNumbers);
-      const blob = new Blob([byteArray], { type: 'application/pdf'});
-      saveAs(blob, 'checklist.pdf');
-     }).catch( e => { console.log(e); });
+      this.exporterDataService.getPDFNormativa(this.rucEstablishmentRegisterSelected.requisites, capacities, tariffs, this.establishment_selected.workers_on_establishment, this.establishment_selected.address_map_latitude, this.establishment_selected.address_map_longitude).then( r => {
+         const byteCharacters = atob(r);
+         const byteNumbers = new Array(byteCharacters.length);
+         for (let i = 0; i < byteCharacters.length; i++) {
+            byteNumbers[i] = byteCharacters.charCodeAt(i);
+         }
+         const byteArray = new Uint8Array(byteNumbers);
+         const blob = new Blob([byteArray], { type: 'application/pdf'});
+         saveAs(blob, 'checklist.pdf');
+      }).catch( e => { console.log(e); });
   }
 
   getCapacityTypes() {

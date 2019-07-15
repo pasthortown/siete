@@ -93,6 +93,12 @@
           name="requisitesFile" placeholder="Formulario de Revisión de Requisitos (Check List)"
           (change)="CodeFileRequisitesAttachment($event)">
       </div>
+      <small *ngIf="please_wait_requisites">
+        <div class="alert alert-info mt-2 mb-2" role="alert">
+          <label class="col-12 text-justify"><strong>INFORMACIÓN</strong></label><br />
+          El sistema está generando el documento, ésto puede tardar algunos segundos. Por favor espere.
+        </div>
+      </small>
   </div>
   <div class="col-6">
       <label>Fecha de la Inspección</label>

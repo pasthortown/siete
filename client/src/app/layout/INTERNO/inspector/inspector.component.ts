@@ -113,6 +113,7 @@ export class InspectorComponent implements OnInit {
    @ViewChild('pasosSuperiores') pasosSuperioresTabSet;
    tabActive = 'paso1';
    zonales: any[] = [];
+   please_wait_requisites = false;
    tabActiveSuperior = 'tab1';
    tramite = '-';
    selectedNameType: RucNameType = new RucNameType();
@@ -205,7 +206,7 @@ export class InspectorComponent implements OnInit {
   mainPhoneContactValidated = false;
   secondaryPhoneContactValidated = true;
   user: User = new User();
-
+  capacity_types: CapacityType[] = [];
   //DATOS ESTABLECIMIENTO
   rowsEstablishment = [];
   columnsEstablishment = [];
@@ -1260,36 +1261,188 @@ export class InspectorComponent implements OnInit {
   }
 
   imprimirRequisitos() {
-     const cuerpo = [['REQUISITOS PARA CATEGORIA-CLASIFICACIÓN']];
-     this.registerDataService.get_requisites_set_by_user(this.idRegister).then( r => {
-         this.rucEstablishmentRegisterSelected.requisites = r as RegisterRequisite[];
-         this.rucEstablishmentRegisterSelected.requisites.forEach(requisite => {
-            if (requisite.requisite_father_code !== '-') {
-               let fullfillText = 'No Cumple';
-               if (requisite.fullfill) {
-                  fullfillText = 'Cumple';
+     this.please_wait_requisites = true;
+     this.registerDataService.get_register_data(this.registerMinturSelected.register.id).then( r0 => {
+      this.establishmentDataService.get_filtered(this.registerMinturSelected.establishment.id).then( r2 => {
+         this.registerDataService.get_tarifario(this.registerMinturSelected.register.id).then( r3 => {
+            this.tarifarioResponse = r3 as Tariff[];
+            const capacities = [];
+            const capacities_on_register = r0.capacities_on_register;
+            capacities_on_register.forEach(capacity => {
+               this.capacity_types.forEach(capacityType => {
+                  if (capacityType.id == capacity.capacity_type_id) {
+                     if (capacityType.editable_spaces) {
+                        capacity.max_spaces = 0;
+                     } else {
+                        capacity.max_spaces = capacityType.spaces * capacity.quantity;
+                     }
+                     if (capacity.max_bed > capacityType.bed_quantity){
+                        capacity.max_bed = capacityType.bed_quantity;
+                     }
+                     if (capacity.max_bed == 0){
+                        capacity.max_bed = 1;
+                     }
+                  }
+               });   
+            });
+            capacities_on_register.forEach(capacity => {
+               const newCapacity = {type: '', beds: 0, spaces: 0};
+               newCapacity.beds = capacity.quantity;
+               newCapacity.spaces = capacity.max_spaces;
+               this.capacity_types.forEach(element => {
+                     if (element.id == capacity.capacity_type_id) {
+                        newCapacity.type = element.name.toString();
+                     }
+               });
+               capacities.push(newCapacity);
+            });
+            const tariffs = [];
+            this.tarifarioResponse.forEach(tariff => {
+               const newTariff = {capacity_type_id: 0, type: '', habitacion_alta: 0, habitacion_baja: 0, persona_alta: 0, persona_baja: 0};
+               let existe = false;
+               tariffs.forEach(element => {
+                  if (element.capacity_type_id == tariff.capacity_type_id) {
+                     existe = true;
+                  }
+               });
+               if (!existe) {
+                  this.capacity_types.forEach(element => {
+                     if (element.id == tariff.capacity_type_id) {
+                        newTariff.type = element.name.toString();
+                        newTariff.capacity_type_id = tariff.capacity_type_id;
+                     }
+                  });
+                  tariffs.push(newTariff);
                }
-               cuerpo.push([requisite.id.toString(), requisite.requisite_name.toString(), fullfillText, '']);
-            } else {
-               cuerpo.push(['', requisite.requisite_name.toString(), 'Resp. Usuario' , 'Cumple S/N']);
-            }
-         });
-         const today = new Date();
-         const contacto = this.userDataService.get(this.registerMinturSelected.establishment.contact_user_id).then(r => {
-            const encabezado = [['Día', today.getDate().toString(), 'Mes', (today.getMonth() + 1).toString(), 'Año', today.getFullYear().toString()],
-                             ['Nombre del Establecimiento', this.registerMinturSelected.establishment.commercially_known_name ],
-                             ['Nombre de Contacto', r.name],
-                             ['RUC', this.registerMinturSelected.ruc.number, 'Teléfono', r.main_phone_number, 'Correo', r.email],
-                             ['Provincia', '', 'Ciudad', ''],
-                             ['Dirección', this.registerMinturSelected.establishment.address_main_street + ' ' + this.registerMinturSelected.establishment.address_number + ' ' + this.registerMinturSelected.establishment.address_secondary_street],
-                             ['Número de Habitaciones', '', 'Número de Plazas', ''],
-                             ['Personas que Trabajan en el Establecimiento', 'Hombres', '', 'Mujeres', '', 'Discapacidad', ''],
-                           ];
-            const nombre = 'Prueba_de_Informe';
-            this.exporterDataService.excel_file(encabezado, cuerpo).then(r => {
-               window.open(environment.api_exporter + 'download/?file=' + r + '&name=' + nombre + '.xlsx');
-            }).catch( e => { console.log(e); });
-         }).catch( e => {console.log(e);} );
+            });
+            tariffs.forEach(element => {
+               this.tarifarioResponse.forEach(tariff => {
+                  if (tariff.capacity_type_id == element.capacity_type_id) {
+                     if (tariff.tariff_type_id == 3) {
+                        element.habitacion_baja = tariff.price;
+                     }
+                     if (tariff.tariff_type_id == 5) {
+                        element.habitacion_alta = tariff.price;
+                     }
+                     if (tariff.tariff_type_id == 4) {
+                        element.persona_baja = tariff.price;
+                     }
+                     if (tariff.tariff_type_id == 6) {
+                        element.persona_alta = tariff.price;
+                     }
+                  }
+               });
+            });
+            const workers_on_establishment: Worker[] = [];
+            this.genders.forEach(gender => {
+               this.worker_groups.forEach(worker_group => {
+                  const newEstablishmentWorker = new Worker();
+                  newEstablishmentWorker.gender_id = gender.id;
+                  newEstablishmentWorker.gender_name = gender.name;
+                  newEstablishmentWorker.worker_group_id = worker_group.id;
+                  newEstablishmentWorker.worker_group_name = worker_group.name;
+                  newEstablishmentWorker.is_max = worker_group.is_max;
+                  workers_on_establishment.push(newEstablishmentWorker);
+               });
+            });
+            const personal = [];
+            r2.workers_on_establishment.forEach(worker_group_in => {
+               let newworkergroup = {worker_group_name: '', gender_name: '', count: ''};
+               workers_on_establishment.forEach(worker_group_template => {
+                  if (worker_group_in.worker_group_id == worker_group_template.worker_group_id) {
+                     newworkergroup.worker_group_name = worker_group_template.worker_group_name.toString();
+                     newworkergroup.gender_name = worker_group_template.gender_name.toString();
+                     newworkergroup.count = worker_group_in.count;
+                  }
+               });
+               personal.push(newworkergroup);
+            });
+            const requisites = [];
+            this.requisiteDataService.get_filtered(r0.register.register_type_id).then( r => {
+               this.requisitesByRegisterType = r as Requisite[];
+               this.requisitesByRegisterType.forEach(element => {
+                  const newRegisterRequisite = new RegisterRequisite();
+                  newRegisterRequisite.requisite_name = element.name;
+                  newRegisterRequisite.requisite_id = element.id;
+                  newRegisterRequisite.fullfill = true;
+                  newRegisterRequisite.requisite_code = element.code;
+                  newRegisterRequisite.mandatory = element.mandatory;
+                  newRegisterRequisite.requisite_father_code = element.father_code;
+                  newRegisterRequisite.level = element.code.split('.').length;
+                  newRegisterRequisite.HTMLtype = element.type;
+                  newRegisterRequisite.fullfill = false;
+                  if (newRegisterRequisite.HTMLtype == 'YES / NO') {
+                     newRegisterRequisite.value = '0';
+                  }
+                  if (newRegisterRequisite.HTMLtype == 'NUMBER') {
+                     newRegisterRequisite.value = '0';
+                  }
+                  if (newRegisterRequisite.HTMLtype == 'TRUE / FALSE') {
+                     newRegisterRequisite.value = 'false';
+                  }
+                  requisites.push(newRegisterRequisite);
+               });
+               requisites.sort(function(a, b) {
+                  const a_id = a.requisite_id;
+                  const b_id = b.requisite_id;
+                  return a_id > b_id ? 1 : a_id < b_id ? -1 : 0;
+              });
+              requisites.forEach(requisite_template => {
+                 r0.requisites.forEach(requisite_in => {
+                    if (requisite_template.requisite_id == requisite_in.requisite_id) {
+                     requisite_template.fullfill = requisite_in.fullfill;
+                     requisite_template.value = requisite_in.value;
+                    }
+                 });
+              });
+              console.log({r0:r0});
+              console.log({r2:r2});
+              console.log({r3:r3});
+              console.log(this.ruc_registro_selected.ruc.number);
+              const today = new Date();
+              const params = [{nombre_tecnico_zonal: this.user.name},
+               {dia: today.getDate()},
+               {mes: today.getMonth() + 1},
+               {year: today.getFullYear()},
+               {nombre_comercial: r2.establishment.commercially_known_name},
+               {ruc: this.ruc_registro_selected.ruc.number},
+               //{actividad:actividad},
+               //{categoria:categoria},
+               //{tipo_establecimiento:tipo_establecimiento},
+               //{representante_legal:representante_legal},
+               {telefono_principal: r2.contact_user.main_phone_number},
+               //{local:local},
+               {pagina_web: r2.establishment.url_web},
+               //{numero_registro:numero_registro},
+               //{fecha_registro:fecha_registro},
+               //{tipo_tramite: tipo_tramite},
+               //{clasificacion:clasificacion},
+               {franquicia_cadena: r2.establishment.franchise_chain_name},
+               {contacto_establecimiento: r2.contact_user.name},
+               {telefono_secundario: r2.contact_user.secondary_phone_number},
+               {correo_electronico:r2.contact_user.email},
+               //{provincia:provincia},
+               //{canton:canton},
+               //{parroquia:parroquia},
+               {referencia_ubicacion: r2.establishment.address_reference},
+               {calle_principal: r2.establishment.address_main_street},
+               {numeracion: r2.establishment.address_number},
+               {calle_secundaria: r2.establishment.address_secondary_street}];
+
+              this.exporterDataService.getPDFNormativa(requisites, capacities, tariffs, personal, r2.establishment.address_map_latitude, r2.establishment.address_map_longitude, true, 'Luis', params).then( r => {
+               const byteCharacters = atob(r);
+               const byteNumbers = new Array(byteCharacters.length);
+               for (let i = 0; i < byteCharacters.length; i++) {
+                  byteNumbers[i] = byteCharacters.charCodeAt(i);
+               }
+               const byteArray = new Uint8Array(byteNumbers);
+               const blob = new Blob([byteArray], { type: 'application/pdf'});
+               saveAs(blob, 'checklist.pdf');
+               this.please_wait_requisites = false;
+              }).catch( e => { console.log(e); });
+            }).catch( e => console.log(e) );
+         }).catch( e => { console.log(e); });
+      }).catch( e => { console.log(e); });
      }).catch( e => { console.log(e); });
   }
 
@@ -1799,6 +1952,7 @@ export class InspectorComponent implements OnInit {
 
   refresh() {
    this.getZonales();
+   this.getAllCapacityTypes();
    this.fechasNombramiento();
    this.pays = [];
    this.consumoCedula = false;
@@ -1813,7 +1967,6 @@ export class InspectorComponent implements OnInit {
    this.ruc_registro_selected = new RegistroDataCarrier();
    this.getTaxPayerType();
    this.getGroupType();
-   this.getCapacityTypes();
    this.getTariffs();
    this.getStates();
    this.getRucNameTypes();
@@ -1982,9 +2135,9 @@ export class InspectorComponent implements OnInit {
          this.checkRuc();
       } else {
          this.ruc_registro_selected.ruc = r.Ruc as Ruc;
-         this.ruc_registro_selected.ruc.establishments = [];
          this.getPays();
          this.getRegistersOnRuc();
+         this.ruc_registro_selected.ruc.establishments = [];
          this.ruc_registro_selected.ruc.contact_user = r.contact_user as User;
          if (r.group_given == '0') {
             this.ruc_registro_selected.ruc.group_given = new GroupGiven();
@@ -2172,6 +2325,13 @@ export class InspectorComponent implements OnInit {
    this.capacityTypeDataService.get_filtered_by_register_type(this.rucEstablishmentRegisterSelected.register_type_id).then( r => {
       this.allowed_capacity_types = r as CapacityType[];
    }).catch( e => { console.log(e); });
+  }
+
+  getAllCapacityTypes() {
+     this.capacity_types = [];
+     this.capacityTypeDataService.get().then( r => {
+        this.capacity_types = r;
+     }).catch( e => { console.log(e); });
   }
 
   refreshEstablishment() {
@@ -2527,7 +2687,7 @@ guardarDeclaracion() {
   getRegistersOnRuc() {
    this.rucEstablishmentRegisterSelected = new Register();
    this.mostrarDataRegister = false;
-   this.registerDataService.get_registers_by_ruc(this.user.ruc).then( r => {
+   this.registerDataService.get_registers_by_ruc(this.ruc_registro_selected.ruc.number).then( r => {
       this.ruc_registro_selected.registers = r as any[];
    }).catch( e => { console.log(e); });
   }
@@ -3370,8 +3530,8 @@ guardarDeclaracion() {
     this.establishment_selected.address_number = establishment.address_number;
     this.establishment_selected.address_secondary_street = establishment.address_secondary_street;
     this.establishment_selected.sri_state = establishment.sri_state;
-    this.checkEstablishmentAddress();
     this.validateNombreComercial();
+    this.checkEstablishmentAddress();
     this.selectedNameType = new RucNameType();
     return;
    }
@@ -3449,15 +3609,17 @@ guardarDeclaracion() {
   }
 
   recoverUbication() {
-    this.ubicationDataService.getByIdLower(this.establishment_selected.ubication_id).then( r => {
-      this.zonalEstablishmentSelectedCode = r.zonal.code;
-      this.provinciaEstablishmentSelectedCode = r.provincia.code;
-      this.cantonEstablishmentSelectedCode = r.canton.code;
-      this.establishment_selected.ubication_id = r.parroquia.id;
-      this.getCantonesEstablishmentRecovery();
-      this.getParroquiasEstablishmentRecovery();
-    }).catch( e => { console.log(e); });
-  }
+   this.ubicationDataService.getByIdLower(this.establishment_selected.ubication_id).then( r => {
+     this.regionSelectedCode = r.region;
+     this.getClasifications();
+     this.zonalEstablishmentSelectedCode = r.zonal.code;
+     this.provinciaEstablishmentSelectedCode = r.provincia.code;
+     this.cantonEstablishmentSelectedCode = r.canton.code;
+     this.establishment_selected.ubication_id = r.parroquia.id;
+     this.getCantonesEstablishmentRecovery();
+     this.getParroquiasEstablishmentRecovery();
+   }).catch( e => { console.log(e); });
+ }
 
   newRegisterEstablishment() {
     this.establishment_selected = new Establishment();
@@ -3823,16 +3985,72 @@ guardarDeclaracion() {
    this.rucEstablishmentRegisterSelected.capacities_on_register = newCapacities;
   }
 
-  calcSpaces() {
+  calcSpaces(capacity?) {
+   if(typeof capacity !== 'undefined') {
+      this.allowed_capacity_types.forEach(capacityType => {
+         if (capacityType.id == capacity.capacity_type_id) {
+            if (capacityType.editable_spaces) {
+               capacity.max_spaces = 0;
+            } else {
+               capacity.max_spaces = capacityType.spaces * capacity.quantity;
+            }
+            if (capacity.max_bed > capacityType.bed_quantity){
+               capacity.max_bed = capacityType.bed_quantity;
+            }
+            if (capacity.max_bed == 0){
+               capacity.max_bed = 1;
+            }
+         }
+      });
+   }
    this.rucEstablishmentRegisterSelected.total_spaces = 0;
    this.rucEstablishmentRegisterSelected.total_habitations = 0;
-   this.rucEstablishmentRegisterSelected.capacities_on_register.forEach(element => {
-      this.rucEstablishmentRegisterSelected.total_spaces += element.total_spaces * element.quantity;
-      this.rucEstablishmentRegisterSelected.total_habitations += element.quantity;
-   });
-   this.validateTariffs();
+   this.rucEstablishmentRegisterSelected.total_beds = 0;
+   if (this.tarifarioRack.valores.length == this.rucEstablishmentRegisterSelected.capacities_on_register.length) {
+      for (let i = 0; i<this.rucEstablishmentRegisterSelected.capacities_on_register.length ; i++) {
+         this.tarifarioRack.valores[i].idTipoCapacidad = this.rucEstablishmentRegisterSelected.capacities_on_register[i].capacity_type_id;
+      }
+   } else {
+      this.tarifarioRack.valores = [];
+      this.rucEstablishmentRegisterSelected.capacities_on_register.forEach(capacity => {
+         const childs = [];
+         let idTipoCapacidad = capacity.capacity_type_id;
+         let editable = capacity.editable;
+         this.tarifas.forEach(tariffType => {
+            tariffType.childs.forEach(tariffTypeChild => {
+               const es_referencia = tariffType.father.is_reference;
+               let plazasHabitacion = 0;
+               this.allowed_capacity_types.forEach(capacityType => {
+                  if (capacityType.id == idTipoCapacidad) {
+                     plazasHabitacion = capacityType.spaces;
+                  }
+               });
+               let nombreDivision = '';
+               nombreDivision = tariffTypeChild.name;
+               const tariff = new Tariff();
+               tariff.tariff_type_id = tariffTypeChild.id;
+               tariff.price = 0;
+               tariff.capacity_type_id = capacity.capacity_type_id;
+               const today = new Date();
+               tariff.year = today.getFullYear();
+               let newChild = {nombreDivision: nombreDivision, tariff: tariff, isReference: es_referencia, plazasHabitacion: plazasHabitacion};
+               childs.push(newChild);
+            });
+         });
+         const topush = {idTipoCapacidad: idTipoCapacidad, tariffs: childs, editable: editable};
+         this.tarifarioRack.valores.push(topush);
+      });
+   }
    this.rucEstablishmentRegisterSelected.capacities_on_register.forEach(capacity => {
-      this.calcBeds(capacity);
+      this.allowed_capacity_types.forEach(capacityType => {
+         if (capacityType.id == capacity.capacity_type_id) {
+            capacity.editable_beds = capacityType.editable_beds;
+            capacity.editable_spaces = capacityType.editable_spaces;
+         }
+      });
+      this.rucEstablishmentRegisterSelected.total_spaces += capacity.max_spaces;
+      this.rucEstablishmentRegisterSelected.total_habitations += capacity.quantity;
+      this.rucEstablishmentRegisterSelected.total_beds += (capacity.max_bed * capacity.quantity);
    });
   }
 
