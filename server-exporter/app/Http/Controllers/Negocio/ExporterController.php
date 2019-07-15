@@ -57,11 +57,18 @@ class ExporterController extends Controller
 
   protected function build_table_personal($personal) {
     $html_content = '<table style="width: 100%; border: 1px solid black; border-collapse: collapse; text-align: left; font-size:14px;">';
-    $html_content .= '<tr style="background-color:yellow;"><th colspan="3" style="border: 1px solid black; text-align: center;">PERSONAL DEL ESTABLECIMIENTO</th></tr>';
+    $html_content .= '<tr style="background-color:yellow;"><th colspan="4" style="border: 1px solid black; text-align: center;">PERSONAL DEL ESTABLECIMIENTO</th></tr>';
     $html_content .= '<tr style="background-color:yellow; text-align: center;"><th style="border: 1px solid black;">GÉNERO</th><th style="border: 1px solid black;">DESCRIPCIÓN</th><th style="border: 1px solid black;">INFORMACIÓN USUARIO</th><th style="border: 1px solid black;">INFORMACIÓN TÉCNICO ZONAL</th></tr>';
+    $total = 0;
     foreach($personal as $grupo) {
-      $html_content .= '<tr><th style="border: 1px solid black;">' . $grupo['gender_name'] . '</th><th style="border: 1px solid black;">' . $grupo['worker_group_name'] . '</th><td style="border: 1px solid black;">' . $grupo['count'] . '</td><td style="border: 1px solid black;"></td></tr>';
+      if ($grupo['worker_group_name'] == 'TOTAL de empleados del establecimiento') {
+        $html_content .= '<tr style="background-color:gray;"><th style="border: 1px solid black;">' . $grupo['gender_name'] . '</th><th style="border: 1px solid black;">' . $grupo['worker_group_name'] . '</th><td style="border: 1px solid black;">' . $grupo['count'] . '</td><td style="border: 1px solid black;"></td></tr>';
+        $total += $grupo['count'];
+      } else {
+        $html_content .= '<tr><th style="border: 1px solid black;">' . $grupo['gender_name'] . '</th><th style="border: 1px solid black;">' . $grupo['worker_group_name'] . '</th><td style="border: 1px solid black;">' . $grupo['count'] . '</td><td style="border: 1px solid black;"></td></tr>';
+      }
     }
+    $html_content .= '<tr style="background-color:gray;"><th style="border: 1px solid black;"></th><th style="border: 1px solid black;">TOTAL DE TRABAJADORES DEL ESTABLECIMIENTO</th><td style="border: 1px solid black;">' . $total . '</td><td style="border: 1px solid black;"></td></tr>';
     $html_content .= '</table>';
     return $html_content;
   }
