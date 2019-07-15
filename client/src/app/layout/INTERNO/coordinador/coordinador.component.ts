@@ -2499,7 +2499,7 @@ export class CoordinadorComponent implements OnInit {
       this.requisitosApprovalStateAttachment.approval_state_attachment_file,
       this.requisitosApprovalStateAttachment.approval_state_attachment_file_type,
       this.requisitosApprovalStateAttachment.approval_state_attachment_file_name);*/
-   this.exporterDataService.getPDFNormativa(this.rucEstablishmentRegisterSelected.requisites).then( r => {
+   this.exporterDataService.getPDFNormativa(this.rucEstablishmentRegisterSelected.requisites, this.rucEstablishmentRegisterSelected.capacities_on_register, this.tarifarioRack.valores, this.establishment_selected.address_map_latitude, this.establishment_selected.address_map_longitude).then( r => {
       const byteCharacters = atob(r);
       const byteNumbers = new Array(byteCharacters.length);
       for (let i = 0; i < byteCharacters.length; i++) {

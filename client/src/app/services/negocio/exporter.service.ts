@@ -61,19 +61,19 @@ export class ExporterService {
       }).catch( error => { this.handledError(error.json()); });
    }
 
-   getPDFNormativa(requisites: any[], qr?: Boolean, qr_content?: string, params?: any[]): Promise<any> {
+   getPDFNormativa(requisites: any[], capacities: any[], tariffs: any[], latitude: number, longitude: number, qr?: Boolean, qr_content?: string, params?: any[]): Promise<any> {
       let data = null;
       if(typeof qr != 'undefined') {
          if(typeof params != 'undefined') {
-            data = {requisites: requisites, params: params, qr: qr, qr_content: qr_content};
+            data = {requisites: requisites, capacities: capacities, tariffs: tariffs, latitude: latitude, longitude: longitude, params: params, qr: qr, qr_content: qr_content};
          } else {
-            data = {requisites: requisites, qr: qr, qr_content: qr_content};
+            data = {requisites: requisites, capacities: capacities, tariffs: tariffs, latitude: latitude, longitude: longitude, qr: qr, qr_content: qr_content};
          }
       } else {
          if(typeof params != 'undefined') {
-            data = {requisites: requisites, params: params};
+            data = {requisites: requisites, capacities: capacities, tariffs: tariffs, latitude: latitude, longitude: longitude,  params: params};
          } else {
-            data = {requisites: requisites};   
+            data = {requisites: requisites, capacities: capacities, tariffs: tariffs, latitude: latitude, longitude: longitude};   
          }
          
       }

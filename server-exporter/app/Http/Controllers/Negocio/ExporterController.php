@@ -262,9 +262,9 @@ class ExporterController extends Controller
     $html_content .= '</table></td></tr></table>';
     $html_content .= '</div></pagina>';
     $html_content .= '<pagina><div style="width:100%; height:200px;"></div><div style="width:100%; margin-left: 150px; margin-right:100px;">';
-    $html_content .= $this->build_table_capacidades([]);
+    $html_content .= $this->build_table_capacidades($request['capacities']);
     $html_content .= '<br/><br/>';
-    $html_content .= $this->build_table_tarifario([]);
+    $html_content .= $this->build_table_tarifario($request['tariffs']);
     $html_content .= '<br/><br/>';
     $html_content .= $this->build_table_personal([]);
     $html_content .= '<br/><br/>';
