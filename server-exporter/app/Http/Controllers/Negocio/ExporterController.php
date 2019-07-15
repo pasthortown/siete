@@ -62,13 +62,13 @@ class ExporterController extends Controller
     $total = 0;
     foreach($personal as $grupo) {
       if ($grupo['worker_group_name'] == 'TOTAL de empleados del establecimiento') {
-        $html_content .= '<tr style="background-color:gray;"><th style="border: 1px solid black;">' . $grupo['gender_name'] . '</th><th style="border: 1px solid black;">' . $grupo['worker_group_name'] . '</th><td style="border: 1px solid black;">' . $grupo['count'] . '</td><td style="border: 1px solid black;"></td></tr>';
+        $html_content .= '<tr style="background-color:gray;"><th style="border: 1px solid black;">' . $grupo['gender_name'] . '</th><th style="border: 1px solid black;">' . $grupo['worker_group_name'] . '</th><th style="border: 1px solid black;">' . $grupo['count'] . '</th><td style="border: 1px solid black;"></td></tr>';
         $total += $grupo['count'];
       } else {
         $html_content .= '<tr><th style="border: 1px solid black;">' . $grupo['gender_name'] . '</th><th style="border: 1px solid black;">' . $grupo['worker_group_name'] . '</th><td style="border: 1px solid black;">' . $grupo['count'] . '</td><td style="border: 1px solid black;"></td></tr>';
       }
     }
-    $html_content .= '<tr style="background-color:gray;"><th style="border: 1px solid black;"></th><th style="border: 1px solid black;">TOTAL DE TRABAJADORES DEL ESTABLECIMIENTO</th><td style="border: 1px solid black;">' . $total . '</td><td style="border: 1px solid black;"></td></tr>';
+    $html_content .= '<tr style="background-color:gray;"><th style="border: 1px solid black;"></th><th style="border: 1px solid black;">TOTAL DE TRABAJADORES DEL ESTABLECIMIENTO</th><th style="border: 1px solid black;">' . $total . '</th><td style="border: 1px solid black;"></td></tr>';
     $html_content .= '</table>';
     return $html_content;
   }
