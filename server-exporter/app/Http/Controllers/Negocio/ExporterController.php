@@ -76,7 +76,7 @@ class ExporterController extends Controller
     $html_content .= '<tr><th style="border: 1px solid black;">DIRECCIÓN:</th><th style="border: 1px solid black;" colspan="3">##direccion##</th></tr>';
     $html_content .= '<tr><th style="border: 1px solid black;">CLASIFICACIÓN:</th><th style="border: 1px solid black;">##clasificacion##</th><th style="border: 1px solid black;">CATEGORÍA:</th><th style="border: 1px solid black;">##categoria##</th></tr>';
     $html_content .= '</table><br/>';
-    $html_content .= $this->build_table_tarifario_reporte([]);
+    $html_content .= $this->build_table_tarifario_reporte($request['tariffs']);
     $html_content .= '<p style="text-align:left; font-size:14px;"><strong><i>*Precios incluyen IVA</i></strong><br /><br /></p>';
     $html_content .= '<table style="margin:auto; text-align: center; width:50%;">';
     $html_content .= '<tr><td style="border-bottom: 1px solid black;"></td></tr>';
@@ -275,7 +275,7 @@ class ExporterController extends Controller
     $html_content .= '<br/><br/>';
     $html_content .= $this->build_table_tarifario($request['tariffs']);
     $html_content .= '<br/><br/>';
-    $html_content .= $this->build_table_personal([]);
+    $html_content .= $this->build_table_personal($request['personal']);
     $html_content .= '<br/><br/>';
     $html_content .= '<h3 style="text-transform: uppercase; width: 100%; text-align: center;">REQUISITOS PARA ##clasificacion## - ##categoria##</h3><br/><br/>';
     $html_content .= '</div></pagina>';

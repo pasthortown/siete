@@ -39,19 +39,19 @@ export class ExporterService {
       }).catch( error => { this.handledError(error.json()); });
    }
 
-   getPDFTarifarioRack(body: any[], qr?: Boolean, qr_content?: string, params?: any[]): Promise<any> {
+   getPDFTarifarioRack(tariffs: any[], qr?: Boolean, qr_content?: string, params?: any[]): Promise<any> {
       let data = null;
       if(typeof qr != 'undefined') {
          if(typeof params != 'undefined') {
-            data = {body: body, params: params, qr: qr, qr_content: qr_content};
+            data = {tariffs: tariffs, params: params, qr: qr, qr_content: qr_content};
          } else {
-            data = {body: body, qr: qr, qr_content: qr_content};
+            data = {tariffs: tariffs, qr: qr, qr_content: qr_content};
          }
       } else {
          if(typeof params != 'undefined') {
-            data = {body: body, params: params};
+            data = {tariffs: tariffs, params: params};
          } else {
-            data = {body: body};   
+            data = {tariffs: tariffs};   
          }
          
       }
