@@ -2499,7 +2499,19 @@ export class CoordinadorComponent implements OnInit {
       this.requisitosApprovalStateAttachment.approval_state_attachment_file,
       this.requisitosApprovalStateAttachment.approval_state_attachment_file_type,
       this.requisitosApprovalStateAttachment.approval_state_attachment_file_name);*/
-   this.exporterDataService.getPDFNormativa(this.rucEstablishmentRegisterSelected.requisites, this.rucEstablishmentRegisterSelected.capacities_on_register, this.tarifarioRack.valores, this.establishment_selected.address_map_latitude, this.establishment_selected.address_map_longitude).then( r => {
+      const capacities= [];
+      this.rucEstablishmentRegisterSelected.capacities_on_register.forEach(capacity => {
+         const newCapacity = {type: '', beds: 0, spaces: 0};
+         newCapacity.beds = capacity.quantity;
+         newCapacity.spaces = capacity.max_spaces;
+         this.allowed_capacity_types.forEach(element => {
+            if (element.id == capacity.capacity_type_id) {
+               newCapacity.type = element.name.toString();
+            }
+         });
+         capacities.push(newCapacity);
+      });
+   this.exporterDataService.getPDFNormativa(this.rucEstablishmentRegisterSelected.requisites, capacities, this.tarifarioRack.valores, this.establishment_selected.address_map_latitude, this.establishment_selected.address_map_longitude).then( r => {
       const byteCharacters = atob(r);
       const byteNumbers = new Array(byteCharacters.length);
       for (let i = 0; i < byteCharacters.length; i++) {
