@@ -264,7 +264,7 @@ class ExporterController extends Controller
     $html_content .= '<tr><th style="border: 1px solid black;">Cantón</th><td style="border: 1px solid black;">##canton##</td><td style="border: 1px solid black;"></td><th colspan="2" style="border: 1px solid black;">Numeración</th><td colspan="2" style="border: 1px solid black;">##numeracion##</td><td colspan="2" style="border: 1px solid black;"></td></tr>';
     $html_content .= '<tr><th style="border: 1px solid black;">Parroquia</th><td style="border: 1px solid black;">##parroquia##</td><td style="border: 1px solid black;"></td><th colspan="2" style="border: 1px solid black;">Calle Secundaria</th><td colspan="2" style="border: 1px solid black;">##calle_secundaria##</td><td colspan="2" style="border: 1px solid black;"></td></tr>';
     $html_content .= '<tr><th style="border: 1px solid black;">Referencia Ubicación</th><td colspan="8" style="border: 1px solid black;">##referencia_ubicacion##</td></tr>';
-    $html_content .= '<tr><th colspan="9">Georeferencia</th></tr>';
+    $html_content .= '<tr><th style="border: 1px solid black;">Georeferencia</th><th colspan="8" style="border: 1px solid black;">Observaciones</th></tr>';
     try {
       $latitud = $request['latitud'];
     } catch (Exception $e) {
@@ -275,7 +275,7 @@ class ExporterController extends Controller
     } catch (Exception $e) {
       $longitud = -78.5063691;
     }
-    $html_content .= '<tr><td colspan="9" style="text-align:center;"><img style="margin:10px;" src="data:image/png;base64,'.$this->qrcodelocation($latitud,$longitud).'"/></td></tr>';
+    $html_content .= '<tr><td style="text-align:center; border: 1px solid black;"><img style="margin:10px;" src="data:image/png;base64,'.$this->qrcodelocation($latitud,$longitud).'"/></td><td colspan="8" style="border: 1px solid black;"></td></tr>';
     $html_content .= '</table>';
     $html_content .= '<br/><br/>';
     $html_content .= '<table style="text-align: left; width:100%;">';
