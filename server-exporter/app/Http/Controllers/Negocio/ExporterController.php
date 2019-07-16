@@ -136,7 +136,7 @@ class ExporterController extends Controller
     $pageContent .= '<tr style="background-color:yellow; font-size:14px;"><th style="border: 1px solid black;">Código</th><th style="border: 1px solid black;">Descripción</th><th style="border: 1px solid black;">Usuario</th><th style="border: 1px solid black;">Verificación</th></tr>';
     foreach ($requisites as $requisite) {
       $mandatory = '*';
-      if ($requisite['mandatory'] == 'true') {
+      if ($requisite['mandatory'] == true) {
         $mandatory = '*';
       } else {
         $mandatory = '';
@@ -192,7 +192,7 @@ class ExporterController extends Controller
       for($i = $currIndex ; $i < sizeof($requisites) ; $i++) {
         $requisite = $requisites[$i];
         $mandatory = '*';
-        if ($requisite['mandatory'] == 'true') {
+        if ($requisite['mandatory'] == true) {
           $mandatory = '*';
         } else {
           $mandatory = '';
