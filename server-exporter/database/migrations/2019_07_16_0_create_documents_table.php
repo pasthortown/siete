@@ -22,6 +22,7 @@ class CreateDocumentsTable extends Migration
           $table->string('activity',100)->nullable($value = true);
           $table->string('zonal',100)->nullable($value = true);
           $table->string('document_type',100)->nullable($value = true);
+          $table->string('user',10)->nullable($value = true);
        });
     }
 

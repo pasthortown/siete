@@ -31,6 +31,7 @@
          <thead>
             <tr>
                <th>Seleccionado</th>
+               <th>id</th>
                <th>Nombre PDF</th>
                <th>Opciones</th>
             </tr>
@@ -38,6 +39,7 @@
          <tbody>
             <tr *ngFor="let template of templates" (click)="selecttemplate(template)">
                <td class="text-right"><span *ngIf="templateSelected === template" class="far fa-hand-point-right"></span></td>
+               <td>{{template.id}}</td>
                <td>{{template.title}}</td>
                <td>
                   <button type="button" class="btn btn-dark" (click)="descargarPDF(template.body, template.title, template.orientation)"><span class="far fa-file-pdf"></span>&nbsp;Descargar</button>

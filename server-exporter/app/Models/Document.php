@@ -12,7 +12,7 @@ class Document extends Model
      * @var array
      */
     protected $fillable = [
-       'params','code','procedure_id','activity','zonal','document_type',
+       'params','code','procedure_id','activity','zonal','document_type','user',
     ];
 
     /**

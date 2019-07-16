@@ -142,6 +142,7 @@ export class InspectorComponent implements OnInit {
    idTramiteEstadoFilter = 0;
    report: ApprovalStateReport = new ApprovalStateReport();
    estoyVacaciones = false;
+   imprimiendo_informe = false;
    //ASIGNACIONES
    inspectores: User[] = [];
    financieros: User[] = [];
@@ -163,6 +164,7 @@ export class InspectorComponent implements OnInit {
    //REGISTROS MINTUR
    registers_mintur = [];
    registerMinturSelected: any = null;
+   coordinadorZonal = '';
    currentPageMinturRegisters = 1;
    lastPageMinturRegisters = 1;
    recordsByPageRegisterMintur = 5;
@@ -1263,6 +1265,118 @@ export class InspectorComponent implements OnInit {
    }).catch( e => { console.log(e); });
   }
 
+  imprimirInforme() {
+   this.imprimiendo_informe = true;
+   this.registerDataService.get_register_data(this.registerMinturSelected.register.id).then( r0 => {
+      this.establishmentDataService.get_filtered(this.registerMinturSelected.establishment.id).then( r2 => {
+         let provincia = new Ubication();
+         let canton = new Ubication();
+         let parroquia = new Ubication();
+         let zonal = new Ubication();
+         this.ubications.forEach(element => {
+            if (element.id == r2.establishment.ubication_id) {
+            parroquia = element;
+            }
+         });
+         this.ubications.forEach(element => {
+            if (element.code == parroquia.father_code) {
+            canton = element;
+            }
+         });
+         this.ubications.forEach(element => {
+            if (element.code == canton.father_code) {
+            provincia = element;
+            }
+         });
+         this.ubications.forEach(element => {
+            if (element.code == provincia.father_code) {
+            zonal = element;
+            }
+         });
+         let clasificacion = '';
+         this.register_types.forEach(element => {
+            if (element.id == r0.register.register_type_id) {
+               clasificacion = element.name.toString();
+            }
+         });
+         let iniciales_tecnico_zonal = '';
+         this.user.name.split(' ').forEach(element => {
+            iniciales_tecnico_zonal += element.substring(0, 1).toUpperCase();
+         });
+         let iniciales_cordinacion_zonal = '';
+         const zonalName = zonal.name.split(' ');
+         iniciales_cordinacion_zonal = zonalName[zonalName.length - 1].toUpperCase();
+         const today = new Date();
+         let qr_value = 'MT-CZ' + iniciales_cordinacion_zonal + '-' + this.ruc_registro_selected.ruc.number + '-' + r2.establishment.ruc_code_id + '-INFORME-ALOJAMIENTO-' + iniciales_tecnico_zonal + '-' + today.getDate() + '-' + (today.getMonth() + 1) + '-' + today.getFullYear();
+         const actividad = 'ALOJAMIENTO';
+         let resultado_aprobacion = '';
+         if (this.inspectionState == 1) {
+            resultado_aprobacion = 'APROBADA';
+         }
+         if (this.inspectionState == 2) {
+            resultado_aprobacion = 'NEGADA';
+         }
+         if (this.inspectionState == 3) {
+            resultado_aprobacion = 'PRÓRROGA DE 15 DÍAS';
+         }
+         if (this.inspectionState == 4) {
+            resultado_aprobacion = 'PRÓRROGA DE 6 MESES';
+         }
+         const meses = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+         const params = [{codigo_informe: qr_value},
+            {canton: canton.name.toUpperCase()},
+            {fecha: today.toLocaleDateString().toUpperCase()},
+            {nombre_coordinador_zonal: this.coordinadorZonal.toUpperCase()},
+            {actividad: actividad},
+            {nombre_comercial: r2.establishment.commercially_known_name.toUpperCase()},
+            {dia: today.getDate()},
+            {mes: meses[today.getMonth()].toUpperCase()},
+            {year: today.getFullYear()},
+            {ruc: this.ruc_registro_selected.ruc.number.toUpperCase()},
+            {provincia: provincia.name.toUpperCase()},
+            {fecha_solicitud: (new Date(r0.register.updated_at.toString())).toLocaleDateString().toUpperCase()},
+            {parroquia: parroquia.name.toUpperCase()},
+            {actividad: actividad},
+            {clasificacion: clasificacion.toUpperCase()},
+            {fecha_inspeccion: this.registerApprovalInspector.date_fullfill.toString()},
+            {categoria: r0.register_category.name.toUpperCase()},
+            {calle_principal: r2.establishment.address_main_street.toUpperCase()},            
+            {numeracion: r2.establishment.address_number.toUpperCase()},
+            {calle_secundaria: r2.establishment.address_secondary_street.toUpperCase()},
+            {resultado_aprobacion: resultado_aprobacion},
+            {identificacion: this.user.identification.toUpperCase()},
+            {conclusiones: this.report.conclution},
+            {recomendaciones: this.report.recomendation},
+            {nombre_tecnico_Zonal: this.user.name.toUpperCase()},
+            {zonal: iniciales_cordinacion_zonal.toUpperCase()}];
+            let document = new Documento();
+            document.activity = 'ALOJAMIENTO';
+            document.code = qr_value;
+            document.document_type = 'INFORME';
+            let paramsToBuild = {
+               template: 11, qr: true, qr_value: qr_value, params: params
+            }
+            document.procedure_id = 'REGISTRO';
+            document.zonal = zonal.name;
+            document.params = JSON.stringify(paramsToBuild);
+            this.documentDataService.post(document).then().catch( e => { console.log(e); });
+
+         this.exporterDataService.template(11, true, qr_value, params).then( r => {
+            const byteCharacters = atob(r);
+                     const byteNumbers = new Array(byteCharacters.length);
+                     for (let i = 0; i < byteCharacters.length; i++) {
+                        byteNumbers[i] = byteCharacters.charCodeAt(i);
+                     }
+                     const byteArray = new Uint8Array(byteNumbers);
+                     const blob = new Blob([byteArray], { type: 'application/pdf'});
+                     saveAs(blob, qr_value + '.pdf');
+                     this.please_wait_requisites = false;
+                     this.imprimiendo_informe = false;
+         }).catch( e => { console.log(e); });
+      }).catch( e => { console.log(e); });
+   }).catch( e => { console.log(e); });
+  }
+
   imprimirRequisitos() {
      this.please_wait_requisites = true;
      this.registerDataService.get_register_data(this.registerMinturSelected.register.id).then( r0 => {
@@ -1360,7 +1474,6 @@ export class InspectorComponent implements OnInit {
                });
                personal.push(newworkergroup);
             });
-            console.log(personal);
             const requisites = [];
             this.requisiteDataService.get_filtered(r0.register.register_type_id).then( r => {
                this.requisitesByRegisterType = r as Requisite[];
@@ -1450,6 +1563,9 @@ export class InspectorComponent implements OnInit {
                 }
               });
               const today = new Date();
+              let iniciales_cordinacion_zonal = '';
+              const zonalName = zonal.name.split(' ');
+              iniciales_cordinacion_zonal = zonalName[zonalName.length - 1].toUpperCase();
               const params = [{nombre_tecnico_zonal: this.user.name},
                {dia: today.getDate()},
                {mes: today.getMonth() + 1},
@@ -1482,11 +1598,7 @@ export class InspectorComponent implements OnInit {
                this.user.name.split(' ').forEach(element => {
                   iniciales_tecnico_zonal += element.substring(0, 1).toUpperCase();
                });
-               let iniciales_cordinacion_zonal = '';
-               zonal.name.split(' ').forEach(element => {
-                  iniciales_cordinacion_zonal += element.substring(0, 1).toUpperCase();
-               });
-              let qr_value = 'MT-C' + iniciales_cordinacion_zonal + '-' + this.ruc_registro_selected.ruc.number + '-' + r2.establishment.ruc_code_id + '-ALOJAMIENTO-' + iniciales_tecnico_zonal + '-' + today.getDate() + '-' + (today.getMonth() + 1) + '-' + today.getFullYear();
+              let qr_value = 'MT-CZ' + iniciales_cordinacion_zonal + '-' + this.ruc_registro_selected.ruc.number + '-' + r2.establishment.ruc_code_id + '-CHECKLIST-ALOJAMIENTO-' + iniciales_tecnico_zonal + '-' + today.getDate() + '-' + (today.getMonth() + 1) + '-' + today.getFullYear();
               let document = new Documento();
               document.activity = 'ALOJAMIENTO';
               document.code = qr_value;
@@ -1524,28 +1636,14 @@ export class InspectorComponent implements OnInit {
   }
 
   descargarRequisitos() {
-   /*this.downloadFile(
+   this.downloadFile(
       this.requisitosApprovalStateAttachment.approval_state_attachment_file,
       this.requisitosApprovalStateAttachment.approval_state_attachment_file_type,
       this.requisitosApprovalStateAttachment.approval_state_attachment_file_name);
-   this.exporterDataService.getPDFNormativa().then( r => {
-         const byteCharacters = atob(r);
-         const byteNumbers = new Array(byteCharacters.length);
-         for (let i = 0; i < byteCharacters.length; i++) {
-            byteNumbers[i] = byteCharacters.charCodeAt(i);
-         }
-         const byteArray = new Uint8Array(byteNumbers);
-         const blob = new Blob([byteArray], { type: 'application/pdf'});
-         saveAs(blob, 'checklist.pdf');
-        }).catch( e => { console.log(e); });*/
   }
 
   borrarRequisitos() {
    this.requisitosApprovalStateAttachment = new ApprovalStateAttachment();
-  }
-
-  imprimirInforme() {
-
   }
 
   descargarInforme() {

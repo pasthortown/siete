@@ -37,6 +37,7 @@
                <th>activity</th>
                <th>zonal</th>
                <th>document_type</th>
+               <th>user</th>
             </tr>
          </thead>
          <tbody>
@@ -48,6 +49,7 @@
                <td>{{document.activity}}</td>
                <td>{{document.zonal}}</td>
                <td>{{document.document_type}}</td>
+               <td>{{document.user}}</td>
             </tr>
          </tbody>
       </table>
@@ -118,6 +120,12 @@
                <label for="document_type" class="col-4 col-form-label">document_type</label>
                <div class="col-8">
                   <input type="text" class="form-control" id="document_type" name="document_type" placeholder="documentType" [(ngModel)]="documentSelected.document_type">
+               </div>
+            </div>
+            <div class="form-group row">
+               <label for="user" class="col-4 col-form-label">user</label>
+               <div class="col-8">
+                  <input type="text" class="form-control" id="user" name="user" placeholder="user" [(ngModel)]="documentSelected.user">
                </div>
             </div>
          </div>

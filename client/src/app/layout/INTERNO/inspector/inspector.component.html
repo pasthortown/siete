@@ -127,10 +127,6 @@
     <ck-editor id="notes" name="notes" skin="moono-lisa" [(ngModel)]="report.background"></ck-editor>
   </div>
   <div class="col-12 mt-3 mb-2">
-    <label class="col-form-label">Acciones Realizadas</label>
-    <ck-editor id="notes" name="notes" skin="moono-lisa" [(ngModel)]="report.actions_done"></ck-editor>
-  </div>
-  <div class="col-12 mt-3 mb-2">
     <label class="col-form-label">Conclusiones</label>
     <ck-editor id="notes" name="notes" skin="moono-lisa" [(ngModel)]="report.conclution"></ck-editor>
   </div>
@@ -139,10 +135,15 @@
     <ck-editor id="notes" name="notes" skin="moono-lisa" [(ngModel)]="report.recomendation"></ck-editor>
   </div>
   <div class="col-12 mt-3 mb-2">
+    <label class="col-form-label">Coordinador Zonal</label>
+    <input type="text" class="form-control" id="cordinadorZonal"
+    name="cordinadorZonal" placeholder="Nombre del Cordinador Zonal al que se dirije el Informe de la Inspección" [(ngModel)]="coordinadorZonal"/>
+  </div>
+  <div class="col-12 mt-3 mb-2">
     <label>Informe de Inspección</label>
     <div class="input-group mb-3">
       <div class="input-group-prepend">
-        <button type="button" class="btn btn-secondary" title="Imprimir Informe" (click)="imprimirInforme()"><i class="fas fa-print"></i></button>
+        <button type="button" [disabled]="imprimiendo_informe" class="btn btn-secondary" title="Imprimir Informe" (click)="imprimirInforme()"><i class="fas fa-print"></i></button>
         <button type="button" [disabled]="!validateInformeFile()" class="btn btn-secondary" title="Descargar Informe Cargado" (click)="descargarInforme()"><i class="fas fa-download"></i></button>
         <button type="button" [disabled]="!validateInformeFile()" class="btn btn-danger" title="Borrar Informe Cargado" (click)="borrarInforme()"><i class="fas fa-trash"></i></button>
       </div>

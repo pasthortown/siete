@@ -6,4 +6,5 @@ export class Document {
    activity: String;
    zonal: String;
    document_type: String;
+   user: String;
 }

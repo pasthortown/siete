@@ -85,9 +85,9 @@ export class DocumentComponent implements OnInit {
    toCSV() {
       this.documentDataService.get().then( r => {
          const backupData = r as Document[];
-         let output = 'id;params;code;procedure_id;activity;zonal;document_type\n';
+         let output = 'id;params;code;procedure_id;activity;zonal;document_type;user\n';
          backupData.forEach(element => {
-            output += element.id; + element.params + ';' + element.code + ';' + element.procedure_id + ';' + element.activity + ';' + element.zonal + ';' + element.document_type + '\n';
+            output += element.id; + element.params + ';' + element.code + ';' + element.procedure_id + ';' + element.activity + ';' + element.zonal + ';' + element.document_type + ';' + element.user + '\n';
          });
          const blob = new Blob([output], { type: 'text/plain' });
          const fecha = new Date();
