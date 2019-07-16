@@ -1358,6 +1358,7 @@ export class InspectorComponent implements OnInit {
             }
             document.procedure_id = 'REGISTRO';
             document.zonal = zonal.name;
+            document.user = iniciales_tecnico_zonal;
             document.params = JSON.stringify(paramsToBuild);
             this.documentDataService.post(document).then().catch( e => { console.log(e); });
 
@@ -1608,6 +1609,7 @@ export class InspectorComponent implements OnInit {
               }
               document.procedure_id = 'REGISTRO';
               document.zonal = zonal.name;
+              document.user = iniciales_tecnico_zonal;
               document.params = JSON.stringify(paramsToBuild);
               this.documentDataService.post(document).then().catch( e => { console.log(e); });
               this.exporterDataService.getPDFNormativa(requisites, capacities, tariffs, personal, r2.establishment.address_map_latitude, r2.establishment.address_map_longitude, true, qr_value, params).then( r => {
