@@ -1616,8 +1616,16 @@ export class InspectorComponent implements OnInit {
               document.params = JSON.stringify(paramsToBuild);
               this.documentDataService.post(document).then().catch( e => { console.log(e); });
               const complementary_services = [];
-              console.log(r0);
-              console.log(r2);
+              r0.complementary_service_foods_on_register.forEach(element => {
+                 let complementary_service_food_type = '';
+                 this.complementaryServiceFoodTypes.forEach(ct => {
+                    if (ct.id == element.complementary_service_food_type_id) {
+                     complementary_service_food_type = ct.name.toString();
+                    }
+                 });
+                 const newComplementaryService = {type: complementary_service_food_type, tables: element.quantity_tables, spaces: element.quantity_chairs};
+                 complementary_services.push(newComplementaryService);
+              });
               this.exporterDataService.getPDFNormativa(requisites, capacities, tariffs, complementary_services, personal, r2.establishment.address_map_latitude, r2.establishment.address_map_longitude, true, qr_value, params).then( r => {
                const byteCharacters = atob(r);
                const byteNumbers = new Array(byteCharacters.length);
