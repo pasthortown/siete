@@ -135,11 +135,11 @@ class ExporterController extends Controller
     $pageContent = '<table style="width: 100%; border: 1px solid black; border-collapse: collapse; text-align: left;">';
     $pageContent .= '<tr style="background-color:yellow; font-size:14px;"><th style="border: 1px solid black;">Código</th><th style="border: 1px solid black;">Descripción</th><th style="border: 1px solid black;">Usuario</th><th style="border: 1px solid black;">Verificación</th></tr>';
     foreach ($requisites as $requisite) {
-      $mandatory = '*';
+      $mandatory = ' (obligatorio) ';
       if ($requisite['mandatory'] == true) {
-        $mandatory = '*';
+        $mandatory = ' (obligatorio) ';
       } else {
-        $mandatory = '-';
+        $mandatory = ' (no obligatorio) ';
       }
       if ($requisite['HTMLtype'] == 'GRUPO 0') {
         $pageContent .= '<tr style="background-color:yellow;"><td></td><th style="border: 1px solid black; font-size: 16px;" colspan="3">'. $requisite['requisite_name']. $mandatory .'</th></tr>';
@@ -191,11 +191,11 @@ class ExporterController extends Controller
       $pageContent .= '<tr style="background-color:yellow; font-size:14px;"><th style="border: 1px solid black;">Código</th><th style="border: 1px solid black;">Descripción</th><th style="border: 1px solid black;">Usuario</th><th style="border: 1px solid black;">Verificación</th></tr>';
       for($i = $currIndex ; $i < sizeof($requisites) ; $i++) {
         $requisite = $requisites[$i];
-        $mandatory = '*';
+        $mandatory = ' (obligatorio) ';
         if ($requisite['mandatory'] == true) {
-          $mandatory = '*';
+          $mandatory = ' (obligatorio) ';
         } else {
-          $mandatory = '';
+          $mandatory = ' (no obligatorio) ';
         }
         if ($requisite['HTMLtype'] == 'GRUPO 0') {
           $pageContent .= '<tr style="background-color:yellow;"><td></td><th style="border: 1px solid black; font-size: 16px;" colspan="3">'. $requisite['requisite_name']. $mandatory .'</th></tr>';
