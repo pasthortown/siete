@@ -69,6 +69,20 @@ class DocumentController extends Controller
        return response()->json($document,200);
     }
 
+    function get_doc_id(Request $data) {
+      $result = $data->json()->all();
+      $preview_document = Document::where('code', $result['code'])->first();
+      if ($preview_document) {
+         return $preview_document->id;
+      }
+      $lastDocument = Document::orderBy('id')->get()->last();
+      if($lastDocument) {
+         return $lastDocument->id + 1;
+      } else {
+         return 1;
+      }
+    }
+
     function put(Request $data)
     {
        try{
