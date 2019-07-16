@@ -1366,15 +1366,15 @@ export class InspectorComponent implements OnInit {
    
             this.exporterDataService.template(11, true, qr_value, params).then( r => {
                const byteCharacters = atob(r);
-                        const byteNumbers = new Array(byteCharacters.length);
-                        for (let i = 0; i < byteCharacters.length; i++) {
-                           byteNumbers[i] = byteCharacters.charCodeAt(i);
-                        }
-                        const byteArray = new Uint8Array(byteNumbers);
-                        const blob = new Blob([byteArray], { type: 'application/pdf'});
-                        saveAs(blob, qr_value + '.pdf');
-                        this.please_wait_requisites = false;
-                        this.imprimiendo_informe = false;
+               const byteNumbers = new Array(byteCharacters.length);
+               for (let i = 0; i < byteCharacters.length; i++) {
+                  byteNumbers[i] = byteCharacters.charCodeAt(i);
+               }
+               const byteArray = new Uint8Array(byteNumbers);
+               const blob = new Blob([byteArray], { type: 'application/pdf'});
+               saveAs(blob, qr_value + '.pdf');
+               this.please_wait_requisites = false;
+               this.imprimiendo_informe = false;
             }).catch( e => { console.log(e); });
          }).catch( e => { console.log(e); });
       }).catch( e => { console.log(e); });
@@ -2800,59 +2800,98 @@ guardarDeclaracion() {
       this.guardarRecepcionRoom(r.id);
       this.guardarCertificadoUsoSuelos();
       const today = new Date();
-      let clasificacion: String = '';
-      let categoria: String = '';
-      this.categories_registers.forEach(categorie_register => {
-         if (categorie_register.id == this.rucEstablishmentRegisterSelected.register_type_id) {
-            categoria = categorie_register.name;
-         }
-      });
-      this.clasifications_registers.forEach(clasification_register => {
-         if (clasification_register.code == this.categorySelectedCode) {
-            clasificacion = clasification_register.name;
-         }
-      });
-      let provinciaName: String = '';
-      this.provinciasEstablishment.forEach(element => {
-         if (element.code == this.provinciaEstablishmentSelectedCode) {
-            provinciaName = element.name;
-         }
-      });
-      let cantonName: String = '';
-      this.cantonesEstablishment.forEach(element => {
-         if (element.code == this.cantonEstablishmentSelectedCode) {
-            cantonName = element.name;
-         }
-      });
-      let parroquiaName: String = '';
-      this.parroquiasEstablishment.forEach(element => {
+      const tipo_tramite = 'REGISTRO';
+      const actividad = 'ALOJAMIENTO';
+      let provincia = new Ubication();
+      let canton = new Ubication();
+      let parroquia = new Ubication();
+      let zonal = new Ubication();
+      let iniciales_cordinacion_zonal = '';
+      this.ubications.forEach(element => {
          if (element.id == this.establishment_selected.ubication_id) {
-            parroquiaName = element.name;
+         parroquia = element;
          }
       });
-      const information = {
-         para: this.user.name,
-         tramite: 'Registro',
-         ruc: this.user.ruc,
-         nombreComercial: this.establishment_selected.commercially_known_name,
-         fechaSolicitud: today.toLocaleString(),
-         actividad: 'Alojamiento Turístico',
-         clasificacion: clasificacion,
-         categoria: categoria,
-         tipoSolicitud: 'Registro',
-         provincia: provinciaName,
-         canton: cantonName,
-         parroquia: parroquiaName,
-         callePrincipal: this.establishment_selected.address_main_street,
-         calleInterseccion: this.establishment_selected.address_secondary_street,
-         numeracion: this.establishment_selected.address_number,
-         thisYear:today.getFullYear()
-      };
-      this.mailerDataService.sendMail('mail', this.user.email.toString(), 'Información de Detalle de Solicitud', information).then( r => {
-         this.guardando = false;
-         this.refresh();
-         this.toastr.successToastr('Solicitud de Registro Enviada, Satisfactoriamente.', 'Nuevo');
-         this.router.navigate(['/main']);
+      this.ubications.forEach(element => {
+         if (element.code == parroquia.father_code) {
+         canton = element;
+         }
+      });
+      this.ubications.forEach(element => {
+         if (element.code == canton.father_code) {
+         provincia = element;
+         }
+      });
+      this.ubications.forEach(element => {
+         if (element.code == provincia.father_code) {
+         zonal = element;
+         }
+      });
+      let clasificacion = '';
+      this.clasifications_registers.forEach(element => {
+         if (element.code == this.categorySelectedCode) {
+            clasificacion = element.name.toString();
+         }
+      });
+      let categoria = '';
+      this.categories_registers.forEach(element => {
+         if (element.id == this.rucEstablishmentRegisterSelected.register_type_id) {
+            categoria = element.name.toString();
+         }
+      });
+      const zonalName = zonal.name.split(' ');
+      iniciales_cordinacion_zonal = zonalName[zonalName.length - 1].toUpperCase();
+      let qr_value = 'MT-CZ' + iniciales_cordinacion_zonal + '-' + this.ruc_registro_selected.ruc.number + '-SOLICITUD-ALOJAMIENTO-' + today.getDate() + '-' + (today.getMonth() + 1) + '-' + today.getFullYear();
+      const params = [{tipo_tramite: tipo_tramite},
+         {fecha: today.toLocaleDateString().toUpperCase()},
+         {representante_legal: this.user.name.toUpperCase()},
+         {nombre_comercial: this.establishment_selected.commercially_known_name.toUpperCase()},
+         {ruc: this.ruc_registro_selected.ruc.number},
+         {fecha_solicitud: today.toLocaleDateString().toUpperCase()},
+         {actividad: actividad},
+         {clasificacion: clasificacion.toUpperCase()},
+         {categoria: categoria.toUpperCase()},
+         {provincia: provincia.name.toUpperCase()},
+         {canton: canton.name.toUpperCase()},
+         {parroquia: parroquia.name.toUpperCase()},
+         {calle_principal: this.establishment_selected.address_main_street.toUpperCase()},
+         {numeracion: this.establishment_selected.address_number.toUpperCase()},
+         {calle_secundaria: this.establishment_selected.address_secondary_street.toUpperCase()}];
+      this.exporterDataService.template(10, true, qr_value, params).then( r => {
+         let pdfBase64 = r;
+         const byteCharacters = atob(r);
+         const byteNumbers = new Array(byteCharacters.length);
+         for (let i = 0; i < byteCharacters.length; i++) {
+            byteNumbers[i] = byteCharacters.charCodeAt(i);
+         }
+         const byteArray = new Uint8Array(byteNumbers);
+         const blob = new Blob([byteArray], { type: 'application/pdf'});
+         saveAs(blob, qr_value + '.pdf');
+         const information = {
+            para: this.user.name,
+            tramite: 'Registro',
+            ruc: this.user.ruc,
+            nombreComercial: this.establishment_selected.commercially_known_name,
+            fechaSolicitud: today.toLocaleString(),
+            actividad: 'Alojamiento Turístico',
+            clasificacion: clasificacion,
+            categoria: categoria,
+            tipoSolicitud: 'Registro',
+            provincia: provincia.name.toUpperCase(),
+            canton: canton.name.toUpperCase(),
+            parroquia: parroquia.name.toUpperCase(),
+            callePrincipal: this.establishment_selected.address_main_street,
+            calleInterseccion: this.establishment_selected.address_secondary_street,
+            numeracion: this.establishment_selected.address_number,
+            thisYear: today.getFullYear(),
+            pdfBase64: pdfBase64,
+         };
+         this.mailerDataService.sendMail('mail', this.user.email.toString(), 'Información de Detalle de Solicitud', information).then( r => {
+            this.guardando = false;
+            this.refresh();
+            this.toastr.successToastr('Solicitud de Registro Enviada, Satisfactoriamente.', 'Nuevo');
+            this.router.navigate(['/main']);
+         }).catch( e => { console.log(e); });
       }).catch( e => { console.log(e); });
    }).catch( e => {
       this.guardando = false;

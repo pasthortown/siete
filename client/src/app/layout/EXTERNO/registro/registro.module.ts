@@ -51,6 +51,8 @@ import { DeclarationService } from 'src/app/services/CRUD/FINANCIERO/declaration
 import { Ng2TableModule } from 'ng2-table/ng2-table';
 
 import { ScrollToModule } from '@nicky-lenaers/ngx-scroll-to';
+import { DocumentService } from 'src/app/services/CRUD/EXPORTER/document.service';
+import { ExporterService } from 'src/app/services/negocio/exporter.service';
 
 @NgModule({
   imports: [CommonModule,
@@ -81,6 +83,8 @@ import { ScrollToModule } from '@nicky-lenaers/ngx-scroll-to';
     MailerService,
     UbicationService,
     RegisterService,
+    ExporterService,
+    DocumentService,
     CapacityTypeService,
     EstablishmentCertificationAttachmentService,
     EstablishmentPictureService,
