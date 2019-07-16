@@ -1323,56 +1323,59 @@ export class InspectorComponent implements OnInit {
             resultado_aprobacion = 'PRÓRROGA DE 6 MESES';
          }
          const meses = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
-         const params = [{codigo_informe: qr_value},
-            {canton: canton.name.toUpperCase()},
-            {fecha: today.toLocaleDateString().toUpperCase()},
-            {nombre_coordinador_zonal: this.coordinadorZonal.toUpperCase()},
-            {actividad: actividad},
-            {nombre_comercial: r2.establishment.commercially_known_name.toUpperCase()},
-            {dia: today.getDate()},
-            {mes: meses[today.getMonth()].toUpperCase()},
-            {year: today.getFullYear()},
-            {ruc: this.ruc_registro_selected.ruc.number.toUpperCase()},
-            {provincia: provincia.name.toUpperCase()},
-            {fecha_solicitud: (new Date(r0.register.updated_at.toString())).toLocaleDateString().toUpperCase()},
-            {parroquia: parroquia.name.toUpperCase()},
-            {actividad: actividad},
-            {clasificacion: clasificacion.toUpperCase()},
-            {fecha_inspeccion: this.registerApprovalInspector.date_fullfill.toString()},
-            {categoria: r0.register_category.name.toUpperCase()},
-            {calle_principal: r2.establishment.address_main_street.toUpperCase()},            
-            {numeracion: r2.establishment.address_number.toUpperCase()},
-            {calle_secundaria: r2.establishment.address_secondary_street.toUpperCase()},
-            {resultado_aprobacion: resultado_aprobacion},
-            {identificacion: this.user.identification.toUpperCase()},
-            {conclusiones: this.report.conclution},
-            {recomendaciones: this.report.recomendation},
-            {nombre_tecnico_Zonal: this.user.name.toUpperCase()},
-            {zonal: iniciales_cordinacion_zonal.toUpperCase()}];
-            let document = new Documento();
-            document.activity = 'ALOJAMIENTO';
-            document.code = qr_value;
-            document.document_type = 'INFORME';
-            let paramsToBuild = {
-               template: 11, qr: true, qr_value: qr_value, params: params
-            }
-            document.procedure_id = 'REGISTRO';
-            document.zonal = zonal.name;
-            document.user = iniciales_tecnico_zonal;
-            document.params = JSON.stringify(paramsToBuild);
-            this.documentDataService.post(document).then().catch( e => { console.log(e); });
-
-         this.exporterDataService.template(11, true, qr_value, params).then( r => {
-            const byteCharacters = atob(r);
-                     const byteNumbers = new Array(byteCharacters.length);
-                     for (let i = 0; i < byteCharacters.length; i++) {
-                        byteNumbers[i] = byteCharacters.charCodeAt(i);
-                     }
-                     const byteArray = new Uint8Array(byteNumbers);
-                     const blob = new Blob([byteArray], { type: 'application/pdf'});
-                     saveAs(blob, qr_value + '.pdf');
-                     this.please_wait_requisites = false;
-                     this.imprimiendo_informe = false;
+         this.documentDataService.get_doc_id(qr_value).then( respuesta => {
+            const codigo_informe = 'MT-CZ' + iniciales_cordinacion_zonal + '-' + iniciales_tecnico_zonal + '-' + today.getFullYear() + '-' + respuesta.toString();
+            const params = [{codigo_informe: codigo_informe},
+               {canton: canton.name.toUpperCase()},
+               {fecha: today.toLocaleDateString().toUpperCase()},
+               {nombre_coordinador_zonal: this.coordinadorZonal.toUpperCase()},
+               {actividad: actividad},
+               {nombre_comercial: r2.establishment.commercially_known_name.toUpperCase()},
+               {dia: today.getDate()},
+               {mes: meses[today.getMonth()].toUpperCase()},
+               {year: today.getFullYear()},
+               {ruc: this.ruc_registro_selected.ruc.number.toUpperCase()},
+               {provincia: provincia.name.toUpperCase()},
+               {fecha_solicitud: (new Date(r0.register.updated_at.toString())).toLocaleDateString().toUpperCase()},
+               {parroquia: parroquia.name.toUpperCase()},
+               {actividad: actividad},
+               {clasificacion: clasificacion.toUpperCase()},
+               {fecha_inspeccion: this.registerApprovalInspector.date_fullfill.toString()},
+               {categoria: r0.register_category.name.toUpperCase()},
+               {calle_principal: r2.establishment.address_main_street.toUpperCase()},            
+               {numeracion: r2.establishment.address_number.toUpperCase()},
+               {calle_secundaria: r2.establishment.address_secondary_street.toUpperCase()},
+               {resultado_aprobacion: resultado_aprobacion},
+               {identificacion: this.user.identification.toUpperCase()},
+               {conclusiones: this.report.conclution},
+               {recomendaciones: this.report.recomendation},
+               {nombre_tecnico_Zonal: this.user.name.toUpperCase()},
+               {zonal: iniciales_cordinacion_zonal.toUpperCase()}];
+               let document = new Documento();
+               document.activity = 'ALOJAMIENTO';
+               document.code = qr_value;
+               document.document_type = 'INFORME';
+               let paramsToBuild = {
+                  template: 11, qr: true, qr_value: qr_value, params: params
+               }
+               document.procedure_id = 'REGISTRO';
+               document.zonal = zonal.name;
+               document.user = iniciales_tecnico_zonal;
+               document.params = JSON.stringify(paramsToBuild);
+               this.documentDataService.post(document).then().catch( e => { console.log(e); });
+   
+            this.exporterDataService.template(11, true, qr_value, params).then( r => {
+               const byteCharacters = atob(r);
+                        const byteNumbers = new Array(byteCharacters.length);
+                        for (let i = 0; i < byteCharacters.length; i++) {
+                           byteNumbers[i] = byteCharacters.charCodeAt(i);
+                        }
+                        const byteArray = new Uint8Array(byteNumbers);
+                        const blob = new Blob([byteArray], { type: 'application/pdf'});
+                        saveAs(blob, qr_value + '.pdf');
+                        this.please_wait_requisites = false;
+                        this.imprimiendo_informe = false;
+            }).catch( e => { console.log(e); });
          }).catch( e => { console.log(e); });
       }).catch( e => { console.log(e); });
    }).catch( e => { console.log(e); });
@@ -1612,7 +1615,10 @@ export class InspectorComponent implements OnInit {
               document.user = iniciales_tecnico_zonal;
               document.params = JSON.stringify(paramsToBuild);
               this.documentDataService.post(document).then().catch( e => { console.log(e); });
-              this.exporterDataService.getPDFNormativa(requisites, capacities, tariffs, personal, r2.establishment.address_map_latitude, r2.establishment.address_map_longitude, true, qr_value, params).then( r => {
+              const complementary_services = [];
+              console.log(r0);
+              console.log(r2);
+              this.exporterDataService.getPDFNormativa(requisites, capacities, tariffs, complementary_services, personal, r2.establishment.address_map_latitude, r2.establishment.address_map_longitude, true, qr_value, params).then( r => {
                const byteCharacters = atob(r);
                const byteNumbers = new Array(byteCharacters.length);
                for (let i = 0; i < byteCharacters.length; i++) {

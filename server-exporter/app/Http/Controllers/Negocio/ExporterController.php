@@ -55,6 +55,18 @@ class ExporterController extends Controller
     return $html_content;
   }
 
+  protected function build_table_complementary_services($complementary_services) {
+    $html_content = '<table style="width: 100%; border: 1px solid black; border-collapse: collapse; text-align: left; font-size:14px;">';
+    $html_content .= '<tr style="background-color:yellow;"><th colspan="5" style="border: 1px solid black; text-align: center;">SERVICIOS COMPLEMENTARIOS</th></tr>';
+    $html_content .= '<tr style="background-color:yellow; text-align: center;"><th style="border: 1px solid black;"></th><th style="border: 1px solid black;" colspan="2">INFORMACIÓN USUARIO</th><th style="border: 1px solid black;" colspan="2">INFORMACIÓN TÉCNICO ZONAL</th></tr>';
+    $html_content .= '<tr style="background-color:yellow;"><th style="border: 1px solid black;">TIPO DE SERVICIO</th><th style="border: 1px solid black;">MESAS</th><th style="border: 1px solid black;">PLAZAS</th><th style="border: 1px solid black;">MESAS</th><th style="border: 1px solid black;">PLAZAS</th></tr>';
+    foreach($complementary_services as $complementary_service) {
+      $html_content .= '<tr><th style="border: 1px solid black;">' . $complementary_service['type'] . '</th><td style="border: 1px solid black; text-align:center;">' . $complementary_service['tables'] . '</td><td style="border: 1px solid black; text-align:center;">' . $complementary_service['spaces'] . '</td><td style="border: 1px solid black;"></td><td style="border: 1px solid black;"></td></tr>';
+    }
+    $html_content .= '</table>';
+    return $html_content;
+  }
+
   protected function build_table_personal($personal) {
     $html_content = '<table style="width: 100%; border: 1px solid black; border-collapse: collapse; text-align: left; font-size:14px;">';
     $html_content .= '<tr style="background-color:yellow;"><th colspan="4" style="border: 1px solid black; text-align: center;">PERSONAL DEL ESTABLECIMIENTO</th></tr>';
@@ -296,6 +308,8 @@ class ExporterController extends Controller
     $html_content .= $this->build_table_capacidades($request['capacities']);
     $html_content .= '<br/><br/>';
     $html_content .= $this->build_table_tarifario($request['tariffs']);
+    $html_content .= '<br/><br/>';
+    $html_content .= $this->build_table_complementary_services($request['complementary_services']);
     $html_content .= '<br/><br/>';
     $html_content .= $this->build_table_personal($request['personal']);
     $html_content .= '<br/><br/>';

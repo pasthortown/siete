@@ -17,6 +17,14 @@ export class DocumentService {
       this.options.headers.append('api_token', sessionStorage.getItem('api_token'));
    }
 
+
+   get_doc_id(code: string): Promise<any> {
+      return this.http.post(this.url + 'id', JSON.stringify({code: code}), this.options).toPromise()
+      .then( r => {
+         return r.json();
+      }).catch( error => { this.handledError(error.json()); });
+   }
+
    get(id?: number): Promise<any> {
       if (typeof id === 'undefined') {
          return this.http.get(this.url, this.options).toPromise()

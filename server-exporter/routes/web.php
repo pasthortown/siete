@@ -44,4 +44,5 @@ $router->group(['middleware' => ['auth']], function () use ($router) {
    $router->put('/document', ['uses' => 'DocumentController@put']);
    $router->delete('/document', ['uses' => 'DocumentController@delete']);
    $router->post('/document/masive_load', ['uses' => 'DocumentController@masiveLoad']);
+   $router->post('/document/id', ['uses' => 'DocumentController@get_doc_id']);
 });

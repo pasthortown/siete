@@ -2519,56 +2519,10 @@ export class CoordinadorComponent implements OnInit {
   }
 
   descargarRequisitos() {
-     /*this.downloadFile(
+     this.downloadFile(
       this.requisitosApprovalStateAttachment.approval_state_attachment_file,
       this.requisitosApprovalStateAttachment.approval_state_attachment_file_type,
-      this.requisitosApprovalStateAttachment.approval_state_attachment_file_name);*/
-      const capacities = [];
-      this.rucEstablishmentRegisterSelected.capacities_on_register.forEach(capacity => {
-         const newCapacity = {type: '', beds: 0, spaces: 0};
-         newCapacity.beds = capacity.quantity;
-         newCapacity.spaces = capacity.max_spaces;
-         this.allowed_capacity_types.forEach(element => {
-            if (element.id == capacity.capacity_type_id) {
-               newCapacity.type = element.name.toString();
-            }
-         });
-         capacities.push(newCapacity);
-      });
-      const tariffs = [];
-      this.tarifarioRack.valores.forEach(tariff => {
-         const newTariff = {type: '', habitacion_alta: 0, habitacion_baja: 0, persona_alta: 0, persona_baja: 0 };
-         this.allowed_capacity_types.forEach(element => {
-            if (element.id == tariff.idTipoCapacidad) {
-               newTariff.type = element.name.toString();
-            }
-         });
-         tariff.tariffs.forEach(element => {
-            if (element.tariff.tariff_type_id == 3) {
-               newTariff.habitacion_baja = element.tariff.price;
-            }
-            if (element.tariff.tariff_type_id == 5) {
-               newTariff.habitacion_alta = element.tariff.price;
-            }
-            if (element.tariff.tariff_type_id == 4) {
-               newTariff.persona_baja = element.tariff.price;
-            }
-            if (element.tariff.tariff_type_id == 6) {
-               newTariff.persona_alta = element.tariff.price;
-            }
-         });
-         tariffs.push(newTariff);
-      });
-      this.exporterDataService.getPDFNormativa(this.rucEstablishmentRegisterSelected.requisites, capacities, tariffs, this.establishment_selected.workers_on_establishment, this.establishment_selected.address_map_latitude, this.establishment_selected.address_map_longitude).then( r => {
-         const byteCharacters = atob(r);
-         const byteNumbers = new Array(byteCharacters.length);
-         for (let i = 0; i < byteCharacters.length; i++) {
-            byteNumbers[i] = byteCharacters.charCodeAt(i);
-         }
-         const byteArray = new Uint8Array(byteNumbers);
-         const blob = new Blob([byteArray], { type: 'application/pdf'});
-         saveAs(blob, 'checklist.pdf');
-      }).catch( e => { console.log(e); });
+      this.requisitosApprovalStateAttachment.approval_state_attachment_file_name);
   }
 
   getCapacityTypes() {
