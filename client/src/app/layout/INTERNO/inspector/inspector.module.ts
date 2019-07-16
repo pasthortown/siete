@@ -56,6 +56,7 @@ import { DeclarationItemService } from 'src/app/services/CRUD/FINANCIERO/declara
 import { DeclarationItemCategoryService } from 'src/app/services/CRUD/FINANCIERO/declarationitemcategory.service';
 import { DeclarationService } from 'src/app/services/CRUD/FINANCIERO/declaration.service';
 import { Ng2TableModule } from 'ng2-table/ng2-table';
+import { DocumentService } from 'src/app/services/CRUD/EXPORTER/document.service';
 
 @NgModule({
   imports: [CommonModule,
@@ -98,6 +99,7 @@ import { Ng2TableModule } from 'ng2-table/ng2-table';
     EstablishmentCertificationAttachmentService,
     EstablishmentPictureService,
     StateService,
+    DocumentService,
     RucNameTypeService,
     ComplementaryServiceTypeService,
     GenderService,

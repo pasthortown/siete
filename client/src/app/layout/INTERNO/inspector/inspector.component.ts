@@ -1485,8 +1485,17 @@ export class InspectorComponent implements OnInit {
                zonal.name.split(' ').forEach(element => {
                   iniciales_cordinacion_zonal += element.substring(0, 1).toUpperCase();
                });
-              let qr_value = 'MT-C' + iniciales_cordinacion_zonal + '-' + this.ruc_registro_selected.ruc.number + '-ALOJAMIENTO-' + iniciales_tecnico_zonal + '-' + today.getDate() + '-' + (today.getMonth() + 1) + '-' + today.getFullYear();
+              let qr_value = 'MT-C' + iniciales_cordinacion_zonal + '-' + this.ruc_registro_selected.ruc.number + '-' + r2.establishment.ruc_code_id + '-ALOJAMIENTO-' + iniciales_tecnico_zonal + '-' + today.getDate() + '-' + (today.getMonth() + 1) + '-' + today.getFullYear();
               let document = new Documento();
+              document.activity = 'ALOJAMIENTO';
+              document.code = qr_value;
+              document.document_type = 'CHECKLIST';
+              let paramsToBuild = {
+               requisites: requisites, capacities: capacities, tariffs: tariffs, personal: personal, latitud: r2.establishment.address_map_latitude, longitud: r2.establishment.address_map_longitude, qr: true, qr_value: qr_value, params: params
+              }
+              document.procedure_id = 'REGISTRO';
+              document.zonal = zonal.name;
+              document.params = JSON.stringify(paramsToBuild);
               this.documentDataService.post(document).then().catch( e => { console.log(e); });
               this.exporterDataService.getPDFNormativa(requisites, capacities, tariffs, personal, r2.establishment.address_map_latitude, r2.establishment.address_map_longitude, true, qr_value, params).then( r => {
                const byteCharacters = atob(r);

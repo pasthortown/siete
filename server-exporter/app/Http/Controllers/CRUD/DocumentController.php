@@ -34,20 +34,32 @@ class DocumentController extends Controller
        try{
           DB::beginTransaction();
           $result = $data->json()->all();
-          $document = new Document();
-          $lastDocument = Document::orderBy('id')->get()->last();
-          if($lastDocument) {
-             $document->id = $lastDocument->id + 1;
+          $preview_document = Document::where('code', $result['code'])->first();
+          if ($preview_document) {
+            $document = Document::where('code', $result['code'])->update([
+               'params'=>$result['params'],
+               'code'=>$result['code'],
+               'procedure_id'=>$result['procedure_id'],
+               'activity'=>$result['activity'],
+               'zonal'=>$result['zonal'],
+               'document_type'=>$result['document_type'],
+            ]);
           } else {
-             $document->id = 1;
+            $document = new Document();
+            $lastDocument = Document::orderBy('id')->get()->last();
+            if($lastDocument) {
+               $document->id = $lastDocument->id + 1;
+            } else {
+               $document->id = 1;
+            }
+            $document->params = $result['params'];
+            $document->code = $result['code'];
+            $document->procedure_id = $result['procedure_id'];
+            $document->activity = $result['activity'];
+            $document->zonal = $result['zonal'];
+            $document->document_type = $result['document_type'];
+            $document->save();
           }
-          $document->params = $result['params'];
-          $document->code = $result['code'];
-          $document->procedure_id = $result['procedure_id'];
-          $document->activity = $result['activity'];
-          $document->zonal = $result['zonal'];
-          $document->document_type = $result['document_type'];
-          $document->save();
           DB::commit();
        } catch (Exception $e) {
           return response()->json($e,400);
