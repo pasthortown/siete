@@ -139,9 +139,8 @@ class ExporterController extends Controller
       if ($requisite['mandatory'] == true) {
         $mandatory = '*';
       } else {
-        $mandatory = '';
+        $mandatory = '-';
       }
-      $mandatory = str($requisite['mandatory']);
       if ($requisite['HTMLtype'] == 'GRUPO 0') {
         $pageContent .= '<tr style="background-color:yellow;"><td></td><th style="border: 1px solid black; font-size: 16px;" colspan="3">'. $requisite['requisite_name']. $mandatory .'</th></tr>';
       }
