@@ -273,7 +273,7 @@ class ExporterController extends Controller
     try {
       $longitud = $request['longitud'];
     } catch (Exception $e) {
-      $longitud = -78.5063691;
+      $longitud = -78.506369;
     }
     $html_content .= '<tr><td style="text-align:center; border: 1px solid black;"><img style="margin:10px;" src="data:image/png;base64,'.$this->qrcodelocation($latitud,$longitud).'"/></td><td colspan="8" style="border: 1px solid black;"></td></tr>';
     $html_content .= '</table>';
