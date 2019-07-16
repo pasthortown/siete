@@ -139,25 +139,25 @@ class ExporterController extends Controller
       if ($requisite['mandatory'] == true) {
         $mandatory = ' (obligatorio) ';
       } else {
-        $mandatory = ' (no obligatorio) ';
+        $mandatory = '';
       }
       if ($requisite['HTMLtype'] == 'GRUPO 0') {
-        $pageContent .= '<tr style="background-color:yellow;"><td></td><th style="border: 1px solid black; font-size: 16px;" colspan="3">'. $requisite['requisite_name']. $mandatory .'</th></tr>';
+        $pageContent .= '<tr style="background-color:yellow;"><td></td><th style="border: 1px solid black; font-size: 16px;" colspan="3">'. $requisite['requisite_name'].'</th></tr>';
       }
       if ($requisite['HTMLtype'] == 'GRUPO 1') {
-        $pageContent .= '<tr style="background-color:LightGray;"><td></td><th style="border: 1px solid black; font-size: 16px;" colspan="3">'. $requisite['requisite_name']. $mandatory .'</th></tr>';
+        $pageContent .= '<tr style="background-color:LightGray;"><td></td><th style="border: 1px solid black; font-size: 16px;" colspan="3">'. $requisite['requisite_name'].'</th></tr>';
       }
       if ($requisite['HTMLtype'] == 'GRUPO 2') {
-        $pageContent .= '<tr style="background-color:LightGray;"><td></td><th style="border: 1px solid black; font-size: 16px;" colspan="3">'. $requisite['requisite_name']. $mandatory .'</th></tr>';
+        $pageContent .= '<tr style="background-color:LightGray;"><td></td><th style="border: 1px solid black; font-size: 16px;" colspan="3">'. $requisite['requisite_name'].'</th></tr>';
       }
       if ($requisite['HTMLtype'] == 'GRUPO 3') {
-        $pageContent .= '<tr style="background-color:LightGray;"><td></td><th style="border: 1px solid black; font-size: 16px;" colspan="3">'. $requisite['requisite_name']. $mandatory .'</th></tr>';
+        $pageContent .= '<tr style="background-color:LightGray;"><td></td><th style="border: 1px solid black; font-size: 16px;" colspan="3">'. $requisite['requisite_name'].'</th></tr>';
       }
       if ($requisite['HTMLtype'] == 'GRUPO 4') {
-        $pageContent .= '<tr style="background-color:LightGray;"><td></td><th style="border: 1px solid black; font-size: 16px;" colspan="3">'. $requisite['requisite_name']. $mandatory .'</th></tr>';
+        $pageContent .= '<tr style="background-color:LightGray;"><td></td><th style="border: 1px solid black; font-size: 16px;" colspan="3">'. $requisite['requisite_name'].'</th></tr>';
       }
       if ($requisite['HTMLtype'] == 'GRUPO 5') {
-        $pageContent .= '<tr style="background-color:LightGray;"><td></td><th style="border: 1px solid black; font-size: 16px;" colspan="3">'. $requisite['requisite_name']. $mandatory .'</th></tr>';
+        $pageContent .= '<tr style="background-color:LightGray;"><td></td><th style="border: 1px solid black; font-size: 16px;" colspan="3">'. $requisite['requisite_name'].'</th></tr>';
       }
       if ($requisite['HTMLtype'] == 'TRUE / FALSE') {
         $cumple = "CUMPLE";
@@ -166,7 +166,7 @@ class ExporterController extends Controller
         } else {
           $cumple = "NO CUMPLE";
         }
-        $pageContent .= '<tr><th style="border: 1px solid black; font-size: 14px;">' . $requisite['requisite_id'] . '</th><td style="border: 1px solid black; font-size: 14px;">'. $requisite['requisite_name'] .'</td><td style="border: 1px solid black; font-size: 14px; text-align:center;">' . $cumple . '</td><td style="border: 1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>';
+        $pageContent .= '<tr><th style="border: 1px solid black; font-size: 14px;">' . $requisite['requisite_id'] . '</th><td style="border: 1px solid black; font-size: 14px;">'. $requisite['requisite_name']. $mandatory .'</td><td style="border: 1px solid black; font-size: 14px; text-align:center;">' . $cumple . '</td><td style="border: 1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>';
       }
       if ($requisite['HTMLtype'] == 'YES / NO') {
         $pageContent .= '<tr><th style="border: 1px solid black; font-size: 14px;">' . $requisite['requisite_id'] . '</th><td style="border: 1px solid black; font-size: 14px;">'. $requisite['requisite_name']. $mandatory .'</td><td style="border: 1px solid black; font-size: 14px; text-align:center;">' . $requisite['value'] . '</td><td style="border: 1px solid black;">&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>';
@@ -198,22 +198,22 @@ class ExporterController extends Controller
           $mandatory = ' (no obligatorio) ';
         }
         if ($requisite['HTMLtype'] == 'GRUPO 0') {
-          $pageContent .= '<tr style="background-color:yellow;"><td></td><th style="border: 1px solid black; font-size: 16px;" colspan="3">'. $requisite['requisite_name']. $mandatory .'</th></tr>';
+          $pageContent .= '<tr style="background-color:yellow;"><td></td><th style="border: 1px solid black; font-size: 16px;" colspan="3">'. $requisite['requisite_name'].'</th></tr>';
         }
         if ($requisite['HTMLtype'] == 'GRUPO 1') {
-          $pageContent .= '<tr style="background-color:LightGray;"><td></td><th style="border: 1px solid black; font-size: 16px;" colspan="3">'. $requisite['requisite_name']. $mandatory .'</th></tr>';
+          $pageContent .= '<tr style="background-color:LightGray;"><td></td><th style="border: 1px solid black; font-size: 16px;" colspan="3">'. $requisite['requisite_name'].'</th></tr>';
         }
         if ($requisite['HTMLtype'] == 'GRUPO 2') {
-          $pageContent .= '<tr style="background-color:LightGray;"><td></td><th style="border: 1px solid black; font-size: 16px;" colspan="3">'. $requisite['requisite_name']. $mandatory .'</th></tr>';
+          $pageContent .= '<tr style="background-color:LightGray;"><td></td><th style="border: 1px solid black; font-size: 16px;" colspan="3">'. $requisite['requisite_name'].'</th></tr>';
         }
         if ($requisite['HTMLtype'] == 'GRUPO 3') {
-          $pageContent .= '<tr style="background-color:LightGray;"><td></td><th style="border: 1px solid black; font-size: 16px;" colspan="3">'. $requisite['requisite_name']. $mandatory .'</th></tr>';
+          $pageContent .= '<tr style="background-color:LightGray;"><td></td><th style="border: 1px solid black; font-size: 16px;" colspan="3">'. $requisite['requisite_name'].'</th></tr>';
         }
         if ($requisite['HTMLtype'] == 'GRUPO 4') {
-          $pageContent .= '<tr style="background-color:LightGray;"><td></td><th style="border: 1px solid black; font-size: 16px;" colspan="3">'. $requisite['requisite_name']. $mandatory .'</th></tr>';
+          $pageContent .= '<tr style="background-color:LightGray;"><td></td><th style="border: 1px solid black; font-size: 16px;" colspan="3">'. $requisite['requisite_name'].'</th></tr>';
         }
         if ($requisite['HTMLtype'] == 'GRUPO 5') {
-          $pageContent .= '<tr style="background-color:LightGray;"><td></td><th style="border: 1px solid black; font-size: 16px;" colspan="3">'. $requisite['requisite_name']. $mandatory .'</th></tr>';
+          $pageContent .= '<tr style="background-color:LightGray;"><td></td><th style="border: 1px solid black; font-size: 16px;" colspan="3">'. $requisite['requisite_name'].'</th></tr>';
         }
         if ($requisite['HTMLtype'] == 'TRUE / FALSE') {
           $cumple = "CUMPLE";
