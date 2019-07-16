@@ -1349,9 +1349,9 @@ export class InspectorComponent implements OnInit {
                });
             });
             const personal = [];
-            r2.workers_on_establishment.forEach(worker_group_in => {
+            workers_on_establishment.forEach(worker_group_template => {
                let newworkergroup = {worker_group_name: '', gender_name: '', count: ''};
-               workers_on_establishment.forEach(worker_group_template => {
+               r2.workers_on_establishment.forEach(worker_group_in => {
                   if (worker_group_in.worker_group_id == worker_group_template.worker_group_id) {
                      newworkergroup.worker_group_name = worker_group_template.worker_group_name.toString();
                      newworkergroup.gender_name = worker_group_template.gender_name.toString();
@@ -1360,6 +1360,7 @@ export class InspectorComponent implements OnInit {
                });
                personal.push(newworkergroup);
             });
+            console.log(personal);
             const requisites = [];
             this.requisiteDataService.get_filtered(r0.register.register_type_id).then( r => {
                this.requisitesByRegisterType = r as Requisite[];
