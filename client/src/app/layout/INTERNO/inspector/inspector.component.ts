@@ -100,7 +100,8 @@ import { RegisterService } from 'src/app/services/CRUD/ALOJAMIENTO/register.serv
 import { RegisterStateService } from 'src/app/services/CRUD/ALOJAMIENTO/registerstate.service';
 import { ExporterService } from 'src/app/services/negocio/exporter.service';
 import Swal from 'sweetalert2';
-
+import { DocumentService } from 'src/app/services/CRUD/EXPORTER/document.service';
+import { Document as Documento } from 'src/app/models/EXPORTER/Document';
 @Component({
   selector: 'app-registro',
   templateUrl: './inspector.component.html',
@@ -313,6 +314,7 @@ export class InspectorComponent implements OnInit {
               private mailerDataService: MailerService,
               private floorAuthorizationCertificateDataService: FloorAuthorizationCertificateService,
               private payDataService: PayService,
+              private documentDataService: DocumentService,
               private approvalStateReportDataService: ApprovalStateReportService,
               private receptionRoomDataService: ReceptionRoomService,
               private declarationAttachmentDataService: DeclarationAttachmentService,
@@ -1484,6 +1486,8 @@ export class InspectorComponent implements OnInit {
                   iniciales_cordinacion_zonal += element.substring(0, 1).toUpperCase();
                });
               let qr_value = 'MT-C' + iniciales_cordinacion_zonal + '-' + this.ruc_registro_selected.ruc.number + '-ALOJAMIENTO-' + iniciales_tecnico_zonal + '-' + today.getDate() + '-' + (today.getMonth() + 1) + '-' + today.getFullYear();
+              let document = new Documento();
+              this.documentDataService.post(document).then().catch( e => { console.log(e); });
               this.exporterDataService.getPDFNormativa(requisites, capacities, tariffs, personal, r2.establishment.address_map_latitude, r2.establishment.address_map_longitude, true, qr_value, params).then( r => {
                const byteCharacters = atob(r);
                const byteNumbers = new Array(byteCharacters.length);
