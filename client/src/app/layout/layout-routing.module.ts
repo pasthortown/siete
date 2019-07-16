@@ -339,9 +339,12 @@ const routes: Routes = [
 
          {
             path: 'template',
-            loadChildren: './CRUD/EXPORTER/template/template.module#templateModule'
+            loadChildren: './CRUD/EXPORTER/Template/template.module#TemplateModule'
          },
-         
+         {
+            path: 'document',
+            loadChildren: './CRUD/EXPORTER/Document/document.module#DocumentModule'
+         },
          {
             path: '**',
             redirectTo: 'not-found'

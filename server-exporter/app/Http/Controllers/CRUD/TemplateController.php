@@ -4,29 +4,29 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 Use Exception;
-use App\template;
+use App\Template;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
-class templateController extends Controller
+class TemplateController extends Controller
 {
     function get(Request $data)
     {
        $id = $data['id'];
        if ($id == null) {
-          return response()->json(template::get(),200);
+          return response()->json(Template::get(),200);
        } else {
-          $template = template::findOrFail($id);
+          $template = Template::findOrFail($id);
           $attach = [];
-          return response()->json(["template"=>$template, "attach"=>$attach],200);
+          return response()->json(["Template"=>$template, "attach"=>$attach],200);
        }
     }
 
     function paginate(Request $data)
     {
        $size = $data['size'];
-       return response()->json(template::paginate($size),200);
+       return response()->json(Template::paginate($size),200);
     }
 
     function post(Request $data)
@@ -34,10 +34,10 @@ class templateController extends Controller
        try{
           DB::beginTransaction();
           $result = $data->json()->all();
-          $template = new template();
-          $lasttemplate = template::orderBy('id')->get()->last();
-          if($lasttemplate) {
-             $template->id = $lasttemplate->id + 1;
+          $template = new Template();
+          $lastTemplate = Template::orderBy('id')->get()->last();
+          if($lastTemplate) {
+             $template->id = $lastTemplate->id + 1;
           } else {
              $template->id = 1;
           }
@@ -57,7 +57,7 @@ class templateController extends Controller
        try{
           DB::beginTransaction();
           $result = $data->json()->all();
-          $template = template::where('id',$result['id'])->update([
+          $template = Template::where('id',$result['id'])->update([
              'body'=>$result['body'],
              'title'=>$result['title'],
              'orientation'=>$result['orientation'],
@@ -72,16 +72,16 @@ class templateController extends Controller
     function delete(Request $data)
     {
        $id = $data['id'];
-       return template::destroy($id);
+       return Template::destroy($id);
     }
 
     function backup(Request $data)
     {
-       $templates = template::get();
+       $templates = Template::get();
        $toReturn = [];
        foreach( $templates as $template) {
           $attach = [];
-          array_push($toReturn, ["template"=>$template, "attach"=>$attach]);
+          array_push($toReturn, ["Template"=>$template, "attach"=>$attach]);
        }
        return response()->json($toReturn,200);
     }
@@ -93,16 +93,16 @@ class templateController extends Controller
       try{
        DB::beginTransaction();
        foreach($masiveData as $row) {
-         $result = $row['template'];
-         $exist = template::where('id',$result['id'])->first();
+         $result = $row['Template'];
+         $exist = Template::where('id',$result['id'])->first();
          if ($exist) {
-           template::where('id', $result['id'])->update([
+           Template::where('id', $result['id'])->update([
              'body'=>$result['body'],
              'title'=>$result['title'],
              'orientation'=>$result['orientation'],
            ]);
          } else {
-          $template = new template();
+          $template = new Template();
           $template->id = $result['id'];
           $template->body = $result['body'];
           $template->title = $result['title'];

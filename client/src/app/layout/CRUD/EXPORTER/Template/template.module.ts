@@ -2,9 +2,9 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { templateRoutingModule } from './template-routing.module';
-import { templateComponent } from './template.component';
-import { templateService } from './../../../../services/CRUD/EXPORTER/template.service';
+import { TemplateRoutingModule } from './template-routing.module';
+import { TemplateComponent } from './template.component';
+import { TemplateService } from './../../../../services/CRUD/EXPORTER/template.service';
 import { environment } from 'src/environments/environment';
 import { CKEditorModule } from 'ngx-ckeditor';
 import { ExporterService } from 'src/app/services/negocio/exporter.service';
@@ -12,14 +12,14 @@ import { ExporterService } from 'src/app/services/negocio/exporter.service';
 
 @NgModule({
    imports: [CommonModule,
-             templateRoutingModule,
+             TemplateRoutingModule,
              CKEditorModule,
              FormsModule],
-   declarations: [templateComponent],
+   declarations: [TemplateComponent],
    providers: [
                NgbModal,
-               templateService,
+               TemplateService,
                ExporterService
                ]
 })
-export class templateModule {}
+export class TemplateModule {}

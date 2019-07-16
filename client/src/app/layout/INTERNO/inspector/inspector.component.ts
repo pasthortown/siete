@@ -187,6 +187,7 @@ export class InspectorComponent implements OnInit {
   mostrarData = true;
   group_types: GroupType[] = [];
   rucs_registrados: RegistroDataCarrier[] = [];
+  representante_legal = '';
   ruc_registro_selected: RegistroDataCarrier = new RegistroDataCarrier();
   rucData = 'CONECTÁNDOSE AL SRI...';
   superciasData = 'CONECTÁNDOSE A LA SUPERINTENDENCIA DE COMPANÍAS...';
@@ -1395,41 +1396,95 @@ export class InspectorComponent implements OnInit {
                     }
                  });
               });
-              console.log({r0:r0});
-              console.log({r2:r2});
-              console.log({r3:r3});
-              console.log(this.ruc_registro_selected.ruc.number);
+              let fecha_registro = '';
+              if (r2.establishment.as_turistic_register_date == null || typeof r2.establishment.as_turistic_register_date == 'undefined') {
+               fecha_registro = 'PENDIENTE';
+              } else {
+               fecha_registro = (r2.establishment.as_turistic_register_date as Date).toLocaleDateString();
+              }
+              let local = '';
+              if (r2.establishment.establishment_property_type_id == 1) {
+               local = 'PROPIO';
+              } else {
+               local = 'ARRENDADO';
+              }
+              let clasificacion = '';
+              this.register_types.forEach(element => {
+               if (element.id == r0.register.register_type_id) {
+                  clasificacion = element.name.toString();
+               }
+              });
+              let actividad = 'ALOJAMIENTO';
+              let tipo_tramite = 'REGISTRO';
+              let tipo_establecimiento = '';
+              this.ruc_name_types.forEach(element => {
+                 if (element.id == r2.establishment.ruc_name_type_id) {
+                    tipo_establecimiento = element.name.toString();
+                 }
+              });
+              let provincia = new Ubication();
+              let canton = new Ubication();
+              let parroquia = new Ubication();
+              let zonal = new Ubication();
+              this.ubications.forEach(element => {
+                if (element.id == r2.establishment.ubication_id) {
+                  parroquia = element;
+                }
+              });
+              this.ubications.forEach(element => {
+                if (element.code == parroquia.father_code) {
+                  canton = element;
+                }
+              });
+              this.ubications.forEach(element => {
+                if (element.code == canton.father_code) {
+                  provincia = element;
+                }
+              });
+              this.ubications.forEach(element => {
+                if (element.code == provincia.father_code) {
+                  zonal = element;
+                }
+              });
               const today = new Date();
               const params = [{nombre_tecnico_zonal: this.user.name},
                {dia: today.getDate()},
                {mes: today.getMonth() + 1},
                {year: today.getFullYear()},
-               {nombre_comercial: r2.establishment.commercially_known_name},
-               {ruc: this.ruc_registro_selected.ruc.number},
-               //{actividad:actividad},
-               //{categoria:categoria},
-               //{tipo_establecimiento:tipo_establecimiento},
-               //{representante_legal:representante_legal},
-               {telefono_principal: r2.contact_user.main_phone_number},
-               //{local:local},
-               {pagina_web: r2.establishment.url_web},
-               //{numero_registro:numero_registro},
-               //{fecha_registro:fecha_registro},
-               //{tipo_tramite: tipo_tramite},
-               //{clasificacion:clasificacion},
-               {franquicia_cadena: r2.establishment.franchise_chain_name},
-               {contacto_establecimiento: r2.contact_user.name},
-               {telefono_secundario: r2.contact_user.secondary_phone_number},
-               {correo_electronico:r2.contact_user.email},
-               //{provincia:provincia},
-               //{canton:canton},
-               //{parroquia:parroquia},
-               {referencia_ubicacion: r2.establishment.address_reference},
-               {calle_principal: r2.establishment.address_main_street},
-               {numeracion: r2.establishment.address_number},
-               {calle_secundaria: r2.establishment.address_secondary_street}];
-
-              this.exporterDataService.getPDFNormativa(requisites, capacities, tariffs, personal, r2.establishment.address_map_latitude, r2.establishment.address_map_longitude, true, 'Luis', params).then( r => {
+               {nombre_comercial: r2.establishment.commercially_known_name.toUpperCase()},
+               {ruc: this.ruc_registro_selected.ruc.number.toUpperCase()},
+               {actividad: actividad.toUpperCase()},
+               {categoria: r0.register_category.name.toUpperCase()},
+               {tipo_establecimiento:tipo_establecimiento.toUpperCase()},
+               {representante_legal: this.representante_legal.toUpperCase()},
+               {telefono_principal: r2.contact_user.main_phone_number.toUpperCase()},
+               {local: local.toUpperCase()},
+               {pagina_web: r2.establishment.url_web.toUpperCase()},
+               {numero_registro: r0.register.code.toUpperCase()},
+               {fecha_registro: fecha_registro.toUpperCase()},
+               {tipo_tramite: tipo_tramite.toUpperCase()},
+               {clasificacion:clasificacion.toUpperCase()},
+               {franquicia_cadena: r2.establishment.franchise_chain_name.toUpperCase()},
+               {contacto_establecimiento: r2.contact_user.name.toUpperCase()},
+               {telefono_secundario: r2.contact_user.secondary_phone_number.toUpperCase()},
+               {correo_electronico:r2.contact_user.email.toUpperCase()},
+               {provincia:provincia.name.toUpperCase()},
+               {canton:canton.name.toUpperCase()},
+               {parroquia:parroquia.name.toUpperCase()},
+               {referencia_ubicacion: r2.establishment.address_reference.toUpperCase()},
+               {calle_principal: r2.establishment.address_main_street.toUpperCase()},
+               {numeracion: r2.establishment.address_number.toUpperCase()},
+               {calle_secundaria: r2.establishment.address_secondary_street.toUpperCase()}];
+               let iniciales_tecnico_zonal = '';
+               this.user.name.split(' ').forEach(element => {
+                  iniciales_tecnico_zonal += element.substring(0, 1).toUpperCase();
+               });
+               let iniciales_cordinacion_zonal = '';
+               zonal.name.split(' ').forEach(element => {
+                  iniciales_cordinacion_zonal += element.substring(0, 1).toUpperCase();
+               });
+              let qr_value = 'MT-C' + iniciales_cordinacion_zonal + '-' + this.ruc_registro_selected.ruc.number + '-ALOJAMIENTO-' + iniciales_tecnico_zonal + '-' + today.getDate() + '-' + (today.getMonth() + 1) + '-' + today.getFullYear();
+              this.exporterDataService.getPDFNormativa(requisites, capacities, tariffs, personal, r2.establishment.address_map_latitude, r2.establishment.address_map_longitude, true, qr_value, params).then( r => {
                const byteCharacters = atob(r);
                const byteNumbers = new Array(byteCharacters.length);
                for (let i = 0; i < byteCharacters.length; i++) {
@@ -3124,6 +3179,8 @@ guardarDeclaracion() {
         let datosRL = '';
         let datosAE = '';
         let datosContactoSRI = '';
+        let RL_name = '';
+        let RZ_name = '';
         itemsDetalles_SRI_RUC_COMPLETO.forEach(entidad => {
            if (entidad.nombre == 'Actividad Economica') {
               const AE = entidad.filas.fila.columnas.columna;
@@ -3138,6 +3195,7 @@ guardarDeclaracion() {
               DC.forEach(element => {
                  if (element.campo == 'razonSocial') {
                     datosGenerales += '<strong>Razón Social: </strong> ' + element.valor + '<br/>';
+                    RZ_name = element.valor;
                  }
                  if (element.campo == 'email') {
                     if (JSON.stringify(element.valor) !== '{}') {
@@ -3156,6 +3214,7 @@ guardarDeclaracion() {
               RL.forEach(element => {
                  if (element.campo == 'identificacion') {
                     datosRL += '<strong>Identificación Representante Legal: </strong> ' + element.valor + '<br/>';
+                    RL_name = element.valor;
                     if (JSON.stringify(element.valor) !== '{}') {
                        this.ruc_registro_selected.ruc.person_representative.identification = element.valor;
                        this.consumoCedulaRepresentanteLegal = false;
@@ -3199,6 +3258,9 @@ guardarDeclaracion() {
            this.rucData = datosGenerales + datosAE + datosContactoSRI;
            if (this.ruc_registro_selected.ruc.tax_payer_type_id != 1) {
               this.rucData += datosRL;
+              this.representante_legal = RL_name;
+           } else {
+              this.representante_legal = RZ_name;
            }
         });
      }).catch( e => {

@@ -1,4 +1,4 @@
-export class template {
+export class Template {
    id: number;
    body: String;
    title: String;

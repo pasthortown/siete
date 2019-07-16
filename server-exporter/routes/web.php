@@ -27,12 +27,21 @@ $router->group(['middleware' => ['auth']], function () use ($router) {
 
    //EXPORTER
 
-   //CRUD template
-   $router->post('/template', ['uses' => 'templateController@post']);
-   $router->get('/template', ['uses' => 'templateController@get']);
-   $router->get('/template/paginate', ['uses' => 'templateController@paginate']);
-   $router->get('/template/backup', ['uses' => 'templateController@backup']);
-   $router->put('/template', ['uses' => 'templateController@put']);
-   $router->delete('/template', ['uses' => 'templateController@delete']);
-   $router->post('/template/masive_load', ['uses' => 'templateController@masiveLoad']);
+   //CRUD Template
+   $router->post('/template', ['uses' => 'TemplateController@post']);
+   $router->get('/template', ['uses' => 'TemplateController@get']);
+   $router->get('/template/paginate', ['uses' => 'TemplateController@paginate']);
+   $router->get('/template/backup', ['uses' => 'TemplateController@backup']);
+   $router->put('/template', ['uses' => 'TemplateController@put']);
+   $router->delete('/template', ['uses' => 'TemplateController@delete']);
+   $router->post('/template/masive_load', ['uses' => 'TemplateController@masiveLoad']);
+
+   //CRUD Document
+   $router->post('/document', ['uses' => 'DocumentController@post']);
+   $router->get('/document', ['uses' => 'DocumentController@get']);
+   $router->get('/document/paginate', ['uses' => 'DocumentController@paginate']);
+   $router->get('/document/backup', ['uses' => 'DocumentController@backup']);
+   $router->put('/document', ['uses' => 'DocumentController@put']);
+   $router->delete('/document', ['uses' => 'DocumentController@delete']);
+   $router->post('/document/masive_load', ['uses' => 'DocumentController@masiveLoad']);
 });

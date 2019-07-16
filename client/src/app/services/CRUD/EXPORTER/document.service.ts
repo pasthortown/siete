@@ -2,14 +2,14 @@ import { Injectable } from '@angular/core';
 import { Http, RequestOptions, Headers } from '@angular/http';
 import { Router } from '@angular/router';
 import { environment } from './../../../../environments/environment';
-import { Template } from './../../../models/EXPORTER/Template';
+import { Document } from './../../../models/EXPORTER/Document';
 
 @Injectable({
    providedIn: 'root'
 })
-export class TemplateService {
+export class DocumentService {
 
-   url = environment.api_exporter + 'template/';
+   url = environment.api_exporter + 'document/';
    options = new RequestOptions();
 
    constructor(private http: Http, private router: Router) {
@@ -51,15 +51,15 @@ export class TemplateService {
       }).catch( error => { this.handledError(error.json()); });
    }
 
-   post(template: Template): Promise<any> {
-      return this.http.post(this.url, JSON.stringify(template), this.options).toPromise()
+   post(document: Document): Promise<any> {
+      return this.http.post(this.url, JSON.stringify(document), this.options).toPromise()
       .then( r => {
          return r.json();
       }).catch( error => { this.handledError(error.json()); });
    }
 
-   put(template: Template): Promise<any> {
-      return this.http.put(this.url, JSON.stringify(template), this.options).toPromise()
+   put(document: Document): Promise<any> {
+      return this.http.put(this.url, JSON.stringify(document), this.options).toPromise()
       .then( r => {
          return r.json();
       }).catch( error => { this.handledError(error.json()); });

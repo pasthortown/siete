@@ -85,7 +85,7 @@
       <label>Formulario de Requisitos (Check List)</label>
       <div class="input-group mb-3">
         <div class="input-group-prepend">
-          <button type="button" class="btn btn-secondary" title="Imprimir Formulario de Requisitos (Check List)" (click)="imprimirRequisitos()"><i class="fas fa-print"></i></button>
+          <button type="button" [disabled]="!SRIOK" class="btn btn-secondary" title="Imprimir Formulario de Requisitos (Check List)" (click)="imprimirRequisitos()"><i class="fas fa-print"></i></button>
           <button type="button" [disabled]="!validateRequisitesFile()" class="btn btn-secondary" title="Descargar Formulario de Requisitos (Check List) Cargado" (click)="descargarRequisitos()"><i class="fas fa-download"></i></button>
           <button type="button" [disabled]="!validateRequisitesFile()" class="btn btn-danger" title="Borrar Formulario de Requisitos (Check List) Cargado" (click)="borrarRequisitos()"><i class="fas fa-trash"></i></button>
         </div>
@@ -93,6 +93,10 @@
           name="requisitesFile" placeholder="Formulario de Revisión de Requisitos (Check List)"
           (change)="CodeFileRequisitesAttachment($event)">
       </div>
+      <small *ngIf="!SRIOK">
+        <div class="col-12 text-justify mt-2 mb-2" [innerHTML]="rucData">
+        </div>
+      </small>
       <small *ngIf="please_wait_requisites">
         <div class="alert alert-info mt-2 mb-2" role="alert">
           <label class="col-12 text-justify"><strong>INFORMACIÓN</strong></label><br />

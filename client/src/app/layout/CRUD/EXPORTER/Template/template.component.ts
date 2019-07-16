@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrManager } from 'ng6-toastr-notifications';
 import { saveAs } from 'file-saver/FileSaver';
-import { templateService } from './../../../../services/CRUD/EXPORTER/template.service';
-import { template } from './../../../../models/EXPORTER/template';
+import { TemplateService } from './../../../../services/CRUD/EXPORTER/template.service';
+import { Template } from './../../../../models/EXPORTER/Template';
 import { ExporterService } from 'src/app/services/negocio/exporter.service';
 
 @Component({
@@ -11,9 +11,9 @@ import { ExporterService } from 'src/app/services/negocio/exporter.service';
    templateUrl: './template.component.html',
    styleUrls: ['./template.component.scss']
 })
-export class templateComponent implements OnInit {
-   templates: template[] = [];
-   templateSelected: template = new template();
+export class TemplateComponent implements OnInit {
+   templates: Template[] = [];
+   templateSelected: Template = new Template();
 
    currentPage = 1;
    lastPage = 1;
@@ -23,13 +23,13 @@ export class templateComponent implements OnInit {
                private modalService: NgbModal,
                private toastr: ToastrManager,
                private exporterDataService: ExporterService,
-               private templateDataService: templateService) {}
+               private templateDataService: TemplateService) {}
 
    ngOnInit() {
       this.goToPage(1);
    }
 
-   selecttemplate(template: template) {
+   selecttemplate(template: Template) {
       this.templateSelected = template;
    }
 
@@ -44,15 +44,15 @@ export class templateComponent implements OnInit {
 
    gettemplates() {
       this.templates = [];
-      this.templateSelected = new template();
+      this.templateSelected = new Template();
       this.templateDataService.get_paginate(this.recordsByPage, this.currentPage).then( r => {
-         this.templates = r.data as template[];
+         this.templates = r.data as Template[];
          this.lastPage = r.last_page;
       }).catch( e => console.log(e) );
    }
 
    newtemplate(content) {
-      this.templateSelected = new template();
+      this.templateSelected = new Template();
       this.openDialog(content);
    }
 
@@ -86,7 +86,7 @@ export class templateComponent implements OnInit {
 
    toCSV() {
       this.templateDataService.get().then( r => {
-         const backupData = r as template[];
+         const backupData = r as Template[];
          let output = 'id;body\n';
          backupData.forEach(element => {
             output += element.id; + element.body + '\n';
