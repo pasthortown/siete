@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Exports\DataExporter;
 use Validator;
 use Exception;
-use App\template;
+use App\Template;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Storage;
@@ -325,7 +325,7 @@ class ExporterController extends Controller
 
   function pdf_template(Request $data) {
     $request = $data->json()->all();
-    $template = template::where('id', $request['template_id'])->first();
+    $template = Template::where('id', $request['template_id'])->first();
     $html_content = $template['body'];
     try {
       $qr = $request['qr'];
