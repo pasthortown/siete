@@ -1373,7 +1373,7 @@ export class RegistroComponent implements OnInit {
         {title: '', name: 'selected'},
         {title: 'Días en Espera', name: 'date_assigment_alert'},
         {title: 'Número de RUC', name: 'number', filtering: {filterString: '', placeholder: 'Número de RUC'}},
-        {title: 'Establecimiento', name: 'establishment'},
+        {title: 'Nombre Comercial', name: 'establishment'},
         {title: 'Dirección', name: 'address'},
         {title: 'Categoría', name: 'category'},
         {title: 'Bandeja', name: 'status'},
