@@ -456,7 +456,7 @@ export class TecnicoFinancieroComponent implements OnInit {
         {title: 'Número de Establecimiento', name: 'code'},
         {title: 'Dirección', name: 'address'},
         {title: 'Nombre Comercial', name: 'name'},
-        {title: 'Estado', name: 'sri_state'},
+        //{title: 'Estado', name: 'sri_state'},
      ];
      const data = [];
      this.ruc_registro_selected.ruc.establishments.forEach(item => {
@@ -465,7 +465,7 @@ export class TecnicoFinancieroComponent implements OnInit {
             code: item.ruc_code_id,
             address: item.address_main_street + ' ' + item.address_number + ' ' + item.address_secondary_street,
             name: item.commercially_known_name,
-            sri_state: item.sri_state,
+            //sri_state: item.sri_state,
          });
      });
      this.dataEstablishment = data;
