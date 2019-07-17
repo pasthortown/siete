@@ -1926,6 +1926,78 @@ export class CoordinadorComponent implements OnInit {
       });
    }).catch( e => { console.log(e); });
   }
+  
+  entregarDocumentos() {
+     this.stateTramiteId = 3;
+     const estado: String = this.stateTramiteId.toString();
+     const digito = estado.substring(estado.length-1, estado.length);
+     const newRegisterState = new RegisterState();
+     let establishmentId = 0;
+     let countRegisters = 1;
+     this.ruc_registro_selected.registers.forEach(element => {
+        if (element.register.id == this.idRegister) {
+           establishmentId = element.establishment.id;
+        }
+     });
+     this.ruc_registro_selected.registers.forEach(element => {
+      if (establishmentId == element.establishment.id && element.status_register.state_id == 9) {
+         countRegisters++;
+      }
+     });
+     if( this.stateTramite == 1 ){
+        this.registerApprovalCoordinador.value = true;
+         if (digito == '0') {
+            newRegisterState.state_id = this.stateTramiteId - 8;
+         }
+         if (digito == '2') {
+            newRegisterState.state_id = this.stateTramiteId;
+         }
+         if (digito == '3') {
+            newRegisterState.state_id = this.stateTramiteId - 1;
+         }
+         if (digito == '9') {
+            newRegisterState.state_id = this.stateTramiteId - 7;
+         }
+     }
+     if( this.stateTramite == 2 ){
+      this.registerApprovalCoordinador.value = false;
+      if (digito == '0') {
+         newRegisterState.state_id = this.stateTramiteId - 7;
+      }
+      if (digito == '2') {
+         newRegisterState.state_id = this.stateTramiteId + 1;
+      }
+      if (digito == '3') {
+         newRegisterState.state_id = this.stateTramiteId;
+      }
+      if (digito == '9') {
+         newRegisterState.state_id = this.stateTramiteId - 6;
+      }
+     }
+     if( this.stateTramite == 3 ){
+      this.registerApprovalCoordinador.value = false;
+      if (digito == '0') {
+         newRegisterState.state_id = this.stateTramiteId - 1;
+      }
+      if (digito == '2') {
+         newRegisterState.state_id = this.stateTramiteId + 7;
+      }
+      if (digito == '3') {
+         newRegisterState.state_id = this.stateTramiteId + 6;
+      }
+      if (digito == '9') {
+         newRegisterState.state_id = this.stateTramiteId;
+      }
+     }
+     newRegisterState.justification = this.registerApprovalCoordinador.notes;
+     newRegisterState.register_id = this.idRegister;
+     this.registroApprovalStateAttachment.approval_state_id = this.registerApprovalCoordinador.id;
+     this.tarifarioRackApprovalStateAttachment.approval_state_id = this.registerApprovalCoordinador.id;
+     //AQUI
+     this.registerStateDataService.post(newRegisterState).then( r1 => {
+        this.refresh();
+     }).catch( e => { console.log(e); });
+  }
 
   guardarTramite() {
      const estado: String = this.stateTramiteId.toString();
@@ -2121,7 +2193,93 @@ export class CoordinadorComponent implements OnInit {
   }
 
   imprimirRegistro() {
-   alert('imprimir');
+   this.imprimiendo_registro = true;
+   this.registerDataService.get_register_data(this.registerMinturSelected.register.id).then( r0 => {
+      this.establishmentDataService.get_filtered(this.registerMinturSelected.establishment.id).then( r2 => {
+         let provincia = new Ubication();
+         let canton = new Ubication();
+         let parroquia = new Ubication();
+         let zonal = new Ubication();
+         this.ubications.forEach(element => {
+            if (element.id == r2.establishment.ubication_id) {
+            parroquia = element;
+            }
+         });
+         this.ubications.forEach(element => {
+            if (element.code == parroquia.father_code) {
+            canton = element;
+            }
+         });
+         this.ubications.forEach(element => {
+            if (element.code == canton.father_code) {
+            provincia = element;
+            }
+         });
+         this.ubications.forEach(element => {
+            if (element.code == provincia.father_code) {
+            zonal = element;
+            }
+         });
+         let iniciales_cordinador_zonal = '';
+         this.user.name.split(' ').forEach(element => {
+            iniciales_cordinador_zonal += element.substring(0, 1).toUpperCase();
+         });
+         let iniciales_cordinacion_zonal = '';
+         const zonalName = zonal.name.split(' ');
+         iniciales_cordinacion_zonal = zonalName[zonalName.length - 1].toUpperCase();
+         const today = new Date();
+         let qr_value = 'MT-CZ' + iniciales_cordinacion_zonal + '-' + this.ruc_registro_selected.ruc.number + '-' + r2.establishment.ruc_code_id + '-REGISTRO-ALOJAMIENTO-' + iniciales_cordinador_zonal + '-' + today.getDate() + '-' + (today.getMonth() + 1) + '-' + today.getFullYear();
+         const actividad = 'ALOJAMIENTO';
+         const tipo_tramite = 'REGISTRO';
+         let clasificacion = '';
+         this.register_types.forEach(element => {
+            if (element.id == r0.register.register_type_id) {
+               clasificacion = element.name.toString();
+            }
+         });
+         console.log(r0);
+         const params = [{canton: canton.name.toUpperCase()},
+            {fecha: today.toLocaleDateString().toUpperCase()},
+            {numero_registro: r0.register.code.toUpperCase()},
+            {nombre_comercial: r2.establishment.commercially_known_name.toUpperCase()},
+            {actividad: actividad},
+            {categoria: clasificacion.toUpperCase()},
+            {clasificacion: r0.register_category.name.toUpperCase()},
+            {representant_legal: this.representante_legal.toUpperCase()},
+            {ruc: this.ruc_registro_selected.ruc.number},
+            {zonal: iniciales_cordinacion_zonal.toUpperCase()},
+            {provincia: provincia.name.toUpperCase()},
+            {parroquia: parroquia.name.toUpperCase()},
+            {dirección: r2.establishment.address_main_street.toUpperCase() + ' ' + r2.establishment.address_number.toUpperCase() + ' ' + r2.establishment.address_secondary_street.toUpperCase()},
+            {habitaciones: 'habitaciones'},
+            {plazas: 'plazas'},
+            {nombre_coordinador_Zonal: this.user.name.toUpperCase()}];
+
+         let document = new Documento();
+         document.activity =actividad;
+         document.code = qr_value;
+         document.document_type = 'REGISTRO TURÍSTICO';
+         let paramsToBuild = {
+            template: 1, qr: true, qr_value: qr_value, params: params
+         }
+         document.procedure_id = tipo_tramite;
+         document.zonal = zonal.name;
+         document.user = iniciales_cordinador_zonal;
+         document.params = JSON.stringify(paramsToBuild);
+         this.documentDataService.post(document).then().catch( e => { console.log(e); });
+         this.exporterDataService.template(4, true, qr_value, params).then( r => {
+            const byteCharacters = atob(r);
+            const byteNumbers = new Array(byteCharacters.length);
+            for (let i = 0; i < byteCharacters.length; i++) {
+               byteNumbers[i] = byteCharacters.charCodeAt(i);
+            }
+            const byteArray = new Uint8Array(byteNumbers);
+            const blob = new Blob([byteArray], { type: 'application/pdf'});
+            saveAs(blob, qr_value + '.pdf');
+            this.imprimiendo_registro = false;
+         }).catch( e => { console.log(e); });
+      }).catch( e => { console.log(e); });
+   }).catch( e => { console.log(e); });
   }
 
   imprimirTarifarioRack() {
@@ -2162,7 +2320,7 @@ export class CoordinadorComponent implements OnInit {
             const zonalName = zonal.name.split(' ');
             iniciales_cordinacion_zonal = zonalName[zonalName.length - 1].toUpperCase();
             const today = new Date();
-            let qr_value = 'MT-CZ' + iniciales_cordinacion_zonal + '-' + this.ruc_registro_selected.ruc.number + '-' + r2.establishment.ruc_code_id + '-ACTA-NOTIFICACION-ALOJAMIENTO-' + iniciales_cordinador_zonal + '-' + today.getDate() + '-' + (today.getMonth() + 1) + '-' + today.getFullYear();
+            let qr_value = 'MT-CZ' + iniciales_cordinacion_zonal + '-' + this.ruc_registro_selected.ruc.number + '-' + r2.establishment.ruc_code_id + '-TARIFARIO-RACK-ALOJAMIENTO-' + iniciales_cordinador_zonal + '-' + today.getDate() + '-' + (today.getMonth() + 1) + '-' + today.getFullYear();
             const actividad = 'ALOJAMIENTO';
             const tipo_tramite = 'REGISTRO';
             let clasificacion = '';
@@ -2186,7 +2344,7 @@ export class CoordinadorComponent implements OnInit {
             let document = new Documento();
             document.activity =actividad;
             document.code = qr_value;
-            document.document_type = 'TARIFARIO_RACK';
+            document.document_type = 'TARIFARIO RACK';
             let paramsToBuild = {
                template: 1, qr: true, qr_value: qr_value, params: params
             }
