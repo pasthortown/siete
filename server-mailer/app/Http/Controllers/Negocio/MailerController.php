@@ -19,10 +19,10 @@ class MailerController extends Controller
 
   protected function send_mail($to, $information, $subject, $fromMail,$fromAlias, $tipoMail) {
     $data = ['information'=>$information, 'appName'=>env('MAIL_FROM_NAME')];
-    Mail::send($tipoMail, $data, function($message) use ($to, $information, $subject, $fromMail,$fromAlias) {
+    Mail::send($tipoMail, $data, function($message) use ($to, $information, $subject, $fromMail,$fromAlias, $tipoMail) {
       $message->to($to, $information['para'])->subject($subject);
       $message->from($fromMail,$fromAlias);
-      if ($information['pdfBase64']) {
+      if ($tipoMail == 'mail' || $tipoMail == 'asignacion') {
         $message->attachData(base64_decode($information['pdfBase64']), 'adjunto.pdf', ['mime' => 'application/pdf']);
       }
     });
