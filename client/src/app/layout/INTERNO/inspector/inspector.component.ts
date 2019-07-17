@@ -143,6 +143,7 @@ export class InspectorComponent implements OnInit {
    report: ApprovalStateReport = new ApprovalStateReport();
    estoyVacaciones = false;
    imprimiendo_informe = false;
+   imprimiendo_acta = false;
    //ASIGNACIONES
    inspectores: User[] = [];
    financieros: User[] = [];
@@ -158,6 +159,7 @@ export class InspectorComponent implements OnInit {
    inspectionState = 0;
    requisitosApprovalStateAttachment: ApprovalStateAttachment = new ApprovalStateAttachment();
    informeApprovalStateAttachment: ApprovalStateAttachment = new ApprovalStateAttachment();
+   actaNotificacionApprovalStateAttachment: ApprovalStateAttachment = new ApprovalStateAttachment();
    newRegisterState: RegisterState = new RegisterState();
    stateTramiteId = 0;
 
@@ -1265,6 +1267,84 @@ export class InspectorComponent implements OnInit {
    }).catch( e => { console.log(e); });
   }
 
+  imprimirActaNotificacion() {
+   this.imprimiendo_acta = true;
+   this.registerDataService.get_register_data(this.registerMinturSelected.register.id).then( r0 => {
+      this.establishmentDataService.get_filtered(this.registerMinturSelected.establishment.id).then( r2 => {
+         let provincia = new Ubication();
+         let canton = new Ubication();
+         let parroquia = new Ubication();
+         let zonal = new Ubication();
+         this.ubications.forEach(element => {
+            if (element.id == r2.establishment.ubication_id) {
+            parroquia = element;
+            }
+         });
+         this.ubications.forEach(element => {
+            if (element.code == parroquia.father_code) {
+            canton = element;
+            }
+         });
+         this.ubications.forEach(element => {
+            if (element.code == canton.father_code) {
+            provincia = element;
+            }
+         });
+         this.ubications.forEach(element => {
+            if (element.code == provincia.father_code) {
+            zonal = element;
+            }
+         });
+         let iniciales_tecnico_zonal = '';
+         this.user.name.split(' ').forEach(element => {
+            iniciales_tecnico_zonal += element.substring(0, 1).toUpperCase();
+         });
+         let iniciales_cordinacion_zonal = '';
+         const zonalName = zonal.name.split(' ');
+         iniciales_cordinacion_zonal = zonalName[zonalName.length - 1].toUpperCase();
+         const today = new Date();
+         let qr_value = 'MT-CZ' + iniciales_cordinacion_zonal + '-' + this.ruc_registro_selected.ruc.number + '-' + r2.establishment.ruc_code_id + '-ACTA-NOTIFICACION-ALOJAMIENTO-' + iniciales_tecnico_zonal + '-' + today.getDate() + '-' + (today.getMonth() + 1) + '-' + today.getFullYear();
+         const actividad = 'ALOJAMIENTO';
+         const tipo_tramite = 'REGISTRO';
+         this.documentDataService.get_doc_id(qr_value).then( respuesta => {
+            const codigo = 'MT-CZ' + iniciales_cordinacion_zonal + '-' + iniciales_tecnico_zonal + '-' + today.getFullYear() + '-' + respuesta.toString();
+            const params = [{canton: canton.name.toUpperCase()},
+               {fecha: today.toLocaleDateString().toUpperCase()},
+               {codigo: codigo},
+               {nombre_comercial: r2.establishment.commercially_known_name.toUpperCase()},
+               {representante_legal: this.representante_legal},
+               {direccion_establecimiento: r2.establishment.address_main_street.toUpperCase() + ' ' + r2.establishment.address_number.toUpperCase() + ' ' + r2.establishment.address_secondary_street.toUpperCase()},
+               {tipo_tramite: tipo_tramite}];
+            
+            let document = new Documento();
+            document.activity =actividad;
+            document.code = qr_value;
+            document.document_type = 'ACTA NOTIFICACION';
+            let paramsToBuild = {
+               template: 1, qr: true, qr_value: qr_value, params: params
+            }
+            document.procedure_id = tipo_tramite;
+            document.zonal = zonal.name;
+            document.user = iniciales_tecnico_zonal;
+            document.params = JSON.stringify(paramsToBuild);
+            this.documentDataService.post(document).then().catch( e => { console.log(e); });
+            this.exporterDataService.template(1, true, qr_value, params).then( r => {
+               const byteCharacters = atob(r);
+               const byteNumbers = new Array(byteCharacters.length);
+               for (let i = 0; i < byteCharacters.length; i++) {
+                  byteNumbers[i] = byteCharacters.charCodeAt(i);
+               }
+               const byteArray = new Uint8Array(byteNumbers);
+               const blob = new Blob([byteArray], { type: 'application/pdf'});
+               saveAs(blob, qr_value + '.pdf');
+               this.please_wait_requisites = false;
+               this.imprimiendo_informe = false;
+            }).catch( e => { console.log(e); });
+         }).catch( e => { console.log(e); });
+      }).catch( e => { console.log(e); });
+   }).catch( e => { console.log(e); });
+  }
+
   imprimirInforme() {
    this.imprimiendo_informe = true;
    this.registerDataService.get_register_data(this.registerMinturSelected.register.id).then( r0 => {
@@ -1669,8 +1749,19 @@ export class InspectorComponent implements OnInit {
       this.informeApprovalStateAttachment.approval_state_attachment_file_name);
   }
 
+  descargarActaNotificacion() {
+   this.downloadFile(
+      this.actaNotificacionApprovalStateAttachment.approval_state_attachment_file,
+      this.actaNotificacionApprovalStateAttachment.approval_state_attachment_file_type,
+      this.actaNotificacionApprovalStateAttachment.approval_state_attachment_file_name);
+  }
+
   borrarInforme() {
    this.informeApprovalStateAttachment = new ApprovalStateAttachment();
+  }
+
+  borrarActaNotificacion() {
+   this.actaNotificacionApprovalStateAttachment = new ApprovalStateAttachment();
   }
 
   CodeFileRequisitesAttachment(event) {
@@ -1699,6 +1790,19 @@ export class InspectorComponent implements OnInit {
    }
   }
 
+  CodeFileActaNotificacionAttachment(event) {
+   const reader = new FileReader();
+   if (event.target.files && event.target.files.length > 0) {
+      const file = event.target.files[0];
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+         this.actaNotificacionApprovalStateAttachment.approval_state_attachment_file_name = file.name;
+         this.actaNotificacionApprovalStateAttachment.approval_state_attachment_file_type = file.type;
+         this.actaNotificacionApprovalStateAttachment.approval_state_attachment_file = reader.result.toString().split(',')[1];
+      };
+   }
+  }
+
   validateRequisitesFile(): Boolean {
    return !(this.requisitosApprovalStateAttachment.approval_state_attachment_file_name == '');
   }
@@ -1709,6 +1813,10 @@ export class InspectorComponent implements OnInit {
 
   validateInformeFile(): Boolean {
    return !(this.informeApprovalStateAttachment.approval_state_attachment_file_name == '');
+  }
+
+  validateActaNotificacionFile(): Boolean {
+   return !(this.actaNotificacionApprovalStateAttachment.approval_state_attachment_file_name == '');
   }
 
   guardarInspeccion() {
