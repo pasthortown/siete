@@ -76,7 +76,7 @@ export class LayoutComponent implements OnInit {
             }
         }
         if (now >= endTime) {
-            this.toastr.errorToastr('Su sesión a caducado', 'Sesión');
+            this.toastr.errorToastr('Su sesión ha caducado', 'Sesión');
             sessionStorage.clear();
             this.router.navigate(['/login']);
         }
