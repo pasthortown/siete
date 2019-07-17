@@ -194,12 +194,12 @@
       <button type="button" class="btn btn-danger ml-2" *ngIf="digito != '9'" title="Cancelar Cambios" (click)="refresh()"><i class="fas fa-times"></i> Cancelar</button>
   </div>
 </div>
-<div class="row" *ngIf="stateTramite == 1 && estadoOrigen == 1">
+<div class="row" *ngIf="stateTramite == 1 && estadoOrigen == 1 && mostrarDataRegisterMintur">
   <div class="col-12 mt-3 mb-2">
     <label>Tarifario Rack o Mostrador</label>
     <div class="input-group mb-3">
       <div class="input-group-prepend">
-        <button type="button" [disabled]="!SRIOK || imprimiendo_tarifario" class="btn btn-secondary" title="Imprimir Tarifario Rack o Mostrador" (click)="imprimirTarifarioRack()"><i class="fas fa-print"></i></button>
+        <button type="button" [disabled]="!SRIOK || imprimiendo_tarifario || validateTarifarioRackFile()" class="btn btn-secondary" title="Imprimir Tarifario Rack o Mostrador" (click)="imprimirTarifarioRack()"><i class="fas fa-print"></i></button>
         <button type="button" [disabled]="!validateTarifarioRackFile()" class="btn btn-secondary" title="Descargar Tarifario Rack Cargado" (click)="descargarTarifarioRack()"><i class="fas fa-download"></i></button>
         <button type="button" [disabled]="!validateTarifarioRackFile()" class="btn btn-danger" title="Borrar Tarifario Rack Cargado" (click)="borrarTarifarioRack()"><i class="fas fa-trash"></i></button>
       </div>
@@ -213,12 +213,12 @@
     </small>
   </div>
 </div>
-<div class="row" *ngIf="stateTramite == 1 && estadoOrigen == 1">
+<div class="row" *ngIf="stateTramite == 1 && estadoOrigen == 1 && mostrarDataRegisterMintur">
   <div class="col-12 mt-3 mb-2">
     <label>Registro Turístico</label>
     <div class="input-group mb-3">
       <div class="input-group-prepend">
-        <button type="button" [disabled]="!SRIOK || imprimiendo_registro" class="btn btn-secondary" title="Imprimir Registro Turístico" (click)="imprimirRegistro()"><i class="fas fa-print"></i></button>
+        <button type="button" [disabled]="!SRIOK || imprimiendo_registro || validateRegistroFile()" class="btn btn-secondary" title="Imprimir Registro Turístico" (click)="imprimirRegistro()"><i class="fas fa-print"></i></button>
         <button type="button" [disabled]="!validateRegistroFile()" class="btn btn-secondary" title="Descargar Registro Turístico Cargado" (click)="descargarRegistro()"><i class="fas fa-download"></i></button>
         <button type="button" [disabled]="!validateRegistroFile()" class="btn btn-danger" title="Borrar Registro Turístico Cargado" (click)="borrarRegistro()"><i class="fas fa-trash"></i></button>
       </div>
@@ -234,7 +234,7 @@
 </div>
 <div class="row" *ngIf="stateTramite == 1 && estadoOrigen == 1">
   <div class="col-12 text-center mb-3">
-    <button type="button" class="btn btn-success" [disabled]="!(validateRegistroFile() && validateTarifarioRackFile)" title="Guardar Información" (click)="entregarDocumentos()"><i class="fas fa-save"></i>Guardar y Entregar Documentos</button>
+    <button type="button" class="btn btn-success" [disabled]="!(validateRegistroFile() && validateTarifarioRackFile)" title="Guardar Información" (click)="entregarDocumentos()"><i class="fas fa-save"></i> Guardar y Entregar Documentos</button>
     <button type="button" class="btn btn-danger ml-2" title="Cancelar Cambios" (click)="refresh()"><i class="fas fa-times"></i> Cancelar</button>
   </div>
 </div>

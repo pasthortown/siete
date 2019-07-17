@@ -2010,6 +2010,7 @@ export class CoordinadorComponent implements OnInit {
      }).catch( e => { console.log(e); });
      this.approvalStateAttachmentDataService.post(this.registroApprovalStateAttachment).then( r2 => {
       this.toastr.successToastr('Datos guardados satisfactoriamente', 'Inspección');
+      this.mostrarDataRegisterMintur = false;
       Swal.fire(
          'Confirmado!',
          'La solicitud de trámite, ha sido atendida satisfactoriamente.',
