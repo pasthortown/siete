@@ -98,6 +98,9 @@
     <div class="col-12" *ngIf="hasInform">
       <span class="badge badge-info" style="cursor:pointer;" (click)="descargarInforme()"><span class="fas fa-file-pdf" (click)="descargarRequisitos()"></span>&nbsp; Informe</span>
     </div>
+    <div class="col-12" *ngIf="hasActaNotificacion">
+      <span class="badge badge-info" style="cursor:pointer;" (click)="descargarActa()"><span class="fas fa-file-pdf" (click)="descargarActa()"></span>&nbsp; Acta de Notificación</span> 
+    </div>
     <div class="col-12" *ngIf="isAssigned">
       <small><strong>Fecha de Asignación:</strong>&nbsp;<i>{{registerApprovalInspector.date_assigment | date:'y-MM-dd'}}</i></small>
     </div>
@@ -173,24 +176,66 @@
     </div>
   </div>
 </div>
-<div class="row" *ngIf="registerApprovalInspector.value && registerApprovalFinanciero.notes != '' && mostrarDataRegisterMintur">
+<div class="row" *ngIf="(registerApprovalInspector.value && registerApprovalFinanciero.notes != '' && mostrarDataRegisterMintur) && (stateTramite == 0)">
   <div class="col-12">
       <label>Estado del Trámite</label>
       <select class="form-control" id="stateTramite" name="stateTramite" [(ngModel)]="stateTramite">
         <option value="0" selected>Pendiente</option>
         <option value="1" selected>Solicitud Aprobada</option>
         <option value="2" selected>Solicitud Rechazada</option>
-        <option value="3" selected>Documentación Entregada</option>
       </select>
-  </div>'
+  </div>
   <div class="col-12 mt-3 mb-2" *ngIf="digito != '9'">
     <label class="col-form-label">Observaciones</label>
     <ck-editor id="notes" name="notes" skin="moono-lisa" [(ngModel)]="registerApprovalCoordinador.notes"></ck-editor>
   </div>
-  <div class="col-12 text-center mb-3" >
-      <button type="button" class="btn btn-success" title="Imprimir Registro" (click)="imprimirRegistro()" [disabled]="!hasRegisterReady"><i class="fas fa-file-pdf"></i> Imprimir Registro</button>
-      <button type="button" class="btn btn-success ml-2" *ngIf="digito != '9'" title="Guardar Información de Inspección" (click)="guardarTramite()"><i class="fas fa-save"></i> Guardar Información</button>
+  <div class="col-12 text-center mb-3">
+      <button type="button" class="btn btn-success" *ngIf="digito != '9'" title="Guardar Información" (click)="guardarTramite()"><i class="fas fa-save"></i> Guardar Información</button>
       <button type="button" class="btn btn-danger ml-2" *ngIf="digito != '9'" title="Cancelar Cambios" (click)="refresh()"><i class="fas fa-times"></i> Cancelar</button>
+  </div>
+</div>
+<div class="row" *ngIf="stateTramite == 1">
+  <div class="col-12 mt-3 mb-2">
+    <label>Tarifario Rack o Mostrador</label>
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <button type="button" [disabled]="!SRIOK || imprimiendo_tarifario" class="btn btn-secondary" title="Imprimir Tarifario Rack o Mostrador" (click)="imprimirTarifarioRack()"><i class="fas fa-print"></i></button>
+        <button type="button" [disabled]="!validateTarifarioRackFile()" class="btn btn-secondary" title="Descargar Tarifario Rack Cargado" (click)="descargarTarifarioRack()"><i class="fas fa-download"></i></button>
+        <button type="button" [disabled]="!validateTarifarioRackFile()" class="btn btn-danger" title="Borrar Tarifario Rack Cargado" (click)="borrarTarifarioRack()"><i class="fas fa-trash"></i></button>
+      </div>
+      <input type="file" class="form-control" id="tarifarioFile"
+        name="tarifarioFile" placeholder="Tarifario Rack o Mostrador"
+        (change)="CodeFileTarifarioRackAttachment($event)">
+    </div>
+    <small *ngIf="!SRIOK">
+      <div class="col-12 text-justify mt-2 mb-2" [innerHTML]="rucData">
+      </div>
+    </small>
+  </div>
+</div>
+<div class="row" *ngIf="stateTramite == 1">
+  <div class="col-12 mt-3 mb-2">
+    <label>Registro Turístico</label>
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <button type="button" [disabled]="!SRIOK || imprimiendo_registro" class="btn btn-secondary" title="Imprimir Registro Turístico" (click)="imprimirRegistro()"><i class="fas fa-print"></i></button>
+        <button type="button" [disabled]="!validateRegistroFile()" class="btn btn-secondary" title="Descargar Registro Turístico Cargado" (click)="descargarRegistro()"><i class="fas fa-download"></i></button>
+        <button type="button" [disabled]="!validateRegistroFile()" class="btn btn-danger" title="Borrar Registro Turístico Cargado" (click)="borrarRegistro()"><i class="fas fa-trash"></i></button>
+      </div>
+      <input type="file" class="form-control" id="actaFile"
+        name="actaFile" placeholder="Registro Turístico"
+        (change)="CodeFileRegistroAttachment($event)">
+    </div>
+    <small *ngIf="!SRIOK">
+      <div class="col-12 text-justify mt-2 mb-2" [innerHTML]="rucData">
+      </div>
+    </small>
+  </div>
+</div>
+<div class="row" *ngIf="stateTramite == 1">
+  <div class="col-12 text-center mb-3">
+    <button type="button" class="btn btn-success" *ngIf="digito != '9'" title="Guardar Información" (click)="guardarTramite()"><i class="fas fa-save"></i> Guardar Información</button>
+    <button type="button" class="btn btn-danger ml-2" *ngIf="digito != '9'" title="Cancelar Cambios" (click)="refresh()"><i class="fas fa-times"></i> Cancelar</button>
   </div>
 </div>
 <div class="row" *ngIf="mostrarDataRegisterMintur">

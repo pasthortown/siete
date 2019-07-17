@@ -1918,8 +1918,11 @@ export class InspectorComponent implements OnInit {
          this.registerStateDataService.post(this.newRegisterState).then( r1 => {
          }).catch( e => { console.log(e); });
          this.approvalStateDataService.put(this.registerApprovalInspector).then( r => {
-            this.requisitosApprovalStateAttachment.approval_state_attachment_file_name = 'Formulario_Requisitos_' + this.user.identification + '_' + today.getFullYear().toString() + '_' + (today.getMonth() + 1).toString() + '_' + today.getDate().toString();
-            this.informeApprovalStateAttachment.approval_state_attachment_file_name = 'Informe_Requisitos_' + this.user.identification + '_' + today.getFullYear().toString() + '_' + (today.getMonth() + 1).toString() + '_' + today.getDate().toString();
+            this.requisitosApprovalStateAttachment.approval_state_attachment_file_name = 'Formulario_Requisitos_' + this.user.identification + '_' + today.getFullYear().toString() + '_' + (today.getMonth() + 1).toString() + '_' + today.getDate().toString()+'.pdf';
+            this.informeApprovalStateAttachment.approval_state_attachment_file_name = 'Informe_Requisitos_' + this.user.identification + '_' + today.getFullYear().toString() + '_' + (today.getMonth() + 1).toString() + '_' + today.getDate().toString()+'.pdf';
+            if ( this.validateActaNotificacionFile() ) {
+               this.actaNotificacionApprovalStateAttachment.approval_state_attachment_file_name = 'Acta_Notificacion_' + this.user.identification + '_' + today.getFullYear().toString() + '_' + (today.getMonth() + 1).toString() + '_' + today.getDate().toString()+'.pdf';
+            }
             if (this.requisitosApprovalStateAttachment.id == 0) {
                this.approvalStateAttachmentDataService.post(this.requisitosApprovalStateAttachment).then( r2 => {
                   this.toastr.successToastr('Inspección Guardada Satisfactoriamente', 'Inspección');
@@ -1947,6 +1950,16 @@ export class InspectorComponent implements OnInit {
             } else {
                this.approvalStateAttachmentDataService.put(this.informeApprovalStateAttachment).then( r3 => {
                }).catch( e => { console.log(e); });
+            }
+            if ( this.validateActaNotificacionFile() ) { 
+               this.actaNotificacionApprovalStateAttachment.approval_state_id = this.informeApprovalStateAttachment.approval_state_id;
+               if (this.actaNotificacionApprovalStateAttachment.id == 0) {
+                  this.approvalStateAttachmentDataService.post(this.actaNotificacionApprovalStateAttachment).then( r3 => {
+                  }).catch( e => { console.log(e); });
+               } else {
+                  this.approvalStateAttachmentDataService.put(this.actaNotificacionApprovalStateAttachment).then( r3 => {
+                  }).catch( e => { console.log(e); });
+               }
             }
          }).catch( e => { console.log(e); });
       } else if (
@@ -2108,6 +2121,8 @@ export class InspectorComponent implements OnInit {
                   this.requisitosApprovalStateAttachment.approval_state_id = element.id;
                   this.informeApprovalStateAttachment = new ApprovalStateAttachment();
                   this.informeApprovalStateAttachment.approval_state_id = element.id;
+                  this.actaNotificacionApprovalStateAttachment = new ApprovalStateAttachment();
+                  this.actaNotificacionApprovalStateAttachment.approval_state_id = element.id;
                }
                approvalStateAttachments.forEach(approvalStateAttachment => {
                   if (approvalStateAttachment.approval_state_id == element.id) {
@@ -2116,6 +2131,9 @@ export class InspectorComponent implements OnInit {
                      }
                      if (approvalStateAttachment.approval_state_attachment_file_name.search('Formulario') == 0) {
                         this.requisitosApprovalStateAttachment = approvalStateAttachment;
+                     }
+                     if (approvalStateAttachment.approval_state_attachment_file_name.search('Acta') == 0) {
+                        this.actaNotificacionApprovalStateAttachment = approvalStateAttachment;
                      }
                   }
                });

@@ -153,11 +153,13 @@ export class CoordinadorComponent implements OnInit {
    isAssigned = false;
    hasIspectionDate  = false;
    hasInform  = false;
+   hasActaNotificacion = false;
    hasRegisterReady = false;
    canSave = true;
    hasRequisites = false;
    informeApprovalStateAttachment = new ApprovalStateAttachment();
    requisitosApprovalStateAttachment = new ApprovalStateAttachment();
+   actaNotificacionApprovalStateAttachment: ApprovalStateAttachment = new ApprovalStateAttachment();
    financialSelectedId: number = 0;
    isAssignedFinancial = false;
    //RREGISTROS MINTUR
@@ -1815,6 +1817,7 @@ export class CoordinadorComponent implements OnInit {
   checkAttachments() {
    this.hasRequisites = false;
    this.hasInform = false;
+   this.hasActaNotificacion = false;
    if (this.registerMinturSelected.states.state_id == 11 ||
       this.registerMinturSelected.states.state_id == 21 ||
       this.registerMinturSelected.states.state_id == 31 ||
@@ -1834,6 +1837,10 @@ export class CoordinadorComponent implements OnInit {
          if (approvalStateAttachment.approval_state_attachment_file_name.search('Formulario') == 0) {
             this.requisitosApprovalStateAttachment = approvalStateAttachment;
             this.hasRequisites = true;
+         }
+         if (approvalStateAttachment.approval_state_attachment_file_name.search('Acta') == 0) {
+            this.actaNotificacionApprovalStateAttachment = approvalStateAttachment;
+            this.hasActaNotificacion = true;
          }
       });
    }).catch( e => { console.log(e); });
@@ -2084,6 +2091,10 @@ export class CoordinadorComponent implements OnInit {
   }
 
   imprimirRegistro() {
+   alert('imprimir');
+  }
+
+  imprimirTarifarioRack() {
    alert('imprimir');
   }
 
@@ -2509,6 +2520,13 @@ export class CoordinadorComponent implements OnInit {
       this.informeApprovalStateAttachment.approval_state_attachment_file_name);
   }
 
+  descargarActa() {
+   this.downloadFile(
+      this.actaNotificacionApprovalStateAttachment.approval_state_attachment_file,
+      this.actaNotificacionApprovalStateAttachment.approval_state_attachment_file_type,
+      this.actaNotificacionApprovalStateAttachment.approval_state_attachment_file_name);
+  }
+  
   descargarPDFTarifario() {
    const tariffs = [];
    this.tarifarioRack.valores.forEach(tariff => {
