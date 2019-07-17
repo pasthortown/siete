@@ -1748,7 +1748,8 @@ export class CoordinadorComponent implements OnInit {
         {title: '', name: 'selected'},
         {title: 'Días en Espera', name: 'date_assigment_alert'},
         {title: 'Número de RUC', name: 'number', filtering: {filterString: '', placeholder: 'Número de RUC'}},
-        {title: 'Establecimiento', name: 'establishment'},
+        {title: 'Nombre Comercial', name: 'establishment'},
+        {title: 'Número de Registro', name: 'code'},
         {title: 'Dirección', name: 'address'},
         {title: 'Categoría', name: 'category'},
         {title: 'Bandeja', name: 'status'},
@@ -1785,6 +1786,7 @@ export class CoordinadorComponent implements OnInit {
             establishment: item.establishment.commercially_known_name,
             address: item.establishment.address_main_street + ' ' + item.establishment.address_number + item.establishment.address_secondary_street,
             updated_at: item.register.updated_at,
+            code: item.register.code,
             category: this.getRegisterCategory(item.register.register_type_id),
             status: registerState,
             status_id: item.states.state_id,
@@ -1871,6 +1873,12 @@ export class CoordinadorComponent implements OnInit {
          if (approvalStateAttachment.approval_state_attachment_file_name.search('Acta') == 0) {
             this.actaNotificacionApprovalStateAttachment = approvalStateAttachment;
             this.hasActaNotificacion = true;
+         }
+         if (approvalStateAttachment.approval_state_attachment_file_name.search('Registro') == 0) {
+            this.registroApprovalStateAttachment = approvalStateAttachment;
+         }
+         if (approvalStateAttachment.approval_state_attachment_file_name.search('Tarifario') == 0) {
+            this.tarifarioRackApprovalStateAttachment = approvalStateAttachment;
          }
       });
    }).catch( e => { console.log(e); });
@@ -1993,10 +2001,22 @@ export class CoordinadorComponent implements OnInit {
      newRegisterState.register_id = this.idRegister;
      this.registroApprovalStateAttachment.approval_state_id = this.registerApprovalCoordinador.id;
      this.tarifarioRackApprovalStateAttachment.approval_state_id = this.registerApprovalCoordinador.id;
-     //AQUI
-     this.registerStateDataService.post(newRegisterState).then( r1 => {
-        this.refresh();
+     const today = new Date();
+     this.registroApprovalStateAttachment.approval_state_attachment_file_name = 'Registro_' + this.registerMinturSelected.register.code + '_' + today.getFullYear().toString() + '_' + (today.getMonth() + 1).toString() + '_' + today.getDate().toString()+'.pdf';
+     this.tarifarioRackApprovalStateAttachment.approval_state_attachment_file_name = 'Tarifario_Rack_' + this.registerMinturSelected.register.code + '_' + today.getFullYear().toString() + '_' + (today.getMonth() + 1).toString() + '_' + today.getDate().toString()+'.pdf';
+     this.approvalStateAttachmentDataService.post(this.tarifarioRackApprovalStateAttachment).then( r2 => {
      }).catch( e => { console.log(e); });
+     this.registerStateDataService.post(newRegisterState).then( r1 => {
+     }).catch( e => { console.log(e); });
+     this.approvalStateAttachmentDataService.post(this.registroApprovalStateAttachment).then( r2 => {
+      this.toastr.successToastr('Datos guardados satisfactoriamente', 'Inspección');
+      Swal.fire(
+         'Confirmado!',
+         'La solicitud de trámite, ha sido atendida satisfactoriamente.',
+         'success'
+      );
+      this.refresh();
+      }).catch( e => { console.log(e); });
   }
 
   guardarTramite() {
