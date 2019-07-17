@@ -34,8 +34,6 @@
         </tr>
     </tbody>
 </table><br/><br/>
-<a href="data:application/pdf;base64,{{$information['pdfBase64']}}" download="solicitud_tramite.pdf">Descargar Solicitud de Trámite</a>
-<br/><br/>
 <div style="width:100%; float:left;" >
     <div style="width:25%; float:left;">&nbsp;</div>
     <div style="width:50%; float:left;">
