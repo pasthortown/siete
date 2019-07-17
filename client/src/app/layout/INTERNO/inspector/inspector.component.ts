@@ -1644,7 +1644,7 @@ export class InspectorComponent implements OnInit {
   }
 
   validateNotesInspection(): Boolean {
-     return this.report.background.length > 4 && this.report.conclution.length > 4 && this.report.recomendation.length > 4 && this.report.actions_done.length > 4;
+     return this.report.background.length > 4 && this.report.conclution.length > 4 && this.report.recomendation.length > 4;
   }
   
   validateInspectionInfo(): Boolean {
