@@ -23,7 +23,7 @@ class MailerController extends Controller
       $message->to($to, $information['para'])->subject($subject);
       $message->from($fromMail,$fromAlias);
       if ($tipoMail == 'mail' || $tipoMail == 'asignacion') {
-        $message->attachData(base64_decode($information['pdfBase64']), 'adjunto.pdf', ['mime' => 'application/pdf']);
+        $message->attachData(base64_decode($information['pdfBase64']), 'Solicitud_Tramite.pdf', ['mime' => 'application/pdf']);
       }
     });
     return response()->json("Solicitud Procesada. Enviaremos la respuesta a tu correo electrónico en un momento.",200);
