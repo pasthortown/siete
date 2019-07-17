@@ -97,6 +97,8 @@ import { RegisterStateService } from 'src/app/services/CRUD/ALOJAMIENTO/register
 import { ReceptionRoom } from 'src/app/models/ALOJAMIENTO/ReceptionRoom';
 import Swal from 'sweetalert2';
 import { ExporterService } from 'src/app/services/negocio/exporter.service';
+import { DocumentService } from 'src/app/services/CRUD/EXPORTER/document.service';
+import { Document as Documento } from 'src/app/models/EXPORTER/Document';
 
 @Component({
   selector: 'app-registro',
@@ -132,6 +134,7 @@ export class CoordinadorComponent implements OnInit {
    pays: Pay[] = [];
    actividadSelected = '-';
    regiones = [];
+   estadoOrigen = 0;
    regionSelectedCode = '-';
    certificadoUsoSuelo: FloorAuthorizationCertificate = new FloorAuthorizationCertificate();
    franchises_rucSelectedId = 0;
@@ -160,6 +163,8 @@ export class CoordinadorComponent implements OnInit {
    informeApprovalStateAttachment = new ApprovalStateAttachment();
    requisitosApprovalStateAttachment = new ApprovalStateAttachment();
    actaNotificacionApprovalStateAttachment: ApprovalStateAttachment = new ApprovalStateAttachment();
+   tarifarioRackApprovalStateAttachment: ApprovalStateAttachment = new ApprovalStateAttachment();
+   registroApprovalStateAttachment: ApprovalStateAttachment = new ApprovalStateAttachment();
    financialSelectedId: number = 0;
    isAssignedFinancial = false;
    //RREGISTROS MINTUR
@@ -190,6 +195,7 @@ export class CoordinadorComponent implements OnInit {
   recordsByPageRegister = 5;
   mostrarData = true;
   group_types: GroupType[] = [];
+  capacity_types: CapacityType[] = [];
   rucs_registrados: RegistroDataCarrier[] = [];
   ruc_registro_selected: RegistroDataCarrier = new RegistroDataCarrier();
   rucData = 'CONECTÁNDOSE AL SRI...';
@@ -201,6 +207,7 @@ export class CoordinadorComponent implements OnInit {
   zonalSelectedCode = '-';
   provinciaSelectedCode = '-';
   cantonSelectedCode = '-';
+  representante_legal = '';
   groupTypeSelected: GroupType = new GroupType();
   rucValidated = false;
   identificationRepresentativePersonValidated = false;
@@ -209,6 +216,8 @@ export class CoordinadorComponent implements OnInit {
   emailContactValidated = false;
   mainPhoneContactValidated = false;
   secondaryPhoneContactValidated = true;
+  imprimiendo_tarifario = false;
+  imprimiendo_registro = false;
   user: User = new User();
 
   //DATOS ESTABLECIMIENTO
@@ -340,6 +349,7 @@ export class CoordinadorComponent implements OnInit {
               private complementary_service_typeDataService: ComplementaryServiceTypeService,
               private systemNameDataService: SystemNameService,
               private genderDataService: GenderService,
+              private documentDataService: DocumentService,
               private workerGroupDataService: WorkerGroupService,
               private capacityTypeDataService: CapacityTypeService,
               private establishment_certification_typeDataService: EstablishmentCertificationTypeService,
@@ -389,6 +399,13 @@ export class CoordinadorComponent implements OnInit {
       return true;
    }
    return false;
+  }
+
+  getAllCapacityTypes() {
+   this.capacity_types = [];
+   this.capacityTypeDataService.get().then( r => {
+      this.capacity_types = r;
+   }).catch( e => { console.log(e); });
   }
 
   onChangeTablePays(config: any, event?): any {
@@ -746,6 +763,15 @@ export class CoordinadorComponent implements OnInit {
    return {max: today, min: min};
   }
 
+  validateTarifarioRackFile(): Boolean {
+   return !(this.tarifarioRackApprovalStateAttachment.approval_state_attachment_file_name == '');
+  }
+
+  validateRegistroFile(): Boolean {
+   return !(this.registroApprovalStateAttachment.approval_state_attachment_file_name == '');
+  }
+
+
   getPays() {
    this.payDataService.get_by_ruc_number(this.registerMinturSelected.ruc.number).then( r => {
       this.pays = r as Pay[];
@@ -1008,7 +1034,7 @@ export class CoordinadorComponent implements OnInit {
       {parroquia: parroquia.name.toUpperCase()},
       {calle_principal: this.registerMinturSelected.establishment.address_main_street.toUpperCase()},
       {numeracion: this.registerMinturSelected.establishment.address_number.toUpperCase()},
-      {calle_secundaria: this.registerMinturSelected.establishment.address_secondary_street.toUpperCase()}];//AQUI
+      {calle_secundaria: this.registerMinturSelected.establishment.address_secondary_street.toUpperCase()}];
    this.exporterDataService.template(10, true, qr_value, params).then( r => {
       let pdfBase64 = r;
       const information = {
@@ -1777,21 +1803,25 @@ export class CoordinadorComponent implements OnInit {
          const estado: String = this.stateTramiteId.toString();
          this.digito = estado.substring(estado.length-1, estado.length);
          this.stateTramite = 0;
+         this.estadoOrigen = 0;
          this.canSave = true;
          if (registerState.search('Solicitud Aprobada') == 0) {
             this.stateTramite = 1;
             this.hasRegisterReady = true;
             this.canSave = false;
+            this.estadoOrigen = 1;
          }
          if (registerState.search('Solicitud Rechazada') == 0) {
             this.stateTramite = 2;
             this.hasRegisterReady = false;
             this.canSave = false;
+            this.estadoOrigen = 2;
          }
          if (registerState.search('Documentación Entregada') == 0) {
             this.stateTramite = 3;
             this.hasRegisterReady = false;
             this.canSave = false;
+            this.estadoOrigen = 3;
          }
       }
    });
@@ -2095,7 +2125,127 @@ export class CoordinadorComponent implements OnInit {
   }
 
   imprimirTarifarioRack() {
-   alert('imprimir');
+   this.imprimiendo_tarifario = true;
+   this.registerDataService.get_register_data(this.registerMinturSelected.register.id).then( r0 => {
+      this.establishmentDataService.get_filtered(this.registerMinturSelected.establishment.id).then( r2 => {
+         this.registerDataService.get_tarifario(this.registerMinturSelected.register.id).then( r3 => {
+            this.tarifarioResponse = r3 as Tariff[];
+            let provincia = new Ubication();
+            let canton = new Ubication();
+            let parroquia = new Ubication();
+            let zonal = new Ubication();
+            this.ubications.forEach(element => {
+               if (element.id == r2.establishment.ubication_id) {
+               parroquia = element;
+               }
+            });
+            this.ubications.forEach(element => {
+               if (element.code == parroquia.father_code) {
+               canton = element;
+               }
+            });
+            this.ubications.forEach(element => {
+               if (element.code == canton.father_code) {
+               provincia = element;
+               }
+            });
+            this.ubications.forEach(element => {
+               if (element.code == provincia.father_code) {
+               zonal = element;
+               }
+            });
+            let iniciales_cordinador_zonal = '';
+            this.user.name.split(' ').forEach(element => {
+               iniciales_cordinador_zonal += element.substring(0, 1).toUpperCase();
+            });
+            let iniciales_cordinacion_zonal = '';
+            const zonalName = zonal.name.split(' ');
+            iniciales_cordinacion_zonal = zonalName[zonalName.length - 1].toUpperCase();
+            const today = new Date();
+            let qr_value = 'MT-CZ' + iniciales_cordinacion_zonal + '-' + this.ruc_registro_selected.ruc.number + '-' + r2.establishment.ruc_code_id + '-ACTA-NOTIFICACION-ALOJAMIENTO-' + iniciales_cordinador_zonal + '-' + today.getDate() + '-' + (today.getMonth() + 1) + '-' + today.getFullYear();
+            const actividad = 'ALOJAMIENTO';
+            const tipo_tramite = 'REGISTRO';
+            let clasificacion = '';
+            this.register_types.forEach(element => {
+               if (element.id == r0.register.register_type_id) {
+                  clasificacion = element.name.toString();
+               }
+            });
+            const params = [{canton: canton.name.toUpperCase()},
+               {fecha: today.toLocaleDateString().toUpperCase()},
+               {nombre_comercial: r2.establishment.commercially_known_name.toUpperCase()},
+               {ruc: this.ruc_registro_selected.ruc.number},
+               {provincia: provincia.name.toUpperCase()},
+               {direccion: r2.establishment.address_main_street.toUpperCase() + ' ' + r2.establishment.address_number.toUpperCase() + ' ' + r2.establishment.address_secondary_street.toUpperCase()},
+               {categoria: clasificacion.toUpperCase()},
+               {registro: r0.register.code.toUpperCase()},
+               {representante_legal: this.representante_legal.toUpperCase()},
+               {clasificacion: r0.register_category.name.toUpperCase()},
+               {nombre_coordinador_Zonal: this.user.name.toUpperCase()},
+               {zonal: iniciales_cordinacion_zonal.toUpperCase()}];
+            let document = new Documento();
+            document.activity =actividad;
+            document.code = qr_value;
+            document.document_type = 'TARIFARIO_RACK';
+            let paramsToBuild = {
+               template: 1, qr: true, qr_value: qr_value, params: params
+            }
+            const tariffs = [];
+            this.tarifarioResponse.forEach(tariff => {
+               const newTariff = {capacity_type_id: 0, type: '', habitacion_alta: 0, habitacion_baja: 0, persona_alta: 0, persona_baja: 0};
+               let existe = false;
+               tariffs.forEach(element => {
+                  if (element.capacity_type_id == tariff.capacity_type_id) {
+                     existe = true;
+                  }
+               });
+               if (!existe) {
+                  this.capacity_types.forEach(element => {
+                     if (element.id == tariff.capacity_type_id) {
+                        newTariff.type = element.name.toString();
+                        newTariff.capacity_type_id = tariff.capacity_type_id;
+                     }
+                  });
+                  tariffs.push(newTariff);
+               }
+            });
+            tariffs.forEach(element => {
+               this.tarifarioResponse.forEach(tariff => {
+                  if (tariff.capacity_type_id == element.capacity_type_id) {
+                     if (tariff.tariff_type_id == 3) {
+                        element.habitacion_baja = tariff.price;
+                     }
+                     if (tariff.tariff_type_id == 5) {
+                        element.habitacion_alta = tariff.price;
+                     }
+                     if (tariff.tariff_type_id == 4) {
+                        element.persona_baja = tariff.price;
+                     }
+                     if (tariff.tariff_type_id == 6) {
+                        element.persona_alta = tariff.price;
+                     }
+                  }
+               });
+            });
+            document.procedure_id = tipo_tramite;
+            document.zonal = zonal.name;
+            document.user = iniciales_cordinacion_zonal;
+            document.params = JSON.stringify(paramsToBuild);
+            this.documentDataService.post(document).then().catch( e => { console.log(e); });
+            this.exporterDataService.getPDFTarifarioRack(tariffs, true, qr_value, params).then( r => {
+               const byteCharacters = atob(r);
+               const byteNumbers = new Array(byteCharacters.length);
+               for (let i = 0; i < byteCharacters.length; i++) {
+                  byteNumbers[i] = byteCharacters.charCodeAt(i);
+               }
+               const byteArray = new Uint8Array(byteNumbers);
+               const blob = new Blob([byteArray], { type: 'application/pdf'});
+               saveAs(blob, qr_value + '.pdf');
+               this.imprimiendo_tarifario = false;
+            }).catch( e => { console.log(e); });
+         }).catch( e => { console.log(e); });
+      }).catch( e => { console.log(e); });
+   }).catch( e => { console.log(e); });
   }
 
   validateGroupGivenTipe(): Boolean {
@@ -2161,6 +2311,7 @@ export class CoordinadorComponent implements OnInit {
    this.getStates();
    this.getRucNameTypes();
    this.getZonalesEstablishment();
+   this.getAllCapacityTypes();
    this.getEstablishmentPropertyType();
    this.getLanguage();
    this.getComplementaryFoodServiceType();
@@ -2500,10 +2651,58 @@ export class CoordinadorComponent implements OnInit {
    }
   }
 
+  CodeFileRegistroAttachment(event) {
+   const reader = new FileReader();
+   if (event.target.files && event.target.files.length > 0) {
+      const file = event.target.files[0];
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+         this.registroApprovalStateAttachment.approval_state_attachment_file_name = file.name;
+         this.registroApprovalStateAttachment.approval_state_attachment_file_type = file.type;
+         this.registroApprovalStateAttachment.approval_state_attachment_file = reader.result.toString().split(',')[1];
+      };
+   }
+  }
+
+  CodeFileTarifarioRackAttachment(event) {
+   const reader = new FileReader();
+   if (event.target.files && event.target.files.length > 0) {
+      const file = event.target.files[0];
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+         this.tarifarioRackApprovalStateAttachment.approval_state_attachment_file_name = file.name;
+         this.tarifarioRackApprovalStateAttachment.approval_state_attachment_file_type = file.type;
+         this.tarifarioRackApprovalStateAttachment.approval_state_attachment_file = reader.result.toString().split(',')[1];
+      };
+   }
+  }
+
   borrarNombramiento() {
    this.ruc_registro_selected.ruc.person_representative_attachment.person_representative_attachment_file = '';
    this.ruc_registro_selected.ruc.person_representative_attachment.person_representative_attachment_file_type = '';
    this.ruc_registro_selected.ruc.person_representative_attachment.person_representative_attachment_file_name = '';
+  }
+
+  borrarTarifarioRack() {
+   this.tarifarioRackApprovalStateAttachment = new ApprovalStateAttachment();
+  }
+
+  borrarRegistro() {
+   this.registroApprovalStateAttachment = new ApprovalStateAttachment();
+  }
+
+  descargarRegistro() {
+   this.downloadFile(
+      this.registroApprovalStateAttachment.approval_state_attachment_file,
+      this.registroApprovalStateAttachment.approval_state_attachment_file_type,
+      this.registroApprovalStateAttachment.approval_state_attachment_file_name);
+  }
+
+  descargarTarifarioRack() {
+   this.downloadFile(
+      this.tarifarioRackApprovalStateAttachment.approval_state_attachment_file,
+      this.tarifarioRackApprovalStateAttachment.approval_state_attachment_file_type,
+      this.tarifarioRackApprovalStateAttachment.approval_state_attachment_file_name);
   }
 
   descargarNombramiento() {
@@ -3407,6 +3606,8 @@ guardarDeclaracion() {
         let datosRL = '';
         let datosAE = '';
         let datosContactoSRI = '';
+        let RL_name = '';
+        let RZ_name = '';
         itemsDetalles_SRI_RUC_COMPLETO.forEach(entidad => {
            if (entidad.nombre == 'Actividad Economica') {
               const AE = entidad.filas.fila.columnas.columna;
@@ -3421,6 +3622,7 @@ guardarDeclaracion() {
               DC.forEach(element => {
                  if (element.campo == 'razonSocial') {
                     datosGenerales += '<strong>Razón Social: </strong> ' + element.valor + '<br/>';
+                    RZ_name = element.valor;
                  }
                  if (element.campo == 'email') {
                     if (JSON.stringify(element.valor) !== '{}') {
@@ -3439,6 +3641,7 @@ guardarDeclaracion() {
               RL.forEach(element => {
                  if (element.campo == 'identificacion') {
                     datosRL += '<strong>Identificación Representante Legal: </strong> ' + element.valor + '<br/>';
+                    RL_name = element.valor;
                     if (JSON.stringify(element.valor) !== '{}') {
                        this.ruc_registro_selected.ruc.person_representative.identification = element.valor;
                        this.consumoCedulaRepresentanteLegal = false;
@@ -3482,6 +3685,9 @@ guardarDeclaracion() {
            this.rucData = datosGenerales + datosAE + datosContactoSRI;
            if (this.ruc_registro_selected.ruc.tax_payer_type_id != 1) {
               this.rucData += datosRL;
+              this.representante_legal = RL_name;
+           } else {
+              this.representante_legal = RZ_name;
            }
         });
      }).catch( e => {

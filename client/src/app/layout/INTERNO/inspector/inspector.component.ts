@@ -102,6 +102,7 @@ import { ExporterService } from 'src/app/services/negocio/exporter.service';
 import Swal from 'sweetalert2';
 import { DocumentService } from 'src/app/services/CRUD/EXPORTER/document.service';
 import { Document as Documento } from 'src/app/models/EXPORTER/Document';
+
 @Component({
   selector: 'app-registro',
   templateUrl: './inspector.component.html',
@@ -1312,7 +1313,7 @@ export class InspectorComponent implements OnInit {
                {fecha: today.toLocaleDateString().toUpperCase()},
                {codigo: codigo},
                {nombre_comercial: r2.establishment.commercially_known_name.toUpperCase()},
-               {representante_legal: this.representante_legal},
+               {representante_legal: this.representante_legal.toUpperCase()},
                {direccion_establecimiento: r2.establishment.address_main_street.toUpperCase() + ' ' + r2.establishment.address_number.toUpperCase() + ' ' + r2.establishment.address_secondary_street.toUpperCase()},
                {tipo_tramite: tipo_tramite}];
             
@@ -1337,7 +1338,6 @@ export class InspectorComponent implements OnInit {
                const byteArray = new Uint8Array(byteNumbers);
                const blob = new Blob([byteArray], { type: 'application/pdf'});
                saveAs(blob, qr_value + '.pdf');
-               this.please_wait_requisites = false;
                this.imprimiendo_informe = false;
             }).catch( e => { console.log(e); });
          }).catch( e => { console.log(e); });

@@ -88,7 +88,7 @@ class ExporterController extends Controller
   function pdf_tarifario_rack(Request $data) {
     $request = $data->json()->all();
     $html_content = '<pagina><div style="width:100%; height:350px;"></div><div style="width:100%; margin-left: 150px; margin-right:100px;">';
-    $html_content .= '<p style="text-align:right;"><strong>##canton## , ##fecha##<br/><br/></strong>';
+    $html_content .= '<p style="text-align:right;"><strong>##canton##, ##fecha##<br/><br/></strong>';
     $html_content .= '</p><p style="text-align: justify">Conforme a lo determinado en la disposición general tercera del Reglamento General de Alojamiento "Los establecimientos de alojamiento deberán informar a la Autoridad Nacional de Turismo hasta el primero de diciembre de cada año sobre las tarifas rack o mostrador del año siguiente. Estas considerarán el valor por huésped por noche por tipo de habitación y por temporada alta y baja, incluido impuesto; de no hacerlo la Autoridad Nacional de Turismo sancionar conforme a la normativa vigente", para el cumplimiento se procede a detallar a continuación, la siguiente información:</p>';
     $html_content .= '<table style="width: 100%; border: 1px solid black; border-collapse: collapse; text-align: left; font-size:14px;">';
     $html_content .= '<tr><th colspan="4" style="text-align:center; background-color:yellow;">DATOS GENERALES</th></tr>';
@@ -103,7 +103,7 @@ class ExporterController extends Controller
     $html_content .= '<table style="margin:auto; text-align: center; width:50%;">';
     $html_content .= '<tr><td style="border-bottom: 1px solid black;"></td></tr>';
     $html_content .= '<tr><td><strong>##nombre_coordinador_Zonal##</strong></td></tr>';
-    $html_content .= '<tr><td><strong>Coordinación Zonal:##zonal##</strong></td></tr>';
+    $html_content .= '<tr><td><strong>Coordinación Zonal ##zonal##</strong></td></tr>';
     $html_content .= '</table>';
     
     $html_content .= '</div></pagina>';

@@ -176,7 +176,7 @@
     </div>
   </div>
 </div>
-<div class="row" *ngIf="(registerApprovalInspector.value && registerApprovalFinanciero.notes != '' && mostrarDataRegisterMintur) && (stateTramite == 0)">
+<div class="row" *ngIf="(registerApprovalInspector.value && registerApprovalFinanciero.notes != '' && mostrarDataRegisterMintur) && (estadoOrigen == 0)">
   <div class="col-12">
       <label>Estado del Trámite</label>
       <select class="form-control" id="stateTramite" name="stateTramite" [(ngModel)]="stateTramite">
@@ -194,7 +194,7 @@
       <button type="button" class="btn btn-danger ml-2" *ngIf="digito != '9'" title="Cancelar Cambios" (click)="refresh()"><i class="fas fa-times"></i> Cancelar</button>
   </div>
 </div>
-<div class="row" *ngIf="stateTramite == 1">
+<div class="row" *ngIf="stateTramite == 1 && estadoOrigen == 1">
   <div class="col-12 mt-3 mb-2">
     <label>Tarifario Rack o Mostrador</label>
     <div class="input-group mb-3">
@@ -213,7 +213,7 @@
     </small>
   </div>
 </div>
-<div class="row" *ngIf="stateTramite == 1">
+<div class="row" *ngIf="stateTramite == 1 && estadoOrigen == 1">
   <div class="col-12 mt-3 mb-2">
     <label>Registro Turístico</label>
     <div class="input-group mb-3">
@@ -232,10 +232,10 @@
     </small>
   </div>
 </div>
-<div class="row" *ngIf="stateTramite == 1">
+<div class="row" *ngIf="stateTramite == 1 && estadoOrigen == 1">
   <div class="col-12 text-center mb-3">
-    <button type="button" class="btn btn-success" *ngIf="digito != '9'" title="Guardar Información" (click)="guardarTramite()"><i class="fas fa-save"></i> Guardar Información</button>
-    <button type="button" class="btn btn-danger ml-2" *ngIf="digito != '9'" title="Cancelar Cambios" (click)="refresh()"><i class="fas fa-times"></i> Cancelar</button>
+    <button type="button" class="btn btn-success" [disabled]="!(validateRegistroFile() && validateTarifarioRackFile)" title="Guardar Información" (click)="guardarTramite()"><i class="fas fa-save"></i> Guardar Información</button>
+    <button type="button" class="btn btn-danger ml-2" title="Cancelar Cambios" (click)="refresh()"><i class="fas fa-times"></i> Cancelar</button>
   </div>
 </div>
 <div class="row" *ngIf="mostrarDataRegisterMintur">

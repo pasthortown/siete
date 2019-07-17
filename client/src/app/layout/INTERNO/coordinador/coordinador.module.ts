@@ -55,6 +55,7 @@ import { DeclarationService } from 'src/app/services/CRUD/FINANCIERO/declaration
 import { Ng2TableModule } from 'ng2-table/ng2-table';
 import { ApprovalStateAttachmentService } from './../../../services/CRUD/ALOJAMIENTO/approvalstateattachment.service';
 import { ExporterService } from 'src/app/services/negocio/exporter.service';
+import { DocumentService } from 'src/app/services/CRUD/EXPORTER/document.service';
 
 @NgModule({
   imports: [CommonModule,
@@ -74,6 +75,7 @@ import { ExporterService } from 'src/app/services/negocio/exporter.service';
     ConsultorService,
     DeclarationItemCategoryService,
     DeclarationService,
+    DocumentService,
     ReceptionRoomService,
     MailerService,
     DeclarationAttachmentService,
