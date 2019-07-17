@@ -41,6 +41,7 @@ import { BedTypeService } from 'src/app/services/CRUD/ALOJAMIENTO/bedtype.servic
 import { TariffTypeService } from 'src/app/services/CRUD/ALOJAMIENTO/tarifftype.service';
 import { RucNameTypeService } from 'src/app/services/CRUD/BASE/rucnametype.service';
 import { StateService } from 'src/app/services/CRUD/FINANCIERO/state.service';
+import { DeclarationAttachmentService } from 'src/app/services/CRUD/FINANCIERO/declarationattachment.service';
 import { CapacityTypeService } from 'src/app/services/CRUD/ALOJAMIENTO/capacitytype.service';
 import { DinardapService } from 'src/app/services/negocio/dinardap.service';
 import { EstablishmentCertificationAttachmentService } from 'src/app/services/CRUD/BASE/establishmentcertificationattachment.service';
@@ -96,6 +97,7 @@ import { StateService as StateAlojamientoService } from 'src/app/services/CRUD/A
     GroupTypeService,
     RegisterTypeService,
     WorkerGroupService,
+    DeclarationAttachmentService,
     TariffTypeService,
     PreviewRegisterCodeService,
     EstablishmentCertificationTypeService,

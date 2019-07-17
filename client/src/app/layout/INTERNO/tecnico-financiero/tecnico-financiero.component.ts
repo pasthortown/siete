@@ -91,6 +91,8 @@ import { StateDeclaration } from 'src/app/models/FINANCIERO/StateDeclaration';
 import Swal from 'sweetalert2';
 import { StateService as StateAlojamientoService } from 'src/app/services/CRUD/ALOJAMIENTO/state.service';
 import { State as StateAlojamiento } from 'src/app/models/ALOJAMIENTO/State';
+import { DeclarationAttachment } from 'src/app/models/FINANCIERO/DeclarationAttachment';
+import { DeclarationAttachmentService } from 'src/app/services/CRUD/FINANCIERO/declarationattachment.service';
 @Component({
   selector: 'app-tecnico-financiero',
   templateUrl: './tecnico-financiero.component.html',
@@ -256,6 +258,7 @@ export class TecnicoFinancieroComponent implements OnInit {
  consumoCedulaRepresentanteLegal = false;
  SRIOK = false;
  REGCIVILOK = false;
+ balance: DeclarationAttachment = new DeclarationAttachment();
  REGCIVILOKEstablishment = false;
  REGCIVILREPRESENTANTELEGALOK = false;
  guardando = false;
@@ -306,6 +309,7 @@ export class TecnicoFinancieroComponent implements OnInit {
              private establishmentDataService: EstablishmentService,
              private register_typeDataService: RegisterTypeService,
              private requisiteDataService: RequisiteService,
+             private declarationAttachmentDataService: DeclarationAttachmentService,
              private bedTypeDataService: BedTypeService,
              private declarationDataService: DeclarationService,
              private declarationItemCategoryDataService: DeclarationItemCategoryService,
@@ -536,6 +540,13 @@ export class TecnicoFinancieroComponent implements OnInit {
   filteredData = tempArray;
   return filteredData;
  }
+
+ downloadBalance() {
+   this.downloadFile(
+      this.balance.declaration_attachment_file,
+      this.balance.declaration_attachment_file_type,
+      this.balance.declaration_attachment_file_name);
+  }
 
  changeSortRegister(data: any, config: any): any {
   if (!config.sorting) {
@@ -1563,6 +1574,7 @@ getDeclarationItems() {
 
  selectDeclaration(declaration: Declaration) {
    this.declaration_selected = declaration;
+   this.getDeclarationAttachment(declaration.id);
    this.mostrarDataDeclaration = true;
    this.declarationItemsToShow = [];
    this.guardando = false;
@@ -1582,6 +1594,12 @@ getDeclarationItems() {
       }
    });
 }
+
+  getDeclarationAttachment(declaration_id: number) {
+   this.declarationAttachmentDataService.get_by_declaration_id(declaration_id).then( r => {
+      this.balance = r as DeclarationAttachment;
+   }).catch( e => { console.log(e); });
+  }
 
  guardarDeclaracion() {
   this.declaration_selected.declaration_item_values_on_declaration = [];
