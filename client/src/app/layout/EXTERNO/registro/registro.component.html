@@ -359,7 +359,7 @@
                                             placeholder="Nombre Comercial" [(ngModel)]="
                                               establishment_selected.commercially_known_name
                                             " [disabled]="!rucEstablishmentRegisterSelected.editable"/>
-                                            <small class="col-12">
+                                            <small class="col-12" *ngIf="!establishmentComercialNameValidated">
                                               <div class="alert alert-info mt-2 mb-2" role="alert">
                                                 <label class="col-12 text-justify"><strong>Información</strong></label><br />
                                                 <p>Estimado usuario, el sistema ha detectado que su nombre comercial contiene alguno de 
