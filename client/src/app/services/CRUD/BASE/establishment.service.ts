@@ -32,7 +32,7 @@ export class EstablishmentService {
 
    set_register_date(id: number): Promise<any> {
       const data = {id: id};
-      return this.http.post(this.url, JSON.stringify(data) , this.options).toPromise()
+      return this.http.post(this.url + 'set_register_date', JSON.stringify(data) , this.options).toPromise()
       .then( r => {
          return r.json();
       }).catch( error => { this.handledError(error.json());  });

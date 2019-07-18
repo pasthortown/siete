@@ -1180,26 +1180,30 @@ export class CoordinadorComponent implements OnInit {
          clasificacion = element.name;
       }
    });
-   let parroquiaName: String = '';
-   let parroquia: Ubication = new Ubication();
+   const tipo_tramite = 'REGISTRO';
+   const actividad = 'ALOJAMIENTO';
+   let provincia = new Ubication();
+   let canton = new Ubication();
+   let parroquia = new Ubication();
+   let zonal = new Ubication();
    this.ubications.forEach(element => {
       if (element.id == this.registerMinturSelected.establishment.ubication_id) {
-         parroquiaName = element.name;
-         parroquia = element;
+      parroquia = element;
       }
    });
-   let cantonName: String = '';
-   let canton: Ubication = new Ubication();
    this.ubications.forEach(element => {
       if (element.code == parroquia.father_code) {
-         cantonName = element.name;
-         canton = element;
+      canton = element;
       }
    });
-   let provinciaName: String = '';
    this.ubications.forEach(element => {
       if (element.code == canton.father_code) {
-         provinciaName = element.name;
+      provincia = element;
+      }
+   });
+   this.ubications.forEach(element => {
+      if (element.code == provincia.father_code) {
+      zonal = element;
       }
    });
    let financiero = new User();
@@ -1208,29 +1212,52 @@ export class CoordinadorComponent implements OnInit {
          financiero = element;
       }
    });
-   const information = {
-      para: financiero.name,
-      tramite: 'Registro',
-      ruc: this.ruc_registro_selected.ruc.number,
-      nombreComercial: this.registerMinturSelected.establishment.commercially_known_name,
-      fechaSolicitud: today.toLocaleString(),
-      actividad: 'Alojamiento Turístico',
-      clasificacion: clasificacion,
-      categoria: categoria,
-      tipoSolicitud: 'Registro',
-      provincia: provinciaName,
-      canton: cantonName,
-      parroquia: parroquiaName,
-      callePrincipal: this.registerMinturSelected.establishment.address_main_street,
-      calleInterseccion: this.registerMinturSelected.establishment.address_secondary_street,
-      numeracion: this.registerMinturSelected.establishment.address_number,
-      thisYear:today.getFullYear()
-   };
-   this.mailerDataService.sendMail('asignacion', financiero.email.toString(), 'Asignación de trámite para su revisión', information).then( r => {
-      this.toastr.successToastr('Técinco Financiero Asignado Satisfactoriamente.', 'Asignación de Técinco Financiero');
-      this.refresh();
-   }).catch( e => { console.log(e); });
-  }
+   let iniciales_cordinacion_zonal = '';
+   const zonalName = zonal.name.split(' ');
+   iniciales_cordinacion_zonal = zonalName[zonalName.length - 1].toUpperCase();
+   let qr_value = 'MT-CZ' + iniciales_cordinacion_zonal + '-' + this.ruc_registro_selected.ruc.number + '-SOLICITUD-ALOJAMIENTO-' + today.getDate() + '-' + (today.getMonth() + 1) + '-' + today.getFullYear();
+   const params = [{tipo_tramite: tipo_tramite},
+      {fecha: today.toLocaleDateString().toUpperCase()},
+      {representante_legal: this.user.name.toUpperCase()},
+      {nombre_comercial: this.registerMinturSelected.establishment.commercially_known_name.toUpperCase()},
+      {ruc: this.ruc_registro_selected.ruc.number},
+      {fecha_solicitud: today.toLocaleDateString().toUpperCase()},
+      {actividad: actividad},
+      {clasificacion: clasificacion.toUpperCase()},
+      {categoria: categoria.toUpperCase()},
+      {provincia: provincia.name.toUpperCase()},
+      {canton: canton.name.toUpperCase()},
+      {parroquia: parroquia.name.toUpperCase()},
+      {calle_principal: this.registerMinturSelected.establishment.address_main_street.toUpperCase()},
+      {numeracion: this.registerMinturSelected.establishment.address_number.toUpperCase()},
+      {calle_secundaria: this.registerMinturSelected.establishment.address_secondary_street.toUpperCase()}];
+      this.exporterDataService.template(10, true, qr_value, params).then( r => {
+         let pdfBase64 = r;
+         const information = {
+            para: financiero.name,
+            tramite: 'Registro',
+            ruc: this.ruc_registro_selected.ruc.number,
+            nombreComercial: this.registerMinturSelected.establishment.commercially_known_name,
+            fechaSolicitud: today.toLocaleString(),
+            actividad: 'Alojamiento Turístico',
+            clasificacion: clasificacion,
+            categoria: categoria,
+            tipoSolicitud: 'Registro',
+            provincia: provincia.name.toUpperCase(),
+            canton: canton.name.toUpperCase(),
+            parroquia: parroquia.name.toUpperCase(),
+            callePrincipal: this.registerMinturSelected.establishment.address_main_street,
+            calleInterseccion: this.registerMinturSelected.establishment.address_secondary_street,
+            numeracion: this.registerMinturSelected.establishment.address_number,
+            thisYear:today.getFullYear(),
+            pdfBase64: pdfBase64,
+         };
+         this.mailerDataService.sendMail('asignacion', financiero.email.toString(), 'Asignación de trámite para su revisión', information).then( r => {
+            this.toastr.successToastr('Técinco Financiero Asignado Satisfactoriamente.', 'Asignación de Técinco Financiero');
+            this.refresh();
+         }).catch( e => { console.log(e); });
+      }).catch( e => { console.log(e); });
+   }
 
   desasignarFinanciero() {
    const today = new Date();
@@ -2005,10 +2032,13 @@ export class CoordinadorComponent implements OnInit {
      const today = new Date();
      this.registroApprovalStateAttachment.approval_state_attachment_file_name = 'Registro_' + this.registerMinturSelected.register.code + '_' + today.getFullYear().toString() + '_' + (today.getMonth() + 1).toString() + '_' + today.getDate().toString()+'.pdf';
      this.tarifarioRackApprovalStateAttachment.approval_state_attachment_file_name = 'Tarifario_Rack_' + this.registerMinturSelected.register.code + '_' + today.getFullYear().toString() + '_' + (today.getMonth() + 1).toString() + '_' + today.getDate().toString()+'.pdf';
+     
      this.approvalStateAttachmentDataService.post(this.tarifarioRackApprovalStateAttachment).then( r2 => {
      }).catch( e => { console.log(e); });
+     
      this.registerStateDataService.post(newRegisterState).then( r1 => {
      }).catch( e => { console.log(e); });
+     
      this.approvalStateAttachmentDataService.post(this.registroApprovalStateAttachment).then( r2 => {
       this.toastr.successToastr('Datos guardados satisfactoriamente', 'Inspección');
       this.mostrarDataRegisterMintur = false;
