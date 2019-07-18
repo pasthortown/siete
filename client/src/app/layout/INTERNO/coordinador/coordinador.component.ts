@@ -1654,7 +1654,8 @@ export class CoordinadorComponent implements OnInit {
    }).catch( e => { console.log(e); });
   }
 
-  onChangeTable(config: any, page: any = {page: this.currentPageMinturRegisters, itemsPerPage: this.recordsByPageRegisterMintur}): any {
+  onChangeTable(config: any, event?): any {
+   const page: any = {page: this.currentPageMinturRegisters, itemsPerPage: this.recordsByPageRegisterMintur};
    if (config.filtering) {
      Object.assign(this.config.filtering, config.filtering);
    }
