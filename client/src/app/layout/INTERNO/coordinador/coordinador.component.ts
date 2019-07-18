@@ -2258,7 +2258,42 @@ export class CoordinadorComponent implements OnInit {
                clasificacion = element.name.toString();
             }
          });
-         console.log(r0);
+         const capacities = [];
+         const capacities_on_register = r0.capacities_on_register;
+         capacities_on_register.forEach(capacity => {
+            this.capacity_types.forEach(capacityType => {
+               if (capacityType.id == capacity.capacity_type_id) {
+                  if (capacityType.editable_spaces) {
+                     capacity.max_spaces = 0;
+                  } else {
+                     capacity.max_spaces = capacityType.spaces * capacity.quantity;
+                  }
+                  if (capacity.max_bed > capacityType.bed_quantity){
+                     capacity.max_bed = capacityType.bed_quantity;
+                  }
+                  if (capacity.max_bed == 0){
+                     capacity.max_bed = 1;
+                  }
+               }
+            });   
+         });
+         let habitaciones = 0;
+         let plazas = 0;
+         capacities_on_register.forEach(capacity => {
+            const newCapacity = {type: '', spaces: 0, habitaciones: 0};
+            newCapacity.habitaciones = capacity.quantity;
+            newCapacity.spaces = capacity.max_spaces;
+            this.capacity_types.forEach(element => {
+                  if (element.id == capacity.capacity_type_id) {
+                     newCapacity.type = element.name.toString();
+                  }
+            });
+            capacities.push(newCapacity);
+         });
+         capacities.forEach(capacity => {
+            habitaciones += capacity.habitaciones;
+            plazas += capacity.spaces;
+         });
          const params = [{canton: canton.name.toUpperCase()},
             {fecha: today.toLocaleDateString().toUpperCase()},
             {numero_registro: r0.register.code.toUpperCase()},
@@ -2272,8 +2307,8 @@ export class CoordinadorComponent implements OnInit {
             {provincia: provincia.name.toUpperCase()},
             {parroquia: parroquia.name.toUpperCase()},
             {dirección: r2.establishment.address_main_street.toUpperCase() + ' ' + r2.establishment.address_number.toUpperCase() + ' ' + r2.establishment.address_secondary_street.toUpperCase()},
-            {habitaciones: 'habitaciones'},
-            {plazas: 'plazas'},
+            {habitaciones: habitaciones},
+            {plazas: plazas},
             {nombre_coordinador_Zonal: this.user.name.toUpperCase()}];
 
          let document = new Documento();

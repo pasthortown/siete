@@ -49,7 +49,7 @@ class ExporterController extends Controller
     $html_content .= '<tr style="background-color:yellow; text-align: center;"><th style="border: 1px solid black;"></th><th style="border: 1px solid black;" colspan="2">INFORMACIÓN USUARIO</th><th style="border: 1px solid black;" colspan="2">INFORMACIÓN TÉCNICO ZONAL</th></tr>';
     $html_content .= '<tr style="background-color:yellow;"><th style="border: 1px solid black;">TIPO DE HABITACIÓN</th><th style="border: 1px solid black;">HABITACIONES</th><th style="border: 1px solid black;">PLAZAS</th><th style="border: 1px solid black;">HABITACIONES</th><th style="border: 1px solid black;">PLAZAS</th></tr>';
     foreach($capacidades as $capacity) {
-      $html_content .= '<tr><th style="border: 1px solid black;">' . $capacity['type'] . '</th><td style="border: 1px solid black; text-align:center;">' . $capacity['beds'] . '</td><td style="border: 1px solid black; text-align:center;">' . $capacity['spaces'] . '</td><td style="border: 1px solid black;"></td><td style="border: 1px solid black;"></td></tr>';
+      $html_content .= '<tr><th style="border: 1px solid black;">' . $capacity['type'] . '</th><td style="border: 1px solid black; text-align:center;">' . $capacity['habitaciones'] . '</td><td style="border: 1px solid black; text-align:center;">' . $capacity['spaces'] . '</td><td style="border: 1px solid black;"></td><td style="border: 1px solid black;"></td></tr>';
     }
     $html_content .= '</table>';
     return $html_content;
