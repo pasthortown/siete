@@ -127,7 +127,7 @@
     <div class="input-group mb-3">
       <div class="input-group-prepend">
         <button type="button" [disabled]="!SRIOK || imprimiendo_acta" class="btn btn-secondary" title="Imprimir Acta de Notificación" (click)="imprimirActaNotificacion()"><i class="fas fa-print"></i></button>
-        <button type="button" [disabled]="!validateActaNotificacionFile()" class="btn btn-secondary" title="Descargar Acta de Notificación Cargada" (click)="descargarActaNotificacion()"><i class="fas fa-download"></i></button>
+        <button type="button" [disabled]="!validateActaNotificacionFile()" class="btn btn-secondary ml-2" title="Descargar Acta de Notificación Cargada" (click)="descargarActaNotificacion()"><i class="fas fa-download"></i></button>
         <button type="button" [disabled]="!validateActaNotificacionFile()" class="btn btn-danger" title="Borrar Acta de Notificación Cargada" (click)="borrarActaNotificacion()"><i class="fas fa-trash"></i></button>
       </div>
       <input type="file" class="form-control" id="actaFile"
@@ -163,7 +163,7 @@
     <div class="input-group mb-3">
       <div class="input-group-prepend">
         <button type="button" [disabled]="imprimiendo_informe" class="btn btn-secondary" title="Imprimir Informe" (click)="imprimirInforme()"><i class="fas fa-print"></i></button>
-        <button type="button" [disabled]="!validateInformeFile()" class="btn btn-secondary" title="Descargar Informe Cargado" (click)="descargarInforme()"><i class="fas fa-download"></i></button>
+        <button type="button" [disabled]="!validateInformeFile()" class="btn btn-secondary ml-2" title="Descargar Informe Cargado" (click)="descargarInforme()"><i class="fas fa-download"></i></button>
         <button type="button" [disabled]="!validateInformeFile()" class="btn btn-danger" title="Borrar Informe Cargado" (click)="borrarInforme()"><i class="fas fa-trash"></i></button>
       </div>
       <input type="file" class="form-control" id="informeFile"
