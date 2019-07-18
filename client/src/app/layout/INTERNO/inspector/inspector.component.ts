@@ -1487,8 +1487,8 @@ export class InspectorComponent implements OnInit {
                });   
             });
             capacities_on_register.forEach(capacity => {
-               const newCapacity = {type: '', beds: 0, spaces: 0};
-               newCapacity.beds = capacity.quantity;
+               const newCapacity = {type: '', spaces: 0, habitaciones: 0};
+               newCapacity.habitaciones = capacity.quantity;
                newCapacity.spaces = capacity.max_spaces;
                this.capacity_types.forEach(element => {
                      if (element.id == capacity.capacity_type_id) {

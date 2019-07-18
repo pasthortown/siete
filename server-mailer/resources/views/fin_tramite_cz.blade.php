@@ -51,7 +51,7 @@
     <div style="width:25%; float:left;">&nbsp;</div>
     <div style="width:50%; float:left;">
         <div style="width:100%; text-align:center;border-top: 1px solid;border-image: -webkit-linear-gradient(left, #E18728, #BE4C39 33%, #9351A6 66%, #4472B9,#4CA454,#D49B00) 2%; border-image: -ms-linear-gradient(left, #E18728, #BE4C39 33%, #9351A6 66%, #4472B9,#4CA454,#D49B00) 2%; border-image: -moz-linear-gradient(left, #E18728, #BE4C39 33%, #9351A6 66%, #4472B9,#4CA454,#D49B00) 2%;">
-           <small>MINISTERIO DE TURISMO @ {{ $information['thisYear'] }}<br/>Dirección de Tecnologías de la Información y Comunicación</small>
+            <small>MINISTERIO DE TURISMO @ {{ $information['thisYear'] }}<br/>Dirección de Tecnologías de la Información y Comunicaciones</small>
         </div>
     </div>
 </div>
