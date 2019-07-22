@@ -1209,12 +1209,17 @@ export class InspectorComponent implements OnInit {
      this.columns = [
         {title: '', name: 'selected'},
         {title: 'Días en Espera', name: 'date_assigment_alert'},
-        {title: 'Número de RUC', name: 'number', filtering: {filterString: '', placeholder: 'Número de RUC'}},
+        {title: 'Número de RUC', name: 'number'},
         {title: 'Nombre Comercial', name: 'establishment'},
-        {title: 'Dirección', name: 'address'},
-        {title: 'Categoría', name: 'category'},
         {title: 'Bandeja', name: 'status'},
+        {title: 'Actividad', name: 'actividad'},
+        {title: 'Provincia', name: 'provincia'},
+        {title: 'Cantón', name: 'canton'},
+        {title: 'Parroquia', name: 'parroquia'},
+        {title: 'Dirección', name: 'address'},
+        {title: 'Clasificación - Categoría', name: 'category'},
         {title: 'Fecha de Solicitud', name: 'updated_at'},
+        {title: 'Número de Registro', name: 'code'},
         {title: 'Fecha de Asignación', name: 'date_assigment'},
      ];
      const data = [];
@@ -1242,6 +1247,30 @@ export class InspectorComponent implements OnInit {
          }
          const estado: String = item.states.state_id.toString();
          const digito = estado.substring(estado.length-1, estado.length);
+         let provincia = new Ubication();
+         let canton = new Ubication();
+         let parroquia = new Ubication();
+         let zonal = new Ubication();
+         this.ubications.forEach(element => {
+            if (element.id == item.establishment.ubication_id) {
+            parroquia = element;
+            }
+         });
+         this.ubications.forEach(element => {
+            if (element.code == parroquia.father_code) {
+            canton = element;
+            }
+         });
+         this.ubications.forEach(element => {
+            if (element.code == canton.father_code) {
+            provincia = element;
+            }
+         });
+         this.ubications.forEach(element => {
+            if (element.code == provincia.father_code) {
+            zonal = element;
+            }
+         });
          if ( digito == '4' || digito == '5' || digito == '6' ) {
             data.push({
                selected: '',
@@ -1255,6 +1284,11 @@ export class InspectorComponent implements OnInit {
                category: this.getRegisterCategory(item.register.register_type_id),
                status: registerState,
                status_id: item.states.state_id,
+               actividad: 'ALOJAMIENTO',
+               provincia: provincia.name,
+               canton: canton.name,
+               parroquia: parroquia.name,
+               code: item.register.code,
             });
          }
      });
@@ -2277,7 +2311,6 @@ export class InspectorComponent implements OnInit {
    this.getTaxPayerType();
    this.getGroupType();
    this.getTariffs();
-   this.getStates();
    this.getRucNameTypes();
    this.getZonalesEstablishment();
    this.getEstablishmentPropertyType();
@@ -2297,6 +2330,7 @@ export class InspectorComponent implements OnInit {
    this.ubications = [];
    this.ubicationDataService.get().then( r => {
       this.ubications = r as Ubication[];
+      this.getStates();
    }).catch( e => { console.log(e); });
   }
 

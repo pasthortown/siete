@@ -1775,13 +1775,17 @@ export class CoordinadorComponent implements OnInit {
      this.columns = [
         {title: '', name: 'selected'},
         {title: 'Días en Espera', name: 'date_assigment_alert'},
-        {title: 'Número de RUC', name: 'number', filtering: {filterString: '', placeholder: 'Número de RUC'}},
+        {title: 'Número de RUC', name: 'number'},
         {title: 'Nombre Comercial', name: 'establishment'},
-        {title: 'Número de Registro', name: 'code'},
-        {title: 'Dirección', name: 'address'},
-        {title: 'Categoría', name: 'category'},
         {title: 'Bandeja', name: 'status'},
+        {title: 'Actividad', name: 'actividad'},
+        {title: 'Provincia', name: 'provincia'},
+        {title: 'Cantón', name: 'canton'},
+        {title: 'Parroquia', name: 'parroquia'},
+        {title: 'Dirección', name: 'address'},
+        {title: 'Clasificación - Categoría', name: 'category'},
         {title: 'Fecha de Solicitud', name: 'updated_at'},
+        {title: 'Número de Registro', name: 'code'},
      ];
      const data = [];
      this.registers_mintur.forEach(item => {
@@ -1806,11 +1810,39 @@ export class CoordinadorComponent implements OnInit {
          if (diffDays > 10) {
             date_assigment_alert = '<div class="col-12 text-center"><span class="badge badge-danger">&nbsp;' + diffDays.toString() + '&nbsp;</span></div>';
          }
+         let provincia = new Ubication();
+         let canton = new Ubication();
+         let parroquia = new Ubication();
+         let zonal = new Ubication();
+         this.ubications.forEach(element => {
+            if (element.id == item.establishment.ubication_id) {
+            parroquia = element;
+            }
+         });
+         this.ubications.forEach(element => {
+            if (element.code == parroquia.father_code) {
+            canton = element;
+            }
+         });
+         this.ubications.forEach(element => {
+            if (element.code == canton.father_code) {
+            provincia = element;
+            }
+         });
+         this.ubications.forEach(element => {
+            if (element.code == provincia.father_code) {
+            zonal = element;
+            }
+         });
          data.push({
             selected: '',
             date_assigment_alert: date_assigment_alert,
             number: item.ruc.number,
             registerId: item.register.id,
+            actividad: 'ALOJAMIENTO',
+            provincia: provincia.name,
+            canton: canton.name,
+            parroquia: parroquia.name,
             establishment: item.establishment.commercially_known_name,
             address: item.establishment.address_main_street + ' ' + item.establishment.address_number + item.establishment.address_secondary_street,
             updated_at: item.register.updated_at,
@@ -2553,7 +2585,6 @@ export class CoordinadorComponent implements OnInit {
    this.getGroupType();
    this.getCapacityTypes();
    this.getTariffs();
-   this.getStates();
    this.getRucNameTypes();
    this.getZonalesEstablishment();
    this.getAllCapacityTypes();
@@ -2583,6 +2614,7 @@ export class CoordinadorComponent implements OnInit {
    this.ubications = [];
    this.ubicationDataService.get().then( r => {
       this.ubications = r as Ubication[];
+      this.getStates();
    }).catch( e => { console.log(e); });
   }
 
