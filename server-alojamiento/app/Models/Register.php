@@ -69,4 +69,9 @@ class Register extends Model
        return $this->belongsTo('App\ReceptionRoom');
     }
 
+    function RegisterProcedure()
+    {
+       return $this->belongsTo('App\RegisterProcedure');
+    }
+
 }

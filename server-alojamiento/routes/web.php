@@ -231,4 +231,31 @@ $router->group(['middleware' => ['auth']], function () use ($router) {
    $router->put('/approvalstatereport', ['uses' => 'ApprovalStateReportController@put']);
    $router->delete('/approvalstatereport', ['uses' => 'ApprovalStateReportController@delete']);
    $router->post('/approvalstatereport/masive_load', ['uses' => 'ApprovalStateReportController@masiveLoad']);   
+
+   //CRUD Procedure
+   $router->post('/procedure', ['uses' => 'ProcedureController@post']);
+   $router->get('/procedure', ['uses' => 'ProcedureController@get']);
+   $router->get('/procedure/paginate', ['uses' => 'ProcedureController@paginate']);
+   $router->get('/procedure/backup', ['uses' => 'ProcedureController@backup']);
+   $router->put('/procedure', ['uses' => 'ProcedureController@put']);
+   $router->delete('/procedure', ['uses' => 'ProcedureController@delete']);
+   $router->post('/procedure/masive_load', ['uses' => 'ProcedureController@masiveLoad']);
+
+   //CRUD ProcedureJustification
+   $router->post('/procedurejustification', ['uses' => 'ProcedureJustificationController@post']);
+   $router->get('/procedurejustification', ['uses' => 'ProcedureJustificationController@get']);
+   $router->get('/procedurejustification/paginate', ['uses' => 'ProcedureJustificationController@paginate']);
+   $router->get('/procedurejustification/backup', ['uses' => 'ProcedureJustificationController@backup']);
+   $router->put('/procedurejustification', ['uses' => 'ProcedureJustificationController@put']);
+   $router->delete('/procedurejustification', ['uses' => 'ProcedureJustificationController@delete']);
+   $router->post('/procedurejustification/masive_load', ['uses' => 'ProcedureJustificationController@masiveLoad']);
+
+   //CRUD RegisterProcedure
+   $router->post('/registerprocedure', ['uses' => 'RegisterProcedureController@post']);
+   $router->get('/registerprocedure', ['uses' => 'RegisterProcedureController@get']);
+   $router->get('/registerprocedure/paginate', ['uses' => 'RegisterProcedureController@paginate']);
+   $router->get('/registerprocedure/backup', ['uses' => 'RegisterProcedureController@backup']);
+   $router->put('/registerprocedure', ['uses' => 'RegisterProcedureController@put']);
+   $router->delete('/registerprocedure', ['uses' => 'RegisterProcedureController@delete']);
+   $router->post('/registerprocedure/masive_load', ['uses' => 'RegisterProcedureController@masiveLoad']);
 });

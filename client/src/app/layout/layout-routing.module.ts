@@ -215,6 +215,18 @@ const routes: Routes = [
             path: 'reception_room',
             loadChildren: './CRUD/ALOJAMIENTO/ReceptionRoom/receptionroom.module#ReceptionRoomModule'
          },
+         {
+            path: 'procedure',
+            loadChildren: './CRUD/ALOJAMIENTO/Procedure/procedure.module#ProcedureModule'
+         },
+         {
+            path: 'procedure_justification',
+            loadChildren: './CRUD/ALOJAMIENTO/ProcedureJustification/procedurejustification.module#ProcedureJustificationModule'
+         },
+         {
+            path: 'register_procedure',
+            loadChildren: './CRUD/ALOJAMIENTO/RegisterProcedure/registerprocedure.module#RegisterProcedureModule'
+         },
 
          //AUTH
          {
