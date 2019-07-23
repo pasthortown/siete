@@ -8,5 +8,6 @@ export const environment = {
   api_alojamiento: 'http://ws-pruebas.turismo.gob.ec:8002/',
   api_financiero: 'http://ws-pruebas.turismo.gob.ec:8003/',
   api_mailer: 'http://ws-pruebas.turismo.gob.ec:9003/',
+  api_catastro: 'http://ws-pruebas.turismo.gob.ec:7000/',
   gmapapiKey: 'AIzaSyCGUwCcM-LKjRK4rjbBJ06_GLmX2LaYzfg',
 };

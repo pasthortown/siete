@@ -357,6 +357,13 @@ const routes: Routes = [
             path: 'document',
             loadChildren: './CRUD/EXPORTER/Document/document.module#DocumentModule'
          },
+
+         //CATASTRO
+
+         {
+            path: 'catastro',
+            loadChildren: './CRUD/CATASTRO/Register/register.module#RegisterModule'
+         },
          {
             path: '**',
             redirectTo: 'not-found'
