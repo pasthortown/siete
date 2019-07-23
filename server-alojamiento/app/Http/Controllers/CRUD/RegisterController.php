@@ -618,8 +618,8 @@ class RegisterController extends Controller
            Register::where('id', $result['id'])->update([
              'code'=>$result['code'],
              'autorized_complementary_capacities'=>$result['autorized_complementary_capacities'],
-             'autorized_complementary_food_capacities'=>$result['autorized_complementary_food_capacities'],
              'establishment_id'=>$result['establishment_id'],
+             'autorized_complementary_food_capacities'=>$result['autorized_complementary_food_capacities'],
              'register_type_id'=>$result['register_type_id'],
            ]);
          } else {
@@ -627,8 +627,8 @@ class RegisterController extends Controller
           $register->id = $result['id'];
           $register->code = $result['code'];
           $register->autorized_complementary_capacities = $result['autorized_complementary_capacities'];
-          $register->autorized_complementary_food_capacities = $result['autorized_complementary_food_capacities'];
           $register->establishment_id = $result['establishment_id'];
+          $register->autorized_complementary_food_capacities = $result['autorized_complementary_food_capacities'];
           $register->register_type_id = $result['register_type_id'];
           $register->save();
          }
