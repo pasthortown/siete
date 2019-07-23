@@ -635,9 +635,7 @@ class RegisterController extends Controller
          $register = Register::where('id',$result['id'])->first();
          $complementary_service_types_on_register = [];
          foreach($row['attach'] as $attach){
-            if ($attach['complementary_service_types_on_register']) {
-               $complementary_service_types_on_register = $attach['complementary_service_types_on_register'];
-            }
+            $complementary_service_types_on_register = $attach['complementary_service_types_on_register'];
          }
          $complementary_service_types_on_register_old = $register->ComplementaryServiceTypes()->get();
          foreach( $complementary_service_types_on_register_old as $complementary_service_type_old ) {
@@ -665,9 +663,7 @@ class RegisterController extends Controller
          $register = Register::where('id',$result['id'])->first();
          $capacities_on_register = [];
          foreach($row['attach'] as $attach){
-            if ($attach['capacities_on_register']) {
-               $capacities_on_register = $attach['capacities_on_register'];
-            }
+            $capacities_on_register = $attach['capacities_on_register'];
          }
          $capacities_on_register_old = $register->Capacities()->get();
          foreach( $capacities_on_register_old as $capacity_old ) {
@@ -695,9 +691,7 @@ class RegisterController extends Controller
          $register = Register::where('id',$result['id'])->first();
          $complementary_service_foods_on_register = [];
          foreach($row['attach'] as $attach){
-            if ($attach['complementary_service_foods_on_register']) {
-               $complementary_service_foods_on_register = $attach['complementary_service_foods_on_register'];
-            }
+            $complementary_service_foods_on_register = $attach['complementary_service_foods_on_register'];
          }
          $complementary_service_foods_on_register_old = $register->ComplementaryServiceFoods()->get();
          foreach( $complementary_service_foods_on_register_old as $complementary_service_food_old ) {
