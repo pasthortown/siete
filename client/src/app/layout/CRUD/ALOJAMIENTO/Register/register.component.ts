@@ -359,7 +359,7 @@ export class RegisterComponent implements OnInit {
    openDialog(content) {
       this.modalService.open(content, { centered: true }).result.then(( response => {
          if ( response === 'Guardar click' ) {
-            if (typeof this.registerSelected.id === 'undefined') {
+            if (typeof this.registerSelected.id === 'undefined' || this.registerSelected.id === 0) {
                this.registerDataService.post(this.registerSelected).then( r => {
                   this.toastr.successToastr('Datos guardados satisfactoriamente.', 'Nuevo');
                   this.getRegisters();

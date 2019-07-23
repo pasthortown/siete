@@ -504,18 +504,16 @@ class RegisterController extends Controller
           $register = Register::where('id',$result['id'])->first();
           $complementary_service_types_on_register = $result['complementary_service_types_on_register'];
           $complementary_service_types_on_register_old = $register->ComplementaryServiceTypes()->get();
-          if ($complementary_service_types_on_register_old) {
-            foreach( $complementary_service_types_on_register_old as $complementary_service_type_old ) {
-               $delete = true;
-               foreach( $complementary_service_types_on_register as $complementary_service_type ) {
-                  if ( $complementary_service_type_old->id === $complementary_service_type['id'] ) {
-                     $delete = false;
-                  }
-               }
-               if ( $delete ) {
-                  $register->ComplementaryServiceTypes()->detach($complementary_service_type_old->id);
-               }
-            }
+          foreach( $complementary_service_types_on_register_old as $complementary_service_type_old ) {
+             $delete = true;
+             foreach( $complementary_service_types_on_register as $complementary_service_type ) {
+                if ( $complementary_service_type_old->id === $complementary_service_type['id'] ) {
+                   $delete = false;
+                }
+             }
+             if ( $delete ) {
+                $register->ComplementaryServiceTypes()->detach($complementary_service_type_old->id);
+             }
           }
           foreach( $complementary_service_types_on_register as $complementary_service_type ) {
              $add = true;
@@ -531,18 +529,16 @@ class RegisterController extends Controller
           $register = Register::where('id',$result['id'])->first();
           $capacities_on_register = $result['capacities_on_register'];
           $capacities_on_register_old = $register->Capacities()->get();
-          if ($capacities_on_register_old) {
-            foreach( $capacities_on_register_old as $capacity_old ) {
-               $delete = true;
-               foreach( $capacities_on_register as $capacity ) {
-                  if ( $capacity_old->id === $capacity['id'] ) {
-                     $delete = false;
-                  }
-               }
-               if ( $delete ) {
-                  $register->Capacities()->detach($capacity_old->id);
-               }
-            }
+          foreach( $capacities_on_register_old as $capacity_old ) {
+             $delete = true;
+             foreach( $capacities_on_register as $capacity ) {
+                if ( $capacity_old->id === $capacity['id'] ) {
+                   $delete = false;
+                }
+             }
+             if ( $delete ) {
+                $register->Capacities()->detach($capacity_old->id);
+             }
           }
           foreach( $capacities_on_register as $capacity ) {
              $add = true;
@@ -557,18 +553,16 @@ class RegisterController extends Controller
           }
           $complementary_service_foods_on_register = $result['complementary_service_foods_on_register'];
           $complementary_service_foods_on_register_old = $register->ComplementaryServiceFoods()->get();
-          if ($complementary_service_foods_on_register_old) {
-            foreach( $complementary_service_foods_on_register_old as $complementary_service_food_old ) {
-               $delete = true;
-               foreach( $complementary_service_foods_on_register as $complementary_service_food ) {
-                  if ( $complementary_service_food_old->id === $complementary_service_food['id'] ) {
-                     $delete = false;
-                  }
-               }
-               if ( $delete ) {
-                  $register->ComplementaryServiceFoods()->detach($complementary_service_food_old->id);
-               }
-            }
+          foreach( $complementary_service_foods_on_register_old as $complementary_service_food_old ) {
+             $delete = true;
+             foreach( $complementary_service_foods_on_register as $complementary_service_food ) {
+                if ( $complementary_service_food_old->id === $complementary_service_food['id'] ) {
+                   $delete = false;
+                }
+             }
+             if ( $delete ) {
+                $register->ComplementaryServiceFoods()->detach($complementary_service_food_old->id);
+             }
           }
           foreach( $complementary_service_foods_on_register as $complementary_service_food ) {
              $add = true;
@@ -641,20 +635,20 @@ class RegisterController extends Controller
          $register = Register::where('id',$result['id'])->first();
          $complementary_service_types_on_register = [];
          foreach($row['attach'] as $attach){
-            $complementary_service_types_on_register = $attach['complementary_service_types_on_register'];
+            if ($attach['complementary_service_types_on_register']) {
+               $complementary_service_types_on_register = $attach['complementary_service_types_on_register'];
+            }
          }
          $complementary_service_types_on_register_old = $register->ComplementaryServiceTypes()->get();
-         if ($complementary_service_types_on_register_old) {
-            foreach( $complementary_service_types_on_register_old as $complementary_service_type_old ) {
-               $delete = true;
-               foreach( $complementary_service_types_on_register as $complementary_service_type ) {
-                  if ( $complementary_service_type_old->id === $complementary_service_type['id'] ) {
-                     $delete = false;
-                  }
+         foreach( $complementary_service_types_on_register_old as $complementary_service_type_old ) {
+            $delete = true;
+            foreach( $complementary_service_types_on_register as $complementary_service_type ) {
+               if ( $complementary_service_type_old->id === $complementary_service_type['id'] ) {
+                  $delete = false;
                }
-               if ( $delete ) {
-                  $register->ComplementaryServiceTypes()->detach($complementary_service_type_old->id);
-               }
+            }
+            if ( $delete ) {
+               $register->ComplementaryServiceTypes()->detach($complementary_service_type_old->id);
             }
          }
          foreach( $complementary_service_types_on_register as $complementary_service_type ) {
@@ -671,20 +665,20 @@ class RegisterController extends Controller
          $register = Register::where('id',$result['id'])->first();
          $capacities_on_register = [];
          foreach($row['attach'] as $attach){
-            $capacities_on_register = $attach['capacities_on_register'];
+            if ($attach['capacities_on_register']) {
+               $capacities_on_register = $attach['capacities_on_register'];
+            }
          }
          $capacities_on_register_old = $register->Capacities()->get();
-         if ($capacities_on_register_old) {
-            foreach( $capacities_on_register_old as $capacity_old ) {
-               $delete = true;
-               foreach( $capacities_on_register as $capacity ) {
-                  if ( $capacity_old->id === $capacity['id'] ) {
-                     $delete = false;
-                  }
+         foreach( $capacities_on_register_old as $capacity_old ) {
+            $delete = true;
+            foreach( $capacities_on_register as $capacity ) {
+               if ( $capacity_old->id === $capacity['id'] ) {
+                  $delete = false;
                }
-               if ( $delete ) {
-                  $register->Capacities()->detach($capacity_old->id);
-               }
+            }
+            if ( $delete ) {
+               $register->Capacities()->detach($capacity_old->id);
             }
          }
          foreach( $capacities_on_register as $capacity ) {
@@ -701,20 +695,20 @@ class RegisterController extends Controller
          $register = Register::where('id',$result['id'])->first();
          $complementary_service_foods_on_register = [];
          foreach($row['attach'] as $attach){
-            $complementary_service_foods_on_register = $attach['complementary_service_foods_on_register'];
+            if ($attach['complementary_service_foods_on_register']) {
+               $complementary_service_foods_on_register = $attach['complementary_service_foods_on_register'];
+            }
          }
          $complementary_service_foods_on_register_old = $register->ComplementaryServiceFoods()->get();
-         if ($complementary_service_foods_on_register_old) {
-            foreach( $complementary_service_foods_on_register_old as $complementary_service_food_old ) {
-               $delete = true;
-               foreach( $complementary_service_foods_on_register as $complementary_service_food ) {
-                  if ( $complementary_service_food_old->id === $complementary_service_food['id'] ) {
-                     $delete = false;
-                  }
+         foreach( $complementary_service_foods_on_register_old as $complementary_service_food_old ) {
+            $delete = true;
+            foreach( $complementary_service_foods_on_register as $complementary_service_food ) {
+               if ( $complementary_service_food_old->id === $complementary_service_food['id'] ) {
+                  $delete = false;
                }
-               if ( $delete ) {
-                  $register->ComplementaryServiceFoods()->detach($complementary_service_food_old->id);
-               }
+            }
+            if ( $delete ) {
+               $register->ComplementaryServiceFoods()->detach($complementary_service_food_old->id);
             }
          }
          foreach( $complementary_service_foods_on_register as $complementary_service_food ) {
