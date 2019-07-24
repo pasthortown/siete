@@ -63,6 +63,9 @@ class RegisterController extends Controller
           $register->system_source = $result['system_source'];
           $register->georeference_latitude = $result['georeference_latitude'];
           $register->georeference_longitude = $result['georeference_longitude'];
+          $register->establishment_ruc_code = $result['establishment_ruc_code'];
+          $register->max_capacity = $result['max_capacity'];
+          $register->max_areas = $result['max_areas'];
           $register->save();
           DB::commit();
        } catch (Exception $e) {
@@ -99,6 +102,9 @@ class RegisterController extends Controller
              'system_source'=>$result['system_source'],
              'georeference_latitude'=>$result['georeference_latitude'],
              'georeference_longitude'=>$result['georeference_longitude'],
+             'establishment_ruc_code'=>$result['establishment_ruc_code'],
+             'max_capacity'=>$result['max_capacity'],
+             'max_areas'=>$result['max_areas'],
           ]);
           DB::commit();
        } catch (Exception $e) {
@@ -157,6 +163,9 @@ class RegisterController extends Controller
              'system_source'=>$result['system_source'],
              'georeference_latitude'=>$result['georeference_latitude'],
              'georeference_longitude'=>$result['georeference_longitude'],
+             'establishment_ruc_code'=>$result['establishment_ruc_code'],
+             'max_capacity'=>$result['max_capacity'],
+             'max_areas'=>$result['max_areas'],
            ]);
          } else {
           $register = new Register();
@@ -183,6 +192,9 @@ class RegisterController extends Controller
           $register->system_source = $result['system_source'];
           $register->georeference_latitude = $result['georeference_latitude'];
           $register->georeference_longitude = $result['georeference_longitude'];
+          $register->establishment_ruc_code = $result['establishment_ruc_code'];
+          $register->max_capacity = $result['max_capacity'];
+          $register->max_areas = $result['max_areas'];
           $register->save();
          }
        }

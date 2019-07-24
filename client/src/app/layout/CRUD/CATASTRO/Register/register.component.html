@@ -52,6 +52,9 @@
                <th>web</th>
                <th>system_source</th>
                <th>georeference</th>
+               <th>establishment_ruc_code</th>
+               <th>max_capacity</th>
+               <th>max_areas</th>
             </tr>
          </thead>
          <tbody>
@@ -78,6 +81,9 @@
                <td>{{register.web}}</td>
                <td>{{register.system_source}}</td>
                <td>Lat: {{register.georeference_latitude}} Lng: {{register.georeference_longitude}}</td>
+               <td>{{register.establishment_ruc_code}}</td>
+               <td>{{register.max_capacity}}</td>
+               <td>{{register.max_areas}}</td>
             </tr>
          </tbody>
       </table>
@@ -240,6 +246,24 @@
                   <agm-map class="col-12" style="height: 200px;"[latitude]="registerSelected.georeference_latitude * 1" [longitude]="registerSelected.georeference_longitude * 1" [zoom]="15" (mapClick)="georeferenceEvent($event)">
                      <agm-marker [latitude]="registerSelected.georeference_latitude * 1" [longitude]="registerSelected.georeference_longitude * 1" [markerDraggable]="true" (dragEnd)="georeferenceEvent($event)" [animation]="'DROP'"></agm-marker>
                   </agm-map>
+               </div>
+            </div>
+            <div class="form-group row">
+               <label for="establishment_ruc_code" class="col-4 col-form-label">establishment_ruc_code</label>
+               <div class="col-8">
+                  <input type="text" class="form-control" id="establishment_ruc_code" name="establishment_ruc_code" placeholder="establishmentRucCode" [(ngModel)]="registerSelected.establishment_ruc_code">
+               </div>
+            </div>
+            <div class="form-group row">
+               <label for="max_capacity" class="col-4 col-form-label">max_capacity</label>
+               <div class="col-8">
+                  <input type="number" class="form-control" id="max_capacity" name="max_capacity" placeholder="maxCapacity" [(ngModel)]="registerSelected.max_capacity">
+               </div>
+            </div>
+            <div class="form-group row">
+               <label for="max_areas" class="col-4 col-form-label">max_areas</label>
+               <div class="col-8">
+                  <input type="number" class="form-control" id="max_areas" name="max_areas" placeholder="maxAreas" [(ngModel)]="registerSelected.max_areas">
                </div>
             </div>
          </div>

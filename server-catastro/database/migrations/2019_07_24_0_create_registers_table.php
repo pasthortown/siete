@@ -38,6 +38,9 @@ class CreateRegistersTable extends Migration
           $table->string('system_source',100)->nullable($value = true);
           $table->float('georeference_latitude',24,16)->nullable($value = true);
           $table->float('georeference_longitude',24,16)->nullable($value = true);
+          $table->string('establishment_ruc_code',5)->nullable($value = true);
+          $table->integer('max_capacity')->nullable($value = true);
+          $table->integer('max_areas')->nullable($value = true);
        });
     }
 

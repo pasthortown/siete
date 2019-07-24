@@ -22,6 +22,9 @@ export class Register {
    system_source: String;
    georeference_latitude: number;
    georeference_longitude: number;
+   establishment_ruc_code: String;
+   max_capacity: number;
+   max_areas: number;
    constructor() {
       this.georeference_latitude = 0;
       this.georeference_longitude = 0;
