@@ -275,6 +275,7 @@ export class TecnicoFinancieroComponent implements OnInit {
  declarationItemsToShow: any[] = [];
  declarationItemsCategories: DeclarationItemCategory[] = [];
  declarationItems: DeclarationItem[] = [];
+ totalunoxmil = 0;
  maxYear: number = 2019;
  idRegister: number = 0;
 
@@ -420,6 +421,15 @@ export class TecnicoFinancieroComponent implements OnInit {
       );
     }
   });
+}
+
+calcularUnoxMil() {
+   this.totalunoxmil = 0;
+   this.declarationItemsToShow.forEach(itemToShow => {
+      itemToShow.items.forEach(item => {
+         this.totalunoxmil += item.valueItem.value * (item.declarationItem.factor);
+      });
+   });
 }
 
  changeSortEstablishment(data: any, config: any): any {

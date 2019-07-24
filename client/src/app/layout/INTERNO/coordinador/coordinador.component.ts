@@ -147,6 +147,7 @@ export class CoordinadorComponent implements OnInit {
    stateTramite: number = 0;
    stateTramiteId: number = 0;
    inspectores: User[] = [];
+   totalunoxmil = 0;
    financieros: User[] = [];
    inspectorSelectedId: number = 0;
    registerApprovals: ApprovalState[] = [];

@@ -121,6 +121,7 @@ export class RegistroComponent implements OnInit {
    pays: Pay[] = [];
    stateTramiteId = 0;
    actividadSelected = '-';
+   totalunoxmil = 0;
    regiones = [];
    regionSelectedCode = '-';
    franchiseChainNameValidated = false;
@@ -1371,6 +1372,15 @@ export class RegistroComponent implements OnInit {
          this.clasifications_registers = r as RegisterType[];
       }
    }).catch( e => { console.log(e) });
+  }
+
+  calcularUnoxMil() {
+     this.totalunoxmil = 0;
+     this.declarationItemsToShow.forEach(itemToShow => {
+        itemToShow.items.forEach(item => {
+           this.totalunoxmil += item.valueItem.value * (item.declarationItem.factor);
+        });
+     });
   }
 
   getRucNameTypes() {

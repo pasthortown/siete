@@ -228,6 +228,7 @@ export class RegistroComponent implements OnInit {
   provinciaEstablishmentSelectedCode = '-';
   cantonEstablishmentSelectedCode = '-';
   zonalesEstablishment: Ubication[] = [];
+  totalunoxmil = 0;
   provinciasEstablishment: Ubication[] = [];
   ruc_name_types: RucNameType[] = [];
   cantonesEstablishment: Ubication[];
@@ -416,6 +417,15 @@ export class RegistroComponent implements OnInit {
       }).catch( e => { console.log(e); });
      }
   }
+
+  calcularUnoxMil() {
+   this.totalunoxmil = 0;
+   this.declarationItemsToShow.forEach(itemToShow => {
+      itemToShow.items.forEach(item => {
+         this.totalunoxmil += item.valueItem.value * (item.declarationItem.factor);
+      });
+   });
+}
 
   changeFilterPays(data: any, config: any): any {
    let filteredData: Array<any> = data;

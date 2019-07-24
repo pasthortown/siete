@@ -236,6 +236,7 @@ export class InspectorComponent implements OnInit {
   ruc_name_types: RucNameType[] = [];
   cantonesEstablishment: Ubication[];
   parroquiasEstablishment: Ubication[];
+  totalunoxmil = 0;
   preview_register_codes: PreviewRegisterCode[] = [];
   establishment_selected: Establishment = new Establishment();
   establishment_property_types: EstablishmentPropertyType[] = [];
@@ -459,6 +460,15 @@ export class InspectorComponent implements OnInit {
    });
    this.establishmentComercialNameValidated = toReturn;
   }
+
+  calcularUnoxMil() {
+   this.totalunoxmil = 0;
+   this.declarationItemsToShow.forEach(itemToShow => {
+      itemToShow.items.forEach(item => {
+         this.totalunoxmil += item.valueItem.value * (item.declarationItem.factor);
+      });
+   });
+}
 
   guardarRecepcionRoom(register_id: number) {
      this.salaRecepciones.register_id = register_id;

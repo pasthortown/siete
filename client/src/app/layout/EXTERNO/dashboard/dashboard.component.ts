@@ -237,6 +237,7 @@ export class DashboardComponent implements OnInit {
   ruc_name_types: RucNameType[] = [];
   cantonesEstablishment: Ubication[];
   parroquiasEstablishment: Ubication[];
+  totalunoxmil = 0;
   preview_register_codes: PreviewRegisterCode[] = [];
   establishment_selected: Establishment = new Establishment();
   establishment_property_types: EstablishmentPropertyType[] = [];
@@ -388,6 +389,15 @@ export class DashboardComponent implements OnInit {
      }
      this.onChangeTable(this.config);
   }
+
+  calcularUnoxMil() {
+   this.totalunoxmil = 0;
+   this.declarationItemsToShow.forEach(itemToShow => {
+      itemToShow.items.forEach(item => {
+         this.totalunoxmil += item.valueItem.value * (item.declarationItem.factor);
+      });
+   });
+}
 
   editableTramiteRequerido(): Boolean {
    if (this.estado_tramite_selected_code == '1' || this.estado_tramite_selected_code == '9') {

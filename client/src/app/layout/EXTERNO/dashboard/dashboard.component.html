@@ -1118,8 +1118,26 @@
                                     </div>
                                     <input type="number" class="form-control" min="0" step="0.01" id="declarationITemValue"
                                       name="declarationITemValue" [(ngModel)]="item.valueItem.value"
-                                      placeholder="Valor" [disabled]="!declaration_selected.editable"/>
+                                      placeholder="Valor" (input)="calcularUnoxMil()" [disabled]="!declaration_selected.editable"/>
                                   </div>
+                                </td>
+                              </tr>
+                            </tbody>
+                            <tbody>
+                              <tr>
+                                <th class="text-light bg-secondary text-right">
+                                  TOTAL PROPIEDAD, PLANTA Y EQUIPO
+                                </th>
+                                <td style="color:red;">
+                                  <strong>{{totalunoxmil | number: '1.2'}} USD</strong>
+                                </td>
+                              </tr>
+                              <tr>
+                                <th class="text-light bg-secondary text-right">
+                                  CONTRIBUCIÓN CAUSADA UNO POR MIL
+                                </th>
+                                <td style="color:red;">
+                                  <strong>{{totalunoxmil/1000 | number: '1.2'}} USD</strong>
                                 </td>
                               </tr>
                             </tbody>
