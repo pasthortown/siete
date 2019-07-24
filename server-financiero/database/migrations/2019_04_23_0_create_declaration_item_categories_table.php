@@ -16,7 +16,7 @@ class CreateDeclarationItemCategoriesTable extends Migration
        Schema::create('declaration_item_categories', function (Blueprint $table) {
           $table->increments('id');
           $table->timestamps();
-          $table->string('name',50)->nullable($value = true);
+          $table->string('name',250)->nullable($value = true);
           $table->longText('description')->nullable($value = true);
           $table->integer('year')->nullable($value = true);
           $table->integer('tax_payer_type_id')->nullable($value = true);
