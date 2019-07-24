@@ -3773,18 +3773,29 @@ guardarDeclaracion() {
   }
 
   guardarEstablecimiento() {
+   if (this.cantonEstablishmentSelectedCode == '2.17.1') {
+      this.toastr.errorToastr('Estimado Usuario, para solicitar el Certificado de Registro de Turismo de establecimientos ubicados en el Cantón Quito, por favor acercarse a las oficinas de "Quito Turismo"', 'Nuevo');
+      return;
+   }
    if (!this.validateWorkers()) {
       this.toastr.errorToastr('Existe conflicto con la información ingresada referente a los Trabajadores en el Establecimiento.', 'Nuevo');
       return;
    }
    if (!this.validateEstablecimiento()) {
       this.toastr.errorToastr('Existe conflicto con la información ingresada.', 'Nuevo');
+      return;
    }
    if(!this.REGCIVILOKEstablishment) {
       this.toastr.errorToastr('Esperando confirmación del Registro Civil', 'Registro Civil');
+      return;
    }
    if(this.establishment_selected_picture.establishment_picture_file === '') {
       this.toastr.errorToastr('Debe cargar la fotografía de la fachada del establecimiento', 'Fotografía de Fachada del Establecimiento');
+      return;
+   }
+   if(!this.secondaryPhoneContactEstablishmentValidated) {
+      this.toastr.errorToastr('Existe conflicto con la información del contacto del establecimiento', 'Información');
+      return;
    }
    if(!this.REGCIVILOKEstablishment){
       return;

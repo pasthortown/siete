@@ -1989,45 +1989,69 @@ getDeclarationItems() {
  }
 
  guardarEstablecimiento() {
-  if (!this.validateWorkers()) {
-     this.toastr.errorToastr('Existe conflicto con la información ingresada referente a los Trabajadores en el Establecimiento.', 'Nuevo');
-     return;
+   if (this.cantonEstablishmentSelectedCode == '2.17.1') {
+      this.toastr.errorToastr('Estimado Usuario, para solicitar el Certificado de Registro de Turismo de establecimientos ubicados en el Cantón Quito, por favor acercarse a las oficinas de "Quito Turismo"', 'Nuevo');
+      return;
+   }
+   if (!this.validateWorkers()) {
+      this.toastr.errorToastr('Existe conflicto con la información ingresada referente a los Trabajadores en el Establecimiento.', 'Nuevo');
+      return;
+   }
+   if (!this.validateEstablecimiento()) {
+      this.toastr.errorToastr('Existe conflicto con la información ingresada.', 'Nuevo');
+      return;
+   }
+   if(!this.REGCIVILOKEstablishment) {
+      this.toastr.errorToastr('Esperando confirmación del Registro Civil', 'Registro Civil');
+      return;
+   }
+   if(this.establishment_selected_picture.establishment_picture_file === '') {
+      this.toastr.errorToastr('Debe cargar la fotografía de la fachada del establecimiento', 'Fotografía de Fachada del Establecimiento');
+      return;
+   }
+   if(!this.secondaryPhoneContactEstablishmentValidated) {
+      this.toastr.errorToastr('Existe conflicto con la información del contacto del establecimiento', 'Información');
+      return;
+   }
+   if(!this.REGCIVILOKEstablishment){
+      return;
+   }
+   this.guardando = true;
+   this.establishment_selected.ruc_id = this.ruc_registro_selected.ruc.id;
+   this.establishment_declarations_selected = this.establishment_selected;
+   if (this.establishment_selected.ruc_name_type_id <= 1 ) {
+      this.establishment_selected.franchise_chain_name = '';
+   } else {
+      if (this.establishment_selected.franchise_chain_name == '') {
+         this.toastr.errorToastr('Escriba el nombre de la Franquicia o Cadena', 'Nuevo');
+         return;
+      }
+   }
+   this.establishmentDataService.register_establishment_data(this.establishment_selected).then( r => {
+      this.guardando = false;
+      if ( r === '0' ) {
+         this.toastr.errorToastr('Existe conflicto con el correo de la persona de contacto ingresada.', 'Nuevo');
+         return;
+      }
+      this.establishment_declarations_selected.id = r.id;
+      if (typeof this.establishment_selected_picture.id === 'undefined') {
+         this.establishment_selected_picture.establishment_id = r.id;
+         this.establishmentPictureDataService.post(this.establishment_selected_picture).then( r => {
+            this.selectRegisterEstablishment(this.establishment_selected);
+            this.toastr.successToastr('Datos guardados satisfactoriamente.', 'Nuevo');
+         }).catch( e => console.log(e) );
+      } else {
+         this.establishmentPictureDataService.put(this.establishment_selected_picture).then( r => {
+            this.selectRegisterEstablishment(this.establishment_selected);
+            this.toastr.successToastr('Datos guardados satisfactoriamente.', 'Nuevo');
+         }).catch( e => console.log(e) );
+      }
+   }).catch( e => {
+      this.guardando = false;
+      this.toastr.errorToastr('Existe conflicto con la información ingresada.', 'Nuevo');
+      return;
+   });
   }
-  if (!this.validateEstablecimiento()) {
-     this.toastr.errorToastr('Existe conflicto con la información ingresada.', 'Nuevo');
-  }
-  if(!this.REGCIVILOKEstablishment) {
-     this.toastr.errorToastr('Esperando confirmación del Registro Civil', 'Registro Civil');
-  }
-  if(!this.REGCIVILOKEstablishment){
-     return;
-  }
-  this.guardando = true;
-  this.establishment_selected.ruc_id = this.ruc_registro_selected.ruc.id;
-  this.establishmentDataService.register_establishment_data(this.establishment_selected).then( r => {
-     this.guardando = false;
-     if ( r === '0' ) {
-        this.toastr.errorToastr('Existe conflicto con el correo de la persona de contacto ingresada.', 'Nuevo');
-        return;
-     }
-     if (typeof this.establishment_selected_picture.id === 'undefined') {
-        this.establishment_selected_picture.establishment_id = r.id;
-        this.establishmentPictureDataService.post(this.establishment_selected_picture).then( r => {
-           this.getEstablishmentsOnRuc(this.currentPageEstablishment);
-           this.toastr.successToastr('Datos guardados satisfactoriamente.', 'Nuevo');
-        }).catch( e => console.log(e) );
-     } else {
-        this.establishmentPictureDataService.put(this.establishment_selected_picture).then( r => {
-           this.getEstablishmentsOnRuc(this.currentPageEstablishment);
-           this.toastr.successToastr('Datos guardados satisfactoriamente.', 'Nuevo');
-        }).catch( e => console.log(e) );
-     }
-  }).catch( e => {
-     this.guardando = false;
-     this.toastr.errorToastr('Existe conflicto con la información ingresada.', 'Nuevo');
-     return;
-  });
- }
 
  newRegisterRecord() {
   this.rucEstablishmentRegisterSelected = new Register();

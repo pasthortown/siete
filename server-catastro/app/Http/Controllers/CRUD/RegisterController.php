@@ -74,6 +74,15 @@ class RegisterController extends Controller
        return response()->json($register,200);
     }
 
+    function search_by_ruc(Request $data) {
+       $register = Register::where('ruc',$data['ruc'])->first();
+       if($register) {
+         return response()->json($register,200);
+       } else {
+         return response()->json(0,200);
+       }
+    }
+
     function put(Request $data)
     {
        try{

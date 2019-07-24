@@ -2793,12 +2793,19 @@ guardarDeclaracion() {
    }
    if (!this.validateEstablecimiento()) {
       this.toastr.errorToastr('Existe conflicto con la información ingresada.', 'Nuevo');
+      return;
    }
    if(!this.REGCIVILOKEstablishment) {
       this.toastr.errorToastr('Esperando confirmación del Registro Civil', 'Registro Civil');
+      return;
    }
    if(this.establishment_selected_picture.establishment_picture_file === '') {
       this.toastr.errorToastr('Debe cargar la fotografía de la fachada del establecimiento', 'Fotografía de Fachada del Establecimiento');
+      return;
+   }
+   if(!this.secondaryPhoneContactEstablishmentValidated) {
+      this.toastr.errorToastr('Existe conflicto con la información del contacto del establecimiento', 'Información');
+      return;
    }
    if(!this.REGCIVILOKEstablishment){
       return;
