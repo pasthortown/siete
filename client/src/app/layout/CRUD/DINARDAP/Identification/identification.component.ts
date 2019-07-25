@@ -87,7 +87,7 @@ export class IdentificationComponent implements OnInit {
          const backupData = r as Identification[];
          let output = 'id;number;data;date\n';
          backupData.forEach(element => {
-            output += element.id; + element.number + ';' + element.data + ';' + element.date + '\n';
+            output += element.id + ';' + element.number + ';' + element.data + ';' + element.date + '\n';
          });
          const blob = new Blob([output], { type: 'text/plain' });
          const fecha = new Date();

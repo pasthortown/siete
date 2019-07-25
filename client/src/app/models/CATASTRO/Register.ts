@@ -27,6 +27,7 @@ export class Register {
    max_areas: number;
    total_male: number;
    total_female: number;
+   ruc_state: String;
    constructor() {
       this.georeference_latitude = 0;
       this.georeference_longitude = 0;

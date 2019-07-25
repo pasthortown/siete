@@ -57,6 +57,7 @@
                <th>max_areas</th>
                <th>total_male</th>
                <th>total_female</th>
+               <th>ruc_state</th>
             </tr>
          </thead>
          <tbody>
@@ -88,6 +89,7 @@
                <td>{{register.max_areas}}</td>
                <td>{{register.total_male}}</td>
                <td>{{register.total_female}}</td>
+               <td>{{register.ruc_state}}</td>
             </tr>
          </tbody>
       </table>
@@ -280,6 +282,12 @@
                <label for="total_female" class="col-4 col-form-label">total_female</label>
                <div class="col-8">
                   <input type="number" class="form-control" id="total_female" name="total_female" placeholder="totalFemale" [(ngModel)]="registerSelected.total_female">
+               </div>
+            </div>
+            <div class="form-group row">
+               <label for="ruc_state" class="col-4 col-form-label">ruc_state</label>
+               <div class="col-8">
+                  <input type="text" class="form-control" id="ruc_state" name="ruc_state" placeholder="rucState" [(ngModel)]="registerSelected.ruc_state">
                </div>
             </div>
          </div>

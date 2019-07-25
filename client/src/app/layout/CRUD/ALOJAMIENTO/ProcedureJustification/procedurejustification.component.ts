@@ -87,7 +87,7 @@ export class ProcedureJustificationComponent implements OnInit {
          const backupData = r as ProcedureJustification[];
          let output = 'id;justification;code;father_code\n';
          backupData.forEach(element => {
-            output += element.id; + element.justification + ';' + element.code + ';' + element.father_code + '\n';
+            output += element.id + ';' + element.justification + ';' + element.code + ';' + element.father_code + '\n';
          });
          const blob = new Blob([output], { type: 'text/plain' });
          const fecha = new Date();

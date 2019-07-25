@@ -89,7 +89,7 @@ export class TemplateComponent implements OnInit {
          const backupData = r as Template[];
          let output = 'id;body\n';
          backupData.forEach(element => {
-            output += element.id; + element.body + '\n';
+            output += element.id + ';' + element.body + '\n';
          });
          const blob = new Blob([output], { type: 'text/plain' });
          const fecha = new Date();

@@ -29,6 +29,15 @@ class RegisterController extends Controller
        return response()->json(Register::paginate($size),200);
     }
 
+    function search_by_ruc(Request $data) {
+      $register = Register::where('ruc',$data['ruc'])->first();
+      if($register) {
+        return response()->json($register,200);
+      } else {
+        return response()->json(0,200);
+      }
+    }
+
     function post(Request $data)
     {
        try{
@@ -68,6 +77,7 @@ class RegisterController extends Controller
           $register->max_areas = $result['max_areas'];
           $register->total_male = $result['total_male'];
           $register->total_female = $result['total_female'];
+          $register->ruc_state = $result['ruc_state'];
           $register->save();
           DB::commit();
        } catch (Exception $e) {
@@ -75,15 +85,6 @@ class RegisterController extends Controller
        }
        return response()->json($register,200);
     }
-
-    function search_by_ruc(Request $data) {
-      $register = Register::where('ruc',$data['ruc'])->first();
-      if($register) {
-        return response()->json($register,200);
-      } else {
-        return response()->json(0,200);
-      }
-   }
 
     function put(Request $data)
     {
@@ -118,6 +119,7 @@ class RegisterController extends Controller
              'max_areas'=>$result['max_areas'],
              'total_male'=>$result['total_male'],
              'total_female'=>$result['total_female'],
+             'ruc_state'=>$result['ruc_state'],
           ]);
           DB::commit();
        } catch (Exception $e) {
@@ -181,6 +183,7 @@ class RegisterController extends Controller
              'max_areas'=>$result['max_areas'],
              'total_male'=>$result['total_male'],
              'total_female'=>$result['total_female'],
+             'ruc_state'=>$result['ruc_state'],
            ]);
          } else {
           $register = new Register();
@@ -212,6 +215,7 @@ class RegisterController extends Controller
           $register->max_areas = $result['max_areas'];
           $register->total_male = $result['total_male'];
           $register->total_female = $result['total_female'];
+          $register->ruc_state = $result['ruc_state'];
           $register->save();
          }
        }

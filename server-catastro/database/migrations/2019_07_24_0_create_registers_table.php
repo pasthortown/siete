@@ -43,6 +43,7 @@ class CreateRegistersTable extends Migration
           $table->integer('max_areas')->nullable($value = true);
           $table->integer('total_male')->nullable($value = true);
           $table->integer('total_female')->nullable($value = true);
+          $table->string('ruc_state',100)->nullable($value = true);
        });
     }
 

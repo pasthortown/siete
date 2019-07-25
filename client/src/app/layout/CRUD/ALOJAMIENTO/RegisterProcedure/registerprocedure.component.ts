@@ -132,7 +132,7 @@ export class RegisterProcedureComponent implements OnInit {
          const backupData = r as RegisterProcedure[];
          let output = 'id;date;register_id;procedure_justification_id;procedure_id\n';
          backupData.forEach(element => {
-            output += element.id; + element.date + ';' + element.register_id + ';' + element.procedure_justification_id + ';' + element.procedure_id + '\n';
+            output += element.id + ';' + element.date + ';' + element.register_id + ';' + element.procedure_justification_id + ';' + element.procedure_id + '\n';
          });
          const blob = new Blob([output], { type: 'text/plain' });
          const fecha = new Date();
