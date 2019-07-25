@@ -363,7 +363,18 @@
             </ul>
          </li>
       </div>
-
+      <div class="nested-menu">
+         <a class="list-group-item" (click)="addExpandClass('bdd catastro')">
+            <span class="fas fa-database"></span>&nbsp;BDD CATASTRO
+         </a>
+         <li class="nested" [class.expand]="showMenu === 'bdd catastro'">
+            <ul class="submenu">
+               <li>
+                  <a [routerLink]="['/register']" [routerLinkActive]="['router-link-active']" class="list-group-item">Register </a>
+               </li>
+            </ul>
+         </li>
+      </div>
 
 
       <!--div class="nested-menu">

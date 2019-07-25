@@ -12,7 +12,7 @@ class Register extends Model
      * @var array
      */
     protected $fillable = [
-       'ruc','comercial_name','register_code','as_turistic_date','activity','category','classification','legal_representant_name','legal_representant_identification','establishment_property_type','organization_type','ubication_main','ubication_sencond','ubication_third','address','main_phone_number','secondary_phone_number','email','web','system_source','georeference_latitude','georeference_longitude','establishment_ruc_code','max_capacity','max_areas',
+       'ruc','comercial_name','register_code','as_turistic_date','activity','category','classification','legal_representant_name','legal_representant_identification','establishment_property_type','organization_type','ubication_main','ubication_sencond','ubication_third','address','main_phone_number','secondary_phone_number','email','web','system_source','georeference_latitude','georeference_longitude','establishment_ruc_code','max_capacity','max_areas','total_male','total_female',
     ];
 
     /**

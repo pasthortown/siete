@@ -66,6 +66,8 @@ class RegisterController extends Controller
           $register->establishment_ruc_code = $result['establishment_ruc_code'];
           $register->max_capacity = $result['max_capacity'];
           $register->max_areas = $result['max_areas'];
+          $register->total_male = $result['total_male'];
+          $register->total_female = $result['total_female'];
           $register->save();
           DB::commit();
        } catch (Exception $e) {
@@ -75,13 +77,13 @@ class RegisterController extends Controller
     }
 
     function search_by_ruc(Request $data) {
-       $register = Register::where('ruc',$data['ruc'])->first();
-       if($register) {
-         return response()->json($register,200);
-       } else {
-         return response()->json(0,200);
-       }
-    }
+      $register = Register::where('ruc',$data['ruc'])->first();
+      if($register) {
+        return response()->json($register,200);
+      } else {
+        return response()->json(0,200);
+      }
+   }
 
     function put(Request $data)
     {
@@ -114,6 +116,8 @@ class RegisterController extends Controller
              'establishment_ruc_code'=>$result['establishment_ruc_code'],
              'max_capacity'=>$result['max_capacity'],
              'max_areas'=>$result['max_areas'],
+             'total_male'=>$result['total_male'],
+             'total_female'=>$result['total_female'],
           ]);
           DB::commit();
        } catch (Exception $e) {
@@ -175,6 +179,8 @@ class RegisterController extends Controller
              'establishment_ruc_code'=>$result['establishment_ruc_code'],
              'max_capacity'=>$result['max_capacity'],
              'max_areas'=>$result['max_areas'],
+             'total_male'=>$result['total_male'],
+             'total_female'=>$result['total_female'],
            ]);
          } else {
           $register = new Register();
@@ -204,6 +210,8 @@ class RegisterController extends Controller
           $register->establishment_ruc_code = $result['establishment_ruc_code'];
           $register->max_capacity = $result['max_capacity'];
           $register->max_areas = $result['max_areas'];
+          $register->total_male = $result['total_male'];
+          $register->total_female = $result['total_female'];
           $register->save();
          }
        }

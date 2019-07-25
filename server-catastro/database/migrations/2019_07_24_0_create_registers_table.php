@@ -16,7 +16,7 @@ class CreateRegistersTable extends Migration
        Schema::create('registers', function (Blueprint $table) {
           $table->increments('id');
           $table->timestamps();
-          $table->string('ruc',20)->nullable($value = true);
+          $table->string('ruc',100)->nullable($value = true);
           $table->string('comercial_name',500)->nullable($value = true);
           $table->string('register_code',100)->nullable($value = true);
           $table->date('as_turistic_date')->nullable($value = true);
@@ -24,9 +24,9 @@ class CreateRegistersTable extends Migration
           $table->string('category',100)->nullable($value = true);
           $table->string('classification',100)->nullable($value = true);
           $table->string('legal_representant_name',500)->nullable($value = true);
-          $table->string('legal_representant_identification',20)->nullable($value = true);
-          $table->string('establishment_property_type',20)->nullable($value = true);
-          $table->string('organization_type',20)->nullable($value = true);
+          $table->string('legal_representant_identification',100)->nullable($value = true);
+          $table->string('establishment_property_type',100)->nullable($value = true);
+          $table->string('organization_type',100)->nullable($value = true);
           $table->string('ubication_main',255)->nullable($value = true);
           $table->string('ubication_sencond',255)->nullable($value = true);
           $table->string('ubication_third',255)->nullable($value = true);
@@ -41,6 +41,8 @@ class CreateRegistersTable extends Migration
           $table->string('establishment_ruc_code',5)->nullable($value = true);
           $table->integer('max_capacity')->nullable($value = true);
           $table->integer('max_areas')->nullable($value = true);
+          $table->integer('total_male')->nullable($value = true);
+          $table->integer('total_female')->nullable($value = true);
        });
     }
 

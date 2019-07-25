@@ -25,6 +25,8 @@ export class Register {
    establishment_ruc_code: String;
    max_capacity: number;
    max_areas: number;
+   total_male: number;
+   total_female: number;
    constructor() {
       this.georeference_latitude = 0;
       this.georeference_longitude = 0;
