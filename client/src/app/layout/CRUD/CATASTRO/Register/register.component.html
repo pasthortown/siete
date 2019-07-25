@@ -22,6 +22,36 @@
             <button type="button" title="Cargar" class="btn btn-dark" (click)="uploadInput.click()"><i class="fas fa-upload"></i></button>
             <input [hidden]="true" type="file" class="form-control" #uploadInput (change)="decodeUploadFile($event)" accept=".json"/>
          </div>
+         <div class="btn-group mr-2" role="group">
+            <div class="input-group">
+               <div class="input-group-prepend">
+                  <button type="button" title="Buscar" class="btn btn-secondary" (click)="getByRuc()"><i class="fas fa-search"></i></button>
+               </div>
+               <input type="text" class="form-control" id="search_ruc" name="search_ruc" placeholder="Buscar por RUC" [(ngModel)]="search_ruc">
+             </div>
+         </div>
+         <div class="btn-group mr-2" role="group">
+            <div class="input-group">
+               <div class="input-group-prepend">
+                  <button type="button" title="Buscar" class="btn btn-secondary" (click)="downloadByActivity()"><i class="fas fa-file-csv"></i></button>
+               </div>
+               <select
+                  class="form-control"
+                  id="filter_activity"
+                  name="filter_activity"
+                  [(ngModel)]="filter_activity"
+                  >
+                  <option value="all" selected>Todos</option>
+                  <option value="Intermediación">Intermediación</option>
+                  <option value="Alimentos y Bebidas">Alimentos y Bebidas</option>
+                  <option value="Parques de atracciones estables">Parques de atracciones estables</option>
+                  <option value="Operación e Intermediación Turística (Ag. de Viajes)">Operación e Intermediación Turística (Ag. de Viajes)</option>
+                  <option value="Centro de Turismo Comunitario">Centro de Turismo Comunitario</option>
+                  <option value="Alojamiento">Alojamiento</option>
+                  <option value="Transporte Turístico">Transporte Turístico</option>
+               </select>
+             </div>
+         </div>
       </div>
    </div>
 </div>

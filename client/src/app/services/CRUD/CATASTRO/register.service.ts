@@ -51,6 +51,20 @@ export class RegisterService {
       }).catch( error => { this.handledError(error.json()); });
    }
 
+   searchFiltered(activity: string): Promise<any> {
+      return this.http.get(this.url + 'search_filtered?activity=' + activity, this.options).toPromise()
+      .then( r => {
+         return r.json();
+      }).catch( error => { this.handledError(error.json()); });
+   }
+
+   searchByRuc(ruc: string): Promise<any> {
+      return this.http.get(this.url + 'search_by_ruc?ruc=' + ruc, this.options).toPromise()
+      .then( r => {
+         return r.json();
+      }).catch( error => { this.handledError(error.json()); });
+   }
+
    post(register: Register): Promise<any> {
       return this.http.post(this.url, JSON.stringify(register), this.options).toPromise()
       .then( r => {

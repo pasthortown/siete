@@ -1471,8 +1471,8 @@ export class InspectorComponent implements OnInit {
                {calle_secundaria: r2.establishment.address_secondary_street.toUpperCase()},
                {resultado_aprobacion: resultado_aprobacion},
                {identificacion: this.user.identification.toUpperCase()},
-               {conclusiones: this.report.conclution},
-               {recomendaciones: this.report.recomendation},
+               {conclusiones: decodeURIComponent(escape(this.report.conclution.toString()))},
+               {recomendaciones: decodeURIComponent(escape(this.report.recomendation.toString()))},
                {nombre_tecnico_Zonal: this.user.name.toUpperCase()},
                {zonal: iniciales_cordinacion_zonal.toUpperCase()}];
                let document = new Documento();
@@ -2064,8 +2064,7 @@ export class InspectorComponent implements OnInit {
       prorroga = 'Prórroga de 6 meses';
    }
    let observaciones = this.registerApprovalInspector.notes;
-   observaciones = observaciones.replace('<p>', '');
-   observaciones = observaciones.replace('</p>', '');
+   observaciones = decodeURIComponent(escape(this.registerApprovalInspector.notes.toString()));
    this.userDataService.get(this.registerMinturSelected.establishment.contact_user_id).then( r => {
       const information = {
          para: r.name,

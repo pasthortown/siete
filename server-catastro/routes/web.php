@@ -28,6 +28,7 @@ $router->group(['middleware' => ['auth']], function () use ($router) {
    $router->get('/register/paginate', ['uses' => 'RegisterController@paginate']);
    $router->get('/register/backup', ['uses' => 'RegisterController@backup']);
    $router->get('/register/search_by_ruc', ['uses' => 'RegisterController@search_by_ruc']);
+   $router->get('/register/search_filtered', ['uses' => 'RegisterController@search_filtered']);
    $router->put('/register', ['uses' => 'RegisterController@put']);
    $router->delete('/register', ['uses' => 'RegisterController@delete']);
    $router->post('/register/masive_load', ['uses' => 'RegisterController@masiveLoad']);

@@ -2231,8 +2231,7 @@ export class CoordinadorComponent implements OnInit {
       const czDireccion = datosZonal.direccion.split('>')[1].split('<')[0];
       const czTelefono = datosZonal.telefono.split('>')[1].split('<')[0];
       let observaciones = this.registerApprovalCoordinador.notes;
-      observaciones = observaciones.replace('<p>', '');
-      observaciones = observaciones.replace('</p>', '');
+      observaciones = decodeURIComponent(escape(this.registerApprovalCoordinador.notes.toString()));
       this.userDataService.get(this.registerMinturSelected.establishment.contact_user_id).then( r => {
          const information = {
             para: r.name,

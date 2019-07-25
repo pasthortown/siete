@@ -30,7 +30,16 @@ class RegisterController extends Controller
     }
 
     function search_by_ruc(Request $data) {
-      $register = Register::where('ruc',$data['ruc'])->first();
+      $register = Register::where('ruc',$data['ruc'])->get();
+      if($register) {
+        return response()->json($register,200);
+      } else {
+        return response()->json(0,200);
+      }
+    }
+
+    function search_filtered(Request $data) {
+      $register = Register::where('activity', $data['activity'])->get();
       if($register) {
         return response()->json($register,200);
       } else {

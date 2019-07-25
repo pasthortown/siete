@@ -18,12 +18,24 @@ export class RegisterComponent implements OnInit {
    lastPage = 1;
    showDialog = false;
    recordsByPage = 5;
+   search_ruc = '';
+   filter_activity = 'all';
+
    constructor(
                private modalService: NgbModal,
                private toastr: ToastrManager,
                private registerDataService: RegisterService) {}
 
    ngOnInit() {
+      this.refresh();
+   }
+
+   refresh() {
+      this.currentPage = 1;
+      this.lastPage = 1;
+      this.showDialog = false;
+      this.recordsByPage = 5;
+      this.search_ruc = '';
       this.goToPage(1);
    }
 
@@ -45,6 +57,21 @@ export class RegisterComponent implements OnInit {
       this.registerSelected.georeference_longitude = event.coords.lng;
    }
 
+   getByRuc() {
+      this.registerDataService.searchByRuc(this.search_ruc).then( r => {
+         if (r == 0) {
+            this.toastr.errorToastr('No se encontraron registros.', 'Error');
+            this.refresh();
+         } else {
+            this.currentPage = 1;
+            this.lastPage = 1;
+            this.showDialog = false;
+            this.registers = r as Register[];            
+         }
+      }).catch( e => { console.log(e); });
+   }
+
+   
    getRegisters() {
       this.registers = [];
       this.registerSelected = new Register();
@@ -85,6 +112,23 @@ export class RegisterComponent implements OnInit {
          const fecha = new Date();
          saveAs(blob, fecha.toLocaleDateString() + '_Registers.json');
       }).catch( e => console.log(e) );
+   }
+
+   downloadByActivity() {
+      if (this.filter_activity == 'all'){
+         this.toCSV();
+      }else {
+         this.registerDataService.searchFiltered(this.filter_activity).then( r => {
+            const backupData = r as Register[];
+            let output = 'id;ruc;comercial_name;register_code;as_turistic_date;activity;category;classification;legal_representant_name;legal_representant_identification;establishment_property_type;organization_type;ubication_main;ubication_sencond;ubication_third;address;main_phone_number;secondary_phone_number;email;web;system_source;georeference_latitude;georeference_longitude;establishment_ruc_code;max_capacity;max_areas;total_male;total_female;ruc_state\n';
+            backupData.forEach(element => {
+               output += element.id + ';' + element.ruc + ';' + element.comercial_name + ';' + element.register_code + ';' + element.as_turistic_date + ';' + element.activity + ';' + element.category + ';' + element.classification + ';' + element.legal_representant_name + ';' + element.legal_representant_identification + ';' + element.establishment_property_type + ';' + element.organization_type + ';' + element.ubication_main + ';' + element.ubication_sencond + ';' + element.ubication_third + ';' + element.address + ';' + element.main_phone_number + ';' + element.secondary_phone_number + ';' + element.email + ';' + element.web + ';' + element.system_source + ';' + element.georeference_latitude + ';' + element.georeference_longitude + ';' + element.establishment_ruc_code + ';' + element.max_capacity + ';' + element.max_areas + ';' + element.total_male + ';' + element.total_female + ';' + element.ruc_state + '\n';
+            });
+            const blob = new Blob([output], { type: 'text/plain' });
+            const fecha = new Date();
+            saveAs(blob, fecha.toLocaleDateString() + '_Registers.csv');
+         }).catch( e => console.log(e) );
+      }
    }
 
    toCSV() {
