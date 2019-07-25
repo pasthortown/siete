@@ -4,6 +4,7 @@ import { ToastrManager } from 'ng6-toastr-notifications';
 import { saveAs } from 'file-saver/FileSaver';
 import { RegisterService } from './../../../../services/CRUD/CATASTRO/register.service';
 import { Register } from './../../../../models/CATASTRO/Register';
+import { DinardapService } from 'src/app/services/negocio/dinardap.service';
 
 @Component({
    selector: 'app-register',
@@ -20,10 +21,13 @@ export class RegisterComponent implements OnInit {
    recordsByPage = 5;
    search_ruc = '';
    filter_activity = 'all';
+   SRIOK = false;
+   rucSelectedData = '';
 
    constructor(
                private modalService: NgbModal,
                private toastr: ToastrManager,
+               private dinardapDataService: DinardapService,
                private registerDataService: RegisterService) {}
 
    ngOnInit() {
@@ -41,6 +45,7 @@ export class RegisterComponent implements OnInit {
 
    selectRegister(register: Register) {
       this.registerSelected = register;
+      this.getRucDataDinardap(register.ruc.toString());
    }
 
    goToPage(page: number) {
@@ -66,11 +71,106 @@ export class RegisterComponent implements OnInit {
             this.currentPage = 1;
             this.lastPage = 1;
             this.showDialog = false;
-            this.registers = r as Register[];            
+            this.registers = r as Register[];           
          }
       }).catch( e => { console.log(e); });
    }
 
+   getRucDataDinardap(search_ruc: String) {
+      this.rucSelectedData = '<div class=\"progress mb-3\"><div class=\"progress-bar progress-bar-striped progress-bar-animated bg-warning col-12\">Espere...</div></div><div class="col-12 text-center"><strong>Conectándose al SRI...</strong></div>';
+      let rucData = '';
+      if (search_ruc.length !== 13) {
+        rucData = 'RUC INCORRECTO'
+        this.rucSelectedData = rucData;
+      }
+      this.dinardapDataService.get_RUC(search_ruc).then( r => {
+           this.SRIOK = true; 
+           const itemsDetalles_SRI_RUC = r.sri_ruc.original.entidades.entidad.filas.fila.columnas.columna;
+           const itemsDetalles_SRI_RUC_COMPLETO = r.sri_ruc_completo.original.entidades.entidad;
+           rucData = '';
+           let datosGenerales = '';
+           let datosRL = '';
+           let datosAE = '';
+           let datosContactoSRI = '';
+           itemsDetalles_SRI_RUC_COMPLETO.forEach(entidad => {
+              if (entidad.nombre == 'Actividad Economica') {
+                 const AE = entidad.filas.fila.columnas.columna;
+                 AE.forEach(element => {
+                    if (element.campo == 'actividadGeneral') {
+                       datosAE += '<strong>Actividad Económica: </strong> ' + element.valor + '<br/>';
+                    }
+                 });
+              }
+              if (entidad.nombre == 'Contribuyente Datos Completo') {
+                 const DC = entidad.filas.fila.columnas.columna;
+                 DC.forEach(element => {
+                    if (element.campo == 'razonSocial') {
+                       datosGenerales += '<strong>Razón Social: </strong> ' + element.valor + '<br/>';
+                    }
+                    if (element.campo == 'email') {
+                       if (JSON.stringify(element.valor) !== '{}') {
+                          datosContactoSRI += '<strong>Correo Electrónico - Registrado en SRI: </strong> ' + element.valor + '<br/>';
+                       }
+                    }
+                    if (element.campo == 'telefonoDomicilio') {
+                       if (JSON.stringify(element.valor) !== '{}') {
+                          datosContactoSRI += '<strong>Teléfono Domicilio - Registrado en SRI: </strong> ' + element.valor + '<br/>';
+                       }
+                    }
+                 });
+              }
+              if (entidad.nombre == 'Representante Legal') {
+                 const RL = entidad.filas.fila.columnas.columna;
+                 RL.forEach(element => {
+                    if (element.campo == 'identificacion') {
+                       datosRL += '<strong>Identificación Representante Legal: </strong> ' + element.valor + '<br/>';
+                    }
+                    if (element.campo == 'nombre') {
+                       datosRL += '<strong>Nombre Representante Legal: </strong> ' + element.valor + '<br/>';
+                    }
+                 });
+              }
+           });
+           itemsDetalles_SRI_RUC.forEach(element => {
+              if (element.campo == 'estadoContribuyente') {
+                 datosGenerales += '<strong>Estado Contribuyente: </strong> ' + element.valor + '<br/>';
+              }
+              if (element.campo == 'fechaInscripcionRuc') {
+                 datosGenerales += '<strong>Fecha de Inscripción del RUC: </strong> ' + element.valor + '<br/>';
+              }
+              if (element.campo == 'fechaActualizacion') {
+                 datosGenerales += '<strong>Fecha de Actualización: </strong> ' + element.valor + '<br/>';
+              }
+              if (element.campo == 'obligado') {
+                 if (element.valor == 'N') {
+                    datosGenerales += '<strong>Obligado a Llevar Contabilidad: </strong> NO<br/>';
+                 } else {
+                    datosGenerales += '<strong>Obligado a Llevar Contabilidad: </strong> SI<br/>';
+                 }
+              }
+              let PersonaNatural = false;
+              if (element.campo == 'personaSociedad') {
+                 if (element.valor == 'PNL') {
+                  PersonaNatural = true;
+                 } else {
+                  PersonaNatural = false
+                 }
+                 datosGenerales += '<strong>Tipo de Contribuyente: </strong> ' + element.valor + '<br/>';
+              }
+              rucData = datosGenerales + datosAE + datosContactoSRI;
+              if (PersonaNatural) {
+                 rucData += datosRL;
+              }
+              this.rucSelectedData = rucData;
+           });
+        }).catch( e => {
+           console.log(e);
+           rucData = '<div class="alert alert-danger" role="alert">El SRI, no respondió. Vuelva a intentarlo.</div>';
+           this.SRIOK = false;
+           this.rucSelectedData = rucData;
+        });
+    }
+  
    
    getRegisters() {
       this.registers = [];
@@ -130,6 +230,8 @@ export class RegisterComponent implements OnInit {
          }).catch( e => console.log(e) );
       }
    }
+
+
 
    toCSV() {
       this.registerDataService.get().then( r => {

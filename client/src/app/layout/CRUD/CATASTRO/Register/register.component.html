@@ -1,6 +1,6 @@
 <div class="row">
    <h1 class="col-12 text-right">
-      Register
+      CATASTRO TURÍSTICO
    </h1>
 </div>
 <div class="row">
@@ -8,19 +8,6 @@
       <div class="btn-toolbar" role="toolbar">
          <div class="btn-group mr-2" role="group">
             <button type="button" class="btn btn-primary" title="Actualizar" (click)="goToPage(currentPage)"><i class="fas fa-sync"></i></button>
-         </div>
-         <div class="btn-group mr-2" role="group">
-            <button type="button" title="Nuevo" class="btn btn-success" (click)="newRegister(content)"><i class="fas fa-file"></i></button>
-            <button type="button" title="Editar" class="btn btn-warning" (click)="editRegister(content)"><i class="fas fa-edit"></i></button>
-         </div>
-         <div class="btn-group mr-2" role="group">
-            <button type="button" title="Eliminar" class="btn btn-danger" (click)="deleteRegister()"><i class="fas fa-trash"></i></button>
-         </div>
-         <div class="btn-group mr-2" role="group">
-            <button type="button" title="BackUp" class="btn btn-dark" (click)="backup()"><i class="fas fa-download"></i></button>
-            <button type="button" title="Exportar CSV" class="btn btn-dark" (click)="toCSV()"><i class="fas fa-file-csv"></i></button>
-            <button type="button" title="Cargar" class="btn btn-dark" (click)="uploadInput.click()"><i class="fas fa-upload"></i></button>
-            <input [hidden]="true" type="file" class="form-control" #uploadInput (change)="decodeUploadFile($event)" accept=".json"/>
          </div>
          <div class="btn-group mr-2" role="group">
             <div class="input-group">
@@ -143,6 +130,12 @@
             </div>
             <input type="number" min="{{1}}" max="{{lastPage}}" class="form-control" placeholder="Ir a la Página" #goToPageNumber>
          </div>
+      </div>
+   </div>
+</div>
+<div class="row mt-5">
+   <div class="col-12" *ngIf="rucSelectedData !== ''">
+      <div class="alert alert-success" role="alert" [innerHtml]="rucSelectedData">
       </div>
    </div>
 </div>

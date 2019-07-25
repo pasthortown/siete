@@ -7,6 +7,7 @@ import { RegisterComponent } from './register.component';
 import { RegisterService } from './../../../../services/CRUD/CATASTRO/register.service';
 import { environment } from 'src/environments/environment';
 import { AgmCoreModule } from '@agm/core';
+import { DinardapService } from 'src/app/services/negocio/dinardap.service';
 
 @NgModule({
    imports: [CommonModule,
@@ -16,6 +17,7 @@ import { AgmCoreModule } from '@agm/core';
    declarations: [RegisterComponent],
    providers: [
                NgbModal,
+               DinardapService,
                RegisterService
                ]
 })

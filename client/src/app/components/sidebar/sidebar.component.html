@@ -363,7 +363,7 @@
             </ul>
          </li>
       </div>
-      <div class="nested-menu">
+      <div class="nested-menu" *ngIf="isAdmin">
          <a class="list-group-item" (click)="addExpandClass('bdd catastro')">
             <span class="fas fa-database"></span>&nbsp;BDD CATASTRO
          </a>
