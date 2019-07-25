@@ -4,102 +4,152 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 Use Exception;
-use App\Requisite;
+use App\Register;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
-class RequisiteController extends Controller
+class RegisterController extends Controller
 {
     function get(Request $data)
     {
        $id = $data['id'];
        if ($id == null) {
-          return response()->json(Requisite::orderBy('id', 'ASC')->get(),200);
+          return response()->json(Register::orderBy('as_turistic_date', 'ASC')->get(),200);
        } else {
-          $requisite = Requisite::findOrFail($id);
+          $register = Register::findOrFail($id);
           $attach = [];
-          return response()->json(["Requisite"=>$requisite, "attach"=>$attach],200);
+          return response()->json(["Register"=>$register, "attach"=>$attach],200);
        }
     }
 
     function paginate(Request $data)
     {
        $size = $data['size'];
-       return response()->json(Requisite::orderBy('id', 'ASC')->paginate($size),200);
+       return response()->json(Register::orderBy('as_turistic_date', 'ASC')->paginate($size),200);
     }
 
-    function filtered(Request $data)
-    {
-       $filter = $data['filter'];
-       return response()->json(Requisite::where('register_type_id', $filter)->get(),200);
+    function search_by_ruc(Request $data) {
+      $register = Register::where('ruc',$data['ruc'])->get();
+      if($register) {
+        return response()->json($register,200);
+      } else {
+        return response()->json(0,200);
+      }
+    }
+
+    function search_filtered(Request $data) {
+      $register = Register::where('activity', $data['activity'])->orderBy('as_turistic_date', 'ASC')->get();
+      if($register) {
+        return response()->json($register,200);
+      } else {
+        return response()->json(0,200);
+      }
     }
 
     function post(Request $data)
     {
-      try{
-         DB::beginTransaction();
-         $result = $data->json()->all();
-         $requisite = new Requisite();
-         $lastRequisite = Requisite::orderBy('id')->get()->last();
-         if($lastRequisite) {
-            $requisite->id = $lastRequisite->id + 1;
-         } else {
-            $requisite->id = 1;
-         }
-         $requisite->name = $result['name'];
-         $requisite->description = $result['description'];
-         $requisite->father_code = $result['father_code'];
-         $requisite->code = $result['code'];
-         $requisite->to_approve = $result['to_approve'];
-         $requisite->mandatory = $result['mandatory'];
-         $requisite->type = $result['type'];
-         $requisite->params = $result['params'];
-         $requisite->register_type_id = $result['register_type_id'];
-         $requisite->save();
-         DB::commit();
-      } catch (Exception $e) {
-         return response()->json($e,400);
-      }
-      return response()->json($requisite,200);
+       try{
+          DB::beginTransaction();
+          $result = $data->json()->all();
+          $register = new Register();
+          $lastRegister = Register::orderBy('id')->get()->last();
+          if($lastRegister) {
+             $register->id = $lastRegister->id + 1;
+          } else {
+             $register->id = 1;
+          }
+          $register->ruc = $result['ruc'];
+          $register->comercial_name = $result['comercial_name'];
+          $register->register_code = $result['register_code'];
+          $register->as_turistic_date = $result['as_turistic_date'];
+          $register->activity = $result['activity'];
+          $register->category = $result['category'];
+          $register->classification = $result['classification'];
+          $register->legal_representant_name = $result['legal_representant_name'];
+          $register->legal_representant_identification = $result['legal_representant_identification'];
+          $register->establishment_property_type = $result['establishment_property_type'];
+          $register->organization_type = $result['organization_type'];
+          $register->ubication_main = $result['ubication_main'];
+          $register->ubication_sencond = $result['ubication_sencond'];
+          $register->ubication_third = $result['ubication_third'];
+          $register->address = $result['address'];
+          $register->main_phone_number = $result['main_phone_number'];
+          $register->secondary_phone_number = $result['secondary_phone_number'];
+          $register->email = $result['email'];
+          $register->web = $result['web'];
+          $register->system_source = $result['system_source'];
+          $register->georeference_latitude = $result['georeference_latitude'];
+          $register->georeference_longitude = $result['georeference_longitude'];
+          $register->establishment_ruc_code = $result['establishment_ruc_code'];
+          $register->max_capacity = $result['max_capacity'];
+          $register->max_areas = $result['max_areas'];
+          $register->total_male = $result['total_male'];
+          $register->total_female = $result['total_female'];
+          $register->ruc_state = $result['ruc_state'];
+          $register->save();
+          DB::commit();
+       } catch (Exception $e) {
+          return response()->json($e,400);
+       }
+       return response()->json($register,200);
     }
 
     function put(Request $data)
     {
-      try{
-         DB::beginTransaction();
-         $result = $data->json()->all();
-         $requisite = Requisite::where('id',$result['id'])->update([
-            'name'=>$result['name'],
-            'description'=>$result['description'],
-            'father_code'=>$result['father_code'],
-            'code'=>$result['code'],
-            'to_approve'=>$result['to_approve'],
-            'mandatory'=>$result['mandatory'],
-            'type'=>$result['type'],
-            'params'=>$result['params'],
-            'register_type_id'=>$result['register_type_id'],
-         ]);
-         DB::commit();
-      } catch (Exception $e) {
-         return response()->json($e,400);
-      }
-      return response()->json($requisite,200);
+       try{
+          DB::beginTransaction();
+          $result = $data->json()->all();
+          $register = Register::where('id',$result['id'])->update([
+             'ruc'=>$result['ruc'],
+             'comercial_name'=>$result['comercial_name'],
+             'register_code'=>$result['register_code'],
+             'as_turistic_date'=>$result['as_turistic_date'],
+             'activity'=>$result['activity'],
+             'category'=>$result['category'],
+             'classification'=>$result['classification'],
+             'legal_representant_name'=>$result['legal_representant_name'],
+             'legal_representant_identification'=>$result['legal_representant_identification'],
+             'establishment_property_type'=>$result['establishment_property_type'],
+             'organization_type'=>$result['organization_type'],
+             'ubication_main'=>$result['ubication_main'],
+             'ubication_sencond'=>$result['ubication_sencond'],
+             'ubication_third'=>$result['ubication_third'],
+             'address'=>$result['address'],
+             'main_phone_number'=>$result['main_phone_number'],
+             'secondary_phone_number'=>$result['secondary_phone_number'],
+             'email'=>$result['email'],
+             'web'=>$result['web'],
+             'system_source'=>$result['system_source'],
+             'georeference_latitude'=>$result['georeference_latitude'],
+             'georeference_longitude'=>$result['georeference_longitude'],
+             'establishment_ruc_code'=>$result['establishment_ruc_code'],
+             'max_capacity'=>$result['max_capacity'],
+             'max_areas'=>$result['max_areas'],
+             'total_male'=>$result['total_male'],
+             'total_female'=>$result['total_female'],
+             'ruc_state'=>$result['ruc_state'],
+          ]);
+          DB::commit();
+       } catch (Exception $e) {
+          return response()->json($e,400);
+       }
+       return response()->json($register,200);
     }
 
     function delete(Request $data)
     {
        $id = $data['id'];
-       return Requisite::destroy($id);
+       return Register::destroy($id);
     }
 
     function backup(Request $data)
     {
-      $requisites = Requisite::get();
+       $registers = Register::orderBy('as_turistic_date', 'ASC')->get();
        $toReturn = [];
-       foreach( $requisites as $requisite) {
+       foreach( $registers as $register) {
           $attach = [];
-          array_push($toReturn, ["Requisite"=>$requisite, "attach"=>$attach]);
+          array_push($toReturn, ["Register"=>$register, "attach"=>$attach]);
        }
        return response()->json($toReturn,200);
     }
@@ -111,33 +161,71 @@ class RequisiteController extends Controller
       try{
        DB::beginTransaction();
        foreach($masiveData as $row) {
-         $result = $row['Requisite'];
-         $exist = Requisite::where('id',$result['id'])->first();
+         $result = $row['Register'];
+         $exist = Register::where('id',$result['id'])->first();
          if ($exist) {
-           Requisite::where('id', $result['id'])->update([
-             'name'=>$result['name'],
-             'description'=>$result['description'],
-             'father_code'=>$result['father_code'],
-             'code'=>$result['code'],
-             'to_approve'=>$result['to_approve'],
-             'mandatory'=>$result['mandatory'],
-             'type'=>$result['type'],
-             'params'=>$result['params'],
-             'register_type_id'=>$result['register_type_id'],
+           Register::where('id', $result['id'])->update([
+             'ruc'=>$result['ruc'],
+             'comercial_name'=>$result['comercial_name'],
+             'register_code'=>$result['register_code'],
+             'as_turistic_date'=>$result['as_turistic_date'],
+             'activity'=>$result['activity'],
+             'category'=>$result['category'],
+             'classification'=>$result['classification'],
+             'legal_representant_name'=>$result['legal_representant_name'],
+             'legal_representant_identification'=>$result['legal_representant_identification'],
+             'establishment_property_type'=>$result['establishment_property_type'],
+             'organization_type'=>$result['organization_type'],
+             'ubication_main'=>$result['ubication_main'],
+             'ubication_sencond'=>$result['ubication_sencond'],
+             'ubication_third'=>$result['ubication_third'],
+             'address'=>$result['address'],
+             'main_phone_number'=>$result['main_phone_number'],
+             'secondary_phone_number'=>$result['secondary_phone_number'],
+             'email'=>$result['email'],
+             'web'=>$result['web'],
+             'system_source'=>$result['system_source'],
+             'georeference_latitude'=>$result['georeference_latitude'],
+             'georeference_longitude'=>$result['georeference_longitude'],
+             'establishment_ruc_code'=>$result['establishment_ruc_code'],
+             'max_capacity'=>$result['max_capacity'],
+             'max_areas'=>$result['max_areas'],
+             'total_male'=>$result['total_male'],
+             'total_female'=>$result['total_female'],
+             'ruc_state'=>$result['ruc_state'],
            ]);
          } else {
-          $requisite = new Requisite();
-          $requisite->id = $result['id'];
-          $requisite->name = $result['name'];
-          $requisite->description = $result['description'];
-          $requisite->father_code = $result['father_code'];
-          $requisite->code = $result['code'];
-          $requisite->to_approve = $result['to_approve'];
-          $requisite->mandatory = $result['mandatory'];
-          $requisite->type = $result['type'];
-          $requisite->params = $result['params'];
-          $requisite->register_type_id = $result['register_type_id'];
-          $requisite->save();
+          $register = new Register();
+          $register->id = $result['id'];
+          $register->ruc = $result['ruc'];
+          $register->comercial_name = $result['comercial_name'];
+          $register->register_code = $result['register_code'];
+          $register->as_turistic_date = $result['as_turistic_date'];
+          $register->activity = $result['activity'];
+          $register->category = $result['category'];
+          $register->classification = $result['classification'];
+          $register->legal_representant_name = $result['legal_representant_name'];
+          $register->legal_representant_identification = $result['legal_representant_identification'];
+          $register->establishment_property_type = $result['establishment_property_type'];
+          $register->organization_type = $result['organization_type'];
+          $register->ubication_main = $result['ubication_main'];
+          $register->ubication_sencond = $result['ubication_sencond'];
+          $register->ubication_third = $result['ubication_third'];
+          $register->address = $result['address'];
+          $register->main_phone_number = $result['main_phone_number'];
+          $register->secondary_phone_number = $result['secondary_phone_number'];
+          $register->email = $result['email'];
+          $register->web = $result['web'];
+          $register->system_source = $result['system_source'];
+          $register->georeference_latitude = $result['georeference_latitude'];
+          $register->georeference_longitude = $result['georeference_longitude'];
+          $register->establishment_ruc_code = $result['establishment_ruc_code'];
+          $register->max_capacity = $result['max_capacity'];
+          $register->max_areas = $result['max_areas'];
+          $register->total_male = $result['total_male'];
+          $register->total_female = $result['total_female'];
+          $register->ruc_state = $result['ruc_state'];
+          $register->save();
          }
        }
        DB::commit();
