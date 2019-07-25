@@ -28,6 +28,8 @@ export class Register {
    total_male: number;
    total_female: number;
    ruc_state: String;
+   max_beds: number;
+   establishment_state: String;
    constructor() {
       this.georeference_latitude = 0;
       this.georeference_longitude = 0;

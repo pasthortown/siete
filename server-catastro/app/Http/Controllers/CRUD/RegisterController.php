@@ -87,6 +87,8 @@ class RegisterController extends Controller
           $register->total_male = $result['total_male'];
           $register->total_female = $result['total_female'];
           $register->ruc_state = $result['ruc_state'];
+          $register->max_beds = $result['max_beds'];
+          $register->establishment_state = $result['establishment_state'];
           $register->save();
           DB::commit();
        } catch (Exception $e) {
@@ -129,6 +131,8 @@ class RegisterController extends Controller
              'total_male'=>$result['total_male'],
              'total_female'=>$result['total_female'],
              'ruc_state'=>$result['ruc_state'],
+             'max_beds'=>$result['max_beds'],
+             'establishment_state'=>$result['establishment_state'],
           ]);
           DB::commit();
        } catch (Exception $e) {
@@ -193,6 +197,8 @@ class RegisterController extends Controller
              'total_male'=>$result['total_male'],
              'total_female'=>$result['total_female'],
              'ruc_state'=>$result['ruc_state'],
+             'max_beds'=>$result['max_beds'],
+             'establishment_state'=>$result['establishment_state'],
            ]);
          } else {
           $register = new Register();
@@ -225,6 +231,8 @@ class RegisterController extends Controller
           $register->total_male = $result['total_male'];
           $register->total_female = $result['total_female'];
           $register->ruc_state = $result['ruc_state'];
+          $register->max_beds = $result['max_beds'];
+          $register->establishment_state = $result['establishment_state'];
           $register->save();
          }
        }

@@ -44,6 +44,8 @@ class CreateRegistersTable extends Migration
           $table->integer('total_male')->nullable($value = true);
           $table->integer('total_female')->nullable($value = true);
           $table->string('ruc_state',100)->nullable($value = true);
+          $table->integer('max_beds')->nullable($value = true);
+          $table->string('establishment_state',100)->nullable($value = true);
        });
     }
 
