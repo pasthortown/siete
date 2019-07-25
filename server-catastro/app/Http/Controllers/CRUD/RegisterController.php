@@ -15,7 +15,7 @@ class RegisterController extends Controller
     {
        $id = $data['id'];
        if ($id == null) {
-          return response()->json(Register::get(),200);
+          return response()->json(Register::orderBy('as_turistic_date', 'ASC')->get(),200);
        } else {
           $register = Register::findOrFail($id);
           $attach = [];
@@ -30,7 +30,7 @@ class RegisterController extends Controller
     }
 
     function search_by_ruc(Request $data) {
-      $register = Register::where('ruc',$data['ruc'])->get();
+      $register = Register::where('ruc',$data['ruc'])->orderBy('as_turistic_date', 'ASC')->get();
       if($register) {
         return response()->json($register,200);
       } else {
@@ -38,8 +38,17 @@ class RegisterController extends Controller
       }
     }
 
+    function getActivities() {
+      $activities = Register::select('activity')->distinct()->get();
+      if($activities) {
+        return response()->json($activities,200);
+      } else {
+        return response()->json(0,200);
+      }
+    }
+
     function search_filtered(Request $data) {
-      $register = Register::where('activity', $data['activity'])->get();
+      $register = Register::where('activity', $data['activity'])->orderBy('as_turistic_date', 'ASC')->get();
       if($register) {
         return response()->json($register,200);
       } else {

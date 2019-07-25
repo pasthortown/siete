@@ -29,13 +29,7 @@
                   [(ngModel)]="filter_activity"
                   >
                   <option value="all" selected>Todos</option>
-                  <option value="Intermediación">Intermediación</option>
-                  <option value="Alimentos y Bebidas">Alimentos y Bebidas</option>
-                  <option value="Parques de atracciones estables">Parques de atracciones estables</option>
-                  <option value="Operación e Intermediación Turística (Ag. de Viajes)">Operación e Intermediación Turística (Ag. de Viajes)</option>
-                  <option value="Centro de Turismo Comunitario">Centro de Turismo Comunitario</option>
-                  <option value="Alojamiento">Alojamiento</option>
-                  <option value="Transporte Turístico">Transporte Turístico</option>
+                  <option  *ngFor="let activity of activities" value="{{activity.activity}}">{{activity.activity}}</option>
                </select>
              </div>
          </div>

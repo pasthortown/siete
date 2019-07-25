@@ -23,6 +23,7 @@ export class RegisterComponent implements OnInit {
    filter_activity = 'all';
    SRIOK = false;
    rucSelectedData = '';
+   activities = [];
 
    constructor(
                private modalService: NgbModal,
@@ -41,6 +42,7 @@ export class RegisterComponent implements OnInit {
       this.recordsByPage = 5;
       this.search_ruc = '';
       this.goToPage(1);
+      this.getActivities();
    }
 
    selectRegister(register: Register) {
@@ -73,6 +75,13 @@ export class RegisterComponent implements OnInit {
             this.showDialog = false;
             this.registers = r as Register[];           
          }
+      }).catch( e => { console.log(e); });
+   }
+
+   getActivities() {
+      this.registerDataService.getActivities().then( r => {
+         this.activities = r;
+         console.log(r);
       }).catch( e => { console.log(e); });
    }
 

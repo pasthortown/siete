@@ -58,6 +58,13 @@ export class RegisterService {
       }).catch( error => { this.handledError(error.json()); });
    }
 
+   getActivities(): Promise<any> {
+      return this.http.get(this.url + 'getActivities', this.options).toPromise()
+      .then( r => {
+         return r.json();
+      }).catch( error => { this.handledError(error.json()); });
+   }
+
    searchByRuc(ruc: string): Promise<any> {
       return this.http.get(this.url + 'search_by_ruc?ruc=' + ruc, this.options).toPromise()
       .then( r => {
