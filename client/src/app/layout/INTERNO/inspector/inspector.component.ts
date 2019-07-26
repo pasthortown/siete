@@ -3560,7 +3560,6 @@ guardarDeclaracion() {
               RL.forEach(element => {
                  if (element.campo == 'identificacion') {
                     datosRL += '<strong>Identificación Representante Legal: </strong> ' + element.valor + '<br/>';
-                    RL_name = element.valor;
                     if (JSON.stringify(element.valor) !== '{}') {
                        this.ruc_registro_selected.ruc.person_representative.identification = element.valor;
                        this.consumoCedulaRepresentanteLegal = false;
@@ -3569,6 +3568,7 @@ guardarDeclaracion() {
                     }
                  }
                  if (element.campo == 'nombre') {
+                    RL_name = element.valor;
                     datosRL += '<strong>Nombre Representante Legal: </strong> ' + element.valor + '<br/>';
                  }
               });

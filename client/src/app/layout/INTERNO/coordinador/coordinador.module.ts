@@ -56,7 +56,7 @@ import { Ng2TableModule } from 'ng2-table/ng2-table';
 import { ApprovalStateAttachmentService } from './../../../services/CRUD/ALOJAMIENTO/approvalstateattachment.service';
 import { ExporterService } from 'src/app/services/negocio/exporter.service';
 import { DocumentService } from 'src/app/services/CRUD/EXPORTER/document.service';
-
+import { RegisterService as RegistroCatastroService } from 'src/app/services/CRUD/CATASTRO/register.service';
 @NgModule({
   imports: [CommonModule,
     CKEditorModule,
@@ -76,6 +76,7 @@ import { DocumentService } from 'src/app/services/CRUD/EXPORTER/document.service
     DeclarationItemCategoryService,
     DeclarationService,
     DocumentService,
+    RegistroCatastroService,
     ReceptionRoomService,
     MailerService,
     DeclarationAttachmentService,

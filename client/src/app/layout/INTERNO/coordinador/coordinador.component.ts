@@ -99,6 +99,8 @@ import Swal from 'sweetalert2';
 import { ExporterService } from 'src/app/services/negocio/exporter.service';
 import { DocumentService } from 'src/app/services/CRUD/EXPORTER/document.service';
 import { Document as Documento } from 'src/app/models/EXPORTER/Document';
+import { Register as RegistroCatastro } from 'src/app/models/CATASTRO/Register';
+import { RegisterService as RegistroCatastroService } from 'src/app/services/CRUD/CATASTRO/register.service';
 
 @Component({
   selector: 'app-registro',
@@ -149,6 +151,8 @@ export class CoordinadorComponent implements OnInit {
    inspectores: User[] = [];
    totalunoxmil = 0;
    financieros: User[] = [];
+   total_male = 0;
+   total_female = 0;
    inspectorSelectedId: number = 0;
    registerApprovals: ApprovalState[] = [];
    registerApprovalCoordinador: ApprovalState = new ApprovalState();
@@ -160,6 +164,7 @@ export class CoordinadorComponent implements OnInit {
    hasActaNotificacion = false;
    hasRegisterReady = false;
    canSave = true;
+   organization_type = '';
    hasRequisites = false;
    informeApprovalStateAttachment = new ApprovalStateAttachment();
    requisitosApprovalStateAttachment = new ApprovalStateAttachment();
@@ -357,6 +362,7 @@ export class CoordinadorComponent implements OnInit {
               private establishment_property_typeDataService: EstablishmentPropertyTypeService,
               private establishmentDataService: EstablishmentService,
               private register_typeDataService: RegisterTypeService,
+              private registerCatastroDataService: RegistroCatastroService,
               private requisiteDataService: RequisiteService,
               private bedTypeDataService: BedTypeService,
               private declarationDataService: DeclarationService,
@@ -719,6 +725,12 @@ export class CoordinadorComponent implements OnInit {
    this.total_workers = 0;
    this.establishment_selected.workers_on_establishment.forEach(element => {
       if (element.is_max) {
+         if (element.gender_id == 1) {
+            this.total_male = element.count;
+         }
+         if (element.gender_id == 2) {
+            this.total_female = element.count;
+         }
          this.total_workers += element.count;
       }
    });
@@ -2104,7 +2116,6 @@ export class CoordinadorComponent implements OnInit {
          countRegisters++;
       }
      });
-     const code = this.ruc_registro_selected.ruc.number + '.' + establishmentId.toString() + '.' + countRegisters.toString();
      this.registerApprovalCoordinador.register_id = this.idRegister;
      this.registerApprovalCoordinador.date_assigment = this.registerApprovalFinanciero.date_fullfill;
      this.registerApprovalCoordinador.id_user = this.user.id;
@@ -2168,6 +2179,8 @@ export class CoordinadorComponent implements OnInit {
      newRegisterState.register_id = this.idRegister;
      this.registerStateDataService.post(newRegisterState).then( r1 => {
      }).catch( e => { console.log(e); });
+     // CODIGO REGISTRO
+     const code = this.ruc_registro_selected.ruc.number + '.' + establishmentId.toString() + '.' + countRegisters.toString();
      this.approvalStateDataService.put(this.registerApprovalCoordinador).then( r => {
         this.registerDataService.set_register_code(code, this.idRegister).then( r => {
         }).catch( e => { console.log(e); });
@@ -2230,34 +2243,77 @@ export class CoordinadorComponent implements OnInit {
       });
       const czDireccion = datosZonal.direccion.split('>')[1].split('<')[0];
       const czTelefono = datosZonal.telefono.split('>')[1].split('<')[0];
-      let observaciones = this.registerApprovalCoordinador.notes;
-      observaciones = decodeURIComponent(escape(this.registerApprovalCoordinador.notes.toString()));
+      const observaciones = this.registerApprovalCoordinador.notes;
       this.userDataService.get(this.registerMinturSelected.establishment.contact_user_id).then( r => {
-         const information = {
-            para: r.name,
-            tramite: 'Registro',
-            estadoTramite: estadoTramite,
-            ruc: this.ruc_registro_selected.ruc.number,
-            nombreComercial: this.registerMinturSelected.establishment.commercially_known_name,
-            fechaSolicitud: today.toLocaleString(),
-            actividad: 'Alojamiento Turístico',
-            clasificacion: clasificacion,
-            categoria: categoria,
-            tipoSolicitud: 'Registro',
-            provincia: provinciaName,
-            canton: cantonName,
-            parroquia: parroquiaName,
-            callePrincipal: this.registerMinturSelected.establishment.address_main_street,
-            calleInterseccion: this.registerMinturSelected.establishment.address_secondary_street,
-            numeracion: this.registerMinturSelected.establishment.address_number,
-            czDireccion: czDireccion,
-            czTelefono: czTelefono,
-            observaciones: observaciones,
-            thisYear:today.getFullYear()
-         };
-         this.mailerDataService.sendMail('fin_tramite_cz', r.email.toString(), 'Trámite Atendido', information).then( r => {
-            this.toastr.successToastr('Datos Guardados Satisfactoriamente', 'Coordinación');
-            this.refresh();
+         this.registerDataService.get_register_data(this.registerMinturSelected.register.id).then( r2 => {
+            this.establishmentDataService.get_filtered(this.registerMinturSelected.establishment.id).then( r3 => {
+               this.establishment_selected = r3.establishment as Establishment;
+               this.rucEstablishmentRegisterSelected = r2.register as Register;
+               const newRegistroCatastro = new RegistroCatastro();
+               newRegistroCatastro.activity = 'ALOJAMIENTO';
+               newRegistroCatastro.address = this.registerMinturSelected.establishment.address_main_street + ' ' + this.registerMinturSelected.establishment.address_number + ' ' + this.registerMinturSelected.establishment.address_secondary_street;
+               newRegistroCatastro.comercial_name = this.registerMinturSelected.establishment.commercially_known_name;
+               newRegistroCatastro.web = this.registerMinturSelected.establishment.url_web;
+               newRegistroCatastro.ubication_main = provinciaName;
+               newRegistroCatastro.ubication_sencond = cantonName;
+               newRegistroCatastro.ubication_third = parroquiaName;
+               newRegistroCatastro.as_turistic_date = today;
+               newRegistroCatastro.category = categoria;
+               newRegistroCatastro.classification = clasificacion;
+               newRegistroCatastro.email = r.email;
+               newRegistroCatastro.establishment_ruc_code = this.registerMinturSelected.establishment.ruc_code_id;
+               newRegistroCatastro.establishment_state = 'ACTIVO';
+               newRegistroCatastro.georeference_latitude = this.registerMinturSelected.establishment.address_map_latitude;
+               newRegistroCatastro.georeference_longitude = this.registerMinturSelected.establishment.address_map_longitude;
+               newRegistroCatastro.main_phone_number = r.main_phone_number;
+               newRegistroCatastro.max_areas = this.rucEstablishmentRegisterSelected.total_habitations;
+               newRegistroCatastro.max_beds = this.rucEstablishmentRegisterSelected.total_beds;
+               newRegistroCatastro.max_capacity = this.rucEstablishmentRegisterSelected.total_spaces;
+               newRegistroCatastro.organization_type = this.organization_type;
+               newRegistroCatastro.register_code = code;
+               newRegistroCatastro.ruc = this.ruc_registro_selected.ruc.number;
+               newRegistroCatastro.ruc_state = 'ABIERTO';
+               newRegistroCatastro.secondary_phone_number = r.secondary_phone_number;
+               newRegistroCatastro.system_source = 'SITURIN';
+               this.refreshTotalWorkers();
+               newRegistroCatastro.total_female = this.total_female;
+               newRegistroCatastro.total_male = this.total_male;
+               this.establishment_property_types.forEach(element => {
+                  if (element.id == this.registerMinturSelected.establishment.establishment_property_type_id) {
+                     newRegistroCatastro.establishment_property_type = element.name;
+                  }
+               });
+               newRegistroCatastro.legal_representant_identification = this.ruc_registro_selected.ruc.person_representative.identification;
+               newRegistroCatastro.legal_representant_name = this.representante_legal;
+               this.registerCatastroDataService.post(newRegistroCatastro).then( r => {
+               }).catch( e => { console.log(e); });
+               const information = {
+                  para: r.name,
+                  tramite: 'Registro',
+                  estadoTramite: estadoTramite,
+                  ruc: this.ruc_registro_selected.ruc.number,
+                  nombreComercial: this.registerMinturSelected.establishment.commercially_known_name,
+                  fechaSolicitud: today.toLocaleString(),
+                  actividad: 'Alojamiento Turístico',
+                  clasificacion: clasificacion,
+                  categoria: categoria,
+                  tipoSolicitud: 'Registro',
+                  provincia: provinciaName,
+                  canton: cantonName,
+                  parroquia: parroquiaName,
+                  callePrincipal: this.registerMinturSelected.establishment.address_main_street,
+                  calleInterseccion: this.registerMinturSelected.establishment.address_secondary_street,
+                  numeracion: this.registerMinturSelected.establishment.address_number,
+                  czDireccion: czDireccion,
+                  czTelefono: czTelefono,
+                  observaciones: observaciones,
+                  thisYear:today.getFullYear()
+               };
+               this.mailerDataService.sendMail('fin_tramite_cz', r.email.toString(), 'Trámite Atendido', information).then( r => {
+                  this.toastr.successToastr('Datos Guardados Satisfactoriamente', 'Coordinación');
+                  this.refresh();
+               }).catch( e => { console.log(e); });
+            }).catch( e => { console.log(e); });
          }).catch( e => { console.log(e); });
       }).catch( e => { console.log(e); });
   }
@@ -3929,7 +3985,6 @@ guardarDeclaracion() {
               RL.forEach(element => {
                  if (element.campo == 'identificacion') {
                     datosRL += '<strong>Identificación Representante Legal: </strong> ' + element.valor + '<br/>';
-                    RL_name = element.valor;
                     if (JSON.stringify(element.valor) !== '{}') {
                        this.ruc_registro_selected.ruc.person_representative.identification = element.valor;
                        this.consumoCedulaRepresentanteLegal = false;
@@ -3938,6 +3993,7 @@ guardarDeclaracion() {
                     }
                  }
                  if (element.campo == 'nombre') {
+                    RL_name = element.valor;
                     datosRL += '<strong>Nombre Representante Legal: </strong> ' + element.valor + '<br/>';
                  }
               });
@@ -3969,6 +4025,7 @@ guardarDeclaracion() {
                  this.ruc_registro_selected.ruc.tax_payer_type_id = 2;
               }
               datosGenerales += '<strong>Tipo de Contribuyente: </strong> ' + element.valor + '<br/>';
+              this.organization_type = element.valor;
            }
            this.rucData = datosGenerales + datosAE + datosContactoSRI;
            if (this.ruc_registro_selected.ruc.tax_payer_type_id != 1) {
