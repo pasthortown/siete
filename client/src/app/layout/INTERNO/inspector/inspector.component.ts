@@ -1228,7 +1228,7 @@ export class InspectorComponent implements OnInit {
         {title: 'Parroquia', name: 'parroquia'},
         {title: 'Dirección', name: 'address'},
         {title: 'Clasificación - Categoría', name: 'category'},
-        {title: 'Fecha de Solicitud', name: 'updated_at'},
+        {title: 'Fecha de Solicitud', name: 'created_at'},
         {title: 'Número de Registro', name: 'code'},
         {title: 'Fecha de Asignación', name: 'date_assigment'},
      ];
@@ -1243,7 +1243,7 @@ export class InspectorComponent implements OnInit {
          if (registerState.search('Negado') == 0) {
             date1 = new Date(item.states.updated_at);
          }
-         const date2 = new Date(item.register.updated_at);
+         const date2 = new Date(item.register.created_at);
          const diffTime = Math.abs(date2.getTime() - date1.getTime());
          const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
          if (diffDays < 7) {
@@ -1289,7 +1289,7 @@ export class InspectorComponent implements OnInit {
                registerId: item.register.id,
                establishment: item.establishment.commercially_known_name,
                address: item.establishment.address_main_street + ' ' + item.establishment.address_number + ' ' + item.establishment.address_secondary_street,
-               updated_at: item.register.updated_at,
+               created_at: item.register.created_at,
                date_assigment: item.register.date_assigment,
                category: this.getRegisterCategory(item.register.register_type_id),
                status: registerState,
@@ -1954,6 +1954,7 @@ export class InspectorComponent implements OnInit {
          this.newRegisterState.register_id = this.registerApprovalInspector.register_id;
          this.registerApprovalInspector.notes = '';
          this.report.approval_state_id = this.registerApprovalInspector.id;
+
          if (this.report.id == 0) {
             this.approvalStateReportDataService.post(this.report).then().catch( e => { console.log(e); });
          } else {
@@ -1963,6 +1964,7 @@ export class InspectorComponent implements OnInit {
          }).catch( e => { console.log(e); });
          this.approvalStateDataService.put(this.registerApprovalInspector).then( r => {
             this.requisitosApprovalStateAttachment.approval_state_attachment_file_name = 'Formulario_Requisitos_' + this.user.identification + '_' + today.getFullYear().toString() + '_' + (today.getMonth() + 1).toString() + '_' + today.getDate().toString()+'.pdf';
+            this.requisitosApprovalStateAttachment.approval_state_id = this.registerApprovalInspector.id;
             this.informeApprovalStateAttachment.approval_state_attachment_file_name = 'Informe_Requisitos_' + this.user.identification + '_' + today.getFullYear().toString() + '_' + (today.getMonth() + 1).toString() + '_' + today.getDate().toString()+'.pdf';
             if ( this.validateActaNotificacionFile() ) {
                this.actaNotificacionApprovalStateAttachment.approval_state_attachment_file_name = 'Acta_Notificacion_' + this.user.identification + '_' + today.getFullYear().toString() + '_' + (today.getMonth() + 1).toString() + '_' + today.getDate().toString()+'.pdf';

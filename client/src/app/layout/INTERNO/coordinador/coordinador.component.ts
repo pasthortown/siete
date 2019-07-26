@@ -1797,7 +1797,7 @@ export class CoordinadorComponent implements OnInit {
         {title: 'Parroquia', name: 'parroquia'},
         {title: 'Dirección', name: 'address'},
         {title: 'Clasificación - Categoría', name: 'category'},
-        {title: 'Fecha de Solicitud', name: 'updated_at'},
+        {title: 'Fecha de Solicitud', name: 'created_at'},
         {title: 'Número de Registro', name: 'code'},
      ];
      const data = [];
@@ -1811,7 +1811,7 @@ export class CoordinadorComponent implements OnInit {
          if (registerState.search('Negado') == 0) {
             date1 = new Date(item.states.updated_at);
          }
-         const date2 = new Date(item.register.updated_at);
+         const date2 = new Date(item.register.created_at);
          const diffTime = Math.abs(date2.getTime() - date1.getTime());
          const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
          if (diffDays < 7) {
@@ -1858,7 +1858,7 @@ export class CoordinadorComponent implements OnInit {
             parroquia: parroquia.name,
             establishment: item.establishment.commercially_known_name,
             address: item.establishment.address_main_street + ' ' + item.establishment.address_number + item.establishment.address_secondary_street,
-            updated_at: item.register.updated_at,
+            created_at: item.register.created_at,
             code: item.register.code,
             category: this.getRegisterCategory(item.register.register_type_id),
             status: registerState,

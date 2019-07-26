@@ -1387,7 +1387,7 @@ export class RegistroComponent implements OnInit {
         {title: 'Dirección', name: 'address'},
         {title: 'Categoría', name: 'category'},
         {title: 'Bandeja', name: 'status'},
-        {title: 'Fecha de Solicitud', name: 'updated_at'},
+        {title: 'Fecha de Solicitud', name: 'created_at'},
      ];
      const data = [];
      this.registers_mintur.forEach(item => {
@@ -1400,7 +1400,7 @@ export class RegistroComponent implements OnInit {
          if (registerState.search('Negado') == 0) {
             date1 = new Date(item.states.updated_at);
          }
-         const date2 = new Date(item.register.updated_at);
+         const date2 = new Date(item.register.created_at);
          const diffTime = Math.abs(date2.getTime() - date1.getTime());
          const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
          if (diffDays < 7) {
@@ -1419,7 +1419,7 @@ export class RegistroComponent implements OnInit {
             registerId: item.register.id,
             establishment: item.establishment.commercially_known_name,
             address: item.establishment.address_main_street + ' ' + item.establishment.address_number + item.establishment.address_secondary_street,
-            updated_at: item.register.updated_at,
+            created_at: item.register.created_at,
             category: this.getRegisterCategory(item.register.register_type_id),
             status: registerState,
             status_id: item.states.state_id,
