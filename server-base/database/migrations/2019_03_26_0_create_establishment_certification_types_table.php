@@ -16,7 +16,7 @@ class CreateEstablishmentCertificationTypesTable extends Migration
        Schema::create('establishment_certification_types', function (Blueprint $table) {
           $table->increments('id');
           $table->timestamps();
-          $table->string('name',50)->nullable($value = true);
+          $table->string('name',100)->nullable($value = true);
           $table->string('code',20)->nullable($value = true);
           $table->string('father_code',20)->nullable($value = true);
        });
