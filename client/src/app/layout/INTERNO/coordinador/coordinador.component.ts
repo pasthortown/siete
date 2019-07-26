@@ -3218,6 +3218,16 @@ export class CoordinadorComponent implements OnInit {
          this.declarationItemsToShow.push({Category: category, items: items});
       }
    });
+   this.calcularUnoxMil();
+}
+
+calcularUnoxMil() {
+   this.totalunoxmil = 0;
+   this.declarationItemsToShow.forEach(itemToShow => {
+      itemToShow.items.forEach(item => {
+         this.totalunoxmil += item.valueItem.value * (item.declarationItem.factor);
+      });
+   });
 }
 
 guardarDeclaracion() {

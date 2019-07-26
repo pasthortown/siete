@@ -2182,6 +2182,7 @@ export class RegistroComponent implements OnInit {
          this.declarationItemsToShow.push({Category: category, items: items});
       }
    });
+   this.calcularUnoxMil();
 }
 
 guardarDeclaracion() {

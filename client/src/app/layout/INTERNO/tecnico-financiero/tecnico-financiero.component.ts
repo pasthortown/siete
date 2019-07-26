@@ -1603,6 +1603,7 @@ getDeclarationItems() {
          this.declarationItemsToShow.push({Category: category, items: items});
       }
    });
+   this.calcularUnoxMil();
 }
 
   getDeclarationAttachment(declaration_id: number) {

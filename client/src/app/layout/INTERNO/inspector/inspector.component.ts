@@ -2795,6 +2795,7 @@ export class InspectorComponent implements OnInit {
          this.declarationItemsToShow.push({Category: category, items: items});
       }
    });
+   this.calcularUnoxMil();
 }
 
 guardarDeclaracion() {
