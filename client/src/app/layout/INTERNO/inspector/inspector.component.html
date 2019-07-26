@@ -1473,6 +1473,11 @@
                             </table>
                           </div>
                         </div>
+                        <div class="row mt-3" *ngIf="categorySelectedCode !== '-' && rucEstablishmentRegisterSelected.register_type_id !== 0 && tarifarioRack.valores.length > 0">
+                          <h4 class="col-12">
+                            <strong>Tarifario RACK</strong>
+                          </h4>
+                        </div>
                         <div class="row" *ngIf="categorySelectedCode !== '-' && rucEstablishmentRegisterSelected.register_type_id !== 0 && tarifarioRack.valores.length > 0">
                           <div class="col-12">
                             <div class="alert alert-info mt-2 mb-2" role="alert">
@@ -1480,11 +1485,6 @@
                               Para registrar las tarifas en esta tipología de habitación, es necesario que su establecimiento cuente con la declaración de dichas habitaciones, por favor revise la sección Capacidades del establecimiento que se encuentra en la sección anterior
                             </div>
                           </div>
-                        </div>
-                        <div class="row mt-3" *ngIf="categorySelectedCode !== '-' && rucEstablishmentRegisterSelected.register_type_id !== 0 && tarifarioRack.valores.length > 0">
-                          <h4 class="col-12">
-                            <strong>Tarifario RACK</strong>
-                          </h4>
                         </div>
                         <div class="row" *ngIf="categorySelectedCode !== '-' && rucEstablishmentRegisterSelected.register_type_id !== 0 && tarifarioRack.valores.length > 0">
                           <div class="col-12">
@@ -1727,7 +1727,13 @@
                           </div>
                         </div>
                         <div class="row">
-                          <label class="col-12 col-form-label mb-2"><strong>Requisitos</strong></label>
+                          <div class="col-12">
+                            <div class="row mt-3">
+                                <h4 class="col-12">
+                                  <strong>Normativa</strong>
+                                </h4>
+                              </div>
+                          </div>
                           <div class="col-12">
                             <div class="alert alert-warning" role="alert">
                               <label class="col-12 text-justify"><strong>Atención</strong><br />
@@ -1737,13 +1743,6 @@
                                 Los requisitos marcados con <strong style="color:red;">*</strong> son obligatorios.
                               </label>
                             </div>
-                          </div>
-                          <div class="col-12">
-                            <div class="row mt-3">
-                                <h4 class="col-12">
-                                  <strong>Normativa</strong>
-                                </h4>
-                              </div>
                           </div>
                           <div class="col-12">
                               <div class="form-group row">

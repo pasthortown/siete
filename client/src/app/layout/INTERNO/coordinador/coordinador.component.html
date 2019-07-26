@@ -77,8 +77,8 @@
     <label class="col-form-label"><strong>Técnico Zonal Asignado</strong></label>
     <div class="input-group mb-3">
       <div class="input-group-prepend">
-        <button [disabled]="digito == '2' || digito == '9' || inspectorSelectedId == 0 || isAssigned || hasRequisites" type="button" title="Asignar" class="btn btn-success" (click)="asignarInspector()"><span class="fas fa-user-plus"></span></button>
-        <button [disabled]="digito == '2' || digito == '9' || !isAssigned || hasRequisites" type="button" title="Remover" class="btn btn-danger" (click)="desasignarInspector()"><span class="fas fa-user-minus"></span></button>
+        <button [disabled]="digito !== '1' && digito !== '0'" type="button" title="Asignar" class="btn btn-success" (click)="asignarInspector()"><span class="fas fa-user-plus"></span></button>
+        <button [disabled]="digito !== '1' && digito !== '0'" type="button" title="Remover" class="btn btn-danger" (click)="desasignarInspector()"><span class="fas fa-user-minus"></span></button>
       </div>
       <select [disabled]="isAssigned" class="form-control" id="idInspector" name="idInspector" [(ngModel)]="inspectorSelectedId">
         <option value="0" selected>Seleccione...</option>
@@ -1527,6 +1527,11 @@
                             </table>
                           </div>
                         </div>
+                        <div class="row mt-3" *ngIf="categorySelectedCode !== '-' && rucEstablishmentRegisterSelected.register_type_id !== 0 && tarifarioRack.valores.length > 0">
+                          <h4 class="col-12">
+                            <strong>Tarifario RACK</strong>
+                          </h4>
+                        </div>
                         <div class="row" *ngIf="categorySelectedCode !== '-' && rucEstablishmentRegisterSelected.register_type_id !== 0 && tarifarioRack.valores.length > 0">
                           <div class="col-12">
                             <div class="alert alert-info mt-2 mb-2" role="alert">
@@ -1534,11 +1539,6 @@
                               Para registrar las tarifas en esta tipología de habitación, es necesario que su establecimiento cuente con la declaración de dichas habitaciones, por favor revise la sección Capacidades del establecimiento que se encuentra en la sección anterior
                             </div>
                           </div>
-                        </div>
-                        <div class="row mt-3" *ngIf="categorySelectedCode !== '-' && rucEstablishmentRegisterSelected.register_type_id !== 0 && tarifarioRack.valores.length > 0">
-                          <h4 class="col-12">
-                            <strong>Tarifario RACK</strong>
-                          </h4>
                         </div>
                         <div class="row" *ngIf="categorySelectedCode !== '-' && rucEstablishmentRegisterSelected.register_type_id !== 0 && tarifarioRack.valores.length > 0">
                           <div class="col-12">
@@ -1781,7 +1781,13 @@
                           </div>
                         </div>
                         <div class="row">
-                          <label class="col-12 col-form-label mb-2"><strong>Requisitos</strong></label>
+                          <div class="col-12">
+                            <div class="row mt-3">
+                                <h4 class="col-12">
+                                  <strong>Normativa</strong>
+                                </h4>
+                              </div>
+                          </div>
                           <div class="col-12">
                             <div class="alert alert-warning" role="alert">
                               <label class="col-12 text-justify"><strong>Atención</strong><br />
@@ -1791,13 +1797,6 @@
                                 Los requisitos marcados con <strong style="color:red;">*</strong> son obligatorios.
                               </label>
                             </div>
-                          </div>
-                          <div class="col-12">
-                            <div class="row mt-3">
-                                <h4 class="col-12">
-                                  <strong>Normativa</strong>
-                                </h4>
-                              </div>
                           </div>
                           <div class="col-12">
                               <div class="form-group row">
