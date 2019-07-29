@@ -32,16 +32,12 @@
             <tr>
                <th>Seleccionado</th>
                <th>justification</th>
-               <th>code</th>
-               <th>father_code</th>
             </tr>
          </thead>
          <tbody>
             <tr *ngFor="let procedure_justification of procedure_justifications" (click)="selectProcedureJustification(procedure_justification)">
                <td class="text-right"><span *ngIf="procedure_justificationSelected === procedure_justification" class="far fa-hand-point-right"></span></td>
                <td>{{procedure_justification.justification}}</td>
-               <td>{{procedure_justification.code}}</td>
-               <td>{{procedure_justification.father_code}}</td>
             </tr>
          </tbody>
       </table>
@@ -85,15 +81,14 @@
                </div>
             </div>
             <div class="form-group row">
-               <label for="code" class="col-4 col-form-label">code</label>
+               <label for="procedure_id" class="col-4 col-form-label">Procedure</label>
                <div class="col-8">
-                  <input type="text" class="form-control" id="code" name="code" placeholder="code" [(ngModel)]="procedure_justificationSelected.code">
-               </div>
-            </div>
-            <div class="form-group row">
-               <label for="father_code" class="col-4 col-form-label">father_code</label>
-               <div class="col-8">
-                  <input type="text" class="form-control" id="father_code" name="father_code" placeholder="fatherCode" [(ngModel)]="procedure_justificationSelected.father_code">
+                  <select class="form-control" id="procedure_id" name="procedure_id" [(ngModel)]="procedure_justificationSelected.procedure_id">
+                     <option value="0" selected>Seleccione...</option>
+                     <option *ngFor="let procedure of procedures" value={{procedure.id}}>
+                        {{procedure.id}}
+                     </option>
+                  </select>
                </div>
             </div>
          </div>

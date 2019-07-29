@@ -10,9 +10,6 @@ import { Register } from './../../../../models/ALOJAMIENTO/Register';
 import { ProcedureJustificationService } from './../../../../services/CRUD/ALOJAMIENTO/procedurejustification.service';
 import { ProcedureJustification } from './../../../../models/ALOJAMIENTO/ProcedureJustification';
 
-import { ProcedureService } from './../../../../services/CRUD/ALOJAMIENTO/procedure.service';
-import { Procedure } from './../../../../models/ALOJAMIENTO/Procedure';
-
 
 @Component({
    selector: 'app-registerprocedure',
@@ -29,20 +26,17 @@ export class RegisterProcedureComponent implements OnInit {
    recordsByPage = 5;
    registers: Register[] = [];
    procedure_justifications: ProcedureJustification[] = [];
-   procedures: Procedure[] = [];
    constructor(
                private modalService: NgbModal,
                private toastr: ToastrManager,
                private registerDataService: RegisterService,
                private procedure_justificationDataService: ProcedureJustificationService,
-               private procedureDataService: ProcedureService,
                private register_procedureDataService: RegisterProcedureService) {}
 
    ngOnInit() {
       this.goToPage(1);
       this.getRegister();
       this.getProcedureJustification();
-      this.getProcedure();
    }
 
    selectRegisterProcedure(register_procedure: RegisterProcedure) {
@@ -63,13 +57,6 @@ export class RegisterProcedureComponent implements OnInit {
       }).catch( e => console.log(e) );
    }
 
-   getProcedure() {
-      this.procedures = [];
-      this.procedureDataService.get().then( r => {
-         this.procedures = r as Procedure[];
-      }).catch( e => console.log(e) );
-   }
-
    goToPage(page: number) {
       if ( page < 1 || page > this.lastPage ) {
          this.toastr.errorToastr('La página solicitada no existe.', 'Error');
@@ -84,7 +71,6 @@ export class RegisterProcedureComponent implements OnInit {
       this.register_procedureSelected = new RegisterProcedure();
       this.register_procedureSelected.register_id = 0;
       this.register_procedureSelected.procedure_justification_id = 0;
-      this.register_procedureSelected.procedure_id = 0;
       this.register_procedureDataService.get_paginate(this.recordsByPage, this.currentPage).then( r => {
          this.register_procedures = r.data as RegisterProcedure[];
          this.lastPage = r.last_page;
@@ -95,7 +81,6 @@ export class RegisterProcedureComponent implements OnInit {
       this.register_procedureSelected = new RegisterProcedure();
       this.register_procedureSelected.register_id = 0;
       this.register_procedureSelected.procedure_justification_id = 0;
-      this.register_procedureSelected.procedure_id = 0;
       this.openDialog(content);
    }
 
@@ -130,9 +115,9 @@ export class RegisterProcedureComponent implements OnInit {
    toCSV() {
       this.register_procedureDataService.get().then( r => {
          const backupData = r as RegisterProcedure[];
-         let output = 'id;date;register_id;procedure_justification_id;procedure_id\n';
+         let output = 'id;date;register_id;procedure_justification_id\n';
          backupData.forEach(element => {
-            output += element.id + ';' + element.date + ';' + element.register_id + ';' + element.procedure_justification_id + ';' + element.procedure_id + '\n';
+            output += element.id; + element.date + ';' + element.register_id + ';' + element.procedure_justification_id + '\n';
          });
          const blob = new Blob([output], { type: 'text/plain' });
          const fecha = new Date();

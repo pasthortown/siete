@@ -1,11 +1,8 @@
 export class ProcedureJustification {
    id: number;
    justification: String;
-   code: String;
-   father_code: String;
-   constructor() {
+   procedure_id: number;
+   constructior() {
       this.justification = '';
-      this.code = '';
-      this.father_code = '';
    }
 }

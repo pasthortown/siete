@@ -17,8 +17,8 @@ class CreateProcedureJustificationsTable extends Migration
           $table->increments('id');
           $table->timestamps();
           $table->longText('justification')->nullable($value = true);
-          $table->string('code',10)->nullable($value = true);
-          $table->string('father_code',10)->nullable($value = true);
+          $table->unsignedInteger('procedure_id');
+          $table->foreign('procedure_id')->references('id')->on('procedures')->onDelete('cascade');
        });
     }
 

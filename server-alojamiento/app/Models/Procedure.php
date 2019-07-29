@@ -24,9 +24,9 @@ class Procedure extends Model
        
     ];
 
-    function RegisterProcedure()
+    function ProcedureJustification()
     {
-       return $this->belongsTo('App\RegisterProcedure');
+       return $this->belongsTo('App\ProcedureJustification');
     }
 
 }

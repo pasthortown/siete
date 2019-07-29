@@ -12,7 +12,7 @@ class ProcedureJustification extends Model
      * @var array
      */
     protected $fillable = [
-       'justification','code','father_code',
+       'justification',
     ];
 
     /**
@@ -27,6 +27,11 @@ class ProcedureJustification extends Model
     function RegisterProcedure()
     {
        return $this->belongsTo('App\RegisterProcedure');
+    }
+
+    function Procedure()
+    {
+       return $this->hasOne('App\Procedure');
     }
 
 }

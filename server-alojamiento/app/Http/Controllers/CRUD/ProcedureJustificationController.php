@@ -42,8 +42,7 @@ class ProcedureJustificationController extends Controller
              $procedurejustification->id = 1;
           }
           $procedurejustification->justification = $result['justification'];
-          $procedurejustification->code = $result['code'];
-          $procedurejustification->father_code = $result['father_code'];
+          $procedurejustification->procedure_id = $result['procedure_id'];
           $procedurejustification->save();
           DB::commit();
        } catch (Exception $e) {
@@ -59,8 +58,7 @@ class ProcedureJustificationController extends Controller
           $result = $data->json()->all();
           $procedurejustification = ProcedureJustification::where('id',$result['id'])->update([
              'justification'=>$result['justification'],
-             'code'=>$result['code'],
-             'father_code'=>$result['father_code'],
+             'procedure_id'=>$result['procedure_id'],
           ]);
           DB::commit();
        } catch (Exception $e) {
@@ -98,15 +96,13 @@ class ProcedureJustificationController extends Controller
          if ($exist) {
            ProcedureJustification::where('id', $result['id'])->update([
              'justification'=>$result['justification'],
-             'code'=>$result['code'],
-             'father_code'=>$result['father_code'],
+             'procedure_id'=>$result['procedure_id'],
            ]);
          } else {
           $procedurejustification = new ProcedureJustification();
           $procedurejustification->id = $result['id'];
           $procedurejustification->justification = $result['justification'];
-          $procedurejustification->code = $result['code'];
-          $procedurejustification->father_code = $result['father_code'];
+          $procedurejustification->procedure_id = $result['procedure_id'];
           $procedurejustification->save();
          }
        }

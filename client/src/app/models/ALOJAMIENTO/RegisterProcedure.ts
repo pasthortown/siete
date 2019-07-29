@@ -3,5 +3,4 @@ export class RegisterProcedure {
    date: Date;
    register_id: number;
    procedure_justification_id: number;
-   procedure_id: number;
 }

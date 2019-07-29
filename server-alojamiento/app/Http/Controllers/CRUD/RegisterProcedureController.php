@@ -44,7 +44,6 @@ class RegisterProcedureController extends Controller
           $registerprocedure->date = $result['date'];
           $registerprocedure->register_id = $result['register_id'];
           $registerprocedure->procedure_justification_id = $result['procedure_justification_id'];
-          $registerprocedure->procedure_id = $result['procedure_id'];
           $registerprocedure->save();
           DB::commit();
        } catch (Exception $e) {
@@ -62,7 +61,6 @@ class RegisterProcedureController extends Controller
              'date'=>$result['date'],
              'register_id'=>$result['register_id'],
              'procedure_justification_id'=>$result['procedure_justification_id'],
-             'procedure_id'=>$result['procedure_id'],
           ]);
           DB::commit();
        } catch (Exception $e) {
@@ -102,7 +100,6 @@ class RegisterProcedureController extends Controller
              'date'=>$result['date'],
              'register_id'=>$result['register_id'],
              'procedure_justification_id'=>$result['procedure_justification_id'],
-             'procedure_id'=>$result['procedure_id'],
            ]);
          } else {
           $registerprocedure = new RegisterProcedure();
@@ -110,7 +107,6 @@ class RegisterProcedureController extends Controller
           $registerprocedure->date = $result['date'];
           $registerprocedure->register_id = $result['register_id'];
           $registerprocedure->procedure_justification_id = $result['procedure_justification_id'];
-          $registerprocedure->procedure_id = $result['procedure_id'];
           $registerprocedure->save();
          }
        }

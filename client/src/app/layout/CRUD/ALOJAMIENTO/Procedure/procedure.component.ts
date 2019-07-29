@@ -87,7 +87,7 @@ export class ProcedureComponent implements OnInit {
          const backupData = r as Procedure[];
          let output = 'id;name\n';
          backupData.forEach(element => {
-            output += element.id + ';' + element.name + '\n';
+            output += element.id; + element.name + '\n';
          });
          const blob = new Blob([output], { type: 'text/plain' });
          const fecha = new Date();

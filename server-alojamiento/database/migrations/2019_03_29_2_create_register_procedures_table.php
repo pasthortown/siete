@@ -21,8 +21,6 @@ class CreateRegisterProceduresTable extends Migration
           $table->foreign('register_id')->references('id')->on('registers')->onDelete('cascade');
           $table->unsignedInteger('procedure_justification_id');
           $table->foreign('procedure_justification_id')->references('id')->on('procedure_justifications')->onDelete('cascade');
-          $table->unsignedInteger('procedure_id');
-          $table->foreign('procedure_id')->references('id')->on('procedures')->onDelete('cascade');
        });
     }
 

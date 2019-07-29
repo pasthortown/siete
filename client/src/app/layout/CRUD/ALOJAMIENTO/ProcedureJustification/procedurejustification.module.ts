@@ -6,6 +6,7 @@ import { ProcedureJustificationRoutingModule } from './procedurejustification-ro
 import { ProcedureJustificationComponent } from './procedurejustification.component';
 import { ProcedureJustificationService } from './../../../../services/CRUD/ALOJAMIENTO/procedurejustification.service';
 import { environment } from 'src/environments/environment';
+import { ProcedureService } from './../../../../services/CRUD/ALOJAMIENTO/procedure.service';
 import { CKEditorModule } from 'ngx-ckeditor';
 
 @NgModule({
@@ -16,6 +17,7 @@ import { CKEditorModule } from 'ngx-ckeditor';
    declarations: [ProcedureJustificationComponent],
    providers: [
                NgbModal,
+               ProcedureService,
                ProcedureJustificationService
                ]
 })

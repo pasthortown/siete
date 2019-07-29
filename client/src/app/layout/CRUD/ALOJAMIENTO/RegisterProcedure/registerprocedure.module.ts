@@ -8,7 +8,6 @@ import { RegisterProcedureService } from './../../../../services/CRUD/ALOJAMIENT
 import { environment } from 'src/environments/environment';
 import { RegisterService } from './../../../../services/CRUD/ALOJAMIENTO/register.service';
 import { ProcedureJustificationService } from './../../../../services/CRUD/ALOJAMIENTO/procedurejustification.service';
-import { ProcedureService } from './../../../../services/CRUD/ALOJAMIENTO/procedure.service';
 
 @NgModule({
    imports: [CommonModule,
@@ -19,7 +18,6 @@ import { ProcedureService } from './../../../../services/CRUD/ALOJAMIENTO/proced
                NgbModal,
                RegisterService,
                ProcedureJustificationService,
-               ProcedureService,
                RegisterProcedureService
                ]
 })

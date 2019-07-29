@@ -4,6 +4,9 @@ import { ToastrManager } from 'ng6-toastr-notifications';
 import { saveAs } from 'file-saver/FileSaver';
 import { ProcedureJustificationService } from './../../../../services/CRUD/ALOJAMIENTO/procedurejustification.service';
 import { ProcedureJustification } from './../../../../models/ALOJAMIENTO/ProcedureJustification';
+import { ProcedureService } from './../../../../services/CRUD/ALOJAMIENTO/procedure.service';
+import { Procedure } from './../../../../models/ALOJAMIENTO/Procedure';
+
 
 @Component({
    selector: 'app-procedurejustification',
@@ -18,17 +21,27 @@ export class ProcedureJustificationComponent implements OnInit {
    lastPage = 1;
    showDialog = false;
    recordsByPage = 5;
+   procedures: Procedure[] = [];
    constructor(
                private modalService: NgbModal,
                private toastr: ToastrManager,
+               private procedureDataService: ProcedureService,
                private procedure_justificationDataService: ProcedureJustificationService) {}
 
    ngOnInit() {
       this.goToPage(1);
+      this.getProcedure();
    }
 
    selectProcedureJustification(procedure_justification: ProcedureJustification) {
       this.procedure_justificationSelected = procedure_justification;
+   }
+
+   getProcedure() {
+      this.procedures = [];
+      this.procedureDataService.get().then( r => {
+         this.procedures = r as Procedure[];
+      }).catch( e => console.log(e) );
    }
 
    goToPage(page: number) {
@@ -43,6 +56,7 @@ export class ProcedureJustificationComponent implements OnInit {
    getProcedureJustifications() {
       this.procedure_justifications = [];
       this.procedure_justificationSelected = new ProcedureJustification();
+      this.procedure_justificationSelected.procedure_id = 0;
       this.procedure_justificationDataService.get_paginate(this.recordsByPage, this.currentPage).then( r => {
          this.procedure_justifications = r.data as ProcedureJustification[];
          this.lastPage = r.last_page;
@@ -51,6 +65,7 @@ export class ProcedureJustificationComponent implements OnInit {
 
    newProcedureJustification(content) {
       this.procedure_justificationSelected = new ProcedureJustification();
+      this.procedure_justificationSelected.procedure_id = 0;
       this.openDialog(content);
    }
 
@@ -85,9 +100,9 @@ export class ProcedureJustificationComponent implements OnInit {
    toCSV() {
       this.procedure_justificationDataService.get().then( r => {
          const backupData = r as ProcedureJustification[];
-         let output = 'id;justification;code;father_code\n';
+         let output = 'id;justification;procedure_id\n';
          backupData.forEach(element => {
-            output += element.id + ';' + element.justification + ';' + element.code + ';' + element.father_code + '\n';
+            output += element.id; + element.justification + ';' + element.procedure_id + '\n';
          });
          const blob = new Blob([output], { type: 'text/plain' });
          const fecha = new Date();

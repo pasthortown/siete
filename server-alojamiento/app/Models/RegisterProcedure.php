@@ -34,9 +34,4 @@ class RegisterProcedure extends Model
        return $this->hasOne('App\ProcedureJustification');
     }
 
-    function Procedure()
-    {
-       return $this->hasOne('App\Procedure');
-    }
-
 }
