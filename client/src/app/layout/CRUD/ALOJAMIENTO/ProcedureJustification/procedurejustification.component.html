@@ -31,13 +31,22 @@
          <thead>
             <tr>
                <th>Seleccionado</th>
+               <th>ID</th>
                <th>justification</th>
             </tr>
          </thead>
          <tbody>
             <tr *ngFor="let procedure_justification of procedure_justifications" (click)="selectProcedureJustification(procedure_justification)">
                <td class="text-right"><span *ngIf="procedure_justificationSelected === procedure_justification" class="far fa-hand-point-right"></span></td>
-               <td>{{procedure_justification.justification}}</td>
+               <td> {{ procedure_justification.id }}</td>
+               <td>
+                     <select class="form-control" id="procedure_id" name="procedure_id" [(ngModel)]="procedure_justification.procedure_id" [disabled]="true">
+                        <option value="0" selected>Seleccione...</option>
+                        <option *ngFor="let procedure of procedures" value={{procedure.id}}>
+                           {{procedure.name}}
+                        </option>
+                     </select>
+               </td>
             </tr>
          </tbody>
       </table>
@@ -86,7 +95,7 @@
                   <select class="form-control" id="procedure_id" name="procedure_id" [(ngModel)]="procedure_justificationSelected.procedure_id">
                      <option value="0" selected>Seleccione...</option>
                      <option *ngFor="let procedure of procedures" value={{procedure.id}}>
-                        {{procedure.id}}
+                        {{procedure.name}}
                      </option>
                   </select>
                </div>

@@ -56,6 +56,7 @@ import { Ng2TableModule } from 'ng2-table/ng2-table';
 import { ApprovalStateAttachmentService } from './../../../services/CRUD/ALOJAMIENTO/approvalstateattachment.service';
 import { ExporterService } from 'src/app/services/negocio/exporter.service';
 import { DocumentService } from 'src/app/services/CRUD/EXPORTER/document.service';
+import { ProcedureJustificationService } from 'src/app/services/CRUD/ALOJAMIENTO/procedurejustification.service';
 
 @NgModule({
   imports: [CommonModule,
@@ -75,6 +76,7 @@ import { DocumentService } from 'src/app/services/CRUD/EXPORTER/document.service
     ConsultorService,
     DeclarationItemCategoryService,
     DeclarationService,
+    ProcedureJustificationService,
     ReceptionRoomService,
     MailerService,
     DeclarationAttachmentService,

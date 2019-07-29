@@ -99,6 +99,8 @@ import Swal from 'sweetalert2';
 import { DocumentService } from 'src/app/services/CRUD/EXPORTER/document.service';
 import { Document as Documento } from 'src/app/models/EXPORTER/Document';
 import { ExporterService } from 'src/app/services/negocio/exporter.service';
+import { ProcedureJustificationService } from 'src/app/services/CRUD/ALOJAMIENTO/procedurejustification.service';
+import { ProcedureJustification } from 'src/app/models/ALOJAMIENTO/ProcedureJustification';
 
 @Component({
   selector: 'app-registro',
@@ -116,8 +118,10 @@ export class DashboardComponent implements OnInit {
    actualizando = false;
    activando = false;
    inactivando = false;
+   idCausal = 0;
    reclasificando = false;
    recategorizando = false;
+   registrarlo = false;
    tabActiveSuperior = 'tab1';
    selectedNameType: RucNameType = new RucNameType();
    total_workers = 0;
@@ -125,6 +129,7 @@ export class DashboardComponent implements OnInit {
    franchiseChainNameValidated = false;
    establecimientos_pendiente = false;
    rechazarTramite = false;
+   mostrarCausales = false;
    digito = '';
    tarifarioResponse: Tariff[] = [];
    tarifarioRack = {cabecera: [], valores: []};
@@ -212,6 +217,7 @@ export class DashboardComponent implements OnInit {
   addressContactValidated = false;
   emailContactValidated = false;
   mainPhoneContactValidated = false;
+  procedureJustifications = [];
   secondaryPhoneContactValidated = true;
   user: User = new User();
 
@@ -336,6 +342,7 @@ export class DashboardComponent implements OnInit {
               private rucNameTypeDataService: RucNameTypeService,
               private group_typeDataService: GroupTypeService,
               private languageDataService: LanguageService,
+              private procedureJustificationDataService: ProcedureJustificationService,
               private documentDataService: DocumentService,
               private exporterDataService: ExporterService,
               private complementaryServiceFoodTypeDataService: ComplementaryServiceFoodTypeService,
@@ -555,6 +562,12 @@ export class DashboardComponent implements OnInit {
 
   rechazarCheck() {
    this.registerApprovalInspector.notes = '';
+  }
+
+  getProcedureJustifications() { 
+   this.procedureJustificationDataService.get().then( r => {
+      this.procedureJustifications = r as ProcedureJustification[];
+   }).catch( e => { console.log(e); });
   }
 
   changeSortPays(data: any, config: any): any {
@@ -1420,8 +1433,11 @@ export class DashboardComponent implements OnInit {
    this.inactivando = true;
    this.reclasificando = false;
    this.recategorizando = false;
+   this.getProcedureJustifications();
+   this.idCausal = 0;
+   this.mostrarCausales = true;
   }
-
+  
   reactivar() {
    this.actualizando = false;
    this.activando = true;
