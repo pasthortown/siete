@@ -74,6 +74,7 @@ class UbicationController extends Controller
           $ubication->name = $result['name'];
           $ubication->code = $result['code'];
           $ubication->father_code = $result['father_code'];
+          $ubication->acronym = $result['acronym'];
           $ubication->gmap_reference_latitude = $result['gmap_reference_latitude'];
           $ubication->gmap_reference_longitude = $result['gmap_reference_longitude'];
           $ubication->save();
@@ -93,6 +94,7 @@ class UbicationController extends Controller
              'name'=>$result['name'],
              'code'=>$result['code'],
              'father_code'=>$result['father_code'],
+             'acronym'=>$result['acronym'],
              'gmap_reference_latitude'=>$result['gmap_reference_latitude'],
              'gmap_reference_longitude'=>$result['gmap_reference_longitude'],
           ]);
@@ -134,6 +136,7 @@ class UbicationController extends Controller
              'name'=>$result['name'],
              'code'=>$result['code'],
              'father_code'=>$result['father_code'],
+             'acronym'=>$result['acronym'],
              'gmap_reference_latitude'=>$result['gmap_reference_latitude'],
              'gmap_reference_longitude'=>$result['gmap_reference_longitude'],
            ]);
@@ -143,6 +146,7 @@ class UbicationController extends Controller
           $ubication->name = $result['name'];
           $ubication->code = $result['code'];
           $ubication->father_code = $result['father_code'];
+          $ubication->acronym = $result['acronym'];
           $ubication->gmap_reference_latitude = $result['gmap_reference_latitude'];
           $ubication->gmap_reference_longitude = $result['gmap_reference_longitude'];
           $ubication->save();

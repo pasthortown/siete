@@ -81,7 +81,16 @@
   <div class="col-12">
     <div class="btn-toolbar" role="toolbar">
       <div class="btn-group" role="group">
-        <button class="btn btn-secondary" (click)="actualizar()">Actualizar</button><button class="btn btn-secondary" (click)="darBaja()">Dar de Baja</button><button class="btn btn-secondary" (click)="reactivar()">Reactivar</button><button class="btn btn-secondary" (click)="recategorizacion()">Recategorización</button><button class="btn btn-secondary"  (click)="reclasificacion()">Reclasificación</button>
+        <button class="btn btn-light" (click)="actualizar()" *ngIf="!actualizando">Actualizar</button>
+        <button class="btn btn-secondary" (click)="actualizar()" *ngIf="actualizando">Actualizar</button>
+        <button class="btn btn-light" (click)="darBaja()" *ngIf="!inactivando">Dar de Baja</button>
+        <button class="btn btn-secondary" (click)="darBaja()" *ngIf="inactivando">Dar de Baja</button>
+        <button class="btn btn-light" (click)="reactivar()" *ngIf="!activando">Reactivar</button>
+        <button class="btn btn-secondary" (click)="reactivar()" *ngIf="activando">Reactivar</button>
+        <button class="btn btn-light" (click)="recategorizacion()" *ngIf="!recategorizando">Recategorización</button>
+        <button class="btn btn-secondary" (click)="recategorizacion()" *ngIf="recategorizando">Recategorización</button>
+        <button class="btn btn-light"  (click)="reclasificacion()" *ngIf="!reclasificando">Reclasificación</button>
+        <button class="btn btn-secondary"  (click)="reclasificacion()" *ngIf="reclasificando">Reclasificación</button>
       </div>
     </div>
   </div>
@@ -92,50 +101,11 @@
     <select class="form-control" id="causales" name="causales"
       [(ngModel)]="idCausal">
       <option value="0" selected>Seleccione...</option>
+      <option *ngFor="let procedure of procedureJustificationsToShow" value="{{procedure.id}}">{{procedure.justification}}</option>
     </select>
   </div>
 </div>
-<div class="row mt-3" *ngIf="actualizando">
-  <div class="col-12">
-    <h3>ACTUALIZACIÓN</h3>
-  </div>
-  <div class="col-12">
-    DATOS QUE CAMBIAN
-  </div>
-</div>
-<div class="row mt-3" *ngIf="inactivando">
-  <div class="col-12">
-    <h3>DAR DE BAJA</h3>
-  </div>
-  <div class="col-12">
-    DATOS QUE CAMBIAN
-  </div>
-</div>
-<div class="row mt-3" *ngIf="activando">
-  <div class="col-12">
-    <h3>REACTIVAR</h3>
-  </div>
-  <div class="col-12">
-    DATOS QUE CAMBIAN
-  </div>
-</div>
-<div class="row mt-3" *ngIf="recategorizando">
-  <div class="col-12">
-    <h3>RECATEGORIZACION</h3>
-  </div>
-  <div class="col-12">
-    DATOS QUE CAMBIAN
-  </div>
-</div>
-<div class="row mt-3" *ngIf="reclasificando">
-  <div class="col-12">
-    <h3>RECLASIFICACIÓN</h3>
-  </div>
-  <div class="col-12">
-    DATOS QUE CAMBIAN
-  </div>
-</div>
-<div class="row" *ngIf="registrarlo">
+<div class="row" *ngIf="registrarlo || actualizando || activando || inactivando || reclasificando || recategorizando">
   <div class="col-12">
     <div class="row mt-5">
       <div class="col-12 text-left">
@@ -222,7 +192,7 @@
                   <div class="form-group">
                     <label for="group_type_id">Tipo de Personería Jurídica*</label><span
                       *ngIf="!validateGroupGivenTipe()" class="ml-2 badge badge-danger">Incorrecto</span>
-                    <select class="form-control" id="group_type_id" name="group_type_id"
+                    <select class="form-control" [disabled]="!registrarlo" id="group_type_id" name="group_type_id"
                       [(ngModel)]="ruc_registro_selected.ruc.group_given.group_type_id" (change)="
                           setGroupTypeSelected(
                             ruc_registro_selected.ruc.group_given.group_type_id
@@ -235,11 +205,6 @@
                     </select>
                   </div>
                 </div>
-              </div>
-              <div class="row mt-3" *ngIf="ruc_registro_selected.ruc.tax_payer_type_id > 1">
-                <h4 class="col-12">
-                  <strong>Escritura de Constitución</strong>
-                </h4>
               </div>
               <div class="row" *ngIf="ruc_registro_selected.ruc.tax_payer_type_id > 1">
                 <div class="col-12">
@@ -255,7 +220,7 @@
                   <div class="form-group">
                     <label for="group_type_id">Número de Expediente de la Superintendencia de Companías*</label><span
                       *ngIf="ruc_registro_selected.ruc.group_given.register_code === ''" class="ml-2 badge badge-danger">Incorrecto</span>
-                    <input type="text" class="form-control" min="0" id="expediente"
+                    <input type="text" [disabled]="!registrarlo" class="form-control" min="0" id="expediente"
                       name="expediente" (keyup)="checkRegistroSupercias()" placeholder="Número de Expediente de la Superintendencia de Companías" [(ngModel)]="ruc_registro_selected.ruc.group_given.register_code"/>
                   </div>
                 </div>
@@ -535,18 +500,13 @@
                                       </div>
                                     </div>
                                     <div class="col-12 text-center">
-                                      <img class="rounded mb-2" *ngIf="establishment_selected_picture.establishment_picture_file !== '' && true" src="data:{{
-                                          establishment_selected_picture.establishment_picture_file_type
-                                        }};base64,{{
-                                          establishment_selected_picture.establishment_picture_file
-                                        }}" height="400px" width="600px" />
-                                      <img class="rounded mb-2" *ngIf="establishment_selected_picture.establishment_picture_file !== '' && false" src="data:{{
+                                      <img class="rounded mb-2" *ngIf="establishment_selected_picture.establishment_picture_file !== ''" src="data:{{
                                           establishment_selected_picture.establishment_picture_file_type
                                         }};base64,{{
                                           establishment_selected_picture.establishment_picture_file
                                         }}" height="400px" width="600px" (click)="subirFotoFachada()" />
                                     </div>
-                                    <div class="col-12 text-center" *ngIf="false">
+                                    <div class="col-12 text-center">
                                       <button type="button" class="btn btn-primary" (click)="subirFotoFachada()">
                                         Subir Fotografía
                                       </button>
@@ -729,7 +689,7 @@
                                   </div>
                                   <div class="form-group">
                                     <label>Ubicar el establecimiento en el mapa*</label>
-                                    <agm-map class="col-12" *ngIf="false" style="height: 400px;" [latitude]="
+                                    <agm-map class="col-12" *ngIf="true" style="height: 400px;" [latitude]="
                                         establishment_selected.address_map_latitude * 1
                                       " [longitude]="
                                         establishment_selected.address_map_longitude * 1
@@ -742,7 +702,7 @@
                                         [animation]="'DROP'"></agm-marker>
                                     </agm-map>
 
-                                    <agm-map class="col-12" *ngIf="true" style="height: 400px;" [latitude]="
+                                    <agm-map class="col-12" *ngIf="false" style="height: 400px;" [latitude]="
                                         establishment_selected.address_map_latitude * 1
                                       " [longitude]="
                                         establishment_selected.address_map_longitude * 1
@@ -1119,12 +1079,12 @@
                                     <i class="fas fa-download"></i>
                                   </button>
                                   <button
-                                    type="button" title="Eliminar" [disabled]="false" class="btn btn-danger"
+                                    type="button" title="Eliminar" [disabled]="!declaration_selected.editable" class="btn btn-danger"
                                     (click)="borrarBalance()">
                                     <i class="fas fa-trash"></i>
                                   </button>
                                 </div>
-                                <input type="file" class="form-control" [disabled]="false" (change)="
+                                <input type="file" class="form-control" [disabled]="!declaration_selected.editable" (change)="
                                       CodificarArchivoBalance(
                                         $event
                                       )
@@ -1239,7 +1199,7 @@
                       </div>
                       <div class="col-12">
                         <div class="row">
-                          <div class="col-12" *ngIf="estado_tramite_selected_code == 9">
+                          <div class="col-12" *ngIf="false">
                             <div class="row">
                               <div class="col-4">
                                 <div class="form-group">
@@ -1262,36 +1222,7 @@
                           </div>
                           <div class="col-12">
                             <div class="row">
-                              <div class="col-3">
-                                <div class="form-group">
-                                  <label>Estado del Trámite</label>
-                                  <select disabled class="form-control" id="tramite_state_name" name="tramite_state_name"
-                                    (change)="getSpecificStates()" [(ngModel)]="estado_tramite_selected_code">
-                                    <option value="-" selected>Seleccione...</option>
-                                    <option *ngFor="
-                                      let state of estados_tramites
-                                    " value="{{ state.code }}">
-                                      {{ state.name }}
-                                    </option>
-                                  </select>
-                                </div>
-                              </div>
-                              <div class="col-3">
-                                <div class="form-group">
-                                  <label>Trámite Requerido</label><span *ngIf="rucEstablishmentRegisterSelected.status == 0"
-                                    class="ml-2 badge badge-danger">Incorrecto</span>
-                                  <select class="form-control" disabled id="state_name" name="state_name"
-                                    [(ngModel)]="rucEstablishmentRegisterSelected.status" (change)="changeTramiteRequerido()" [disabled]="!editableTramiteRequerido()">
-                                    <option value="0" selected>Seleccione...</option>
-                                    <option *ngFor="
-                                        let state of specific_states
-                                      " value="{{ state.id }}">
-                                      {{ state.name }}
-                                    </option>
-                                  </select>
-                                </div>
-                              </div>
-                              <div class="col-3">
+                              <div class="col-6">
                                 <div class="form-group">
                                   <label for="code">Número de Registro</label>
                                   <input disabled type="text" class="form-control" id="code" name="code"
@@ -1300,10 +1231,10 @@
                                     "/>
                                 </div>
                               </div>
-                              <div class="col-3">
+                              <div class="col-6">
                                 <div class="form-group">
                                   <label>Fecha de Registro</label>
-                                  <input disabled type="date" *ngIf="establishment_selected.as_turistic_register_date != null" class="form-control" id="registerDate" name="registerDate"
+                                  <input disabled type="date" class="form-control" id="registerDate" name="registerDate"
                                     placeholder="Fecha de Registro" [ngModel]="
                                     establishment_selected.as_turistic_register_date | date: 'y-MM-dd'
                                   " (ngModelChange)="
@@ -1331,7 +1262,7 @@
                                 <div class="form-group">
                                   <label>Actividad Turística</label><span *ngIf="actividadSelected == '-'"
                                     class="ml-2 badge badge-danger">Incorrecto</span>
-                                  <select class="form-control" id="actividad" name="actividad" [(ngModel)]="actividadSelected" [disabled]="false">
+                                  <select class="form-control" id="actividad" disabled name="actividad" [(ngModel)]="actividadSelected" [disabled]="false">
                                     <option value="-" selected>Seleccione...</option>
                                     <option value="1" selected>Alojamiento Turístico</option>
                                   </select>
@@ -1341,7 +1272,7 @@
                                 <div class="form-group">
                                   <label>Clasificación</label><span *ngIf="categorySelectedCode == '-'"
                                     class="ml-2 badge badge-danger">Incorrecto</span>
-                                  <select class="form-control" id="register_type_id" name="register_type_id"
+                                  <select class="form-control" id="register_type_id" [disabled]="!(reclasificando || registrarlo)" name="register_type_id"
                                     (change)="getCategories()" [(ngModel)]="categorySelectedCode" [disabled]="false">
                                     <option value="-" selected>Seleccione...</option>
                                     <option *ngFor="
@@ -1358,7 +1289,7 @@
                                       rucEstablishmentRegisterSelected.register_type_id ==
                                       0
                                     " class="ml-2 badge badge-danger">Incorrecto</span>
-                                  <select class="form-control" id="register_type_id" name="register_type_id"
+                                  <select class="form-control" id="register_type_id" [disabled]="!(recategorizando || reclasificando || registrarlo)" name="register_type_id"
                                     (change)="getAllowedInfo()" [(ngModel)]="
                                       rucEstablishmentRegisterSelected.register_type_id
                                     " [disabled]="false">
@@ -1657,7 +1588,7 @@
                           ">
                           <label class="col-12 col-form-label mb-2"><strong>Clases de Modalidades de Turismo de Aventura</strong></label>
                           <div class="col-12">
-                            <div class="input-group" *ngIf="false">
+                            <div class="input-group">
                               <div class="input-group-prepend">
                                 <button type="button" title="Eliminar" class="btn btn-danger"
                                   (click)="removeComplementaryServiceType()" [disabled]="false">
@@ -1715,7 +1646,7 @@
                             </table>
                           </div>
                         </div>
-                        <div class="row">
+                        <div class="row" *ngIf="reclasificando || recategorizando || registrarlo">
                           <div class="col-12">
                             <div class="row mt-3">
                                 <h4 class="col-12">

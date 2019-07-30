@@ -465,23 +465,27 @@ calcularUnoxMil() {
  }
 
  buildDataTableEstablishment() {
-     this.columnsEstablishment = [
-        {title: '', name: 'selected'},
-        {title: 'Número de Establecimiento', name: 'code'},
-        {title: 'Dirección', name: 'address'},
-        {title: 'Nombre Comercial', name: 'name'},
-     ];
-     const data = [];
-     this.ruc_registro_selected.ruc.establishments.forEach(item => {
+   this.columnsEstablishment = [
+      {title: '', name: 'selected'},
+      {title: 'Número de Establecimiento', name: 'code'},
+      {title: 'Dirección', name: 'address'},
+      {title: 'Nombre Comercial', name: 'name'},
+      {title: 'Estado', name: 'sri_state'},
+   ];
+   const data = [];
+   this.ruc_registro_selected.ruc.establishments.forEach(item => {
+      if (item.ruc_code_id == this.registerMinturSelected.establishment.ruc_code_id) {
          data.push({
             selected: '',
             code: item.ruc_code_id,
             address: item.address_main_street + ' ' + item.address_number + ' ' + item.address_secondary_street,
             name: item.commercially_known_name,
+            sri_state: item.sri_state,
          });
-     });
-     this.dataEstablishment = data;
-     this.onChangeTableEstablishment(this.config);
+      }
+   });
+   this.dataEstablishment = data;
+   this.onChangeTableEstablishment(this.config);
   }
 
   onCellClickEstablishment(event) {
@@ -1305,6 +1309,7 @@ getDeclarationItems() {
          this.declarationItemsToShow.push({Category: category, items: items});  
       }
    });
+   this.calcularUnoxMil();
 }
 
  addComplementaryFoodService() {

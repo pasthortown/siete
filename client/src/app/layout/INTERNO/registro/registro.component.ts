@@ -1418,7 +1418,7 @@ export class RegistroComponent implements OnInit {
             number: item.ruc.number,
             registerId: item.register.id,
             establishment: item.establishment.commercially_known_name,
-            address: item.establishment.address_main_street + ' ' + item.establishment.address_number + item.establishment.address_secondary_street,
+            address: item.establishment.address_main_street + ' ' + item.establishment.address_number + ' ' + item.establishment.address_secondary_street,
             created_at: item.register.created_at,
             category: this.getRegisterCategory(item.register.register_type_id),
             status: registerState,
@@ -1796,6 +1796,7 @@ export class RegistroComponent implements OnInit {
          this.declarationItemsToShow.push({Category: category, items: items});  
       }
    });
+   this.calcularUnoxMil();
   }
  
   addComplementaryFoodService() {

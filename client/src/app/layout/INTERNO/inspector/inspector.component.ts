@@ -943,13 +943,15 @@ export class InspectorComponent implements OnInit {
    ];
    const data = [];
    this.ruc_registro_selected.ruc.establishments.forEach(item => {
-       data.push({
-          selected: '',
-          code: item.ruc_code_id,
-          address: item.address_main_street + ' ' + item.address_number + ' ' + item.address_secondary_street,
-          name: item.commercially_known_name,
-          sri_state: item.sri_state,
-       });
+      if (item.ruc_code_id == this.registerMinturSelected.establishment.ruc_code_id) {
+         data.push({
+            selected: '',
+            code: item.ruc_code_id,
+            address: item.address_main_street + ' ' + item.address_number + ' ' + item.address_secondary_street,
+            name: item.commercially_known_name,
+            sri_state: item.sri_state,
+         });
+      }
    });
    this.dataEstablishment = data;
    this.onChangeTableEstablishment(this.config);
@@ -2416,6 +2418,7 @@ export class InspectorComponent implements OnInit {
          this.declarationItemsToShow.push({Category: category, items: items});  
       }
    });
+   this.calcularUnoxMil();
   }
 
   addComplementaryFoodService() {

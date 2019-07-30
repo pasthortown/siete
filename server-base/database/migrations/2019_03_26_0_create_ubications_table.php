@@ -21,6 +21,7 @@ class CreateUbicationsTable extends Migration
           $table->string('father_code',100)->nullable($value = true);
           $table->float('gmap_reference_latitude',24,16)->nullable($value = true);
           $table->float('gmap_reference_longitude',24,16)->nullable($value = true);
+          $table->string('acronym',20)->nullable($value = true);
        });
     }
 

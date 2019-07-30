@@ -1505,13 +1505,15 @@ export class CoordinadorComponent implements OnInit {
    ];
    const data = [];
    this.ruc_registro_selected.ruc.establishments.forEach(item => {
-       data.push({
-          selected: '',
-          code: item.ruc_code_id,
-          address: item.address_main_street + ' ' + item.address_number + ' ' + item.address_secondary_street,
-          name: item.commercially_known_name,
-          sri_state: item.sri_state,
-       });
+      if (item.ruc_code_id == this.registerMinturSelected.establishment.ruc_code_id) {
+         data.push({
+            selected: '',
+            code: item.ruc_code_id,
+            address: item.address_main_street + ' ' + item.address_number + ' ' + item.address_secondary_street,
+            name: item.commercially_known_name,
+            sri_state: item.sri_state,
+         });
+      }
    });
    this.dataEstablishment = data;
    this.onChangeTableEstablishment(this.config);
@@ -1857,7 +1859,7 @@ export class CoordinadorComponent implements OnInit {
             canton: canton.name,
             parroquia: parroquia.name,
             establishment: item.establishment.commercially_known_name,
-            address: item.establishment.address_main_street + ' ' + item.establishment.address_number + item.establishment.address_secondary_street,
+            address: item.establishment.address_main_street + ' ' + item.establishment.address_number + ' ' + item.establishment.address_secondary_street,
             created_at: item.register.created_at,
             code: item.register.code,
             category: this.getRegisterCategory(item.register.register_type_id),
@@ -2179,17 +2181,8 @@ export class CoordinadorComponent implements OnInit {
      newRegisterState.register_id = this.idRegister;
      this.registerStateDataService.post(newRegisterState).then( r1 => {
      }).catch( e => { console.log(e); });
-     // CODIGO REGISTRO
-     const code = this.ruc_registro_selected.ruc.number + '.' + establishmentId.toString() + '.' + countRegisters.toString();
-     this.approvalStateDataService.put(this.registerApprovalCoordinador).then( r => {
-        this.registerDataService.set_register_code(code, this.idRegister).then( r => {
-        }).catch( e => { console.log(e); });
-        this.establishmentDataService.set_register_date(establishmentId).then( r => {
-        }).catch( e => { console.log(e); });
-     }).catch( e => { console.log(e); });
-     if (!enviarMail) {
-      return;
-     }
+
+
      const today = new Date();
       let clasificacion: String = '';
       let categoria: String = '';
@@ -2244,6 +2237,19 @@ export class CoordinadorComponent implements OnInit {
       const czDireccion = datosZonal.direccion.split('>')[1].split('<')[0];
       const czTelefono = datosZonal.telefono.split('>')[1].split('<')[0];
       const observaciones = this.registerApprovalCoordinador.notes;
+
+     // CODIGO REGISTRO
+     
+     const code = this.ruc_registro_selected.ruc.number + '.' + establishmentId.toString() + '.' + countRegisters.toString();
+     this.approvalStateDataService.put(this.registerApprovalCoordinador).then( r => {
+        this.registerDataService.set_register_code(code, this.idRegister).then( r => {
+        }).catch( e => { console.log(e); });
+        this.establishmentDataService.set_register_date(establishmentId).then( r => {
+        }).catch( e => { console.log(e); });
+     }).catch( e => { console.log(e); });
+     if (!enviarMail) {
+      return;
+     }
       this.userDataService.get(this.registerMinturSelected.establishment.contact_user_id).then( r => {
          this.registerDataService.get_register_data(this.registerMinturSelected.register.id).then( r2 => {
             this.establishmentDataService.get_filtered(this.registerMinturSelected.establishment.id).then( r3 => {
@@ -2740,6 +2746,7 @@ export class CoordinadorComponent implements OnInit {
          this.declarationItemsToShow.push({Category: category, items: items});  
       }
    });
+   this.calcularUnoxMil();
   }
  
   addComplementaryFoodService() {

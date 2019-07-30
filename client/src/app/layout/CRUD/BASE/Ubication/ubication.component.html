@@ -35,6 +35,7 @@
                <th>code</th>
                <th>father_code</th>
                <th>gmap_reference</th>
+               <th>acronym</th>
             </tr>
          </thead>
          <tbody>
@@ -44,6 +45,7 @@
                <td>{{ubication.code}}</td>
                <td>{{ubication.father_code}}</td>
                <td>Lat: {{ubication.gmap_reference_latitude}} Lng: {{ubication.gmap_reference_longitude}}</td>
+               <td>{{ubication.acronym}}</td>
             </tr>
          </tbody>
       </table>
@@ -96,6 +98,12 @@
                <label for="father_code" class="col-4 col-form-label">father_code</label>
                <div class="col-8">
                   <input type="text" class="form-control" id="father_code" name="father_code" placeholder="fatherCode" [(ngModel)]="ubicationSelected.father_code">
+               </div>
+            </div>
+            <div class="form-group row">
+               <label for="acronym" class="col-4 col-form-label">acronym</label>
+               <div class="col-8">
+                  <input type="text" class="form-control" id="acronym" name="acronym" placeholder="acronym" [(ngModel)]="ubicationSelected.acronym">
                </div>
             </div>
             <div class="form-group row">

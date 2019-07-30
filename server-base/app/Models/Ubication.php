@@ -12,7 +12,7 @@ class Ubication extends Model
      * @var array
      */
     protected $fillable = [
-       'name','code','father_code','gmap_reference_latitude','gmap_reference_longitude',
+       'name','code','father_code','gmap_reference_latitude','gmap_reference_longitude','acronym',
     ];
 
     /**

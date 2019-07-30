@@ -121,7 +121,7 @@ export class DashboardComponent implements OnInit {
    idCausal = 0;
    reclasificando = false;
    recategorizando = false;
-   registrarlo = false;
+   registrarlo = true;
    tabActiveSuperior = 'tab1';
    selectedNameType: RucNameType = new RucNameType();
    total_workers = 0;
@@ -218,6 +218,7 @@ export class DashboardComponent implements OnInit {
   emailContactValidated = false;
   mainPhoneContactValidated = false;
   procedureJustifications = [];
+  procedureJustificationsToShow = [];
   secondaryPhoneContactValidated = true;
   user: User = new User();
 
@@ -565,8 +566,15 @@ export class DashboardComponent implements OnInit {
   }
 
   getProcedureJustifications() { 
+   this.procedureJustificationsToShow = [];
+   this.procedureJustifications = []
    this.procedureJustificationDataService.get().then( r => {
       this.procedureJustifications = r as ProcedureJustification[];
+      this.procedureJustifications.forEach(element => {
+         if (element.procedure_id == 5) {
+            this.procedureJustificationsToShow.push(element);
+         }
+      });
    }).catch( e => { console.log(e); });
   }
 
@@ -1118,13 +1126,15 @@ export class DashboardComponent implements OnInit {
    ];
    const data = [];
    this.ruc_registro_selected.ruc.establishments.forEach(item => {
-       data.push({
-          selected: '',
-          code: item.ruc_code_id,
-          address: item.address_main_street + ' ' + item.address_number + ' ' + item.address_secondary_street,
-          name: item.commercially_known_name,
-          sri_state: item.sri_state,
-       });
+      if (item.ruc_code_id == this.registerMinturSelected.establishment.ruc_code_id) {
+         data.push({
+            selected: '',
+            code: item.ruc_code_id,
+            address: item.address_main_street + ' ' + item.address_number + ' ' + item.address_secondary_street,
+            name: item.commercially_known_name,
+            sri_state: item.sri_state,
+         });
+      }
    });
    this.dataEstablishment = data;
    this.onChangeTableEstablishment(this.config);
@@ -1410,7 +1420,7 @@ export class DashboardComponent implements OnInit {
             number: item.ruc.number,
             registerId: item.register.id,
             establishment: item.establishment.commercially_known_name,
-            address: item.establishment.address_main_street + ' ' + item.establishment.address_number + item.establishment.address_secondary_street,
+            address: item.establishment.address_main_street + ' ' + item.establishment.address_number + ' ' + item.establishment.address_secondary_street,
             updated_at: item.register.updated_at,
             category: this.getRegisterCategory(item.register.register_type_id),
          });
@@ -1420,11 +1430,13 @@ export class DashboardComponent implements OnInit {
   }
 
   actualizar() {
+   this.mostrarCausales = false;
    this.actualizando = true;
    this.activando = false;
    this.inactivando = false;
    this.reclasificando = false;
    this.recategorizando = false;
+   this.idCausal = 6;
   }
 
   darBaja() {
@@ -1439,27 +1451,33 @@ export class DashboardComponent implements OnInit {
   }
   
   reactivar() {
+   this.mostrarCausales = false;
    this.actualizando = false;
    this.activando = true;
    this.inactivando = false;
    this.reclasificando = false;
    this.recategorizando = false;
+   this.idCausal = 7;
   }
 
   reclasificacion() {
+   this.mostrarCausales = false;
    this.actualizando = false;
    this.activando = false;
    this.inactivando = false;
    this.reclasificando = true;
    this.recategorizando = false;
+   this.idCausal = 4;
   }
 
   recategorizacion() {
+   this.mostrarCausales = false;
    this.actualizando = false;
    this.activando = false;
    this.inactivando = false;
    this.reclasificando = false;
    this.recategorizando = true;
+   this.idCausal = 5;
   }
 
   onCellClick(event) {
@@ -1829,6 +1847,7 @@ export class DashboardComponent implements OnInit {
          this.declarationItemsToShow.push({Category: category, items: items});  
       }
    });
+   this.calcularUnoxMil();
   }
  
   addComplementaryFoodService() {
