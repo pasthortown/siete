@@ -135,6 +135,7 @@ export class CoordinadorComponent implements OnInit {
    dataPays = [];
    pays: Pay[] = [];
    actividadSelected = '-';
+   representante_legal_identificacion = '';
    regiones = [];
    estadoOrigen = 0;
    regionSelectedCode = '-';
@@ -2346,7 +2347,7 @@ export class CoordinadorComponent implements OnInit {
                      newRegistroCatastro.establishment_property_type = element.name;
                   }
                });
-               newRegistroCatastro.legal_representant_identification = this.ruc_registro_selected.ruc.person_representative.identification;
+               newRegistroCatastro.legal_representant_identification = this.representante_legal;
                newRegistroCatastro.legal_representant_name = this.representante_legal;
                this.registerCatastroDataService.post(newRegistroCatastro).then( r => {
                }).catch( e => { console.log(e); });
@@ -4061,6 +4062,7 @@ guardarDeclaracion() {
               RL.forEach(element => {
                  if (element.campo == 'identificacion') {
                     datosRL += '<strong>Identificación Representante Legal: </strong> ' + element.valor + '<br/>';
+                    this.representante_legal_identificacion = element.valor;
                     if (JSON.stringify(element.valor) !== '{}') {
                        this.ruc_registro_selected.ruc.person_representative.identification = element.valor;
                        this.consumoCedulaRepresentanteLegal = false;
