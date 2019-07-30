@@ -8,17 +8,17 @@
     "ubication_main": "GALÁPAGOS",
     "ubication_sencond": "ISABELA",
     "ubication_third": "TOMAS DE BERLANGA (SANTO TOMAS)",
-    "as_turistic_date": "2019-07-30T19:34:45.823Z",
+    "as_turistic_date": "2019-07-30T20:36:00.129Z",
     "category": "Categoría única",
     "classification": "CAMPAMENTO TURÍSTICO",
     "email": "azuza83@hotmail.com",
     "establishment_ruc_code": "1",
     "establishment_state": "ACTIVO",
     "main_phone_number": "099887766",
-    "max_areas": 0,
+    "max_areas": 23,
     "max_beds": 0,
-    "max_capacity": 0,
-    "organization_type": "",
+    "max_capacity": 24,
+    "organization_type": "PNL",
     "register_code": "WAJ-00000007",
     "ruc": "0900022625001",
     "ruc_state": "ABIERTO",
@@ -28,5 +28,5 @@
     "total_male": 4,
     "establishment_property_type": "Propio",
     "legal_representant_identification": "",
-    "legal_representant_name": ""
+    "legal_representant_name": "JARAMILLO CARTAGENA GERMAN ANTONIO"
 }

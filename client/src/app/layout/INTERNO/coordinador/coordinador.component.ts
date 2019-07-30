@@ -2284,7 +2284,9 @@ export class CoordinadorComponent implements OnInit {
                capacities_on_register.forEach(capacity => {
                   max_areas += capacity.quantity;
                   max_spaces += capacity.max_spaces;
-                  max_beds += capacity.max_bed;
+                  if (capacity.max_bed != null || typeof capacity.max_bed != 'undefined') {
+                     max_beds += capacity.max_bed;
+                  }
                });
                this.establishment_selected.workers_on_establishment.forEach(worker => {
                   this.genders.forEach(gender => {
