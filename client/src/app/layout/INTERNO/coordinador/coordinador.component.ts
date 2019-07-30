@@ -2260,15 +2260,31 @@ export class CoordinadorComponent implements OnInit {
             this.establishmentDataService.get_filtered(this.registerMinturSelected.establishment.id).then( r3 => {
                this.establishment_selected = r3.establishment as Establishment;
                this.establishment_selected.workers_on_establishment = r3.workers_on_establishment as Worker[];
-               this.rucEstablishmentRegisterSelected.capacities_on_register = r2.capacities_on_register as Capacity[];
                let max_spaces = 0;
                let max_beds = 0;
                let max_areas = 0;
-               //AQUI
-               this.rucEstablishmentRegisterSelected.capacities_on_register.forEach(capacity => {
-                  max_spaces += capacity.max_spaces;
+               const capacities_on_register = r2.capacities_on_register;
+               capacities_on_register.forEach(capacity => {
+                  this.capacity_types.forEach(capacityType => {
+                     if (capacityType.id == capacity.capacity_type_id) {
+                        if (capacityType.editable_spaces) {
+                           capacity.max_spaces = 0;
+                        } else {
+                           capacity.max_spaces = capacityType.spaces * capacity.quantity;
+                        }
+                        if (capacity.max_bed > capacityType.bed_quantity){
+                           capacity.max_bed = capacityType.bed_quantity;
+                        }
+                        if (capacity.max_bed == 0){
+                           capacity.max_bed = 1;
+                        }
+                     }
+                  });   
+               });
+               capacities_on_register.forEach(capacity => {
                   max_areas += capacity.quantity;
-                  max_beds += (capacity.max_bed * capacity.quantity);
+                  max_spaces += capacity.max_spaces;
+                  max_beds += capacity.max_bed;
                });
                this.establishment_selected.workers_on_establishment.forEach(worker => {
                   this.genders.forEach(gender => {
