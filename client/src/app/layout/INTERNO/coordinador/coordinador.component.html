@@ -190,7 +190,7 @@
     <ck-editor id="notes" name="notes" skin="moono-lisa" [(ngModel)]="registerApprovalCoordinador.notes"></ck-editor>
   </div>
   <div class="col-12 text-center mb-3">
-      <button type="button" class="btn btn-success" *ngIf="digito != '9'" title="Guardar Información" (click)="guardarTramite()"><i class="fas fa-save"></i> Guardar Información</button>
+      <button type="button" class="btn btn-success" [disabled]="guardandoTramite" *ngIf="digito != '9' && stateTramite != 0" title="Guardar Información" (click)="guardarTramite()"><i class="fas fa-save"></i> Guardar Información</button>
       <button type="button" class="btn btn-danger ml-2" *ngIf="digito != '9'" title="Cancelar Cambios" (click)="refresh()"><i class="fas fa-times"></i> Cancelar</button>
   </div>
 </div>

@@ -142,7 +142,7 @@ export class CoordinadorComponent implements OnInit {
    franchises_rucSelectedId = 0;
    fechaNombramientoOK = false;
    allowed_capacity_types: CapacityType[] = []; 
-
+   guardandoTramite = false;
 
    //ASIGNACIONES
    registerIdSelected = 0;
@@ -2011,7 +2011,7 @@ export class CoordinadorComponent implements OnInit {
   }
   
   entregarDocumentos() {
-     this.stateTramiteId = 3;
+     this.stateTramite = 3;
      const estado: String = this.stateTramiteId.toString();
      const digito = estado.substring(estado.length-1, estado.length);
      const newRegisterState = new RegisterState();
@@ -2058,7 +2058,7 @@ export class CoordinadorComponent implements OnInit {
       }
      }
      if( this.stateTramite == 3 ){
-      this.registerApprovalCoordinador.value = false;
+      this.registerApprovalCoordinador.value = true;
       if (digito == '0') {
          newRegisterState.state_id = this.stateTramiteId - 1;
       }
@@ -2099,6 +2099,7 @@ export class CoordinadorComponent implements OnInit {
   }
 
   guardarTramite() {
+     this.guardandoTramite = true;
      const estado: String = this.stateTramiteId.toString();
      const digito = estado.substring(estado.length-1, estado.length);
      if ( this.stateTramite == 0) {
@@ -2180,6 +2181,10 @@ export class CoordinadorComponent implements OnInit {
      newRegisterState.justification = this.registerApprovalCoordinador.notes;
      newRegisterState.register_id = this.idRegister;
      this.registerStateDataService.post(newRegisterState).then( r1 => {
+      if (!enviarMail) {
+         this.guardandoTramite = false;
+         this.refresh();
+      }
      }).catch( e => { console.log(e); });
 
 
@@ -2238,22 +2243,57 @@ export class CoordinadorComponent implements OnInit {
       const czTelefono = datosZonal.telefono.split('>')[1].split('<')[0];
       const observaciones = this.registerApprovalCoordinador.notes;
 
-     // CODIGO REGISTRO
      
-     const code = this.ruc_registro_selected.ruc.number + '.' + establishmentId.toString() + '.' + countRegisters.toString();
+      if (!enviarMail) {
+         return;
+      }
+     let numerico = '00000000'.substr(0, 8 - this.idRegister.toString().length) + this.idRegister.toString();
+     const code = provincia.acronym.toString() + canton.acronym.toString() + 'AJ-' + numerico;
      this.approvalStateDataService.put(this.registerApprovalCoordinador).then( r => {
         this.registerDataService.set_register_code(code, this.idRegister).then( r => {
         }).catch( e => { console.log(e); });
         this.establishmentDataService.set_register_date(establishmentId).then( r => {
         }).catch( e => { console.log(e); });
      }).catch( e => { console.log(e); });
-     if (!enviarMail) {
-      return;
-     }
       this.userDataService.get(this.registerMinturSelected.establishment.contact_user_id).then( r => {
          this.registerDataService.get_register_data(this.registerMinturSelected.register.id).then( r2 => {
             this.establishmentDataService.get_filtered(this.registerMinturSelected.establishment.id).then( r3 => {
                this.establishment_selected = r3.establishment as Establishment;
+               this.establishment_selected.workers_on_establishment = r3.workers_on_establishment as Worker[];
+               this.rucEstablishmentRegisterSelected.capacities_on_register = r2.capacities_on_register as Capacity[];
+               let max_spaces = 0;
+               let max_beds = 0;
+               let max_areas = 0;
+               //AQUI
+               this.rucEstablishmentRegisterSelected.capacities_on_register.forEach(capacity => {
+                  max_spaces += capacity.max_spaces;
+                  max_areas += capacity.quantity;
+                  max_beds += (capacity.max_bed * capacity.quantity);
+               });
+               this.establishment_selected.workers_on_establishment.forEach(worker => {
+                  this.genders.forEach(gender => {
+                     if(gender.id == worker.gender_id) {
+                        worker.gender_name = gender.name;
+                     }
+                  });
+                  this.worker_groups.forEach(worker_group => {
+                     if(worker_group.id == worker.worker_group_id) {
+                        worker.worker_group_name = worker_group.name;
+                        worker.is_max = worker_group.is_max;
+                     }
+                  });
+               });
+               this.establishment_selected.workers_on_establishment.forEach(element => {
+                  if (element.is_max) {
+                     if (element.gender_id == 1) {
+                        this.total_male = element.count;
+                     }
+                     if (element.gender_id == 2) {
+                        this.total_female = element.count;
+                     }
+                     this.total_workers += element.count;
+                  }
+               });
                this.rucEstablishmentRegisterSelected = r2.register as Register;
                const newRegistroCatastro = new RegistroCatastro();
                newRegistroCatastro.activity = 'ALOJAMIENTO';
@@ -2272,16 +2312,15 @@ export class CoordinadorComponent implements OnInit {
                newRegistroCatastro.georeference_latitude = this.registerMinturSelected.establishment.address_map_latitude;
                newRegistroCatastro.georeference_longitude = this.registerMinturSelected.establishment.address_map_longitude;
                newRegistroCatastro.main_phone_number = r.main_phone_number;
-               newRegistroCatastro.max_areas = this.rucEstablishmentRegisterSelected.total_habitations;
-               newRegistroCatastro.max_beds = this.rucEstablishmentRegisterSelected.total_beds;
-               newRegistroCatastro.max_capacity = this.rucEstablishmentRegisterSelected.total_spaces;
+               newRegistroCatastro.max_areas = max_areas;
+               newRegistroCatastro.max_beds = max_beds;
+               newRegistroCatastro.max_capacity = max_spaces;
                newRegistroCatastro.organization_type = this.organization_type;
                newRegistroCatastro.register_code = code;
                newRegistroCatastro.ruc = this.ruc_registro_selected.ruc.number;
                newRegistroCatastro.ruc_state = 'ABIERTO';
                newRegistroCatastro.secondary_phone_number = r.secondary_phone_number;
                newRegistroCatastro.system_source = 'SITURIN';
-               this.refreshTotalWorkers();
                newRegistroCatastro.total_female = this.total_female;
                newRegistroCatastro.total_male = this.total_male;
                this.establishment_property_types.forEach(element => {
@@ -2312,11 +2351,12 @@ export class CoordinadorComponent implements OnInit {
                   numeracion: this.registerMinturSelected.establishment.address_number,
                   czDireccion: czDireccion,
                   czTelefono: czTelefono,
-                  observaciones: observaciones,
+                  observaciones: decodeURIComponent(escape(observaciones.toString())),
                   thisYear:today.getFullYear()
                };
                this.mailerDataService.sendMail('fin_tramite_cz', r.email.toString(), 'Trámite Atendido', information).then( r => {
                   this.toastr.successToastr('Datos Guardados Satisfactoriamente', 'Coordinación');
+                  this.guardandoTramite = false;
                   this.refresh();
                }).catch( e => { console.log(e); });
             }).catch( e => { console.log(e); });
@@ -2632,6 +2672,7 @@ export class CoordinadorComponent implements OnInit {
   refresh() {
    this.fechasNombramiento();
    this.pays = [];
+   this.guardandoTramite = false;
    this.consumoCedula = false;
    this.consumoCedulaEstablishmentContact = false;
    this.consumoRuc = false;
