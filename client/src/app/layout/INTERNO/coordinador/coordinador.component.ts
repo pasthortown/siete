@@ -1882,6 +1882,7 @@ export class CoordinadorComponent implements OnInit {
          this.stateTramiteId = element.states.state_id;
          const estado: String = this.stateTramiteId.toString();
          this.digito = estado.substring(estado.length-1, estado.length);
+         console.log(this.digito);
          this.stateTramite = 0;
          this.estadoOrigen = 0;
          this.canSave = true;
