@@ -1350,7 +1350,7 @@
                                   </td>
                                   <td>
                                     <div class="col-12">
-                                        <input type="number" class="form-control" min="0" max="9999" id="count_plazas" name="count_plazas" (input)="calcSpaces(capacity)"
+                                        <input type="number" class="form-control" min="0" max="9999" id="count_plazas" name="count_plazas" (input)="calcSpaces()"
                                         placeholder="Cantidad de Plazas" [(ngModel)]="capacity.max_spaces" [disabled]="true || !capacity.editable_spaces"/>
                                     </div>
                                   </td>
@@ -1618,7 +1618,7 @@
                             </table>
                           </div>
                         </div>
-                        <div class="row">
+                        <div class="row" *ngIf="categorySelectedCode !== '-' && rucEstablishmentRegisterSelected.register_type_id !== 0">
                           <div class="col-12">
                             <div class="row mt-3">
                                 <h4 class="col-12">
