@@ -1223,6 +1223,7 @@ export class InspectorComponent implements OnInit {
         {title: 'Días en Espera', name: 'date_assigment_alert'},
         {title: 'Número de RUC', name: 'number'},
         {title: 'Nombre Comercial', name: 'establishment'},
+        {title: 'Número de Establecimiento', name: 'ruc_code_id'},
         {title: 'Bandeja', name: 'status'},
         {title: 'Actividad', name: 'actividad'},
         {title: 'Provincia', name: 'provincia'},
@@ -1293,6 +1294,7 @@ export class InspectorComponent implements OnInit {
                address: item.establishment.address_main_street + ' ' + item.establishment.address_number + ' ' + item.establishment.address_secondary_street,
                created_at: item.register.created_at,
                date_assigment: item.register.date_assigment,
+               ruc_code_id: item.establishment.ruc_code_id,
                category: this.getRegisterCategory(item.register.register_type_id),
                status: registerState,
                status_id: item.states.state_id,
@@ -2098,7 +2100,7 @@ export class InspectorComponent implements OnInit {
 
   onCellClick(event) {
    this.registers_mintur.forEach(element => {
-      if (element.ruc.number == event.row.number) {
+      if (element.ruc.number == event.row.number && element.establishment.ruc_code_id == event.row.ruc_code_id) {
          this.selectRegisterMintur(element);
          this.idRegister = event.row.registerId;
          this.stateTramiteId = element.states.state_id;

@@ -1792,6 +1792,7 @@ export class CoordinadorComponent implements OnInit {
         {title: '', name: 'selected'},
         {title: 'Días en Espera', name: 'date_assigment_alert'},
         {title: 'Número de RUC', name: 'number'},
+        {title: 'Número de Establecimiento', name: 'ruc_code_id'},
         {title: 'Nombre Comercial', name: 'establishment'},
         {title: 'Bandeja', name: 'status'},
         {title: 'Actividad', name: 'actividad'},
@@ -1859,6 +1860,7 @@ export class CoordinadorComponent implements OnInit {
             provincia: provincia.name,
             canton: canton.name,
             parroquia: parroquia.name,
+            ruc_code_id: item.establishment.ruc_code_id,
             establishment: item.establishment.commercially_known_name,
             address: item.establishment.address_main_street + ' ' + item.establishment.address_number + ' ' + item.establishment.address_secondary_street,
             created_at: item.register.created_at,
@@ -1874,7 +1876,7 @@ export class CoordinadorComponent implements OnInit {
 
   onCellClick(event) {
    this.registers_mintur.forEach(element => {
-      if (element.ruc.number == event.row.number) {
+      if (element.ruc.number == event.row.number && element.establishment.ruc_code_id == event.row.ruc_code_id) {
          this.selectRegisterMintur(element);
          const registerState = this.getRegisterState(element.states.state_id);
          this.stateTramiteId = element.states.state_id;

@@ -737,7 +737,8 @@ calcularUnoxMil() {
     this.columns = [
        {title: '', name: 'selected'},
        {title: 'Días en Espera', name: 'date_assigment_alert'},
-       {title: 'Número de RUC', name: 'number', filtering: {filterString: '', placeholder: 'Número de RUC'}},
+       {title: 'Número de RUC', name: 'number'},
+       {title: 'Número de Establecimiento', name: 'ruc_code_id'},
        {title: 'NOmbre Comercial', name: 'establishment'},
        {title: 'Dirección', name: 'address'},
        {title: 'Categoría', name: 'category'},
@@ -776,6 +777,7 @@ calcularUnoxMil() {
             date_assigment_alert: date_assigment_alert,
             number: item.ruc.number,
             registerId: item.register.id,
+            ruc_code_id: item.establishment.ruc_code_id,
             establishment: item.establishment.commercially_known_name,
             address: item.establishment.address_main_street + ' ' + item.establishment.address_number + ' ' + item.establishment.address_secondary_street,
             created_at: item.register.created_at,
@@ -1023,7 +1025,7 @@ calcularUnoxMil() {
 
  onCellClick(event) {
   this.registers_mintur.forEach(element => {
-     if (element.ruc.number == event.row.number) {
+   if (element.ruc.number == event.row.number && element.establishment.ruc_code_id == event.row.ruc_code_id) {
         this.selectRegisterMintur(element);
         this.stateTramiteId = element.states.state_id;
         this.idRegister = event.row.registerId;

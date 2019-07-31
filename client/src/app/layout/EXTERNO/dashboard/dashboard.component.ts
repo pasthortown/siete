@@ -1410,6 +1410,7 @@ export class DashboardComponent implements OnInit {
      this.columns = [
         {title: '', name: 'selected'},
         {title: 'Establecimiento', name: 'establishment'},
+        {title: 'Número de Establecimiento', name: 'ruc_code_id'},
         {title: 'Dirección', name: 'address'},
         {title: 'Categoría', name: 'category'},
      ];
@@ -1420,6 +1421,7 @@ export class DashboardComponent implements OnInit {
             number: item.ruc.number,
             registerId: item.register.id,
             establishment: item.establishment.commercially_known_name,
+            ruc_code_id: item.establishment.ruc_code_id,
             address: item.establishment.address_main_street + ' ' + item.establishment.address_number + ' ' + item.establishment.address_secondary_street,
             updated_at: item.register.updated_at,
             category: this.getRegisterCategory(item.register.register_type_id),
@@ -1482,7 +1484,7 @@ export class DashboardComponent implements OnInit {
 
   onCellClick(event) {
    this.registers_mintur.forEach(element => {
-      if (element.ruc.number == event.row.number) {
+      if (element.ruc.number == event.row.number && element.establishment.ruc_code_id == event.row.ruc_code_id) {
          this.selectRegisterMintur(element);
          const registerState = this.getRegisterState(element.states.state_id);
          this.stateTramiteId = element.states.state_id;
