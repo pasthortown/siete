@@ -81,7 +81,6 @@ export class RegisterComponent implements OnInit {
    getActivities() {
       this.registerDataService.getActivities().then( r => {
          this.activities = r;
-         console.log(r);
       }).catch( e => { console.log(e); });
    }
 
@@ -239,8 +238,6 @@ export class RegisterComponent implements OnInit {
          }).catch( e => console.log(e) );
       }
    }
-
-
 
    toCSV() {
       this.registerDataService.get().then( r => {

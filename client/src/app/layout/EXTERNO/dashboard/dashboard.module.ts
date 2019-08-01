@@ -57,6 +57,7 @@ import { ApprovalStateAttachmentService } from './../../../services/CRUD/ALOJAMI
 import { ExporterService } from 'src/app/services/negocio/exporter.service';
 import { DocumentService } from 'src/app/services/CRUD/EXPORTER/document.service';
 import { ProcedureJustificationService } from 'src/app/services/CRUD/ALOJAMIENTO/procedurejustification.service';
+import { RegisterService as CatastroRegisterService } from 'src/app/services/CRUD/CATASTRO/register.service';
 
 @NgModule({
   imports: [CommonModule,
@@ -79,6 +80,7 @@ import { ProcedureJustificationService } from 'src/app/services/CRUD/ALOJAMIENTO
     ProcedureJustificationService,
     ReceptionRoomService,
     MailerService,
+    CatastroRegisterService,
     DeclarationAttachmentService,
     FloorAuthorizationCertificateService,
     PayService,
