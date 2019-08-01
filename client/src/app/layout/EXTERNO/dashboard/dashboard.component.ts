@@ -101,6 +101,8 @@ import { Document as Documento } from 'src/app/models/EXPORTER/Document';
 import { ExporterService } from 'src/app/services/negocio/exporter.service';
 import { ProcedureJustificationService } from 'src/app/services/CRUD/ALOJAMIENTO/procedurejustification.service';
 import { ProcedureJustification } from 'src/app/models/ALOJAMIENTO/ProcedureJustification';
+import { RegisterService as CatastroRegisterService } from 'src/app/services/CRUD/CATASTRO/register.service';
+import { Register as CatastroRegister } from 'src/app/models/CATASTRO/Register';
 
 @Component({
   selector: 'app-registro',
@@ -121,7 +123,7 @@ export class DashboardComponent implements OnInit {
    idCausal = 0;
    reclasificando = false;
    recategorizando = false;
-   registrarlo = true;
+   registrarlo = false;
    tabActiveSuperior = 'tab1';
    selectedNameType: RucNameType = new RucNameType();
    total_workers = 0;
@@ -140,6 +142,7 @@ export class DashboardComponent implements OnInit {
    rowsPays = [];
    columnsPays = [];
    dataPays = [];
+   estados = [];
    pays: Pay[] = [];
    actividadSelected = '-';
    regiones = [];
@@ -326,6 +329,7 @@ export class DashboardComponent implements OnInit {
 
   constructor(private toastr: ToastrManager,
               private receptionRoomDataService: ReceptionRoomService,
+              private catastroRegisterDataService: CatastroRegisterService,
               private payDataService: PayService,
               private floorAuthorizationCertificateDataService: FloorAuthorizationCertificateService,
               private declarationAttachmentDataService: DeclarationAttachmentService,
@@ -1400,7 +1404,7 @@ export class DashboardComponent implements OnInit {
   getRegistersMintur() {
    this.registers_mintur = [];
    this.registerMinturSelected = new Register();
-   this.consultorDataService.get_registers(1).then( r => {
+   this.catastroRegisterDataService.searchByRuc('0190170438001').then( r => {
       this.registers_mintur = r;
       this.buildDataTable();
    }).catch( e => console.log(e) );
@@ -1409,23 +1413,91 @@ export class DashboardComponent implements OnInit {
   buildDataTable() {
      this.columns = [
         {title: '', name: 'selected'},
-        {title: 'Establecimiento', name: 'establishment'},
-        {title: 'Número de Establecimiento', name: 'ruc_code_id'},
+        {title: 'Establecimiento', name: 'comercial_name'},
+        {title: 'Fecha de Registro', name: 'as_turistic_date'},
+        {title: 'Número de Registro', name: 'register_code'},
+        {title: 'Provincia', name: 'ubication_main'},
+        {title: 'Cantón', name: 'ubication_sencond'},
+        {title: 'Parroquia', name: 'ubication_third'},
         {title: 'Dirección', name: 'address'},
+        {title: 'Actividad', name: 'activity'},
         {title: 'Categoría', name: 'category'},
+        {title: 'Clasificación', name: 'classification'},
+        {title: 'Estado', name: 'establishment_state'},
      ];
      const data = [];
+     const dataSITURIN = [];
+     const dataSIETE = [];
+     const dataOTHERS = [];
      this.registers_mintur.forEach(item => {
-         data.push({
-            selected: '',
-            number: item.ruc.number,
-            registerId: item.register.id,
-            establishment: item.establishment.commercially_known_name,
-            ruc_code_id: item.establishment.ruc_code_id,
-            address: item.establishment.address_main_street + ' ' + item.establishment.address_number + ' ' + item.establishment.address_secondary_street,
-            updated_at: item.register.updated_at,
-            category: this.getRegisterCategory(item.register.register_type_id),
+         let existe = false;
+         this.estados.forEach(element => {
+            if (element == item.establishment_state) {
+               existe = true;
+            }
          });
+         if (!existe) {
+            this.estados.push(item.establishment_state);
+         }
+         const newItem = {
+            selected: '',
+            activity: item.activity,
+            address: item.address,
+            as_turistic_date: item.as_turistic_date,
+            category: item.category,
+            classification: item.classification,
+            comercial_name: item.comercial_name,
+            created_at: item.created_at,
+            email: item.email,
+            establishment_property_type: item.establishment_property_type,
+            establishment_ruc_code: item.establishment_ruc_code,
+            establishment_state: item.establishment_state,
+            georeference_latitude: item.georeference_latitude,
+            georeference_longitude: item.georeference_longitude,
+            id: item.id,
+            legal_representant_identification: item.legal_representant_identification,
+            legal_representant_name: item.legal_representant_name,
+            main_phone_number: item.main_phone_number,
+            max_areas: item.max_areas,
+            max_beds: item.max_beds,
+            max_capacity: item.max_capacity,
+            organization_type: item.organization_type,
+            register_code: item.register_code,
+            ruc: item.ruc,
+            ruc_state: item.ruc_state,
+            secondary_phone_number: item.secondary_phone_number,
+            system_source: item.system_source,
+            total_female: item.total_female,
+            total_male: item.total_male,
+            ubication_main: item.ubication_main,
+            ubication_sencond: item.ubication_sencond,
+            ubication_third: item.ubication_third,
+            updated_at: item.updated_at,
+            web: item.web,
+         };
+         if (newItem.system_source == 'SIETE') {
+            dataSIETE.push(newItem);
+         }
+         if (newItem.system_source == 'SITURIN') {
+            dataSITURIN.push(newItem);
+         }
+         if (newItem.system_source !== 'SITURIN' || newItem.system_source !== 'SIETE') {
+            dataOTHERS.push(newItem);
+         }
+     });
+     dataSITURIN.forEach(element => {
+        data.push(element);
+     });
+     dataSIETE.forEach(itemSIETE => {
+        let existeSITURIN = false;
+        dataSITURIN.forEach(itemSITURIN => {
+           if (itemSITURIN.establishment_ruc_code == itemSIETE.establishment_ruc_code) {
+            existeSITURIN = true;
+           }
+        });
+        if (!existeSITURIN) {
+           data.push(itemSIETE);
+        }
      });
      this.data = data;
      this.onChangeTable(this.config);
@@ -1484,38 +1556,43 @@ export class DashboardComponent implements OnInit {
 
   onCellClick(event) {
    this.registers_mintur.forEach(element => {
-      if (element.ruc.number == event.row.number && element.establishment.ruc_code_id == event.row.ruc_code_id) {
-         this.selectRegisterMintur(element);
-         const registerState = this.getRegisterState(element.states.state_id);
-         this.stateTramiteId = element.states.state_id;
-         const estado: String = this.stateTramiteId.toString();
-         this.digito = estado.substring(estado.length-1, estado.length);
-         this.stateTramite = 0;
-         this.canSave = true;
-         if (registerState.search('Solicitud Aprobada') == 0) {
-            this.stateTramite = 1;
-            this.hasRegisterReady = true;
-            this.canSave = false;
+      if (element.id == event.row.id) {
+         console.log(element);
+         if (element.system_source == 'SITURIN') {
+            /*this.selectRegisterMintur(element);
+            const registerState = this.getRegisterState(element.states.state_id);
+            this.stateTramiteId = element.states.state_id;
+            const estado: String = this.stateTramiteId.toString();
+            this.digito = estado.substring(estado.length-1, estado.length);
+            this.stateTramite = 0;
+            this.canSave = true;
+            if (registerState.search('Solicitud Aprobada') == 0) {
+               this.stateTramite = 1;
+               this.hasRegisterReady = true;
+               this.canSave = false;
+            }
+            if (registerState.search('Solicitud Rechazada') == 0) {
+               this.stateTramite = 2;
+               this.hasRegisterReady = false;
+               this.canSave = false;
+            }
+            if (registerState.search('Documentación Entregada') == 0) {
+               this.stateTramite = 3;
+               this.hasRegisterReady = false;
+               this.canSave = false;
+            }*/
+            /*this.idRegister = event.row.registerId;
+            this.getApprovalStates();
+            this.rows.forEach(row => {
+               if (this.idRegister == row.registerId) {
+                  row.selected = '<div class="col-12 text-right"><span class="far fa-hand-point-right"></span></div>';
+               } else {
+                  row.selected = '';
+               }
+            });*/
+         } else {
+
          }
-         if (registerState.search('Solicitud Rechazada') == 0) {
-            this.stateTramite = 2;
-            this.hasRegisterReady = false;
-            this.canSave = false;
-         }
-         if (registerState.search('Documentación Entregada') == 0) {
-            this.stateTramite = 3;
-            this.hasRegisterReady = false;
-            this.canSave = false;
-         }
-      }
-   });
-   this.idRegister = event.row.registerId;
-   this.getApprovalStates();
-   this.rows.forEach(row => {
-      if (this.idRegister == row.registerId) {
-         row.selected = '<div class="col-12 text-right"><span class="far fa-hand-point-right"></span></div>';
-      } else {
-         row.selected = '';
       }
    });
   }

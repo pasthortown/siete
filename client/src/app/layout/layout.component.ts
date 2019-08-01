@@ -100,7 +100,17 @@ export class LayoutComponent implements OnInit {
               if (registros.length == 0 || r == 0) {
                   sessionStorage.setItem('canMoreThanRegister',JSON.stringify(false));
               } else {
-                sessionStorage.setItem('canMoreThanRegister',JSON.stringify(true));
+                let autorizado = false;
+                registros.forEach(element => {
+                    if (element.system_source == "SITURIN" || element.system_source == "SIETE") {
+                        autorizado = true;
+                    }
+                });
+                if (autorizado) {
+                    sessionStorage.setItem('canMoreThanRegister',JSON.stringify(true));
+                } else {
+                    sessionStorage.setItem('canMoreThanRegister',JSON.stringify(false));
+                }
               }
           }).catch( e => { console.log(e); });
           let redirigirProfile = false;
