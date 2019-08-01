@@ -152,6 +152,10 @@ export class CoordinadorComponent implements OnInit {
    inspectores: User[] = [];
    totalunoxmil = 0;
    financieros: User[] = [];
+   asignandoFinanciero: Boolean = false;
+   desasignandoFinanciero: Boolean = false;
+   asignandoInspector: Boolean = false;
+   desasignandoInspector: Boolean = false;
    total_male = 0;
    total_female = 0;
    inspectorSelectedId: number = 0;
@@ -970,6 +974,7 @@ export class CoordinadorComponent implements OnInit {
   }
 
   asignarInspector() {
+   this.asignandoInspector = true;
    this.isAssigned = true;
    this.registerApprovalInspector.id_user = this.inspectorSelectedId;
    this.registerApprovalInspector.date_assigment = new Date();
@@ -979,6 +984,7 @@ export class CoordinadorComponent implements OnInit {
       newRegisterState.justification = 'Técinco Zonal asignado en la fecha ' + this.registerApprovalInspector.date_assigment.toDateString();
       newRegisterState.register_id = this.idRegister;
       newRegisterState.state_id = this.stateTramiteId + 3;
+      this.asignandoInspector = false;
       this.registerStateDataService.post(newRegisterState).then( r1 => {
       }).catch( e => { console.log(e); });
    }).catch( e => { console.log(e); });
@@ -1086,6 +1092,7 @@ export class CoordinadorComponent implements OnInit {
   }
 
   desasignarInspector() {
+   this.desasignandoInspector = true;
    const today = new Date();
    let clasificacion: String = '';
    let categoria: String = '';
@@ -1160,12 +1167,14 @@ export class CoordinadorComponent implements OnInit {
    newRegisterState.justification = 'Técinco Zonal removido en la fecha ' + today.toDateString();
    newRegisterState.register_id =  this.idRegister;
    newRegisterState.state_id = this.stateTramiteId - 3;
+   this.desasignandoInspector = true;
    this.registerStateDataService.post(newRegisterState).then( r1 => {
    }).catch( e => { console.log(e); });
    }).catch( e => { console.log(e); });
   }
 
   asignarFinanciero() {
+   this.asignandoFinanciero = true;
    this.isAssignedFinancial = true;
    this.registerApprovalFinanciero.id_user = this.financialSelectedId;
    this.registerApprovalFinanciero.date_assigment = new Date();
@@ -1175,6 +1184,7 @@ export class CoordinadorComponent implements OnInit {
       newRegisterState.justification = 'Técnico Financiero asignado en la fecha ' + this.registerApprovalFinanciero.date_assigment.toDateString();
       newRegisterState.register_id =  this.idRegister;
       newRegisterState.state_id = this.stateTramiteId - 3;
+      this.asignandoFinanciero = false;
       this.registerStateDataService.post(newRegisterState).then( r1 => {
       }).catch( e => { console.log(e); });
    }).catch( e => { console.log(e); });
@@ -1274,6 +1284,7 @@ export class CoordinadorComponent implements OnInit {
    }
 
   desasignarFinanciero() {
+   this.desasignandoFinanciero = true;
    const today = new Date();
    let clasificacion: String = '';
    let categoria: String = '';
@@ -1348,6 +1359,7 @@ export class CoordinadorComponent implements OnInit {
     newRegisterState.justification = 'Técnico Financiero removido en la fecha ' + today.toDateString();
     newRegisterState.register_id =  this.idRegister;
     newRegisterState.state_id = this.stateTramiteId + 3;
+    this.desasignandoFinanciero = false;
     this.registerStateDataService.post(newRegisterState).then( r1 => {
     }).catch( e => { console.log(e); });
    }).catch( e => { console.log(e); });
