@@ -87,6 +87,14 @@ export class SidebarComponent implements OnInit {
     return true;
   }
 
+  checkCatastro(): Boolean {
+    let toReturn: Boolean = false;
+    if ( JSON.parse(sessionStorage.getItem('canMoreThanRegister')) !== null ) {
+      toReturn = JSON.parse(sessionStorage.getItem('canMoreThanRegister'));
+    }
+    return toReturn;
+  }
+
   checkRols() {
     this.isAdmin = false;
     this.isAdminRuc = false;

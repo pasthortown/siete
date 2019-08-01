@@ -5,6 +5,8 @@ import { ProfilePictureService } from '../services/profile/profilepicture.servic
 import { ProfilePicture } from '../models/profile/ProfilePicture';
 import { User } from '../models/profile/User';
 import { ToastrManager } from 'ng6-toastr-notifications';
+import { RegisterService } from '../services/CRUD/CATASTRO/register.service';
+import { Register } from '../models/CATASTRO/Register';
 
 @Component({
     selector: 'app-layout',
@@ -17,7 +19,7 @@ export class LayoutComponent implements OnInit {
     two = false;
     three = false;
     
-    constructor(private toastr: ToastrManager, public profilePictureDataService: ProfilePictureService, private userDataService: UserService, private router: Router) {}
+    constructor(private toastr: ToastrManager, private catastroDataService: RegisterService, private profilePictureDataService: ProfilePictureService, private userDataService: UserService, private router: Router) {}
 
     ngOnInit() {
         this.half = false;
@@ -93,6 +95,14 @@ export class LayoutComponent implements OnInit {
         const userData = JSON.parse(sessionStorage.getItem('user'));
         this.userDataService.get(userData.id).then( r => {
           const user = r as User;
+          this.catastroDataService.searchByRuc(user.ruc.toString()).then( r => {
+              const registros = r as Register[];
+              if (registros.length == 0 || r == 0) {
+                  sessionStorage.setItem('canMoreThanRegister',JSON.stringify(false));
+              } else {
+                sessionStorage.setItem('canMoreThanRegister',JSON.stringify(true));
+              }
+          }).catch( e => { console.log(e); });
           let redirigirProfile = false;
           if(user.main_phone_number == '' || typeof user.main_phone_number == 'undefined' || user.main_phone_number == null) {
             redirigirProfile = true;

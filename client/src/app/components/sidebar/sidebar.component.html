@@ -352,6 +352,10 @@
          </li>
       </div>
          <a [routerLink]="['/externo-registro']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="isExternal || isAdminRuc || isCoAdminRuc || isAdminEst || isAdminRegC">
+            <i class="fas fa-newspaper"></i>&nbsp; <span>&nbsp;Registro de Actividades Turísticas</span>
+         </a>
+
+         <a [routerLink]="['/externo-dashboard']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="isExternal || isAdminRuc || isCoAdminRuc || isAdminEst || isAdminRegC || checkCatastro()">
             <i class="fas fa-newspaper"></i>&nbsp; <span>&nbsp;Gestión de Actividades Turísticas</span>
          </a>
       <a [routerLink]="['/tarifario-rack']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="isExternal || isAdminRuc || isCoAdminRuc || isAdminEst || isAdminRegC">
@@ -380,9 +384,6 @@
             <ul class="submenu">
                <li>
                   <a [routerLink]="['/catastro']" [routerLinkActive]="['router-link-active']" class="list-group-item">Register </a>
-               </li>
-               <li>
-                  <a [routerLink]="['/externo-dashboard']" [routerLinkActive]="['router-link-active']" class="list-group-item">Dashboard </a>
                </li>
             </ul>
          </li>
