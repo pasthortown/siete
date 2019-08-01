@@ -1970,6 +1970,7 @@ export class InspectorComponent implements OnInit {
             this.requisitosApprovalStateAttachment.approval_state_attachment_file_name = 'Formulario_Requisitos_' + this.user.identification + '_' + today.getFullYear().toString() + '_' + (today.getMonth() + 1).toString() + '_' + today.getDate().toString()+'.pdf';
             this.requisitosApprovalStateAttachment.approval_state_id = this.registerApprovalInspector.id;
             this.informeApprovalStateAttachment.approval_state_attachment_file_name = 'Informe_Requisitos_' + this.user.identification + '_' + today.getFullYear().toString() + '_' + (today.getMonth() + 1).toString() + '_' + today.getDate().toString()+'.pdf';
+            this.informeApprovalStateAttachment.approval_state_id = this.registerApprovalInspector.id;
             if ( this.validateActaNotificacionFile() ) {
                this.actaNotificacionApprovalStateAttachment.approval_state_attachment_file_name = 'Acta_Notificacion_' + this.user.identification + '_' + today.getFullYear().toString() + '_' + (today.getMonth() + 1).toString() + '_' + today.getDate().toString()+'.pdf';
             }
