@@ -207,6 +207,12 @@
         name="tarifarioFile" placeholder="Tarifario Rack o Mostrador"
         (change)="CodeFileTarifarioRackAttachment($event)">
     </div>
+    <small *ngIf="imprimiendo_tarifario">
+      <div class="alert alert-info mt-2 mb-2" role="alert">
+        <label class="col-12 text-justify"><strong>INFORMACIÓN</strong></label><br />
+        El sistema está generando el documento, ésto puede tardar algunos segundos. Por favor espere.
+      </div>
+    </small>
     <small *ngIf="!SRIOK">
       <div class="col-12 text-justify mt-2 mb-2" [innerHTML]="rucData">
       </div>
@@ -228,6 +234,12 @@
     </div>
     <small *ngIf="!SRIOK">
       <div class="col-12 text-justify mt-2 mb-2" [innerHTML]="rucData">
+      </div>
+    </small>
+    <small *ngIf="imprimiendo_registro">
+      <div class="alert alert-info mt-2 mb-2" role="alert">
+        <label class="col-12 text-justify"><strong>INFORMACIÓN</strong></label><br />
+        El sistema está generando el documento, ésto puede tardar algunos segundos. Por favor espere.
       </div>
     </small>
   </div>

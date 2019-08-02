@@ -638,12 +638,20 @@ export class RegistroComponent implements OnInit {
      ];
      const data = [];
      this.ruc_registro_selected.ruc.establishments.forEach(item => {
-         data.push({
-            selected: '',
-            code: item.ruc_code_id,
-            address: item.address_main_street + ' ' + item.address_number + ' ' + item.address_secondary_street,
-            name: item.commercially_known_name,
-            sri_state: item.sri_state,
+         let establecimientosRegistrados = JSON.parse(sessionStorage.getItem('establecimientos')) as [];
+         establecimientosRegistrados.forEach(element => {
+            let yaRegistrado = false;
+            if (element == item.ruc_code_id) {
+               yaRegistrado = true;
+            }
+            data.push({
+               selected: '',
+               code: item.ruc_code_id,
+               yaRegistrado: yaRegistrado,
+               address: item.address_main_street + ' ' + item.address_number + ' ' + item.address_secondary_street,
+               name: item.commercially_known_name,
+               sri_state: item.sri_state,
+            });
          });
      });
      this.dataEstablishment = data;
@@ -655,6 +663,10 @@ export class RegistroComponent implements OnInit {
       this.toastr.errorToastr('El establecimiento seleccionado, no tiene nombre comercial. Acérquese al SRI para registrar el nombre comercial del establecimiento.', 'Datos - SRI');
       return;
    } 
+   if (event.row.yaRegistrado) {
+      this.toastr.errorToastr('Éste establecimiento, ya tiene un número de Registro, diríjase a la opción Gestión de Actividades Turísiticas para administrarlo.', 'MINISTERIO DE TURISMO');
+      return;
+   }
    this.ruc_registro_selected.ruc.establishments.forEach(element => {
       if (element.ruc_code_id == event.row.code) {
          this.selectRegisterEstablishment(element);

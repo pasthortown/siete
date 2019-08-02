@@ -76,16 +76,16 @@
   <div class="col-12">
     <div class="btn-toolbar" role="toolbar">
       <div class="btn-group" role="group">
-        <button class="btn btn-light" (click)="actualizar()" *ngIf="!actualizando">Actualizar</button>
-        <button class="btn btn-secondary" (click)="actualizar()" *ngIf="actualizando">Actualizar</button>
-        <button class="btn btn-light" (click)="darBaja()" *ngIf="!inactivando">Dar de Baja</button>
-        <button class="btn btn-secondary" (click)="darBaja()" *ngIf="inactivando">Dar de Baja</button>
-        <button class="btn btn-light" (click)="reactivar()" *ngIf="!activando">Reactivar</button>
-        <button class="btn btn-secondary" (click)="reactivar()" *ngIf="activando">Reactivar</button>
-        <button class="btn btn-light" (click)="recategorizacion()" *ngIf="!recategorizando">Recategorización</button>
-        <button class="btn btn-secondary" (click)="recategorizacion()" *ngIf="recategorizando">Recategorización</button>
-        <button class="btn btn-light"  (click)="reclasificacion()" *ngIf="!reclasificando">Reclasificación</button>
-        <button class="btn btn-secondary"  (click)="reclasificacion()" *ngIf="reclasificando">Reclasificación</button>
+        <button class="btn btn-light" (click)="actualizar()" *ngIf="!actualizando" [disabled]="!mostrarActualizar">Actualizar</button>
+        <button class="btn btn-secondary" (click)="actualizar()" *ngIf="actualizando" [disabled]="!mostrarActualizar">Actualizar</button>
+        <button class="btn btn-light" (click)="recategorizacion()" *ngIf="!recategorizando" [disabled]="!mostrarRecategorizar">Recategorización</button>
+        <button class="btn btn-secondary" (click)="recategorizacion()" *ngIf="recategorizando" [disabled]="!mostrarRecategorizar">Recategorización</button>
+        <button class="btn btn-light"  (click)="reclasificacion()" *ngIf="!reclasificando" [disabled]="!mostrarReclasificar">Reclasificación</button>
+        <button class="btn btn-secondary"  (click)="reclasificacion()" *ngIf="reclasificando" [disabled]="!mostrarReclasificar">Reclasificación</button>
+        <button class="btn btn-light" (click)="darBaja()" *ngIf="!inactivando" [disabled]="!mostrarDarBaja">Dar de Baja</button>
+        <button class="btn btn-secondary" (click)="darBaja()" *ngIf="inactivando" [disabled]="!mostrarDarBaja">Dar de Baja</button>
+        <button class="btn btn-light" (click)="reactivar()" *ngIf="!activando" [disabled]="!mostrarActivar">Reactivar</button>
+        <button class="btn btn-secondary" (click)="reactivar()" *ngIf="activando" [disabled]="!mostrarActivar">Reactivar</button>
       </div>
     </div>
   </div>

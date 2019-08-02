@@ -117,6 +117,11 @@ export class DashboardComponent implements OnInit {
    idTramiteEstadoFilter = 0;
    tramite = '-';
    tabActive = 'paso1';
+   mostrarActualizar = true;
+   mostrarActivar = true;
+   mostrarDarBaja = true;
+   mostrarReclasificar = true;
+   mostrarRecategorizar = true;
    actualizando = false;
    activando = false;
    inactivando = false;
@@ -1336,7 +1341,6 @@ export class DashboardComponent implements OnInit {
   }
 
   changeFilter(data: any, config: any): any {
-   this.mostrarDataRegisterMintur = false;
    this.rows.forEach(row => {
       row.selected = '';
    });
@@ -1560,7 +1564,6 @@ export class DashboardComponent implements OnInit {
    this.registers_mintur.forEach(element => {
       this.selectedRegister = element;
       if (element.id == event.row.id) {
-         console.log(element);
          this.register_code = element.register_code;
          this.rows.forEach(row => {
             if (this.register_code == row.register_code) {
@@ -1569,43 +1572,62 @@ export class DashboardComponent implements OnInit {
                row.selected = '';
             }
          });
+         let cambioEstado = false;
+         if(element.establishment_state.toUpperCase().trim() == "ACTIVO" || element.establishment_state.toUpperCase().trim() == "ABIERTO" || element.establishment_state.toUpperCase().trim() == "ESTABLECIMIENTOS ACIVOS") {
+           this.mostrarActualizar = true;
+           this.mostrarActivar = false;
+           this.mostrarDarBaja = true;
+           this.mostrarReclasificar = true;
+           this.mostrarRecategorizar = true; 
+           cambioEstado = true;
+         }
+         if(element.establishment_state.toUpperCase().trim() == "ESTABLECIMIENTOS NO ACTIVOS") {
+            this.mostrarActualizar = false;
+            this.mostrarActivar = true;
+            this.mostrarDarBaja = false;
+            this.mostrarReclasificar = false;
+            this.mostrarRecategorizar = false; 
+            cambioEstado = true;
+         }
+         if (!cambioEstado) {
+            this.mostrarActualizar = false;
+            this.mostrarActivar = false;
+            this.mostrarDarBaja = false;
+            this.mostrarReclasificar = false;
+            this.mostrarRecategorizar = false;
+            return;
+         }
+         this.mostrarDataRegisterMintur = true;
          if (element.system_source == 'SITURIN') {
-            this.registerMinturSelected = {register: null, establishment: null, ruc: null, states: null};
             this.consultorDataService.get_register_by_code(this.register_code).then( r => {
-               console.log(r);
-            }).catch( e => { console.log(e); });
-            /*this.selectRegisterMintur(element);
-            const registerState = this.getRegisterState(element.states.state_id);
-            this.stateTramiteId = element.states.state_id;
-            const estado: String = this.stateTramiteId.toString();
-            this.digito = estado.substring(estado.length-1, estado.length);
-            this.stateTramite = 0;
-            this.canSave = true;
-            if (registerState.search('Solicitud Aprobada') == 0) {
-               this.stateTramite = 1;
-               this.hasRegisterReady = true;
-               this.canSave = false;
-            }
-            if (registerState.search('Solicitud Rechazada') == 0) {
-               this.stateTramite = 2;
-               this.hasRegisterReady = false;
-               this.canSave = false;
-            }
-            if (registerState.search('Documentación Entregada') == 0) {
-               this.stateTramite = 3;
-               this.hasRegisterReady = false;
-               this.canSave = false;
-            }
-            this.idRegister = event.row.registerId;
-            this.getApprovalStates();
-            this.rows.forEach(row => {
-               if (this.idRegister == row.registerId) {
-                  row.selected = '<div class="col-12 text-right"><span class="far fa-hand-point-right"></span></div>';
-               } else {
-                  row.selected = '';
+               const registerMintur = r[0];
+               this.selectRegisterMintur(registerMintur);
+               const registerState = this.getRegisterState(registerMintur.states.state_id);
+               this.stateTramiteId = registerMintur.states.state_id;
+               const estado: String = this.stateTramiteId.toString();
+               this.digito = estado.substring(estado.length-1, estado.length);
+               this.stateTramite = 0;
+               this.canSave = true;
+               if (registerState.search('Solicitud Aprobada') == 0) {
+                  this.stateTramite = 1;
+                  this.hasRegisterReady = true;
+                  this.canSave = false;
                }
-            });*/
+               if (registerState.search('Solicitud Rechazada') == 0) {
+                  this.stateTramite = 2;
+                  this.hasRegisterReady = false;
+                  this.canSave = false;
+               }
+               if (registerState.search('Documentación Entregada') == 0) {
+                  this.stateTramite = 3;
+                  this.hasRegisterReady = false;
+                  this.canSave = false;
+               }
+               this.idRegister = registerMintur.register.id;
+               this.getApprovalStates();
+            }).catch( e => { console.log(e); });
          } else {
+            this.registerMinturSelected = {register: new Register(), establishment: new Establishment(), ruc: new Ruc(), states: new RegisterState()};
             this.fechasNombramiento();
             this.pays = [];
             this.consumoCedula = false;
@@ -1828,7 +1850,6 @@ export class DashboardComponent implements OnInit {
 
   selectRegisterMintur(item: any) {
    this.registerMinturSelected = item;
-   this.mostrarDataRegisterMintur = true;
    this.getRuc(this.registerMinturSelected.ruc.number);
    this.groupTypeSelected = new GroupType();
   }

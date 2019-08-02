@@ -113,7 +113,12 @@ export class LayoutComponent implements OnInit {
                     toReturn = false;
                 }
               }
+              const establecimientos_id = [];
+              registros.forEach(registro => {
+                  establecimientos_id.push(registro.establishment_ruc_code);
+              });
               sessionStorage.setItem('canMoreThanRegister',JSON.stringify(toReturn));
+              sessionStorage.setItem('establecimientos',JSON.stringify(establecimientos_id));
           }).catch( e => { console.log(e); });
           let redirigirProfile = false;
           if(user.main_phone_number == '' || typeof user.main_phone_number == 'undefined' || user.main_phone_number == null) {
