@@ -97,21 +97,23 @@ export class LayoutComponent implements OnInit {
           const user = r as User;
           this.catastroDataService.searchByRuc(user.ruc.toString()).then( r => {
               const registros = r as Register[];
+              let toReturn = false;
               if (registros.length == 0 || r == 0) {
-                  sessionStorage.setItem('canMoreThanRegister',JSON.stringify(false));
+                  toReturn = false;
               } else {
                 let autorizado = false;
                 registros.forEach(element => {
-                    if (element.system_source == "SITURIN" || element.system_source == "SIETE") {
+                    if (element.system_source.toString() == "SITURIN" || element.system_source.toString() == "SIETE") {
                         autorizado = true;
                     }
                 });
                 if (autorizado) {
-                    sessionStorage.setItem('canMoreThanRegister',JSON.stringify(true));
+                    toReturn = true;
                 } else {
-                    sessionStorage.setItem('canMoreThanRegister',JSON.stringify(false));
+                    toReturn = false;
                 }
               }
+              sessionStorage.setItem('canMoreThanRegister',JSON.stringify(toReturn));
           }).catch( e => { console.log(e); });
           let redirigirProfile = false;
           if(user.main_phone_number == '' || typeof user.main_phone_number == 'undefined' || user.main_phone_number == null) {

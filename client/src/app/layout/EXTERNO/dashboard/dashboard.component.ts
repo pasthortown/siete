@@ -1404,7 +1404,7 @@ export class DashboardComponent implements OnInit {
   getRegistersMintur() {
    this.registers_mintur = [];
    this.registerMinturSelected = new Register();
-   this.catastroRegisterDataService.searchByRuc('0190170438001').then( r => {
+   this.catastroRegisterDataService.searchByRuc(this.user.ruc.toString()).then( r => {
       this.registers_mintur = r;
       this.buildDataTable();
    }).catch( e => console.log(e) );
