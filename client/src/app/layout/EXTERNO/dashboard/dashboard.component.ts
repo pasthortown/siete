@@ -139,6 +139,7 @@ export class DashboardComponent implements OnInit {
    balance: DeclarationAttachment = new DeclarationAttachment();
    lastPagePays = 1;
    recordsByPagePays = 5;
+   selectedRegister = null;
    rowsPays = [];
    columnsPays = [];
    dataPays = [];
@@ -1131,7 +1132,7 @@ export class DashboardComponent implements OnInit {
    ];
    const data = [];
    this.ruc_registro_selected.ruc.establishments.forEach(item => {
-      if (item.ruc_code_id == this.registerMinturSelected.establishment.ruc_code_id) {
+      if (item.ruc_code_id == this.selectedRegister.establishment_ruc_code) {
          data.push({
             selected: '',
             code: item.ruc_code_id,
@@ -1557,6 +1558,7 @@ export class DashboardComponent implements OnInit {
 
   onCellClick(event) {
    this.registers_mintur.forEach(element => {
+      this.selectedRegister = element;
       if (element.id == event.row.id) {
          console.log(element);
          this.register_code = element.register_code;
@@ -1568,6 +1570,10 @@ export class DashboardComponent implements OnInit {
             }
          });
          if (element.system_source == 'SITURIN') {
+            this.registerMinturSelected = {register: null, establishment: null, ruc: null, states: null};
+            this.consultorDataService.get_register_by_code(this.register_code).then( r => {
+               console.log(r);
+            }).catch( e => { console.log(e); });
             /*this.selectRegisterMintur(element);
             const registerState = this.getRegisterState(element.states.state_id);
             this.stateTramiteId = element.states.state_id;
@@ -1589,8 +1595,8 @@ export class DashboardComponent implements OnInit {
                this.stateTramite = 3;
                this.hasRegisterReady = false;
                this.canSave = false;
-            }*/
-            /*this.idRegister = event.row.registerId;
+            }
+            this.idRegister = event.row.registerId;
             this.getApprovalStates();
             this.rows.forEach(row => {
                if (this.idRegister == row.registerId) {

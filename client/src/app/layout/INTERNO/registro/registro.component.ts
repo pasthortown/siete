@@ -1644,6 +1644,7 @@ export class RegistroComponent implements OnInit {
 
   selectRegisterMintur(item: any) {
    this.registerMinturSelected = item;
+   console.log(this.registerMinturSelected);
    this.mostrarDataRegisterMintur = true;
    this.getRuc(this.registerMinturSelected.ruc.number);
    this.groupTypeSelected = new GroupType();

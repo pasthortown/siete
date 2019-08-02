@@ -25,6 +25,13 @@ export class ConsultorService {
       }).catch( error => { this.handledError(error.json());  });
    }
 
+   get_register_by_code(code: String): Promise<any> {
+      return this.http.get(this.url + 'register_by_code?code=' + code, this.options).toPromise()
+      .then( r => {
+         return r.json();
+      }).catch( error => { this.handledError(error.json());  });
+   }
+
    get_zonales(id?: number) {
       if (typeof id == 'undefined'){
          return this.http.get(this.url_base + 'zonal/', this.options).toPromise()

@@ -22,6 +22,18 @@ class ConsultorController extends Controller
     return response()->json($toReturn,200);
   }
 
+  function registerByCode(Request $data) {
+    $token = $data->header('api_token');
+    $code = $data['id'];
+    $toReturn = [];
+    $register = json_decode($this->httpGet(env('API_ALOJAMIENTO').'register/get_by_register_code/?code='.$code,null,null,$token));
+    $status = json_decode($this->httpGet(env('API_ALOJAMIENTO').'registerstate/get_by_register_id?id='.$register->id,null,null,$token));
+    $establishment = json_decode($this->httpGet(env('API_BASE').'establishment?id='.$register->establishment_id,null,null,$token));
+    $ruc = json_decode($this->httpGet(env('API_BASE').'ruc?id='.$establishment->Establishment->ruc_id,null,null,$token));
+    array_push($toReturn, ["register"=>$register, "establishment"=>$establishment->Establishment, "ruc"=>$ruc->Ruc, "states"=>$status]);
+    return response()->json($toReturn,200);
+  }
+
   function get_registers_assigned_inspector_id(Request $data) {
     $token = $data->header('api_token');
     $toReturn = [];

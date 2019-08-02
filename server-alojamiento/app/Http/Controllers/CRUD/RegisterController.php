@@ -43,7 +43,7 @@ class RegisterController extends Controller
 
     function get_by_register_code(Request $data) {
       $code = $data['code'];
-      $toReturn = RegisterRequisite::join('requisites', 'requisites.id', '=', 'register_requisites.requisite_id')->where('code', $code)->select('register_requisites.*', 'requisites.name as requisite_name', 'requisites.father_code as requisite_father_code')->get();
+      $toReturn = Register::where('code', $code)->first();
       return response()->json($toReturn, 200);
     }
 
