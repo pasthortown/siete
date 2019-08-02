@@ -2262,7 +2262,7 @@ export class CoordinadorComponent implements OnInit {
       if (!enviarMail) {
          return;
       }
-     let numerico = '00000000'.substr(0, 8 - this.idRegister.toString().length) + this.idRegister.toString();
+     let numerico = '10000000'.substr(0, 8 - this.idRegister.toString().length) + this.idRegister.toString();
      const code = provincia.acronym.toString() + canton.acronym.toString() + 'AJ-' + numerico;
      this.approvalStateDataService.put(this.registerApprovalCoordinador).then( r => {
         this.registerDataService.set_register_code(code, this.idRegister).then( r => {

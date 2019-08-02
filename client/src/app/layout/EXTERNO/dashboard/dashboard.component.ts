@@ -213,6 +213,7 @@ export class DashboardComponent implements OnInit {
   zonalSelectedCode = '-';
   provinciaSelectedCode = '-';
   cantonSelectedCode = '-';
+  register_code = '';
   groupTypeSelected: GroupType = new GroupType();
   rucValidated = false;
   identificationRepresentativePersonValidated = false;
@@ -1558,6 +1559,14 @@ export class DashboardComponent implements OnInit {
    this.registers_mintur.forEach(element => {
       if (element.id == event.row.id) {
          console.log(element);
+         this.register_code = element.register_code;
+         this.rows.forEach(row => {
+            if (this.register_code == row.register_code) {
+               row.selected = '<div class="col-12 text-right"><span class="far fa-hand-point-right"></span></div>';
+            } else {
+               row.selected = '';
+            }
+         });
          if (element.system_source == 'SITURIN') {
             /*this.selectRegisterMintur(element);
             const registerState = this.getRegisterState(element.states.state_id);
@@ -1591,10 +1600,49 @@ export class DashboardComponent implements OnInit {
                }
             });*/
          } else {
-            //this.
+            this.fechasNombramiento();
+            this.pays = [];
+            this.consumoCedula = false;
+            this.consumoCedulaEstablishmentContact = false;
+            this.consumoRuc = false;
+            this.consumoCedulaRepresentanteLegal = false;
+            this.SRIOK = false;
+            this.REGCIVILOK = false;
+            this.REGCIVILOKEstablishment = false;
+            this.REGCIVILREPRESENTANTELEGALOK = false;
+            this.guardando = false;
+            this.ruc_registro_selected = new RegistroDataCarrier();
+            this.registrarlo = true;
+            this.getRuc(this.user.ruc);
+            this.getTaxPayerType();
+            this.getGroupType();
+            this.getCapacityTypes();
+            this.getTariffs();
+            this.getStates();
+            this.getRucNameTypes();
+            this.getZonalesEstablishment();
+            this.getEstablishmentPropertyType();
+            this.getLanguage();
+            this.getPays();
+            this.getComplementaryFoodServiceType();
+            this.getSystemNames();
+            this.getUbications();
+            this.getCertificationTypes();
+            this.getWorkerGroups();
+            this.getRegiones();
+            this.getEstablishmentCertificationTypesCategories();
+            this.getComplementaryServiceTypeCategories();
+            this.groupTypeSelected = new GroupType();
          }
       }
    });
+  }
+
+  getUbications() {
+   this.ubications = [];
+   this.ubicationDataService.get().then( r => {
+      this.ubications = r as Ubication[];
+   }).catch( e => { console.log(e); });
   }
 
   checkIfIsAssigned() {
