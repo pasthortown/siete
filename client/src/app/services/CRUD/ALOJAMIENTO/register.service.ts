@@ -86,6 +86,13 @@ export class RegisterService {
       }).catch( error => { this.handledError(error.json()); });
    }
    
+   get_by_register_code(code: String): Promise<any> {
+      return this.http.get(this.url + 'get_by_register_code/?code=' + code, this.options).toPromise()
+      .then( r => {
+         return r.json();
+      }).catch( error => { this.handledError(error.json()); });
+   }
+
    post(register: Register): Promise<any> {
       return this.http.post(this.url, JSON.stringify(register), this.options).toPromise()
       .then( r => {

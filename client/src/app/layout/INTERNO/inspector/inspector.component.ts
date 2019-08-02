@@ -1598,7 +1598,7 @@ export class InspectorComponent implements OnInit {
             workers_on_establishment.forEach(worker_group_template => {
                let newworkergroup = {worker_group_name: '', gender_name: '', count: ''};
                r2.workers_on_establishment.forEach(worker_group_in => {
-                  if (worker_group_in.worker_group_id == worker_group_template.worker_group_id) {
+                  if (worker_group_in.worker_group_id == worker_group_template.worker_group_id && worker_group_in.gender_id == worker_group_template.gender_id) {
                      newworkergroup.worker_group_name = worker_group_template.worker_group_name.toString();
                      newworkergroup.gender_name = worker_group_template.gender_name.toString();
                      newworkergroup.count = worker_group_in.count;

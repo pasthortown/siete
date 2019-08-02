@@ -41,6 +41,12 @@ class RegisterController extends Controller
       }
     }
 
+    function get_by_register_code(Request $data) {
+      $code = $data['code'];
+      $toReturn = RegisterRequisite::join('requisites', 'requisites.id', '=', 'register_requisites.requisite_id')->where('code', $code)->select('register_requisites.*', 'requisites.name as requisite_name', 'requisites.father_code as requisite_father_code')->get();
+      return response()->json($toReturn, 200);
+    }
+
     function get_requisites_set_by_user(Request $data) {
        $register_id = $data['register_id'];
        $toReturn = RegisterRequisite::join('requisites', 'requisites.id', '=', 'register_requisites.requisite_id')->where('register_id', $register_id)->select('register_requisites.*', 'requisites.name as requisite_name', 'requisites.father_code as requisite_father_code')->get();
