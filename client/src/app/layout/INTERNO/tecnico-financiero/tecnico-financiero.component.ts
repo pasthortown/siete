@@ -736,7 +736,6 @@ calcularUnoxMil() {
  buildDataTable() {
     this.columns = [
        {title: '', name: 'selected'},
-       {title: 'Días en Espera', name: 'date_assigment_alert'},
        {title: 'Número de RUC', name: 'number'},
        {title: 'Número de Establecimiento', name: 'ruc_code_id'},
        {title: 'NOmbre Comercial', name: 'establishment'},
@@ -772,6 +771,7 @@ calcularUnoxMil() {
         const estado: String = item.states.state_id.toString();
         const digito = estado.substring(estado.length-1, estado.length);
         if ( digito == '7' || digito == '8' ) {
+         const creacion = new Date(item.register.created_at.toString());
          data.push({
             selected: '',
             date_assigment_alert: date_assigment_alert,
@@ -780,7 +780,7 @@ calcularUnoxMil() {
             ruc_code_id: item.establishment.ruc_code_id,
             establishment: item.establishment.commercially_known_name,
             address: item.establishment.address_main_street + ' ' + item.establishment.address_number + ' ' + item.establishment.address_secondary_street,
-            created_at: item.register.created_at,
+            created_at: creacion.toLocaleDateString(),
             date_assigment: item.register.date_assigment,
             category: this.getRegisterCategory(item.register.register_type_id),
             status: registerState,

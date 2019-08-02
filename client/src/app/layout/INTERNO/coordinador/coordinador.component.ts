@@ -1802,7 +1802,6 @@ export class CoordinadorComponent implements OnInit {
   buildDataTable() {
      this.columns = [
         {title: '', name: 'selected'},
-        {title: 'Días en Espera', name: 'date_assigment_alert'},
         {title: 'Número de RUC', name: 'number'},
         {title: 'Número de Establecimiento', name: 'ruc_code_id'},
         {title: 'Nombre Comercial', name: 'establishment'},
@@ -1863,6 +1862,7 @@ export class CoordinadorComponent implements OnInit {
             zonal = element;
             }
          });
+         const creacion = new Date(item.register.created_at.toString());
          data.push({
             selected: '',
             date_assigment_alert: date_assigment_alert,
@@ -1875,7 +1875,7 @@ export class CoordinadorComponent implements OnInit {
             ruc_code_id: item.establishment.ruc_code_id,
             establishment: item.establishment.commercially_known_name,
             address: item.establishment.address_main_street + ' ' + item.establishment.address_number + ' ' + item.establishment.address_secondary_street,
-            created_at: item.register.created_at,
+            created_at: creacion.toLocaleDateString(),
             code: item.register.code,
             category: this.getRegisterCategory(item.register.register_type_id),
             status: registerState,
@@ -4924,9 +4924,7 @@ guardarDeclaracion() {
    if(typeof capacity !== 'undefined') {
       this.allowed_capacity_types.forEach(capacityType => {
          if (capacityType.id == capacity.capacity_type_id) {
-            if (capacityType.editable_spaces) {
-               capacity.max_spaces = 0;
-            } else {
+            if (!capacityType.editable_spaces) {
                capacity.max_spaces = capacityType.spaces * capacity.quantity;
             }
             if (capacity.max_bed > capacityType.bed_quantity){

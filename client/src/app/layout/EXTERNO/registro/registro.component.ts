@@ -3101,9 +3101,7 @@ export class RegistroComponent implements OnInit {
    if(typeof capacity !== 'undefined') {
       this.allowed_capacity_types.forEach(capacityType => {
          if (capacityType.id == capacity.capacity_type_id) {
-            if (capacityType.editable_spaces) {
-               capacity.max_spaces = 0;
-            } else {
+            if (!capacityType.editable_spaces) {
                capacity.max_spaces = capacityType.spaces * capacity.quantity;
             }
             if (capacity.max_bed > capacityType.bed_quantity){

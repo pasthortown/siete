@@ -138,7 +138,7 @@
                         </td>
                         <td>
                           <div class="col-12">
-                            <input type="number" [disabled]="!capacity.editable_spaces  || !capacity.editable" class="form-control" min="0" max="9999" id="count_plazas" name="count_plazas" (input)="calcSpaces()"
+                            <input type="number" [disabled]="!capacity.editable_spaces  || !capacity.editable" class="form-control" min="0" max="9999" id="count_plazas" name="count_plazas" (input)="calcSpaces(capacity)"
                               placeholder="Cantidad de Plazas" [(ngModel)]="capacity.max_spaces"/>
                           </div>
                         </td>

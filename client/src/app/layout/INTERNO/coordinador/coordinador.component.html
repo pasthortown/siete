@@ -199,9 +199,9 @@
     <label>Tarifario Rack o Mostrador</label>
     <div class="input-group mb-3">
       <div class="input-group-prepend">
-        <button type="button" [disabled]="!SRIOK || imprimiendo_tarifario || validateTarifarioRackFile()" class="btn btn-secondary" title="Imprimir Tarifario Rack o Mostrador" (click)="imprimirTarifarioRack()"><i class="fas fa-print"></i></button>
+        <button type="button" [disabled]="!SRIOK || imprimiendo_tarifario || validateTarifarioRackFile() || digito == '9'" class="btn btn-secondary" title="Imprimir Tarifario Rack o Mostrador" (click)="imprimirTarifarioRack()"><i class="fas fa-print"></i></button>
         <button type="button" [disabled]="!validateTarifarioRackFile()" class="btn btn-secondary ml-2" title="Descargar Tarifario Rack Cargado" (click)="descargarTarifarioRack()"><i class="fas fa-download"></i></button>
-        <button type="button" [disabled]="!validateTarifarioRackFile()" class="btn btn-danger" title="Borrar Tarifario Rack Cargado" (click)="borrarTarifarioRack()"><i class="fas fa-trash"></i></button>
+        <button type="button" [disabled]="!validateTarifarioRackFile() || digito == '9'" class="btn btn-danger" title="Borrar Tarifario Rack Cargado" (click)="borrarTarifarioRack()"><i class="fas fa-trash"></i></button>
       </div>
       <input type="file" class="form-control" id="tarifarioFile"
         name="tarifarioFile" placeholder="Tarifario Rack o Mostrador"
@@ -218,9 +218,9 @@
     <label>Registro Turístico</label>
     <div class="input-group mb-3">
       <div class="input-group-prepend">
-        <button type="button" [disabled]="!SRIOK || imprimiendo_registro || validateRegistroFile()" class="btn btn-secondary" title="Imprimir Registro Turístico" (click)="imprimirRegistro()"><i class="fas fa-print"></i></button>
+        <button type="button" [disabled]="!SRIOK || imprimiendo_registro || validateRegistroFile() || digito == '9'" class="btn btn-secondary" title="Imprimir Registro Turístico" (click)="imprimirRegistro()"><i class="fas fa-print"></i></button>
         <button type="button" [disabled]="!validateRegistroFile()" class="btn btn-secondary ml-2" title="Descargar Registro Turístico Cargado" (click)="descargarRegistro()"><i class="fas fa-download"></i></button>
-        <button type="button" [disabled]="!validateRegistroFile()" class="btn btn-danger" title="Borrar Registro Turístico Cargado" (click)="borrarRegistro()"><i class="fas fa-trash"></i></button>
+        <button type="button" [disabled]="!validateRegistroFile() || digito == '9'" class="btn btn-danger" title="Borrar Registro Turístico Cargado" (click)="borrarRegistro()"><i class="fas fa-trash"></i></button>
       </div>
       <input type="file" class="form-control" id="actaFile"
         name="actaFile" placeholder="Registro Turístico"
@@ -1478,7 +1478,7 @@
                                   </td>
                                   <td>
                                     <div class="col-12">
-                                        <input type="number" class="form-control" min="0" max="9999" id="count_plazas" name="count_plazas" (input)="calcSpaces()"
+                                        <input type="number" class="form-control" min="0" max="9999" id="count_plazas" name="count_plazas" (input)="calcSpaces(capacity)"
                                         placeholder="Cantidad de Plazas" [(ngModel)]="capacity.max_spaces" [disabled]="true || !capacity.editable_spaces"/>
                                     </div>
                                   </td>
