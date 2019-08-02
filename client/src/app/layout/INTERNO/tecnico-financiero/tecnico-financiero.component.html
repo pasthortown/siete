@@ -49,7 +49,7 @@
         </div>
       </div>
       <div class="col-12 text-center mb-3" *ngIf="mostrarDataRegisterMintur">
-        <input type="checkbox" name="vacacionesCheck" id="vacacionesCheck" value="Bike" [(ngModel)]="estoyVacaciones" (change)= "rechazarCheck()"> Devolver el trámite seleccionado
+        <input type="checkbox" name="vacacionesCheck" id="vacacionesCheck" [(ngModel)]="estoyVacaciones" (change)= "rechazarCheck()"> Devolver el trámite seleccionado
       </div>
       <div class="col-12 mt-5 mb-2" *ngIf="estoyVacaciones">
         <label class="col-form-label">Motivo de la devolución del trámite</label>
@@ -93,9 +93,9 @@
                     <th>Código</th>
                     <th>Estado</th>
                     <th>Valor Pagado</th>
-                    <th>Valor a Pagar - Base</th>
+                    <th>Valor a Pagar - Impuesto 1X1000</th>
                     <th>Valor a Pagar - Multas</th>
-                    <th>Valor a Pagar - Impuestos</th>
+                    <th>Valor a Pagar - Intereses</th>
                     <th>Valor a Pagar - Total</th>
                     <th>Fecha de Pago</th>
                  </tr>
@@ -118,9 +118,9 @@
      </div>
       <div class="row" *ngIf="mostrarDataRegisterMintur">
         <div class="col-3">
-            <label>Valor a Pagar - Base</label>
+            <label>Valor a Pagar - Impuesto 1X1000</label>
             <div class="input-group">
-              <input type="number" [disabled]="pay.payed" class="form-control" (input)="actualizarValorPagar(pay)" id="declarationValueToPayBase" name="declarationValueToPayBase" placeholder="Valor a Pagar - Base" [(ngModel)]="pay.amount_to_pay_base" step="0.01">
+              <input type="number" [disabled]="pay.payed" class="form-control" (input)="actualizarValorPagar(pay)" id="declarationValueToPayBase" name="declarationValueToPayBase" placeholder="Valor a Pagar - Impuesto 1X1000" [(ngModel)]="pay.amount_to_pay_base" step="0.01">
               <div class="input-group-append">
                 <span class="input-group-text">USD</span>
               </div>
@@ -136,9 +136,9 @@
           </div>
         </div>
         <div class="col-3">
-          <label>Valor a Pagar - Impuestos</label>
+          <label>Valor a Pagar - Intereses</label>
           <div class="input-group">
-            <input type="number" [disabled]="pay.payed" class="form-control" (input)="actualizarValorPagar(pay)" id="declarationValueToPayTaxes" name="declarationValueToPayTaxes" placeholder="Valor a Pagar - Impuestos" [(ngModel)]="pay.amount_to_pay_taxes" step="0.01">
+            <input type="number" [disabled]="pay.payed" class="form-control" (input)="actualizarValorPagar(pay)" id="declarationValueToPayTaxes" name="declarationValueToPayTaxes" placeholder="Valor a Pagar - Intereses" [(ngModel)]="pay.amount_to_pay_taxes" step="0.01">
             <div class="input-group-append">
               <span class="input-group-text">USD</span>
             </div>

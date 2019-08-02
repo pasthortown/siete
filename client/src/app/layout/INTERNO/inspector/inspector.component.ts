@@ -571,9 +571,9 @@ export class InspectorComponent implements OnInit {
       {title: 'Código', name: 'code'},
       {title: 'Estado', name: 'state'},
       {title: 'Valor Pagado', name: 'amount_payed'},
-      {title: 'Valor a Pagar - Base', name: 'amount_to_pay_base'},
+      {title: 'Valor a Pagar - Impuesto 1X1000', name: 'amount_to_pay_base'},
       {title: 'Valor a Pagar - Multas', name: 'amount_to_pay_fines'},
-      {title: 'Valor a Pagar - Impuestos', name: 'amount_to_pay_taxes'},
+      {title: 'Valor a Pagar - Intereses', name: 'amount_to_pay_taxes'},
       {title: 'Valor a Pagar - Total', name: 'amount_to_pay'},
       {title: 'Fecha de Pago', name: 'pay_date'}
    ];
