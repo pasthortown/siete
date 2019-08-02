@@ -83,10 +83,14 @@ class PayController extends Controller
 
     function get_by_ruc_number(Request $data)
     {
-       $token = $data->header('api_token'); 
-       $number = $data['number'];
-       $ruc = json_decode($this->httpGet(env('API_BASE').'ruc/get_by_ruc_number?number='.$number, null, null, $token));
-       return response()->json(Pay::where('ruc_id', $ruc->id)->orderBy('created_at', 'DESC')->get(),200);
+      $token = $data->header('api_token');
+      $number = $data['number'];
+      $ruc = json_decode($this->httpGet(env('API_BASE').'ruc/get_by_ruc_number?number='.$number, null, null, $token));
+      try {
+        return response()->json(Pay::where('ruc_id', $ruc->id)->orderBy('created_at', 'DESC')->get(),200);
+      } catch (Exception $e) {
+          return response()->json([],200);
+      }  
     }
 
     function post(Request $data)
