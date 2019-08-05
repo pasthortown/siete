@@ -732,7 +732,7 @@ export class DashboardComponent implements OnInit {
   }
 
   getPays() {
-   this.payDataService.get_by_ruc_number(this.registerMinturSelected.ruc.number).then( r => {
+   this.payDataService.get_by_ruc_number(this.ruc_registro_selected.ruc.number).then( r => {
       this.pays = r as Pay[];
       this.buildDataTablePays();
    }).catch( e => { console.log(e); } );
@@ -1572,18 +1572,18 @@ export class DashboardComponent implements OnInit {
   }
 
   onCellClick(event) {
+   this.register_code = event.row.register_code;
+   this.rows.forEach(row => {
+      if (this.register_code == row.register_code) {
+         row.selected = '<div class="col-12 text-right"><span class="far fa-hand-point-right"></span></div>';
+      } else {
+         row.selected = '';
+      }
+   });
    this.registers_mintur.forEach(element => {
-      this.selectedRegister = element;
       if (element.id == event.row.id) {
-         this.register_code = element.register_code;
+         this.selectedRegister = element;
          this.register_as_turistic_Date = new Date(element.as_turistic_date.toString());
-         this.rows.forEach(row => {
-            if (this.register_code == row.register_code) {
-               row.selected = '<div class="col-12 text-right"><span class="far fa-hand-point-right"></span></div>';
-            } else {
-               row.selected = '';
-            }
-         });
          let cambioEstado = false;
          if(element.establishment_state.toUpperCase().trim() == "ACTIVO" || element.establishment_state.toUpperCase().trim() == "ABIERTO" || element.establishment_state.toUpperCase().trim() == "ESTABLECIMIENTOS ACIVOS") {
            this.mostrarActualizar = true;
@@ -1640,6 +1640,7 @@ export class DashboardComponent implements OnInit {
             }).catch( e => { console.log(e); });
          } else {
             this.registerMinturSelected = {register: new Register(), establishment: new Establishment(), ruc: new Ruc(), states: new RegisterState()};
+            this.registerMinturSelected.ruc.number = this.user.ruc;
             this.fechasNombramiento();
             this.pays = [];
             this.consumoCedula = false;
@@ -1652,26 +1653,7 @@ export class DashboardComponent implements OnInit {
             this.REGCIVILREPRESENTANTELEGALOK = false;
             this.guardando = false;
             this.ruc_registro_selected = new RegistroDataCarrier();
-            this.registrarlo = true;
             this.getRuc(this.user.ruc);
-            this.getTaxPayerType();
-            this.getGroupType();
-            this.getCapacityTypes();
-            this.getTariffs();
-            this.getStates();
-            this.getRucNameTypes();
-            this.getZonalesEstablishment();
-            this.getEstablishmentPropertyType();
-            this.getLanguage();
-            this.getPays();
-            this.getComplementaryFoodServiceType();
-            this.getSystemNames();
-            this.getUbications();
-            this.getCertificationTypes();
-            this.getWorkerGroups();
-            this.getRegiones();
-            this.getEstablishmentCertificationTypesCategories();
-            this.getComplementaryServiceTypeCategories();
             this.groupTypeSelected = new GroupType();
          }
       }
@@ -2490,6 +2472,7 @@ guardarDeclaracion() {
       return;
    }
    this.ruc_registro_selected.ruc.person_representative_attachment.ruc = this.ruc_registro_selected.ruc.number;
+   this.ruc_registro_selected.ruc.contact_user_id = this.user.id;
    this.guardando = true;
    if (typeof this.ruc_registro_selected.ruc.id === 'undefined') {
       this.rucDataService.register_ruc(this.ruc_registro_selected.ruc).then( r => {
@@ -2513,7 +2496,7 @@ guardarDeclaracion() {
             return;
          }
          this.toastr.successToastr('Datos actualizados satisfactoriamente.', 'Actualizar');
-         this.refresh();
+         this.getRuc(this.user.ruc);
       }).catch( e => {
          this.guardando = false;
          this.toastr.errorToastr('Existe conflicto la información proporcionada.', 'Nuevo');
