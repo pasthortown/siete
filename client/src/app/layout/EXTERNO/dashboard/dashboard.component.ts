@@ -2573,38 +2573,44 @@ guardarDeclaracion() {
 
    }).catch( e => { console.log(e); });
    this.rucEstablishmentRegisterSelected.code = this.register_code;
+   let tipo_tramite = 'Registro';
+   this.procedureJustification.justification = "Registro";
+   this.rucEstablishmentRegisterSelected.status = 11;
+   if (this.actualizando){
+      tipo_tramite = 'Actualización';
+      this.procedureJustification.justification = "Actualización";
+      this.rucEstablishmentRegisterSelected.status = 41;
+   }
+   if (this.activando){
+      tipo_tramite = 'Activación';
+      this.procedureJustification.justification = "Activación";
+      this.rucEstablishmentRegisterSelected.status = 61;
+   }
+   if (this.inactivando){
+      tipo_tramite = 'Dar de Baja';
+      this.rucEstablishmentRegisterSelected.status = 51;
+      this.procedureJustificationsToShow.forEach(element => {
+         if (element.id == this.idCausal) {
+            this.procedureJustification.justification = element.justification;
+         }
+      });
+   }
+   if (this.reclasificando){
+      tipo_tramite = 'Reclasificación';
+      this.rucEstablishmentRegisterSelected.status = 21;
+      this.procedureJustification.justification = "Reclasificación";
+   }
+   if (this.recategorizando){
+      tipo_tramite = 'Recategorización';
+      this.rucEstablishmentRegisterSelected.status = 31;
+      this.procedureJustification.justification = "Recategorización";
+   }
+   tipo_tramite = tipo_tramite.toUpperCase();
    this.registerDataService.register_register_data(this.rucEstablishmentRegisterSelected).then( r => {
       this.certificadoUsoSuelo.register_id = r.id;
       this.guardarRecepcionRoom(r.id);
       this.guardarCertificadoUsoSuelos();
       const today = new Date();
-      let tipo_tramite = 'Registro';
-         this.procedureJustification.justification = "Registro";
-         if (this.actualizando){
-            tipo_tramite = 'Actualización';
-            this.procedureJustification.justification = "Actualización";
-         }
-         if (this.activando){
-            tipo_tramite = 'Activación';
-            this.procedureJustification.justification = "Activación";
-         }
-         if (this.inactivando){
-            tipo_tramite = 'Dar de Baja';
-            this.procedureJustificationsToShow.forEach(element => {
-               if (element.id == this.idCausal) {
-                  this.procedureJustification.justification = element.justification;
-               }
-            });
-         }
-         if (this.reclasificando){
-            tipo_tramite = 'Reclasificación';
-            this.procedureJustification.justification = "Reclasificación";
-         }
-         if (this.recategorizando){
-            tipo_tramite = 'Recategorización';
-            this.procedureJustification.justification = "Recategorización";
-         }
-      tipo_tramite = tipo_tramite.toUpperCase();
       const actividad = 'ALOJAMIENTO';
       let provincia = new Ubication();
       let canton = new Ubication();
