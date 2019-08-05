@@ -159,12 +159,12 @@
             <button type="button" class="btn btn-danger ml-2" title="Cancelar Cambios" (click)="refresh()"><i class="fas fa-times"></i> Cancelar</button>
         </div>
       </div>
-      <div class="row" *ngIf="mostrarDataRegisterMintur">
+      <div class="row" *ngIf="mostrarDataRegisterMintur && pays.length > 0">
         <div class="col-12">
           <h4><strong>Resultado de la Revisión</strong> </h4>
         </div>
       </div>
-      <div class="row mt-3" *ngIf="mostrarDataRegisterMintur">
+      <div class="row mt-3" *ngIf="mostrarDataRegisterMintur && pays.length > 0">
         <div class="col-6">
           <label>Fecha de la Revisión</label>
           <input type="date" class="form-control" id="date_fullfill" name="date_fullfill" placeholder="Fecha de Revisión" [ngModel]="registerApprovalFinanciero.date_fullfill | date:'y-MM-dd'" (ngModelChange)="registerApprovalFinanciero.date_fullfill = $event">
@@ -173,19 +173,19 @@
             <label>Estado del Trámite</label>
             <select class="form-control" id="stateTramit" name="stateTramit" [(ngModel)]="inspectionState">
               <option value="0" selected>Pendiente</option>
-              <option value="1" selected>Aprobado</option>
-              <option value="2" selected>Negado</option>
-              <option value="3" selected>Requerimiento Al Usuario</option>
+              <option value="1" *ngIf="pagado()" >Aprobado</option>
+              <option value="2" *ngIf="pays.length > 0">Negado</option>
+              <option value="3" *ngIf="pays.length > 0">Requerimiento Al Usuario</option>
             </select>
         </div>
       </div>
-      <div class="row" *ngIf="mostrarDataRegisterMintur">
+      <div class="row" *ngIf="mostrarDataRegisterMintur && pays.length > 0">
         <div class="col-12 mt-3 mb-2">
           <label class="col-form-label">Observaciones</label>
           <ck-editor id="notes" name="notes" skin="moono-lisa" [(ngModel)]="registerApprovalFinanciero.notes"></ck-editor>
         </div>
         <div class="col-12 text-center mb-3">
-          <button type="button" [disabled]="!validateInspectionInfo()" class="btn btn-success" title="Guardar Información Revisión" (click)="guardarInspeccion()"><i class="fas fa-save"></i> Guardar Información</button>
+          <button type="button" [disabled]="!validateInspectionInfo() || guardandoFinanciero" class="btn btn-success" title="Guardar Información Revisión" (click)="guardarInspeccion()"><i class="fas fa-save"></i> Guardar Información</button>
           <button type="button" class="btn btn-danger ml-2" title="Cancelar Cambios" (click)="refresh()"><i class="fas fa-times"></i> Cancelar</button>
         </div>
       </div>

@@ -201,6 +201,7 @@ export class TecnicoFinancieroComponent implements OnInit {
  establishment_property_types: EstablishmentPropertyType[] = [];
  establishment_selected_picture: EstablishmentPicture = new EstablishmentPicture();
  languages: Language[] = [];
+ guardandoFinanciero = false;
  languages_establishmentSelectedId = 0;
  ubications: Ubication[] = [];
  system_names: SystemName[] = [];
@@ -376,6 +377,16 @@ export class TecnicoFinancieroComponent implements OnInit {
 
  rechazarCheck() {
    this.registerApprovalFinanciero.notes = '';
+ }
+
+ pagado(): Boolean {
+   let toReturn = true;
+   this.pays.forEach(pay => {
+      if (!pay.payed) {
+         toReturn = false;
+      }
+   });
+   return toReturn;
  }
 
  devolverVacaciones() {
@@ -969,6 +980,7 @@ calcularUnoxMil() {
  }
 
  guardarInspeccion() {
+   this.guardandoFinanciero = true;
    const estado: String = this.stateTramiteId.toString();
    const digito = estado.substring(estado.length-1, estado.length);
    if ( this.inspectionState == 0) {
@@ -1019,6 +1031,7 @@ calcularUnoxMil() {
    }).catch( e => { console.log(e); });
    this.approvalStateDataService.put(this.registerApprovalFinanciero).then( r => {
       this.toastr.successToastr('Datos guardados satisfactoriamente.', 'Revisión, Técnico Financiero');
+      this.guardandoFinanciero = false;
       this.refresh();
    }).catch( e => { console.log(e); });
  }
