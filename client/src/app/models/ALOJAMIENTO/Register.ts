@@ -37,6 +37,8 @@ export class Register {
       this.total_habitations = 0;
       this.total_beds = 0;
       this.status = 4;
-      this.code = 'PENDIENTE';
+      if (this.code == null || this.code == '' || typeof this.code == 'undefined') {
+         this.code = 'PENDIENTE';
+      }
    }
 }

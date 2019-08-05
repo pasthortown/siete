@@ -9,7 +9,7 @@
 <p>Estimado/a {{ $information['para'] }}:</p>
 <p>La solicitud de {{ $information['tramite'] }} ha sido desasignada por su Coordinador Zonal, por favor revise su bandeja en la plataforma SITURIN.</p>
 <h3>INFORMACIÓN DEL ESTABLECIMIENTO</h3>
-<table style="border-collapse: collapse;width: 100%;border: 1px solid #ddd;">
+<table style="border-collapse: collapse;width: 100%; border: 1px solid #ddd; text-align: left;">
     <tbody>
         <tr style="background-color: #f2f2f2;">
             <th>RUC:</th><td>{{ $information['ruc'] }}</td><th>Provincia:</th><td>{{ $information['provincia'] }}</td>

@@ -9,7 +9,7 @@
 <p>Estimado/a {{ $information['para'] }}:</p>
 <p>Su solicitud de {{ $information['tramite'] }} ha sido enviada exitosamente, en los próximos días el Ministerio de Turismo le notificará el resultado de su trámite, por favor revise su correo electrónico permanentemente.</p>
 <h3>INFORMACIÓN DEL ESTABLECIMIENTO</h3>
-<table style="border-collapse: collapse;width: 100%;border: 1px solid #ddd;">
+<table style="border-collapse: collapse;width: 100%; border: 1px solid #ddd; text-align: left;">
     <tbody>
         <tr style="background-color: #f2f2f2;">
             <th>RUC:</th><td>{{ $information['ruc'] }}</td><th>Provincia:</th><td>{{ $information['provincia'] }}</td>

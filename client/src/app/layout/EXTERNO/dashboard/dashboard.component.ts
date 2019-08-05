@@ -103,6 +103,8 @@ import { ProcedureJustificationService } from 'src/app/services/CRUD/ALOJAMIENTO
 import { ProcedureJustification } from 'src/app/models/ALOJAMIENTO/ProcedureJustification';
 import { RegisterService as CatastroRegisterService } from 'src/app/services/CRUD/CATASTRO/register.service';
 import { Register as CatastroRegister } from 'src/app/models/CATASTRO/Register';
+import { RegisterProcedure } from 'src/app/models/ALOJAMIENTO/RegisterProcedure';
+import { RegisterProcedureService } from 'src/app/services/CRUD/ALOJAMIENTO/registerprocedure.service';
 
 @Component({
   selector: 'app-registro',
@@ -123,6 +125,7 @@ export class DashboardComponent implements OnInit {
    mostrarReclasificar = true;
    mostrarRecategorizar = true;
    actualizando = false;
+   mensajePorTipoTramite = '';
    activando = false;
    inactivando = false;
    idCausal = 0;
@@ -148,6 +151,7 @@ export class DashboardComponent implements OnInit {
    rowsPays = [];
    columnsPays = [];
    dataPays = [];
+   procedureJustification = new ProcedureJustification();
    estados = [];
    pays: Pay[] = [];
    actividadSelected = '-';
@@ -220,6 +224,7 @@ export class DashboardComponent implements OnInit {
   provinciaSelectedCode = '-';
   cantonSelectedCode = '-';
   register_code = '';
+  register_as_turistic_Date = new Date();
   groupTypeSelected: GroupType = new GroupType();
   rucValidated = false;
   identificationRepresentativePersonValidated = false;
@@ -338,6 +343,7 @@ export class DashboardComponent implements OnInit {
               private receptionRoomDataService: ReceptionRoomService,
               private catastroRegisterDataService: CatastroRegisterService,
               private payDataService: PayService,
+              private registerProcedureDataService: RegisterProcedureService,
               private floorAuthorizationCertificateDataService: FloorAuthorizationCertificateService,
               private declarationAttachmentDataService: DeclarationAttachmentService,
               private mailerDataService: MailerService,
@@ -1517,6 +1523,7 @@ export class DashboardComponent implements OnInit {
    this.reclasificando = false;
    this.recategorizando = false;
    this.idCausal = 6;
+   this.mensajePorTipoTramite = 'En esta sección, usted va a proceder a actualizar la información de su Registro de Turismo, tiene la opción de guardar la información en cualquier momento.';
   }
 
   darBaja() {
@@ -1528,6 +1535,7 @@ export class DashboardComponent implements OnInit {
    this.getProcedureJustifications();
    this.idCausal = 0;
    this.mostrarCausales = true;
+   this.mensajePorTipoTramite = '';
   }
   
   reactivar() {
@@ -1538,6 +1546,7 @@ export class DashboardComponent implements OnInit {
    this.reclasificando = false;
    this.recategorizando = false;
    this.idCausal = 7;
+   this.mensajePorTipoTramite = 'Usted va a proceder a regularizar su establecimiento turístico, para lo cual deberá complementar la información que esta sección presenta, tiene la opción de guardarla en cualquier momento.'
   }
 
   reclasificacion() {
@@ -1548,6 +1557,7 @@ export class DashboardComponent implements OnInit {
    this.reclasificando = true;
    this.recategorizando = false;
    this.idCausal = 4;
+   this.mensajePorTipoTramite = 'Usted va a proceder a regularizar su establecimiento turístico, para lo cual deberá complementar la información que esta sección presenta, tiene la opción de guardarla en cualquier momento.'
   }
 
   recategorizacion() {
@@ -1558,6 +1568,7 @@ export class DashboardComponent implements OnInit {
    this.reclasificando = false;
    this.recategorizando = true;
    this.idCausal = 5;
+   this.mensajePorTipoTramite = 'Usted va a proceder a regularizar su establecimiento turístico, para lo cual deberá complementar la información que esta sección presenta, tiene la opción de guardarla en cualquier momento.'
   }
 
   onCellClick(event) {
@@ -1565,6 +1576,7 @@ export class DashboardComponent implements OnInit {
       this.selectedRegister = element;
       if (element.id == event.row.id) {
          this.register_code = element.register_code;
+         this.register_as_turistic_Date = new Date(element.as_turistic_date.toString());
          this.rows.forEach(row => {
             if (this.register_code == row.register_code) {
                row.selected = '<div class="col-12 text-right"><span class="far fa-hand-point-right"></span></div>';
@@ -1902,6 +1914,7 @@ export class DashboardComponent implements OnInit {
 
   refresh() {
    this.fechasNombramiento();
+   this.procedureJustification = new ProcedureJustification();
    this.pays = [];
    this.consumoCedula = false;
    this.consumoCedulaEstablishmentContact = false;
@@ -2559,12 +2572,39 @@ guardarDeclaracion() {
    this.languageDataService.save_languajes(this.establishment_selected.id, this.establishment_selected.languages_on_establishment).then( r => {
 
    }).catch( e => { console.log(e); });
+   this.rucEstablishmentRegisterSelected.code = this.register_code;
    this.registerDataService.register_register_data(this.rucEstablishmentRegisterSelected).then( r => {
       this.certificadoUsoSuelo.register_id = r.id;
       this.guardarRecepcionRoom(r.id);
       this.guardarCertificadoUsoSuelos();
       const today = new Date();
-      const tipo_tramite = 'REGISTRO';
+      let tipo_tramite = 'Registro';
+         this.procedureJustification.justification = "Registro";
+         if (this.actualizando){
+            tipo_tramite = 'Actualización';
+            this.procedureJustification.justification = "Actualización";
+         }
+         if (this.activando){
+            tipo_tramite = 'Activación';
+            this.procedureJustification.justification = "Activación";
+         }
+         if (this.inactivando){
+            tipo_tramite = 'Dar de Baja';
+            this.procedureJustificationsToShow.forEach(element => {
+               if (element.id == this.idCausal) {
+                  this.procedureJustification.justification = element.justification;
+               }
+            });
+         }
+         if (this.reclasificando){
+            tipo_tramite = 'Reclasificación';
+            this.procedureJustification.justification = "Reclasificación";
+         }
+         if (this.recategorizando){
+            tipo_tramite = 'Recategorización';
+            this.procedureJustification.justification = "Recategorización";
+         }
+      tipo_tramite = tipo_tramite.toUpperCase();
       const actividad = 'ALOJAMIENTO';
       let provincia = new Ubication();
       let canton = new Ubication();
@@ -2630,17 +2670,24 @@ guardarDeclaracion() {
          }
          const byteArray = new Uint8Array(byteNumbers);
          const blob = new Blob([byteArray], { type: 'application/pdf'});
+         this.procedureJustificationDataService.post(this.procedureJustification).then(procedureJustification => {
+            let newRegisterProcedure = new RegisterProcedure();
+            newRegisterProcedure.procedure_justification_id = procedureJustification.id;
+            newRegisterProcedure.register_id = r.id;
+            this.registerProcedureDataService.post(newRegisterProcedure).then( regProc => { 
+            }).catch( e => { console.log(e); });
+         }).catch( e => { console.log(e); });
          saveAs(blob, qr_value + '.pdf');
          const information = {
             para: this.user.name,
-            tramite: 'Registro',
+            tramite: tipo_tramite,
             ruc: this.user.ruc,
             nombreComercial: this.establishment_selected.commercially_known_name,
             fechaSolicitud: today.toLocaleString(),
             actividad: 'Alojamiento Turístico',
             clasificacion: clasificacion,
             categoria: categoria,
-            tipoSolicitud: 'Registro',
+            tipoSolicitud: tipo_tramite,
             provincia: provincia.name.toUpperCase(),
             canton: canton.name.toUpperCase(),
             parroquia: parroquia.name.toUpperCase(),

@@ -9,7 +9,7 @@
 <p>Estimado/a {{ $information['para'] }}:</p>
 <p>Por favor cancele en cualquier agencia o cajero inteligente de Banco Pacífico a nivel nacional, el valor correspondiente a su contribución Uno por Mil, para mayor información contáctese con la Coordinación Zonal.</p>
 <h3>DESCRIPCIÓN DE PAGO</h3>
-<table style="border-collapse: collapse;width: 100%;border: 1px solid #ddd; text-align: left;">
+<table style="border-collapse: collapse;width: 100%; border: 1px solid #ddd; text-align: left;">
     <tbody>
         <tr style="background-color: #f2f2f2;">
             <th>Contribución Uno por Mil:</th><td>{{ $information['amount_to_pay_base'] }}</td>
