@@ -1533,7 +1533,7 @@
                                       " [disabled]="!rucEstablishmentRegisterSelected.editable">
                                       <option value="0" selected>Seleccione...</option>
                                       <option *ngFor="
-                                          let complementary_food_service_type of complementaryServiceFood.type_of_complementary_service_food
+                                          let complementary_food_service_type of complementaryServiceFoodTypes
                                         " value="{{ complementary_food_service_type.id }}">
                                         {{ complementary_food_service_type.name }}
                                       </option>
@@ -1827,7 +1827,7 @@
                           (click)="pasos.select('paso2')">
                           <i class="fas fa-arrow-left"></i>&nbsp;Anterior
                         </button>
-                        <button [disabled]="guardando" *ngIf="validateRegister()" type="button" class="btn btn-success" title="Enviar Solicitud"
+                        <button [disabled]="guardando" *ngIf="validateRegister() || true" type="button" class="btn btn-success" title="Enviar Solicitud"
                           (click)="guardarRegistro()">
                           <i class="fas fa-paper-plane"></i>&nbsp;Enviar Solicitud
                         </button>

@@ -1143,7 +1143,7 @@ export class DashboardComponent implements OnInit {
    ];
    const data = [];
    this.ruc_registro_selected.ruc.establishments.forEach(item => {
-      if (item.ruc_code_id == this.selectedRegister.establishment_ruc_code) {
+      if (Number(item.ruc_code_id) == Number(this.selectedRegister.establishment_ruc_code)) {
          data.push({
             selected: '',
             code: item.ruc_code_id,
@@ -2499,7 +2499,7 @@ guardarDeclaracion() {
             return;
          }
          this.toastr.successToastr('Datos guardados satisfactoriamente.', 'Nuevo');
-         this.refresh();
+         this.getRuc(this.user.ruc);
       }).catch( e => {
          this.guardando = false;
          this.toastr.errorToastr('Existe conflicto la información proporcionada.', 'Nuevo');
@@ -3911,7 +3911,6 @@ guardarDeclaracion() {
 
   validateRegister(): Boolean {
      const c1 = (this.rucEstablishmentRegisterSelected.establishment_id == 0);
-     const c2 = (this.rucEstablishmentRegisterSelected.status == 0);
      const c3 = (this.categorySelectedCode == '-');
      const c4 = (this.rucEstablishmentRegisterSelected.register_type_id == 0);
      const c5 = (this.rucEstablishmentRegisterSelected.total_spaces == 0);
@@ -3927,7 +3926,7 @@ guardarDeclaracion() {
          c7 = (complementaryServiceFood.complementary_service_food_type_id == 0);
       }
      });
-     const toReturn = c1 || c2 || c3 || c4 || c5 || c6 || c7;
+     const toReturn = c1 || c3 || c4 || c5 || c6 || c7;
    return !toReturn;
   }
 

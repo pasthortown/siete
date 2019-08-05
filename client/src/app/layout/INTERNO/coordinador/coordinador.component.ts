@@ -1518,7 +1518,7 @@ export class CoordinadorComponent implements OnInit {
    ];
    const data = [];
    this.ruc_registro_selected.ruc.establishments.forEach(item => {
-      if (item.ruc_code_id == this.registerMinturSelected.establishment.ruc_code_id) {
+      if (Number(item.ruc_code_id) == Number(this.registerMinturSelected.establishment.ruc_code_id)) {
          data.push({
             selected: '',
             code: item.ruc_code_id,

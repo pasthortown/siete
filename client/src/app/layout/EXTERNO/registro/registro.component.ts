@@ -641,7 +641,7 @@ export class RegistroComponent implements OnInit {
          let establecimientosRegistrados = JSON.parse(sessionStorage.getItem('establecimientos')) as [];
          establecimientosRegistrados.forEach(element => {
             let yaRegistrado = false;
-            if (element == item.ruc_code_id) {
+            if (element == Number(item.ruc_code_id)) {
                yaRegistrado = true;
             }
             data.push({
