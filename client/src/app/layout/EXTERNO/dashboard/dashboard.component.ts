@@ -3678,7 +3678,7 @@ guardarDeclaracion() {
    this.establishment_selected.workers_on_establishment = this.getEstablishmentWorkerGroup();
    this.mostrarDataEstablishment = true;
    this.cedulaEstablishmentContactData = '';
-   this.rucEstablishmentRegisterSelected.editable = false;
+   this.rucEstablishmentRegisterSelected.editable = true;
    this.getCantonesEstablishment();
    this.declarations = [];
    this.provinciaEstablishmentSelectedCode = '-';
@@ -3841,7 +3841,7 @@ guardarDeclaracion() {
       this.getCertificadoUsoSuelo(this.rucEstablishmentRegisterSelected.id);
       this.getReceptionRoom(this.rucEstablishmentRegisterSelected.id);
       this.setCategory(this.rucEstablishmentRegisterSelected.register_type_id);
-      this.rucEstablishmentRegisterSelected.editable = false;
+      this.rucEstablishmentRegisterSelected.editable = true;
       this.rucEstablishmentRegisterSelected.status = r.status.state_id;
       this.getTramiteStatus(this.rucEstablishmentRegisterSelected.status);
       this.rucEstablishmentRegisterSelected.complementary_service_types_on_register = r.complementary_service_types_on_register as ComplementaryServiceType[];
