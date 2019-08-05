@@ -67,6 +67,14 @@
     </ngb-pagination>
   </div>
 </div>
+<div class="row mt-3 mb-3">
+  <div class="col-12">
+    <div class="alert alert-info mt-2 mb-2" role="alert" *ngIf="mostrarDataRegisterMintur">
+      <label class="col-12 text-justify"><strong>Información</strong></label><br />
+      Seleccione el trámite que desea realizar
+    </div>
+  </div>
+</div>
 <div class="row" *ngIf="mostrarDataRegisterMintur">
   <div class="col-12">
     <h3>Opciones:</h3>
@@ -444,7 +452,7 @@
                                         </div>
                                       </div>
                                     </div>
-                                  <div class="row">
+                                  <div class="row" *ngIf="establishmentComercialNameValidated">
                                     <div class="col-3">
                                       <div class="form-group">
                                         <label>Tipo de Establecimiento</label><span
@@ -473,7 +481,7 @@
                                       </div>
                                     </div>
                                   </div>
-                                  <div class="form-group">
+                                  <div class="form-group" *ngIf="establishmentComercialNameValidated">
                                     <label>Su local es*</label><span *ngIf="
                                         establishment_selected.establishment_property_type_id == 0
                                       " class="ml-2 badge badge-danger">Incorrecto</span>
@@ -489,13 +497,13 @@
                                       </option>
                                     </select>
                                   </div>
-                                  <div class="form-group">
+                                  <div class="form-group" *ngIf="establishmentComercialNameValidated">
                                     <label>Dirección URL de la Página WEB</label><span *ngIf="!urlwebEstablishmentValidated"
                                       class="ml-2 badge badge-danger">Incorrecto</span>
                                     <input type="text" class="form-control" id="url_web" name="url_web" (keyup)="checkURLWeb()"
                                       placeholder="Ejemplo: www.google.com" [disabled]="!rucEstablishmentRegisterSelected.editable" [(ngModel)]="establishment_selected.url_web" />
                                   </div>
-                                  <div class="row">
+                                  <div class="row" *ngIf="establishmentComercialNameValidated">
                                     <div class="col-12">
                                       <div class="form-group">
                                         <label>Fotografía de la Fachada del Establecimiento*</label><span *ngIf="establishment_selected_picture.establishment_picture_file === ''"
@@ -517,12 +525,12 @@
                                         accept="image/*" />
                                     </div>
                                   </div>
-                                  <div class="row mt-5">
+                                  <div class="row mt-5" *ngIf="establishmentComercialNameValidated">
                                     <div class="col-12 text-left">
                                       <h4><strong>Personal del Establecimiento:</strong></h4>
                                     </div>
                                   </div>
-                                    <div class="form-group row">
+                                    <div class="form-group row" *ngIf="establishmentComercialNameValidated">
                                       <div class="col-12">
                                         <div class="alert alert-info mt-2 mb-2" role="alert">
                                           <label class="col-12 text-justify"><strong>Atención</strong></label><br />
@@ -572,12 +580,12 @@
                                         </div>
                                       </div>
                                     </div>
-                                  <div class="row mt-5">
+                                  <div class="row mt-5" *ngIf="establishmentComercialNameValidated">
                                     <div class="col-12 text-left">
                                       <h4><strong>Datos de Ubicación del Establecimiento:</strong></h4>
                                     </div>
                                   </div>
-                                  <div class="row mt-2">
+                                  <div class="row mt-2" *ngIf="establishmentComercialNameValidated">
                                     <label class="col-12"><strong>Ubicación</strong></label>
                                     <div class="col-3" [hidden]="true">
                                       <div class="form-group">
@@ -645,11 +653,11 @@
                                       </div>
                                     </div>
                                   </div>
-                                  <div class="row mt-2">
+                                  <div class="row mt-2" *ngIf="establishmentComercialNameValidated">
                                     <label class="col-12"><strong>Dirección*</strong></label><span *ngIf="!addressEstablishmentValidated"
                                     class="ml-2 badge badge-danger">Incorrecto</span>
                                   </div>
-                                  <div class="row mt-2">
+                                  <div class="row mt-2" *ngIf="establishmentComercialNameValidated">
                                     <div class="col-4">
                                         <div class="form-group">
                                             <label>Calle Principal</label><span *ngIf="establishment_selected.address_main_street === ''"
@@ -681,7 +689,7 @@
                                         </div>
                                     </div>
                                   </div>
-                                  <div class="form-group">
+                                  <div class="form-group" *ngIf="establishmentComercialNameValidated">
                                     <label>Referencia de Ubicación* - ¿Como llegar?</label><span
                                       *ngIf="establishment_selected.address_reference == ''"
                                       class="ml-2 badge badge-danger">Incorrecto</span>
@@ -690,7 +698,7 @@
                                     <ck-editor id="address_reference" [readonly]="true" *ngIf="!rucEstablishmentRegisterSelected.editable" name="address_reference" skin="moono-lisa"
                                       [(ngModel)]="establishment_selected.address_reference"></ck-editor>
                                   </div>
-                                  <div class="form-group">
+                                  <div class="form-group" *ngIf="establishmentComercialNameValidated">
                                     <label>Ubicar el establecimiento en el mapa*</label>
                                     <agm-map class="col-12" *ngIf="rucEstablishmentRegisterSelected.editable" style="height: 400px;" [latitude]="
                                         establishment_selected.address_map_latitude * 1
@@ -718,12 +726,12 @@
                                         [animation]="'DROP'"></agm-marker>
                                     </agm-map>
                                   </div>
-                                  <div class="row mt-5">
+                                  <div class="row mt-5" *ngIf="establishmentComercialNameValidated">
                                     <div class="col-12 text-left">
                                       <h4><strong>Certificaciones:</strong></h4>
                                     </div>
                                   </div>
-                                  <div class="form-group row">
+                                  <div class="form-group row" *ngIf="establishmentComercialNameValidated">
                                     <div class="col-12">
                                       <div class="alert alert-info mt-2 mb-2" role="alert">
                                         <label class="col-12 text-justify"><strong>Atención</strong></label><br />
@@ -851,7 +859,7 @@
                                       </table>
                                     </div>
                                   </div>
-                                  <div class="row mt-3">
+                                  <div class="row mt-3" *ngIf="establishmentComercialNameValidated">
                                       <h4 class="col-12"><strong>Persona de Contacto en el Establecimiento</strong></h4>
                                       <div class="col-12">
                                         <div class="row">
