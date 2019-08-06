@@ -23,6 +23,12 @@ class RegisterController extends Controller
        }
     }
 
+    function get_by_register_code(Request $data)
+    {
+       $code = $data['code'];
+       return response()->json(Register::where('register_code', $code)->first(),200);
+    }
+
     function paginate(Request $data)
     {
        $size = $data['size'];

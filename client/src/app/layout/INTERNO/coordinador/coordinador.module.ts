@@ -57,6 +57,8 @@ import { ApprovalStateAttachmentService } from './../../../services/CRUD/ALOJAMI
 import { ExporterService } from 'src/app/services/negocio/exporter.service';
 import { DocumentService } from 'src/app/services/CRUD/EXPORTER/document.service';
 import { RegisterService as RegistroCatastroService } from 'src/app/services/CRUD/CATASTRO/register.service';
+import { RegisterProcedureService } from 'src/app/services/CRUD/ALOJAMIENTO/registerprocedure.service';
+
 @NgModule({
   imports: [CommonModule,
     CKEditorModule,
@@ -84,6 +86,7 @@ import { RegisterService as RegistroCatastroService } from 'src/app/services/CRU
     PayService,
     ExporterService,
     TaxPayerTypeService,
+    RegisterProcedureService,
     PersonRepresentativeAttachmentService,
     EstablishmentCertificationService,
     ComplementaryServiceFoodTypeService,

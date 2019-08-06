@@ -23,6 +23,12 @@ class RegisterProcedureController extends Controller
        }
     }
 
+    function get_by_register_id(Request $data)
+    {
+       $id = $data['id'];
+       return response()->json(RegisterProcedure::join('procedure_justifications', 'procedure_justifications.id', '=', 'register_procedures.procedure_justification_id')->select('procedure_justifications.*')->where('register_id', $id)->first(),200);
+    }
+
     function paginate(Request $data)
     {
        $size = $data['size'];

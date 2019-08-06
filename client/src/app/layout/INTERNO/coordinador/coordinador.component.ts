@@ -101,6 +101,7 @@ import { DocumentService } from 'src/app/services/CRUD/EXPORTER/document.service
 import { Document as Documento } from 'src/app/models/EXPORTER/Document';
 import { Register as RegistroCatastro } from 'src/app/models/CATASTRO/Register';
 import { RegisterService as RegistroCatastroService } from 'src/app/services/CRUD/CATASTRO/register.service';
+import { RegisterProcedureService } from 'src/app/services/CRUD/ALOJAMIENTO/registerprocedure.service';
 
 @Component({
   selector: 'app-registro',
@@ -136,6 +137,7 @@ export class CoordinadorComponent implements OnInit {
    pays: Pay[] = [];
    actividadSelected = '-';
    representante_legal_identificacion = '';
+   motivoTramite = '';
    regiones = [];
    estadoOrigen = 0;
    regionSelectedCode = '-';
@@ -150,6 +152,7 @@ export class CoordinadorComponent implements OnInit {
    stateTramite: number = 0;
    stateTramiteId: number = 0;
    inspectores: User[] = [];
+   mostrarMotivoTramite = false;
    totalunoxmil = 0;
    financieros: User[] = [];
    asignandoFinanciero: Boolean = false;
@@ -229,6 +232,8 @@ export class CoordinadorComponent implements OnInit {
   secondaryPhoneContactValidated = true;
   imprimiendo_tarifario = false;
   imprimiendo_registro = false;
+  register_code = '';
+  as_turistic_date = null;
   user: User = new User();
 
   //DATOS ESTABLECIMIENTO
@@ -369,6 +374,7 @@ export class CoordinadorComponent implements OnInit {
               private register_typeDataService: RegisterTypeService,
               private registerCatastroDataService: RegistroCatastroService,
               private requisiteDataService: RequisiteService,
+              private registerProcedureDataService: RegisterProcedureService,
               private bedTypeDataService: BedTypeService,
               private declarationDataService: DeclarationService,
               private declarationItemCategoryDataService: DeclarationItemCategoryService,
@@ -1886,13 +1892,35 @@ export class CoordinadorComponent implements OnInit {
      this.onChangeTable(this.config);
   }
 
+  checkMotivoTramite(estado: String) {
+   this.motivoTramite = '';
+   const PrimerDigito = estado.substring(0, 1);
+   if (PrimerDigito == '1') {
+      this.mostrarMotivoTramite = false;
+   } else {
+      this.mostrarMotivoTramite = true;
+   }
+   this.registerProcedureDataService.get_by_register_id(this.idRegister.toString()).then( r => {
+      if (typeof r.id != 'undefined') {
+         this.motivoTramite = r.justification;
+         this.registerCatastroDataService.get_by_register_code(this.register_code).then( r2 => {
+            if (typeof r2.activity != 'undefined') {
+               this.as_turistic_date = new Date(r2.as_turistic_date.toString());
+            }
+         }).catch( e => { console.log(e); });
+      }
+   }).catch( e => { console.log(e); });
+  }
+
   onCellClick(event) {
+   this.register_code = event.row.code;
+   let estado = '';
    this.registers_mintur.forEach(element => {
       if (element.ruc.number == event.row.number && element.establishment.ruc_code_id == event.row.ruc_code_id) {
          this.selectRegisterMintur(element);
          const registerState = this.getRegisterState(element.states.state_id);
          this.stateTramiteId = element.states.state_id;
-         const estado: String = this.stateTramiteId.toString();
+         estado = this.stateTramiteId.toString();
          this.digito = estado.substring(estado.length-1, estado.length);
          this.stateTramite = 0;
          this.estadoOrigen = 0;
@@ -1918,6 +1946,7 @@ export class CoordinadorComponent implements OnInit {
       }
    });
    this.idRegister = event.row.registerId;
+   this.checkMotivoTramite(estado);
    this.getApprovalStates();
    this.rows.forEach(row => {
       if (this.idRegister == row.registerId) {

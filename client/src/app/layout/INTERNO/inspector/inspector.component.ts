@@ -1293,7 +1293,7 @@ export class InspectorComponent implements OnInit {
                establishment: item.establishment.commercially_known_name,
                address: item.establishment.address_main_street + ' ' + item.establishment.address_number + ' ' + item.establishment.address_secondary_street,
                created_at: creacion.toLocaleDateString(),
-               date_assigment: item.register.date_assigment,
+               date_assigment: item.register.date_assigment.toLocaleDateString(),
                ruc_code_id: item.establishment.ruc_code_id,
                category: this.getRegisterCategory(item.register.register_type_id),
                status: registerState,
@@ -1648,7 +1648,7 @@ export class InspectorComponent implements OnInit {
               if (r2.establishment.as_turistic_register_date == null || typeof r2.establishment.as_turistic_register_date == 'undefined') {
                fecha_registro = 'PENDIENTE';
               } else {
-               fecha_registro = (r2.establishment.as_turistic_register_date as Date).toLocaleDateString();
+               fecha_registro = (new Date(r2.establishment.as_turistic_register_date)).toLocaleDateString();
               }
               let local = '';
               if (r2.establishment.establishment_property_type_id == 1) {

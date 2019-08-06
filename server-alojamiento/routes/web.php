@@ -255,6 +255,7 @@ $router->group(['middleware' => ['auth']], function () use ($router) {
    $router->post('/registerprocedure', ['uses' => 'RegisterProcedureController@post']);
    $router->get('/registerprocedure', ['uses' => 'RegisterProcedureController@get']);
    $router->get('/registerprocedure/paginate', ['uses' => 'RegisterProcedureController@paginate']);
+   $router->get('/registerprocedure/get_by_register_id', ['uses' => 'RegisterProcedureController@get_by_register_id']);
    $router->get('/registerprocedure/backup', ['uses' => 'RegisterProcedureController@backup']);
    $router->put('/registerprocedure', ['uses' => 'RegisterProcedureController@put']);
    $router->delete('/registerprocedure', ['uses' => 'RegisterProcedureController@delete']);

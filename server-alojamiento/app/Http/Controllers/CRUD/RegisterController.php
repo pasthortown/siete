@@ -369,11 +369,11 @@ class RegisterController extends Controller
                }
                $tariff->price = $tarifa['price'];
                $tariff->year = $tarifa['year'];
-               $tariff->id_ruc = $tarifa['id_ruc'];
-               $tariff->state_id = 1;
+               $tariff->register_id = $tarifa['register_id'];
                $tariff->tariff_type_id = $tarifa['tariff_type_id'];
                $tariff->capacity_type_id = $tarifa['capacity_type_id'];
                $tariff->register_id = $register->id;
+               $tariff->state_id = 1;
                $tariff->save();
             } else {
                $tariff = Tariff::where('id',$tarifa['id'])->update([

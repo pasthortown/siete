@@ -37,6 +37,13 @@ export class RegisterService {
       }).catch( error => { this.handledError(error.json());  });
    }
 
+   get_by_register_code(code: String): Promise<any> {
+      return this.http.get(this.url + 'get_by_register_code?code=' + code.toString(), this.options).toPromise()
+      .then( r => {
+         return r.json();
+      }).catch( error => { this.handledError(error.json());  });
+   }
+
    delete(id: number): Promise<any> {
       return this.http.delete(this.url + '?id=' + id.toString(), this.options).toPromise()
       .then( r => {
