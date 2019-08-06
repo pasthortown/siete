@@ -1571,6 +1571,28 @@ export class DashboardComponent implements OnInit {
    this.mensajePorTipoTramite = 'Usted va a proceder a regularizar su establecimiento turístico, para lo cual deberá complementar la información que esta sección presenta, tiene la opción de guardarla en cualquier momento.'
   }
 
+  checkTramitEmitted(register_code: String) {
+   this.registerDataService.get_by_register_code(register_code).then( r => {
+      if (typeof r.id !== 'undefined') {
+         this.consultorDataService.get_register_by_code(register_code).then( r2 => {
+            const stateIdReproted =  r2[0].states.state_id;
+            const estado: String = stateIdReproted.toString();
+            const miDigito = estado.substring(estado.length-1, estado.length);
+            this.rucEstablishmentRegisterSelected.editable = true;
+            if (miDigito == '1' ||
+               miDigito == '4' ||
+               miDigito == '5' ||
+               miDigito == '6' ||
+               miDigito == '7' ||
+               miDigito == '0'
+               ) {
+                  this.rucEstablishmentRegisterSelected.editable = false;
+            }
+         }).catch( e => { console.log(e) ;});
+      }
+   }).catch( e => { console.log(e); });
+  }
+
   onCellClick(event) {
    this.register_code = event.row.register_code;
    this.rows.forEach(row => {
@@ -1610,6 +1632,7 @@ export class DashboardComponent implements OnInit {
             return;
          }
          this.mostrarDataRegisterMintur = true;
+         this.checkTramitEmitted(this.register_code);
          if (element.system_source == 'SITURIN') {
             this.consultorDataService.get_register_by_code(this.register_code).then( r => {
                const registerMintur = r[0];
@@ -3667,7 +3690,6 @@ guardarDeclaracion() {
    this.establishment_selected.workers_on_establishment = this.getEstablishmentWorkerGroup();
    this.mostrarDataEstablishment = true;
    this.cedulaEstablishmentContactData = '';
-   this.rucEstablishmentRegisterSelected.editable = true;
    this.getCantonesEstablishment();
    this.declarations = [];
    this.provinciaEstablishmentSelectedCode = '-';
@@ -3830,7 +3852,7 @@ guardarDeclaracion() {
       this.getCertificadoUsoSuelo(this.rucEstablishmentRegisterSelected.id);
       this.getReceptionRoom(this.rucEstablishmentRegisterSelected.id);
       this.setCategory(this.rucEstablishmentRegisterSelected.register_type_id);
-      this.rucEstablishmentRegisterSelected.editable = true;
+      this.checkTramitEmitted(this.register_code);
       this.rucEstablishmentRegisterSelected.status = r.status.state_id;
       this.getTramiteStatus(this.rucEstablishmentRegisterSelected.status);
       this.rucEstablishmentRegisterSelected.complementary_service_types_on_register = r.complementary_service_types_on_register as ComplementaryServiceType[];
