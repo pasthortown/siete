@@ -41615,23 +41615,7 @@
         },
         "attach": []
     },
-    {
-        "Requisite": {
-            "id": 1217,
-            "created_at": "2019-07-24 21:09:47",
-            "updated_at": "2019-07-30 20:29:13",
-            "name": "¿EN QUÉ IDIOMAS SE BRINDA ATENCIÓN EN SU ESTABLECIMIENTO",
-            "description": "¿EN QUÉ IDIOMAS SE BRINDA ATENCIÓN EN SU ESTABLECIMIENTO",
-            "father_code": "14",
-            "to_approve": 1,
-            "mandatory": true,
-            "type": "YES / NO",
-            "params": "",
-            "code": "14.10",
-            "register_type_id": 4
-        },
-        "attach": []
-    },
+   
     {
         "Requisite": {
             "id": 2341,
@@ -46470,7 +46454,7 @@
             "father_code": "14",
             "to_approve": 1,
             "mandatory": true,
-            "type": "YES / NO",
+            "type": "NUMBER",
             "params": "",
             "code": "14.3",
             "register_type_id": 3
@@ -46647,23 +46631,7 @@
         },
         "attach": []
     },
-    {
-        "Requisite": {
-            "id": 2595,
-            "created_at": "2019-07-24 21:09:48",
-            "updated_at": "2019-07-30 20:29:14",
-            "name": "¿EN QUÉ IDIOMAS SE BRINDA ATENCIÓN EN SU ESTABLECIMIENTO",
-            "description": "¿EN QUÉ IDIOMAS SE BRINDA ATENCIÓN EN SU ESTABLECIMIENTO",
-            "father_code": "14",
-            "to_approve": 1,
-            "mandatory": true,
-            "type": "YES / NO",
-            "params": "",
-            "code": "14.10",
-            "register_type_id": 3
-        },
-        "attach": []
-    },
+    
     {
         "Requisite": {
             "id": 2597,
@@ -53821,24 +53789,7 @@
         },
         "attach": []
     },
-    {
-        "Requisite": {
-            "id": 3024,
-            "created_at": "2019-07-24 21:09:49",
-            "updated_at": "2019-07-30 20:29:15",
-            "name": " ¿EN QUÉ IDIOMAS SE BRINDA ATENCIÓN EN SU ESTABLECIMIENTO?",
-            "description": " ¿EN QUÉ IDIOMAS SE BRINDA ATENCIÓN EN SU ESTABLECIMIENTO?",
-            "father_code": "12",
-            "to_approve": 1,
-            "mandatory": true,
-            "type": "YES / NO",
-            "params": "",
-            "code": "12.18",
-            "register_type_id": 22
-        },
-        "attach": []
-    },
-    {
+        {
         "Requisite": {
             "id": 3025,
             "created_at": "2019-07-24 21:09:49",
@@ -59040,24 +58991,7 @@
         },
         "attach": []
     },
-    {
-        "Requisite": {
-            "id": 4439,
-            "created_at": "2019-07-24 21:09:49",
-            "updated_at": "2019-07-30 20:29:16",
-            "name": "¿EN QUÉ IDIOMAS SE BRINDA ATENCIÓN EN SU ESTABLECIMIENTO?",
-            "description": "¿EN QUÉ IDIOMAS SE BRINDA ATENCIÓN EN SU ESTABLECIMIENTO?",
-            "father_code": "13",
-            "to_approve": 1,
-            "mandatory": true,
-            "type": "YES / NO",
-            "params": "",
-            "code": "13.1",
-            "register_type_id": 25
-        },
-        "attach": []
-    },
-    {
+        {
         "Requisite": {
             "id": 4440,
             "created_at": "2019-07-24 21:09:49",
