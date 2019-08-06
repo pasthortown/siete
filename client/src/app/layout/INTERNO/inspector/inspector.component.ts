@@ -102,6 +102,8 @@ import { ExporterService } from 'src/app/services/negocio/exporter.service';
 import Swal from 'sweetalert2';
 import { DocumentService } from 'src/app/services/CRUD/EXPORTER/document.service';
 import { Document as Documento } from 'src/app/models/EXPORTER/Document';
+import { RegisterProcedureService } from 'src/app/services/CRUD/ALOJAMIENTO/registerprocedure.service';
+import { RegisterService as RegistroCatastroService } from 'src/app/services/CRUD/CATASTRO/register.service';
 
 @Component({
   selector: 'app-registro',
@@ -126,6 +128,8 @@ export class InspectorComponent implements OnInit {
    currentPagePays = 1;
    balance: DeclarationAttachment = new DeclarationAttachment();
    lastPagePays = 1;
+   register_code = '';
+   as_turistic_date = null;
    recordsByPagePays = 5;
    rowsPays = [];
    columnsPays = [];
@@ -148,6 +152,7 @@ export class InspectorComponent implements OnInit {
    //ASIGNACIONES
    inspectores: User[] = [];
    financieros: User[] = [];
+   tipo_tramite = '';
    inspectorSelectedId: number = 0;
    registerApprovals: ApprovalState[] = [];
    registerApprovalCoordinador: ApprovalState = new ApprovalState();
@@ -282,6 +287,8 @@ export class InspectorComponent implements OnInit {
   complementary_service_types_registerSelectedId = 0;
   capacitySelected: Capacity = new Capacity();
   bedSelected: Bed = new Bed();
+  mostrarMotivoTramite = false;
+  motivoTramite = '';
   alowed_bed_types: BedType[] = []; 
   register_establishment_capacities_registerSelectedId = 0;
   rack_prices_registerSelectedId = 0;
@@ -300,6 +307,7 @@ export class InspectorComponent implements OnInit {
   REGCIVILOKEstablishment = false;
   REGCIVILREPRESENTANTELEGALOK = false;
   guardando = false;
+  estado = '';
 
   //DECLARACIONES
   currentPageDeclaration = 1;
@@ -330,6 +338,7 @@ export class InspectorComponent implements OnInit {
               private consultorDataService: ConsultorService,
               private userDataService: UserService,
               private dinardapDataService: DinardapService,
+              private registerCatastroDataService: RegistroCatastroService,
               private registerStateDataService: RegisterStateService,
               private approvalStateAttachmentDataService: ApprovalStateAttachmentService,
               private rucDataService: RucService,
@@ -348,6 +357,7 @@ export class InspectorComponent implements OnInit {
               private genderDataService: GenderService,
               private workerGroupDataService: WorkerGroupService,
               private capacityTypeDataService: CapacityTypeService,
+              private registerProcedureDataService: RegisterProcedureService,
               private establishment_certification_typeDataService: EstablishmentCertificationTypeService,
               private establishment_property_typeDataService: EstablishmentPropertyTypeService,
               private establishmentDataService: EstablishmentService,
@@ -395,6 +405,46 @@ export class InspectorComponent implements OnInit {
       return true;
    }
    return false;
+  }
+
+  checkMotivoTramite(estado: String) {
+   this.motivoTramite = '';
+   const PrimerDigito = estado.substring(0, 1);
+   if (PrimerDigito == '1') {
+      this.mostrarMotivoTramite = false;
+   } else {
+      this.mostrarMotivoTramite = true;
+   }
+   this.registerProcedureDataService.get_by_register_id(this.idRegister.toString()).then( r => {
+      if (typeof r.id != 'undefined') {
+         this.motivoTramite = r.justification;
+         this.registerCatastroDataService.get_by_register_code(this.register_code).then( r2 => {
+            if (typeof r2.activity != 'undefined') {
+               this.as_turistic_date = new Date(r2.as_turistic_date.toString());
+            }
+            this.tipo_tramite = '';
+            const primerdigito = estado.substring(0, 1);
+            if (primerdigito == '1') {
+               this.tipo_tramite = 'REGISTRO';
+            }
+            if (primerdigito == '2') {
+               this.tipo_tramite = 'RECLASIFICACIÓN';
+            }
+            if (primerdigito == '3') {
+               this.tipo_tramite = 'RECATEGORIZACIÓN';
+            }
+            if (primerdigito == '4') {
+               this.tipo_tramite = 'ACTUALIZACIÓN';
+            }
+            if (primerdigito == '5') {
+               this.tipo_tramite = 'INACTIVACIÓN';
+            }
+            if (primerdigito == '6') {
+               this.tipo_tramite = 'REINGRESO';
+            }
+         }).catch( e => { console.log(e); });
+      }
+   }).catch( e => { console.log(e); });
   }
 
   onChangeTablePays(config: any, event?): any {
@@ -1293,7 +1343,7 @@ export class InspectorComponent implements OnInit {
                establishment: item.establishment.commercially_known_name,
                address: item.establishment.address_main_street + ' ' + item.establishment.address_number + ' ' + item.establishment.address_secondary_street,
                created_at: creacion.toLocaleDateString(),
-               date_assigment: item.register.date_assigment.toLocaleDateString(),
+               date_assigment: new Date(item.register.date_assigment.toString()).toLocaleDateString(),
                ruc_code_id: item.establishment.ruc_code_id,
                category: this.getRegisterCategory(item.register.register_type_id),
                status: registerState,
@@ -1354,16 +1404,16 @@ export class InspectorComponent implements OnInit {
          const today = new Date();
          let qr_value = 'MT-CZ' + iniciales_cordinacion_zonal + '-' + this.ruc_registro_selected.ruc.number + '-' + r2.establishment.ruc_code_id + '-ACTA-NOTIFICACION-ALOJAMIENTO-' + iniciales_tecnico_zonal + '-' + today.getDate() + '-' + (today.getMonth() + 1) + '-' + today.getFullYear();
          const actividad = 'ALOJAMIENTO';
-         const tipo_tramite = 'REGISTRO';
          this.documentDataService.get_doc_id(qr_value).then( respuesta => {
             const codigo = 'MT-CZ' + iniciales_cordinacion_zonal + '-' + iniciales_tecnico_zonal + '-' + today.getFullYear() + '-' + respuesta.toString();
             const params = [{canton: canton.name.toUpperCase()},
                {fecha: today.toLocaleDateString().toUpperCase()},
                {codigo: codigo},
+               {tramite: this.tipo_tramite.toUpperCase()},
                {nombre_comercial: r2.establishment.commercially_known_name.toUpperCase()},
                {representante_legal: this.representante_legal.toUpperCase()},
                {direccion_establecimiento: r2.establishment.address_main_street.toUpperCase() + ' ' + r2.establishment.address_number.toUpperCase() + ' ' + r2.establishment.address_secondary_street.toUpperCase()},
-               {tipo_tramite: tipo_tramite}];
+               {tipo_tramite: this.tipo_tramite.toUpperCase()}];
             
             let document = new Documento();
             document.activity =actividad;
@@ -1372,7 +1422,7 @@ export class InspectorComponent implements OnInit {
             let paramsToBuild = {
                template: 1, qr: true, qr_value: qr_value, params: params
             }
-            document.procedure_id = tipo_tramite;
+            document.procedure_id = this.tipo_tramite.toUpperCase();
             document.zonal = zonal.name;
             document.user = iniciales_tecnico_zonal;
             document.params = JSON.stringify(paramsToBuild);
@@ -1663,7 +1713,6 @@ export class InspectorComponent implements OnInit {
                }
               });
               let actividad = 'ALOJAMIENTO';
-              let tipo_tramite = 'REGISTRO';
               let tipo_establecimiento = '';
               this.ruc_name_types.forEach(element => {
                  if (element.id == r2.establishment.ruc_name_type_id) {
@@ -1713,7 +1762,7 @@ export class InspectorComponent implements OnInit {
                {pagina_web: r2.establishment.url_web.toUpperCase()},
                {numero_registro: r0.register.code.toUpperCase()},
                {fecha_registro: fecha_registro.toUpperCase()},
-               {tipo_tramite: tipo_tramite.toUpperCase()},
+               {tipo_tramite: this.tipo_tramite.toUpperCase()},
                {clasificacion:clasificacion.toUpperCase()},
                {franquicia_cadena: r2.establishment.franchise_chain_name.toUpperCase()},
                {contacto_establecimiento: r2.contact_user.name.toUpperCase()},
@@ -1877,6 +1926,8 @@ export class InspectorComponent implements OnInit {
    let enviarEmailUsuario = false;
    let prorroga15 = false;
    let prorroga6 = false;
+   this.motivoTramite = '';
+   this.mostrarMotivoTramite = false;
    Swal.fire({
       title: 'Confirmación',
       text: '¿Está seguro de confirmar el resultado del trámite a su cargo?',
@@ -2104,7 +2155,10 @@ export class InspectorComponent implements OnInit {
       if (element.ruc.number == event.row.number && element.establishment.ruc_code_id == event.row.ruc_code_id) {
          this.selectRegisterMintur(element);
          this.idRegister = event.row.registerId;
+         this.register_code = event.row.code;
          this.stateTramiteId = element.states.state_id;
+         this.estado = this.stateTramiteId.toString();
+         this.checkMotivoTramite(this.estado);
          this.getApprovalStates();
          this.rows.forEach(row => {
             if (this.idRegister == row.registerId) {
@@ -2927,6 +2981,7 @@ guardarDeclaracion() {
       this.toastr.errorToastr('Debe cargar el certificado de uso de suelo.', 'Nuevo');
       return;
    }
+   //AQUI
    let mostradoError = false;
    this.rucEstablishmentRegisterSelected.requisites.forEach(element => {
       if (element.HTMLtype == 'TRUE / FALSE' && element.fullfill) {
@@ -2977,7 +3032,6 @@ guardarDeclaracion() {
       this.guardarRecepcionRoom(r.id);
       this.guardarCertificadoUsoSuelos();
       const today = new Date();
-      const tipo_tramite = 'REGISTRO';
       const actividad = 'ALOJAMIENTO';
       let provincia = new Ubication();
       let canton = new Ubication();
@@ -3019,7 +3073,7 @@ guardarDeclaracion() {
       const zonalName = zonal.name.split(' ');
       iniciales_cordinacion_zonal = zonalName[zonalName.length - 1].toUpperCase();
       let qr_value = 'MT-CZ' + iniciales_cordinacion_zonal + '-' + this.ruc_registro_selected.ruc.number + '-SOLICITUD-ALOJAMIENTO-' + today.getDate() + '-' + (today.getMonth() + 1) + '-' + today.getFullYear();
-      const params = [{tipo_tramite: tipo_tramite},
+      const params = [{tipo_tramite: this.tipo_tramite.toUpperCase()},
          {fecha: today.toLocaleDateString().toUpperCase()},
          {representante_legal: this.user.name.toUpperCase()},
          {nombre_comercial: this.establishment_selected.commercially_known_name.toUpperCase()},
@@ -3046,20 +3100,20 @@ guardarDeclaracion() {
          saveAs(blob, qr_value + '.pdf');
          const information = {
             para: this.user.name,
-            tramite: 'Registro',
+            tramite: this.tipo_tramite.toUpperCase(),
             ruc: this.user.ruc,
-            nombreComercial: this.establishment_selected.commercially_known_name,
+            nombreComercial: this.establishment_selected.commercially_known_name.toUpperCase(),
             fechaSolicitud: today.toLocaleString(),
-            actividad: 'Alojamiento Turístico',
-            clasificacion: clasificacion,
-            categoria: categoria,
-            tipoSolicitud: 'Registro',
+            actividad: 'Alojamiento Turístico'.toUpperCase(),
+            clasificacion: clasificacion.toUpperCase(),
+            categoria: categoria.toUpperCase(),
+            tipoSolicitud: this.tipo_tramite.toUpperCase(),
             provincia: provincia.name.toUpperCase(),
             canton: canton.name.toUpperCase(),
             parroquia: parroquia.name.toUpperCase(),
-            callePrincipal: this.establishment_selected.address_main_street,
-            calleInterseccion: this.establishment_selected.address_secondary_street,
-            numeracion: this.establishment_selected.address_number,
+            callePrincipal: this.establishment_selected.address_main_street.toUpperCase(),
+            calleInterseccion: this.establishment_selected.address_secondary_street.toUpperCase(),
+            numeracion: this.establishment_selected.address_number.toUpperCase(),
             thisYear: today.getFullYear(),
             pdfBase64: pdfBase64,
          };

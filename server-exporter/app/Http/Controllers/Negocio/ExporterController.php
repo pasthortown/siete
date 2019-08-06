@@ -371,7 +371,7 @@ class ExporterController extends Controller
     if (!$params) {
       $params = [];
     }
-    $title = $template['title'];
+    $title = $this->build_title($template['title'], $params);
     $pdf_content = $this->build_content($html_content, $params);
     $html = $this->mintur_style($pdf_content, $title, $qr, $qr_content);
     $orientation = $template['orientation'];
@@ -382,6 +382,16 @@ class ExporterController extends Controller
     $bytes = $pdf->output();
     $toReturn = base64_encode($bytes);
     return response()->json($toReturn, 200);
+  }
+
+  protected function build_title($title, $params) {
+    $toReturn = $title;
+    foreach ($params as $param) {
+      foreach($param as $key => $value) {
+         $toReturn = str_ireplace('##'.$key.'##', $value, $toReturn);
+      }
+    }
+    return $toReturn;
   }
 
   protected function qrcodelocation($latitude, $longitude) {

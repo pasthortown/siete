@@ -57,6 +57,8 @@ import { DeclarationItemCategoryService } from 'src/app/services/CRUD/FINANCIERO
 import { DeclarationService } from 'src/app/services/CRUD/FINANCIERO/declaration.service';
 import { Ng2TableModule } from 'ng2-table/ng2-table';
 import { DocumentService } from 'src/app/services/CRUD/EXPORTER/document.service';
+import { RegisterProcedureService } from 'src/app/services/CRUD/ALOJAMIENTO/registerprocedure.service';
+import { RegisterService as RegistroCatastroService } from 'src/app/services/CRUD/CATASTRO/register.service';
 
 @NgModule({
   imports: [CommonModule,
@@ -79,6 +81,7 @@ import { DocumentService } from 'src/app/services/CRUD/EXPORTER/document.service
     DeclarationService,
     RegisterStateService,
     TaxPayerTypeService,
+    RegistroCatastroService,
     PersonRepresentativeAttachmentService,
     EstablishmentCertificationService,
     ComplementaryServiceFoodTypeService,
@@ -109,6 +112,7 @@ import { DocumentService } from 'src/app/services/CRUD/EXPORTER/document.service
     TariffTypeService,
     PreviewRegisterCodeService,
     EstablishmentCertificationTypeService,
+    RegisterProcedureService,
     LanguageService,
     EstablishmentService,
     WorkerService,
