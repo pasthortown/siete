@@ -67,63 +67,65 @@ export class PagosComponent implements OnInit {
       const reportData = r as any[];
       let output = '';
       reportData.forEach(element => {
-        const localidad = '5'; // Guayaquil 1  -   Quito 5
-        const transaccion = 'OCP'; // SIEMPRE OCP
-        const codigo_servicio = 'ZG'; // OC= Orden de Cobro (Débito a Cuenta), ZG= Recaudación con Información (Recaudación a través de Canales con ingreso de información), SC= Recaudación de Colegios (Recaudación a través de Canales con o sin información).
-        const tipo_cuenta = '00'; // 00= Cuenta Corriente, 10= Cuenta Ahorros
-        const numero_cuenta = '        '; // SE DEJA EN BLANCO
-        let valor = ''; // 13 ENTEROS 2 DECIMALES SIN PUNTO DECIMAL
-        let codigo_del_tercero = ''; // 15 CARACTERES
-        const referencia_transaccion = 'VALOR 1 POR 1000    '; // 20 CARACTERES
-        const forma_de_pago = 'RE' // CU= Debito de cuenta, RE= Recaudaciones por canal electronico
-        const moneda = 'USD' // SIEMPRE USD
-        let nombre_del_tercero = ''; // 30 CARACTERES
-        const localidad_retiro = '  '; // 2 CARACTERES NO APLICA DEJAR EN BLANCO
-        const agencia_retiro = '  '; // 2 CARACTERES NO APLICA DEJAR EN BLANCO
-        const tipo_nuc_tercero = 'R'; // C= Cedula, R= RUC, P= Pasaporte
-        let numero_unico_tercero = ''; // 14 CARACTERES Identificacion del tercero
-        const telefono_tercero = '0000000000'; // 10 CARACTERES Telefono del Tercero
-         const pay = element.pay;
-         const user = element.user;
-         const ruc = element.RUC.Ruc;
-         valor = pay.amount_to_pay.toString();
-         valor = parseFloat(valor).toFixed(2).toString().replace('.', '');
-         for (let i = 0; 0 < (15 - valor.length); i ++) {
-           valor = '0' + valor;
-         }
-         codigo_del_tercero = pay.code;
-         for (let i = 0; 0 < (15 - codigo_del_tercero.length); i ++) {
-           codigo_del_tercero = ' ' + codigo_del_tercero;
-         }
-         for (let i = 0; i < 30; i ++) {
-           if (i < user.name.length) {
-            nombre_del_tercero += user.name[i];
-           } else {
-            nombre_del_tercero += ' ';
+        if (element.pay.amount_to_pay > 0) {
+          const localidad = '5'; // Guayaquil 1  -   Quito 5
+          const transaccion = 'OCP'; // SIEMPRE OCP
+          const codigo_servicio = 'ZG'; // OC= Orden de Cobro (Débito a Cuenta), ZG= Recaudación con Información (Recaudación a través de Canales con ingreso de información), SC= Recaudación de Colegios (Recaudación a través de Canales con o sin información).
+          const tipo_cuenta = '00'; // 00= Cuenta Corriente, 10= Cuenta Ahorros
+          const numero_cuenta = '        '; // SE DEJA EN BLANCO
+          let valor = ''; // 13 ENTEROS 2 DECIMALES SIN PUNTO DECIMAL
+          let codigo_del_tercero = ''; // 15 CARACTERES
+          const referencia_transaccion = 'VALOR 1 POR 1000    '; // 20 CARACTERES
+          const forma_de_pago = 'RE' // CU= Debito de cuenta, RE= Recaudaciones por canal electronico
+          const moneda = 'USD' // SIEMPRE USD
+          let nombre_del_tercero = ''; // 30 CARACTERES
+          const localidad_retiro = '  '; // 2 CARACTERES NO APLICA DEJAR EN BLANCO
+          const agencia_retiro = '  '; // 2 CARACTERES NO APLICA DEJAR EN BLANCO
+          const tipo_nuc_tercero = 'R'; // C= Cedula, R= RUC, P= Pasaporte
+          let numero_unico_tercero = ''; // 14 CARACTERES Identificacion del tercero
+          const telefono_tercero = '0000000000'; // 10 CARACTERES Telefono del Tercero
+           const pay = element.pay;
+           const user = element.user;
+           const ruc = element.RUC.Ruc;
+           valor = pay.amount_to_pay.toString();
+           valor = parseFloat(valor).toFixed(2).toString().replace('.', '');
+           for (let i = 0; 0 < (15 - valor.length); i ++) {
+             valor = '0' + valor;
            }
-         }
-         for (let i = 0; i < 14; i ++) {
-           if (i < ruc.number.length) {
-            numero_unico_tercero += ruc.number[i];
-           } else {
-            numero_unico_tercero += ' ';
+           codigo_del_tercero = pay.code;
+           for (let i = 0; 0 < (15 - codigo_del_tercero.length); i ++) {
+             codigo_del_tercero = ' ' + codigo_del_tercero;
            }
-         }
-         output += localidad +
-         transaccion +
-         codigo_servicio +
-         tipo_cuenta +
-         numero_cuenta +
-         valor +
-         codigo_del_tercero +
-         referencia_transaccion +
-         forma_de_pago + moneda +
-         nombre_del_tercero +
-         localidad_retiro +
-         agencia_retiro +
-         tipo_nuc_tercero +
-         numero_unico_tercero +
-         telefono_tercero + '\n';
+           for (let i = 0; i < 30; i ++) {
+             if (i < user.name.length) {
+              nombre_del_tercero += user.name[i];
+             } else {
+              nombre_del_tercero += ' ';
+             }
+           }
+           for (let i = 0; i < 14; i ++) {
+             if (i < ruc.number.length) {
+              numero_unico_tercero += ruc.number[i];
+             } else {
+              numero_unico_tercero += ' ';
+             }
+           }
+           output += localidad +
+           transaccion +
+           codigo_servicio +
+           tipo_cuenta +
+           numero_cuenta +
+           valor +
+           codigo_del_tercero +
+           referencia_transaccion +
+           forma_de_pago + moneda +
+           nombre_del_tercero +
+           localidad_retiro +
+           agencia_retiro +
+           tipo_nuc_tercero +
+           numero_unico_tercero +
+           telefono_tercero + '\n';
+        }
       });
       const blob = new Blob([output], { type: 'text/plain' });
       const nombreArchivo = 'reporte_pagos.txt';

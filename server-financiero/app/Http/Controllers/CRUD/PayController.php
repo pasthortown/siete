@@ -63,8 +63,8 @@ class PayController extends Controller
          if(!($payOnBDD->payed)) {
             DB::beginTransaction();
             $payOnBDD = Pay::where('code', $code)->update([
-               'amount_to_pay'=> $amount_to_pay,
-               'amount_payed'=>$valor,
+               'amount_to_pay'=> round($amount_to_pay,2),
+               'amount_payed'=>round($valor,2),
                'pay_date'=>date("Y-m-d H:i:s"),
                'payed'=>$payed,
             ]);
@@ -105,16 +105,16 @@ class PayController extends Controller
           } else {
              $pay->id = 1;
           }
-          $pay->amount_payed = $result['amount_payed'];
-          $pay->amount_to_pay = $result['amount_to_pay'];
+          $pay->amount_payed = round($result['amount_payed'],2);
+          $pay->amount_to_pay = round($result['amount_to_pay'],2);
           $pay->pay_date = $result['pay_date'];
           $pay->payed = $result['payed'];
           $pay->code = $result['code'];
           $pay->max_pay_date = $result['max_pay_date'];
           $pay->ruc_id = $result['ruc_id'];
-          $pay->amount_to_pay_taxes = $result['amount_to_pay_taxes'];
-          $pay->amount_to_pay_base = $result['amount_to_pay_base'];
-          $pay->amount_to_pay_fines = $result['amount_to_pay_fines'];
+          $pay->amount_to_pay_taxes = round($result['amount_to_pay_taxes'],2);
+          $pay->amount_to_pay_base = round($result['amount_to_pay_base'],2);
+          $pay->amount_to_pay_fines = round($result['amount_to_pay_fines'],2);
           $pay->notes = $result['notes'];
           $pay->save();
           DB::commit();
@@ -130,16 +130,16 @@ class PayController extends Controller
           DB::beginTransaction();
           $result = $data->json()->all();
           $pay = Pay::where('id',$result['id'])->update([
-             'amount_payed'=>$result['amount_payed'],
-             'amount_to_pay'=>$result['amount_to_pay'],
+             'amount_payed'=>round($result['amount_payed'],2),
+             'amount_to_pay'=>round($result['amount_to_pay'],2),
              'pay_date'=>$result['pay_date'],
              'payed'=>$result['payed'],
              'code'=>$result['code'],
              'max_pay_date'=>$result['max_pay_date'],
              'ruc_id'=>$result['ruc_id'],
-             'amount_to_pay_taxes'=>$result['amount_to_pay_taxes'],
-             'amount_to_pay_base'=>$result['amount_to_pay_base'],
-             'amount_to_pay_fines'=>$result['amount_to_pay_fines'],
+             'amount_to_pay_taxes'=>round($result['amount_to_pay_taxes'],2),
+             'amount_to_pay_base'=>round($result['amount_to_pay_base'],2),
+             'amount_to_pay_fines'=>round($result['amount_to_pay_fines'],2),
              'notes'=>$result['notes'],
           ]);
           DB::commit();
@@ -177,31 +177,31 @@ class PayController extends Controller
          $exist = Pay::where('id',$result['id'])->first();
          if ($exist) {
            Pay::where('id', $result['id'])->update([
-             'amount_payed'=>$result['amount_payed'],
-             'amount_to_pay'=>$result['amount_to_pay'],
+             'amount_payed'=>round($result['amount_payed'],2),
+             'amount_to_pay'=>round($result['amount_to_pay'],2),
              'pay_date'=>$result['pay_date'],
              'payed'=>$result['payed'],
              'code'=>$result['code'],
              'max_pay_date'=>$result['max_pay_date'],
              'ruc_id'=>$result['ruc_id'],
-             'amount_to_pay_taxes'=>$result['amount_to_pay_taxes'],
-             'amount_to_pay_base'=>$result['amount_to_pay_base'],
-             'amount_to_pay_fines'=>$result['amount_to_pay_fines'],
+             'amount_to_pay_taxes'=>round($result['amount_to_pay_taxes'],2),
+             'amount_to_pay_base'=>round($result['amount_to_pay_base'],2),
+             'amount_to_pay_fines'=>round($result['amount_to_pay_fines'],2),
              'notes'=>$result['notes'],
            ]);
          } else {
           $pay = new Pay();
           $pay->id = $result['id'];
-          $pay->amount_payed = $result['amount_payed'];
-          $pay->amount_to_pay = $result['amount_to_pay'];
+          $pay->amount_payed = round($result['amount_payed'],2);
+          $pay->amount_to_pay = round($result['amount_to_pay'],2);
           $pay->pay_date = $result['pay_date'];
           $pay->payed = $result['payed'];
           $pay->code = $result['code'];
           $pay->max_pay_date = $result['max_pay_date'];
           $pay->ruc_id = $result['ruc_id'];
-          $pay->amount_to_pay_taxes = $result['amount_to_pay_taxes'];
-          $pay->amount_to_pay_base = $result['amount_to_pay_base'];
-          $pay->amount_to_pay_fines = $result['amount_to_pay_fines'];
+          $pay->amount_to_pay_taxes = round($result['amount_to_pay_taxes'],2);
+          $pay->amount_to_pay_base = round($result['amount_to_pay_base'],2);
+          $pay->amount_to_pay_fines = round($result['amount_to_pay_fines'],2);
           $pay->notes = $result['notes'];
           $pay->save();
          }
