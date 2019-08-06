@@ -258,3 +258,4 @@ class RegisterController extends Controller
       return response()->json('Task Complete',200);
     }
 }
+

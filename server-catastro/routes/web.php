@@ -35,3 +35,4 @@ $router->group(['middleware' => ['auth']], function () use ($router) {
    $router->delete('/register', ['uses' => 'RegisterController@delete']);
    $router->post('/register/masive_load', ['uses' => 'RegisterController@masiveLoad']);
 });
+
