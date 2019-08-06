@@ -1896,19 +1896,18 @@ export class DashboardComponent implements OnInit {
 
   refresh() {
    this.fechasNombramiento();
-   this.procedureJustification = new ProcedureJustification();
    this.pays = [];
    this.consumoCedula = false;
    this.consumoCedulaEstablishmentContact = false;
    this.consumoRuc = false;
    this.consumoCedulaRepresentanteLegal = false;
-   this.mostrarDataRegisterMintur = false;
    this.SRIOK = false;
    this.REGCIVILOK = false;
    this.REGCIVILOKEstablishment = false;
    this.REGCIVILREPRESENTANTELEGALOK = false;
    this.guardando = false;
    this.ruc_registro_selected = new RegistroDataCarrier();
+   this.getRuc(this.user.ruc);
    this.getTaxPayerType();
    this.getGroupType();
    this.getCapacityTypes();
@@ -1918,17 +1917,17 @@ export class DashboardComponent implements OnInit {
    this.getZonalesEstablishment();
    this.getEstablishmentPropertyType();
    this.getLanguage();
+   this.getPays();
    this.getComplementaryFoodServiceType();
    this.getSystemNames();
+   this.getUbications();
    this.getCertificationTypes();
    this.getWorkerGroups();
    this.getRegiones();
    this.getEstablishmentCertificationTypesCategories();
    this.getComplementaryServiceTypeCategories();
-   this.getInspectores();
-   this.getFinancieros();
    this.groupTypeSelected = new GroupType();
-  }
+ }
 
   getInspectores() {
    this.inspectores = [];
@@ -2559,19 +2558,23 @@ guardarDeclaracion() {
    let tipo_tramite = 'Registro';
    this.procedureJustification.justification = "Registro";
    this.rucEstablishmentRegisterSelected.status = 11;
+   this.procedureJustification.procedure_id = 6;
    if (this.actualizando){
       tipo_tramite = 'Actualización';
       this.procedureJustification.justification = "Actualización";
       this.rucEstablishmentRegisterSelected.status = 41;
+      this.procedureJustification.procedure_id = 4;
    }
    if (this.activando){
       tipo_tramite = 'Activación';
       this.procedureJustification.justification = "Activación";
+      this.procedureJustification.procedure_id = 1;
       this.rucEstablishmentRegisterSelected.status = 61;
    }
    if (this.inactivando){
       tipo_tramite = 'Dar de Baja';
       this.rucEstablishmentRegisterSelected.status = 51;
+      this.procedureJustification.procedure_id = 5;
       this.procedureJustificationsToShow.forEach(element => {
          if (element.id == this.idCausal) {
             this.procedureJustification.justification = element.justification;
@@ -2581,19 +2584,17 @@ guardarDeclaracion() {
    if (this.reclasificando){
       tipo_tramite = 'Reclasificación';
       this.rucEstablishmentRegisterSelected.status = 21;
+      this.procedureJustification.procedure_id = 2;
       this.procedureJustification.justification = "Reclasificación";
    }
    if (this.recategorizando){
       tipo_tramite = 'Recategorización';
       this.rucEstablishmentRegisterSelected.status = 31;
+      this.procedureJustification.procedure_id = 3;
       this.procedureJustification.justification = "Recategorización";
    }
    tipo_tramite = tipo_tramite.toUpperCase();
-   this.registerDataService.register_register_data(this.rucEstablishmentRegisterSelected).then( r => {
-      this.certificadoUsoSuelo.register_id = r.id;
-      this.guardarRecepcionRoom(r.id);
-      this.guardarCertificadoUsoSuelos();
-      const today = new Date();
+   const today = new Date();
       const actividad = 'ALOJAMIENTO';
       let provincia = new Ubication();
       let canton = new Ubication();
@@ -2620,6 +2621,10 @@ guardarDeclaracion() {
          zonal = element;
          }
       });
+   this.registerDataService.register_register_data(this.rucEstablishmentRegisterSelected).then( r => {
+      this.certificadoUsoSuelo.register_id = r.id;
+      this.guardarRecepcionRoom(r.id);
+      this.guardarCertificadoUsoSuelos();
       let clasificacion = '';
       this.clasifications_registers.forEach(element => {
          if (element.code == this.categorySelectedCode) {
@@ -2659,10 +2664,11 @@ guardarDeclaracion() {
          }
          const byteArray = new Uint8Array(byteNumbers);
          const blob = new Blob([byteArray], { type: 'application/pdf'});
-         this.procedureJustificationDataService.post(this.procedureJustification).then(procedureJustification => {
+         this.procedureJustificationDataService.post(this.procedureJustification).then(procedureJustificationResponse => {
             let newRegisterProcedure = new RegisterProcedure();
-            newRegisterProcedure.procedure_justification_id = procedureJustification.id;
-            newRegisterProcedure.register_id = r.id;
+            newRegisterProcedure.procedure_justification_id = procedureJustificationResponse.id;
+            newRegisterProcedure.register_id = this.certificadoUsoSuelo.register_id;
+            newRegisterProcedure.date = new Date();
             this.registerProcedureDataService.post(newRegisterProcedure).then( regProc => { 
             }).catch( e => { console.log(e); });
          }).catch( e => { console.log(e); });
