@@ -2566,13 +2566,13 @@ guardarDeclaracion() {
       this.procedureJustification.procedure_id = 4;
    }
    if (this.activando){
-      tipo_tramite = 'Activación';
-      this.procedureJustification.justification = "Activación";
+      tipo_tramite = 'Reingreso';
+      this.procedureJustification.justification = "Reingreso";
       this.procedureJustification.procedure_id = 1;
       this.rucEstablishmentRegisterSelected.status = 61;
    }
    if (this.inactivando){
-      tipo_tramite = 'Dar de Baja';
+      tipo_tramite = 'Inactivación';
       this.rucEstablishmentRegisterSelected.status = 51;
       this.procedureJustification.procedure_id = 5;
       this.procedureJustificationsToShow.forEach(element => {

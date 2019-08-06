@@ -90,10 +90,10 @@
         <button class="btn btn-secondary" (click)="recategorizacion()" *ngIf="recategorizando" [disabled]="!mostrarRecategorizar">Recategorización</button>
         <button class="btn btn-light"  (click)="reclasificacion()" *ngIf="!reclasificando" [disabled]="!mostrarReclasificar">Reclasificación</button>
         <button class="btn btn-secondary"  (click)="reclasificacion()" *ngIf="reclasificando" [disabled]="!mostrarReclasificar">Reclasificación</button>
-        <button class="btn btn-light" (click)="darBaja()" *ngIf="!inactivando" [disabled]="!mostrarDarBaja">Dar de Baja</button>
-        <button class="btn btn-secondary" (click)="darBaja()" *ngIf="inactivando" [disabled]="!mostrarDarBaja">Dar de Baja</button>
-        <button class="btn btn-light" (click)="reactivar()" *ngIf="!activando" [disabled]="!mostrarActivar">Reactivar</button>
-        <button class="btn btn-secondary" (click)="reactivar()" *ngIf="activando" [disabled]="!mostrarActivar">Reactivar</button>
+        <button class="btn btn-light" (click)="darBaja()" *ngIf="!inactivando" [disabled]="!mostrarDarBaja">Inactivar</button>
+        <button class="btn btn-secondary" (click)="darBaja()" *ngIf="inactivando" [disabled]="!mostrarDarBaja">Inactivar</button>
+        <button class="btn btn-light" (click)="Reingreso()" *ngIf="!activando" [disabled]="!mostrarActivar">Reingreso</button>
+        <button class="btn btn-secondary" (click)="Reingreso()" *ngIf="activando" [disabled]="!mostrarActivar">Reingreso</button>
       </div>
     </div>
     <div class="alert alert-info mt-2 mb-2" role="alert" *ngIf="mensajePorTipoTramite != ''">
