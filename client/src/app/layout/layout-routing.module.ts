@@ -268,6 +268,10 @@ const routes: Routes = [
             loadChildren: './CRUD/FINANCIERO/Pay/pay.module#PayModule'
          },
          {
+            path: 'pay_tax',
+            loadChildren: './CRUD/FINANCIERO/PayTax/paytax.module#PayTaxModule'
+         },
+         {
             path: 'declaration_item_value',
             loadChildren: './CRUD/FINANCIERO/DeclarationItemValue/declarationitemvalue.module#DeclarationItemValueModule'
          },

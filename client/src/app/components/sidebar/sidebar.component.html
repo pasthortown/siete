@@ -43,6 +43,9 @@
                <li>
                   <a [routerLink]="['/pagos-reporte']" [routerLinkActive]="['router-link-active']" class="list-group-item">Reporte de Pagos</a>
                </li>
+               <li>
+                  <a [routerLink]="['/pay_tax']" [routerLinkActive]="['router-link-active']" class="list-group-item">PayTax </a>
+               </li>
             </ul>
          </li>
       </div>
@@ -384,6 +387,49 @@
             <ul class="submenu">
                <li>
                   <a [routerLink]="['/catastro']" [routerLinkActive]="['router-link-active']" class="list-group-item">Register </a>
+               </li>
+            </ul>
+         </li>
+      </div>
+
+      <div class="nested-menu">
+         <a class="list-group-item" (click)="addExpandClass('bdd financiero')">
+            <span class="fas fa-database"></span>&nbsp;BDD FINANCIERO
+         </a>
+         <li class="nested" [class.expand]="showMenu === 'bdd financiero'">
+            <ul class="submenu">
+               <li>
+                  <a [routerLink]="['/declaration']" [routerLinkActive]="['router-link-active']" class="list-group-item">Declaration </a>
+               </li>
+               <li>
+                  <a [routerLink]="['/declaration_item']" [routerLinkActive]="['router-link-active']" class="list-group-item">DeclarationItem </a>
+               </li>
+               <li>
+                  <a [routerLink]="['/declaration_item_category']" [routerLinkActive]="['router-link-active']" class="list-group-item">DeclarationItemCategory </a>
+               </li>
+               <li>
+                  <a [routerLink]="['/state']" [routerLinkActive]="['router-link-active']" class="list-group-item">State </a>
+               </li>
+               <li>
+                  <a [routerLink]="['/state_declaration']" [routerLinkActive]="['router-link-active']" class="list-group-item">StateDeclaration </a>
+               </li>
+               <li>
+                  <a [routerLink]="['/pay']" [routerLinkActive]="['router-link-active']" class="list-group-item">Pay </a>
+               </li>
+               <li>
+                  <a [routerLink]="['/declaration_item_value']" [routerLinkActive]="['router-link-active']" class="list-group-item">DeclarationItemValue </a>
+               </li>
+               <li>
+                  <a [routerLink]="['/pay_attachment']" [routerLinkActive]="['router-link-active']" class="list-group-item">PayAttachment </a>
+               </li>
+               <li>
+                  <a [routerLink]="['/pay_mass_file_attachment']" [routerLinkActive]="['router-link-active']" class="list-group-item">PayMassFileAttachment </a>
+               </li>
+               <li>
+                  <a [routerLink]="['/declaration_attachment']" [routerLinkActive]="['router-link-active']" class="list-group-item">DeclarationAttachment </a>
+               </li>
+               <li>
+                  <a [routerLink]="['/pay_tax']" [routerLinkActive]="['router-link-active']" class="list-group-item">PayTax </a>
                </li>
             </ul>
          </li>

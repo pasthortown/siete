@@ -118,4 +118,13 @@ $router->group(['middleware' => ['auth']], function () use ($router) {
    $router->put('/declarationattachment', ['uses' => 'DeclarationAttachmentController@put']);
    $router->delete('/declarationattachment', ['uses' => 'DeclarationAttachmentController@delete']);
    $router->post('/declarationattachment/masive_load', ['uses' => 'DeclarationAttachmentController@masiveLoad']);
+
+   //CRUD PayTax
+   $router->post('/paytax', ['uses' => 'PayTaxController@post']);
+   $router->get('/paytax', ['uses' => 'PayTaxController@get']);
+   $router->get('/paytax/paginate', ['uses' => 'PayTaxController@paginate']);
+   $router->get('/paytax/backup', ['uses' => 'PayTaxController@backup']);
+   $router->put('/paytax', ['uses' => 'PayTaxController@put']);
+   $router->delete('/paytax', ['uses' => 'PayTaxController@delete']);
+   $router->post('/paytax/masive_load', ['uses' => 'PayTaxController@masiveLoad']);
 });
