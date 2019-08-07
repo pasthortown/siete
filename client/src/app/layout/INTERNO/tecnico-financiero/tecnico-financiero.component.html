@@ -77,7 +77,7 @@
               </button>
               <button type="button" class="btn btn-danger" title="Borrar Órden de Pago" (click)="
                 borrarOrdenDePago()
-                " [disabled]=true>
+                ">
                 <i class="fas fa-trash"></i>
               </button>
             </div>
@@ -201,66 +201,7 @@
               <ngb-tabset>
                 <ngb-tab title="Declaración de Impuestos" id="tab4">
                   <ng-template ngbTabContent>
-                    <div class="row mt-3">
-                      <h4 class="col-12">
-                        <strong>Establecimientos Registrados</strong>
-                      </h4>
-                    </div>
-                    <div class="row">
-                      <div class="col-12">
-                        <div class="btn-toolbar" role="toolbar">
-                          <div class="btn-group mr-2" role="group">
-                            <button type="button" class="btn btn-primary" title="Actualizar" (click)="
-                              getEstablishmentsOnRuc(currentPageEstablishment)
-                              ">
-                              <i class="fas fa-sync"></i>
-                            </button>
-                          </div>
-                          <div class="input-group">
-                            <div class="input-group-prepend">
-                              <button type="button" class="input-group-text btn btn-success" title="Buscar">
-                                <span class="fas fa-search"></span>
-                              </button>
-                            </div>
-                            <input *ngIf="config.filtering" placeholder="Buscar..."
-                              [ngTableFiltering]="config.filtering"
-                              class="form-control"
-                              (input)="onChangeTableEstablishment(config)"/>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div style="width: 100%; overflow-x: auto;">
-                        <div class="row">
-                            <div class="col-12 mt-2">
-                               <ng-table
-                                  [config]="config"
-                                  (cellClicked)="onCellClickEstablishmentDeclaration($event)"
-                                  (tableChanged)="onChangeTableEstablishment(config)"
-                                  [rows]="rowsEstablishment"
-                                  [columns]="columnsEstablishment">
-                                </ng-table>
-                            </div>
-                          </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-12">
-                        <ngb-pagination
-                          *ngIf="config.paging"
-                          [(page)]="currentPageEstablishment"
-                          [pageSize]="recordsByPageEstablishment"
-                          [maxSize]="10"
-                          [boundaryLinks]="true"
-                          (pageChange)="onChangeTableEstablishment(config, $event)"
-                          [collectionSize]="ruc_registro_selected.ruc.establishments.length">
-                          <ng-template ngbPaginationFirst>Primera</ng-template>
-                          <ng-template ngbPaginationPrevious>Anterior</ng-template>
-                          <ng-template ngbPaginationNext>Siguiente</ng-template>
-                          <ng-template ngbPaginationLast>Última</ng-template>
-                        </ngb-pagination>
-                      </div>
-                    </div>
-                    <div class="row mt-5" *ngIf="establishment_declarations_selected.id !== 0">
+                    <div class="row mt-5">
                       <div class="col-12">
                         <div class="row mt-3">
                           <h4 class="col-12">
@@ -272,7 +213,7 @@
                             <div class="btn-toolbar" role="toolbar">
                               <div class="btn-group mr-2" role="group">
                                 <button type="button" class="btn btn-primary" title="Actualizar" (click)="
-                                  getEstablishmentsOnRuc(currentPageDeclaration)
+                                getDeclarationsByEstablishment(establishment_id)
                                   ">
                                   <i class="fas fa-sync"></i>
                                 </button>
