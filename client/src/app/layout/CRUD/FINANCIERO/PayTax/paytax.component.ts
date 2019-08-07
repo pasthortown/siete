@@ -113,7 +113,7 @@ export class PayTaxComponent implements OnInit {
    openDialog(content) {
       this.modalService.open(content, { centered: true }).result.then(( response => {
          if ( response === 'Guardar click' ) {
-            if (typeof this.pay_taxSelected.id === 'undefined') {
+            if (typeof this.pay_taxSelected.id === 'undefined' || this.pay_taxSelected.id === 0) {
                this.pay_taxDataService.post(this.pay_taxSelected).then( r => {
                   this.toastr.successToastr('Datos guardados satisfactoriamente.', 'Nuevo');
                   this.getPayTaxes();
