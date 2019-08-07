@@ -93,6 +93,8 @@ import { StateService as StateAlojamientoService } from 'src/app/services/CRUD/A
 import { State as StateAlojamiento } from 'src/app/models/ALOJAMIENTO/State';
 import { DeclarationAttachment } from 'src/app/models/FINANCIERO/DeclarationAttachment';
 import { DeclarationAttachmentService } from 'src/app/services/CRUD/FINANCIERO/declarationattachment.service';
+import { PayTax } from 'src/app/models/FINANCIERO/PayTax';
+import { PayTaxService } from 'src/app/services/CRUD/FINANCIERO/paytax.service';
 @Component({
   selector: 'app-tecnico-financiero',
   templateUrl: './tecnico-financiero.component.html',
@@ -112,6 +114,7 @@ export class TecnicoFinancieroComponent implements OnInit {
   registerApprovalInspector: ApprovalState = new ApprovalState();
   registerApprovalFinanciero: ApprovalState = new ApprovalState();
   pay: Pay = new Pay();
+  paytaxes: PayTax[] = [];
   pays: Pay[] = [];
   isAssigned = false;
   hasIspectionDate  = false;
@@ -306,6 +309,7 @@ export class TecnicoFinancieroComponent implements OnInit {
              private genderDataService: GenderService,
              private workerGroupDataService: WorkerGroupService,
              private capacityTypeDataService: CapacityTypeService,
+             private payTaxDataService: PayTaxService,
              private establishment_certification_typeDataService: EstablishmentCertificationTypeService,
              private establishment_property_typeDataService: EstablishmentPropertyTypeService,
              private establishmentDataService: EstablishmentService,
@@ -1421,7 +1425,14 @@ getDeclarationItems() {
       if (this.pays.length == 0) {
          this.pay = new Pay();
       }
+      this.buildPays();
    }).catch( e => { console.log(e); } );
+ }
+
+ buildPays() {
+    this.payTaxDataService.get().then( r => {
+       console.log(r);
+    }).catch( e => { console.log(e); });
  }
 
  checkImContactRuc() {

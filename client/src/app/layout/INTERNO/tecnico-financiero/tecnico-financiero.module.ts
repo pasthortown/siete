@@ -53,6 +53,7 @@ import { Ng2TableModule } from 'ng2-table/ng2-table';
 import { PayService } from './../../../services/CRUD/FINANCIERO/pay.service';
 import { StateDeclarationService } from 'src/app/services/CRUD/FINANCIERO/statedeclaration.service';
 import { StateService as StateAlojamientoService } from 'src/app/services/CRUD/ALOJAMIENTO/state.service';
+import { PayTaxService } from 'src/app/services/CRUD/FINANCIERO/paytax.service';
 @NgModule({
   imports: [CommonModule,
     CKEditorModule,
@@ -86,6 +87,7 @@ import { StateService as StateAlojamientoService } from 'src/app/services/CRUD/A
     AgreementService,
     UbicationService,
     RegisterService,
+    PayTaxService,
     StateDeclarationService,
     CapacityTypeService,
     EstablishmentCertificationAttachmentService,

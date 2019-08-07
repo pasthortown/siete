@@ -15,7 +15,7 @@ class PayTaxController extends Controller
     {
        $id = $data['id'];
        if ($id == null) {
-          return response()->json(PayTax::get(),200);
+         return response()->json(PayTax::orderBy('year','ASC')->orderBy('trimester','ASC')->get(),200);
        } else {
           $paytax = PayTax::findOrFail($id);
           $attach = [];
