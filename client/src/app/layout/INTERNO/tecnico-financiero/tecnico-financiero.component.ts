@@ -259,6 +259,7 @@ export class TecnicoFinancieroComponent implements OnInit {
  consumoCedula = false;
  consumoCedulaEstablishmentContact = false;
  consumoRuc = false;
+ establishment_id = 0;
  consumoCedulaRepresentanteLegal = false;
  SRIOK = false;
  REGCIVILOK = false;
@@ -753,10 +754,9 @@ calcularUnoxMil() {
        {title: '', name: 'selected'},
        {title: 'Número de RUC', name: 'number'},
        {title: 'Número de Establecimiento', name: 'ruc_code_id'},
-       {title: 'NOmbre Comercial', name: 'establishment'},
+       {title: 'Nombre Comercial', name: 'establishment'},
        {title: 'Dirección', name: 'address'},
        {title: 'Categoría', name: 'category'},
-       {title: 'Bandeja', name: 'status'},
        {title: 'Fecha de Solicitud', name: 'created_at'},
        {title: 'Fecha de Asignación', name: 'date_assigment'},
     ];
@@ -800,6 +800,7 @@ calcularUnoxMil() {
             category: this.getRegisterCategory(item.register.register_type_id),
             status: registerState,
             status_id: item.states.state_id,
+            establishment_id: item.establishment.id,
          });
         }
     });
@@ -822,7 +823,7 @@ calcularUnoxMil() {
  borrarOrdenDePago() {
    this.payDataService.delete(this.pay.id).then( r => {
       this.toastr.errorToastr('Órden de Pago Eliminada Satisfactoriamente', 'Revisión, Técnico Financiero');
-      this.refresh();
+      this.getPays();
    }).catch( e => { console.log(e); });
  }
 
@@ -1047,6 +1048,8 @@ calcularUnoxMil() {
         this.stateTramiteId = element.states.state_id;
         this.idRegister = event.row.registerId;
         this.getApprovalStates();
+        this.establishment_id = event.row.establishment_id;
+        this.getDeclarationsByEstablishment(event.row.establishment_id);
         this.rows.forEach(row => {
            if (this.idRegister == row.registerId) {
               row.selected = '<div class="col-12 text-right"><span class="far fa-hand-point-right"></span></div>';
@@ -1206,8 +1209,6 @@ calcularUnoxMil() {
    this.estoyVacaciones = false;
    this.getZonales();
    this.getDeclarationStates();
-   this.getInspectores();
-   this.getFinancieros();
    this.getTramiteStates();
    this.getDeclarationCategories();
    this.getDeclarationItems();
@@ -1215,21 +1216,8 @@ calcularUnoxMil() {
    this.getTaxPayerType();
    this.getGroupType();
    this.getStates();
-   this.getStatesAlojamiento();
-   this.getCapacityTypes();
-   this.getRucNameTypes();
    this.getZonalesEstablishment();
-   this.getEstablishmentPropertyType();
-   this.getLanguage();
-   this.getComplementaryFoodServiceType();
-   this.getSystemNames();
-   this.getCertificationTypes();
-   this.getWorkerGroups();
-   this.getTariffs();
-   this.getClasifications();
    this.getUbications();
-   this.getEstablishmentCertificationTypesCategories();
-   this.getComplementaryServiceTypeCategories();
  }
 
  getZonales() {
@@ -1431,7 +1419,10 @@ getDeclarationItems() {
 
  buildPays() {
     this.payTaxDataService.get().then( r => {
-       console.log(r);
+       this.paytaxes = r as PayTax[];
+       this.declarations.forEach(declaration => {
+         this.calcTaxes(declaration);
+       });
     }).catch( e => { console.log(e); });
  }
 
@@ -1602,6 +1593,7 @@ getDeclarationItems() {
  }
 
  getDeclarationsByEstablishment(id: number) {
+    this.declarations = [];
    this.declarationDataService.get_by_establishment(id).then( r => {
       this.declarations = r as Declaration[];
    }).catch( e => { console.log(e); });
@@ -1633,6 +1625,95 @@ getDeclarationItems() {
       }
    });
    this.calcularUnoxMil();
+}
+
+calcTaxes(declaration: Declaration) {
+   const toCalc = [];
+   this.declarationItemsCategories.forEach(category => {
+      if (category.tax_payer_type_id == this.ruc_registro_selected.ruc.tax_payer_type_id) {
+         const items = [];
+         declaration.declaration_item_values_on_declaration.forEach(newValueItem => {
+            this.declarationItems.forEach(item => {
+               if (item.tax_payer_type_id == this.ruc_registro_selected.ruc.tax_payer_type_id) {
+                  if ((item.id == newValueItem.declaration_item_id) && (item.declaration_item_category_id == category.id)) {
+                     items.push({declarationItem: item, valueItem: newValueItem});
+                  }
+               }
+            });
+         });
+         toCalc.push({Category: category, items: items});
+      }
+   });
+   let totaltoPayBase = 0;
+   toCalc.forEach(itemToShow => {
+      itemToShow.items.forEach(item => {
+         totaltoPayBase += item.valueItem.value * (item.declarationItem.factor);
+      });
+   });
+   const declaration_date = new Date(declaration.declaration_date.toString());
+   let mora = [0.03, 0.011, 0.011, 0.011, 0.011, 0.011, 0.011];
+   let intereses = 0;
+   let meses = [
+               {month: 0, trimester: 1},
+               {month: 1, trimester: 1},
+               {month: 2, trimester: 1},
+               {month: 3, trimester: 2},
+               {month: 4, trimester: 2},
+               {month: 5, trimester: 2},
+               {month: 6, trimester: 3},
+               {month: 7, trimester: 3},
+               {month: 8, trimester: 3},
+               {month: 9, trimester: 4},
+               {month: 10, trimester: 4},
+               {month: 11, trimester: 4}
+            ];
+   let cuenta = 0;
+   this.paytaxes.forEach(paytax => {
+      if (paytax.year >= declaration_date.getFullYear()) {
+         meses.forEach(mes => {
+            if (mes.trimester == paytax.trimester) {
+               intereses = intereses + (paytax.value*1);
+               cuenta = cuenta + 1;
+            }
+         });
+      }
+   });
+   const today = new Date();
+   this.paytaxes.forEach(paytax => {
+      if (paytax.year == declaration_date.getFullYear()) {
+         meses.forEach(mes => {
+            if(mes.month < 7) {
+               if (mes.trimester == paytax.trimester) {
+                  intereses = intereses - (paytax.value*1);
+                  cuenta = cuenta - 1;
+               }
+            }
+         });
+      }
+      if (paytax.year == today.getFullYear()) {
+         meses.forEach(mes => {
+            if(mes.month > today.getMonth() ) {
+               if (mes.trimester == paytax.trimester) {
+                  intereses = intereses - (paytax.value*1);
+                  cuenta = cuenta - 1;
+               }
+            }
+         });
+      }
+   });
+   let moraCalculado = 0;
+   if (cuenta > 0) {
+      for(let i = 1; i<=cuenta; i++){
+         if (i <= mora.length) {
+            moraCalculado += mora[i - 1]*1;
+         }
+      }
+   }
+   const impuestoCausado = totaltoPayBase/1000;
+   const interesNominal = intereses/100;
+   const toReturn = {base: impuestoCausado, mora: impuestoCausado*moraCalculado, impuestos: impuestoCausado*interesNominal};
+   console.log(toReturn);
+   return toReturn;
 }
 
   getDeclarationAttachment(declaration_id: number) {
