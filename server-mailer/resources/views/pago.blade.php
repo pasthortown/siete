@@ -23,6 +23,9 @@
         <tr>
             <th>Total a pagar:</th><td><strong style="color: red">{{ $information['amount_to_pay'] }}</strong></td>
         </tr>
+        <tr>
+            <th>Códigos de las Órdenes de pago:</th><td>{{$information['payCodes']}}</td>
+        </tr>
     </tbody>
 </table>
 <p><strong>El pago deberá hacerlo a partir del siguiente día laborable de la fecha que reciba esta notificación a su correo electrónico</strong>, únicamente debe acercarse a las ventanillas del Banco de Pacífico, dicte el número de RUC e  indique que realizará un pago al Ministerio de Turismo.</p>

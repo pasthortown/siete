@@ -73,6 +73,7 @@ import { RegisterTypeService } from 'src/app/services/CRUD/ALOJAMIENTO/registert
 import { RequisiteService } from 'src/app/services/CRUD/ALOJAMIENTO/requisite.service';
 import { TariffType } from 'src/app/models/ALOJAMIENTO/TariffType';
 import { Tariff } from 'src/app/models/ALOJAMIENTO/Tariff';
+import { RegisterService as RegistroCatastroService } from 'src/app/services/CRUD/CATASTRO/register.service';
 import { RucNameType } from 'src/app/models/BASE/RucNameType';
 import { RucNameTypeService } from 'src/app/services/CRUD/BASE/rucnametype.service';
 import { StateService } from 'src/app/services/CRUD/FINANCIERO/state.service';
@@ -95,6 +96,7 @@ import { DeclarationAttachment } from 'src/app/models/FINANCIERO/DeclarationAtta
 import { DeclarationAttachmentService } from 'src/app/services/CRUD/FINANCIERO/declarationattachment.service';
 import { PayTax } from 'src/app/models/FINANCIERO/PayTax';
 import { PayTaxService } from 'src/app/services/CRUD/FINANCIERO/paytax.service';
+import { RegisterProcedureService } from 'src/app/services/CRUD/ALOJAMIENTO/registerprocedure.service';
 @Component({
   selector: 'app-tecnico-financiero',
   templateUrl: './tecnico-financiero.component.html',
@@ -132,6 +134,7 @@ export class TecnicoFinancieroComponent implements OnInit {
   declarationstates: State[] = [];
   //REGISTROS MINTUR
   registers_mintur = [];
+  tipo_tramite = '';
   registerMinturSelected: any = null;
   currentPageMinturRegisters = 1;
   lastPageMinturRegisters = 1;
@@ -248,7 +251,9 @@ export class TecnicoFinancieroComponent implements OnInit {
  complementary_service_types_registerSelectedId = 0;
  capacitySelected: Capacity = new Capacity();
  bedSelected: Bed = new Bed();
- alowed_bed_types: BedType[] = []; 
+ as_turistic_date = null;
+ register_code = '';
+ alowed_bed_types: BedType[] = [];
  register_establishment_capacities_registerSelectedId = 0;
  rack_prices_registerSelectedId = 0;
  establishment_service_offers_registerSelectedId = 0;
@@ -274,6 +279,8 @@ export class TecnicoFinancieroComponent implements OnInit {
  //DECLARACIONES
  currentPageDeclaration = 1;
  lastPageDeclaration = 1;
+ mostrarMotivoTramite = false;
+ motivoTramite = '';
  recordsByPageDeclaration = 5;
  establishment_declarations_selected = new Establishment();
  declaration_selected: Declaration = new Declaration();
@@ -293,6 +300,7 @@ export class TecnicoFinancieroComponent implements OnInit {
              private mailerDataService: MailerService,
              private payDataService: PayService,
              private userDataService: UserService,
+             private registerProcedureDataService: RegisterProcedureService,
              private dinardapDataService: DinardapService,
              private registerStateDataService: RegisterStateService,
              private approvalStateAttachmentDataService: ApprovalStateAttachmentService,
@@ -302,6 +310,7 @@ export class TecnicoFinancieroComponent implements OnInit {
              private rucNameTypeDataService: RucNameTypeService,
              private group_typeDataService: GroupTypeService,
              private stateDeclaratonDataService: StateDeclarationService,
+             private registerCatastroDataService: RegistroCatastroService,
              private languageDataService: LanguageService,
              private complementaryServiceFoodTypeDataService: ComplementaryServiceFoodTypeService,
              private establishmentPictureDataService: EstablishmentPictureService,
@@ -334,6 +343,46 @@ export class TecnicoFinancieroComponent implements OnInit {
   this.refresh();
   this.getUser();
  }
+
+ checkMotivoTramite(estado: String) {
+   this.motivoTramite = '';
+   const PrimerDigito = estado.substring(0, 1);
+   if (PrimerDigito == '1') {
+      this.mostrarMotivoTramite = false;
+   } else {
+      this.mostrarMotivoTramite = true;
+   }
+   this.registerProcedureDataService.get_by_register_id(this.idRegister.toString()).then( r => {
+      if (typeof r.id != 'undefined') {
+         this.motivoTramite = r.justification;
+         this.registerCatastroDataService.get_by_register_code(this.register_code).then( r2 => {
+            if (typeof r2.activity != 'undefined') {
+               this.as_turistic_date = new Date(r2.as_turistic_date.toString());
+            }
+            this.tipo_tramite = '';
+            const primerdigito = estado.substring(0, 1);
+            if (primerdigito == '1') {
+               this.tipo_tramite = 'REGISTRO';
+            }
+            if (primerdigito == '2') {
+               this.tipo_tramite = 'RECLASIFICACIÓN';
+            }
+            if (primerdigito == '3') {
+               this.tipo_tramite = 'RECATEGORIZACIÓN';
+            }
+            if (primerdigito == '4') {
+               this.tipo_tramite = 'ACTUALIZACIÓN';
+            }
+            if (primerdigito == '5') {
+               this.tipo_tramite = 'INACTIVACIÓN';
+            }
+            if (primerdigito == '6') {
+               this.tipo_tramite = 'REINGRESO';
+            }
+         }).catch( e => { console.log(e); });
+      }
+   }).catch( e => { console.log(e); });
+  }
 
  onChangeTableEstablishment(config: any, page: any = {page: this.currentPageEstablishment, itemsPerPage: this.recordsByPageEstablishment}): any {
   if (config.filtering) {
@@ -500,6 +549,14 @@ calcularUnoxMil() {
             name: item.commercially_known_name,
          });
       }
+   });
+   data.sort((previous: any, current: any) => {
+      if (Number(previous.code) > Number(current.code)) {
+         return 1;
+      } else if (Number(previous.code) < Number(current.code)) {
+         return -1;
+      }
+      return 0;
    });
    this.dataEstablishment = data;
    this.onChangeTableEstablishment(this.config);
@@ -838,7 +895,6 @@ calcularUnoxMil() {
    this.pay.payed = false;
    this.payDataService.post(this.pay).then( r => {
       this.getPays();
-      this.enviarEmailPago(this.pay);
    }).catch( e => { console.log(e); });
  }
 
@@ -850,11 +906,25 @@ calcularUnoxMil() {
    paySelected.payed = false;
    this.payDataService.post(paySelected).then( r => {
       this.getPays();
-      this.enviarEmailPago(paySelected);
    }).catch( e => { console.log(e); });
  }
 
- enviarEmailPago(paySelected: Pay) {
+ enviarEmailPago() {
+    let payCodes = '';
+    let totalPayBase = 0;
+    let totalPayFines = 0;
+    let totalPayTaxes = 0;
+    let totalPayToPay = 0;
+    this.pays.forEach(pay => {
+       if (!pay.payed) {
+         totalPayToPay += pay.amount_to_pay*1;
+         totalPayBase += pay.amount_to_pay_base*1;
+         totalPayFines += pay.amount_to_pay_fines*1;
+         totalPayFines += pay.amount_to_pay_taxes*1;
+         payCodes += pay.code + ', ';
+       }
+    });
+    payCodes = payCodes.trim().substr(0,payCodes.length - 1);
    const today = new Date();
    let clasificacion: String = '';
    let categoria: String = '';
@@ -911,20 +981,21 @@ calcularUnoxMil() {
    this.userDataService.get(this.registerMinturSelected.establishment.contact_user_id).then( r => {
       const information = {
          para: r.name,
-         amount_to_pay_base: paySelected.amount_to_pay_base,
-         amount_to_pay_fines: paySelected.amount_to_pay_fines,
-         amount_to_pay_taxes: paySelected.amount_to_pay_taxes,
-         amount_to_pay: paySelected.amount_to_pay,
+         amount_to_pay_base: totalPayBase,
+         amount_to_pay_fines: totalPayFines,
+         amount_to_pay_taxes: totalPayTaxes,
+         amount_to_pay: totalPayToPay,
          ruc: this.ruc_registro_selected.ruc.number,
          nombreComercial: this.registerMinturSelected.establishment.commercially_known_name,
          fechaSolicitud: today.toLocaleString(),
          actividad: 'Alojamiento Turístico',
          clasificacion: clasificacion,
          categoria: categoria,
-         tipoSolicitud: 'Registro',
+         tipoSolicitud: this.tipo_tramite,
          provincia: provinciaName,
          canton: cantonName,
          parroquia: parroquiaName,
+         payCodes: payCodes,
          callePrincipal: this.registerMinturSelected.establishment.address_main_street,
          calleInterseccion: this.registerMinturSelected.establishment.address_secondary_street,
          numeracion: this.registerMinturSelected.establishment.address_number,
@@ -1739,8 +1810,13 @@ calcTaxes(declaration: Declaration) {
    newPayCalc.amount_to_pay_fines = impuestoCausado * moraCalculado;
    newPayCalc.amount_to_pay_taxes = impuestoCausado * interesNominal;
    newPayCalc.amount_to_pay = newPayCalc.amount_to_pay_base + newPayCalc.amount_to_pay_fines + newPayCalc.amount_to_pay_taxes;
-   newPayCalc.code = new Date(declaration.declaration_date.toString()).getFullYear().toString();
+   newPayCalc.code = declaration.year.toString();
    this.pays_calc.push(newPayCalc);
+}
+
+encerarDeclaracion(paySelected) {
+   paySelected.amount_to_pay_fines = 0;
+   paySelected.amount_to_pay_taxes = 0;
 }
 
   getDeclarationAttachment(declaration_id: number) {

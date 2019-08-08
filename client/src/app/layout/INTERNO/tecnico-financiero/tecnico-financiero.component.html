@@ -48,6 +48,16 @@
           </ngb-pagination>
         </div>
       </div>
+
+      <div class="row" *ngIf="mostrarMotivoTramite && motivoTramite != ''">
+        <div class="col-12">
+          <label class="col-form-label"><strong>Motivo de Trámite</strong></label>
+          <div class="alert alert-info mt-2 mb-2" role="alert">
+              {{motivoTramite}}
+          </div>
+        </div>
+      </div>
+      
       <div class="col-12 text-center mb-3" *ngIf="mostrarDataRegisterMintur">
         <input type="checkbox" name="vacacionesCheck" id="vacacionesCheck" [(ngModel)]="estoyVacaciones" (change)= "rechazarCheck()"> Devolver el trámite seleccionado
       </div>
@@ -69,6 +79,9 @@
                 refresh()
                 ">
                 <i class="fas fa-sync"></i>
+              </button>
+              <button type="button" [disabled]="pagado()" class="btn btn-warning" title="Enviar Correos de Órdenes de Pago" (click)="enviarEmailPago()">
+                  <span class="fas fa-envelope-open-text"></span>
               </button>
             </div>
           </div>
@@ -102,16 +115,11 @@
                           <td>{{paySelected.amount_to_pay | number: '1.2'}} USD</td>
                           <td>{{paySelected.pay_date | date:'y-MM-dd'}}</td>
                           <td>
-                            <div class="btn-group" role="group">
-                              <button type="button" class="btn btn-warning" title="Re-enviar Correo de Órden de Pago" (click)="enviarEmailPago(paySelected)">
-                                <span class="fas fa-envelope-open-text"></span>
-                              </button>
-                              <button type="button" class="btn btn-danger" title="Borrar Órden de Pago" (click)="
+                              <button type="button" class="btn btn-danger" *ngIf="!paySelected.payed" title="Borrar Órden de Pago" (click)="
                                 borrarOrdenDePago(paySelected)
                                 ">
                                 <i class="fas fa-trash"></i>
                               </button>
-                            </div>
                           </td>
                        </tr>
                     </tbody>
@@ -145,9 +153,14 @@
                   <td>{{paySelected.amount_to_pay_taxes | number: '1.2'}} USD</td>
                   <td>{{paySelected.amount_to_pay | number: '1.2'}} USD</td>
                   <td>
-                    <button type="button" class="btn btn-success" (click)="saveToPayValueCalc(paySelected)">
-                      <span class="fas fa-money-check-alt"></span>&nbsp;Cargar Valor a Pagar
-                    </button>
+                      <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-success" title="Cargar Valor a Pagar" (click)="saveToPayValueCalc(paySelected)">
+                          <span class="fas fa-cloud-upload-alt"></span>
+                        </button>
+                        <button type="button" class="btn btn-warning" title="Es un Registro Nuevo" (click)="encerarDeclaracion(paySelected)">
+                          <span class="fas fa-file-export"></span>
+                        </button>
+                      </div>
                   </td>
                </tr>
             </tbody>
@@ -211,12 +224,12 @@
             <button type="button" class="btn btn-danger ml-2" title="Cancelar Cambios" (click)="cancelPayManual()"><i class="fas fa-times"></i> Cancelar</button>
         </div>
       </div>
-      <div class="row" *ngIf="mostrarDataRegisterMintur && pays.length > 0">
+      <div class="row" *ngIf="mostrarDataRegisterMintur">
         <div class="col-12">
           <h4><strong>Resultado de la Revisión</strong> </h4>
         </div>
       </div>
-      <div class="row mt-3" *ngIf="mostrarDataRegisterMintur && pays.length > 0">
+      <div class="row mt-3" *ngIf="mostrarDataRegisterMintur">
         <div class="col-6">
           <label>Fecha de la Revisión</label>
           <input type="date" class="form-control" id="date_fullfill" name="date_fullfill" placeholder="Fecha de Revisión" [ngModel]="registerApprovalFinanciero.date_fullfill | date:'y-MM-dd'" (ngModelChange)="registerApprovalFinanciero.date_fullfill = $event">
@@ -227,11 +240,11 @@
               <option value="0" selected>Pendiente</option>
               <option value="1" *ngIf="pagado()" >Aprobado</option>
               <option value="2" *ngIf="pays.length > 0">Negado</option>
-              <option value="3" *ngIf="pays.length > 0">Requerimiento Al Usuario</option>
+              <option value="3">Requerimiento Al Usuario</option>
             </select>
         </div>
       </div>
-      <div class="row" *ngIf="mostrarDataRegisterMintur && pays.length > 0">
+      <div class="row" *ngIf="mostrarDataRegisterMintur">
         <div class="col-12 mt-3 mb-2">
           <label class="col-form-label">Observaciones</label>
           <ck-editor id="notes" name="notes" skin="moono-lisa" [(ngModel)]="registerApprovalFinanciero.notes"></ck-editor>

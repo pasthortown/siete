@@ -1003,6 +1003,14 @@ export class InspectorComponent implements OnInit {
          });
       }
    });
+   data.sort((previous: any, current: any) => {
+      if (Number(previous.code) > Number(current.code)) {
+         return 1;
+      } else if (Number(previous.code) < Number(current.code)) {
+         return -1;
+      }
+      return 0;
+   });
    this.dataEstablishment = data;
    this.onChangeTableEstablishment(this.config);
   }
@@ -1821,6 +1829,7 @@ export class InspectorComponent implements OnInit {
   }
 
   validateNotesInspection(): Boolean {
+   this.report.background = "                ";
      return this.report.background.length > 4 && this.report.conclution.length > 4 && this.report.recomendation.length > 4;
   }
   
