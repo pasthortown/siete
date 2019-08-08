@@ -2,8 +2,8 @@
     {
         "DeclarationItem": {
             "id": 1,
-            "created_at": "2019-04-23 16:49:39",
-            "updated_at": "2019-04-23 16:49:39",
+            "created_at": "2019-08-07 00:11:49",
+            "updated_at": "2019-08-07 00:11:49",
             "name": "TERRENOS",
             "description": "<p>TERRENOS</p>\n",
             "factor": 1,
@@ -16,8 +16,8 @@
     {
         "DeclarationItem": {
             "id": 2,
-            "created_at": "2019-04-23 16:49:50",
-            "updated_at": "2019-04-23 16:49:50",
+            "created_at": "2019-08-07 00:11:49",
+            "updated_at": "2019-08-07 00:11:49",
             "name": "INMUEBLES (EXCEPTO TERRENOS)",
             "description": "<p>INMUEBLES (EXCEPTO TERRENOS)</p>\n",
             "factor": 1,
@@ -30,8 +30,8 @@
     {
         "DeclarationItem": {
             "id": 3,
-            "created_at": "2019-04-23 16:50:00",
-            "updated_at": "2019-04-23 16:50:00",
+            "created_at": "2019-08-07 00:11:49",
+            "updated_at": "2019-08-07 00:11:49",
             "name": "CONSTRUCCIONES EN CURSO",
             "description": "<p>CONSTRUCCIONES EN CURSO</p>\n",
             "factor": 1,
@@ -44,8 +44,8 @@
     {
         "DeclarationItem": {
             "id": 4,
-            "created_at": "2019-04-23 16:49:39",
-            "updated_at": "2019-04-23 16:49:39",
+            "created_at": "2019-08-07 00:11:49",
+            "updated_at": "2019-08-07 00:11:49",
             "name": "MUEBLES Y ENSERES",
             "description": "<p>MUEBLES Y ENSERES</p>\n",
             "factor": 1,
@@ -58,8 +58,8 @@
     {
         "DeclarationItem": {
             "id": 5,
-            "created_at": "2019-04-23 16:49:50",
-            "updated_at": "2019-04-23 16:49:50",
+            "created_at": "2019-08-07 00:11:49",
+            "updated_at": "2019-08-07 00:11:49",
             "name": "MAQUINARIA, EQUIPO E INSTALACIONES",
             "description": "<p>MAQUINARIA, EQUIPO E INSTALACIONES</p>\n",
             "factor": 1,
@@ -72,8 +72,8 @@
     {
         "DeclarationItem": {
             "id": 6,
-            "created_at": "2019-04-23 16:50:00",
-            "updated_at": "2019-04-23 16:50:00",
+            "created_at": "2019-08-07 00:11:49",
+            "updated_at": "2019-08-07 00:11:49",
             "name": "NAVES, AERONAVES, BARCAZAS Y SIMILARES",
             "description": "<p>NAVES, AERONAVES, BARCAZAS Y SIMILARES</p>\n",
             "factor": 1,
@@ -86,8 +86,8 @@
     {
         "DeclarationItem": {
             "id": 7,
-            "created_at": "2019-04-23 16:50:00",
-            "updated_at": "2019-04-23 16:50:00",
+            "created_at": "2019-08-07 00:11:49",
+            "updated_at": "2019-08-07 00:11:49",
             "name": "EQUIPO DE COMPUTACIÓN Y SOFTWARE",
             "description": "<p>EQUIPO DE COMPUTACIÓN Y SOFTWARE</p>\n",
             "factor": 1,
@@ -100,8 +100,8 @@
     {
         "DeclarationItem": {
             "id": 8,
-            "created_at": "2019-04-23 16:50:00",
-            "updated_at": "2019-04-23 16:50:00",
+            "created_at": "2019-08-07 00:11:49",
+            "updated_at": "2019-08-07 00:11:49",
             "name": "VEHÍCULOS, EQUIPOS DE TRANSPORTE Y CAMINERO MÓVIL",
             "description": "<p>VEHÍCULOS, EQUIPOS DE TRANSPORTE Y CAMINERO MÓVIL</p>\n",
             "factor": 1,
@@ -114,8 +114,8 @@
     {
         "DeclarationItem": {
             "id": 9,
-            "created_at": "2019-04-23 16:50:00",
-            "updated_at": "2019-04-23 16:50:00",
+            "created_at": "2019-08-07 00:11:49",
+            "updated_at": "2019-08-07 00:11:49",
             "name": "PROPIEDAD, PLANTA Y EQUIPO POR CONTRATOS DE ARRENDAMIENTO FINANCIERO",
             "description": "<p>PROPIEDAD, PLANTA Y EQUIPO POR CONTRATOS DE ARRENDAMIENTO FINANCIERO</p>\n",
             "factor": 1,
@@ -128,8 +128,8 @@
     {
         "DeclarationItem": {
             "id": 10,
-            "created_at": "2019-04-23 16:50:00",
-            "updated_at": "2019-04-23 16:50:00",
+            "created_at": "2019-08-07 00:11:49",
+            "updated_at": "2019-08-07 00:11:49",
             "name": "OTRAS PROPIEDADES PLANTA Y EQUIPO",
             "description": "<p>OTRAS PROPIEDADES PLANTA Y EQUIPO</p>\n",
             "factor": 1,
@@ -142,8 +142,8 @@
     {
         "DeclarationItem": {
             "id": 11,
-            "created_at": "2019-04-23 16:50:00",
-            "updated_at": "2019-04-23 16:50:00",
+            "created_at": "2019-08-07 00:11:49",
+            "updated_at": "2019-08-07 00:11:49",
             "name": "DEPRECIACIÓN ACUMULADO PROPIEDADES, PLANTA Y EQUIPO",
             "description": "<p>DEPRECIACIÓN ACUMULADO PROPIEDADES, PLANTA Y EQUIPO</p>\n",
             "factor": -1,
@@ -156,8 +156,8 @@
     {
         "DeclarationItem": {
             "id": 12,
-            "created_at": "2019-04-23 16:50:00",
-            "updated_at": "2019-04-23 16:50:00",
+            "created_at": "2019-08-07 00:11:49",
+            "updated_at": "2019-08-07 00:11:49",
             "name": "DETERIORO ACUMULADO DEL VALOR DE PROPIEDADES PLANTA Y EQUIPO",
             "description": "<p>DETERIORO ACUMULADO DEL VALOR DE PROPIEDADES PLANTA Y EQUIPO</p>\n",
             "factor": -1,
@@ -170,8 +170,8 @@
     {
         "DeclarationItem": {
             "id": 13,
-            "created_at": "2019-04-23 16:49:39",
-            "updated_at": "2019-04-23 16:49:39",
+            "created_at": "2019-08-07 00:11:49",
+            "updated_at": "2019-08-07 00:11:49",
             "name": "MARCAS, PATENTES, LICENCIAS Y OTROS SIMILARES",
             "description": "<p>MARCAS, PATENTES, LICENCIAS Y OTROS SIMILARES</p>\n",
             "factor": 1,
@@ -184,8 +184,8 @@
     {
         "DeclarationItem": {
             "id": 14,
-            "created_at": "2019-04-23 16:49:50",
-            "updated_at": "2019-04-23 16:49:50",
+            "created_at": "2019-08-07 00:11:49",
+            "updated_at": "2019-08-07 00:11:49",
             "name": "AMORTIZACIÓN ACUMULADA ACTIVOS INTANGIBLES",
             "description": "<p>AMORTIZACIÓN ACUMULADA ACTIVOS INTANGIBLES</p>\n",
             "factor": -1,
@@ -198,8 +198,8 @@
     {
         "DeclarationItem": {
             "id": 15,
-            "created_at": "2019-04-23 16:50:00",
-            "updated_at": "2019-04-23 16:50:00",
+            "created_at": "2019-08-07 00:11:49",
+            "updated_at": "2019-08-07 00:11:49",
             "name": "TERRENOS (COSTO HISTÓRICO ANTES DE REEXPRESIONES O REVALUACIONES) (360)",
             "description": "<p>TERRENOS (COSTO HISTÓRICO ANTES DE REEXPRESIONES O REVALUACIONES) (360)</p>\n",
             "factor": 1,
@@ -212,8 +212,8 @@
     {
         "DeclarationItem": {
             "id": 16,
-            "created_at": "2019-04-23 16:50:00",
-            "updated_at": "2019-04-23 16:50:00",
+            "created_at": "2019-08-07 00:11:49",
+            "updated_at": "2019-08-07 00:11:49",
             "name": "TERRENOS (AJUSTE ACUMULADO POR REEXPRESIONES O REVALUACIONES) (361)",
             "description": "<p>TERRENOS (AJUSTE ACUMULADO POR REEXPRESIONES O REVALUACIONES) (361)</p>\n",
             "factor": 1,
@@ -226,8 +226,8 @@
     {
         "DeclarationItem": {
             "id": 17,
-            "created_at": "2019-04-23 16:50:00",
-            "updated_at": "2019-04-23 16:50:00",
+            "created_at": "2019-08-07 00:11:49",
+            "updated_at": "2019-08-07 00:11:49",
             "name": "EDIFICIOS Y OTROS INMUEBLES EXCEPTO TERRENOS (COSTO HISTÓRICO ANTES DE REEXPRESIONES O REVALUACIONES) (362)",
             "description": "<p>EDIFICIOS Y OTROS INMUEBLES EXCEPTO TERRENOS (COSTO HISTÓRICO ANTES DE REEXPRESIONES O REVALUACIONES) (362)</p>\n",
             "factor": 1,
@@ -240,8 +240,8 @@
     {
         "DeclarationItem": {
             "id": 18,
-            "created_at": "2019-04-23 16:50:00",
-            "updated_at": "2019-04-23 16:50:00",
+            "created_at": "2019-08-07 00:11:49",
+            "updated_at": "2019-08-07 00:11:49",
             "name": "EDIFICIOS Y OTROS INMUEBLES EXCEPTO TERRENOS (AJUSTE ACUMULADO POR REEXPRESIONES O REVALUACIONES) (363)",
             "description": "<p>EDIFICIOS Y OTROS INMUEBLES EXCEPTO TERRENOS (AJUSTE ACUMULADO POR REEXPRESIONES O REVALUACIONES) (363)</p>\n",
             "factor": 1,
@@ -254,8 +254,8 @@
     {
         "DeclarationItem": {
             "id": 19,
-            "created_at": "2019-04-23 16:50:00",
-            "updated_at": "2019-04-23 16:50:00",
+            "created_at": "2019-08-07 00:11:49",
+            "updated_at": "2019-08-07 00:11:49",
             "name": "NAVES, AERONAVES, BARCAZAS Y SIMILARES (COSTO HISTÓRICO ANTES DE REEXPRESIONES O REVALUACIONES) (364)",
             "description": "<p>NAVES, AERONAVES, BARCAZAS Y SIMILARES (COSTO HISTÓRICO ANTES DE REEXPRESIONES O REVALUACIONES) (364)</p>\n",
             "factor": 1,
@@ -268,8 +268,8 @@
     {
         "DeclarationItem": {
             "id": 20,
-            "created_at": "2019-04-23 16:50:00",
-            "updated_at": "2019-04-23 16:50:00",
+            "created_at": "2019-08-07 00:11:49",
+            "updated_at": "2019-08-07 00:11:49",
             "name": "NAVES, AERONAVES, BARCAZAS Y SIMILARES (AJUSTE ACUMULADO POR REEXPRESIONES O REVALUACIONES) (365)",
             "description": "<p>NAVES, AERONAVES, BARCAZAS Y SIMILARES (AJUSTE ACUMULADO POR REEXPRESIONES O REVALUACIONES) (365)</p>\n",
             "factor": 1,
@@ -282,8 +282,8 @@
     {
         "DeclarationItem": {
             "id": 21,
-            "created_at": "2019-04-23 16:50:00",
-            "updated_at": "2019-04-23 16:50:00",
+            "created_at": "2019-08-07 00:11:49",
+            "updated_at": "2019-08-07 00:11:49",
             "name": "MAQUINARIA, EQUIPO, INSTALACIONES Y ADECUACIONES (COSTO HISTÓRICO ANTES DE REEXPRESIONES O REVALUACIONES) (366)",
             "description": "<p>MAQUINARIA, EQUIPO, INSTALACIONES Y ADECUACIONES (COSTO HISTÓRICO ANTES DE REEXPRESIONES O REVALUACIONES) (366)</p>\n",
             "factor": 1,
@@ -296,8 +296,8 @@
     {
         "DeclarationItem": {
             "id": 22,
-            "created_at": "2019-04-23 16:50:00",
-            "updated_at": "2019-04-23 16:50:00",
+            "created_at": "2019-08-07 00:11:49",
+            "updated_at": "2019-08-07 00:11:49",
             "name": "MAQUINARIA, EQUIPO, INSTALACIONES Y ADECUACIONES (AJUSTE ACUMULADO POR REEXPRESIONES O REVALUACIONES) (367)",
             "description": "<p>MAQUINARIA, EQUIPO, INSTALACIONES Y ADECUACIONES (AJUSTE ACUMULADO POR REEXPRESIONES O REVALUACIONES) (367)</p>\n",
             "factor": 1,
@@ -310,8 +310,8 @@
     {
         "DeclarationItem": {
             "id": 23,
-            "created_at": "2019-04-23 16:50:00",
-            "updated_at": "2019-04-23 16:50:00",
+            "created_at": "2019-08-07 00:11:49",
+            "updated_at": "2019-08-07 00:11:49",
             "name": "CONSTRUCCIONES EN CURSO Y OTROS ACTIVOS EN TRÁNSITO (370)",
             "description": "<p>CONSTRUCCIONES EN CURSO Y OTROS ACTIVOS EN TRÁNSITO (370)</p>\n",
             "factor": 1,
@@ -324,8 +324,8 @@
     {
         "DeclarationItem": {
             "id": 24,
-            "created_at": "2019-04-23 16:50:00",
-            "updated_at": "2019-04-23 16:50:00",
+            "created_at": "2019-08-07 00:11:49",
+            "updated_at": "2019-08-07 00:11:49",
             "name": "MUEBLES Y ENSERES (371)",
             "description": "<p>MUEBLES Y ENSERES (371)</p>\n",
             "factor": 1,
@@ -338,8 +338,8 @@
     {
         "DeclarationItem": {
             "id": 25,
-            "created_at": "2019-04-23 16:50:00",
-            "updated_at": "2019-04-23 16:50:00",
+            "created_at": "2019-08-07 00:11:49",
+            "updated_at": "2019-08-07 00:11:49",
             "name": "EQUIPO DE COMPUTACIÓN Y SOFTWARE (372)",
             "description": "<p>EQUIPO DE COMPUTACIÓN Y SOFTWARE (372)</p>\n",
             "factor": 1,
@@ -352,8 +352,8 @@
     {
         "DeclarationItem": {
             "id": 26,
-            "created_at": "2019-04-23 16:50:00",
-            "updated_at": "2019-04-23 16:50:00",
+            "created_at": "2019-08-07 00:11:49",
+            "updated_at": "2019-08-07 00:11:49",
             "name": "VEHÍCULOS, EQUIPOS DE TRANSPORTE Y EQUIPO CAMINERO MÓVIL (373)",
             "description": "<p>VEHÍCULOS, EQUIPOS DE TRANSPORTE Y EQUIPO CAMINERO MÓVIL (373)</p>\n",
             "factor": 1,
@@ -366,8 +366,8 @@
     {
         "DeclarationItem": {
             "id": 27,
-            "created_at": "2019-04-23 16:50:00",
-            "updated_at": "2019-04-23 16:50:00",
+            "created_at": "2019-08-07 00:11:49",
+            "updated_at": "2019-08-07 00:11:49",
             "name": "POR CONTRATOS DE ARRENDAMIENTO FINANCIERO TERRENOS (374)",
             "description": "<p>POR CONTRATOS DE ARRENDAMIENTO FINANCIERO TERRENOS (374)</p>\n",
             "factor": 1,
@@ -380,8 +380,8 @@
     {
         "DeclarationItem": {
             "id": 28,
-            "created_at": "2019-04-23 16:50:00",
-            "updated_at": "2019-04-23 16:50:00",
+            "created_at": "2019-08-07 00:11:49",
+            "updated_at": "2019-08-07 00:11:49",
             "name": "POR CONTRATOS DE ARRENDAMIENTO FINANCIERO EDIFICIOS Y OTROS INMUEBLES (EXCEPTO TERRENOS) (375)",
             "description": "<p>POR CONTRATOS DE ARRENDAMIENTO FINANCIERO EDIFICIOS Y OTROS INMUEBLES (EXCEPTO TERRENOS) (375)</p>\n",
             "factor": 1,
@@ -394,8 +394,8 @@
     {
         "DeclarationItem": {
             "id": 29,
-            "created_at": "2019-04-23 16:50:00",
-            "updated_at": "2019-04-23 16:50:00",
+            "created_at": "2019-08-07 00:11:49",
+            "updated_at": "2019-08-07 00:11:49",
             "name": "POR CONTRATOS DE ARRENDAMIENTO FINANCIERO NAVES, AERONAVES, BARCAZAS Y SIMILARES (376)",
             "description": "<p>POR CONTRATOS DE ARRENDAMIENTO FINANCIERO NAVES, AERONAVES, BARCAZAS Y SIMILARES (376)</p>\n",
             "factor": 1,
@@ -408,8 +408,8 @@
     {
         "DeclarationItem": {
             "id": 30,
-            "created_at": "2019-04-23 16:50:00",
-            "updated_at": "2019-04-23 16:50:00",
+            "created_at": "2019-08-07 00:11:49",
+            "updated_at": "2019-08-07 00:11:49",
             "name": "POR CONTRATOS DE ARRENDAMIENTO FINANCIERO MAQUINARIA, EQUIPO, INSTALACIONES Y ADECUACIONES (377)",
             "description": "<p>POR CONTRATOS DE ARRENDAMIENTO FINANCIERO MAQUINARIA, EQUIPO, INSTALACIONES Y ADECUACIONES (377)</p>\n",
             "factor": 1,
@@ -422,8 +422,8 @@
     {
         "DeclarationItem": {
             "id": 31,
-            "created_at": "2019-04-23 16:50:00",
-            "updated_at": "2019-04-23 16:50:00",
+            "created_at": "2019-08-07 00:11:49",
+            "updated_at": "2019-08-07 00:11:49",
             "name": "POR CONTRATOS DE ARRENDAMIENTO FINANCIERO EQUIPO DE COMPUTACIÓN (378)",
             "description": "<p>POR CONTRATOS DE ARRENDAMIENTO FINANCIERO EQUIPO DE COMPUTACIÓN (378)</p>\n",
             "factor": 1,
@@ -436,8 +436,8 @@
     {
         "DeclarationItem": {
             "id": 32,
-            "created_at": "2019-04-23 16:50:00",
-            "updated_at": "2019-04-23 16:50:00",
+            "created_at": "2019-08-07 00:11:49",
+            "updated_at": "2019-08-07 00:11:49",
             "name": "POR CONTRATOS DE ARRENDAMIENTO FINANCIERO VEHÍCULOS, EQUIPOS DE TRANSPORTE Y EQUIPO CAMINERO MÓVIL (379)",
             "description": "<p>POR CONTRATOS DE ARRENDAMIENTO FINANCIERO VEHÍCULOS, EQUIPOS DE TRANSPORTE Y EQUIPO CAMINERO MÓVIL (379)</p>\n",
             "factor": 1,
@@ -450,8 +450,8 @@
     {
         "DeclarationItem": {
             "id": 33,
-            "created_at": "2019-04-23 16:50:00",
-            "updated_at": "2019-04-23 16:50:00",
+            "created_at": "2019-08-07 00:11:49",
+            "updated_at": "2019-08-07 00:11:49",
             "name": "POR CONTRATOS DE ARRENDAMIENTO FINANCIERO OTROS (380)",
             "description": "<p>POR CONTRATOS DE ARRENDAMIENTO FINANCIERO OTROS (380)</p>\n",
             "factor": 1,
@@ -464,8 +464,8 @@
     {
         "DeclarationItem": {
             "id": 34,
-            "created_at": "2019-04-23 16:50:00",
-            "updated_at": "2019-04-23 16:50:00",
+            "created_at": "2019-08-07 00:11:49",
+            "updated_at": "2019-08-07 00:11:49",
             "name": "OTRAS PROPIEDADES PLANTA Y EQUIPO (381)",
             "description": "<p>OTRAS PROPIEDADES PLANTA Y EQUIPO (381)</p>\n",
             "factor": 1,
@@ -478,11 +478,11 @@
     {
         "DeclarationItem": {
             "id": 35,
-            "created_at": "2019-04-23 16:50:00",
-            "updated_at": "2019-04-23 16:50:00",
+            "created_at": "2019-08-07 00:11:49",
+            "updated_at": "2019-08-07 00:11:49",
             "name": "DEL HISTÓRICO ANTES DE REEXPRESIONES O REVALUACIONES (382)",
             "description": "<p>DEL HISTÓRICO ANTES DE REEXPRESIONES O REVALUACIONES (382)</p>\n",
-            "factor": 1,
+            "factor": -1,
             "year": 2019,
             "tax_payer_type_id": 2,
             "declaration_item_category_id": 3
@@ -492,11 +492,11 @@
     {
         "DeclarationItem": {
             "id": 36,
-            "created_at": "2019-04-23 16:50:00",
-            "updated_at": "2019-04-23 16:50:00",
+            "created_at": "2019-08-07 00:11:49",
+            "updated_at": "2019-08-07 00:11:49",
             "name": "DEL AJUSTE ACUMULADO POR REEXPRESIONES O REVALUACIONES (383)",
             "description": "<p>DEL AJUSTE ACUMULADO POR REEXPRESIONES O REVALUACIONES (383)</p>\n",
-            "factor": 1,
+            "factor": -1,
             "year": 2019,
             "tax_payer_type_id": 2,
             "declaration_item_category_id": 3
@@ -506,8 +506,8 @@
     {
         "DeclarationItem": {
             "id": 37,
-            "created_at": "2019-04-23 16:50:00",
-            "updated_at": "2019-04-23 16:50:00",
+            "created_at": "2019-08-07 00:11:49",
+            "updated_at": "2019-08-07 00:11:49",
             "name": "DETERIORO ACUMULADO DEL VALOR DE PROPIEDADES PLANTA Y EQUIPO (384)",
             "description": "<p>DETERIORO ACUMULADO DEL VALOR DE PROPIEDADES PLANTA Y EQUIPO (384)</p>\n",
             "factor": -1,
@@ -520,8 +520,8 @@
     {
         "DeclarationItem": {
             "id": 38,
-            "created_at": "2019-04-23 16:50:00",
-            "updated_at": "2019-04-23 16:50:00",
+            "created_at": "2019-08-07 00:11:49",
+            "updated_at": "2019-08-07 00:11:49",
             "name": "MARCAS, PATENTES, LICENCIAS Y OTROS SIMILARES (386)",
             "description": "<p>MARCAS, PATENTES, LICENCIAS Y OTROS SIMILARES (386)</p>\n",
             "factor": 1,
@@ -534,8 +534,8 @@
     {
         "DeclarationItem": {
             "id": 39,
-            "created_at": "2019-04-23 16:50:00",
-            "updated_at": "2019-04-23 16:50:00",
+            "created_at": "2019-08-07 00:11:49",
+            "updated_at": "2019-08-07 00:11:49",
             "name": "AMORTIZACIÓN ACUMULADA ACTIVOS INTANGIBLES (390)",
             "description": "<p>AMORTIZACIÓN ACUMULADA ACTIVOS INTANGIBLES (390)</p>\n",
             "factor": 1,
