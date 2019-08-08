@@ -116,6 +116,7 @@ export class TecnicoFinancieroComponent implements OnInit {
   pay: Pay = new Pay();
   paytaxes: PayTax[] = [];
   pays: Pay[] = [];
+  pays_calc: Pay[] = [];
   isAssigned = false;
   hasIspectionDate  = false;
   hasInform  = false;
@@ -1651,9 +1652,9 @@ calcTaxes(declaration: Declaration) {
       });
    });
    const declaration_date = new Date(declaration.declaration_date.toString());
-   let mora = [0.03, 0.011, 0.011, 0.011, 0.011, 0.011, 0.011];
+   const mora = [0.03, 0.011, 0.011, 0.011, 0.011, 0.011, 0.011];
    let intereses = 0;
-   let meses = [
+   const meses = [
                {month: 0, trimester: 1},
                {month: 1, trimester: 1},
                {month: 2, trimester: 1},
@@ -1711,9 +1712,13 @@ calcTaxes(declaration: Declaration) {
    }
    const impuestoCausado = totaltoPayBase/1000;
    const interesNominal = intereses/100;
-   const toReturn = {base: impuestoCausado, mora: impuestoCausado*moraCalculado, impuestos: impuestoCausado*interesNominal};
-   console.log(toReturn);
-   return toReturn;
+   const newPayCalc = new Pay();
+   newPayCalc.amount_to_pay_base = impuestoCausado;
+   newPayCalc.amount_to_pay_fines = impuestoCausado * moraCalculado;
+   newPayCalc.amount_to_pay_taxes = impuestoCausado * interesNominal;
+   newPayCalc.amount_to_pay = newPayCalc.amount_to_pay_base + newPayCalc.amount_to_pay_fines + newPayCalc.amount_to_pay_taxes;
+   newPayCalc.code = declaration.declaration_date.getFullYear().toString();
+   this.pays_calc.push(newPayCalc);
 }
 
   getDeclarationAttachment(declaration_id: number) {

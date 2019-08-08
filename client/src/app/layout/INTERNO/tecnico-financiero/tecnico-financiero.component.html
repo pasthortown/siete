@@ -116,6 +116,58 @@
            </table>
         </div>
      </div>
+     <div class="row" *ngIf="mostrarDataRegisterMintur">
+      <div class="col-12">
+        <h4><strong>Órdenes de Pagos Calculadas</strong></h4>
+      </div>
+      <div class="col-12">
+        <div class="btn-toolbar" role="toolbar">
+          <div class="btn-group mr-2" role="group">
+            <button type="button" class="btn btn-primary" title="Actualizar" (click)="
+              refresh()
+              ">
+              <i class="fas fa-sync"></i>
+            </button>
+            <button type="button" class="btn btn-success" title="Nueva Órden de Pago" (click)="
+              nuevaOrdenDePago()
+              ">
+              <i class="fas fa-file"></i>
+            </button>
+            <button type="button" class="btn btn-danger" title="Borrar Órden de Pago" (click)="
+              borrarOrdenDePago()
+              ">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row" *ngIf="mostrarDataRegisterMintur">
+      <div class="col-12">
+         <table class="table table-hover mt-2">
+            <thead>
+               <tr>
+                  <th>Seleccionado</th>
+                  <th>Año de la Declaración</th>
+                  <th>Valor a Pagar - Impuesto 1X1000</th>
+                  <th>Valor a Pagar - Multas</th>
+                  <th>Valor a Pagar - Intereses</th>
+                  <th>Valor a Pagar - Total</th>>
+               </tr>
+            </thead>
+            <tbody>
+               <tr *ngFor="let paySelected of pays_calc" (click)="selectPay(paySelected)">
+                  <td class="text-right"><span *ngIf="pay === paySelected" class="far fa-hand-point-right"></span></td>
+                  <td>{{paySelected.code}}</td>
+                  <td>{{paySelected.amount_to_pay_base}}</td>
+                  <td>{{paySelected.amount_to_pay_fines}}</td>
+                  <td>{{paySelected.amount_to_pay_taxes}}</td>
+                  <td>{{paySelected.amount_to_pay}}</td>
+               </tr>
+            </tbody>
+         </table>
+      </div>
+   </div>
       <div class="row" *ngIf="mostrarDataRegisterMintur">
         <div class="col-3">
             <label>Valor a Pagar - Impuesto 1X1000</label>
