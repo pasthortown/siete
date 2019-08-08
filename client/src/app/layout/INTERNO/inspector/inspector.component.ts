@@ -1003,6 +1003,14 @@ export class InspectorComponent implements OnInit {
          });
       }
    });
+   data.sort((previous: any, current: any) => {
+      if (Number(previous.code) > Number(current.code)) {
+         return 1;
+      } else if (Number(previous.code) < Number(current.code)) {
+         return -1;
+      }
+      return 0;
+   });
    this.dataEstablishment = data;
    this.onChangeTableEstablishment(this.config);
   }
