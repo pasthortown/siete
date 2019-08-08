@@ -1,3 +1,4 @@
+import { RegisterProcedureService } from './../../../services/CRUD/ALOJAMIENTO/registerprocedure.service';
 import { ApprovalStateAttachmentService } from './../../../services/CRUD/ALOJAMIENTO/approvalstateattachment.service';
 import { ApprovalStateService } from './../../../services/CRUD/ALOJAMIENTO/approvalstate.service';
 import { RegisterService } from 'src/app/services/CRUD/ALOJAMIENTO/register.service';
@@ -54,6 +55,7 @@ import { PayService } from './../../../services/CRUD/FINANCIERO/pay.service';
 import { StateDeclarationService } from 'src/app/services/CRUD/FINANCIERO/statedeclaration.service';
 import { StateService as StateAlojamientoService } from 'src/app/services/CRUD/ALOJAMIENTO/state.service';
 import { PayTaxService } from 'src/app/services/CRUD/FINANCIERO/paytax.service';
+import { RegisterService as RegistroCatastroService } from 'src/app/services/CRUD/CATASTRO/register.service';
 @NgModule({
   imports: [CommonModule,
     CKEditorModule,
@@ -78,6 +80,8 @@ import { PayTaxService } from 'src/app/services/CRUD/FINANCIERO/paytax.service';
     RegisterStateService,
     TaxPayerTypeService,
     StateAlojamientoService,
+    RegistroCatastroService,
+    RegisterProcedureService,
     PersonRepresentativeAttachmentService,
     EstablishmentCertificationService,
     ComplementaryServiceFoodTypeService,
