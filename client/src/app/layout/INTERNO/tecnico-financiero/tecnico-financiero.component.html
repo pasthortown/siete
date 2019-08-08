@@ -116,7 +116,7 @@
                               <button type="button" class="btn btn-warning" title="Re-enviar Correo de Órden de Pago" (click)="enviarEmailPago(paySelected)">
                                 <span class="fas fa-envelope-open-text"></span>
                               </button>
-                              <button type="button" class="btn btn-danger" title="Borrar Órden de Pago" (click)="
+                              <button type="button" *ngIf="!paySelected.payed" class="btn btn-danger" title="Borrar Órden de Pago" (click)="
                                 borrarOrdenDePago(paySelected)
                                 ">
                                 <i class="fas fa-trash"></i>
