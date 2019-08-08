@@ -114,6 +114,7 @@ export class TecnicoFinancieroComponent implements OnInit {
   registerApprovalInspector: ApprovalState = new ApprovalState();
   registerApprovalFinanciero: ApprovalState = new ApprovalState();
   pay: Pay = new Pay();
+  paySelectedOrders: Pay = new Pay();
   paytaxes: PayTax[] = [];
   pays: Pay[] = [];
   pays_calc: Pay[] = [];
@@ -195,6 +196,7 @@ export class TecnicoFinancieroComponent implements OnInit {
  zonalEstablishmentSelectedCode = '-';
  provinciaEstablishmentSelectedCode = '-';
  cantonEstablishmentSelectedCode = '-';
+ payManualAgreement = false;
  zonalesEstablishment: Ubication[] = [];
  provinciasEstablishment: Ubication[] = [];
  ruc_name_types: RucNameType[] = [];
@@ -821,26 +823,38 @@ calcularUnoxMil() {
   return this.validateNotesInspection();
  }
 
- borrarOrdenDePago() {
-   this.payDataService.delete(this.pay.id).then( r => {
+ borrarOrdenDePago(paySelected: Pay) {
+   this.payDataService.delete(paySelected.id).then( r => {
       this.toastr.errorToastr('Órden de Pago Eliminada Satisfactoriamente', 'Revisión, Técnico Financiero');
       this.getPays();
    }).catch( e => { console.log(e); });
  }
 
  saveToPayValue() {
-   if (this.pay.id == 0) {
-      this.pay.ruc_id = this.ruc_registro_selected.ruc.id;
-      this.pay.amount_payed = -1;
-      this.pay.pay_date = null;
-      this.pay.code = this.ruc_registro_selected.ruc.number.substring(0, 10) + this.pays.length.toString();
-      this.pay.payed = false;
-      this.payDataService.post(this.pay).then( r => {
-      }).catch( e => { console.log(e); });
-   } else {
-      this.payDataService.put(this.pay).then( r => {
-      }).catch( e => { console.log(e); });
-   }
+   this.pay.ruc_id = this.ruc_registro_selected.ruc.id;
+   this.pay.amount_payed = -1;
+   this.pay.pay_date = null;
+   this.pay.code = this.ruc_registro_selected.ruc.number.substring(0, 10) + this.pays.length.toString();
+   this.pay.payed = false;
+   this.payDataService.post(this.pay).then( r => {
+      this.getPays();
+      this.enviarEmailPago(this.pay);
+   }).catch( e => { console.log(e); });
+ }
+
+ saveToPayValueCalc(paySelected: Pay) {
+   paySelected.ruc_id = this.ruc_registro_selected.ruc.id;
+   paySelected.amount_payed = -1;
+   paySelected.pay_date = null;
+   paySelected.code = this.ruc_registro_selected.ruc.number.substring(0, 10) + this.pays.length.toString();
+   paySelected.payed = false;
+   this.payDataService.post(paySelected).then( r => {
+      this.getPays();
+      this.enviarEmailPago(paySelected);
+   }).catch( e => { console.log(e); });
+ }
+
+ enviarEmailPago(paySelected: Pay) {
    const today = new Date();
    let clasificacion: String = '';
    let categoria: String = '';
@@ -897,10 +911,10 @@ calcularUnoxMil() {
    this.userDataService.get(this.registerMinturSelected.establishment.contact_user_id).then( r => {
       const information = {
          para: r.name,
-         amount_to_pay_base: this.pay.amount_to_pay_base,
-         amount_to_pay_fines: this.pay.amount_to_pay_fines,
-         amount_to_pay_taxes: this.pay.amount_to_pay_taxes,
-         amount_to_pay: this.pay.amount_to_pay,
+         amount_to_pay_base: paySelected.amount_to_pay_base,
+         amount_to_pay_fines: paySelected.amount_to_pay_fines,
+         amount_to_pay_taxes: paySelected.amount_to_pay_taxes,
+         amount_to_pay: paySelected.amount_to_pay,
          ruc: this.ruc_registro_selected.ruc.number,
          nombreComercial: this.registerMinturSelected.establishment.commercially_known_name,
          fechaSolicitud: today.toLocaleString(),
@@ -920,7 +934,6 @@ calcularUnoxMil() {
       };
       this.mailerDataService.sendMail('pago', r.email.toString(), 'Órden de Pago Registrada', information).then( r => {
          this.toastr.successToastr('Información Guardada Satisfactoriamente', 'Revisión, Técnico Financiero');
-         this.getPays();
       }).catch( e => { console.log(e); });
    }).catch( e => {console.log(e); });
  }
@@ -1201,11 +1214,17 @@ calcularUnoxMil() {
       this.SRIOK;
    }
 
+ cancelPayManual() {
+   this.pay = new Pay();
+   this.payManualAgreement = false;
+ }
+
  refresh() {
    this.registerMinturSelected = new Register();
    this.mostrarDataRegisterMintur = false;
    this.ruc_registro_selected = new RegistroDataCarrier();
    this.pay = new Pay();
+   this.payManualAgreement = false;
    this.pays = [];
    this.estoyVacaciones = false;
    this.getZonales();
@@ -1405,10 +1424,12 @@ getDeclarationItems() {
   }
 
  selectPay(pay: Pay) {
-   this.pay = pay;
+   this.paySelectedOrders = pay;
  }
 
  getPays() {
+    this.payManualAgreement = false;
+    this.paySelectedOrders = new Pay();
    this.payDataService.get_by_ruc_id(this.ruc_registro_selected.ruc.id).then( r => {
       this.pays = r as Pay[];
       if (this.pays.length == 0) {
@@ -1421,6 +1442,7 @@ getDeclarationItems() {
  buildPays() {
     this.payTaxDataService.get().then( r => {
        this.paytaxes = r as PayTax[];
+       this.pays_calc = [];
        this.declarations.forEach(declaration => {
          this.calcTaxes(declaration);
        });
@@ -1717,7 +1739,7 @@ calcTaxes(declaration: Declaration) {
    newPayCalc.amount_to_pay_fines = impuestoCausado * moraCalculado;
    newPayCalc.amount_to_pay_taxes = impuestoCausado * interesNominal;
    newPayCalc.amount_to_pay = newPayCalc.amount_to_pay_base + newPayCalc.amount_to_pay_fines + newPayCalc.amount_to_pay_taxes;
-   newPayCalc.code = declaration.declaration_date.getFullYear().toString();
+   newPayCalc.code = new Date(declaration.declaration_date.toString()).getFullYear().toString();
    this.pays_calc.push(newPayCalc);
 }
 

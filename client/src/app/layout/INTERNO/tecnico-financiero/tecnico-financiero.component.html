@@ -70,105 +70,105 @@
                 ">
                 <i class="fas fa-sync"></i>
               </button>
-              <button type="button" class="btn btn-success" title="Nueva Órden de Pago" (click)="
-                nuevaOrdenDePago()
-                ">
-                <i class="fas fa-file"></i>
-              </button>
-              <button type="button" class="btn btn-danger" title="Borrar Órden de Pago" (click)="
-                borrarOrdenDePago()
-                ">
-                <i class="fas fa-trash"></i>
-              </button>
             </div>
           </div>
         </div>
       </div>
-      <div class="row" *ngIf="mostrarDataRegisterMintur">
-        <div class="col-12">
-           <table class="table table-hover mt-2">
-              <thead>
-                 <tr>
-                    <th>Seleccionado</th>
-                    <th>Código</th>
-                    <th>Estado</th>
-                    <th>Valor Pagado</th>
-                    <th>Valor a Pagar - Impuesto 1X1000</th>
-                    <th>Valor a Pagar - Multas</th>
-                    <th>Valor a Pagar - Intereses</th>
-                    <th>Valor a Pagar - Total</th>
-                    <th>Fecha de Pago</th>
-                 </tr>
-              </thead>
-              <tbody>
-                 <tr *ngFor="let paySelected of pays" (click)="selectPay(paySelected)">
-                    <td class="text-right"><span *ngIf="pay === paySelected" class="far fa-hand-point-right"></span></td>
-                    <td>{{paySelected.code}}</td>
-                    <td><span class="badge badge-success" *ngIf="paySelected.payed">Pagado</span><span class="badge badge-danger" *ngIf="!paySelected.payed">No Pagado</span></td>
-                    <td><strong *ngIf="paySelected.amount_payed != -1">{{paySelected.amount_payed}}</strong></td>
-                    <td>{{paySelected.amount_to_pay_base}}</td>
-                    <td>{{paySelected.amount_to_pay_fines}}</td>
-                    <td>{{paySelected.amount_to_pay_taxes}}</td>
-                    <td>{{paySelected.amount_to_pay}}</td>
-                    <td>{{paySelected.pay_date}}</td>
-                 </tr>
-              </tbody>
-           </table>
-        </div>
-     </div>
-     <div class="row" *ngIf="mostrarDataRegisterMintur">
+      <div style="width: 100%; overflow-x: auto;">
+          <div class="row" *ngIf="mostrarDataRegisterMintur">
+              <div class="col-12">
+                 <table class="table table-hover mt-2">
+                    <thead>
+                       <tr>
+                          <th>Código</th>
+                          <th>Estado</th>
+                          <th>Valor Pagado</th>
+                          <th>Valor a Pagar - Impuesto 1X1000</th>
+                          <th>Valor a Pagar - Multas</th>
+                          <th>Valor a Pagar - Intereses</th>
+                          <th>Valor a Pagar - Total</th>
+                          <th>Fecha de Pago</th>
+                          <th>Opciones</th>
+                       </tr>
+                    </thead>
+                    <tbody>
+                       <tr *ngFor="let paySelected of pays">
+                          <td>{{paySelected.code}}</td>
+                          <td><span class="badge badge-success" *ngIf="paySelected.payed">Pagado</span><span class="badge badge-danger" *ngIf="!paySelected.payed">No Pagado</span></td>
+                          <td><strong *ngIf="paySelected.amount_payed != -1">{{paySelected.amount_payed | number: '1.2'}} USD</strong></td>
+                          <td>{{paySelected.amount_to_pay_base | number: '1.2'}} USD</td>
+                          <td>{{paySelected.amount_to_pay_fines | number: '1.2'}} USD</td>
+                          <td>{{paySelected.amount_to_pay_taxes | number: '1.2'}} USD</td>
+                          <td>{{paySelected.amount_to_pay | number: '1.2'}} USD</td>
+                          <td>{{paySelected.pay_date | date:'y-MM-dd'}}</td>
+                          <td>
+                            <div class="btn-group" role="group">
+                              <button type="button" class="btn btn-warning" title="Re-enviar Correo de Órden de Pago" (click)="enviarEmailPago(paySelected)">
+                                <span class="fas fa-envelope-open-text"></span>
+                              </button>
+                              <button type="button" class="btn btn-danger" title="Borrar Órden de Pago" (click)="
+                                borrarOrdenDePago(paySelected)
+                                ">
+                                <i class="fas fa-trash"></i>
+                              </button>
+                            </div>
+                          </td>
+                       </tr>
+                    </tbody>
+                 </table>
+              </div>
+           </div>
+      </div>
+     <div class="row mt-5" *ngIf="mostrarDataRegisterMintur">
       <div class="col-12">
         <h4><strong>Órdenes de Pagos Calculadas</strong></h4>
       </div>
-      <div class="col-12">
-        <div class="btn-toolbar" role="toolbar">
-          <div class="btn-group mr-2" role="group">
-            <button type="button" class="btn btn-primary" title="Actualizar" (click)="
-              refresh()
-              ">
-              <i class="fas fa-sync"></i>
-            </button>
-            <button type="button" class="btn btn-success" title="Nueva Órden de Pago" (click)="
-              nuevaOrdenDePago()
-              ">
-              <i class="fas fa-file"></i>
-            </button>
-            <button type="button" class="btn btn-danger" title="Borrar Órden de Pago" (click)="
-              borrarOrdenDePago()
-              ">
-              <i class="fas fa-trash"></i>
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+     </div>
     <div class="row" *ngIf="mostrarDataRegisterMintur">
       <div class="col-12">
          <table class="table table-hover mt-2">
             <thead>
                <tr>
-                  <th>Seleccionado</th>
                   <th>Año de la Declaración</th>
                   <th>Valor a Pagar - Impuesto 1X1000</th>
                   <th>Valor a Pagar - Multas</th>
                   <th>Valor a Pagar - Intereses</th>
-                  <th>Valor a Pagar - Total</th>>
+                  <th>Valor a Pagar - Total</th>
+                  <th>Opciones</th>
                </tr>
             </thead>
             <tbody>
-               <tr *ngFor="let paySelected of pays_calc" (click)="selectPay(paySelected)">
-                  <td class="text-right"><span *ngIf="pay === paySelected" class="far fa-hand-point-right"></span></td>
+               <tr *ngFor="let paySelected of pays_calc">
                   <td>{{paySelected.code}}</td>
-                  <td>{{paySelected.amount_to_pay_base}}</td>
-                  <td>{{paySelected.amount_to_pay_fines}}</td>
-                  <td>{{paySelected.amount_to_pay_taxes}}</td>
-                  <td>{{paySelected.amount_to_pay}}</td>
+                  <td>{{paySelected.amount_to_pay_base | number: '1.2'}} USD</td>
+                  <td>{{paySelected.amount_to_pay_fines | number: '1.2'}} USD</td>
+                  <td>{{paySelected.amount_to_pay_taxes | number: '1.2'}} USD</td>
+                  <td>{{paySelected.amount_to_pay | number: '1.2'}} USD</td>
+                  <td>
+                    <button type="button" class="btn btn-success" (click)="saveToPayValueCalc(paySelected)">
+                      <span class="fas fa-money-check-alt"></span>&nbsp;Cargar Valor a Pagar
+                    </button>
+                  </td>
                </tr>
             </tbody>
          </table>
       </div>
    </div>
-      <div class="row" *ngIf="mostrarDataRegisterMintur">
+   <div class="row" *ngIf="mostrarDataRegisterMintur">
+    <div class="col-12">
+      <h4><strong>Insertar Órden de Pago Manual</strong></h4>
+    </div>
+   </div>
+   <div class="row" *ngIf="mostrarDataRegisterMintur">
+    <div class="col-12">
+      <div class="form-group mt-3 text-center">
+        <label class="col-12"><strong>Deseo generar una órden de pago manual</strong></label>
+        <label class="switch"><input type="checkbox" id="baised_accounting"
+            name="baised_accounting" [(ngModel)]="payManualAgreement"><span class="slider round"></span></label>
+      </div>
+    </div>
+   </div>
+      <div class="row" *ngIf="mostrarDataRegisterMintur && payManualAgreement">
         <div class="col-3">
             <label>Valor a Pagar - Impuesto 1X1000</label>
             <div class="input-group">
@@ -203,12 +203,12 @@
           </div>
         </div>
       </div>
-      <div class="row mt-3" *ngIf="mostrarDataRegisterMintur">
+      <div class="row mt-3" *ngIf="mostrarDataRegisterMintur && payManualAgreement">
         <div class="col-12 text-center">
             <button type="button" class="btn btn-success" (click)="saveToPayValue()">
               <span class="fas fa-money-check-alt"></span>&nbsp;Cargar Valor a Pagar
             </button>
-            <button type="button" class="btn btn-danger ml-2" title="Cancelar Cambios" (click)="refresh()"><i class="fas fa-times"></i> Cancelar</button>
+            <button type="button" class="btn btn-danger ml-2" title="Cancelar Cambios" (click)="cancelPayManual()"><i class="fas fa-times"></i> Cancelar</button>
         </div>
       </div>
       <div class="row" *ngIf="mostrarDataRegisterMintur && pays.length > 0">
@@ -290,7 +290,7 @@
                                     <span *ngIf="declaration_selected === declaration" class="far fa-hand-point-right"></span>
                                   </td>
                                   <td>{{declaration.year}}</td>
-                                  <td>{{declaration.declaration_date}}</td>
+                                  <td>{{declaration.declaration_date | date:'y-MM-dd'}}</td>
                                   <td>{{declaration.status_name}}</td>
                                 </tr>
                               </tbody>
