@@ -2419,8 +2419,6 @@ export class CoordinadorComponent implements OnInit {
                });
                newRegistroCatastro.legal_representant_identification = this.representante_legal;
                newRegistroCatastro.legal_representant_name = this.representante_legal;
-               this.registerCatastroDataService.post(newRegistroCatastro).then( r => {
-               }).catch( e => { console.log(e); });
                const information = {
                   para: r.name,
                   tramite: this.tipo_tramite.toUpperCase(),
@@ -2446,6 +2444,8 @@ export class CoordinadorComponent implements OnInit {
                this.mailerDataService.sendMail('fin_tramite_cz', r.email.toString(), 'Trámite Atendido', information).then( r => {
                   this.toastr.successToastr('Datos Guardados Satisfactoriamente', 'Coordinación');
                   this.guardandoTramite = false;
+                  this.registerCatastroDataService.post(newRegistroCatastro).then( r => {
+                  }).catch( e => { console.log(e); });
                   this.refresh();
                }).catch( e => { console.log(e); });
             }).catch( e => { console.log(e); });
