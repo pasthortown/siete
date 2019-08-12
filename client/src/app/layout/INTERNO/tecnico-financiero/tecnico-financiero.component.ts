@@ -1053,9 +1053,29 @@ calcularUnoxMil() {
             {Dirección: (this.registerMinturSelected.establishment.address_main_street + ' ' + this.registerMinturSelected.establishment.address_number + ' ' + this.registerMinturSelected.establishment.address_secondary_street).toUpperCase()},
             {Registro: this.registerMinturSelected.register.code},
             {Nombre_Declarante: this.ruc_registro_selected.ruc.contact_user.name.toUpperCase()},
-            {Identificación_Declarante: this.ruc_registro_selected.ruc.contact_user.identification}];
+            {Identificación_Declarante: this.ruc_registro_selected.ruc.contact_user.identification},
+            {Valor_Pagar_Base: pay.amount_to_pay_base},
+            {Valor_Pagar_Multas: pay.amount_to_pay_fines},
+            {Valor_Pagar_Intereses: pay.amount_to_pay_taxes},
+            {Valor_Pagar_Total: pay.amount_to_pay}];
          const qr_value = JSON.stringify(parametrosQR);
-         this.exporterDataService.getPDFDeclaration(declaration, pay, true, qr_value, params).then( r => {
+         const declarationItemsToSend = [];
+         this.declarationItemsCategories.forEach(category => {
+            if (category.tax_payer_type_id == this.ruc_registro_selected.ruc.tax_payer_type_id) {
+               const items = [];
+               declaration.declaration_item_values_on_declaration.forEach(newValueItem => {
+                  this.declarationItems.forEach(item => {
+                     if (item.tax_payer_type_id == this.ruc_registro_selected.ruc.tax_payer_type_id) {
+                        if ((item.id == newValueItem.declaration_item_id) && (item.declaration_item_category_id == category.id)) {
+                           items.push({declarationItem: item, valueItem: newValueItem});
+                        }
+                     }
+                  });
+               });
+               declarationItemsToSend.push({Category: category, items: items});
+            }
+         });
+         this.exporterDataService.getPDFDeclaration(declarationItemsToSend, pay, true, qr_value, params).then( r => {
             const byteCharacters = atob(r);
             const byteNumbers = new Array(byteCharacters.length);
             for (let i = 0; i < byteCharacters.length; i++) {
