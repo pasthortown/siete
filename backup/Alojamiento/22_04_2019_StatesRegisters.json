@@ -52,8 +52,8 @@
             "id": 5,
             "created_at": "2019-04-22 17:07:01",
             "updated_at": "2019-04-22 17:07:01",
-            "name": "Prórroga Inspección (15 Días) - Técnico Zonal",
-            "description": "<p>Prórroga Inspección (15 Días) - Técnico Zonal</p>\n",
+            "name": "Aplazo para Inspección (15 Días) - Técnico Zonal",
+            "description": "<p>Aplazo para Inspección (15 Días) - Técnico Zonal</p>\n",
             "code": "5",
             "father_code": "-"
         },
@@ -64,8 +64,8 @@
             "id": 6,
             "created_at": "2019-04-22 17:07:01",
             "updated_at": "2019-04-22 17:07:01",
-            "name": "Prórroga Inspección (6 Meses) - Técnico Zonal",
-            "description": "<p>Prórroga Inspección (6 Meses) - Técnico Zonal</p>\n",
+            "name": "Aplazo para Inspección (6 Meses) - Técnico Zonal",
+            "description": "<p>Aplazo para Inspección (6 Meses) - Técnico Zonal</p>\n",
             "code": "6",
             "father_code": "-"
         },
