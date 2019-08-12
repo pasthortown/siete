@@ -164,6 +164,7 @@ export class TecnicoFinancieroComponent implements OnInit {
  lastPageRegister = 1;
  recordsByPageRegister = 5;
  mostrarData = true;
+ fechaSolicitud = new Date();
  group_types: GroupType[] = [];
  rucs_registrados: RegistroDataCarrier[] = [];
  ruc_registro_selected: RegistroDataCarrier = new RegistroDataCarrier();
@@ -356,6 +357,7 @@ export class TecnicoFinancieroComponent implements OnInit {
    } else {
       this.mostrarMotivoTramite = true;
    }
+   this.tipo_tramite = 'REGISTRO';
    this.registerProcedureDataService.get_by_register_id(this.idRegister.toString()).then( r => {
       if (typeof r.id != 'undefined') {
          this.motivoTramite = r.justification;
@@ -363,7 +365,6 @@ export class TecnicoFinancieroComponent implements OnInit {
             if (typeof r2.activity != 'undefined') {
                this.as_turistic_date = new Date(r2.as_turistic_date.toString());
             }
-            this.tipo_tramite = '';
             const primerdigito = estado.substring(0, 1);
             if (primerdigito == '1') {
                this.tipo_tramite = 'REGISTRO';
@@ -913,6 +914,22 @@ calcularUnoxMil() {
    }).catch( e => { console.log(e); });
  }
 
+ calcTotales(): Boolean {
+   this.totalPayBase = 0;
+   this.totalPayFines = 0;
+   this.totalPayTaxes = 0;
+   this.totalPayToPay = 0;
+   this.pays.forEach(pay => {
+      if (!pay.payed) {
+        this.totalPayToPay += pay.amount_to_pay*1;
+        this.totalPayBase += pay.amount_to_pay_base*1;
+        this.totalPayFines += pay.amount_to_pay_fines*1;
+        this.totalPayTaxes += pay.amount_to_pay_taxes*1;
+      }
+   });
+   return true;
+ }
+
  enviarEmailPago() {
     let payCodes = '';
     this.totalPayBase = 0;
@@ -984,26 +1001,26 @@ calcularUnoxMil() {
    const czTelefono = datosZonal.telefono.split('>')[1].split('<')[0];
    this.userDataService.get(this.registerMinturSelected.establishment.contact_user_id).then( r => {
       const information = {
-         para: r.name,
+         para: r.name.toUpperCase(),
          amount_to_pay_base: this.totalPayBase,
          amount_to_pay_fines: this.totalPayFines,
          amount_to_pay_taxes: this.totalPayTaxes,
          amount_to_pay: this.totalPayToPay,
          ruc: this.ruc_registro_selected.ruc.number,
-         nombreComercial: this.registerMinturSelected.establishment.commercially_known_name,
-         fechaSolicitud: today.toLocaleString(),
-         actividad: 'Alojamiento Turístico',
-         clasificacion: clasificacion,
-         categoria: categoria,
-         tipoSolicitud: this.tipo_tramite,
-         provincia: provinciaName,
-         canton: cantonName,
-         parroquia: parroquiaName,
+         nombreComercial: this.registerMinturSelected.establishment.commercially_known_name.toUpperCase(),
+         fechaSolicitud: this.fechaSolicitud.toLocaleDateString(),
+         actividad: 'Alojamiento Turístico'.toUpperCase(),
+         clasificacion: clasificacion.toUpperCase(),
+         categoria: categoria.toUpperCase(),
+         tipoSolicitud: this.tipo_tramite.toUpperCase(),
+         provincia: provinciaName.toUpperCase(),
+         canton: cantonName.toUpperCase(),
+         parroquia: parroquiaName.toUpperCase(),
          payCodes: payCodes,
-         callePrincipal: this.registerMinturSelected.establishment.address_main_street,
-         calleInterseccion: this.registerMinturSelected.establishment.address_secondary_street,
+         callePrincipal: this.registerMinturSelected.establishment.address_main_street.toUpperCase(),
+         calleInterseccion: this.registerMinturSelected.establishment.address_secondary_street.toUpperCase(),
          numeracion: this.registerMinturSelected.establishment.address_number,
-         czDireccion: czDireccion,
+         czDireccion: czDireccion.toUpperCase(),
          czTelefono: czTelefono,
          thisYear: today.getFullYear()
       };
@@ -1237,6 +1254,9 @@ calcularUnoxMil() {
  selectRegisterMintur(item: any) {
   this.registerMinturSelected = item;
   this.mostrarDataRegisterMintur = true;
+  const estado: String = item.states.state_id.toString();
+  this.checkMotivoTramite(estado);
+  this.fechaSolicitud = new Date(item.register.created_at.toString());
   this.getRuc(this.registerMinturSelected.ruc.number);
   this.getRegistersOnRuc();
   this.groupTypeSelected = new GroupType();
@@ -1748,7 +1768,6 @@ calcTaxes(declaration: Declaration) {
          totaltoPayBase += item.valueItem.value * (item.declarationItem.factor);
       });
    });
-   const declaration_date = new Date(declaration.declaration_date.toString());
    const mora = [0.03, 0.011, 0.011, 0.011, 0.011, 0.011, 0.011];
    let intereses = 0;
    const meses = [
@@ -1767,7 +1786,7 @@ calcTaxes(declaration: Declaration) {
             ];
    let cuenta = 0;
    this.paytaxes.forEach(paytax => {
-      if (paytax.year >= declaration_date.getFullYear()) {
+      if (paytax.year >= declaration.year) {
          meses.forEach(mes => {
             if (mes.trimester == paytax.trimester) {
                intereses = intereses + (paytax.value*1);
@@ -1778,7 +1797,7 @@ calcTaxes(declaration: Declaration) {
    });
    const today = new Date();
    this.paytaxes.forEach(paytax => {
-      if (paytax.year == declaration_date.getFullYear()) {
+      if (paytax.year == declaration.year) {
          meses.forEach(mes => {
             if(mes.month < 7) {
                if (mes.trimester == paytax.trimester) {
@@ -1810,12 +1829,17 @@ calcTaxes(declaration: Declaration) {
    const impuestoCausado = totaltoPayBase/1000;
    const interesNominal = intereses/100;
    const newPayCalc = new Pay();
-   newPayCalc.amount_to_pay_base = impuestoCausado;
-   newPayCalc.amount_to_pay_fines = impuestoCausado * moraCalculado;
-   newPayCalc.amount_to_pay_taxes = impuestoCausado * interesNominal;
-   newPayCalc.amount_to_pay = newPayCalc.amount_to_pay_base + newPayCalc.amount_to_pay_fines + newPayCalc.amount_to_pay_taxes;
+   newPayCalc.amount_to_pay_base = this.rounded(impuestoCausado);
+   newPayCalc.amount_to_pay_fines = this.rounded(impuestoCausado * moraCalculado);
+   newPayCalc.amount_to_pay_taxes = this.rounded(impuestoCausado * interesNominal);
+   newPayCalc.amount_to_pay = this.rounded(newPayCalc.amount_to_pay_base + newPayCalc.amount_to_pay_fines + newPayCalc.amount_to_pay_taxes);
    newPayCalc.code = declaration.year.toString();
    this.pays_calc.push(newPayCalc);
+}
+
+rounded(numero: number): number {
+   const toround = numero*100;
+   return Math.round(toround)/100;
 }
 
 encerarDeclaracion(paySelected) {
