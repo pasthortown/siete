@@ -38,6 +38,7 @@
 <li>En el campo código: digite el número de RUC. </li>
 </ol>
 <br/>
+<p><i><strong>Posterior al pago por favor entregue el comprobante en la Coordinación Zonal para que le certifiquen el comprobante y se le emita su factura.</strong></i></p><br/><br/>
 <h3>INFORMACIÓN DEL ESTABLECIMIENTO</h3>
 <table style="border-collapse: collapse;width: 100%;border: 1px solid #ddd; text-align:left;">
     <tbody>

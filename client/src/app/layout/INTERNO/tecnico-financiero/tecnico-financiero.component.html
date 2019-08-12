@@ -70,7 +70,7 @@
       </div>
      <div class="row mt-5" *ngIf="mostrarDataRegisterMintur">
       <div class="col-12">
-        <h4><strong>Órdenes de Pagos Calculadas</strong></h4>
+        <h4><strong>Órdenes de Pagos Calculadas Por Declaración</strong></h4>
       </div>
      </div>
     <div class="row" *ngIf="mostrarDataRegisterMintur">
@@ -100,6 +100,9 @@
                         </button>
                         <button type="button" class="btn btn-warning" title="Es un Registro Nuevo" (click)="encerarDeclaracion(paySelected)">
                           <span class="fas fa-file-export"></span>
+                        </button>
+                        <button type="button" class="btn btn-info ml-2" title="Descargar Declaración" [disabled]="imprimiendoDeclaracion" (click)="descargarDeclaracionPDF(paySelected)">
+                          <span class="fas fa-file-pdf"></span>
                         </button>
                       </div>
                   </td>

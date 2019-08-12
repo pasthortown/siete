@@ -97,6 +97,7 @@ import { DeclarationAttachmentService } from 'src/app/services/CRUD/FINANCIERO/d
 import { PayTax } from 'src/app/models/FINANCIERO/PayTax';
 import { PayTaxService } from 'src/app/services/CRUD/FINANCIERO/paytax.service';
 import { RegisterProcedureService } from 'src/app/services/CRUD/ALOJAMIENTO/registerprocedure.service';
+import { ExporterService } from 'src/app/services/negocio/exporter.service';
 @Component({
   selector: 'app-tecnico-financiero',
   templateUrl: './tecnico-financiero.component.html',
@@ -129,6 +130,7 @@ export class TecnicoFinancieroComponent implements OnInit {
   hasInform  = false;
   hasRequisites = false;
   inspectionState = 0;
+  imprimiendoDeclaracion = false;
   estoyVacaciones = false;
   declarationApprovalStateAttachment: ApprovalStateAttachment = new ApprovalStateAttachment();
   payApprovalStateAttachment: ApprovalStateAttachment = new ApprovalStateAttachment();
@@ -320,6 +322,7 @@ export class TecnicoFinancieroComponent implements OnInit {
              private complementaryServiceFoodTypeDataService: ComplementaryServiceFoodTypeService,
              private establishmentPictureDataService: EstablishmentPictureService,
              private ubicationDataService: UbicationService,
+             private exporterDataService: ExporterService,
              private establishmentCertificationAttachmentDataService: EstablishmentCertificationAttachmentService,
              private personRepresentativeAttachmentDataService: PersonRepresentativeAttachmentService,
              private complementary_service_typeDataService: ComplementaryServiceTypeService,
@@ -1028,6 +1031,43 @@ calcularUnoxMil() {
          this.toastr.successToastr('Información Guardada Satisfactoriamente', 'Revisión, Técnico Financiero');
       }).catch( e => { console.log(e); });
    }).catch( e => {console.log(e); });
+ }
+
+ descargarDeclaracionPDF(pay: Pay) {
+   this.imprimiendoDeclaracion = true;
+   this.declarations.forEach(declaration => {
+      if (declaration.year.toString() == pay.code) {
+         const today = new Date();
+         const params = [{year_declaration: declaration.year},
+            {year_fiscal: today.getFullYear()},
+            {razon_social: this.registerMinturSelected.establishment.commercially_known_name.toUpperCase()},
+            {ruc: this.ruc_registro_selected.ruc.number},
+            {direccion: (this.registerMinturSelected.establishment.address_main_street + ' ' + this.registerMinturSelected.establishment.address_number + ' ' + this.registerMinturSelected.establishment.address_secondary_street).toUpperCase()},
+            {registro: this.registerMinturSelected.register.code},
+            {nombre_declarante: this.ruc_registro_selected.ruc.contact_user.name.toUpperCase()},
+            {identificacion_declarante: this.ruc_registro_selected.ruc.contact_user.identification}];
+         const parametrosQR = [{Año_Declaración: declaration.year},
+            {Año_Fiscal: today.getFullYear()},
+            {Razón_Social: this.registerMinturSelected.establishment.commercially_known_name.toUpperCase()},
+            {RUC: this.ruc_registro_selected.ruc.number},
+            {Dirección: (this.registerMinturSelected.establishment.address_main_street + ' ' + this.registerMinturSelected.establishment.address_number + ' ' + this.registerMinturSelected.establishment.address_secondary_street).toUpperCase()},
+            {Registro: this.registerMinturSelected.register.code},
+            {Nombre_Declarante: this.ruc_registro_selected.ruc.contact_user.name.toUpperCase()},
+            {Identificación_Declarante: this.ruc_registro_selected.ruc.contact_user.identification}];
+         const qr_value = JSON.stringify(parametrosQR);
+         this.exporterDataService.getPDFDeclaration(declaration, pay, true, qr_value, params).then( r => {
+            const byteCharacters = atob(r);
+            const byteNumbers = new Array(byteCharacters.length);
+            for (let i = 0; i < byteCharacters.length; i++) {
+               byteNumbers[i] = byteCharacters.charCodeAt(i);
+            }
+            const byteArray = new Uint8Array(byteNumbers);
+            const blob = new Blob([byteArray], { type: 'application/pdf'});
+            saveAs(blob, 'declaración_' + this.ruc_registro_selected.ruc.number + '_' + declaration.year + '.pdf');
+            this.imprimiendoDeclaracion = false;
+         }).catch( e => { console.log(e); });
+      }
+   });
  }
 
  descargarDeclaracion() {

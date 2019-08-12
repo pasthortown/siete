@@ -31,6 +31,68 @@ class ExporterController extends Controller
     return $html_content;
   }
 
+  protected function build_table_declaration($declaration) {
+    
+  }
+
+  function pdf_declaration(Request $data) {
+    $request = $data->json()->all();
+    $html_content = '<pagina><div style="width:100%; height:350px;"></div><div style="width:100%; margin-left: 150px; margin-right:100px;">';
+    $html_content .= '<p style="text-align: center">FORMULARIO PARA APLICACIÓN DE LA CONTRIBUCIÓN DE UNO POR MIL DE LOS ACTIVOS FIJOS</p>';
+    $html_content .= '<p style="text-align: justify; font-size:12px;">BASE LEGAL: Art. 39 Literal "a" Ley de Turismo. Registro Oficial 733-Suplemento de 27 de diciembre de 2002, modificado el 29 de diciembre de 2014.<br/>Art. 78 del Reglamento de aplicación a la Ley de Turismo. Registro Oficial de 5 de enero del 2004</p>';
+    $html_content .= '<table style="width: 100%; border: 1px solid black; border-collapse: collapse; text-align: left; font-size:14px;">';
+    $html_content .= '<tr><th colspan="4" style="text-align:center; background-color:yellow;">DATOS DE CONTRIBUYENTE</th></tr>';
+    $html_content .= '<tr><th style="border: 1px solid black;">AÑO DE OBLIGACIÓN DE PAGO:</th><td style="border: 1px solid black;">##year_declaration##</td><th style="border: 1px solid black;">AÑO FISCAL:</th><td style="border: 1px solid black;">##year_fiscal##</td></tr>';
+    $html_content .= '<tr><th style="border: 1px solid black;">RAZÓN SOCIAL:</th><td colspan="3" style="border: 1px solid black;">##razon_social##</td></tr>';
+    $html_content .= '<tr><th style="border: 1px solid black;">RUC:</th><td colspan="3" style="border: 1px solid black;">##ruc##</td></tr>';
+    $html_content .= '<tr><th style="border: 1px solid black;">DIRECCIÓN:</th><td colspan="3" style="border: 1px solid black;">##direccion##</td></tr>';
+    $html_content .= '<tr><th style="border: 1px solid black;">NÚMERO DE REGISTRO:</th><td colspan="3" style="border: 1px solid black;">##registro##</td></tr>';
+    $html_content .= '</table><br/>';
+    $html_content .= $this->build_table_declaration($request['declaration']);
+    $html_content .= '<table style="width: 100%; border: 1px solid black; border-collapse: collapse; text-align: left; font-size:14px;">';
+    $html_content .= '<tr><th colspan="4" style="text-align:center; background-color:yellow;">DATOS DE PAGO</th></tr>';
+    $html_content .= '<tr style="background-color:yellow;"><th style="border: 1px solid black;">CONTRIBUCIÓN CAUSADA UN POR MIL</th><th style="border: 1px solid black;">RECARGOS POR MORA</th><th style="border: 1px solid black;">MULTAS</th><th style="border: 1px solid black;">TOTAL A PAGAR</th></tr>';
+    $html_content .= '<tr><th style="border: 1px solid black;">'.number_format((float)$request['pay']['amount_to_pay_base'], 2, '.', '').'USD</th><th style="border: 1px solid black;">'.number_format((float)$request['pay']['amount_to_pay_taxes'], 2, '.', '').'USD</th><th style="border: 1px solid black;">'.number_format((float)$request['pay']['amount_to_pay_fines'], 2, '.', '').'USD</th><th style="border: 1px solid black;">'.number_format((float)$request['pay']['amount_to_pay'], 2, '.', '').'USD</th></tr>';
+    $html_content .= '</table><br/>';
+    $html_content .= '<table style="width: 100%; border: 1px solid black; border-collapse: collapse; text-align: left; font-size:14px;">';
+    $html_content .= '<tr><th colspan="4" style="text-align:justify;">Declaro bajo juramento que los datos consignados en el presente formulario reflejan la realidad y autorizo al Ministerio de Turismo a verificar el contenido de esta declaración en cualquier momento, al tiempo que me sujeto, a las sanciones previstas en la ley en caso de falsedad o perjurio.</th></tr>';
+    $html_content .= '<tr><th style="border: 1px solid black;">Nombre del Declarante</th><th colspan="3" style="border: 1px solid black;">##nombre_declarante##</th></tr>';
+    $html_content .= '<tr><th style="border: 1px solid black;">Documento de Identidad:</th><th colspan="3" style="border: 1px solid black;">##identificacion_declarante##</th></tr>';
+    $html_content .= '<tr><th style="border: 1px solid black; height:100px;">Firma</th><th colspan="3" style="border: 1px solid black;"></th></tr>';
+    $html_content .= '</table>';
+    $html_content .= '<div style="width:100%; text-align:right; font-size:12px;"><strong><i>Versión 1 02-08-2016</i></strong></div>';
+    $html_content .= '</div></pagina>';
+    try {
+      $qr = $request['qr'];
+    } catch (Exception $e) {
+      $qr = false;
+    }
+    try {
+      $qr_content = $request['qr_content'];
+    } catch (Exception $e) {
+      $qr_content = '';
+    }
+    try {
+      $params = $request['params'];
+    } catch (Exception $e) {
+      $params = [];
+    }
+    if (!$params) {
+      $params = [];
+    }
+    $title = 'FORMULARIO UNO POR MIL';
+    $pdf_content = $this->build_content($html_content, $params);
+    $html = $this->mintur_style($pdf_content, $title, $qr, $qr_content);
+    $orientation = 'portrait';
+    $pdf = App::make('dompdf.wrapper');
+    $pdf->setPaper('A4', $orientation);
+    $pdf->setOptions(['dpi' => 150, 'defaultFont' => 'courier']);
+    $pdf->loadHTML($html);
+    $bytes = $pdf->output();
+    $toReturn = base64_encode($bytes);
+    return response()->json($toReturn, 200);
+  }
+
   protected function build_table_tarifario_reporte($tariffs) {
     $html_content = '<table style="width: 100%; border: 1px solid black; border-collapse: collapse; text-align: left; font-size:14px;">';
     $html_content .= '<tr style="background-color:yellow;"><th colspan="5" style="border: 1px solid black; text-align: center;">LISTADO DE TARIFAS</th></tr>';

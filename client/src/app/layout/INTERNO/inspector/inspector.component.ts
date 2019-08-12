@@ -1412,6 +1412,10 @@ export class InspectorComponent implements OnInit {
          iniciales_cordinacion_zonal = zonalName[zonalName.length - 1].toUpperCase();
          const today = new Date();
          let qr_value = 'MT-CZ' + iniciales_cordinacion_zonal + '-' + this.ruc_registro_selected.ruc.number + '-' + r2.establishment.ruc_code_id + '-ACTA-NOTIFICACION-ALOJAMIENTO-' + iniciales_tecnico_zonal + '-' + today.getDate() + '-' + (today.getMonth() + 1) + '-' + today.getFullYear();
+         let aclaracion_registro = '';
+         if (this.tipo_tramite == 'REGISTRO') {
+            aclaracion_registro = 'Es importante destacar que de no cumplir con lo indicado, lamentaremos tener que ejecutar las acciones determinadas en el Art. 52 de la Ley de Turismo en concordancia con el Art. 91 y 87 del Reglamento General a la Ley de Turismo a los establecimientos que incumplan con el marco legal vigente.';
+         }
          const actividad = 'ALOJAMIENTO';
          this.documentDataService.get_doc_id(qr_value).then( respuesta => {
             const codigo = 'MT-CZ' + iniciales_cordinacion_zonal + '-' + iniciales_tecnico_zonal + '-' + today.getFullYear() + '-' + respuesta.toString();
@@ -1419,6 +1423,7 @@ export class InspectorComponent implements OnInit {
                {fecha: today.toLocaleDateString().toUpperCase()},
                {codigo: codigo},
                {numero_coordinacion_zonal: iniciales_cordinacion_zonal},
+               {aclaracion_registro: aclaracion_registro},
                {tramite: this.tipo_tramite.toUpperCase()},
                {nombre_comercial: r2.establishment.commercially_known_name.toUpperCase()},
                {representante_legal: this.representante_legal.toUpperCase()},

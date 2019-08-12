@@ -39,6 +39,27 @@ export class ExporterService {
       }).catch( error => { this.handledError(error.json()); });
    }
 
+   getPDFDeclaration(declaration: any, pay: any, qr?: Boolean, qr_content?: string, params?: any[]) {
+      let data = null;
+      if(typeof qr != 'undefined') {
+         if(typeof params != 'undefined') {
+            data = {declaration: declaration, pay: pay, params: params, qr: qr, qr_content: qr_content};
+         } else {
+            data = {declaration: declaration, pay: pay, qr: qr, qr_content: qr_content};
+         }
+      } else {
+         if(typeof params != 'undefined') {
+            data = {declaration: declaration, pay: pay, params: params};
+         } else {
+            data = {declaration: declaration, pay: pay};   
+         }
+      }
+      return this.http.post(this.url + 'download/pdf_declaration', JSON.stringify(data), this.options).toPromise()
+      .then( r => {
+         return r.json();
+      }).catch( error => { this.handledError(error.json()); });
+   }
+
    getPDFTarifarioRack(tariffs: any[], qr?: Boolean, qr_content?: string, params?: any[]): Promise<any> {
       let data = null;
       if(typeof qr != 'undefined') {
@@ -53,7 +74,6 @@ export class ExporterService {
          } else {
             data = {tariffs: tariffs};   
          }
-         
       }
       return this.http.post(this.url + 'download/pdf_tarifario_rack', JSON.stringify(data), this.options).toPromise()
       .then( r => {
