@@ -2257,8 +2257,6 @@ export class CoordinadorComponent implements OnInit {
          this.refresh();
       }
      }).catch( e => { console.log(e); });
-
-
      const today = new Date();
       let clasificacion: String = '';
       let categoria: String = '';
@@ -2313,8 +2311,6 @@ export class CoordinadorComponent implements OnInit {
       const czDireccion = datosZonal.direccion.split('>')[1].split('<')[0];
       const czTelefono = datosZonal.telefono.split('>')[1].split('<')[0];
       const observaciones = this.registerApprovalCoordinador.notes;
-
-     
       if (!enviarMail) {
          return;
       }
@@ -2444,7 +2440,7 @@ export class CoordinadorComponent implements OnInit {
                this.mailerDataService.sendMail('fin_tramite_cz', r.email.toString(), 'Trámite Atendido', information).then( r => {
                   this.toastr.successToastr('Datos Guardados Satisfactoriamente', 'Coordinación');
                   this.guardandoTramite = false;
-                  this.registerCatastroDataService.post(newRegistroCatastro).then( r => {
+                  this.registerCatastroDataService.post(newRegistroCatastro).then( r5 => {
                      this.refresh();
                   }).catch( e => { console.log(e); });
                }).catch( e => { console.log(e); });
