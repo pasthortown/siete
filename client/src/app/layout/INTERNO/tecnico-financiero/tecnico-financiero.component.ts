@@ -899,7 +899,7 @@ calcularUnoxMil() {
    this.pay.ruc_id = this.ruc_registro_selected.ruc.id;
    this.pay.amount_payed = -1;
    this.pay.pay_date = null;
-   this.pay.code = this.ruc_registro_selected.ruc.number.substring(0, 10) + this.pays.length.toString();
+   this.pay.code = this.ruc_registro_selected.ruc.number.substring(0, 10) + this.pays.length.toString() + 'CP';
    this.pay.payed = false;
    this.payDataService.post(this.pay).then( r => {
       this.getPays();
