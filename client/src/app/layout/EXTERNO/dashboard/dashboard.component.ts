@@ -533,6 +533,12 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+  borrarDeclaration(declaration) {
+   this.declarationDataService.delete(declaration.id).then( r => {
+      this.refreshDeclaracion();
+   }).catch( e => { console.log(e); });
+  }
+
   confirmarRechazoTramite() {
      if(this.registerApprovalInspector.notes == '') {
       this.toastr.errorToastr('Debe indicar la justificación para la devolución del trámite.', 'Rechazo de Trámite');
@@ -2012,6 +2018,7 @@ export class DashboardComponent implements OnInit {
   buildDeclarationItemsToShow() {
    this.declarationItemsToShow = [];
    this.declarationItemsCategories.forEach(category => {
+      category.total = 0;
       if (category.tax_payer_type_id == this.ruc_registro_selected.ruc.tax_payer_type_id) {
          const items = [];
          this.declarationItems.forEach(item => {
@@ -2021,6 +2028,7 @@ export class DashboardComponent implements OnInit {
               if (item.tax_payer_type_id == this.ruc_registro_selected.ruc.tax_payer_type_id) {
                 items.push({declarationItem: item, valueItem: newValueItem});
               }
+              category.total += newValueItem.value * item.factor;
            }
          });
          this.declarationItemsToShow.push({Category: category, items: items});  

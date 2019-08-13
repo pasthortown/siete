@@ -185,6 +185,7 @@ export class CoordinadorComponent implements OnInit {
    registers_mintur = [];
    registerMinturSelected: any = null;
    currentPageMinturRegisters = 1;
+   razon_social = '';
    lastPageMinturRegisters = 1;
    recordsByPageRegisterMintur = 5;
    mostrarDataRegisterMintur = false;
@@ -2546,6 +2547,7 @@ export class CoordinadorComponent implements OnInit {
          const params = [{canton: canton.name.toUpperCase()},
             {fecha: today.toLocaleDateString().toUpperCase()},
             {numero_registro: r0.register.code.toUpperCase()},
+            {razon_zocial: this.razon_social.toUpperCase()},
             {nombre_comercial: r2.establishment.commercially_known_name.toUpperCase()},
             {actividad: actividad},
             {categoria: clasificacion.toUpperCase()},
@@ -2566,7 +2568,7 @@ export class CoordinadorComponent implements OnInit {
          document.document_type = 'REGISTRO TURÍSTICO';
          let paramsToBuild = {
             template: 1, qr: true, qr_value: qr_value, params: params
-         }
+         };
          document.procedure_id = this.tipo_tramite.toUpperCase();
          document.zonal = zonal.name;
          document.user = iniciales_cordinador_zonal;
@@ -2637,6 +2639,7 @@ export class CoordinadorComponent implements OnInit {
                {fecha: today.toLocaleDateString().toUpperCase()},
                {nombre_comercial: r2.establishment.commercially_known_name.toUpperCase()},
                {ruc: this.ruc_registro_selected.ruc.number},
+               {razon_social: this.razon_social.toUpperCase()},
                {provincia: provincia.name.toUpperCase()},
                {direccion: r2.establishment.address_main_street.toUpperCase() + ' ' + r2.establishment.address_number.toUpperCase() + ' ' + r2.establishment.address_secondary_street.toUpperCase()},
                {categoria: clasificacion.toUpperCase()},
@@ -2856,6 +2859,7 @@ export class CoordinadorComponent implements OnInit {
   buildDeclarationItemsToShow() {
    this.declarationItemsToShow = [];
    this.declarationItemsCategories.forEach(category => {
+      category.total = 0;
       if (category.tax_payer_type_id == this.ruc_registro_selected.ruc.tax_payer_type_id) {
          const items = [];
          this.declarationItems.forEach(item => {
@@ -2865,6 +2869,7 @@ export class CoordinadorComponent implements OnInit {
               if (item.tax_payer_type_id == this.ruc_registro_selected.ruc.tax_payer_type_id) {
                 items.push({declarationItem: item, valueItem: newValueItem});
               }
+              category.total += newValueItem.value * item.factor;
            }
          });
          this.declarationItemsToShow.push({Category: category, items: items});  
@@ -4107,6 +4112,7 @@ guardarDeclaracion() {
                  if (element.campo == 'razonSocial') {
                     datosGenerales += '<strong>Razón Social: </strong> ' + element.valor + '<br/>';
                     RZ_name = element.valor;
+                    this.razon_social = element.valor;
                  }
                  if (element.campo == 'email') {
                     if (JSON.stringify(element.valor) !== '{}') {

@@ -1052,6 +1052,7 @@ export class RegistroComponent implements OnInit {
   buildDeclarationItemsToShow() {
    this.declarationItemsToShow = [];
    this.declarationItemsCategories.forEach(category => {
+      category.total = 0;
       if (category.tax_payer_type_id == this.ruc_registro_selected.ruc.tax_payer_type_id) {
          const items = [];
          this.declarationItems.forEach(item => {
@@ -1061,6 +1062,7 @@ export class RegistroComponent implements OnInit {
               if (item.tax_payer_type_id == this.ruc_registro_selected.ruc.tax_payer_type_id) {
                 items.push({declarationItem: item, valueItem: newValueItem});
               }
+              category.total += newValueItem.value * item.factor;
            }
          });
          this.declarationItemsToShow.push({Category: category, items: items});  

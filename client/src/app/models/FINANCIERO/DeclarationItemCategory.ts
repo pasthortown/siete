@@ -4,4 +4,5 @@ export class DeclarationItemCategory {
    description: String;
    year: number;
    tax_payer_type_id: number;
+   total: number;
 }

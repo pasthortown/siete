@@ -1491,6 +1491,7 @@ getDeclarationItems() {
  buildDeclarationItemsToShow() {
    this.declarationItemsToShow = [];
    this.declarationItemsCategories.forEach(category => {
+      category.total = 0;
       if (category.tax_payer_type_id == this.ruc_registro_selected.ruc.tax_payer_type_id) {
          const items = [];
          this.declarationItems.forEach(item => {
@@ -1500,13 +1501,14 @@ getDeclarationItems() {
               if (item.tax_payer_type_id == this.ruc_registro_selected.ruc.tax_payer_type_id) {
                 items.push({declarationItem: item, valueItem: newValueItem});
               }
+              category.total += newValueItem.value * item.factor;
            }
          });
          this.declarationItemsToShow.push({Category: category, items: items});  
       }
    });
    this.calcularUnoxMil();
-}
+  }
 
  addComplementaryFoodService() {
     const complementaryFoodService = new ComplementaryServiceFood();

@@ -159,6 +159,7 @@ export class InspectorComponent implements OnInit {
    registerApprovalInspector: ApprovalState = new ApprovalState();
    registerApprovalFinanciero: ApprovalState = new ApprovalState();
    isAssigned = false;
+   razon_social = '';
    hasIspectionDate  = false;
    hasInform  = false;
    hasRequisites = false;
@@ -1424,6 +1425,7 @@ export class InspectorComponent implements OnInit {
                {codigo: codigo},
                {numero_coordinacion_zonal: iniciales_cordinacion_zonal},
                {aclaracion_registro: aclaracion_registro},
+               {razon_social: this.razon_social.toUpperCase()},
                {tramite: this.tipo_tramite.toUpperCase()},
                {nombre_comercial: r2.establishment.commercially_known_name.toUpperCase()},
                {representante_legal: this.representante_legal.toUpperCase()},
@@ -2486,6 +2488,7 @@ export class InspectorComponent implements OnInit {
   buildDeclarationItemsToShow() {
    this.declarationItemsToShow = [];
    this.declarationItemsCategories.forEach(category => {
+      category.total = 0;
       if (category.tax_payer_type_id == this.ruc_registro_selected.ruc.tax_payer_type_id) {
          const items = [];
          this.declarationItems.forEach(item => {
@@ -2495,6 +2498,7 @@ export class InspectorComponent implements OnInit {
               if (item.tax_payer_type_id == this.ruc_registro_selected.ruc.tax_payer_type_id) {
                 items.push({declarationItem: item, valueItem: newValueItem});
               }
+              category.total += newValueItem.value * item.factor;
            }
          });
          this.declarationItemsToShow.push({Category: category, items: items});  
@@ -3629,6 +3633,7 @@ guardarDeclaracion() {
                  if (element.campo == 'razonSocial') {
                     datosGenerales += '<strong>Razón Social: </strong> ' + element.valor + '<br/>';
                     RZ_name = element.valor;
+                    this.razon_social = element.valor;
                  }
                  if (element.campo == 'email') {
                     if (JSON.stringify(element.valor) !== '{}') {
