@@ -11,6 +11,7 @@ export class Pay {
    amount_to_pay_base: number;
    amount_to_pay_fines: number;
    notes: String;
+   nuevo: Boolean;
    constructor() {
       this.id = 0;
       this.payed = false;
@@ -22,5 +23,6 @@ export class Pay {
       this.amount_to_pay_fines = 0;
       this.amount_to_pay = 0;
       this.notes = '';
+      this.nuevo = false;
    }
 }

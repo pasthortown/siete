@@ -83,6 +83,7 @@
                   <th>Valor a Pagar - Multas</th>
                   <th>Valor a Pagar - Intereses</th>
                   <th>Valor a Pagar - Total</th>
+                  <th>Es Nuevo</th>
                   <th>Opciones</th>
                </tr>
             </thead>
@@ -93,6 +94,8 @@
                   <td>{{paySelected.amount_to_pay_fines | number: '1.2'}} USD</td>
                   <td>{{paySelected.amount_to_pay_taxes | number: '1.2'}} USD</td>
                   <td>{{paySelected.amount_to_pay | number: '1.2'}} USD</td>
+                  <td><label class="switch"><input type="checkbox" id="esNuevo"
+                    name="esNuevo" [(ngModel)]="paySelected.nuevo"><span class="slider round"></span></label></td>
                   <td>
                       <div class="btn-group" role="group">
                         <button type="button" class="btn btn-success" title="Cargar Valor a Pagar" (click)="saveToPayValueCalc(paySelected)">

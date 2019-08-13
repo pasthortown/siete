@@ -1038,8 +1038,17 @@ calcularUnoxMil() {
    this.declarations.forEach(declaration => {
       if (declaration.year.toString() == pay.code) {
          const today = new Date();
+         let year_fiscal = declaration.year;
+         if (this.ruc_registro_selected.ruc.tax_payer_type_id == 1) {
+            year_fiscal = declaration.year;
+         } else {
+            year_fiscal = declaration.year - 1;
+         }
+         if (this.pay.nuevo) {
+            year_fiscal = declaration.year;
+         }
          const params = [{year_declaration: declaration.year},
-            {year_fiscal: today.getFullYear()},
+            {year_fiscal: year_fiscal},
             {razon_social: this.registerMinturSelected.establishment.commercially_known_name.toUpperCase()},
             {ruc: this.ruc_registro_selected.ruc.number},
             {direccion: (this.registerMinturSelected.establishment.address_main_street + ' ' + this.registerMinturSelected.establishment.address_number + ' ' + this.registerMinturSelected.establishment.address_secondary_street).toUpperCase()},
