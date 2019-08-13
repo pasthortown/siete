@@ -1907,32 +1907,32 @@ export class CoordinadorComponent implements OnInit {
    } else {
       this.mostrarMotivoTramite = true;
    }
+   this.tipo_tramite = 'REGISTRO';
+   const primerdigito = estado.substring(0, 1);
+   if (primerdigito == '1') {
+      this.tipo_tramite = 'REGISTRO';
+   }
+   if (primerdigito == '2') {
+      this.tipo_tramite = 'RECLASIFICACIÓN';
+   }
+   if (primerdigito == '3') {
+      this.tipo_tramite = 'RECATEGORIZACIÓN';
+   }
+   if (primerdigito == '4') {
+      this.tipo_tramite = 'ACTUALIZACIÓN';
+   }
+   if (primerdigito == '5') {
+      this.tipo_tramite = 'INACTIVACIÓN';
+   }
+   if (primerdigito == '6') {
+      this.tipo_tramite = 'REINGRESO';
+   }
    this.registerProcedureDataService.get_by_register_id(this.idRegister.toString()).then( r => {
       if (typeof r.id != 'undefined') {
          this.motivoTramite = r.justification;
          this.registerCatastroDataService.get_by_register_code(this.register_code).then( r2 => {
             if (typeof r2.activity != 'undefined') {
                this.as_turistic_date = new Date(r2.as_turistic_date.toString());
-            }
-            this.tipo_tramite = '';
-            const primerdigito = estado.substring(0, 1);
-            if (primerdigito == '1') {
-               this.tipo_tramite = 'REGISTRO';
-            }
-            if (primerdigito == '2') {
-               this.tipo_tramite = 'RECLASIFICACIÓN';
-            }
-            if (primerdigito == '3') {
-               this.tipo_tramite = 'RECATEGORIZACIÓN';
-            }
-            if (primerdigito == '4') {
-               this.tipo_tramite = 'ACTUALIZACIÓN';
-            }
-            if (primerdigito == '5') {
-               this.tipo_tramite = 'INACTIVACIÓN';
-            }
-            if (primerdigito == '6') {
-               this.tipo_tramite = 'REINGRESO';
             }
          }).catch( e => { console.log(e); });
       }

@@ -129,7 +129,7 @@ export class InspectorComponent implements OnInit {
    balance: DeclarationAttachment = new DeclarationAttachment();
    lastPagePays = 1;
    register_code = '';
-   as_turistic_date = null;
+   as_turistic_date: Date = null;
    recordsByPagePays = 5;
    rowsPays = [];
    columnsPays = [];
@@ -1716,6 +1716,9 @@ export class InspectorComponent implements OnInit {
               } else {
                fecha_registro = (new Date(r2.establishment.as_turistic_register_date)).toLocaleDateString();
               }
+              if (this.as_turistic_date !== null) {
+               fecha_registro = this.as_turistic_date.toLocaleDateString();
+              }
               let local = '';
               if (r2.establishment.establishment_property_type_id == 1) {
                local = 'PROPIO';
@@ -1770,7 +1773,7 @@ export class InspectorComponent implements OnInit {
                {nombre_comercial: r2.establishment.commercially_known_name.toUpperCase()},
                {ruc: this.ruc_registro_selected.ruc.number.toUpperCase()},
                {actividad: actividad.toUpperCase()},
-               {categoria: r0.register_category.name.toUpperCase()},
+               {categoria: clasificacion.toUpperCase()},
                {tipo_establecimiento:tipo_establecimiento.toUpperCase()},
                {representante_legal: this.representante_legal.toUpperCase()},
                {telefono_principal: r2.contact_user.main_phone_number.toUpperCase()},
@@ -1779,7 +1782,7 @@ export class InspectorComponent implements OnInit {
                {numero_registro: r0.register.code.toUpperCase()},
                {fecha_registro: fecha_registro.toUpperCase()},
                {tipo_tramite: this.tipo_tramite.toUpperCase()},
-               {clasificacion:clasificacion.toUpperCase()},
+               {clasificacion: r0.register_category.name.toUpperCase()},
                {franquicia_cadena: r2.establishment.franchise_chain_name.toUpperCase()},
                {contacto_establecimiento: r2.contact_user.name.toUpperCase()},
                {telefono_secundario: r2.contact_user.secondary_phone_number.toUpperCase()},
@@ -2173,6 +2176,11 @@ export class InspectorComponent implements OnInit {
          this.selectRegisterMintur(element);
          this.idRegister = event.row.registerId;
          this.register_code = event.row.code;
+         this.registerCatastroDataService.get_by_register_code(this.register_code).then( r2 => {
+            if (typeof r2.activity != 'undefined') {
+               this.as_turistic_date = new Date(r2.as_turistic_date.toString());
+            }
+         }).catch( e => { console.log(e); });
          this.stateTramiteId = element.states.state_id;
          this.estado = this.stateTramiteId.toString();
          this.checkMotivoTramite(this.estado);
@@ -2998,7 +3006,6 @@ guardarDeclaracion() {
       this.toastr.errorToastr('Debe cargar el certificado de uso de suelo.', 'Nuevo');
       return;
    }
-   //AQUI
    let mostradoError = false;
    this.rucEstablishmentRegisterSelected.requisites.forEach(element => {
       if (element.HTMLtype == 'TRUE / FALSE' && element.fullfill) {
