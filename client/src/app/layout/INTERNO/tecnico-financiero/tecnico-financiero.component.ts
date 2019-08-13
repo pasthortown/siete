@@ -1902,7 +1902,14 @@ rounded(numero: number): number {
    return Math.round(toround)/100;
 }
 
-encerarDeclaracion(paySelected) {
+encerarAllDeclaracion(paySelected: Pay) {
+   paySelected.amount_to_pay_base = 0;
+   paySelected.amount_to_pay_fines = 0;
+   paySelected.amount_to_pay_taxes = 0;
+   paySelected.amount_to_pay = paySelected.amount_to_pay_base + paySelected.amount_to_pay_fines + paySelected.amount_to_pay_taxes;
+}
+
+encerarDeclaracion(paySelected: Pay) {
    paySelected.amount_to_pay_fines = 0;
    paySelected.amount_to_pay_taxes = 0;
    paySelected.amount_to_pay = paySelected.amount_to_pay_base + paySelected.amount_to_pay_fines + paySelected.amount_to_pay_taxes;

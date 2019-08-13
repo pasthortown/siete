@@ -33,12 +33,16 @@ class ExporterController extends Controller
 
   protected function build_table_declaration($declaration) {
     $html_content = '';
-    $html_content .= '<table style="width: 100%; border: 1px solid black; border-collapse: collapse; text-align: left; font-size:14px;">'; 
+    $html_content .= '<table style="width: 100%; border: 1px solid black; border-collapse: collapse; text-align: left; font-size:14px;">';
     foreach($declaration as $declarationCategory) {
+      $total = 0;
+      $totalName = 'TOTAL ' . $declarationCategory['Category']['name'];
       $html_content .= '<tr><th colspan="2" style="text-align:center; background-color:yellow;">'.$declarationCategory['Category']['name'].'</th></tr>';
       foreach($declarationCategory['items'] as $item) {
         $html_content .= '<tr><th style="border: 1px solid black;">'.$item['declarationItem']['name'].'</th><td style="border: 1px solid black;text-align: right;">'.$item['valueItem']['value'].'USD</td></tr>';
+        $total += ($item['valueItem']['value'] * $item['declarationItem']['factor']);
       }
+      $html_content .= '<tr><th style="border: 1px solid black; background-color: silver;">'.$totalName.'</th><th style="border: 1px solid black;text-align: right; color: red; background-color: silver;">'.$total.'USD</th></tr>';
     } 
     $html_content .= '</table><br/>';
     return $html_content;
