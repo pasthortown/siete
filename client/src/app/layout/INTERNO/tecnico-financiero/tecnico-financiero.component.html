@@ -57,7 +57,33 @@
           </div>
         </div>
       </div>
-      
+      <div class="row mt-2 mb-2" *ngIf="contactUser.id != 0">
+        <div class="col-12">
+          <table class="table table-hover mt-2">
+            <thead>
+              <tr><th colspan="2" style="text-align: center;">DATOS DE CONTACTO</th></tr>
+            </thead>
+            <tbody>
+               <tr>
+                  <th>Nombre Completo</th>
+                  <td>{{contactUser.name}}</td>
+               </tr>
+               <tr>
+                  <th>Correo Electrónico</th>
+                  <td><a href="mailto:{{contactUser.email}}">{{contactUser.email}}</a></td>
+                </tr>
+                <tr>
+                  <th>Teléfono Principal</th>
+                  <td><a href="tel:{{contactUser.main_phone_number}}">{{contactUser.main_phone_number}}</a></td>
+                </tr>
+                <tr>
+                  <th>Teléfono Secundario</th>
+                  <td><a href="tel:{{contactUser.secondary_phone_number}}">{{contactUser.secondary_phone_number}}</a></td>
+               </tr>
+            </tbody>
+         </table>
+        </div>
+      </div>
       <div class="col-12 text-center mb-3" *ngIf="mostrarDataRegisterMintur">
         <input type="checkbox" name="vacacionesCheck" id="vacacionesCheck" [(ngModel)]="estoyVacaciones" (change)= "rechazarCheck()"> Devolver el trámite seleccionado
       </div>
@@ -73,6 +99,7 @@
         <h4><strong>Órdenes de Pagos Calculadas Por Declaración</strong></h4><button type="button" class="btn btn-primary" title="Actualizar" (click)="buildPays()"><i class="fas fa-sync"></i></button>
       </div>
      </div>
+     <div style="width: 100%; overflow-x: auto;">
     <div class="row" *ngIf="mostrarDataRegisterMintur">
       <div class="col-12">
          <table class="table table-hover mt-2">
@@ -117,6 +144,7 @@
          </table>
       </div>
    </div>
+  </div>
    <div class="row" *ngIf="mostrarDataRegisterMintur">
     <div class="col-12">
       <h4><strong>Insertar Órden de Pago Manual</strong></h4>
@@ -311,7 +339,6 @@
                                   <th>Seleccionado</th>
                                   <th>Año</th>
                                   <th>Fecha de Declaración</th>
-                                  <th>Estado</th>
                                 </tr>
                               </thead>
                               <tbody>
@@ -321,7 +348,6 @@
                                   </td>
                                   <td>{{declaration.year}}</td>
                                   <td>{{declaration.declaration_date | date:'y-MM-dd'}}</td>
-                                  <td>{{declaration.status_name}}</td>
                                 </tr>
                               </tbody>
                             </table>

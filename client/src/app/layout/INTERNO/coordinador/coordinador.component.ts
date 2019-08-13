@@ -2445,8 +2445,8 @@ export class CoordinadorComponent implements OnInit {
                   this.toastr.successToastr('Datos Guardados Satisfactoriamente', 'Coordinación');
                   this.guardandoTramite = false;
                   this.registerCatastroDataService.post(newRegistroCatastro).then( r => {
+                     this.refresh();
                   }).catch( e => { console.log(e); });
-                  this.refresh();
                }).catch( e => { console.log(e); });
             }).catch( e => { console.log(e); });
          }).catch( e => { console.log(e); });

@@ -277,6 +277,7 @@ export class TecnicoFinancieroComponent implements OnInit {
  establishment_id = 0;
  consumoCedulaRepresentanteLegal = false;
  SRIOK = false;
+ contactUser: User = new User();
  REGCIVILOK = false;
  balance: DeclarationAttachment = new DeclarationAttachment();
  REGCIVILOKEstablishment = false;
@@ -823,6 +824,7 @@ calcularUnoxMil() {
        {title: 'Número de RUC', name: 'number'},
        {title: 'Número de Establecimiento', name: 'ruc_code_id'},
        {title: 'Nombre Comercial', name: 'establishment'},
+       {title: 'Estado', name: 'estado'},
        {title: 'Dirección', name: 'address'},
        {title: 'Categoría', name: 'category'},
        {title: 'Fecha de Solicitud', name: 'created_at'},
@@ -864,11 +866,12 @@ calcularUnoxMil() {
             establishment: item.establishment.commercially_known_name,
             address: item.establishment.address_main_street + ' ' + item.establishment.address_number + ' ' + item.establishment.address_secondary_street,
             created_at: creacion.toLocaleDateString(),
-            date_assigment: item.register.date_assigment,
+            date_assigment: new Date(item.register.date_assigment).toLocaleDateString(),
             category: this.getRegisterCategory(item.register.register_type_id),
             status: registerState,
             status_id: item.states.state_id,
             establishment_id: item.establishment.id,
+            estado: this.getRegisterState(item.states.state_id),
          });
         }
     });
@@ -1557,6 +1560,7 @@ getDeclarationItems() {
          this.getRegistersOnRuc();
          this.ruc_registro_selected.ruc.establishments = [];
          this.ruc_registro_selected.ruc.contact_user = r.contact_user as User;
+         this.contactUser = r.contact_user as User;
          if (r.group_given == '0') {
             this.ruc_registro_selected.ruc.group_given = new GroupGiven();
          } else {
@@ -1718,8 +1722,7 @@ getDeclarationItems() {
   this.states = [];
   this.stateDataService.get().then( r => {
      this.states = r as State[];
-     this.getRegisterTypes();
-     this.getSpecificStates();
+     this.getStatesAlojamiento();
   }).catch( e => { console.log(e); });
  }
 
@@ -3121,6 +3124,7 @@ removeLanguage() {
          this.specific_states.push(element);
       }
    });
+   this.getRegisterTypes();
  }
 
  getDeclarationStates() {

@@ -1021,6 +1021,12 @@ export class RegistroComponent implements OnInit {
    this.buildDeclarationItemsToShow();
   }
 
+  borrarDeclaration(declaration) {
+   this.declarationDataService.delete(declaration.id).then( r => {
+      this.refreshDeclaracion();
+   }).catch( e => { console.log(e); });
+  }
+
   mostrarFechaMaximaPago(): Boolean {
      return typeof this.declaration_selected.max_date_to_pay != 'undefined';
   }

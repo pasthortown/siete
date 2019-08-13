@@ -5,10 +5,7 @@ ps -fx //listar los procesos
 screen -r NOMBRE
 ctrl + ad para volver a consola
 
-DATOS DE CONTACTO PARA ENVIAR MAIL Y DECIRLE QUE LA DECLARACION MAL HECHA
-MOSTRAR ESTADOS
 UNA VEZ HECHO EL CAMBIO VUELVE A LA BANDEJA DEL FINANCIERO
-PODER BORRAR DECLARACION HECHA
 
 INSERT INTO public.account_rols(
 	id, name, description, code, father_code)

@@ -968,6 +968,7 @@
                                   <th>Año</th>
                                   <th>Fecha de Declaración</th>
                                   <th>Estado</th>
+                                  <th>Opciones</th>
                                 </tr>
                               </thead>
                               <tbody>
@@ -978,6 +979,11 @@
                                   <td>{{declaration.year}}</td>
                                   <td>{{declaration.declaration_date}}</td>
                                   <td>{{declaration.status_name}}</td>
+                                  <td>
+                                    <button type="button" title="Borrar" class="btn btn-danger" (click)="borrarDeclaration(declaration)">
+                                      <i class="fas fa-trash"></i>
+                                    </button>
+                                  </td>
                                 </tr>
                               </tbody>
                             </table>
