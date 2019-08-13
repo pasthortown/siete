@@ -51,7 +51,7 @@ class ExporterController extends Controller
   function pdf_declaration(Request $data) {
     $request = $data->json()->all();
     $html_content = '<pagina><div style="width:100%; height:350px;"></div><div style="width:100%; margin-left: 150px; margin-right:100px;">';
-    $html_content .= '<p style="text-align: center">FORMULARIO PARA APLICACIÓN DE LA CONTRIBUCIÓN DE UNO POR MIL DE LOS ACTIVOS FIJOS</p>';
+    $html_content .= '<p style="text-align: center">FORMULARIO PARA APLICACIÓN DE LA CONTRIBUCIÓN DE UNO POR MIL DE LOS ACTIVOS FIJOS (##tipo_persona##)</p>';
     $html_content .= '<p style="text-align: justify; font-size:12px;">BASE LEGAL: Art. 39 Literal "a" Ley de Turismo. Registro Oficial 733-Suplemento de 27 de diciembre de 2002, modificado el 29 de diciembre de 2014.<br/>Art. 78 del Reglamento de aplicación a la Ley de Turismo. Registro Oficial de 5 de enero del 2004</p>';
     $html_content .= '<table style="width: 100%; border: 1px solid black; border-collapse: collapse; text-align: left; font-size:14px;">';
     $html_content .= '<tr><th colspan="4" style="text-align:center; background-color:yellow;">DATOS DE CONTRIBUYENTE</th></tr>';

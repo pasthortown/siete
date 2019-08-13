@@ -1039,16 +1039,20 @@ calcularUnoxMil() {
       if (declaration.year.toString() == pay.code) {
          const today = new Date();
          let year_fiscal = declaration.year;
+         let tipo_persona = 'PERSONA NATURAL';
          if (this.ruc_registro_selected.ruc.tax_payer_type_id == 1) {
             year_fiscal = declaration.year;
+            tipo_persona = 'PERSONA NATURAL';
          } else {
             year_fiscal = declaration.year - 1;
+            tipo_persona = 'PERSONA JURÍDICA';
          }
-         if (this.pay.nuevo) {
+         if (pay.nuevo) {
             year_fiscal = declaration.year;
          }
          const params = [{year_declaration: declaration.year},
             {year_fiscal: year_fiscal},
+            {tipo_persona: tipo_persona},
             {razon_social: this.registerMinturSelected.establishment.commercially_known_name.toUpperCase()},
             {ruc: this.ruc_registro_selected.ruc.number},
             {direccion: (this.registerMinturSelected.establishment.address_main_street + ' ' + this.registerMinturSelected.establishment.address_number + ' ' + this.registerMinturSelected.establishment.address_secondary_street).toUpperCase()},
@@ -1912,10 +1916,35 @@ rounded(numero: number): number {
 }
 
 encerarAllDeclaracion(paySelected: Pay) {
-   paySelected.amount_to_pay_base = 0;
-   paySelected.amount_to_pay_fines = 0;
-   paySelected.amount_to_pay_taxes = 0;
-   paySelected.amount_to_pay = paySelected.amount_to_pay_base + paySelected.amount_to_pay_fines + paySelected.amount_to_pay_taxes;
+   Swal.fire({
+      title: 'Confirmación',
+      text: '¿Está seguro que desea encerar la declaración?',
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Si, continuar',
+      cancelButtonText: 'No, cancelar',
+      reverseButtons: true
+    }).then((result) => {
+      if (result.value) {
+        Swal.fire(
+          'Confirmado!',
+          'Los valores de la declaración han sido encerados',
+          'success'
+        );
+        paySelected.amount_to_pay_base = 0;
+        paySelected.amount_to_pay_fines = 0;
+        paySelected.amount_to_pay_taxes = 0;
+        paySelected.amount_to_pay = paySelected.amount_to_pay_base + paySelected.amount_to_pay_fines + paySelected.amount_to_pay_taxes;
+      } else if (
+        result.dismiss === Swal.DismissReason.cancel
+      ) {
+        Swal.fire(
+          'Cancelado',
+          '',
+          'error'
+        );
+      }
+    });
 }
 
 encerarDeclaracion(paySelected: Pay) {
