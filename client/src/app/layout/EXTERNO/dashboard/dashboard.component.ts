@@ -2569,26 +2569,31 @@ guardarDeclaracion() {
   }
 
   guardarRegistro() {
-   if (this.certificadoUsoSuelo.floor_authorization_certificate_file === ''){
-      this.toastr.errorToastr('Debe cargar el certificado de uso de suelo.', 'Nuevo');
-      return;
-   }
-   let mostradoError = false;
-   this.rucEstablishmentRegisterSelected.requisites.forEach(element => {
-      if (element.HTMLtype == 'TRUE / FALSE' && element.fullfill) {
-         element.value = 'true';
+   if (!(this.actualizando || this.inactivando)) {
+      if (this.certificadoUsoSuelo.floor_authorization_certificate_file === ''){
+         this.toastr.errorToastr('Debe cargar el certificado de uso de suelo.', 'Nuevo');
+         return;
       }
-      let esgrupo = false;
-      if (element.HTMLtype == "GRUPO 0" || element.HTMLtype == "GRUPO 1" || element.HTMLtype == "GRUPO 2" || element.HTMLtype == "GRUPO 3" || element.HTMLtype == "GRUPO 4" || element.HTMLtype == "GRUPO 5" || element.HTMLtype == "GRUPO 6") {
-         esgrupo = true;
+      let mostradoError = false;
+      this.rucEstablishmentRegisterSelected.requisites.forEach(element => {
+         if (element.HTMLtype == 'TRUE / FALSE' && element.fullfill) {
+            element.value = 'true';
+         }
+         let esgrupo = false;
+         if (element.HTMLtype == "GRUPO 0" || element.HTMLtype == "GRUPO 1" || element.HTMLtype == "GRUPO 2" || element.HTMLtype == "GRUPO 3" || element.HTMLtype == "GRUPO 4" || element.HTMLtype == "GRUPO 5" || element.HTMLtype == "GRUPO 6") {
+            esgrupo = true;
+         }
+         if (!mostradoError && !esgrupo && element.mandatory && (element.value == 'false' || element.value == '0')) {
+            this.toastr.errorToastr('La repuesta seleccionada en los requisitos obligatorios no corresponde a la admitida para la categoría seleccionada.', 'Normativa');
+            mostradoError = true;
+         }
+      });
+      if (mostradoError) {
+         return;
       }
-      if (!mostradoError && !esgrupo && element.mandatory && (element.value == 'false' || element.value == '0')) {
-         this.toastr.errorToastr('La repuesta seleccionada en los requisitos obligatorios no corresponde a la admitida para la categoría seleccionada.', 'Normativa');
-         mostradoError = true;
-      }
-   });
-   if (mostradoError) {
-      return;
+      this.languageDataService.save_languajes(this.establishment_selected.id, this.establishment_selected.languages_on_establishment).then( r => {
+
+      }).catch( e => { console.log(e); });
    }
    let NoApruebaCantidadCamas = false;
    this.rucEstablishmentRegisterSelected.capacities_on_register.forEach(capacity => {
@@ -2615,9 +2620,6 @@ guardarDeclaracion() {
       });
    });
    this.rucEstablishmentRegisterSelected.tarifario_rack = tariffs;
-   this.languageDataService.save_languajes(this.establishment_selected.id, this.establishment_selected.languages_on_establishment).then( r => {
-
-   }).catch( e => { console.log(e); });
    this.rucEstablishmentRegisterSelected.code = this.register_code;
    let tipo_tramite = 'Registro';
    this.procedureJustification.justification = "Registro";
