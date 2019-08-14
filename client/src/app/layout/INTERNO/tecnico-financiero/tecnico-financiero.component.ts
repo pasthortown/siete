@@ -1058,6 +1058,8 @@ calcularUnoxMil() {
             {tipo_persona: tipo_persona},
             {razon_social: this.registerMinturSelected.establishment.commercially_known_name.toUpperCase()},
             {ruc: this.ruc_registro_selected.ruc.number},
+            {nombre_responsable: this.user.name.toUpperCase()},
+            {identificacion_responsable: this.user.identification},
             {direccion: (this.registerMinturSelected.establishment.address_main_street + ' ' + this.registerMinturSelected.establishment.address_number + ' ' + this.registerMinturSelected.establishment.address_secondary_street).toUpperCase()},
             {registro: this.registerMinturSelected.register.code},
             {nombre_declarante: this.ruc_registro_selected.ruc.contact_user.name.toUpperCase()},
