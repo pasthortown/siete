@@ -2315,8 +2315,11 @@ export class CoordinadorComponent implements OnInit {
       if (!enviarMail) {
          return;
       }
-     let numerico = '10000000'.substr(0, 8 - this.idRegister.toString().length) + this.idRegister.toString();
-     const code = provincia.acronym.toString() + canton.acronym.toString() + 'AJ-' + numerico;
+     //let numerico = '10000000'.substr(0, 8 - this.idRegister.toString().length) + this.idRegister.toString();
+     //const code = provincia.acronym.toString() + canton.acronym.toString() + 'AJ-' + numerico;
+     const number_by_ruc = '000'.substr(0, 3 - this.registerMinturSelected.establishment.ruc_code_id.toString().length) + this.registerMinturSelected.establishment.ruc_code_id.toString();
+     const numeric_register = '000000'.substr(0, 6 - this.idRegister.toString().length) + this.idRegister.toString();
+     const code = this.ruc_registro_selected.ruc.number + '.' + number_by_ruc + '.' + numeric_register;
      this.approvalStateDataService.put(this.registerApprovalCoordinador).then( r => {
         this.registerDataService.set_register_code(code, this.idRegister).then( r => {
         }).catch( e => { console.log(e); });

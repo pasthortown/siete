@@ -131,6 +131,8 @@ export class DashboardComponent implements OnInit {
    idCausal = 0;
    reclasificando = false;
    recategorizando = false;
+   my_category_current = '';
+   my_classification_current = '';
    registrarlo = false;
    tabActiveSuperior = 'tab1';
    selectedNameType: RucNameType = new RucNameType();
@@ -1561,7 +1563,7 @@ export class DashboardComponent implements OnInit {
    this.reclasificando = false;
    this.recategorizando = false;
    this.idCausal = 7;
-   this.mensajePorTipoTramite = 'Usted va a proceder a regularizar su establecimiento turístico, para lo cual deberá complementar la información que esta sección presenta, tiene la opción de guardarla en cualquier momento.'
+   this.mensajePorTipoTramite = 'Usted va a proceder a regularizar su establecimiento turístico, para lo cual deberá complementar la información que esta sección presenta, tiene la opción de guardarla en cualquier momento.';
   }
 
   reclasificacion() {
@@ -1572,7 +1574,7 @@ export class DashboardComponent implements OnInit {
    this.reclasificando = true;
    this.recategorizando = false;
    this.idCausal = 4;
-   this.mensajePorTipoTramite = 'Usted va a proceder a regularizar su establecimiento turístico, para lo cual deberá complementar la información que esta sección presenta, tiene la opción de guardarla en cualquier momento.'
+   this.mensajePorTipoTramite = 'Usted va a proceder a regularizar su establecimiento turístico, para lo cual deberá complementar la información que esta sección presenta, tiene la opción de guardarla en cualquier momento.';
   }
 
   recategorizacion() {
@@ -1583,7 +1585,7 @@ export class DashboardComponent implements OnInit {
    this.reclasificando = false;
    this.recategorizando = true;
    this.idCausal = 5;
-   this.mensajePorTipoTramite = 'Usted va a proceder a regularizar su establecimiento turístico, para lo cual deberá complementar la información que esta sección presenta, tiene la opción de guardarla en cualquier momento.'
+   this.mensajePorTipoTramite = 'Usted va a proceder a regularizar su establecimiento turístico, para lo cual deberá complementar la información que esta sección presenta, tiene la opción de guardarla en cualquier momento.';
   }
 
   checkTramitEmitted(register_code: String) {
@@ -1610,6 +1612,8 @@ export class DashboardComponent implements OnInit {
 
   onCellClick(event) {
    this.register_code = event.row.register_code;
+   this.my_category_current = event.row.category;
+   this.my_classification_current = event.row.classification;
    this.register_as_turistic_Date = new Date(event.row.as_turistic_date.toString());
    this.rows.forEach(row => {
       if (this.register_code == row.register_code) {
@@ -2569,6 +2573,30 @@ guardarDeclaracion() {
   }
 
   guardarRegistro() {
+   if (this.reclasificando) {
+      let newClassification = '';
+      this.clasifications_registers.forEach(element => {
+         if (element.code == this.categorySelectedCode) {
+            newClassification = element.name.toString();
+         }
+      });
+      if (this.my_classification_current.toUpperCase() == newClassification.toUpperCase()) {
+         this.toastr.errorToastr('Debe seleccionar una Clasificación diferente a la que ya posee.', 'RECLASIFICACIÓN');
+         return;
+      }
+   }
+   if (this.recategorizando) {
+      let newCategory = '';
+      this.categories_registers.forEach(element => {
+         if (element.id == this.rucEstablishmentRegisterSelected.register_type_id) {
+            newCategory = element.name.toString();
+         }
+      });
+      if (this.my_category_current.toUpperCase() == newCategory.toUpperCase()) {
+         this.toastr.errorToastr('Debe seleccionar una Categoría diferente a la que ya posee.', 'RECATEGORIZACIÓN');
+         return;
+      }
+   }
    if (!(this.actualizando || this.inactivando)) {
       if (this.certificadoUsoSuelo.floor_authorization_certificate_file === ''){
          this.toastr.errorToastr('Debe cargar el certificado de uso de suelo.', 'Nuevo');
@@ -2919,7 +2947,11 @@ guardarDeclaracion() {
    this.categories_registers = [];
    this.rucEstablishmentRegisterSelected.requisites = [];
    this.register_typeDataService.get_filtered(this.categorySelectedCode).then( r => {
-      this.categories_registers = r as RegisterType[];
+      const response = r as RegisterType[];
+      response.forEach(element => {
+         this.categories_registers.push(element);
+      });
+      this.getRegisterTypeId();
    }).catch( e => { console.log(e) });
   }
 
@@ -3653,6 +3685,7 @@ guardarDeclaracion() {
     this.rucEstablishmentRegisterSelected.status = 11;
     this.rucEstablishmentRegisterSelected.establishment_id = establishment.id;
     this.mostrarDataRegister = true;
+    this.getRegisterTypeId();
   } else {
     this.selectEstablishmentRegister(registerSelected, false);
   }
@@ -3888,6 +3921,22 @@ guardarDeclaracion() {
       });
     };
    }
+  }
+
+  getRegisterTypeId() {
+   this.register_typeDataService.get().then(r => {
+      const allTypes = r as RegisterType[];
+      allTypes.forEach(element => {
+         if (element.name.toUpperCase() == this.my_classification_current.toUpperCase()) {
+            this.categorySelectedCode = element.code.toString();
+         }
+      });
+      allTypes.forEach(element => {
+         if (element.father_code == this.categorySelectedCode && element.name.toUpperCase() == this.my_category_current.toUpperCase()) {
+            this.rucEstablishmentRegisterSelected.register_type_id = element.id;
+         }
+      });
+   }).catch( e => { console.log(e); });
   }
 
   selectEstablishmentRegister(register: Register, editable: Boolean) {
