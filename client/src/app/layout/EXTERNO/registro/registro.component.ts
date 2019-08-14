@@ -116,6 +116,7 @@ export class RegistroComponent implements OnInit {
    lastPagePays = 1;
    recordsByPagePays = 5;
    rowsPays = [];
+   my_registers = [];
    columnsPays = [];
    dataPays = [];
    pays: Pay[] = [];
@@ -1162,10 +1163,17 @@ export class RegistroComponent implements OnInit {
          if(this.ruc_registro_selected.ruc.tax_payer_type_id > 1) {
             this.getPersonRepresentativeAttachment(this.ruc_registro_selected.ruc.number);
          }
+         this.getMyRegister(this.ruc_registro_selected.ruc.number);
          this.checkRuc();
          this.checkIdentificationRepresentant();
          this.getEstablishmentsOnRuc(this.currentPageEstablishment);
       }
+   }).catch( e => { console.log(e); });
+  }
+
+  getMyRegister(ruc_number: String) {
+   this.registerDataService.get_registers_by_ruc(ruc_number).then( r => {
+      this.my_registers = r;
    }).catch( e => { console.log(e); });
   }
 

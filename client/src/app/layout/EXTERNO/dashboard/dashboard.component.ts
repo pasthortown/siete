@@ -3865,6 +3865,10 @@ guardarDeclaracion() {
    this.certificadoUsoSuelo = new FloorAuthorizationCertificate();
    this.registerDataService.get_register_data(register.id).then( r => {
       this.rucEstablishmentRegisterSelected = r.register as Register;
+      if (this.register_code !== '') {
+         this.rucEstablishmentRegisterSelected.code = this.register_code;
+         this.establishment_selected.as_turistic_register_date = this.register_as_turistic_Date;
+      }
       this.getCertificadoUsoSuelo(this.rucEstablishmentRegisterSelected.id);
       this.getReceptionRoom(this.rucEstablishmentRegisterSelected.id);
       this.setCategory(this.rucEstablishmentRegisterSelected.register_type_id);
