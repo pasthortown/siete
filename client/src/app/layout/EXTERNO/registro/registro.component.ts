@@ -1491,6 +1491,11 @@ export class RegistroComponent implements OnInit {
       }
       return;
    }
+   this.my_registers.forEach(my_register => {
+      console.log(my_register);
+      
+   });
+   return;
    let previamente_declarado = false;
    this.declarations.forEach(declaration => {
       if (declaration.year == this.declaration_selected.year) {

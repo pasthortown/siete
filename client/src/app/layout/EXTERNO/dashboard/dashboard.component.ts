@@ -135,6 +135,7 @@ export class DashboardComponent implements OnInit {
    tabActiveSuperior = 'tab1';
    selectedNameType: RucNameType = new RucNameType();
    total_workers = 0;
+   my_registers = [];
    salaRecepciones: ReceptionRoom = new ReceptionRoom();
    franchiseChainNameValidated = false;
    establecimientos_pendiente = false;
@@ -1609,6 +1610,7 @@ export class DashboardComponent implements OnInit {
 
   onCellClick(event) {
    this.register_code = event.row.register_code;
+   this.register_as_turistic_Date = new Date(event.row.as_turistic_date.toString());
    this.rows.forEach(row => {
       if (this.register_code == row.register_code) {
          row.selected = '<div class="col-12 text-right"><span class="far fa-hand-point-right"></span></div>';
@@ -2138,10 +2140,17 @@ export class DashboardComponent implements OnInit {
          this.REGCIVILOK = false;
          this.REGCIVILOKEstablishment = false;
          this.REGCIVILREPRESENTANTELEGALOK = false;
+         this.getMyRegister(this.ruc_registro_selected.ruc.number);
          this.checkRuc();
          this.checkIdentificationRepresentant();
          this.getEstablishmentsOnRuc(this.currentPageEstablishment);
       }
+   }).catch( e => { console.log(e); });
+  }
+
+  getMyRegister(ruc_number: String) {
+   this.registerDataService.get_registers_by_ruc(ruc_number).then( r => {
+      this.my_registers = r;
    }).catch( e => { console.log(e); });
   }
 
@@ -2447,6 +2456,11 @@ guardarDeclaracion() {
       this.toastr.errorToastr('Usted ya ha declarado previamente el año seleccionado.', 'Declaración');
       return;
    }
+   this.my_registers.forEach(my_register => {
+      console.log(my_register);
+      
+   });
+   return;
    this.declaration_selected.declaration_item_values_on_declaration = [];
    this.declarationItemsToShow.forEach(element => {
       element.items.forEach(item => {
@@ -3631,6 +3645,10 @@ guardarDeclaracion() {
   }
   this.establishmentDataService.get_filtered(establishment.id).then( r => {
     this.establishment_selected = r.establishment as Establishment;
+    if (this.register_code !== '') {
+      this.rucEstablishmentRegisterSelected.code = this.register_code;
+      this.establishment_selected.as_turistic_register_date = this.register_as_turistic_Date;
+    }
     this.recoverUbication();
     this.checkEstablishmentAddress();
     this.checkURLWeb();
