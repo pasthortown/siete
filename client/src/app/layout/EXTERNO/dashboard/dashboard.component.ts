@@ -2456,11 +2456,12 @@ guardarDeclaracion() {
       this.toastr.errorToastr('Usted ya ha declarado previamente el año seleccionado.', 'Declaración');
       return;
    }
+   let my_register_state = new RegisterState();
    this.my_registers.forEach(my_register => {
-      console.log(my_register);
-      
+      if (my_register.establishment.ruc_code_id == this.establishment_selected.ruc_code_id) {
+         my_register_state = my_register.status_register as RegisterState;
+      }
    });
-   return;
    this.declaration_selected.declaration_item_values_on_declaration = [];
    this.declarationItemsToShow.forEach(element => {
       element.items.forEach(item => {
@@ -2475,6 +2476,16 @@ guardarDeclaracion() {
          return;
       }
       const declarationSaved = r as Declaration;
+      if (my_register_state.id !== 0) {
+         const textoEstado = my_register_state.state_id.toString();
+         const digitoEstado = textoEstado.substring(textoEstado.length-1, textoEstado.length);
+         if (digitoEstado == '8') {
+            my_register_state.justification = 'Declaración ' + declarationSaved.year.toString() + 'Emitida';
+            my_register_state.state_id = my_register_state.state_id - 1;
+            this.registerStateDataService.post(my_register_state).then( resp => {
+            }).catch( e => { console.log(e); });
+         }
+      }
       this.balance.declaration_id = declarationSaved.id;
       if (this.balance.id == 0) {
          this.declarationAttachmentDataService.post(this.balance).then( r1 => {

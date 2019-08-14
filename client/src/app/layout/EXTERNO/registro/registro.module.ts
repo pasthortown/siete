@@ -53,6 +53,7 @@ import { Ng2TableModule } from 'ng2-table/ng2-table';
 import { ScrollToModule } from '@nicky-lenaers/ngx-scroll-to';
 import { DocumentService } from 'src/app/services/CRUD/EXPORTER/document.service';
 import { ExporterService } from 'src/app/services/negocio/exporter.service';
+import { RegisterStateService } from 'src/app/services/CRUD/ALOJAMIENTO/registerstate.service';
 
 @NgModule({
   imports: [CommonModule,
@@ -74,6 +75,7 @@ import { ExporterService } from 'src/app/services/negocio/exporter.service';
     DeclarationItemCategoryService,
     DeclarationService,
     TaxPayerTypeService,
+    RegisterStateService,
     PersonRepresentativeAttachmentService,
     EstablishmentCertificationService,
     ComplementaryServiceFoodTypeService,

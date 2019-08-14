@@ -90,6 +90,7 @@ import { ReceptionRoom } from 'src/app/models/ALOJAMIENTO/ReceptionRoom';
 import { DocumentService } from 'src/app/services/CRUD/EXPORTER/document.service';
 import { Document as Documento } from 'src/app/models/EXPORTER/Document';
 import { ExporterService } from 'src/app/services/negocio/exporter.service';
+import { RegisterStateService } from 'src/app/services/CRUD/ALOJAMIENTO/registerstate.service';
 
 @Component({
   selector: 'app-registro',
@@ -274,6 +275,7 @@ export class RegistroComponent implements OnInit {
               private rucDataService: RucService,
               private modalService: NgbModal,
               private payDataService: PayService,
+              private registerStateDataService: RegisterStateService,
               private receptionRoomDataService: ReceptionRoomService,
               private declarationAttachmentDataService: DeclarationAttachmentService,
               private agreementDataService: AgreementService,
@@ -1479,10 +1481,6 @@ export class RegistroComponent implements OnInit {
       this.toastr.errorToastr('La información ingresada es incorrecta.', 'Declaración');
       return;
    }
-   if(this.totalunoxmil <0) {
-      this.toastr.errorToastr('La información ingresada es incorrecta.', 'Declaración');
-      return;
-   }
    if (this.balance.declaration_attachment_file == ''){
       if (this.ruc_registro_selected.ruc.tax_payer_type_id == 2) {
          this.toastr.errorToastr('Adjunte el balance individual del establecimiento, suscrito por el representante legal.', 'Declaración');
@@ -1491,11 +1489,6 @@ export class RegistroComponent implements OnInit {
       }
       return;
    }
-   this.my_registers.forEach(my_register => {
-      console.log(my_register);
-      
-   });
-   return;
    let previamente_declarado = false;
    this.declarations.forEach(declaration => {
       if (declaration.year == this.declaration_selected.year) {
@@ -1506,6 +1499,12 @@ export class RegistroComponent implements OnInit {
       this.toastr.errorToastr('Usted ya ha declarado previamente el año seleccionado.', 'Declaración');
       return;
    }
+   let my_register_state = new RegisterState();
+   this.my_registers.forEach(my_register => {
+      if (my_register.establishment.ruc_code_id == this.establishment_selected.ruc_code_id) {
+         my_register_state = my_register.status_register as RegisterState;
+      }
+   });
    this.declaration_selected.declaration_item_values_on_declaration = [];
    this.declarationItemsToShow.forEach(element => {
       element.items.forEach(item => {
@@ -1520,6 +1519,16 @@ export class RegistroComponent implements OnInit {
          return;
       }
       const declarationSaved = r as Declaration;
+      if (my_register_state.id !== 0) {
+         const textoEstado = my_register_state.state_id.toString();
+         const digitoEstado = textoEstado.substring(textoEstado.length-1, textoEstado.length);
+         if (digitoEstado == '8') {
+            my_register_state.justification = 'Declaración ' + declarationSaved.year.toString() + 'Emitida';
+            my_register_state.state_id = my_register_state.state_id - 1;
+            this.registerStateDataService.post(my_register_state).then( resp => {
+            }).catch( e => { console.log(e); });
+         }
+      }
       this.balance.declaration_id = declarationSaved.id;
       if (this.balance.id == 0) {
          this.declarationAttachmentDataService.post(this.balance).then( r1 => {
