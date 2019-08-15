@@ -1074,6 +1074,21 @@ export class RegistroComponent implements OnInit {
    this.calcularUnoxMil();
   }
 
+  calcTotalPartials() {
+   this.declarationItemsCategories.forEach(category => {
+      category.total = 0;
+      if (category.tax_payer_type_id == this.ruc_registro_selected.ruc.tax_payer_type_id) {
+         this.declarationItems.forEach(item => {
+           if(item.declaration_item_category_id == category.id) {
+              const newValueItem = new DeclarationItemValue();
+              newValueItem.declaration_item_id = item.id;
+              category.total += newValueItem.value * item.factor;
+           }
+         });  
+      }
+   });
+  }
+
   addComplementaryFoodService() {
      const complementaryFoodService = new ComplementaryServiceFood();
      let agregable = true;
@@ -1413,6 +1428,10 @@ export class RegistroComponent implements OnInit {
    }).catch( e => { console.log(e) });
   }
 
+  refreshDeclarationInfo() {
+   this.calcTotalPartials();
+   this.calcularUnoxMil();
+  }
   calcularUnoxMil() {
      this.totalunoxmil = 0;
      this.declarationItemsToShow.forEach(itemToShow => {

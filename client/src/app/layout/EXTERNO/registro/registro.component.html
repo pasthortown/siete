@@ -551,13 +551,12 @@
                                         </select>
                                         <small *ngIf="cantonEstablishmentSelectedCode == '2.17.1'">
                                           <div class="alert alert-info mt-2 mb-2" role="alert">
-                                            <label class="col-12 text-justify"><strong>Información</strong></label><br />
-                                            <p class="col-12 text-justify">Estimado Usuario, para solicitar el Certificado de Registro de Turismo de establecimientos ubicados en el Cantón Quito, por favor acercarse a las oficinas de "Quito Turismo"</p>
-                                            <strong>Información</strong><br/>
-                                            <strong>Dirección: </strong>Parque Bicentenario, terminales del antiguo aeropuerto de Quito<br/>
-                                            <strong>Horario de Atención: </strong>Lunes a Viernes de 8h30 a 17h00<br/>
-                                            <strong>Teléfonos: </strong>Del <a href="tel:022993300">(02) 2993 300</a> a las extensiones 1003 y 1035<br/>
-                                            <strong>Mail: </strong><a href="mailto:info@quito-turismo.gob.ec">info@quito-turismo.gob.ec</a><br/>
+                                            <label class="col-12 text-justify"><strong>Importante:</strong></label><br />
+                                            <p class="col-12 text-justify">Estimado Usuario, si su establecimiento se encuentra ubicado en el cantón Quito, por favor acérquese a las oficinas de "Quito Turismo" para solicitar su Certificado de Registro Turístico</p>
+                                            <p class="col-12 text-justify"><strong>Dirección: </strong>Parque Bicentenario, terminales del antiguo Aeropuerto de Quito<br/>
+                                            <strong>Horario de Atención: </strong>Lunes a Viernes de 08:30 a 17:00<br/>
+                                            <strong>Teléfono: </strong><a href="tel:022993300">(02) 2993 300</a> extensiones 1003 y 1035<br/>
+                                            <strong>Correo electrónico: </strong><a href="mailto:info@quito-turismo.gob.ec">info@quito-turismo.gob.ec</a></p>
                                           </div>
                                         </small>
                                       </div>
@@ -1064,17 +1063,9 @@
                                     </div>
                                     <input type="number" class="form-control" min="0" step="0.01" id="declarationITemValue"
                                       name="declarationITemValue" [(ngModel)]="item.valueItem.value"
-                                      placeholder="Valor" (input)="calcularUnoxMil()" [disabled]="!declaration_selected.editable"/>
+                                      placeholder="Valor" (input)="refreshDeclarationInfo()" [disabled]="!declaration_selected.editable"/>
                                   </div>
                                 </td>
-                              </tr>
-                              <tr>
-                                <th>
-                                  TOTAL {{ declarationItemToShow.Category.name }}
-                                </th>
-                                <th>
-                                  {{ declarationItemToShow.Category.total }}
-                                </th>
                               </tr>
                             </tbody>
                             <tbody>
@@ -1258,8 +1249,10 @@
                           <div class="col-12">
                             <div class="alert alert-info mt-2 mb-2" role="alert">
                               <label class="col-12 text-justify"><strong>Atención</strong></label><br />
-                              Habitación doble (matrimonial): Permite la pernoctación y alojamiento de dos personas, ocupando una cama doble o dos camas individuales.<br/>
-                              PAX: Referente a pasajeros.
+                              <p class="col-12 text-justify">Habitación doble (matrimonial): Permite la pernoctación y alojamiento de dos personas, ocupando una cama doble o dos camas individuales.</p>
+                              <p class="col-12 text-justify">PAX: Referente a pasajeros.</p>
+                              <p class="col-12 mt-2 text-justify" *ngIf="rucEstablishmentRegisterSelected.register_type_id == 30 || rucEstablishmentRegisterSelected.register_type_id == 44">- Debe contar un mínimo 2 y máximo 4 habitaciones, sumando todas habitaciones de las tipologías de habitaciones permitidas para esta clasificación.</p>
+                              <p class="col-12 text-justify" *ngIf="rucEstablishmentRegisterSelected.register_type_id == 30 || rucEstablishmentRegisterSelected.register_type_id == 44">- Debe contar un máximo de 6 plazas, sumando todas las plazas de todas las tipologías de habitaciones permitidas para esta clasificación</p>
                             </div>
                           </div>
                         </div>
@@ -1346,7 +1339,9 @@
                           <div class="col-12">
                             <div class="alert alert-info mt-2 mb-2" role="alert">
                               <label class="col-12 text-justify"><strong>Atención</strong></label><br />
-                              Para registrar las tarifas en esta tipología de habitación, es necesario que su establecimiento cuente con la declaración de dichas habitaciones, por favor revise la sección Capacidades del establecimiento que se encuentra en la sección anterior
+                              <p class="col-12 text-justify">Estimado Usuario, antes de continuar recuerde lo siguiente:</p>
+                              <p class="col-12 text-justify">- Para registrar las tarifas en esta tipología de habitación, es necesario que su establecimiento cuente con la declaración de dichas habitaciones, por favor revise las "Capacidades del establecimiento" que se encuentran en la sección anterior.</p>
+                              <p class="col-12 text-justify">- Registrar la tarifa de habitación por noche incluyendo IVA.</p>
                             </div>
                           </div>
                         </div>
@@ -1387,18 +1382,6 @@
                                   </tr>
                                 </tbody>
                               </table>
-                          </div>
-                        </div>
-                        <div class="row" *ngIf="categorySelectedCode !== '-' && rucEstablishmentRegisterSelected.register_type_id !== 0 && tarifarioRack.valores.length > 0">
-                          <div class="col-12">
-                            <div class="alert alert-info mt-2 mb-2" role="alert">
-                              <label class="col-12 text-justify"><strong>Atención</strong></label><br />
-                              Estimado Usuario, antes de continuar recuerde lo siguiente:<br/>
-                              - Registrar la Tarifa de habitación por noche incluyendo IVA.<br/>
-                              - Reglamento de Alojamiento, Anexo A, Requisito 20: Exhibir el tarifario rack anual registrado ante la Autoridad Nacional de Turismo.<br/>
-                              - Reglamento de Alojamiento, Disposición General, Tercera: Los establecimientos de alojamiento turístico deberán informar a la Autoridad Nacional de Turismo hasta el primero de diciembre de cada año sobre las tarifas rack o mostrador del año siguiente. Estas considerarán el valor por huésped, por noche, por tipo de habitación y por temporada baja y alta, incluido impuestos; de no hacerlo la Autoridad Nacional de Turismo sancionará conforme a la normativa vigente.<br/>
-                              - El formulario será enviado a su correo electrónico posterior a la validación correspondiente.<br/>
-                            </div>
                           </div>
                         </div>
                         <div class="row" *ngIf="categorySelectedCode !== '-' && rucEstablishmentRegisterSelected.register_type_id !== 0 && false">
