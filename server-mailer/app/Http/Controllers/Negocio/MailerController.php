@@ -34,7 +34,7 @@ class MailerController extends Controller
     $email = $result['email'];
     $subject = $result['subject'];
     $information = $result['information'];
-    return $this->send_mail_documentos($email, $information, $subject, env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME'), 'entregar_docuemntos');
+    return $this->send_mail_documentos($email, $information, $subject, env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME'), 'entregar_documentos');
   }
 
   protected function send_mail_documentos($to, $information, $subject, $fromMail,$fromAlias, $tipoMail) {

@@ -2496,7 +2496,7 @@ export class CoordinadorComponent implements OnInit {
          });
          newRegistroCatastro.activity = 'ALOJAMIENTO';
          newRegistroCatastro.address = this.registerMinturSelected.establishment.address_main_street + ' ' + this.registerMinturSelected.establishment.address_number + ' ' + this.registerMinturSelected.establishment.address_secondary_street;
-         newRegistroCatastro.comercial_name = this.registerMinturSelected.establishment.commercially_known_name;
+         newRegistroCatastro.comercial_name = this.registerMinturSelected.establishment.commercially_known_name.toUpperCase();
          newRegistroCatastro.web = this.registerMinturSelected.establishment.url_web;
          newRegistroCatastro.ubication_main = provinciaName;
          newRegistroCatastro.ubication_sencond = cantonName;
@@ -2529,14 +2529,35 @@ export class CoordinadorComponent implements OnInit {
          newRegistroCatastro.legal_representant_identification = this.representante_legal;
          newRegistroCatastro.legal_representant_name = this.representante_legal;
          this.registerCatastroDataService.post(newRegistroCatastro).then( r5 => {
-            Swal.fire(
-               'Confirmado!',
-               'La solicitud de trámite, ha sido atendida satisfactoriamente.',
-               'success'
-            );
-            this.toastr.successToastr('Datos guardados satisfactoriamente', 'Coordinador');
-            this.mostrarDataRegisterMintur = false;
-            this.refresh();
+            const information = [{para: r.name.toUpperCase()},
+               {pdfBase64_certificado: pdfRegistro},
+               {pdfBase64_tarifario: pdfTarifarioRack},
+               {tramite: this.tipo_tramite.toUpperCase()},
+               {ruc: newRegistroCatastro.ruc},
+               {provincia: provinciaName.toUpperCase()},
+               {nombreComercial: newRegistroCatastro.comercial_name},
+               {canton: cantonName.toUpperCase()},
+               {fechaRegistro: today.toLocaleDateString()},
+               {parroquia: parroquiaName.toUpperCase()},
+               {actividad: 'ALOJAMIENTO'},
+               {callePrincipal: this.registerMinturSelected.establishment.address_main_street.toUpperCase()},
+               {clasificacion: clasificacion.toUpperCase()},
+               {calleInterseccion: this.registerMinturSelected.establishment.address_secondary_street.toUpperCase()},
+               {categoria: categoria.toUpperCase()},
+               {numeracion: this.registerMinturSelected.establishment.address_number.toUpperCase()},
+               {tipoSolicitud: this.tipo_tramite.toUpperCase()},
+               {thisYear: today.getFullYear()},
+            ];
+            this.mailerDataService.entregar_documentos('luis.salazar@turismo.gob.ec', 'Entrega de Documentos', information).then( respMail => {
+               Swal.fire(
+                  'Confirmado!',
+                  'La solicitud de trámite, ha sido atendida satisfactoriamente.',
+                  'success'
+               );
+               this.toastr.successToastr('Datos guardados satisfactoriamente', 'Coordinador');
+               this.mostrarDataRegisterMintur = false;
+               this.refresh();
+            }).catch( e => { console.log(e); });
          }).catch( e => { console.log(e); });
       }).catch( e => { console.log(e); });
    }).catch( e => { console.log(e); });

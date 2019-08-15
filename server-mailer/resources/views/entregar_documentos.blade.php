@@ -18,7 +18,7 @@
             <th>Nombre Comercial:</th><td>{{ $information['nombreComercial'] }}</td><th>Cantón:</th><td>{{ $information['canton'] }}</td>
         </tr>
         <tr style="background-color: #f2f2f2;">
-            <th>Fecha Solicitud:</th><td>{{ $information['fechaSolicitud'] }}</td><th>Parroquia:</th><td>{{ $information['parroquia'] }}</td>
+            <th>Fecha de Registro:</th><td>{{ $information['fechaRegistro'] }}</td><th>Parroquia:</th><td>{{ $information['parroquia'] }}</td>
         </tr>
         <tr>
             <th>Actividad:</th><td>{{ $information['actividad'] }}</td><th>Calle Principal:</th><td>{{ $information['callePrincipal'] }}</td>
