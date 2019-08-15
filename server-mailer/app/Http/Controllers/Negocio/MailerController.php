@@ -42,8 +42,8 @@ class MailerController extends Controller
     Mail::send($tipoMail, $data, function($message) use ($to, $information, $subject, $fromMail,$fromAlias, $tipoMail) {
       $message->to($to, $information['para'])->subject($subject);
       $message->from($fromMail,$fromAlias);
-      $message->attachData(base64_decode($information['pdfBase64_certificado']), 'Tarifario_Rack.pdf', ['mime' => 'application/pdf']);
-      $message->attachData(base64_decode($information['pdfBase64_tarifario']), 'Certificado_Registro.pdf', ['mime' => 'application/pdf']);
+      $message->attachData(base64_decode($information['pdfBase64_certificado']), 'Certificado_Registro.pdf', ['mime' => 'application/pdf']);
+      $message->attachData(base64_decode($information['pdfBase64_tarifario']), 'Tarifario_Rack.pdf', ['mime' => 'application/pdf']);
     });
     return response()->json("Solicitud Procesada. Enviaremos la respuesta a tu correo electrónico en un momento.",200);
   }
