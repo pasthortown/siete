@@ -17,6 +17,7 @@ $router->get('/', function () use ($router) {
 
 $router->group(['middleware' => []], function () use ($router) {
    $router->post('enviar', ['uses' => 'MailerController@enviar']);
+   $router->post('entregar_documentos', ['uses' => 'MailerController@entregar_documentos']);
 });
 
 $router->group(['middleware' => ['auth']], function () use ($router) {

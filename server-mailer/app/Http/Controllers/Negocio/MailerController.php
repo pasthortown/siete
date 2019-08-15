@@ -28,4 +28,23 @@ class MailerController extends Controller
     });
     return response()->json("Solicitud Procesada. Enviaremos la respuesta a tu correo electrónico en un momento.",200);
   }
+
+  public function entregar_documentos(Request $data) {
+    $result = $data->json()->all();
+    $email = $result['email'];
+    $subject = $result['subject'];
+    $information = $result['information'];
+    return $this->send_mail_documentos($email, $information, $subject, env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME'), 'entregar_docuemntos');
+  }
+
+  protected function send_mail_documentos($to, $information, $subject, $fromMail,$fromAlias, $tipoMail) {
+    $data = ['information'=>$information, 'appName'=>env('MAIL_FROM_NAME')];
+    Mail::send($tipoMail, $data, function($message) use ($to, $information, $subject, $fromMail,$fromAlias, $tipoMail) {
+      $message->to($to, $information['para'])->subject($subject);
+      $message->from($fromMail,$fromAlias);
+      $message->attachData(base64_decode($information['pdfBase64_certificado']), 'Tarifario_Rack.pdf', ['mime' => 'application/pdf']);
+      $message->attachData(base64_decode($information['pdfBase64_tarifario']), 'Certificado_Registro.pdf', ['mime' => 'application/pdf']);
+    });
+    return response()->json("Solicitud Procesada. Enviaremos la respuesta a tu correo electrónico en un momento.",200);
+  }
 }

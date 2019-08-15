@@ -1453,7 +1453,7 @@ export class InspectorComponent implements OnInit {
                const byteArray = new Uint8Array(byteNumbers);
                const blob = new Blob([byteArray], { type: 'application/pdf'});
                saveAs(blob, qr_value + '.pdf');
-               this.imprimiendo_informe = false;
+               this.imprimiendo_acta = false;
             }).catch( e => { console.log(e); });
          }).catch( e => { console.log(e); });
       }).catch( e => { console.log(e); });

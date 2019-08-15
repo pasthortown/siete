@@ -2151,23 +2151,21 @@ export class CoordinadorComponent implements OnInit {
      const today = new Date();
      this.registroApprovalStateAttachment.approval_state_attachment_file_name = 'Registro_' + this.registerMinturSelected.register.code + '_' + today.getFullYear().toString() + '_' + (today.getMonth() + 1).toString() + '_' + today.getDate().toString()+'.pdf';
      this.tarifarioRackApprovalStateAttachment.approval_state_attachment_file_name = 'Tarifario_Rack_' + this.registerMinturSelected.register.code + '_' + today.getFullYear().toString() + '_' + (today.getMonth() + 1).toString() + '_' + today.getDate().toString()+'.pdf';
-     
      this.approvalStateAttachmentDataService.post(this.tarifarioRackApprovalStateAttachment).then( r2 => {
+      this.approvalStateAttachmentDataService.post(this.registroApprovalStateAttachment).then( r3 => {
+         
+         this.toastr.successToastr('Datos guardados satisfactoriamente', 'Coordinador');
+         this.mostrarDataRegisterMintur = false;
+         Swal.fire(
+            'Confirmado!',
+            'La solicitud de trámite, ha sido atendida satisfactoriamente.',
+            'success'
+         );
+         this.refresh();
+      }).catch( e => { console.log(e); });
      }).catch( e => { console.log(e); });
-     
      this.registerStateDataService.post(newRegisterState).then( r1 => {
      }).catch( e => { console.log(e); });
-     
-     this.approvalStateAttachmentDataService.post(this.registroApprovalStateAttachment).then( r2 => {
-      this.toastr.successToastr('Datos guardados satisfactoriamente', 'Inspección');
-      this.mostrarDataRegisterMintur = false;
-      Swal.fire(
-         'Confirmado!',
-         'La solicitud de trámite, ha sido atendida satisfactoriamente.',
-         'success'
-      );
-      this.refresh();
-      }).catch( e => { console.log(e); });
   }
 
   guardarTramite() {
