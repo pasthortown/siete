@@ -2529,26 +2529,25 @@ export class CoordinadorComponent implements OnInit {
          newRegistroCatastro.legal_representant_identification = this.representante_legal;
          newRegistroCatastro.legal_representant_name = this.representante_legal;
          this.registerCatastroDataService.post(newRegistroCatastro).then( r5 => {
-            const information = [{para: r.name.toUpperCase()},
-               {pdfBase64_certificado: pdfRegistro},
-               {pdfBase64_tarifario: pdfTarifarioRack},
-               {tramite: this.tipo_tramite.toUpperCase()},
-               {ruc: newRegistroCatastro.ruc},
-               {provincia: provinciaName.toUpperCase()},
-               {nombreComercial: newRegistroCatastro.comercial_name},
-               {canton: cantonName.toUpperCase()},
-               {fechaRegistro: today.toLocaleDateString()},
-               {parroquia: parroquiaName.toUpperCase()},
-               {actividad: 'ALOJAMIENTO'},
-               {callePrincipal: this.registerMinturSelected.establishment.address_main_street.toUpperCase()},
-               {clasificacion: clasificacion.toUpperCase()},
-               {calleInterseccion: this.registerMinturSelected.establishment.address_secondary_street.toUpperCase()},
-               {categoria: categoria.toUpperCase()},
-               {numeracion: this.registerMinturSelected.establishment.address_number.toUpperCase()},
-               {tipoSolicitud: this.tipo_tramite.toUpperCase()},
-               {thisYear: today.getFullYear()},
-            ];
-            this.mailerDataService.entregar_documentos('luis.salazar@turismo.gob.ec', 'Entrega de Documentos', information).then( respMail => {
+            const information = {para: r.name.toUpperCase(),
+               pdfBase64_certificado: pdfRegistro,
+               pdfBase64_tarifario: pdfTarifarioRack,
+               tramite: this.tipo_tramite.toUpperCase(),
+               ruc: newRegistroCatastro.ruc,
+               provincia: provinciaName.toUpperCase(),
+               nombreComercial: newRegistroCatastro.comercial_name,
+               canton: cantonName.toUpperCase(),
+               fechaRegistro: today.toLocaleDateString(),
+               parroquia: parroquiaName.toUpperCase(),
+               actividad: 'ALOJAMIENTO',
+               callePrincipal: this.registerMinturSelected.establishment.address_main_street.toUpperCase(),
+               clasificacion: clasificacion.toUpperCase(),
+               calleInterseccion: this.registerMinturSelected.establishment.address_secondary_street.toUpperCase(),
+               categoria: categoria.toUpperCase(),
+               numeracion: this.registerMinturSelected.establishment.address_number.toUpperCase(),
+               tipoSolicitud: this.tipo_tramite.toUpperCase(),
+               thisYear: today.getFullYear()};
+            this.mailerDataService.entregar_documentos(r.email, 'Entrega de Documentos', information).then( respMail => {
                Swal.fire(
                   'Confirmado!',
                   'La solicitud de trámite, ha sido atendida satisfactoriamente.',
@@ -2570,6 +2569,13 @@ export class CoordinadorComponent implements OnInit {
    }).catch( e => { console.log(e); });
   }
 
+  pruebaCatastro() {
+     const data = '{"georeference_latitude":"-0.2153676","georeference_longitude":"-78.5036064","activity":"ALOJAMIENTO","address":"AV. ANTONIO GIL S/N PINGUINOS","comercial_name":"CORAL BLANCO","web":"www.trebolito.com","ubication_main":"NAPO","ubication_sencond":"ARCHIDONA","ubication_third":"ARCHIDONA","as_turistic_date":"2019-08-15T15:19:28.644Z","category":"Categoría única","classification":"CASA DE  HUÉSPEDES","email":"azuza83@hotmail.com","establishment_ruc_code":"1","establishment_state":"ACTIVO","main_phone_number":"0999201526","max_areas":4,"max_beds":0,"max_capacity":16,"organization_type":"PNL","register_code":"0909486441001.001.000030","ruc":"0909486441001","ruc_state":"ABIERTO","secondary_phone_number":"","system_source":"SITURIN","total_female":0,"total_male":0,"establishment_property_type":"Propio","legal_representant_identification":"CONSTANTE VALLADARES EDUARDO DAVID","legal_representant_name":"CONSTANTE VALLADARES EDUARDO DAVID"}';
+     let newRegister = JSON.parse(data) as RegistroCatastro;
+     this.registerCatastroDataService.post(newRegister).then( r => {
+      console.log(r);
+     }).catch( e => { console.log(e); });
+  }
   selectRegisterMintur(item: any) {
    this.registerMinturSelected = item;
    this.mostrarDataRegisterMintur = true;
@@ -2660,7 +2666,7 @@ export class CoordinadorComponent implements OnInit {
          const params = [{canton: canton.name.toUpperCase()},
             {fecha: today.toLocaleDateString().toUpperCase()},
             {numero_registro: r0.register.code.toUpperCase()},
-            {razon_zocial: this.razon_social.toUpperCase()},
+            {razon_social: this.razon_social.toUpperCase()},
             {nombre_comercial: r2.establishment.commercially_known_name.toUpperCase()},
             {actividad: actividad},
             {categoria: clasificacion.toUpperCase()},

@@ -83,7 +83,7 @@ export class RegisterService {
       return this.http.post(this.url, JSON.stringify(register), this.options).toPromise()
       .then( r => {
          return r.json();
-      }).catch( error => { this.handledError(error.json()); });
+      }).catch( error => { console.log(error.json()); });
    }
 
    put(register: Register): Promise<any> {
