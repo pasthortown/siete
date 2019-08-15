@@ -17,7 +17,7 @@ class CreateApprovalStateAttachmentsTable extends Migration
           $table->increments('id');
           $table->timestamps();
           $table->string('approval_state_attachment_file_type',50)->nullable($value = true);
-          $table->string('approval_state_attachment_file_name',50)->nullable($value = true);
+          $table->string('approval_state_attachment_file_name',200)->nullable($value = true);
           $table->longText('approval_state_attachment_file')->nullable($value = true);
           $table->unsignedInteger('approval_state_id');
           $table->foreign('approval_state_id')->references('id')->on('approval_states')->onDelete('cascade');
