@@ -1145,7 +1145,7 @@ export class CoordinadorComponent implements OnInit {
    });
    const information = {
       para: inspector.name.toUpperCase(),
-      tramite: 'Registro'.toUpperCase(),
+      tramite: this.tipo_tramite.toUpperCase(),
       ruc: this.ruc_registro_selected.ruc.number,
       nombreComercial: this.registerMinturSelected.establishment.commercially_known_name.toUpperCase(),
       fechaSolicitud: today.toLocaleString(),
