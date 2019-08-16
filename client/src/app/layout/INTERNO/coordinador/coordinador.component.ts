@@ -1936,6 +1936,25 @@ export class CoordinadorComponent implements OnInit {
    if (primerdigito == '6') {
       this.tipo_tramite = 'REINGRESO';
    }
+   
+   if (estado == '20') {
+      this.tipo_tramite = 'REGISTRO';
+   }
+   if (estado == '30') {
+      this.tipo_tramite = 'RECLASIFICACIÓN';
+   }
+   if (estado == '40') {
+      this.tipo_tramite = 'RECATEGORIZACIÓN';
+   }
+   if (estado == '50') {
+      this.tipo_tramite = 'ACTUALIZACIÓN';
+   }
+   if (estado == '60') {
+      this.tipo_tramite = 'INACTIVACIÓN';
+   }
+   if (estado == '70') {
+      this.tipo_tramite = 'REINGRESO';
+   }
    this.registerProcedureDataService.get_by_register_id(this.idRegister.toString()).then( r => {
       if (typeof r.id != 'undefined') {
          this.motivoTramite = r.justification;
@@ -1974,6 +1993,24 @@ export class CoordinadorComponent implements OnInit {
       this.tipo_tramite = 'INACTIVACIÓN';
    }
    if (primerdigito == '6') {
+      this.tipo_tramite = 'REINGRESO';
+   }
+   if (estado == '20') {
+      this.tipo_tramite = 'REGISTRO';
+   }
+   if (estado == '30') {
+      this.tipo_tramite = 'RECLASIFICACIÓN';
+   }
+   if (estado == '40') {
+      this.tipo_tramite = 'RECATEGORIZACIÓN';
+   }
+   if (estado == '50') {
+      this.tipo_tramite = 'ACTUALIZACIÓN';
+   }
+   if (estado == '60') {
+      this.tipo_tramite = 'INACTIVACIÓN';
+   }
+   if (estado == '70') {
       this.tipo_tramite = 'REINGRESO';
    }
   }
@@ -2609,13 +2646,6 @@ export class CoordinadorComponent implements OnInit {
    }).catch( e => { console.log(e); });
   }
 
-  pruebaCatastro() {
-     const data = '{"georeference_latitude":"-0.2153676","georeference_longitude":"-78.5036064","activity":"ALOJAMIENTO","address":"AV. ANTONIO GIL S/N PINGUINOS","comercial_name":"CORAL BLANCO","web":"www.trebolito.com","ubication_main":"NAPO","ubication_sencond":"ARCHIDONA","ubication_third":"ARCHIDONA","as_turistic_date":"2019-08-15T15:19:28.644Z","category":"Categoría única","classification":"CASA DE  HUÉSPEDES","email":"azuza83@hotmail.com","establishment_ruc_code":"1","establishment_state":"ACTIVO","main_phone_number":"0999201526","max_areas":4,"max_beds":0,"max_capacity":16,"organization_type":"PNL","register_code":"0909486441001.001.000030","ruc":"0909486441001","ruc_state":"ABIERTO","secondary_phone_number":"","system_source":"SITURIN","total_female":0,"total_male":0,"establishment_property_type":"Propio","legal_representant_identification":"CONSTANTE VALLADARES EDUARDO DAVID","legal_representant_name":"CONSTANTE VALLADARES EDUARDO DAVID"}';
-     let newRegister = JSON.parse(data) as RegistroCatastro;
-     this.registerCatastroDataService.post(newRegister).then( r => {
-      console.log(r);
-     }).catch( e => { console.log(e); });
-  }
   selectRegisterMintur(item: any) {
    this.registerMinturSelected = item;
    this.mostrarDataRegisterMintur = true;

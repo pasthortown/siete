@@ -444,6 +444,25 @@ export class InspectorComponent implements OnInit {
             if (primerdigito == '6') {
                this.tipo_tramite = 'REINGRESO';
             }
+            
+            if (estado == '20') {
+               this.tipo_tramite = 'REGISTRO';
+            }
+            if (estado == '30') {
+               this.tipo_tramite = 'RECLASIFICACIÓN';
+            }
+            if (estado == '40') {
+               this.tipo_tramite = 'RECATEGORIZACIÓN';
+            }
+            if (estado == '50') {
+               this.tipo_tramite = 'ACTUALIZACIÓN';
+            }
+            if (estado == '60') {
+               this.tipo_tramite = 'INACTIVACIÓN';
+            }
+            if (estado == '70') {
+               this.tipo_tramite = 'REINGRESO';
+            }
          }).catch( e => { console.log(e); });
       }
    }).catch( e => { console.log(e); });
