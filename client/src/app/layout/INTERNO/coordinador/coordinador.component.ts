@@ -1045,6 +1045,8 @@ export class CoordinadorComponent implements OnInit {
       }
    });
    const zonalName = zonal.name.split(' ');
+   const estado = this.stateTramiteId.toString();
+   this.refreshMotivoTramite(estado);
    iniciales_cordinacion_zonal = zonalName[zonalName.length - 1].toUpperCase();
    let qr_value = 'MT-CZ' + iniciales_cordinacion_zonal + '-' + this.ruc_registro_selected.ruc.number + '-SOLICITUD-ALOJAMIENTO-' + today.getDate() + '-' + (today.getMonth() + 1) + '-' + today.getFullYear();
    const params = [{tipo_tramite: this.tipo_tramite.toUpperCase()},
@@ -1143,6 +1145,8 @@ export class CoordinadorComponent implements OnInit {
          inspector = element;
       }
    });
+   const estado = this.stateTramiteId.toString();
+   this.refreshMotivoTramite(estado);
    const information = {
       para: inspector.name.toUpperCase(),
       tramite: this.tipo_tramite.toUpperCase(),
@@ -1244,6 +1248,8 @@ export class CoordinadorComponent implements OnInit {
    });
    let iniciales_cordinacion_zonal = '';
    const zonalName = zonal.name.split(' ');
+   const estado = this.stateTramiteId.toString();
+   this.refreshMotivoTramite(estado);
    iniciales_cordinacion_zonal = zonalName[zonalName.length - 1].toUpperCase();
    let qr_value = 'MT-CZ' + iniciales_cordinacion_zonal + '-' + this.ruc_registro_selected.ruc.number + '-SOLICITUD-ALOJAMIENTO-' + today.getDate() + '-' + (today.getMonth() + 1) + '-' + today.getFullYear();
    const params = [{tipo_tramite: this.tipo_tramite.toUpperCase()},
@@ -1328,6 +1334,8 @@ export class CoordinadorComponent implements OnInit {
          provinciaName = element.name;
       }
    });
+   const estado = this.stateTramiteId.toString();
+   this.refreshMotivoTramite(estado);
    let financiero = new User();
    this.financieros.forEach(element => {
       if (element.id == this.financialSelectedId) {
@@ -1940,6 +1948,36 @@ export class CoordinadorComponent implements OnInit {
    }).catch( e => { console.log(e); });
   }
 
+  refreshMotivoTramite(estado: String) {
+   this.motivoTramite = '';
+   const PrimerDigito = estado.substring(0, 1);
+   if (PrimerDigito == '1') {
+      this.mostrarMotivoTramite = false;
+   } else {
+      this.mostrarMotivoTramite = true;
+   }
+   this.tipo_tramite = 'REGISTRO';
+   const primerdigito = estado.substring(0, 1);
+   if (primerdigito == '1') {
+      this.tipo_tramite = 'REGISTRO';
+   }
+   if (primerdigito == '2') {
+      this.tipo_tramite = 'RECLASIFICACIÓN';
+   }
+   if (primerdigito == '3') {
+      this.tipo_tramite = 'RECATEGORIZACIÓN';
+   }
+   if (primerdigito == '4') {
+      this.tipo_tramite = 'ACTUALIZACIÓN';
+   }
+   if (primerdigito == '5') {
+      this.tipo_tramite = 'INACTIVACIÓN';
+   }
+   if (primerdigito == '6') {
+      this.tipo_tramite = 'REINGRESO';
+   }
+  }
+
   onCellClick(event) {
    this.register_code = event.row.code;
    let estado = '';
@@ -2163,6 +2201,7 @@ export class CoordinadorComponent implements OnInit {
   guardarTramite() {
      this.guardandoTramite = true;
      const estado: String = this.stateTramiteId.toString();
+     this.refreshMotivoTramite(estado);
      const digito = estado.substring(estado.length-1, estado.length);
      if ( this.stateTramite == 0) {
        this.toastr.errorToastr('Debe seleccionar un estado de trámite', 'Coordinación');
@@ -2462,7 +2501,8 @@ export class CoordinadorComponent implements OnInit {
    });
    const czDireccion = datosZonal.direccion.split('>')[1].split('<')[0];
    const czTelefono = datosZonal.telefono.split('>')[1].split('<')[0];
-
+   const estado = this.stateTramiteId.toString();
+   this.refreshMotivoTramite(estado);
    const newRegistroCatastro = new RegistroCatastro();
    this.userDataService.get(this.registerMinturSelected.establishment.contact_user_id).then( r => {
       this.registerDataService.get_register_data(this.registerMinturSelected.register.id).then( r2 => {
