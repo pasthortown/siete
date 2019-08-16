@@ -2952,7 +2952,6 @@ guardarDeclaracion() {
       response.forEach(element => {
          this.categories_registers.push(element);
       });
-      this.getRegisterTypeId();
    }).catch( e => { console.log(e) });
   }
 
@@ -3702,7 +3701,6 @@ guardarDeclaracion() {
     this.rucEstablishmentRegisterSelected.status = 11;
     this.rucEstablishmentRegisterSelected.establishment_id = establishment.id;
     this.mostrarDataRegister = true;
-    this.getRegisterTypeId();
   } else {
     this.selectEstablishmentRegister(registerSelected, false);
   }
@@ -3938,23 +3936,6 @@ guardarDeclaracion() {
       });
     };
    }
-  }
-
-  getRegisterTypeId() {
-   this.register_typeDataService.get().then(r => {
-      const allTypes = r as RegisterType[];
-      allTypes.forEach(element => {
-         if (element.name.toUpperCase() == this.my_classification_current.toUpperCase()) {
-            console.log(element);
-            this.categorySelectedCode = element.code.toString();
-         }
-      });
-      allTypes.forEach(element => {
-         if (element.father_code == this.categorySelectedCode && element.name.toUpperCase() == this.my_category_current.toUpperCase()) {
-            this.rucEstablishmentRegisterSelected.register_type_id = element.id;
-         }
-      });
-   }).catch( e => { console.log(e); });
   }
 
   selectEstablishmentRegister(register: Register, editable: Boolean) {
