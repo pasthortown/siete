@@ -3941,10 +3941,10 @@ guardarDeclaracion() {
   }
 
   getRegisterTypeId() {
-   return;
    this.register_typeDataService.get().then(r => {
       const allTypes = r as RegisterType[];
-      allTypes.forEach(element => {
+      console.log(allTypes);
+      /*allTypes.forEach(element => {
          if (element.name.toUpperCase() == this.my_classification_current.toUpperCase()) {
             this.categorySelectedCode = element.code.toString();
          }
@@ -3953,7 +3953,7 @@ guardarDeclaracion() {
          if (element.father_code == this.categorySelectedCode && element.name.toUpperCase() == this.my_category_current.toUpperCase()) {
             this.rucEstablishmentRegisterSelected.register_type_id = element.id;
          }
-      });
+      });*/
    }).catch( e => { console.log(e); });
   }
 
