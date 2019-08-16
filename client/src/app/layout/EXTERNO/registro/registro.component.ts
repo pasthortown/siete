@@ -631,6 +631,30 @@ export class RegistroComponent implements OnInit {
    return data.slice(start, end);
   }
 
+  validateHabitaciones(): Boolean {
+   if (this.rucEstablishmentRegisterSelected.total_spaces == 0){
+      return false;
+   }
+   if (this.rucEstablishmentRegisterSelected.total_beds == 0){
+   return false;
+   }
+   if (this.rucEstablishmentRegisterSelected.total_habitations == 0){
+      return false;
+   }
+   if (this.rucEstablishmentRegisterSelected.total_spaces == 0){
+      return false;
+   }
+   if (this.rucEstablishmentRegisterSelected.register_type_id == 31 || this.rucEstablishmentRegisterSelected.register_type_id == 45) {
+      if (this.rucEstablishmentRegisterSelected.total_spaces > 6) {
+         return false;
+      }
+      if (this.rucEstablishmentRegisterSelected.total_habitations < 2 || this.rucEstablishmentRegisterSelected.total_habitations > 4) {
+         return false;
+      }
+   }
+   return true;
+  }
+
   buildDataTableEstablishment() {
      this.columnsEstablishment = [
         {title: '', name: 'selected'},
@@ -1645,6 +1669,10 @@ export class RegistroComponent implements OnInit {
   }
 
   guardarRegistro() {
+   if (!this.validateHabitaciones()) {
+      this.toastr.errorToastr('Existe inconsistencia en los valores de las capacidades.', 'Nuevo');
+      return;
+     }
    if (this.certificadoUsoSuelo.floor_authorization_certificate_file === ''){
       this.toastr.errorToastr('Debe cargar el certificado de uso de suelo.', 'Nuevo');
       return;

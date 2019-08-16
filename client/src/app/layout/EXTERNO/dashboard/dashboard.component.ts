@@ -2574,6 +2574,10 @@ guardarDeclaracion() {
   }
 
   guardarRegistro() {
+   if (!this.validateHabitaciones()) {
+      this.toastr.errorToastr('Existe inconsistencia en los valores de las capacidades.', 'Nuevo');
+      return;
+     }
    if (this.reclasificando) {
       let newClassification = '';
       this.clasifications_registers.forEach(element => {
@@ -3668,6 +3672,30 @@ guardarDeclaracion() {
   address_mapEventEstablishment(event) {
     this.establishment_selected.address_map_latitude = event.coords.lat;
     this.establishment_selected.address_map_longitude = event.coords.lng;
+  }
+
+  validateHabitaciones(): Boolean {
+   if (this.rucEstablishmentRegisterSelected.total_spaces == 0){
+      return false;
+   }
+   if (this.rucEstablishmentRegisterSelected.total_beds == 0){
+   return false;
+   }
+   if (this.rucEstablishmentRegisterSelected.total_habitations == 0){
+      return false;
+   }
+   if (this.rucEstablishmentRegisterSelected.total_spaces == 0){
+      return false;
+   }
+   if (this.rucEstablishmentRegisterSelected.register_type_id == 31 || this.rucEstablishmentRegisterSelected.register_type_id == 45) {
+      if (this.rucEstablishmentRegisterSelected.total_spaces > 6) {
+         return false;
+      }
+      if (this.rucEstablishmentRegisterSelected.total_habitations < 2 || this.rucEstablishmentRegisterSelected.total_habitations > 4) {
+         return false;
+      }
+   }
+   return true;
   }
 
   selectRegisterEstablishment(establishment: Establishment) {
