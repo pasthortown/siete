@@ -1343,21 +1343,21 @@ export class CoordinadorComponent implements OnInit {
       }
    });
    const information = {
-      para: financiero.name,
-      tramite: 'Registro',
+      para: financiero.name.toUpperCase(),
+      tramite: this.tipo_tramite.toUpperCase(),
       ruc: this.ruc_registro_selected.ruc.number,
-      nombreComercial: this.registerMinturSelected.establishment.commercially_known_name,
+      nombreComercial: this.registerMinturSelected.establishment.commercially_known_name.toUpperCase(),
       fechaSolicitud: today.toLocaleString(),
-      actividad: 'Alojamiento Turístico',
-      clasificacion: clasificacion,
-      categoria: categoria,
-      tipoSolicitud: 'Registro',
-      provincia: provinciaName,
-      canton: cantonName,
-      parroquia: parroquiaName,
-      callePrincipal: this.registerMinturSelected.establishment.address_main_street,
-      calleInterseccion: this.registerMinturSelected.establishment.address_secondary_street,
-      numeracion: this.registerMinturSelected.establishment.address_number,
+      actividad: 'Alojamiento Turístico'.toUpperCase(),
+      clasificacion: clasificacion.toUpperCase(),
+      categoria: categoria.toUpperCase(),
+      tipoSolicitud: this.tipo_tramite.toUpperCase(),
+      provincia: provinciaName.toUpperCase(),
+      canton: cantonName.toUpperCase(),
+      parroquia: parroquiaName.toUpperCase(),
+      callePrincipal: this.registerMinturSelected.establishment.address_main_street.toUpperCase(),
+      calleInterseccion: this.registerMinturSelected.establishment.address_secondary_street.toUpperCase(),
+      numeracion: this.registerMinturSelected.establishment.address_number.toUpperCase(),
       thisYear:today.getFullYear()
    };
    this.mailerDataService.sendMail('desasignacion', financiero.email.toString(), 'Desasignación de trámite', information).then( r => {
