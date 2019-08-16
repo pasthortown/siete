@@ -2435,6 +2435,7 @@ export class DashboardComponent implements OnInit {
       }
    });
    this.calcularUnoxMil();
+   this.calcTotalPartials();
 }
 
 guardarDeclaracion() {
@@ -3050,17 +3051,13 @@ guardarDeclaracion() {
   }
 
   calcTotalPartials() {
-   this.declarationItemsCategories.forEach(category => {
-      category.total = 0;
-      if (category.tax_payer_type_id == this.ruc_registro_selected.ruc.tax_payer_type_id) {
-         this.declarationItems.forEach(item => {
-           if(item.declaration_item_category_id == category.id) {
-              const newValueItem = new DeclarationItemValue();
-              newValueItem.declaration_item_id = item.id;
-              category.total += newValueItem.value * item.factor;
-           }
-         });  
-      }
+   this.declarationItemsToShow.forEach(group => {
+      group.Category.total = 0;
+      group.items.forEach(item => {
+         this.declarationItems.forEach(declaration_item => {
+            group.Category.total += item.valueItem.value * declaration_item.factor;
+          });
+      });
    });
   }
 

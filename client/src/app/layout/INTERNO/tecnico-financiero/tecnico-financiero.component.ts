@@ -1823,6 +1823,18 @@ getDeclarationItems() {
       }
    });
    this.calcularUnoxMil();
+   this.calcTotalPartials();
+}
+
+calcTotalPartials() {
+   this.declarationItemsToShow.forEach(group => {
+      group.Category.total = 0;
+      group.items.forEach(item => {
+         this.declarationItems.forEach(declaration_item => {
+            group.Category.total += item.valueItem.value * declaration_item.factor;
+          });
+      });
+   });
 }
 
 calcTaxes(declaration: Declaration) {

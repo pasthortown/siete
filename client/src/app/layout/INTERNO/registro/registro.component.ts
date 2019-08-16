@@ -1643,6 +1643,22 @@ export class RegistroComponent implements OnInit {
      }).catch( e => { console.log(e); });
   }
 
+  calcTotalPartials() {
+   this.declarationItemsToShow.forEach(group => {
+      group.Category.total = 0;
+      group.items.forEach(item => {
+         this.declarationItems.forEach(declaration_item => {
+            group.Category.total += item.valueItem.value * declaration_item.factor;
+          });
+      });
+   });
+  }
+
+  refreshDeclarationInfo() {
+   this.calcTotalPartials();
+   this.calcularUnoxMil();
+  }
+
   getRegisterTypes() {
    this.register_typeDataService.get().then( r => {
       this.register_types = r as RegisterType[];

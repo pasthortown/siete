@@ -1773,6 +1773,7 @@ export class InspectorComponent implements OnInit {
                {mes: today.getMonth() + 1},
                {year: today.getFullYear()},
                {nombre_comercial: r2.establishment.commercially_known_name.toUpperCase()},
+               {razon_social: this.razon_social.toUpperCase()},
                {ruc: this.ruc_registro_selected.ruc.number.toUpperCase()},
                {actividad: actividad.toUpperCase()},
                {categoria: clasificacion.toUpperCase()},
@@ -2885,6 +2886,18 @@ export class InspectorComponent implements OnInit {
       }
    });
    this.calcularUnoxMil();
+   this.calcTotalPartials();
+}
+
+calcTotalPartials() {
+   this.declarationItemsToShow.forEach(group => {
+      group.Category.total = 0;
+      group.items.forEach(item => {
+         this.declarationItems.forEach(declaration_item => {
+            group.Category.total += item.valueItem.value * declaration_item.factor;
+          });
+      });
+   });
 }
 
 guardarDeclaracion() {
