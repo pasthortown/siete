@@ -67,7 +67,7 @@ export class PagosComponent implements OnInit {
       const reportData = r as any[];
       let output = '';
       reportData.forEach(element => {
-        if (element.pay.amount_to_pay > 0) {
+        if (element.pay.amount_to_pay > 0 && !element.payed) {
           const localidad = '5'; // Guayaquil 1  -   Quito 5
           const transaccion = 'OCP'; // SIEMPRE OCP
           const codigo_servicio = 'ZG'; // OC= Orden de Cobro (Débito a Cuenta), ZG= Recaudación con Información (Recaudación a través de Canales con ingreso de información), SC= Recaudación de Colegios (Recaudación a través de Canales con o sin información).
