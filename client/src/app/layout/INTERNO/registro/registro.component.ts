@@ -1100,25 +1100,41 @@ export class RegistroComponent implements OnInit {
    ];
    const data = [];
    this.ruc_registro_selected.ruc.establishments.forEach(item => {
-       data.push({
-          selected: '',
-          code: item.ruc_code_id,
-          address: item.address_main_street + ' ' + item.address_number + ' ' + item.address_secondary_street,
-          name: item.commercially_known_name,
-          sri_state: item.sri_state,
+       let establecimientosRegistrados = JSON.parse(sessionStorage.getItem('establecimientos')) as [];
+       establecimientosRegistrados.forEach(element => {
+          let yaMostrado = false;
+          data.forEach(elementData => {
+             if (elementData.code == item.ruc_code_id) {
+                yaMostrado = true;
+             }
+          });
+          let yaRegistrado = false;
+          if (element == Number(item.ruc_code_id)) {
+             yaRegistrado = true;
+          }
+          if (!yaMostrado) {
+             data.push({
+                selected: '',
+                code: item.ruc_code_id,
+                yaRegistrado: yaRegistrado,
+                address: item.address_main_street + ' ' + item.address_number + ' ' + item.address_secondary_street,
+                name: item.commercially_known_name,
+                sri_state: item.sri_state,
+             });
+          }
        });
    });
-   data.sort((previous: any, current: any) => {
-      if (Number(previous.code) > Number(current.code)) {
-         return 1;
-      } else if (Number(previous.code) < Number(current.code)) {
-         return -1;
-      }
-      return 0;
-   });
+    data.sort((previous: any, current: any) => {
+       if (Number(previous.code) > Number(current.code)) {
+          return 1;
+       } else if (Number(previous.code) < Number(current.code)) {
+          return -1;
+       }
+       return 0;
+    });
    this.dataEstablishment = data;
    this.onChangeTableEstablishment(this.config);
-  }
+}
 
   onCellClickEstablishment(event) {
    if (event.row.name == ''){
