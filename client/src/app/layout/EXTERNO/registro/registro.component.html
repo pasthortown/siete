@@ -123,7 +123,7 @@
                   <div class="form-group">
                     <label for="group_type_id">Tipo de Personería Jurídica*</label><span
                       *ngIf="!validateGroupGivenTipe()" class="ml-2 badge badge-danger">Incorrecto</span>
-                    <select class="form-control" id="group_type_id" name="group_type_id"
+                    <select class="form-control" id="group_type_id" [disabled]="!rucEstablishmentRegisterSelected.editable" name="group_type_id"
                       [(ngModel)]="ruc_registro_selected.ruc.group_given.group_type_id" (change)="
                           setGroupTypeSelected(
                             ruc_registro_selected.ruc.group_given.group_type_id
@@ -191,7 +191,7 @@
                     <label>Fecha de Nombramiento*</label><span
                     *ngIf="!fechaNombramientoOK"
                     class="ml-2 badge badge-danger">Incorrecto</span>
-                    <input type="date" class="form-control" id="assignment_date" name="assignment_date" (input)="fechasNombramiento()"
+                    <input type="date" class="form-control" [disabled]="!rucEstablishmentRegisterSelected.editable" id="assignment_date" name="assignment_date" (input)="fechasNombramiento()"
                       placeholder="assignmentDate" [ngModel]="
                           ruc_registro_selected.ruc.person_representative_attachment.assignment_date | date: 'y-MM-dd'
                         " (ngModelChange)="
@@ -209,12 +209,12 @@
                           class="btn btn-success" (click)="descargarNombramiento()">
                           <i class="fas fa-download"></i>
                         </button>
-                        <button [disabled]="!validateNombramiento()" type="button" title="Eliminar"
+                        <button [disabled]="!validateNombramiento()" type="button" [disabled]="!rucEstablishmentRegisterSelected.editable" title="Eliminar"
                           class="btn btn-danger" (click)="borrarNombramiento()">
                           <i class="fas fa-trash"></i>
                         </button>
                       </div>
-                      <input type="file" class="form-control" id="person_representative_attachment_file"
+                      <input type="file" class="form-control" [disabled]="!rucEstablishmentRegisterSelected.editable" id="person_representative_attachment_file"
                         name="person_representative_attachment_file" placeholder="Nombramiento Representante del Legal"
                         (change)="CodeFilePersonRepresentativeAttachment($event)">
                     </div>
@@ -1489,7 +1489,7 @@
                                   </td>
                                   <td>
                                     <input type="number" class="form-control" min="0" id="sillas" name="sillas"
-                                      placeholder="Cantidad de Plazas"
+                                      placeholder="Cantidad de Plazas" [disabled]="!rucEstablishmentRegisterSelected.editable"
                                       [(ngModel)]="complementaryServiceFood.quantity_chairs"/>
                                   </td>
                                   <td>
