@@ -3941,6 +3941,7 @@ guardarDeclaracion() {
   }
 
   getRegisterTypeId() {
+   return;
    this.register_typeDataService.get().then(r => {
       const allTypes = r as RegisterType[];
       allTypes.forEach(element => {
@@ -3968,7 +3969,7 @@ guardarDeclaracion() {
       }
       this.getCertificadoUsoSuelo(this.rucEstablishmentRegisterSelected.id);
       this.getReceptionRoom(this.rucEstablishmentRegisterSelected.id);
-      //this.setCategory(this.rucEstablishmentRegisterSelected.register_type_id);
+      this.setCategory(this.rucEstablishmentRegisterSelected.register_type_id);
       this.checkTramitEmitted(this.register_code);
       this.rucEstablishmentRegisterSelected.status = r.status.state_id;
       this.getTramiteStatus(this.rucEstablishmentRegisterSelected.status);
