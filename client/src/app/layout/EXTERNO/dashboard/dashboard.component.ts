@@ -877,6 +877,7 @@ export class DashboardComponent implements OnInit {
   }
 
   setCategory(type_id: number){
+     return;
    let categoryCode = '';
    this.actividadSelected = '1';
    this.register_typeDataService.get().then(r => {
