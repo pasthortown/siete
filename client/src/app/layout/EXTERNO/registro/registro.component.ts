@@ -1698,7 +1698,7 @@ export class RegistroComponent implements OnInit {
    this.rucEstablishmentRegisterSelected.capacities_on_register.forEach(capacity => {
       this.allowed_capacity_types.forEach(capacity_type => {
          if (capacity.capacity_type_id == capacity_type.id) {
-            if (capacity.max_bed> capacity_type.bed_quantity){
+            if (capacity.max_bed > capacity_type.bed_quantity){
                NoApruebaCantidadCamas = true;
             }
             if (capacity.max_bed == 0) {
