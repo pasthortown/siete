@@ -1605,26 +1605,10 @@ export class InspectorComponent implements OnInit {
             const capacities = [];
             const capacities_on_register = r0.capacities_on_register;
             capacities_on_register.forEach(capacity => {
-               this.capacity_types.forEach(capacityType => {
-                  if (capacityType.id == capacity.capacity_type_id) {
-                     if (capacityType.editable_spaces) {
-                        capacity.max_spaces = 0;
-                     } else {
-                        capacity.max_spaces = capacityType.spaces * capacity.quantity;
-                     }
-                     if (capacity.max_beds > capacityType.bed_quantity){
-                        capacity.max_beds = capacityType.bed_quantity;
-                     }
-                     if (capacity.max_beds == 0){
-                        capacity.max_beds = 1;
-                     }
-                  }
-               });   
-            });
-            capacities_on_register.forEach(capacity => {
-               const newCapacity = {type: '', spaces: 0, habitaciones: 0};
+               const newCapacity = {type: '', spaces: 0, habitaciones: 0, beds: 0};
                newCapacity.habitaciones = capacity.quantity;
                newCapacity.spaces = capacity.max_spaces;
+               newCapacity.beds = capacity.max_beds;
                this.capacity_types.forEach(element => {
                      if (element.id == capacity.capacity_type_id) {
                         newCapacity.type = element.name.toString();
