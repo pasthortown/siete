@@ -121,6 +121,7 @@ class RegisterController extends Controller
       $requisites = RegisterRequisite::where('register_id', $register->id)->orderBy('requisite_id', 'ASC')->get();
       $capacities_on_register = $register->Capacities()->get();
       $complementary_service_types_on_register = $register->ComplementaryServiceTypes()->get();
+      $complementary_service_foods_on_register = $register->ComplementaryServiceFoods()->get();
       $toReturn = ["register"=>$register,
                    "requisites"=>$requisites,
                    "status"=>$status_register,
