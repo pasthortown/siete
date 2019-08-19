@@ -4102,8 +4102,8 @@ guardarDeclaracion() {
          capacity.max_beds = capacityType.bed_quantity;
          capacity.max_spaces = capacityType.spaces;
          if(capacityType.spaces == 999) {
-            capacity.max_beds = 0;
-            capacity.max_spaces = 0;
+            //capacity.max_beds = 0;
+            //capacity.max_spaces = 0;
          } else {
             capacity.editable_beds = capacityType.editable_beds;
             capacity.editable_spaces = capacityType.editable_spaces;
@@ -4985,6 +4985,10 @@ guardarDeclaracion() {
       this.capacityTypeDataService.get_filtered_by_register_type(this.rucEstablishmentRegisterSelected.register_type_id).then( r2 => {
         this.allowed_capacity_types = r2 as CapacityType[];
         this.mostrarDataRegister = true;
+        this.rucEstablishmentRegisterSelected.capacities_on_register.forEach(capacity => {
+           this.getMaxBed(capacity);
+           this.calcBeds(capacity);
+        });
         this.calcSpaces();
       }).catch( e => { console.log(e); });
    }).catch( e => { console.log(e); });

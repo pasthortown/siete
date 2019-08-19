@@ -3021,7 +3021,7 @@ export class RegistroComponent implements OnInit {
          this.allowed_capacity_types = r2 as CapacityType[];
          this.mostrarDataRegister = true;
          this.rucEstablishmentRegisterSelected.capacities_on_register.forEach(capacity => {
-            //this.getMaxBed(capacity);//AQUI
+            this.getMaxBed(capacity);
             this.calcBeds(capacity);
          });
          this.calcSpaces();
