@@ -1558,7 +1558,7 @@ export class InspectorComponent implements OnInit {
                {actividad: actividad},
                {clasificacion: r0.register_category.name.toUpperCase()},
                {tipo_tramite: this.tipo_tramite},
-               {fecha_inspeccion: new Date(this.registerApprovalInspector.date_fullfill).toLocaleDateString()},
+               {fecha_inspeccion: new Date(this.registerApprovalInspector.date_fullfill.toString()).toLocaleDateString()},
                {categoria: clasificacion.toUpperCase()},
                {calle_principal: r2.establishment.address_main_street.toUpperCase()},            
                {numeracion: r2.establishment.address_number.toUpperCase()},
