@@ -2321,12 +2321,13 @@ encerarDeclaracion(paySelected: Pay) {
  }
 
  getMaxBed(capacity: Capacity) {
-  this.alowed_capacity_types.forEach(element => {
-     if (element.id == capacity.capacity_type_id){
-        capacity.max_beds = element.bed_quantity;
-     }
-  });
- }
+   this.alowed_capacity_types.forEach(capacityType => {
+      if(capacityType.id == capacity.capacity_type_id) {
+         capacity.editable_beds = capacityType.editable_beds;
+         capacity.editable_spaces = capacityType.editable_spaces;
+      }
+   });
+  }
  
  setGroupTypeSelected(id: number) {
     this.groupTypeSelected = new GroupType();
