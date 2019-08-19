@@ -1,6 +1,3 @@
-CONECTARSE SUPERCIAS
-Completar Update Establecimiento
-
 ps -fx //listar los procesos
 screen -r NOMBRE
 ctrl + ad para volver a consola
@@ -32,7 +29,4 @@ INSERT INTO public.account_rols(
       return $e;
     }
 
-
-
-GUARDAR CANTIDAD PLAZAS EN CAPACIDADES
 HABILITAR TARIFARIO RACK
