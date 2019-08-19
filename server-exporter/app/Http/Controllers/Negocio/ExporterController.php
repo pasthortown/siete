@@ -120,11 +120,11 @@ class ExporterController extends Controller
 
   protected function build_table_capacidades($capacidades) {
     $html_content = '<table style="width: 100%; border: 1px solid black; border-collapse: collapse; text-align: left; font-size:14px;">';
-    $html_content .= '<tr style="background-color:yellow;"><th colspan="5" style="border: 1px solid black; text-align: center;">CAPACIDADES DEL ESTABLECIMIENTO</th></tr>';
-    $html_content .= '<tr style="background-color:yellow; text-align: center;"><th style="border: 1px solid black;"></th><th style="border: 1px solid black;" colspan="2">INFORMACIÓN USUARIO</th><th style="border: 1px solid black;" colspan="2">INFORMACIÓN TÉCNICO ZONAL</th></tr>';
-    $html_content .= '<tr style="background-color:yellow;"><th style="border: 1px solid black;">TIPO DE HABITACIÓN</th><th style="border: 1px solid black;">HABITACIONES</th><th style="border: 1px solid black;">PLAZAS</th><th style="border: 1px solid black;">HABITACIONES</th><th style="border: 1px solid black;">PLAZAS</th></tr>';
+    $html_content .= '<tr style="background-color:yellow;"><th colspan="7" style="border: 1px solid black; text-align: center;">CAPACIDADES DEL ESTABLECIMIENTO</th></tr>';
+    $html_content .= '<tr style="background-color:yellow; text-align: center;"><th style="border: 1px solid black;"></th><th style="border: 1px solid black;" colspan="3">INFORMACIÓN USUARIO</th><th style="border: 1px solid black;" colspan="3">INFORMACIÓN TÉCNICO ZONAL</th></tr>';
+    $html_content .= '<tr style="background-color:yellow;"><th style="border: 1px solid black;">TIPO DE HABITACIÓN</th><th style="border: 1px solid black;">HABITACIONES</th><th style="border: 1px solid black;">CAMAS</th><th style="border: 1px solid black;">PLAZAS</th><th style="border: 1px solid black;">HABITACIONES</th><th style="border: 1px solid black;">CAMAS</th><th style="border: 1px solid black;">PLAZAS</th></tr>';
     foreach($capacidades as $capacity) {
-      $html_content .= '<tr><th style="border: 1px solid black;">' . $capacity['type'] . '</th><td style="border: 1px solid black; text-align:center;">' . $capacity['habitaciones'] . '</td><td style="border: 1px solid black; text-align:center;">' . $capacity['spaces'] . '</td><td style="border: 1px solid black;"></td><td style="border: 1px solid black;"></td></tr>';
+      $html_content .= '<tr><th style="border: 1px solid black;">' . $capacity['type'] . '</th><td style="border: 1px solid black; text-align:center;">' . $capacity['habitaciones'] . '</td><td style="border: 1px solid black; text-align:center;">' . $capacity['beds'] . '</td><td style="border: 1px solid black; text-align:center;">' . $capacity['spaces'] . '</td><td style="border: 1px solid black;"></td><td style="border: 1px solid black;"></td><td style="border: 1px solid black;"></td></tr>';
     }
     $html_content .= '</table>';
     return $html_content;
@@ -176,12 +176,6 @@ class ExporterController extends Controller
     $html_content .= '</table><br/>';
     $html_content .= $this->build_table_tarifario_reporte($request['tariffs']);
     $html_content .= '<p style="text-align:left; font-size:14px;"><strong><i>*Precios incluyen IVA</i></strong></p><br /><br /><br /><br />';
-    /*$html_content .= '<table style="margin:auto; text-align: center; width:50%;">';
-    $html_content .= '<tr><td style="border-bottom: 1px solid black;"></td></tr>';
-    $html_content .= '<tr><td><strong>##nombre_coordinador_Zonal##</strong></td></tr>';
-    $html_content .= '<tr><td><strong>Coordinación Zonal ##zonal##</strong></td></tr>';
-    $html_content .= '</table>';*/
-    
     $html_content .= '</div></pagina>';
     try {
       $qr = $request['qr'];
@@ -388,11 +382,13 @@ class ExporterController extends Controller
     $html_content .= '<br/><br/>';
     $html_content .= $this->build_table_complementary_services($request['complementary_services']);
     $html_content .= '<br/><br/>';
+    $html_content .= '</div></pagina>';
+    $html_content .= '<pagina><div style="width:100%; height:350px;"></div><div style="width:100%; margin-left: 150px; margin-right:100px;">';
     $html_content .= $this->build_table_personal($request['personal']);
-    $html_content .= '<br/><br/>';
+    $html_content .= '</div></pagina>';
+    $html_content .= '<pagina><div style="width:100%; height:350px;"></div><div style="width:100%; margin-left: 150px; margin-right:100px;">';
     $html_content .= '<h3 style="text-transform: uppercase; width: 100%; text-align: center;">REQUISITOS PARA ##categoria## - ##clasificacion##</h3><br/><br/>';
     $html_content .= '</div></pagina>';
-
     $requisites = $request['requisites'];
     $html_content .= $this->buildPagesChecklist($requisites);
     try {
