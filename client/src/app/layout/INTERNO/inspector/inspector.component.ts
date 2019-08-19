@@ -1616,8 +1616,6 @@ export class InspectorComponent implements OnInit {
                });
                capacities.push(newCapacity);
             });
-            console.log(capacities);
-            return;
             const tariffs = [];
             this.tarifarioResponse.forEach(tariff => {
                const newTariff = {capacity_type_id: 0, type: '', habitacion_alta: 0, habitacion_baja: 0, persona_alta: 0, persona_baja: 0};
