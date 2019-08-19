@@ -477,10 +477,10 @@ export class TarifarioRackComponent implements OnInit {
    getMaxBed(capacity: Capacity) {
     this.allowed_capacity_types.forEach(capacityType => {
        if(capacityType.id == capacity.capacity_type_id) {
-          capacity.max_bed = capacityType.bed_quantity;
+          capacity.max_beds = capacityType.bed_quantity;
           capacity.max_spaces = capacityType.spaces;
           if(capacityType.spaces == 999) {
-             capacity.max_bed = 0;
+             capacity.max_beds = 0;
              capacity.max_spaces = 0;
           } else {
              capacity.editable_beds = capacityType.editable_beds;
@@ -503,10 +503,10 @@ export class TarifarioRackComponent implements OnInit {
        });
        capacity.total_spaces += places;
     });
-    if(beds_declared == capacity.max_bed){
-       capacity.max_bed_ok = true;
+    if(beds_declared == capacity.max_beds){
+       capacity.max_beds_ok = true;
     }else {
-       capacity.max_bed_ok = false;
+       capacity.max_beds_ok = false;
     }
     this.validateTariffs();
    }
@@ -522,11 +522,11 @@ export class TarifarioRackComponent implements OnInit {
              if (!capacityType.editable_spaces) {
                 capacity.max_spaces = capacityType.spaces * capacity.quantity;
              }
-             if (capacity.max_bed > capacityType.bed_quantity){
-                capacity.max_bed = capacityType.bed_quantity;
+             if (capacity.max_beds > capacityType.bed_quantity){
+                capacity.max_beds = capacityType.bed_quantity;
              }
-             if (capacity.max_bed == 0){
-                capacity.max_bed = 1;
+             if (capacity.max_beds == 0){
+                capacity.max_beds = 1;
              }
           }
        });
@@ -626,7 +626,7 @@ export class TarifarioRackComponent implements OnInit {
        });
        this.registerMinturSelected.total_spaces += capacity.max_spaces;
        this.registerMinturSelected.total_habitations += capacity.quantity;
-       this.registerMinturSelected.total_beds += (capacity.max_bed * capacity.quantity);
+       this.registerMinturSelected.total_beds += (capacity.max_beds * capacity.quantity);
     });
    }
  

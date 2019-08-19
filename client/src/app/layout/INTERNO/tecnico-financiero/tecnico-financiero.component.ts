@@ -2325,7 +2325,7 @@ encerarDeclaracion(paySelected: Pay) {
  getMaxBed(capacity: Capacity) {
   this.alowed_capacity_types.forEach(element => {
      if (element.id == capacity.capacity_type_id){
-        capacity.max_bed = element.bed_quantity;
+        capacity.max_beds = element.bed_quantity;
      }
   });
  }
@@ -3350,10 +3350,10 @@ removeLanguage() {
      });
      capacity.total_spaces += places;
   });
-  if(beds_declared == capacity.max_bed){
-     capacity.max_bed_ok = true;
+  if(beds_declared == capacity.max_beds){
+     capacity.max_beds_ok = true;
   }else {
-     capacity.max_bed_ok = false;
+     capacity.max_beds_ok = false;
   }
   this.validateTariffs();
  }

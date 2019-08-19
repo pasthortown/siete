@@ -206,6 +206,8 @@ class RegisterController extends Controller
             }
             $capacity->quantity = $capacityToRegister['quantity'];
             $capacity->capacity_type_id = $capacityToRegister['capacity_type_id'];
+            $capacity->max_beds = $capacityToRegister['max_beds'];
+            $capacity->max_spaces = $capacityToRegister['max_spaces'];
             $capacity->save();
             $beds_on_capacity = $capacityToRegister['beds_on_capacity'];
             foreach($beds_on_capacity as $bed_to_add){
@@ -341,6 +343,8 @@ class RegisterController extends Controller
             }
             $capacity->quantity = $capacityToRegister['quantity'];
             $capacity->capacity_type_id = $capacityToRegister['capacity_type_id'];
+            $capacity->max_beds = $capacityToRegister['max_beds'];
+            $capacity->max_spaces = $capacityToRegister['max_spaces'];
             $capacity->save();
             $beds_on_capacity = $capacityToRegister['beds_on_capacity'];
             foreach($beds_on_capacity as $bed_to_add){

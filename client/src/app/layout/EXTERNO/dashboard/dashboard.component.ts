@@ -2632,10 +2632,10 @@ guardarDeclaracion() {
    this.rucEstablishmentRegisterSelected.capacities_on_register.forEach(capacity => {
       this.allowed_capacity_types.forEach(capacity_type => {
          if (capacity.capacity_type_id == capacity_type.id) {
-            if (capacity.max_bed> capacity_type.bed_quantity){
+            if (capacity.max_beds> capacity_type.bed_quantity){
                NoApruebaCantidadCamas = true;
             }
-            if (capacity.max_bed == 0) {
+            if (capacity.max_beds == 0) {
                NoApruebaCantidadCamas = true;
             }
          }
@@ -3086,10 +3086,10 @@ guardarDeclaracion() {
   getMaxBed(capacity: Capacity) {
    this.allowed_capacity_types.forEach(capacityType => {
       if(capacityType.id == capacity.capacity_type_id) {
-         capacity.max_bed = capacityType.bed_quantity;
+         capacity.max_beds = capacityType.bed_quantity;
          capacity.max_spaces = capacityType.spaces;
          if(capacityType.spaces == 999) {
-            capacity.max_bed = 0;
+            capacity.max_beds = 0;
             capacity.max_spaces = 0;
          } else {
             capacity.editable_beds = capacityType.editable_beds;
@@ -4188,11 +4188,11 @@ guardarDeclaracion() {
             if (!capacityType.editable_spaces) {
                capacity.max_spaces = capacityType.spaces * capacity.quantity;
             }
-            if (capacity.max_bed > capacityType.bed_quantity){
-               capacity.max_bed = capacityType.bed_quantity;
+            if (capacity.max_beds > capacityType.bed_quantity){
+               capacity.max_beds = capacityType.bed_quantity;
             }
-            if (capacity.max_bed == 0){
-               capacity.max_bed = 1;
+            if (capacity.max_beds == 0){
+               capacity.max_beds = 1;
             }
          }
       });
@@ -4244,7 +4244,7 @@ guardarDeclaracion() {
       });
       this.rucEstablishmentRegisterSelected.total_spaces += capacity.max_spaces;
       this.rucEstablishmentRegisterSelected.total_habitations += capacity.quantity;
-      this.rucEstablishmentRegisterSelected.total_beds += (capacity.max_bed * capacity.quantity);
+      this.rucEstablishmentRegisterSelected.total_beds += (capacity.max_beds * capacity.quantity);
    });
   }
 
@@ -4261,10 +4261,10 @@ guardarDeclaracion() {
       });
       capacity.total_spaces += places;
    });
-   if(beds_declared == capacity.max_bed){
-      capacity.max_bed_ok = true;
+   if(beds_declared == capacity.max_beds){
+      capacity.max_beds_ok = true;
    }else {
-      capacity.max_bed_ok = false;
+      capacity.max_beds_ok = false;
    }
    this.validateTariffs();
   }
