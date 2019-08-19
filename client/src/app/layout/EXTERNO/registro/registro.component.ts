@@ -1113,6 +1113,10 @@ export class RegistroComponent implements OnInit {
       group.items.forEach(item => {
          console.log({Category: group.Category, Item: item});
          this.declarationItems.forEach(declaration_item => {
+            if (declaration_item.name == 'MARCAS, PATENTES, LICENCIAS Y OTROS SIMILARES'){
+               console.log(item.valueItem.value);
+               console.log(declaration_item.factor);   
+            }
             group.Category.total += item.valueItem.value * declaration_item.factor;
           });
       });
