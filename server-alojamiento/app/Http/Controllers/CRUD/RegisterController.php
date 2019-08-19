@@ -125,7 +125,7 @@ class RegisterController extends Controller
                    "requisites"=>$requisites,
                    "status"=>$status_register,
                    "register_category"=>$register_category,
-                   "capacities_on_register"=>$capacities,
+                   "capacities_on_register"=>$capacities_on_register,
                    "complementary_service_types_on_register"=>$complementary_service_types_on_register,
                    "complementary_service_foods_on_register"=>$complementary_service_foods_on_register,
                   ];
