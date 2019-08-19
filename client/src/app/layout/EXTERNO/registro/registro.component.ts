@@ -1112,6 +1112,7 @@ export class RegistroComponent implements OnInit {
       group.Category.total = 0;
       group.items.forEach(item => {
          this.declarationItems.forEach(declaration_item => {
+            console.log({Category: group.Category, Item: declaration_item});
             group.Category.total += item.valueItem.value * declaration_item.factor;
           });
       });
