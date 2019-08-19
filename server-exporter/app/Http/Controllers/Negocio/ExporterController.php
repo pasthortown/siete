@@ -25,7 +25,7 @@ class ExporterController extends Controller
     $html_content .= '<tr style="background-color:yellow; text-align: center;"><th></th><th style="border: 1px solid black;" colspan="2">TARIFA POR HABITACIÓN EN TEMPORADA</th><th style="border: 1px solid black;" colspan="2">TARIFA POR PERSONA EN TEMPORADA</th><th style="border: 1px solid black;" colspan="2">TARIFA POR HABITACIÓN EN TEMPORADA</th><th style="border: 1px solid black;" colspan="2">TARIFA POR PERSONA EN TEMPORADA</th></tr>';
     $html_content .= '<tr style="background-color:yellow;"><th style="border: 1px solid black;">TIPO DE HABITACIÓN</th><th style="border: 1px solid black;">ALTA</th><th style="border: 1px solid black;">BAJA</th><th style="border: 1px solid black;">ALTA</th><th style="border: 1px solid black;">BAJA</th><th style="border: 1px solid black;">ALTA</th><th style="border: 1px solid black;">BAJA</th><th style="border: 1px solid black;">ALTA</th><th style="border: 1px solid black;">BAJA</th></tr>';
     foreach($tariffs as $tariff) {
-      $html_content .= '<tr><th style="border: 1px solid black;">' . $tariff['type'] . '</th><td style="border: 1px solid black; text-align:center;">' . $tariff['habitacion_alta'] . '</td><td style="border: 1px solid black; text-align:center;">' . $tariff['habitacion_baja'] . '</td><td style="border: 1px solid black; text-align:center;">' . $tariff['persona_alta'] . '</td><td style="border: 1px solid black; text-align:center;">' . $tariff['persona_baja'] . '</td><td style="border: 1px solid black;"></td><td style="border: 1px solid black;"></td><td style="border: 1px solid black;"></td><td style="border: 1px solid black;"></td></tr>';
+      $html_content .= '<tr><th style="border: 1px solid black;">' . $tariff['type'] . '</th><td style="border: 1px solid black; text-align:center;">' . number_format((float) $tariff['habitacion_alta'], 2, '.', '') . '</td><td style="border: 1px solid black; text-align:center;">' . number_format((float) $tariff['habitacion_baja'], 2, '.', '') . '</td><td style="border: 1px solid black; text-align:center;">' . number_format((float) $tariff['persona_alta'], 2, '.', '') . '</td><td style="border: 1px solid black; text-align:center;">' . number_format((float) $tariff['persona_baja'], 2, '.', '') . '</td><td style="border: 1px solid black;"></td><td style="border: 1px solid black;"></td><td style="border: 1px solid black;"></td><td style="border: 1px solid black;"></td></tr>';
     }
     $html_content .= '</table>';
     return $html_content;
@@ -385,8 +385,6 @@ class ExporterController extends Controller
     $html_content .= '</div></pagina>';
     $html_content .= '<pagina><div style="width:100%; height:350px;"></div><div style="width:100%; margin-left: 150px; margin-right:100px;">';
     $html_content .= $this->build_table_personal($request['personal']);
-    $html_content .= '</div></pagina>';
-    $html_content .= '<pagina><div style="width:100%; height:350px;"></div><div style="width:100%; margin-left: 150px; margin-right:100px;">';
     $html_content .= '<h3 style="text-transform: uppercase; width: 100%; text-align: center;">REQUISITOS PARA ##categoria## - ##clasificacion##</h3><br/><br/>';
     $html_content .= '</div></pagina>';
     $requisites = $request['requisites'];
