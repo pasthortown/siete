@@ -504,9 +504,9 @@ export class TarifarioRackComponent implements OnInit {
        capacity.total_spaces += places;
     });
     if(beds_declared == capacity.max_beds){
-       capacity.max_beds_ok = true;
+       capacity.max_bed_ok = true;
     }else {
-       capacity.max_beds_ok = false;
+       capacity.max_bed_ok = false;
     }
     this.validateTariffs();
    }
