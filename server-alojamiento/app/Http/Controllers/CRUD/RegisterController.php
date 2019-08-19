@@ -120,24 +120,7 @@ class RegisterController extends Controller
       $status_register = RegisterState::where('register_id', $register->id)->orderBy('created_at', 'DESC')->first();
       $requisites = RegisterRequisite::where('register_id', $register->id)->orderBy('requisite_id', 'ASC')->get();
       $capacities_on_register = $register->Capacities()->get();
-      $capacities = [];
-      foreach($capacities_on_register as $capacity_on_register){
-         $beds = $capacity_on_register->Beds()->get();
-         array_push($capacities, ["quantity"=>$capacity_on_register->quantity,
-         "capacity_type_id"=>$capacity_on_register->capacity_type_id,
-         "beds_on_capacity"=>$beds]);
-      }
       $complementary_service_types_on_register = $register->ComplementaryServiceTypes()->get();
-      $capacities_on_register = $register->Capacities()->get();
-      $capacities = [];
-      foreach($capacities_on_register as $capacity_on_register){
-         $beds = $capacity_on_register->Beds()->get();
-         array_push($capacities, ["quantity"=>$capacity_on_register->quantity,
-         "capacity_type_id"=>$capacity_on_register->capacity_type_id,
-         "beds_on_capacity"=>$beds]);
-      }
-      $complementary_service_types_on_register = $register->ComplementaryServiceTypes()->get();
-      $complementary_service_foods_on_register = $register->ComplementaryServiceFoods()->get();
       $toReturn = ["register"=>$register,
                    "requisites"=>$requisites,
                    "status"=>$status_register,
