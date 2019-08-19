@@ -1536,6 +1536,9 @@ export class InspectorComponent implements OnInit {
          if (this.inspectionState == 4) {
             resultado_aprobacion = 'PRÓRROGA DE 6 MESES';
          }
+         if (this.registerApprovalInspector.date_fullfill == null || typeof(this.registerApprovalInspector.date_fullfill.toString()) == 'undefined') {
+            this.registerApprovalInspector.date_fullfill = new Date();
+         }
          const meses = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
          this.documentDataService.get_doc_id(qr_value).then( respuesta => {
             const codigo_informe = 'MT-CZ' + iniciales_cordinacion_zonal + '-' + iniciales_tecnico_zonal + '-' + today.getFullYear() + '-' + respuesta.toString();
@@ -1555,7 +1558,7 @@ export class InspectorComponent implements OnInit {
                {actividad: actividad},
                {clasificacion: r0.register_category.name.toUpperCase()},
                {tipo_tramite: this.tipo_tramite},
-               {fecha_inspeccion: this.registerApprovalInspector.date_fullfill.toString()},
+               {fecha_inspeccion: this.registerApprovalInspector.date_fullfill.toLocaleDateString()},
                {categoria: clasificacion.toUpperCase()},
                {calle_principal: r2.establishment.address_main_street.toUpperCase()},            
                {numeracion: r2.establishment.address_number.toUpperCase()},
