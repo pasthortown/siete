@@ -261,6 +261,7 @@ class ExporterController extends Controller
         $paginas++;
         $pageContent .= '</table>';
         $toReturn .= '<pagina><div style="width:100%; height:350px;"></div><div style="width:100%; margin-left: 150px; margin-right:100px;">';
+        $toReturn .='<h3 style="text-transform: uppercase; width: 100%; text-align: center;">REQUISITOS PARA ##categoria## - ##clasificacion##</h3><br/><br/>'; 
         $toReturn .= $pageContent;
         $toReturn .= '</div></pagina>';
         $pageContent = '<table style="width: 100%; border: 1px solid black; border-collapse: collapse; text-align: left;">';
