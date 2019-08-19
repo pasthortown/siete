@@ -330,7 +330,7 @@ export class TarifarioRackComponent implements OnInit {
       this.capacityTypeDataService.get_filtered_by_register_type(this.registerMinturSelected.register_type_id).then( r2 => {
         this.allowed_capacity_types = r2 as CapacityType[];
         this.registerMinturSelected.capacities_on_register.forEach(capacity => {
-          this.getMaxBed(capacity);
+          //this.getMaxBed(capacity);
           this.calcBeds(capacity);
         });
         this.calcSpaces();
