@@ -2912,7 +2912,7 @@ calcTotalPartials() {
    this.declarationItemsToShow.forEach(group => {
       group.Category.total = 0;
       group.items.forEach(item => {
-         group.Category.total += item.valueItem.value * item.declaration_item.factor;
+         group.Category.total += item.valueItem.value * item.declarationItem.factor;
       });
    });
   }
