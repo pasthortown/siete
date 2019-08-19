@@ -1111,12 +1111,10 @@ export class RegistroComponent implements OnInit {
    this.declarationItemsToShow.forEach(group => {
       group.Category.total = 0;
       group.items.forEach(item => {
-         console.log({Category: group.Category, Item: item});
          this.declarationItems.forEach(declaration_item => {
-            if (declaration_item.name == 'MARCAS, PATENTES, LICENCIAS Y OTROS SIMILARES'){
+               console.log(declaration_item.name);
                console.log(item.valueItem.value);
                console.log(declaration_item.factor);   
-            }
             group.Category.total += item.valueItem.value * declaration_item.factor;
           });
       });
