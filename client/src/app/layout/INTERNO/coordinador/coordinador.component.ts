@@ -4099,11 +4099,10 @@ guardarDeclaracion() {
   getMaxBed(capacity: Capacity) {
    this.allowed_capacity_types.forEach(capacityType => {
       if(capacityType.id == capacity.capacity_type_id) {
-         capacity.max_beds = capacityType.bed_quantity;
-         capacity.max_spaces = capacityType.spaces;
          if(capacityType.spaces == 999) {
-            //capacity.max_beds = 0;
-            //capacity.max_spaces = 0;
+            capacity.editable_beds = true;
+            capacity.editable_spaces = true;
+            capacity.editable = true;
          } else {
             capacity.editable_beds = capacityType.editable_beds;
             capacity.editable_spaces = capacityType.editable_spaces;
