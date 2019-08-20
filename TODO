@@ -28,5 +28,3 @@ INSERT INTO public.account_rols(
     }catch ( Exception $e) {
       return $e;
     }
-
-HABILITAR TARIFARIO RACK
