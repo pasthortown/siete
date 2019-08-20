@@ -1789,9 +1789,9 @@
                                           </i>
                                         </td>
                                         <td>
-                                          <label class="switch"
+                                            <div class="onoffswitch"
                                             *ngIf="register_requisite.HTMLtype == 'TRUE / FALSE'"><input
-                                              type="checkbox" [disabled]="true" id="cumple" name="cumple" [(ngModel)]="
+                                              type="checkbox" class="onoffswitch-checkbox" [disabled]="true" id="cumple" name="cumple" [(ngModel)]="
                                               register_requisite.fullfill
                                                   " (change)="changeFullfill(register_requisite)" /><label class="onoffswitch-label" for="cumple">
                            <span class="onoffswitch-inner"></span>
