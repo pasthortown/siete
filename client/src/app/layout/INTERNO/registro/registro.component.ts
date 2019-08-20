@@ -1775,6 +1775,7 @@ validateHabitaciones(): Boolean {
    this.getTaxPayerType();
    this.getGroupType();
    this.getCapacityTypes();
+   this.getAllCapacityTypes();
    this.getTariffs();
    this.getStates();
    this.getRucNameTypes();
