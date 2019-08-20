@@ -198,7 +198,8 @@ export class RegistroComponent implements OnInit {
   languages: Language[] = [];
   languages_establishmentSelectedId = 0;
   ubications: Ubication[] = [];
-  system_names: SystemName[] = [];
+  system_names: SystemName[] = []; 
+  all_capacity_types: CapacityType[] = [];
   workers: Worker[] = [];
   worker_establishmentSelected: Worker = new Worker();
   worker_groups: WorkerGroup[] = [];
@@ -1024,9 +1025,17 @@ export class RegistroComponent implements OnInit {
     this.getCertificationTypes();
     this.getWorkerGroups();
     this.getRegiones();
+    this.getAllCapacityTypes();
     this.getEstablishmentCertificationTypesCategories();
     this.getComplementaryServiceTypeCategories();
     this.groupTypeSelected = new GroupType();
+  }
+
+  getAllCapacityTypes() {
+   this.all_capacity_types = [];
+   this.capacityTypeDataService.get().then( r => {
+      this.all_capacity_types = r as CapacityType[];
+   }).catch( e => { console.log(e); });
   }
 
   getUbications() {

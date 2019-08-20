@@ -138,6 +138,7 @@ export class RegistroComponent implements OnInit {
    franchises_rucSelectedId = 0;
    fechaNombramientoOK = false;
    allowed_capacity_types: CapacityType[] = []; 
+   all_capacity_types: CapacityType[] = []; 
 
 
    //ASIGNACIONES
@@ -1799,6 +1800,13 @@ validateHabitaciones(): Boolean {
    }).catch( e => {console.log(e); });
   }
    
+  getAllCapacityTypes() {
+   this.all_capacity_types = [];
+   this.capacityTypeDataService.get().then( r => {
+      this.all_capacity_types = r as CapacityType[];
+   }).catch( e => { console.log(e); });
+  }
+
   getFinancieros() {
    this.financieros = [];
    this.userDataService.get_by_rol('6').then( r => {
@@ -3895,12 +3903,12 @@ guardarDeclaracion() {
             tariffType.childs.forEach(tariffTypeChild => {
                const es_referencia = tariffType.father.is_reference;
                let plazasHabitacion = 0;
-               this.allowed_capacity_types.forEach(capacityType => {
+               this.all_capacity_types.forEach(capacityType => {
                   if (capacityType.id == idTipoCapacidad) {
                      plazasHabitacion = capacityType.spaces;
                   }
                });
-               console.log(this.allowed_capacity_types);
+               console.log(plazasHabitacion);
                let nombreDivision = '';
                nombreDivision = tariffTypeChild.name;
                const tariff = new Tariff();

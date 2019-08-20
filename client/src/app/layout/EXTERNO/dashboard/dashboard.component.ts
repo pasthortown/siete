@@ -257,7 +257,8 @@ export class DashboardComponent implements OnInit {
   zonalEstablishmentSelectedCode = '-';
   provinciaEstablishmentSelectedCode = '-';
   cantonEstablishmentSelectedCode = '-';
-  zonalesEstablishment: Ubication[] = [];
+  zonalesEstablishment: Ubication[] = []; 
+  all_capacity_types: CapacityType[] = []; 
   provinciasEstablishment: Ubication[] = [];
   ruc_name_types: RucNameType[] = [];
   cantonesEstablishment: Ubication[];
@@ -1952,6 +1953,7 @@ export class DashboardComponent implements OnInit {
    this.ruc_registro_selected = new RegistroDataCarrier();
    this.getRuc(this.user.ruc);
    this.getTaxPayerType();
+   this.getAllCapacityTypes();
    this.getGroupType();
    this.getCapacityTypes();
    this.getTariffs();
@@ -2317,6 +2319,13 @@ export class DashboardComponent implements OnInit {
       this.requisitosApprovalStateAttachment.approval_state_attachment_file,
       this.requisitosApprovalStateAttachment.approval_state_attachment_file_type,
       this.requisitosApprovalStateAttachment.approval_state_attachment_file_name);
+  }
+
+  getAllCapacityTypes() {
+   this.all_capacity_types = [];
+   this.capacityTypeDataService.get().then( r => {
+      this.all_capacity_types = r as CapacityType[];
+   }).catch( e => { console.log(e); });
   }
 
   getCapacityTypes() {
