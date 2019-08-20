@@ -3909,6 +3909,7 @@ guardarDeclaracion() {
                      plazasHabitacion = capacityType.spaces;
                   }
                });
+               //AQUI
                let nombreDivision = '';
                nombreDivision = tariffTypeChild.name;
                const tariff = new Tariff();
