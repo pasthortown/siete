@@ -3900,6 +3900,7 @@ guardarDeclaracion() {
                      plazasHabitacion = capacityType.spaces;
                   }
                });
+               console.log(this.allowed_capacity_types);
                let nombreDivision = '';
                nombreDivision = tariffTypeChild.name;
                const tariff = new Tariff();
@@ -3916,7 +3917,6 @@ guardarDeclaracion() {
          this.tarifarioRack.valores.push(topush);
       });
    }
-   console.log(this.tarifarioRack);
    this.rucEstablishmentRegisterSelected.capacities_on_register.forEach(capacity => {
       this.allowed_capacity_types.forEach(capacityType => {
          if (capacityType.id == capacity.capacity_type_id) {
