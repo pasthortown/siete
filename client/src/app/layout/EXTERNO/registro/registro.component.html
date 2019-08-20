@@ -1381,10 +1381,11 @@
                                             <div class="input-group-prepend">
                                               <span class="input-group-text" id="basic-addon1">USD</span>
                                             </div>
-                                            <input type="number" *ngIf="!(!tariffRack.editable || (!tariff.isReference) && tariff.plazasHabitacion !== 999)" class="form-control" min="0" step="0.01" id="low_capacity_room_price"
-                                            name="low_capacity_room_price" (input)="checkValuesTariffs()" [(ngModel)]="tariff.tariff.price" placeholder="Precio" [disabled]="(!tariffRack.editable || (!tariff.isReference) && tariff.plazasHabitacion !== 999)"/>
-                                            <input type="number" *ngIf="(!tariffRack.editable || (!tariff.isReference) && tariff.plazasHabitacion !== 999)" class="form-control" min="0" step="0.01" id="low_capacity_room_price"
-                                            name="low_capacity_room_price" (input)="checkValuesTariffs()" readonly [ngModel]="tariff.tariff.price | number: '1.2'" (ngModelChange)="tariff.tariff.price = $event" placeholder="Precio" [disabled]="(!tariffRack.editable || (!tariff.isReference) && tariff.plazasHabitacion !== 999)"/>
+                                            <input type="number" class="form-control" min="0" step="0.01" id="low_capacity_room_price"
+                                            name="low_capacity_room_price" (input)="checkValuesTariffs()" [ngModel]="tariff.tariff.price | number: '1.2'" (ngModelChange)="
+                                            tariff.tariff.price = $event"
+                                            placeholder="Precio"
+                                            [disabled]="!tariffRack.editable || (!tariff.isReference && tariff.plazasHabitacion !== 999)"/>
                                         </div>
                                     </td>
                                   </tr>
