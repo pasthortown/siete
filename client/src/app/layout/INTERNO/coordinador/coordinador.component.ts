@@ -2148,6 +2148,7 @@ export class CoordinadorComponent implements OnInit {
                this.registerApprovalFinanciero.id_user = 0;
                this.financialSelectedId = 0;
             }
+            console.log(this.registerApprovalFinanciero);
             this.checkIfIsAssignedFinanciero();
             this.checkAttachmentsFinanciero();
          }
