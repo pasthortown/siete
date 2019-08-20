@@ -178,7 +178,7 @@
         <span class="badge badge-warning" *ngIf="!registerApprovalFinanciero.notes != '' && !registerApprovalFinanciero.value">Pendiente</span>
       </small>
     </div>
-    <div class="col-12 mt-3" *ngIf="registerApprovalFinanciero.notes != ' && (digito == '2' || digito == '3')">
+    <div class="col-12 mt-3" *ngIf="registerApprovalFinanciero.notes != '' && (digito == '2' || digito == '3')">
         <div class="alert alert-info" role="alert" [innerHTML]="registerApprovalFinanciero.notes">
         </div>
     </div>
