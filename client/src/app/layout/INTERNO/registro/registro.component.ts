@@ -1804,6 +1804,7 @@ validateHabitaciones(): Boolean {
    this.all_capacity_types = [];
    this.capacityTypeDataService.get().then( r => {
       this.all_capacity_types = r as CapacityType[];
+      console.log(r);
    }).catch( e => { console.log(e); });
   }
 
@@ -3934,8 +3935,7 @@ guardarDeclaracion() {
       this.rucEstablishmentRegisterSelected.total_spaces += capacity.max_spaces;
       this.rucEstablishmentRegisterSelected.total_habitations += capacity.quantity;
       this.rucEstablishmentRegisterSelected.total_beds += (capacity.max_beds * capacity.quantity);
-   });
-   console.log(this.all_capacity_types);
+   });//AQUI
   }
 
   calcBeds(capacity: Capacity) {
