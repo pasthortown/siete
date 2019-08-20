@@ -494,7 +494,6 @@ export class TecnicoFinancieroComponent implements OnInit {
         'La solicitud ha sido devuelta al Coordinador Zonal',
         'success'
       );
-      this.registerApprovalFinanciero.id_user = 0;
       this.registerApprovalFinanciero.date_assigment = null;
       this.registerApprovalFinanciero.notes = 'Devuelto: <strong>' + this.user.name + ':</strong> ' + this.registerApprovalFinanciero.notes;
       this.approvalStateDataService.put(this.registerApprovalFinanciero).then( r => {
