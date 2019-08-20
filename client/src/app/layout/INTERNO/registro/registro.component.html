@@ -150,7 +150,7 @@
                      <input type="checkbox" class="onoffswitch-checkbox"  disabled id="baised_accounting"
                           name="baised_accounting" [(ngModel)]="
                               ruc_registro_selected.ruc.baised_accounting
-                            " /><label class="onoffswitch-label" for="myonoffswitch">
+                            " /><label class="onoffswitch-label" for="baised_accounting">
                            <span class="onoffswitch-inner"></span>
                            <span class="onoffswitch-switch"></span>
                      </label>
@@ -1455,7 +1455,7 @@
                      <input type="checkbox" class="onoffswitch-checkbox"  id="salas_recepciones"
                                 name="salas_recepciones" [(ngModel)]="
                                 salaRecepciones.fullfill
-                                " [disabled]="false"/><label class="onoffswitch-label" for="myonoffswitch">
+                                " [disabled]="false"/><label class="onoffswitch-label" for="salas_recepciones">
                            <span class="onoffswitch-inner"></span>
                            <span class="onoffswitch-switch"></span>
                      </label>
@@ -1486,7 +1486,7 @@
                      <input type="checkbox" class="onoffswitch-checkbox"  id="autorized_complementary_adventure_capacities"
                                 name="autorized_complementary_adventure_capacities" [(ngModel)]="
                                   rucEstablishmentRegisterSelected.autorized_complementary_food_capacities
-                                " [disabled]="!rucEstablishmentRegisterSelected.editable || rucEstablishmentRegisterSelected.register_type_id == 47 || rucEstablishmentRegisterSelected.register_type_id == 46"/><label class="onoffswitch-label" for="myonoffswitch">
+                                " [disabled]="!rucEstablishmentRegisterSelected.editable || rucEstablishmentRegisterSelected.register_type_id == 47 || rucEstablishmentRegisterSelected.register_type_id == 46"/><label class="onoffswitch-label" for="autorized_complementary_adventure_capacities">
                            <span class="onoffswitch-inner"></span>
                            <span class="onoffswitch-switch"></span>
                      </label>
@@ -1574,7 +1574,7 @@
                      <input type="checkbox" class="onoffswitch-checkbox"  id="autorized_complementary_adventure_capacities"
                                 name="autorized_complementary_adventure_capacities" [(ngModel)]="
                                   rucEstablishmentRegisterSelected.autorized_complementary_capacities
-                                " [disabled]="!rucEstablishmentRegisterSelected.editable || rucEstablishmentRegisterSelected.register_type_id == 47 || rucEstablishmentRegisterSelected.register_type_id == 46"/><label class="onoffswitch-label" for="myonoffswitch">
+                                " [disabled]="!rucEstablishmentRegisterSelected.editable || rucEstablishmentRegisterSelected.register_type_id == 47 || rucEstablishmentRegisterSelected.register_type_id == 46"/><label class="onoffswitch-label" for="autorized_complementary_adventure_capacities">
                            <span class="onoffswitch-inner"></span>
                            <span class="onoffswitch-switch"></span>
                      </label>
@@ -1705,7 +1705,7 @@
                                             *ngIf="register_requisite.HTMLtype == 'TRUE / FALSE'"><input
                                               type="checkbox" [disabled]="false" id="cumple" name="cumple" [(ngModel)]="
                                               register_requisite.fullfill
-                                                  " (change)="changeFullfill(register_requisite)" /><label class="onoffswitch-label" for="myonoffswitch">
+                                                  " (change)="changeFullfill(register_requisite)" /><label class="onoffswitch-label" for="cumple">
                            <span class="onoffswitch-inner"></span>
                            <span class="onoffswitch-switch"></span>
                      </label>
