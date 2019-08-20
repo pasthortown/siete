@@ -1422,6 +1422,7 @@ calcularUnoxMil() {
    this.mostrarDataRegisterMintur = false;
    this.ruc_registro_selected = new RegistroDataCarrier();
    this.pay = new Pay();
+   this.contactUser.id = 0;
    this.payManualAgreement = false;
    this.pays = [];
    this.estoyVacaciones = false;
