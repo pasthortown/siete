@@ -151,7 +151,7 @@
       <div class="input-group mb-3">
         <div class="input-group-prepend">
           <button [disabled]="financialSelectedId == 0 || isAssignedFinancial || asignandoFinanciero" type="button" title="Asignar" class="btn btn-success" (click)="asignarFinanciero()"><span class="fas fa-user-plus"></span></button>
-          <button [disabled]="!isAssignedFinancial || desasignandoFinanciero" type="button" type="button" title="Remover" class="btn btn-danger" (click)="desasignarFinanciero()"><span class="fas fa-user-minus"></span></button>
+          <button [disabled]="!isAssignedFinancial || registerApprovalFinanciero.search('Devuelto: ') == 0 || desasignandoFinanciero" type="button" type="button" title="Remover" class="btn btn-danger" (click)="desasignarFinanciero()"><span class="fas fa-user-minus"></span></button>
         </div>
         <select [disabled]="isAssignedFinancial" class="form-control" id="idFinancial" name="idFinancial" [(ngModel)]="financialSelectedId">
           <option value="0" selected>Seleccione...</option>
@@ -159,7 +159,7 @@
         </select>
       </div>
   </div>
-  <div class="col-12 mt-3" *ngIf="registerApprovalFinanciero.notes != '' && digito == '0'">
+  <div class="col-12 mt-3" *ngIf="registerApprovalFinanciero.notes.search('Devuelto: ') == 0 && !registerApprovalFinanciero.value">
     <strong>Motivo de devolución de trámite</strong>
       <div class="alert alert-info" role="alert" [innerHTML]="registerApprovalFinanciero.notes">
       </div>
@@ -178,7 +178,7 @@
         <span class="badge badge-warning" *ngIf="!registerApprovalFinanciero.notes != '' && !registerApprovalFinanciero.value">Pendiente</span>
       </small>
     </div>
-    <div class="col-12 mt-3" *ngIf="registerApprovalFinanciero.notes != '' && (digito == '2' || digito == '3')">
+    <div class="col-12 mt-3" *ngIf="registerApprovalFinanciero.notes != ''">
         <div class="alert alert-info" role="alert" [innerHTML]="registerApprovalFinanciero.notes">
         </div>
     </div>

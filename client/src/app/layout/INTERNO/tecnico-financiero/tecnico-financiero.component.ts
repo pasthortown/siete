@@ -496,12 +496,16 @@ export class TecnicoFinancieroComponent implements OnInit {
       );
       this.registerApprovalFinanciero.id_user = 0;
       this.registerApprovalFinanciero.date_assigment = null;
-      this.registerApprovalFinanciero.notes = '<strong>' + this.user.name + ':</strong> ' + this.registerApprovalFinanciero.notes;
+      this.registerApprovalFinanciero.notes = 'Devuelto: <strong>' + this.user.name + ':</strong> ' + this.registerApprovalFinanciero.notes;
       this.approvalStateDataService.put(this.registerApprovalFinanciero).then( r => {
           const newRegisterState = new RegisterState();
           newRegisterState.justification = 'El Técnico Financiero no se encuentra disponible por Vacaciones / Fuera de Oficina';
           newRegisterState.register_id =  this.idRegister;
-          newRegisterState.state_id = this.stateTramiteId + 3;
+          const estado: String = this.stateTramiteId.toString();
+          const digito = estado.substring(estado.length-1, estado.length);
+          if (digito == '7') {
+            newRegisterState.state_id = this.stateTramiteId + 3;
+          }
           this.registerStateDataService.post(newRegisterState).then( r1 => {
              this.toastr.warningToastr('Trámite devuelto al Coordinador Zonal, Satisfactoriamente.', 'Devolución por Vacaciones / Fuera de Oficina');
              this.refresh();

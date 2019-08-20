@@ -84,7 +84,7 @@
          </table>
         </div>
       </div>
-      <div class="col-12 text-center mb-3" *ngIf="mostrarDataRegisterMintur">
+      <div class="col-12 text-center mb-3" *ngIf="mostrarDataRegisterMintur && digito == '7'">
         <input type="checkbox" name="vacacionesCheck" id="vacacionesCheck" [(ngModel)]="estoyVacaciones" (change)= "rechazarCheck()"> Devolver el trámite seleccionado
       </div>
       <div class="col-12 mt-5 mb-2" *ngIf="estoyVacaciones">
