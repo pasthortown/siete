@@ -1433,7 +1433,7 @@
                             <label class="switch"><input type="checkbox" id="autorized_complementary_adventure_capacities"
                                 name="autorized_complementary_adventure_capacities" [(ngModel)]="
                                   rucEstablishmentRegisterSelected.autorized_complementary_food_capacities
-                                " [disabled]="!rucEstablishmentRegisterSelected.editable"/><span class="slider round"></span></label>
+                                " [disabled]="!rucEstablishmentRegisterSelected.editable || rucEstablishmentRegisterSelected.register_type_id == 47 || rucEstablishmentRegisterSelected.register_type_id == 46"/><span class="slider round"></span></label>
                           </div>
                         </div>
                         <div class="row" *ngIf="rucEstablishmentRegisterSelected.autorized_complementary_food_capacities">
@@ -1516,7 +1516,7 @@
                             <label class="switch"><input type="checkbox" id="autorized_complementary_adventure_capacities"
                                 name="autorized_complementary_adventure_capacities" [(ngModel)]="
                                   rucEstablishmentRegisterSelected.autorized_complementary_capacities
-                                " [disabled]="!rucEstablishmentRegisterSelected.editable"/><span class="slider round"></span></label>
+                                " [disabled]="!rucEstablishmentRegisterSelected.editable || rucEstablishmentRegisterSelected.register_type_id == 47 || rucEstablishmentRegisterSelected.register_type_id == 46"/><span class="slider round"></span></label>
                           </div>
                         </div>
                         <div class="form-group row" *ngIf="
