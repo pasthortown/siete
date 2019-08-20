@@ -128,6 +128,7 @@ export class TecnicoFinancieroComponent implements OnInit {
   isAssigned = false;
   hasIspectionDate  = false;
   hasInform  = false;
+  digito = '';
   hasRequisites = false;
   inspectionState = 0;
   imprimiendoDeclaracion = false;
@@ -1253,6 +1254,8 @@ calcularUnoxMil() {
         this.selectRegisterMintur(element);
         this.stateTramiteId = element.states.state_id;
         this.idRegister = event.row.registerId;
+        const estado = this.stateTramiteId.toString();
+        this.digito = estado.substring(estado.length-1, estado.length);
         this.getApprovalStates();
         this.establishment_id = event.row.establishment_id;
         this.getDeclarationsByEstablishment(event.row.establishment_id);
