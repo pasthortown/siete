@@ -2383,6 +2383,7 @@ export class CoordinadorComponent implements OnInit {
       const czTelefono = datosZonal.telefono.split('>')[1].split('<')[0];
       const observaciones = this.registerApprovalCoordinador.notes;
       if (!enviarMail) {
+         this.refresh();
          return;
       }
      //let numerico = '10000000'.substr(0, 8 - this.idRegister.toString().length) + this.idRegister.toString();
@@ -2479,6 +2480,7 @@ export class CoordinadorComponent implements OnInit {
                this.mailerDataService.sendMail('fin_tramite_cz', r.email.toString(), 'Trámite Atendido', information).then( r => {
                   this.toastr.successToastr('Datos Guardados Satisfactoriamente', 'Coordinación');
                   this.guardandoTramite = false;
+                  this.refresh();
                }).catch( e => { console.log(e); });
             }).catch( e => { console.log(e); });
          }).catch( e => { console.log(e); });
