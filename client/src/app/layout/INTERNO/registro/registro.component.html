@@ -146,10 +146,15 @@
                   <div class="form-group">
                     <label>Obligado a Llevar Contabilidad</label>
                     <div class="col-12">
-                      <label class="switch"><input type="checkbox" disabled id="baised_accounting"
+                      <div class="onoffswitch">
+                     <input type="checkbox" class="onoffswitch-checkbox"  disabled id="baised_accounting"
                           name="baised_accounting" [(ngModel)]="
                               ruc_registro_selected.ruc.baised_accounting
-                            " /><span class="slider round"></span></label>
+                            " /><label class="onoffswitch-label" for="myonoffswitch">
+                           <span class="onoffswitch-inner"></span>
+                           <span class="onoffswitch-switch"></span>
+                     </label>
+                  </div>
                     </div>
                   </div>
                 </div>
@@ -1446,10 +1451,15 @@
                           *ngIf="categorySelectedCode !== '-' && rucEstablishmentRegisterSelected.register_type_id !== 0 && false">
                           <label>¿Su establecimiento cuenta con alquiler de Salas de Recepciones?</label>
                           <div class="col-12">
-                              <label class="switch"><input type="checkbox" id="salas_recepciones"
+                              <div class="onoffswitch">
+                     <input type="checkbox" class="onoffswitch-checkbox"  id="salas_recepciones"
                                 name="salas_recepciones" [(ngModel)]="
                                 salaRecepciones.fullfill
-                                " [disabled]="false"/><span class="slider round"></span></label>
+                                " [disabled]="false"/><label class="onoffswitch-label" for="myonoffswitch">
+                           <span class="onoffswitch-inner"></span>
+                           <span class="onoffswitch-switch"></span>
+                     </label>
+                  </div>
                           </div>
                         </div>
                         <div class="form-group"
@@ -1472,10 +1482,15 @@
                           *ngIf="categorySelectedCode !== '-' && rucEstablishmentRegisterSelected.register_type_id !== 0">
                           <label>¿Su establecimiento cuenta con algún servicio de Alimentos y Bebidas complementario de alojamiento?</label>
                           <div class="col-12">
-                            <label class="switch"><input type="checkbox" id="autorized_complementary_adventure_capacities"
+                            <div class="onoffswitch">
+                     <input type="checkbox" class="onoffswitch-checkbox"  id="autorized_complementary_adventure_capacities"
                                 name="autorized_complementary_adventure_capacities" [(ngModel)]="
                                   rucEstablishmentRegisterSelected.autorized_complementary_food_capacities
-                                " [disabled]="!rucEstablishmentRegisterSelected.editable || rucEstablishmentRegisterSelected.register_type_id == 47 || rucEstablishmentRegisterSelected.register_type_id == 46"/><span class="slider round"></span></label>
+                                " [disabled]="!rucEstablishmentRegisterSelected.editable || rucEstablishmentRegisterSelected.register_type_id == 47 || rucEstablishmentRegisterSelected.register_type_id == 46"/><label class="onoffswitch-label" for="myonoffswitch">
+                           <span class="onoffswitch-inner"></span>
+                           <span class="onoffswitch-switch"></span>
+                     </label>
+                  </div>
                           </div>
                         </div>
                         <div class="row" *ngIf="rucEstablishmentRegisterSelected.autorized_complementary_food_capacities">
@@ -1555,10 +1570,15 @@
                           *ngIf="categorySelectedCode !== '-' && rucEstablishmentRegisterSelected.register_type_id !== 0">
                           <label>¿Su establecimiento oferta alguna modalidad de turismo de aventura, dentro de sus linderos?</label>
                           <div class="col-12">
-                            <label class="switch"><input type="checkbox" id="autorized_complementary_adventure_capacities"
+                            <div class="onoffswitch">
+                     <input type="checkbox" class="onoffswitch-checkbox"  id="autorized_complementary_adventure_capacities"
                                 name="autorized_complementary_adventure_capacities" [(ngModel)]="
                                   rucEstablishmentRegisterSelected.autorized_complementary_capacities
-                                " [disabled]="!rucEstablishmentRegisterSelected.editable || rucEstablishmentRegisterSelected.register_type_id == 47 || rucEstablishmentRegisterSelected.register_type_id == 46"/><span class="slider round"></span></label>
+                                " [disabled]="!rucEstablishmentRegisterSelected.editable || rucEstablishmentRegisterSelected.register_type_id == 47 || rucEstablishmentRegisterSelected.register_type_id == 46"/><label class="onoffswitch-label" for="myonoffswitch">
+                           <span class="onoffswitch-inner"></span>
+                           <span class="onoffswitch-switch"></span>
+                     </label>
+                  </div>
                           </div>
                         </div>
                         <div class="form-group row" *ngIf="
@@ -1685,7 +1705,11 @@
                                             *ngIf="register_requisite.HTMLtype == 'TRUE / FALSE'"><input
                                               type="checkbox" [disabled]="false" id="cumple" name="cumple" [(ngModel)]="
                                               register_requisite.fullfill
-                                                  " (change)="changeFullfill(register_requisite)" /><span class="slider round"></span></label>
+                                                  " (change)="changeFullfill(register_requisite)" /><label class="onoffswitch-label" for="myonoffswitch">
+                           <span class="onoffswitch-inner"></span>
+                           <span class="onoffswitch-switch"></span>
+                     </label>
+                  </div>
                                           <select class="form-control" *ngIf="register_requisite.HTMLtype == 'YES / NO'"
                                           [(ngModel)]="register_requisite.value" [disabled]="false"
                                           >

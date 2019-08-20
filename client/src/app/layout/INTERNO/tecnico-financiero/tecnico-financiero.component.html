@@ -121,8 +121,13 @@
                   <td>{{paySelected.amount_to_pay_fines | number: '1.2'}} USD</td>
                   <td>{{paySelected.amount_to_pay_taxes | number: '1.2'}} USD</td>
                   <td>{{paySelected.amount_to_pay | number: '1.2'}} USD</td>
-                  <td><label class="switch"><input type="checkbox" id="esNuevo"
-                    name="esNuevo" [(ngModel)]="paySelected.nuevo"><span class="slider round"></span></label></td>
+                  <td><div class="onoffswitch">
+                     <input type="checkbox" class="onoffswitch-checkbox"  id="esNuevo"
+                    name="esNuevo" [(ngModel)]="paySelected.nuevo"><label class="onoffswitch-label" for="myonoffswitch">
+                           <span class="onoffswitch-inner"></span>
+                           <span class="onoffswitch-switch"></span>
+                     </label>
+                  </div></td>
                   <td>
                       <div class="btn-group" role="group">
                         <button type="button" class="btn btn-success" title="Cargar Valor a Pagar" (click)="saveToPayValueCalc(paySelected)">
@@ -154,8 +159,13 @@
     <div class="col-12">
       <div class="form-group mt-3 text-center">
         <label class="col-12"><strong>Deseo generar una órden de pago manual</strong></label>
-        <label class="switch"><input type="checkbox" id="baised_accounting"
-            name="baised_accounting" [(ngModel)]="payManualAgreement"><span class="slider round"></span></label>
+        <div class="onoffswitch">
+                     <input type="checkbox" class="onoffswitch-checkbox"  id="baised_accounting"
+            name="baised_accounting" [(ngModel)]="payManualAgreement"><label class="onoffswitch-label" for="myonoffswitch">
+                           <span class="onoffswitch-inner"></span>
+                           <span class="onoffswitch-switch"></span>
+                     </label>
+                  </div>
       </div>
     </div>
    </div>

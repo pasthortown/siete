@@ -115,7 +115,12 @@
             <div class="form-group row">
                <label for="payed" class="col-4 col-form-label">payed</label>
                <div class="col-8">
-                  <label class="switch"><input type="checkbox"id="payed" name="payed" [(ngModel)]="paySelected.payed"><span class="slider round"></span></label>
+                  <div class="onoffswitch">
+                     <input type="checkbox" class="onoffswitch-checkbox" id="payed" name="payed" [(ngModel)]="paySelected.payed"><label class="onoffswitch-label" for="myonoffswitch">
+                           <span class="onoffswitch-inner"></span>
+                           <span class="onoffswitch-switch"></span>
+                     </label>
+                  </div>
                </div>
             </div>
             <div class="form-group row">

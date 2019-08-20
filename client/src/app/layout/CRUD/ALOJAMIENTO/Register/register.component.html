@@ -89,7 +89,12 @@
             <div class="form-group row">
                <label for="autorized_complementary_capacities" class="col-4 col-form-label">autorized_complementary_capacities</label>
                <div class="col-8">
-                  <label class="switch"><input type="checkbox"id="autorized_complementary_capacities" name="autorized_complementary_capacities" [(ngModel)]="registerSelected.autorized_complementary_capacities"><span class="slider round"></span></label>
+                  <div class="onoffswitch">
+                     <input type="checkbox" class="onoffswitch-checkbox" id="autorized_complementary_capacities" name="autorized_complementary_capacities" [(ngModel)]="registerSelected.autorized_complementary_capacities"><label class="onoffswitch-label" for="myonoffswitch">
+                           <span class="onoffswitch-inner"></span>
+                           <span class="onoffswitch-switch"></span>
+                     </label>
+                  </div>
                </div>
             </div>
             <div class="form-group row">
@@ -101,7 +106,12 @@
             <div class="form-group row">
                <label for="autorized_complementary_food_capacities" class="col-4 col-form-label">autorized_complementary_food_capacities</label>
                <div class="col-8">
-                  <label class="switch"><input type="checkbox"id="autorized_complementary_food_capacities" name="autorized_complementary_food_capacities" [(ngModel)]="registerSelected.autorized_complementary_food_capacities"><span class="slider round"></span></label>
+                  <div class="onoffswitch">
+                     <input type="checkbox" class="onoffswitch-checkbox" id="autorized_complementary_food_capacities" name="autorized_complementary_food_capacities" [(ngModel)]="registerSelected.autorized_complementary_food_capacities"><label class="onoffswitch-label" for="myonoffswitch">
+                           <span class="onoffswitch-inner"></span>
+                           <span class="onoffswitch-switch"></span>
+                     </label>
+                  </div>
                </div>
             </div>
             <div class="form-group row">

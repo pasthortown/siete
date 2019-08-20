@@ -96,7 +96,12 @@
             <div class="form-group row">
                <label for="is_max" class="col-4 col-form-label">Es el Máximo</label>
                <div class="col-8">
-                  <label class="switch"><input type="checkbox"id="is_max" name="is_max" [(ngModel)]="worker_groupSelected.is_max"><span class="slider round"></span></label>
+                  <div class="onoffswitch">
+                     <input type="checkbox" class="onoffswitch-checkbox" id="is_max" name="is_max" [(ngModel)]="worker_groupSelected.is_max"><label class="onoffswitch-label" for="myonoffswitch">
+                           <span class="onoffswitch-inner"></span>
+                           <span class="onoffswitch-switch"></span>
+                     </label>
+                  </div>
                </div>
             </div>
          </div>
