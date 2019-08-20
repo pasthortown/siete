@@ -3908,7 +3908,6 @@ guardarDeclaracion() {
                      plazasHabitacion = capacityType.spaces;
                   }
                });
-               console.log(plazasHabitacion);
                let nombreDivision = '';
                nombreDivision = tariffTypeChild.name;
                const tariff = new Tariff();
@@ -3936,6 +3935,7 @@ guardarDeclaracion() {
       this.rucEstablishmentRegisterSelected.total_habitations += capacity.quantity;
       this.rucEstablishmentRegisterSelected.total_beds += (capacity.max_beds * capacity.quantity);
    });
+   console.log(this.all_capacity_types);
   }
 
   calcBeds(capacity: Capacity) {
