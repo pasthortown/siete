@@ -445,6 +445,9 @@ class ExporterController extends Controller
     }
     $title = $this->build_title($template['title'], $params);
     $pdf_content = $this->build_content($html_content, $params);
+    if ($qr){
+      $pdf_content = str_ireplace('##qr_doc_code##', $this->qrcodeHD($request['qr_content']), $pdf_content);
+    }
     $html = $this->mintur_style($pdf_content, $title, $qr, $qr_content);
     $orientation = $template['orientation'];
     $pdf = App::make('dompdf.wrapper');
@@ -475,6 +478,12 @@ class ExporterController extends Controller
   protected function qrcode($content) {
     return base64_encode(QrCode::format('png')
       ->size(140)->margin(0)->backgroundColor(255,255,255)->color(0, 0, 0)
+      ->generate($content));
+  }
+
+  protected function qrcodeHD($content) {
+    return base64_encode(QrCode::format('png')
+      ->size(200)->margin(0)->backgroundColor(255,255,255)->color(0, 0, 0)
       ->generate($content));
   }
 
