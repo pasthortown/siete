@@ -260,4 +260,22 @@ $router->group(['middleware' => ['auth']], function () use ($router) {
    $router->put('/registerprocedure', ['uses' => 'RegisterProcedureController@put']);
    $router->delete('/registerprocedure', ['uses' => 'RegisterProcedureController@delete']);
    $router->post('/registerprocedure/masive_load', ['uses' => 'RegisterProcedureController@masiveLoad']);
+
+   //CRUD PropertyTitleAttachment
+   $router->post('/propertytitleattachment', ['uses' => 'PropertyTitleAttachmentController@post']);
+   $router->get('/propertytitleattachment', ['uses' => 'PropertyTitleAttachmentController@get']);
+   $router->get('/propertytitleattachment/paginate', ['uses' => 'PropertyTitleAttachmentController@paginate']);
+   $router->get('/propertytitleattachment/backup', ['uses' => 'PropertyTitleAttachmentController@backup']);
+   $router->put('/propertytitleattachment', ['uses' => 'PropertyTitleAttachmentController@put']);
+   $router->delete('/propertytitleattachment', ['uses' => 'PropertyTitleAttachmentController@delete']);
+   $router->post('/propertytitleattachment/masive_load', ['uses' => 'PropertyTitleAttachmentController@masiveLoad']);
+
+   //CRUD AuthorizationAttachment
+   $router->post('/authorizationattachment', ['uses' => 'AuthorizationAttachmentController@post']);
+   $router->get('/authorizationattachment', ['uses' => 'AuthorizationAttachmentController@get']);
+   $router->get('/authorizationattachment/paginate', ['uses' => 'AuthorizationAttachmentController@paginate']);
+   $router->get('/authorizationattachment/backup', ['uses' => 'AuthorizationAttachmentController@backup']);
+   $router->put('/authorizationattachment', ['uses' => 'AuthorizationAttachmentController@put']);
+   $router->delete('/authorizationattachment', ['uses' => 'AuthorizationAttachmentController@delete']);
+   $router->post('/authorizationattachment/masive_load', ['uses' => 'AuthorizationAttachmentController@masiveLoad']);
 });

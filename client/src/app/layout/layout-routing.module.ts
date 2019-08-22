@@ -227,6 +227,14 @@ const routes: Routes = [
             path: 'register_procedure',
             loadChildren: './CRUD/ALOJAMIENTO/RegisterProcedure/registerprocedure.module#RegisterProcedureModule'
          },
+         {
+            path: 'property_title_attachment',
+            loadChildren: './CRUD/ALOJAMIENTO/PropertyTitleAttachment/propertytitleattachment.module#PropertyTitleAttachmentModule'
+         },
+         {
+            path: 'authorization_attachment',
+            loadChildren: './CRUD/ALOJAMIENTO/AuthorizationAttachment/authorizationattachment.module#AuthorizationAttachmentModule'
+         },
 
          //AUTH
          {

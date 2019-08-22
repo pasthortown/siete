@@ -74,4 +74,14 @@ class Register extends Model
        return $this->belongsTo('App\RegisterProcedure');
     }
 
+    function PropertyTitleAttachment()
+    {
+       return $this->belongsTo('App\PropertyTitleAttachment');
+    }
+
+    function AuthorizationAttachment()
+    {
+       return $this->belongsTo('App\AuthorizationAttachment');
+    }
+
 }
