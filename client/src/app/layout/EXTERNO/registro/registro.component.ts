@@ -1923,6 +1923,7 @@ export class RegistroComponent implements OnInit {
          newRegisterRequisite.fullfill = true;
          newRegisterRequisite.requisite_code = element.code;
          newRegisterRequisite.mandatory = element.mandatory;
+         newRegisterRequisite.id = element.id;
          newRegisterRequisite.requisite_father_code = element.father_code;
          newRegisterRequisite.level = element.code.split('.').length;
          newRegisterRequisite.HTMLtype = element.type;

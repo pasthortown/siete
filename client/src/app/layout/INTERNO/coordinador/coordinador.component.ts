@@ -3941,6 +3941,7 @@ guardarDeclaracion() {
          newRegisterRequisite.requisite_name = element.name;
          newRegisterRequisite.requisite_id = element.id;
          newRegisterRequisite.fullfill = true;
+         newRegisterRequisite.id = element.id;
          newRegisterRequisite.requisite_code = element.code;
          newRegisterRequisite.mandatory = element.mandatory;
          newRegisterRequisite.requisite_father_code = element.father_code;

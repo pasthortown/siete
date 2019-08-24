@@ -2633,6 +2633,7 @@ guardarDeclaracion() {
          const newRegisterRequisite = new RegisterRequisite();
          newRegisterRequisite.requisite_name = element.name;
          newRegisterRequisite.requisite_id = element.id;
+         newRegisterRequisite.id = element.id;
          newRegisterRequisite.fullfill = true;
          newRegisterRequisite.requisite_code = element.code;
          newRegisterRequisite.mandatory = element.mandatory;

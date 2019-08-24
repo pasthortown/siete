@@ -2917,6 +2917,7 @@ guardarDeclaracion() {
          newRegisterRequisite.requisite_father_code = element.father_code;
          newRegisterRequisite.level = element.code.split('.').length;
          newRegisterRequisite.HTMLtype = element.type;
+         newRegisterRequisite.id = element.id;
          newRegisterRequisite.fullfill = false;
          if (newRegisterRequisite.HTMLtype == 'YES / NO') {
             newRegisterRequisite.value = '0';
