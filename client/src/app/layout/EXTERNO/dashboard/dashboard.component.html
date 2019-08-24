@@ -1735,9 +1735,9 @@
                                         <td>
                                           <div class="onoffswitch"
                                             *ngIf="register_requisite.HTMLtype == 'TRUE / FALSE'"><input
-                                              type="checkbox" class="onoffswitch-checkbox" [disabled]="!rucEstablishmentRegisterSelected.editable" id="{{register_requisite.id}}" name="cumple" [(ngModel)]="
+                                              type="checkbox" class="onoffswitch-checkbox" [disabled]="!rucEstablishmentRegisterSelected.editable" id="{{register_requisite.code}}" name="cumple" [(ngModel)]="
                                               register_requisite.fullfill
-                                                  " (change)="changeFullfill(register_requisite)" /><label class="onoffswitch-label" for="{{register_requisite.id}}">
+                                                  " (change)="changeFullfill(register_requisite)" /><label class="onoffswitch-label" for="{{register_requisite.code}}">
                            <span class="onoffswitch-inner"></span>
                            <span class="onoffswitch-switch"></span>
                      </label>
