@@ -99,6 +99,8 @@ import Swal from 'sweetalert2';
 import { DocumentService } from 'src/app/services/CRUD/EXPORTER/document.service';
 import { Document as Documento } from 'src/app/models/EXPORTER/Document';
 import { ExporterService } from 'src/app/services/negocio/exporter.service';
+import { PropertyTitleAttachment } from 'src/app/models/ALOJAMIENTO/PropertyTitleAttachment';
+import { AuthorizationAttachment } from 'src/app/models/ALOJAMIENTO/AuthorizationAttachment';
 
 @Component({
   selector: 'app-registro',
@@ -135,6 +137,8 @@ export class RegistroComponent implements OnInit {
    regiones = [];
    regionSelectedCode = '-';
    certificadoUsoSuelo: FloorAuthorizationCertificate = new FloorAuthorizationCertificate();
+   tituloPropiedad: PropertyTitleAttachment = new PropertyTitleAttachment();
+   autorizacionCondomino: AuthorizationAttachment = new AuthorizationAttachment();
    franchises_rucSelectedId = 0;
    fechaNombramientoOK = false;
    allowed_capacity_types: CapacityType[] = []; 
@@ -719,6 +723,20 @@ export class RegistroComponent implements OnInit {
       this.certificadoUsoSuelo.floor_authorization_certificate_file_name);
   }
 
+  downloadPropertyTitle() {
+   this.downloadFile(
+      this.tituloPropiedad.property_title_attachment_file,
+      this.tituloPropiedad.property_title_attachment_file_type,
+      this.tituloPropiedad.property_title_attachment_file_name);
+  }
+
+  downloadAutorizacionCondominio() {
+   this.downloadFile(
+      this.autorizacionCondomino.authorization_attachment_file,
+      this.autorizacionCondomino.authorization_attachment_file_type,
+      this.autorizacionCondomino.authorization_attachment_file_name);
+  }
+
   downloadBalance() {
    this.downloadFile(
       this.balance.declaration_attachment_file,
@@ -732,6 +750,14 @@ export class RegistroComponent implements OnInit {
 
   borrarFloorCertificado() {
    this.certificadoUsoSuelo = new FloorAuthorizationCertificate();
+  }
+
+  borrarPropertyTitle() {
+   this.tituloPropiedad = new PropertyTitleAttachment();
+  }
+
+  borrarAutorizacionCondominio() {
+   this.autorizacionCondomino = new AuthorizationAttachment();
   }
 
   getRegiones() {
@@ -808,6 +834,32 @@ export class RegistroComponent implements OnInit {
       this.certificadoUsoSuelo.floor_authorization_certificate_file = reader.result.toString().split(',')[1];
       this.certificadoUsoSuelo.floor_authorization_certificate_file_type = file.type;
       this.certificadoUsoSuelo.floor_authorization_certificate_file_name = file.name;
+    };
+   }
+  }
+
+  CodificarArchivoPropertyTitle(event) {
+   const reader = new FileReader();
+   if (event.target.files && event.target.files.length > 0) {
+    const file = event.target.files[0];
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      this.tituloPropiedad.property_title_attachment_file = reader.result.toString().split(',')[1];
+      this.tituloPropiedad.property_title_attachment_file_type = file.type;
+      this.tituloPropiedad.property_title_attachment_file_name = file.name;
+    };
+   }
+  }
+
+  CodificarArchivoAutorizacionCondominio(event) {
+   const reader = new FileReader();
+   if (event.target.files && event.target.files.length > 0) {
+    const file = event.target.files[0];
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      this.autorizacionCondomino.authorization_attachment_file = reader.result.toString().split(',')[1];
+      this.autorizacionCondomino.authorization_attachment_file_type = file.type;
+      this.autorizacionCondomino.authorization_attachment_file_name = file.name;
     };
    }
   }
