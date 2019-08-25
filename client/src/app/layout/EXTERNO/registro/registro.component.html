@@ -1773,6 +1773,80 @@
                                           </small>
                                         </td>
                                       </tr>
+                                      <tr *ngIf="rucEstablishmentRegisterSelected.register_type_id == 47 || rucEstablishmentRegisterSelected.register_type_id == 46">
+                                        <td>
+                                          <label>Título de Propiedad*</label><span
+                                            *ngIf="certificadoUsoSuelo.floor_authorization_certificate_file === ''"
+                                            class="ml-2 badge badge-danger">Incorrecto</span>
+                                        </td>
+                                        <td>
+                                          <div class="input-group">
+                                            <div class="input-group-prepend">
+                                              <button
+                                                [disabled]="certificadoUsoSuelo.floor_authorization_certificate_file === ''"
+                                                type="button" title="Descargar Certificado" class="btn btn-primary" (click)="
+                                                      downloadFloorCertification()
+                                                    ">
+                                                <i class="fas fa-download"></i>
+                                              </button>
+                                              <button
+                                                [disabled]="certificadoUsoSuelo.floor_authorization_certificate_file === '' || !rucEstablishmentRegisterSelected.editable"
+                                                type="button" title="Eliminar" class="btn btn-danger"
+                                                (click)="borrarFloorCertificado()">
+                                                <i class="fas fa-trash"></i>
+                                              </button>
+                                            </div>
+                                            <input type="file" class="form-control" [disabled]="!rucEstablishmentRegisterSelected.editable" (change)="
+                                                  CodificarArchivoFloorCertification(
+                                                    $event
+                                                  )
+                                                " accept="application/pdf" />                                            
+                                          </div>
+                                          <small class="col-12">
+                                            <div class="alert alert-info mt-2 mb-2" role="alert">
+                                              <label class="col-12 text-justify"><strong>Información</strong></label><br />
+                                              <p>Verifique que el nombre del archivo que está cargando sea de longitud menor a 25 caracteres</p>
+                                            </div>
+                                          </small>
+                                        </td>
+                                      </tr>
+                                      <tr *ngIf="rucEstablishmentRegisterSelected.register_type_id == 47 || rucEstablishmentRegisterSelected.register_type_id == 46">
+                                        <td>
+                                          <label>Autorización por Asamblea de Condóminos*</label><span
+                                            *ngIf="certificadoUsoSuelo.floor_authorization_certificate_file === ''"
+                                            class="ml-2 badge badge-danger">Incorrecto</span>
+                                        </td>
+                                        <td>
+                                          <div class="input-group">
+                                            <div class="input-group-prepend">
+                                              <button
+                                                [disabled]="certificadoUsoSuelo.floor_authorization_certificate_file === ''"
+                                                type="button" title="Descargar Certificado" class="btn btn-primary" (click)="
+                                                      downloadFloorCertification()
+                                                    ">
+                                                <i class="fas fa-download"></i>
+                                              </button>
+                                              <button
+                                                [disabled]="certificadoUsoSuelo.floor_authorization_certificate_file === '' || !rucEstablishmentRegisterSelected.editable"
+                                                type="button" title="Eliminar" class="btn btn-danger"
+                                                (click)="borrarFloorCertificado()">
+                                                <i class="fas fa-trash"></i>
+                                              </button>
+                                            </div>
+                                            <input type="file" class="form-control" [disabled]="!rucEstablishmentRegisterSelected.editable" (change)="
+                                                  CodificarArchivoFloorCertification(
+                                                    $event
+                                                  )
+                                                " accept="application/pdf" />                                            
+                                          </div>
+                                          <small class="col-12">
+                                            <div class="alert alert-info mt-2 mb-2" role="alert">
+                                              <label class="col-12 text-justify"><strong>Información</strong></label><br />
+                                              <p>Verifique que el nombre del archivo que está cargando sea de longitud menor a 25 caracteres</p>
+                                            </div>
+                                          </small>
+                                        </td>
+                                      </tr>
                                     </tbody>
                                   </table>
                                 </div>
