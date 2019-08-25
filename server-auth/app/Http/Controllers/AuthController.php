@@ -105,6 +105,7 @@ class AuthController extends Controller
       $user->ruc = $userData['ruc'];
       $user->address_map_latitude = -0.2153676;
       $user->address_map_longitude = -78.5036064;
+      $user->secondary_phone_number = '0000000000';
       $user->password = Crypt::encrypt($new_password);
       $user->api_token = str_random(64);
       $user->save();
