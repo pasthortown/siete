@@ -199,6 +199,7 @@ export class DashboardComponent implements OnInit {
    currentPageMinturRegisters = 1;
    lastPageMinturRegisters = 1;
    recordsByPageRegisterMintur = 5;
+   agregadoNuevo = false;
    mostrarDataRegisterMintur = false;
    config: any = {
       paging: true,
@@ -4259,6 +4260,7 @@ guardarDeclaracion() {
   addCapacity() {
    const newCapacity = new Capacity();
    newCapacity.editable = true;
+   this.agregadoNuevo = true;
    this.rucEstablishmentRegisterSelected.total_spaces = 0;
    this.rucEstablishmentRegisterSelected.capacities_on_register.push(newCapacity);
   }
@@ -4318,6 +4320,9 @@ guardarDeclaracion() {
          const childs = [];
          let idTipoCapacidad = capacity.capacity_type_id;
          let editable = capacity.editable;
+         if (agregadoNuevo) {
+            editable = true;
+         }
          this.tarifas.forEach(tariffType => {
             tariffType.childs.forEach(tariffTypeChild => {
                const es_referencia = tariffType.father.is_reference;
