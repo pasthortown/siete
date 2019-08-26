@@ -14,6 +14,8 @@ import { CoordinadorRoutingModule } from './coordinador-routing.module';
 import { PersonRepresentativeAttachmentService } from 'src/app/services/CRUD/BASE/personrepresentativeattachment.service';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { PropertyTitleAttachmentService } from 'src/app/services/CRUD/ALOJAMIENTO/propertytitleattachment.service';
+import { AuthorizationAttachmentService } from 'src/app/services/CRUD/ALOJAMIENTO/authorizationattachment.service';
 import { FormsModule } from '@angular/forms';
 import { NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { AgmCoreModule } from '@agm/core';
@@ -80,6 +82,8 @@ import { RegisterProcedureService } from 'src/app/services/CRUD/ALOJAMIENTO/regi
     DocumentService,
     RegistroCatastroService,
     ReceptionRoomService,
+    PropertyTitleAttachmentService,
+    AuthorizationAttachmentService,
     MailerService,
     DeclarationAttachmentService,
     FloorAuthorizationCertificateService,

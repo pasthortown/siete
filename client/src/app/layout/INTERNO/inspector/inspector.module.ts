@@ -14,6 +14,8 @@ import { AgreementService } from 'src/app/services/CRUD/BASE/agreement.service';
 import { UserService } from 'src/app/services/profile/user.service';
 import { InspectorComponent } from './inspector.component';
 import { InspectorRoutingModule } from './inspector-routing.module';
+import { PropertyTitleAttachmentService } from 'src/app/services/CRUD/ALOJAMIENTO/propertytitleattachment.service';
+import { AuthorizationAttachmentService } from 'src/app/services/CRUD/ALOJAMIENTO/authorizationattachment.service';
 import { PersonRepresentativeAttachmentService } from 'src/app/services/CRUD/BASE/personrepresentativeattachment.service';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
@@ -74,6 +76,8 @@ import { RegisterService as RegistroCatastroService } from 'src/app/services/CRU
   providers: [NgbModal,
     UserService,
     DinardapService,
+    PropertyTitleAttachmentService,
+    AuthorizationAttachmentService,
     DeclarationItemService,
     ConsultorService,
     ApprovalStateAttachmentService,

@@ -17,6 +17,8 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { AgmCoreModule } from '@agm/core';
+import { PropertyTitleAttachmentService } from 'src/app/services/CRUD/ALOJAMIENTO/propertytitleattachment.service';
+import { AuthorizationAttachmentService } from 'src/app/services/CRUD/ALOJAMIENTO/authorizationattachment.service';
 import { environment } from 'src/environments/environment';
 import { CKEditorModule } from 'ngx-ckeditor';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -78,6 +80,8 @@ import { ExporterService } from 'src/app/services/negocio/exporter.service';
     ReceptionRoomService,
     MailerService,
     DeclarationAttachmentService,
+    PropertyTitleAttachmentService,
+    AuthorizationAttachmentService,
     FloorAuthorizationCertificateService,
     PayService,
     ExporterService,

@@ -104,6 +104,8 @@ import { RegisterService as RegistroCatastroService } from 'src/app/services/CRU
 import { RegisterProcedureService } from 'src/app/services/CRUD/ALOJAMIENTO/registerprocedure.service';
 import { PropertyTitleAttachment } from 'src/app/models/ALOJAMIENTO/PropertyTitleAttachment';
 import { AuthorizationAttachment } from 'src/app/models/ALOJAMIENTO/AuthorizationAttachment';
+import { PropertyTitleAttachmentService } from 'src/app/services/CRUD/ALOJAMIENTO/propertytitleattachment.service';
+import { AuthorizationAttachmentService } from 'src/app/services/CRUD/ALOJAMIENTO/authorizationattachment.service';
 
 @Component({
   selector: 'app-registro',
@@ -347,6 +349,8 @@ export class CoordinadorComponent implements OnInit {
               private receptionRoomDataService: ReceptionRoomService,
               private payDataService: PayService,
               private floorAuthorizationCertificateDataService: FloorAuthorizationCertificateService,
+              private propertyTitleAttachmentDataService: PropertyTitleAttachmentService,
+              private authorizationAttachmentDataService: AuthorizationAttachmentService,
               private declarationAttachmentDataService: DeclarationAttachmentService,
               private mailerDataService: MailerService,
               private router: Router, 

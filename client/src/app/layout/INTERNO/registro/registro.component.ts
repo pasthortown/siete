@@ -101,6 +101,8 @@ import { Document as Documento } from 'src/app/models/EXPORTER/Document';
 import { ExporterService } from 'src/app/services/negocio/exporter.service';
 import { PropertyTitleAttachment } from 'src/app/models/ALOJAMIENTO/PropertyTitleAttachment';
 import { AuthorizationAttachment } from 'src/app/models/ALOJAMIENTO/AuthorizationAttachment';
+import { PropertyTitleAttachmentService } from 'src/app/services/CRUD/ALOJAMIENTO/propertytitleattachment.service';
+import { AuthorizationAttachmentService } from 'src/app/services/CRUD/ALOJAMIENTO/authorizationattachment.service';
 
 @Component({
   selector: 'app-registro',
@@ -321,6 +323,8 @@ export class RegistroComponent implements OnInit {
               private receptionRoomDataService: ReceptionRoomService,
               private payDataService: PayService,
               private floorAuthorizationCertificateDataService: FloorAuthorizationCertificateService,
+              private propertyTitleAttachmentDataService: PropertyTitleAttachmentService,
+              private authorizationAttachmentDataService: AuthorizationAttachmentService,
               private declarationAttachmentDataService: DeclarationAttachmentService,
               private mailerDataService: MailerService,
               private router: Router, 

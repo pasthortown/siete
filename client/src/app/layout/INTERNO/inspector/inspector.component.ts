@@ -106,6 +106,8 @@ import { RegisterProcedureService } from 'src/app/services/CRUD/ALOJAMIENTO/regi
 import { RegisterService as RegistroCatastroService } from 'src/app/services/CRUD/CATASTRO/register.service';
 import { AuthorizationAttachment } from 'src/app/models/ALOJAMIENTO/AuthorizationAttachment';
 import { PropertyTitleAttachment } from 'src/app/models/ALOJAMIENTO/PropertyTitleAttachment';
+import { PropertyTitleAttachmentService } from 'src/app/services/CRUD/ALOJAMIENTO/propertytitleattachment.service';
+import { AuthorizationAttachmentService } from 'src/app/services/CRUD/ALOJAMIENTO/authorizationattachment.service';
 
 @Component({
   selector: 'app-registro',
@@ -332,6 +334,8 @@ export class InspectorComponent implements OnInit {
   constructor(private toastr: ToastrManager,
               private mailerDataService: MailerService,
               private floorAuthorizationCertificateDataService: FloorAuthorizationCertificateService,
+              private propertyTitleAttachmentDataService: PropertyTitleAttachmentService,
+              private authorizationAttachmentDataService: AuthorizationAttachmentService,
               private payDataService: PayService,
               private documentDataService: DocumentService,
               private approvalStateReportDataService: ApprovalStateReportService,

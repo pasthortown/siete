@@ -107,6 +107,8 @@ import { RegisterProcedure } from 'src/app/models/ALOJAMIENTO/RegisterProcedure'
 import { RegisterProcedureService } from 'src/app/services/CRUD/ALOJAMIENTO/registerprocedure.service';
 import { AuthorizationAttachment } from 'src/app/models/ALOJAMIENTO/AuthorizationAttachment';
 import { PropertyTitleAttachment } from 'src/app/models/ALOJAMIENTO/PropertyTitleAttachment';
+import { PropertyTitleAttachmentService } from 'src/app/services/CRUD/ALOJAMIENTO/propertytitleattachment.service';
+import { AuthorizationAttachmentService } from 'src/app/services/CRUD/ALOJAMIENTO/authorizationattachment.service';
 
 @Component({
   selector: 'app-registro',
@@ -353,6 +355,8 @@ export class DashboardComponent implements OnInit {
               private payDataService: PayService,
               private registerProcedureDataService: RegisterProcedureService,
               private floorAuthorizationCertificateDataService: FloorAuthorizationCertificateService,
+              private propertyTitleAttachmentDataService: PropertyTitleAttachmentService,
+              private authorizationAttachmentDataService: AuthorizationAttachmentService,
               private declarationAttachmentDataService: DeclarationAttachmentService,
               private mailerDataService: MailerService,
               private router: Router, 

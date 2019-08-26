@@ -9,6 +9,8 @@ import { ReceptionRoomService } from './../../../services/CRUD/ALOJAMIENTO/recep
 import { RegistroComponent } from './registro.component';
 import { RegistroRoutingModule } from './registro-routing.module';
 import { PersonRepresentativeAttachmentService } from 'src/app/services/CRUD/BASE/personrepresentativeattachment.service';
+import { PropertyTitleAttachmentService } from 'src/app/services/CRUD/ALOJAMIENTO/propertytitleattachment.service';
+import { AuthorizationAttachmentService } from 'src/app/services/CRUD/ALOJAMIENTO/authorizationattachment.service';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -72,6 +74,8 @@ import { RegisterStateService } from 'src/app/services/CRUD/ALOJAMIENTO/register
     DinardapService,
     DeclarationItemService,
     ReceptionRoomService,
+    PropertyTitleAttachmentService,
+    AuthorizationAttachmentService,
     DeclarationItemCategoryService,
     DeclarationService,
     TaxPayerTypeService,
