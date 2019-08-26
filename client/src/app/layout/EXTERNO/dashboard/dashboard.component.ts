@@ -772,6 +772,30 @@ export class DashboardComponent implements OnInit {
      }
   }
 
+  guardarTituloPropiedad() {
+   if(this.tituloPropiedad.id == 0) {
+    this.propertyTitleAttachmentDataService.post(this.tituloPropiedad).then( r => { 
+
+    }).catch( e => { console.log(e); });
+   } else {
+    this.propertyTitleAttachmentDataService.put(this.tituloPropiedad).then( r => { 
+
+    }).catch( e => { console.log(e); });
+   }
+  }
+
+  guardarAutorizacionCondominos() {
+   if(this.autorizacionCondomino.id == 0) {
+    this.authorizationAttachmentDataService.post(this.autorizacionCondomino).then( r => { 
+
+    }).catch( e => { console.log(e); });
+   } else {
+    this.authorizationAttachmentDataService.put(this.autorizacionCondomino).then( r => { 
+
+    }).catch( e => { console.log(e); });
+   }
+  }
+
   downloadFloorCertification() {
    this.downloadFile(
       this.certificadoUsoSuelo.floor_authorization_certificate_file,
@@ -849,6 +873,18 @@ export class DashboardComponent implements OnInit {
      }).catch( e => { console.log(e); });
   }
 
+  getTituloPropiedad(register_id: number) {
+   this.propertyTitleAttachmentDataService.get_by_register_id(register_id).then( r => {
+      this.tituloPropiedad = r as PropertyTitleAttachment;
+   }).catch( e => { console.log(e); });
+  }
+
+  getAutorizacionCondominos(register_id: number) {
+   this.authorizationAttachmentDataService.get_by_register_id(register_id).then( r => {
+      this.autorizacionCondomino = r as AuthorizationAttachment;
+   }).catch( e => { console.log(e); });
+  }
+  
   getReceptionRoom(register_id: number) {
    this.receptionRoomDataService.get_by_register_id(register_id).then( r => {
       this.salaRecepciones = r as ReceptionRoom;
@@ -2787,6 +2823,10 @@ guardarDeclaracion() {
       });
    this.registerDataService.register_register_data(this.rucEstablishmentRegisterSelected).then( r => {
       this.certificadoUsoSuelo.register_id = r.id;
+      this.tituloPropiedad.register_id = r.id;
+      this.autorizacionCondomino.register_id = r.id;
+      this.guardarTituloPropiedad();
+      this.guardarAutorizacionCondominos();
       this.guardarRecepcionRoom(r.id);
       this.guardarCertificadoUsoSuelos();
       let clasificacion = '';
@@ -4034,6 +4074,8 @@ guardarDeclaracion() {
          this.establishment_selected.as_turistic_register_date = this.register_as_turistic_Date;
       }
       this.getCertificadoUsoSuelo(this.rucEstablishmentRegisterSelected.id);
+      this.getTituloPropiedad(this.rucEstablishmentRegisterSelected.id);
+      this.getAutorizacionCondominos(this.rucEstablishmentRegisterSelected.id);
       this.getReceptionRoom(this.rucEstablishmentRegisterSelected.id);
       this.setCategory(this.rucEstablishmentRegisterSelected.register_type_id);
       this.checkTramitEmitted(this.register_code);

@@ -23,6 +23,11 @@ class AuthorizationAttachmentController extends Controller
        }
     }
 
+    function get_by_register_id(Request $data) {
+      $register_id = $data['register_id'];
+      return response()->json(AuthorizationAttachment::where('register_id', $register_id)->first(),200);
+    }
+
     function paginate(Request $data)
     {
        $size = $data['size'];
