@@ -2679,6 +2679,10 @@ guardarDeclaracion() {
       this.toastr.errorToastr('Existe inconsistencia en los valores de las capacidades.', 'Nuevo');
       return;
      }
+   if (this.tituloPropiedad.property_title_attachment_file === '' && (this.rucEstablishmentRegisterSelected.register_type_id == 47 || this.rucEstablishmentRegisterSelected.register_type_id == 46)){
+      this.toastr.errorToastr('Debe cargar el título de propiedad de su establecimiento.', 'Nuevo');
+      return;
+   }
    if (this.reclasificando) {
       let newClassification = '';
       this.clasifications_registers.forEach(element => {
