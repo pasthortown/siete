@@ -1392,8 +1392,7 @@
                                               <span class="input-group-text" id="basic-addon1">USD</span>
                                             </div>
                                             <input type="number" class="form-control" min="0" step="0.01" id="low_capacity_room_price"
-                                            name="low_capacity_room_price" [ngModel]="tariff.tariff.price | number: '1.2'" (ngModelChange)="
-                                            tariff.tariff.price = $event"
+                                            name="low_capacity_room_price" [ngModel]="tariff.tariff.price | number: '1.2'"
                                             placeholder="Precio" (input) = "checkValuesTariffs()"
                                             [disabled]="!tariffRack.editable || (!tariff.isReference && tariff.plazasHabitacion !== 999)"/>
                                         </div>
