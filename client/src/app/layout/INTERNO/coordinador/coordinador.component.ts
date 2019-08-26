@@ -1064,13 +1064,18 @@ export class CoordinadorComponent implements OnInit {
             valor.tariffs.forEach(tariff2 => {
                if( tariff !== tariff2) {
                   if (tariff.nombreDivision == tariff2.nombreDivision && tariff.plazasHabitacion !== 999) {
-                     tariff.tariff.price = tariff2.tariff.price / tariff2.plazasHabitacion;
+                     tariff.tariff.price = this.rounded(tariff2.tariff.price / tariff2.plazasHabitacion);
                   }
                }
             });
            }
         });
      });
+  }
+
+  rounded(numero: number): number {
+   const toround = numero*100;
+   return Math.round(toround)/100;
   }
 
   asignarInspector() {
