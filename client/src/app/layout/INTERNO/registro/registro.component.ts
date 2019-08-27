@@ -162,6 +162,7 @@ export class RegistroComponent implements OnInit {
    hasIspectionDate  = false;
    hasInform  = false;
    hasRegisterReady = false;
+   modificadoCapacidades = false;
    canSave = true;
    hasRequisites = false;
    informeApprovalStateAttachment = new ApprovalStateAttachment();
@@ -3949,6 +3950,7 @@ guardarDeclaracion() {
   addCapacity() {
    const newCapacity = new Capacity();
    newCapacity.editable = true;
+   this.modificadoCapacidades = true;
    this.rucEstablishmentRegisterSelected.total_spaces = 0;
    this.rucEstablishmentRegisterSelected.capacities_on_register.push(newCapacity);
   }
@@ -3969,6 +3971,7 @@ guardarDeclaracion() {
 
   removeCapacity(capacity: Capacity) {
    const newCapacities: Capacity[] = [];
+   this.modificadoCapacidades = true;
    this.rucEstablishmentRegisterSelected.total_spaces = 0;
    this.rucEstablishmentRegisterSelected.capacities_on_register.forEach(element => {
       if(capacity !== element) {
@@ -4008,6 +4011,9 @@ guardarDeclaracion() {
          const childs = [];
          let idTipoCapacidad = capacity.capacity_type_id;
          let editable = capacity.editable;
+         if (this.modificadoCapacidades) {
+            editable = true;
+         }
          this.tarifas.forEach(tariffType => {
             tariffType.childs.forEach(tariffTypeChild => {
                const es_referencia = tariffType.father.is_reference;
