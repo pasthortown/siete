@@ -2756,6 +2756,7 @@ guardarDeclaracion() {
    }
    let NoApruebaCantidadCamas = false;
    this.rucEstablishmentRegisterSelected.capacities_on_register.forEach(capacity => {
+      capacity.beds_on_capacity = [];
       this.allowed_capacity_types.forEach(capacity_type => {
          if (capacity.capacity_type_id == capacity_type.id) {
             if (capacity.max_beds> capacity_type.bed_quantity){
