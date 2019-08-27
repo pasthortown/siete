@@ -2871,6 +2871,8 @@ guardarDeclaracion() {
    this.provinciasEstablishment.forEach(provincia => {
       if(provincia.code == this.provinciaEstablishmentSelectedCode){
          this.zonalEstablishmentSelectedCode = provincia.father_code.toString();
+         this.establishment_selected.address_map_latitude = provincia.gmap_reference_latitude;
+         this.establishment_selected.address_map_longitude = provincia.gmap_reference_longitude;
       }
    });
    this.cantonesEstablishment = [];
@@ -2894,9 +2896,20 @@ guardarDeclaracion() {
    }).catch( e => { console.log(e) });
   }
 
+  updateGmap(latitude, longitude) {
+   this.establishment_selected.address_map_latitude = latitude;
+   this.establishment_selected.address_map_longitude = longitude;
+  }
+
   getParroquiasEstablishment() {
    this.parroquiasEstablishment = [];
    this.establishment_selected.ubication_id = 0;
+   this.cantonesEstablishment.forEach(canton => {
+      if(canton.code == this.cantonEstablishmentSelectedCode){
+         this.establishment_selected.address_map_latitude = canton.gmap_reference_latitude;
+         this.establishment_selected.address_map_longitude = canton.gmap_reference_longitude;
+      }
+   });
    this.ubicationDataService.get_filtered(this.cantonEstablishmentSelectedCode).then( r => {
       this.parroquiasEstablishment = r as Ubication[];
    }).catch( e => { console.log(e) });
