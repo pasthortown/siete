@@ -409,6 +409,21 @@ export class DashboardComponent implements OnInit {
    this.getTramiteStates();
   }
 
+  refreshMaxBed(capacity: Capacity) {
+   this.allowed_capacity_types.forEach(capacityType => {
+      if(capacityType.id == capacity.capacity_type_id) {
+         capacity.editable_beds = capacityType.editable_beds;
+         capacity.editable_spaces = capacityType.editable_spaces;
+         if (capacity.editable_beds) {
+            capacity.max_beds = 0;
+         }
+         if (capacity.editable_spaces) {
+            capacity.max_spaces = 0;
+         }
+      }
+   });
+  }
+
   filterByTramiteState(tramite?: String) {
      let filtroTexto: String = '';
      this.estados_tramites.forEach(estado => {
