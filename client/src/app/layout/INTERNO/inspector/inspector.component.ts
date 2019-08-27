@@ -4672,6 +4672,9 @@ guardarDeclaracion() {
   calcBeds(capacity: Capacity) {
    capacity.total_spaces = 0;
    let beds_declared = 0;
+   if (typeof capacity.beds_on_capacity == 'undefined') {
+      capacity.beds_on_capacity = [];
+   }
    capacity.beds_on_capacity.forEach(bed => {
       let places = 0;
       beds_declared += bed.quantity;
