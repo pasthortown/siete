@@ -1200,28 +1200,28 @@ export class RegistroComponent implements OnInit {
    const data = [];
    this.ruc_registro_selected.ruc.establishments.forEach(item => {
        let establecimientosRegistrados = JSON.parse(sessionStorage.getItem('establecimientos')) as [];
+       let yaMostrado = false;
+       let yaRegistrado = false;
        establecimientosRegistrados.forEach(element => {
-          let yaMostrado = false;
           data.forEach(elementData => {
              if (elementData.code == item.ruc_code_id) {
                 yaMostrado = true;
              }
           });
-          let yaRegistrado = false;
           if (element == Number(item.ruc_code_id)) {
              yaRegistrado = true;
           }
-          if (!yaMostrado) {
-             data.push({
-                selected: '',
-                code: item.ruc_code_id,
-                yaRegistrado: yaRegistrado,
-                address: item.address_main_street + ' ' + item.address_number + ' ' + item.address_secondary_street,
-                name: item.commercially_known_name,
-                sri_state: item.sri_state,
-             });
-          }
        });
+       if (!yaMostrado) {
+          data.push({
+             selected: '',
+             code: item.ruc_code_id,
+             yaRegistrado: yaRegistrado,
+             address: item.address_main_street + ' ' + item.address_number + ' ' + item.address_secondary_street,
+             name: item.commercially_known_name,
+             sri_state: item.sri_state,
+          });
+       }
    });
     data.sort((previous: any, current: any) => {
        if (Number(previous.code) > Number(current.code)) {
@@ -2896,9 +2896,13 @@ guardarDeclaracion() {
    }).catch( e => { console.log(e) });
   }
 
-  updateGmap(latitude, longitude) {
-   this.establishment_selected.address_map_latitude = latitude;
-   this.establishment_selected.address_map_longitude = longitude;
+  updateGmap() {
+   this.parroquiasEstablishment.forEach(parroquia => {
+      if (parroquia.id == this.establishment_selected.ubication_id) {
+         this.establishment_selected.address_map_latitude = parroquia.gmap_reference_latitude;
+        this.establishment_selected.address_map_longitude = parroquia.gmap_reference_longitude;
+      }
+   });
   }
 
   getParroquiasEstablishment() {

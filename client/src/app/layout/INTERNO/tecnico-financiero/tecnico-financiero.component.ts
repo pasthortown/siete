@@ -2321,9 +2321,13 @@ encerarDeclaracion(paySelected: Pay) {
   }).catch( e => { console.log(e) });
  }
 
- updateGmap(latitude, longitude) {
-   this.establishment_selected.address_map_latitude = latitude;
-   this.establishment_selected.address_map_longitude = longitude;
+ updateGmap() {
+   this.parroquiasEstablishment.forEach(parroquia => {
+      if (parroquia.id == this.establishment_selected.ubication_id) {
+         this.establishment_selected.address_map_latitude = parroquia.gmap_reference_latitude;
+        this.establishment_selected.address_map_longitude = parroquia.gmap_reference_longitude;
+      }
+   });
   }
 
  getParroquiasEstablishment() {
