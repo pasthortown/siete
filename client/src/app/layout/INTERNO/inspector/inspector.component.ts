@@ -4404,9 +4404,6 @@ guardarDeclaracion() {
       this.rucEstablishmentRegisterSelected.complementary_service_types_on_register = r.complementary_service_types_on_register as ComplementaryServiceType[];
       this.rucEstablishmentRegisterSelected.complementary_service_foods_on_register = r.complementary_service_foods_on_register as ComplementaryServiceFood[];
       this.rucEstablishmentRegisterSelected.capacities_on_register = r.capacities_on_register as Capacity[];
-      if (!Array.isArray(this.rucEstablishmentRegisterSelected.capacities_on_register)) {
-         this.rucEstablishmentRegisterSelected.capacities_on_register = [];
-      }
       this.calcSpaces();
       this.getTarifarioRack(register.id);
       this.getCategories();
@@ -4415,6 +4412,9 @@ guardarDeclaracion() {
       this.capacityTypeDataService.get_filtered_by_register_type(this.rucEstablishmentRegisterSelected.register_type_id).then( r2 => {
         this.allowed_capacity_types = r2 as CapacityType[];
         this.mostrarDataRegister = true;
+        if (typeof this.rucEstablishmentRegisterSelected.capacities_on_register == 'undefined') {
+         this.rucEstablishmentRegisterSelected.capacities_on_register = [];
+        }
         this.rucEstablishmentRegisterSelected.capacities_on_register.forEach(capacity => {
            this.getMaxBed(capacity);
            this.calcBeds(capacity);
