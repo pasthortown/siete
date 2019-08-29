@@ -119,6 +119,7 @@ export class RegistroComponent implements OnInit {
    tabActive = 'paso1';
    tabActiveSuperior = 'tab1';
    selectedNameType: RucNameType = new RucNameType();
+   razon_social = '';
    total_workers = 0;
    salaRecepciones: ReceptionRoom = new ReceptionRoom();
    franchiseChainNameValidated = false;
@@ -2597,6 +2598,7 @@ guardarDeclaracion() {
          {representante_legal: this.user.name.toUpperCase()},
          {nombre_comercial: this.establishment_selected.commercially_known_name.toUpperCase()},
          {ruc: this.ruc_registro_selected.ruc.number},
+         {razon_social: this.razon_social},
          {fecha_solicitud: today.toLocaleDateString().toUpperCase()},
          {actividad: actividad},
          {clasificacion: clasificacion.toUpperCase()},
@@ -3146,6 +3148,7 @@ guardarDeclaracion() {
               const DC = entidad.filas.fila.columnas.columna;
               DC.forEach(element => {
                  if (element.campo == 'razonSocial') {
+                    this.razon_social = element.valor;
                     datosGenerales += '<strong>Razón Social: </strong> ' + element.valor + '<br/>';
                  }
                  if (element.campo == 'email') {

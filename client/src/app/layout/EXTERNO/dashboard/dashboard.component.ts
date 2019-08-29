@@ -158,6 +158,7 @@ export class DashboardComponent implements OnInit {
    rowsPays = [];
    columnsPays = [];
    dataPays = [];
+   razon_social = '';
    procedureJustification = new ProcedureJustification();
    estados = [];
    pays: Pay[] = [];
@@ -2511,12 +2512,20 @@ export class DashboardComponent implements OnInit {
          const clasificaciones = [];
          r.forEach(element => {
             if (element.id !== 30 && element.id !== 44) {
-               clasificaciones.push(element);
+               if (element.id == 46) {
+                  clasificaciones.push(element);
+               }
             }
          });
          this.clasifications_registers = clasificaciones;
       } else {
-         this.clasifications_registers = r as RegisterType[];
+         this.clasifications_registers = [];
+         const clasificaciones = r as RegisterType[];
+         clasificaciones.forEach(clasificacion => {
+            if (clasificacion.id == 46) {
+               this.clasifications_registers.push(clasificacion);
+            }
+         });
       }
    }).catch( e => { console.log(e) });
   }
@@ -2875,6 +2884,7 @@ guardarDeclaracion() {
          {representante_legal: this.user.name.toUpperCase()},
          {nombre_comercial: this.establishment_selected.commercially_known_name.toUpperCase()},
          {ruc: this.ruc_registro_selected.ruc.number},
+         {razon_social: this.razon_social},
          {fecha_solicitud: today.toLocaleDateString().toUpperCase()},
          {actividad: actividad},
          {clasificacion: clasificacion.toUpperCase()},
@@ -3434,6 +3444,7 @@ guardarDeclaracion() {
               const DC = entidad.filas.fila.columnas.columna;
               DC.forEach(element => {
                  if (element.campo == 'razonSocial') {
+                  this.razon_social = element.valor;
                     datosGenerales += '<strong>Razón Social: </strong> ' + element.valor + '<br/>';
                  }
                  if (element.campo == 'email') {
