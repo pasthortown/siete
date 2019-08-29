@@ -2309,12 +2309,20 @@ validateHabitaciones(): Boolean {
          const clasificaciones = [];
          r.forEach(element => {
             if (element.id !== 30 && element.id !== 44) {
-               clasificaciones.push(element);
+               if (element.id == 46) {
+                  clasificaciones.push(element);
+               }
             }
          });
          this.clasifications_registers = clasificaciones;
       } else {
-         this.clasifications_registers = r as RegisterType[];
+         this.clasifications_registers = [];
+         const clasificaciones = r as RegisterType[];
+         clasificaciones.forEach(clasificacion => {
+            if (clasificacion.id == 46) {
+               this.clasifications_registers.push(clasificacion);
+            }
+         });
       }
    }).catch( e => { console.log(e) });
   }
