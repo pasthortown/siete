@@ -4,15 +4,15 @@
 
 export const environment = {
   production: false,
-  api_auth: 'http://ws-pruebas.turismo.gob.ec:8000/',
-  api_dinardap: 'http://ws-pruebas.turismo.gob.ec:9000/',
-  api_consultor: 'http://ws-pruebas.turismo.gob.ec:9001/',
-  api_exporter: 'http://ws-pruebas.turismo.gob.ec:9002/',
-  api_base: 'http://ws-pruebas.turismo.gob.ec:8001/',
-  api_alojamiento: 'http://ws-pruebas.turismo.gob.ec:8002/',
-  api_financiero: 'http://ws-pruebas.turismo.gob.ec:8003/',
-  api_mailer: 'http://ws-pruebas.turismo.gob.ec:9003/',
-  api_catastro: 'http://ws-pruebas.turismo.gob.ec:9005/',
+  api_auth: 'https://ws-siturin-desarrollo.turismo.gob.ec/server-auth/public/index.php/',
+  api_dinardap: 'https://ws-siturin-desarrollo.turismo.gob.ec/server-dinardap/public/index.php/',
+  api_consultor: 'https://ws-siturin-desarrollo.turismo.gob.ec/server-consultor/public/index.php/',
+  api_exporter: 'https://ws-siturin-desarrollo.turismo.gob.ec/server-exporter/public/index.php/',
+  api_base: 'https://ws-siturin-desarrollo.turismo.gob.ec/server-base/public/index.php/',
+  api_alojamiento: 'https://ws-siturin-desarrollo.turismo.gob.ec/server-alojamiento/public/index.php/',
+  api_financiero: 'https://ws-siturin-desarrollo.turismo.gob.ec/server-financiero/public/index.php/',
+  api_mailer: 'https://ws-siturin-desarrollo.turismo.gob.ec/server-mailer/public/index.php/',
+  api_catastro: 'https://ws-siturin-desarrollo.turismo.gob.ec/server-catastro/public/index.php/',
   gmapapiKey: 'AIzaSyCGUwCcM-LKjRK4rjbBJ06_GLmX2LaYzfg',
 };
 
