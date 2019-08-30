@@ -2922,6 +2922,7 @@ guardarDeclaracion() {
             actividad: 'Alojamiento Turístico',
             clasificacion: clasificacion,
             categoria: categoria,
+            razon_social: this.razon_social,
             tipoSolicitud: tipo_tramite,
             provincia: provincia.name.toUpperCase(),
             canton: canton.name.toUpperCase(),

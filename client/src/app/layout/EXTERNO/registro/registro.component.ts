@@ -1886,6 +1886,7 @@ export class RegistroComponent implements OnInit {
             actividad: 'Alojamiento Turístico',
             clasificacion: clasificacion,
             categoria: categoria,
+            razon_social: this.razon_social,
             tipoSolicitud: 'Registro',
             provincia: provincia.name.toUpperCase(),
             canton: canton.name.toUpperCase(),

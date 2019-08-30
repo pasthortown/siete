@@ -81,6 +81,20 @@
             >
               Recuperar Contraseña
             </button>
+            <button
+              type="button"
+              class="btn btn-warning"
+              (click)="openDialog(content-video)"
+            >
+              <span class="fas fa-file-video"></span>&nbsp;Video Tutorial
+            </button>
+            <button
+              type="button"
+              class="btn btn-warning"
+              (click)="algo()"
+            >
+              Descargar Manual
+            </button>
           </div>
         </div>
       </form>
@@ -125,4 +139,19 @@
          </div>
       </div>
    </div>
+</ng-template>
+<ng-template #content-video let-modal>
+  <div class="modal-header">
+     <h4 class="modal-title">Video Tutorial</h4>
+     <button type="button" class="close" (click)="modal.dismiss('Cross click')">
+        <span>&times;</span>
+     </button>
+  </div>
+  <div class="modal-body">
+     <div class="row">
+        <video class="col-12" style="overflow-y: auto; height: 500px;" autoplay="autoplay" loop controls="false" muted="muted">
+            <source src="assets/videos/ECUADOR_TRAVEL(youtube.com).mp4" type="video/mp4">
+        </video>
+     </div>
+  </div>
 </ng-template>
