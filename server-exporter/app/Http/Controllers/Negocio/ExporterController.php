@@ -64,7 +64,7 @@ class ExporterController extends Controller
     $html_content .= $this->build_table_declaration($request['declaration']);
     $html_content .= '<table style="width: 100%; border: 1px solid black; border-collapse: collapse; text-align: left; font-size:14px;">';
     $html_content .= '<tr><th colspan="4" style="text-align:center; background-color:yellow;">DATOS DE PAGO</th></tr>';
-    $html_content .= '<tr style="background-color:yellow;"><th style="border: 1px solid black;">CONTRIBUCIÓN CAUSADA UN POR MIL</th><th style="border: 1px solid black;">RECARGOS POR MORA</th><th style="border: 1px solid black;">MULTAS</th><th style="border: 1px solid black;">TOTAL A PAGAR</th></tr>';
+    $html_content .= '<tr style="background-color:yellow;"><th style="border: 1px solid black;">CONTRIBUCIÓN CAUSADA UNO POR MIL</th><th style="border: 1px solid black;">RECARGOS POR MORA</th><th style="border: 1px solid black;">MULTAS</th><th style="border: 1px solid black;">TOTAL A PAGAR</th></tr>';
     $html_content .= '<tr><th style="border: 1px solid black;">'.number_format((float)$request['pay']['amount_to_pay_base'], 2, '.', '').'USD</th><th style="border: 1px solid black;">'.number_format((float)$request['pay']['amount_to_pay_taxes'], 2, '.', '').'USD</th><th style="border: 1px solid black;">'.number_format((float)$request['pay']['amount_to_pay_fines'], 2, '.', '').'USD</th><th style="border: 1px solid black;">'.number_format((float)$request['pay']['amount_to_pay'], 2, '.', '').'USD</th></tr>';
     $html_content .= '</table><br/>';
     $html_content .= '<table style="width: 100%; border: 1px solid black; border-collapse: collapse; text-align: left; font-size:14px;">';
