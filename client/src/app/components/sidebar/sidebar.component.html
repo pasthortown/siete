@@ -364,7 +364,7 @@
          <a [routerLink]="['/externo-dashboard']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="checkCatastro()">
             <i class="fas fa-newspaper"></i>&nbsp; <span>&nbsp;Gestión de Actividades Turísticas</span>
          </a>
-      <a [routerLink]="['/tarifario-rack']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="isExternal || isAdminRuc || isCoAdminRuc || isAdminEst || isAdminRegC">
+      <a [routerLink]="['/tarifario-rack']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="checkCatastro()">
          <i class="fas fa-newspaper"></i>&nbsp; <span>&nbsp;Tarifario Rack o Mostrador </span>
       </a>
       <div class="nested-menu">
