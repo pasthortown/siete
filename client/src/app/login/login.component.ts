@@ -66,6 +66,19 @@ export class LoginComponent implements OnInit {
   }
 
   password_recovery() {
+    if (this.email.split('@')[1] == 'turismo.gob.ec') {
+      Swal.fire({
+        title: 'Recuperación Contraseña',
+        text: 'Para recuperar tu contraseña, envía un correo a la Dirección de Tecnologías de la Información y Comunicaciones.',
+        type: 'success',
+      })
+      .then( response => {
+        this.password = '';
+        this.email = '';
+        return;
+      });
+      return;
+    }
     if ( !this.esperando ) {
       this.esperando = true;
       this.busy = this.authDataServise.password_recovery_request(this.email).then( r => {

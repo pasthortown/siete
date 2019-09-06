@@ -39,7 +39,7 @@ class AuthController extends Controller
     $token = $data['r'];
     $credentials = JWT::decode($token, env('JWT_SECRET'), ['HS256']);
     try{
-      $new_password = str_random(10); 
+      $new_password = str_random(10);
       DB::beginTransaction();
       $status = User::where('id', $credentials->subject)->update([
         'password'=>Crypt::encrypt($new_password),
@@ -75,7 +75,7 @@ class AuthController extends Controller
     }
     return response()->json('Password changed successfully',200);
   }
-  
+
   function register(Request $data)
   {
     $result = $data->json()->all();
@@ -127,7 +127,7 @@ class AuthController extends Controller
       return response()->json($e,400);
     }
   }
-  
+
   function login(Request $data)
   {
       $result = $data->json()->all();
@@ -142,7 +142,7 @@ class AuthController extends Controller
       $domain = explode('@', $email);
       if (sizeof($domain) == 2) {
         if ($domain[1] == 'turismo.gob.ec') {
-          if ($this->authenticate_ldap($email, $password)) {
+          if($this->authenticate_ldap($domain[0], $password)){
             return $this->iniciarSesion($user);
           }
         } else {

@@ -16,6 +16,7 @@ export class ProfileComponent implements OnInit {
   cambiandoClaves = false;
   clavesCoinciden = false;
   clave: String = '';
+  cuentaInterna = false;
   claveConfirm: String = '';
   profileImg = 'assets/images/accounts.png';
   profilePicture: ProfilePicture;
@@ -48,6 +49,11 @@ export class ProfileComponent implements OnInit {
   getUser() {
     this.userDataService.get(JSON.parse(sessionStorage.getItem('user')).id).then( r => {
       this.user = r as User;
+      if (this.user.email.split('@')[1] == 'turismo.gob.ec') {
+        this.cuentaInterna = true;
+      } else {
+        this.cuentaInterna = false;
+      }
       this.checkTelefonoPrincipal();
       this.checkTelefonoSecundario();
     }).catch( e => console.log(e));

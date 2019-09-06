@@ -58,7 +58,7 @@
                 />
               </div>
         </div>
-        <div class="col-6">
+        <div class="col-6" *ngIf="!cuentaInterna">
             <div class="form-group">
                 <label for="user_ruc">Número de RUC</label>
                 <input
@@ -155,11 +155,11 @@
           </div>
             <div
               class="alert alert-info"
-              role="alert"
+              role="alert" *ngIf="!cuentaInterna"
             >
               Si usted desea cambiar la contraseña, llene los campos siguientes.
             </div>
-          <div class="form-group">
+          <div class="form-group" *ngIf="!cuentaInterna">
             <label for="password">Contraseña</label><span
             *ngIf="validatePassword()"
             class="ml-2 badge badge-danger"
@@ -188,7 +188,7 @@
                 <span class="badge badge-warning">Al menos 1 minúscula</span>
             </div>
           </div>
-          <div class="form-group">
+          <div class="form-group" *ngIf="!cuentaInterna">
             <label for="passwordConfirm">Confirmar Contraseña</label>
             <input
               type="password"
@@ -198,7 +198,7 @@
               [(ngModel)]="claveConfirm"
             />
           </div>
-          <div class="form-group">
+          <div class="form-group" *ngIf="!cuentaInterna">
             <div
               *ngIf="cambiandoClaves && clavesCoinciden"
               class="alert alert-success"

@@ -17,7 +17,16 @@
           </h2>
       </div>
       <div class="form-group">
-        <label for="identification">Número de Cédula del Propietario/Representante Legal</label><span
+          <label for="email">Correo Electrónico</label><span
+          *ngIf="!emailContactValidated"
+          class="ml-2 badge badge-danger"
+          >Incorrecto</span>
+          <input type="email" class="form-control" id="email" placeholder="Correo Electrónico" (input)="checkEmail()" [(ngModel)]="user.email" />
+      </div>
+      <div class="form-group" *ngIf="emailContactValidated">
+        <label for="identification" *ngIf="!cuentaInterno">Número de Cédula del Propietario/Representante Legal</label>
+        <label for="identification" *ngIf="cuentaInterno">Número de Cédula del Usuario Interno</label>
+        <span
         *ngIf="!identificationValidated"
         class="ml-2 badge badge-danger"
         >Incorrecto</span>
@@ -40,15 +49,8 @@
       <div class="form-group" *ngIf="identidadConfirmada">
           <label for="name">Nombre Completo</label>
           <input type="text" disabled class="form-control" id="name" placeholder="Nombre Completo" [(ngModel)]="user.name" />
-        </div>
-      <div class="form-group" *ngIf="identidadConfirmada">
-          <label for="email">Correo Electrónico</label><span
-          *ngIf="!emailContactValidated"
-          class="ml-2 badge badge-danger"
-          >Incorrecto</span>
-          <input type="email" class="form-control" id="email" placeholder="Correo Electrónico" (input)="checkEmail()" [(ngModel)]="user.email" />
-        </div>
-      <div class="form-group" *ngIf="identificationValidated && emailContactValidated">
+      </div>
+      <div class="form-group" *ngIf="identificationValidated && emailContactValidated && (cuentaInterno == false)">
         <label for="ruc">Número de RUC al que pertenece el Establecimiento</label><span
         *ngIf="!rucValidated"
         class="ml-2 badge badge-danger"
@@ -56,7 +58,7 @@
         <input type="text" class="form-control" maxlength="13" id="ruc" placeholder="Número de RUC" [(ngModel)]="ruc.number" (keyup)="checkRuc()"/>
       </div>
       <div class="col-12 mb-3" *ngIf="rucValidated">
-          <small id="cedulaRepresentanteHelp"
+          <small id="rucDataIncomming"
           class="form-text text-muted" [innerHTML]="rucData"></small>
       </div>
       <div class="row" *ngIf="esperando">
@@ -68,7 +70,10 @@
       </div>
       <div class="row">
         <div class="col-12 text-center">
-          <button type="submit" [disabled]="!(identificationValidated && consumoCedula && REGCIVILOK && rucValidated && consumoRuc && SRIOK)" class="btn btn-primary mr-2" (click)="registrar()">
+          <button type="submit" *ngIf="!cuentaInterno" [disabled]="!(identificationValidated && consumoCedula && REGCIVILOK && rucValidated && consumoRuc && SRIOK)" class="btn btn-primary mr-2" (click)="registrar()">
+            Crear Cuenta
+          </button>
+          <button type="submit" *ngIf="cuentaInterno" [disabled]="!(identificationValidated && consumoCedula && REGCIVILOK)" class="btn btn-primary mr-2" (click)="registrar()">
             Crear Cuenta
           </button>
           <a [routerLink]="['/login']" class="btn btn-danger">

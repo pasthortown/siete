@@ -95,6 +95,7 @@ export class LayoutComponent implements OnInit {
         const userData = JSON.parse(sessionStorage.getItem('user'));
         this.userDataService.get(userData.id).then( r => {
           const user = r as User;
+          const cuentaInterna = r.email.split('@')[1] == 'turismo.gob.ec';
           this.catastroDataService.searchByRuc(user.ruc.toString()).then( r => {
               const registros = r as Register[];
               let toReturn = false;
@@ -118,6 +119,7 @@ export class LayoutComponent implements OnInit {
                   establecimientos_id.push(registro.establishment_ruc_code);
               });
               sessionStorage.setItem('canMoreThanRegister',JSON.stringify(toReturn));
+              sessionStorage.setItem('cuentaInterna',JSON.stringify(cuentaInterna));
               sessionStorage.setItem('establecimientos',JSON.stringify(establecimientos_id));
           }).catch( e => { console.log(e); });
           let redirigirProfile = false;

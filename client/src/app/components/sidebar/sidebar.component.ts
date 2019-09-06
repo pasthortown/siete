@@ -15,6 +15,7 @@ export class SidebarComponent implements OnInit {
   user: any;
   profileImg = 'assets/images/accounts.png';
   roles: any;
+  cuentaInterna = false;
   isAdmin = false;
   isAdminRuc = false;
   isCoAdminRuc = false;
@@ -77,6 +78,9 @@ export class SidebarComponent implements OnInit {
   }
 
   refreshUser(): Boolean {
+    if ( JSON.parse(sessionStorage.getItem('cuentaInterna')) !== null ) {
+      this.cuentaInterna = JSON.parse(sessionStorage.getItem('cuentaInterna'));
+    }
     if ( JSON.parse(sessionStorage.getItem('user')) !== null ) {
       this.user = JSON.parse(sessionStorage.getItem('user'));
     }

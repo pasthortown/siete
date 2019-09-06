@@ -23,6 +23,7 @@ export class RegisterComponent implements OnInit {
   identificationValidated = false;
   consumoCedula = false;
   cedulaNombre = '';
+  cuentaInterno = false;
   identidadConfirmada = false;
   rucValidated = false;
   consumoRuc = false;
@@ -50,44 +51,87 @@ export class RegisterComponent implements OnInit {
   }
 
   registrar() {
-     if(this.emailContactValidated && this.rucValidated && this.identidadConfirmada && !this.esperando){
-      this.esperando = true;
-      this.user.ruc = this.ruc.number;
-      this.ruc.contact_user = this.user;
-      this.busy = this.authDataServise.register(this.user).then( r => {
-         this.esperando = false;
-         if (r == 0 || typeof r == 'undefined') {
+     if (this.user.email.split('@')[1] == 'turismo.gob.ec'){
+      if(this.emailContactValidated && this.identidadConfirmada && !this.esperando){
+         this.esperando = true;
+         this.user.ruc = this.user.identification + '001';
+         this.ruc.number = this.user.identification + '001';
+         this.ruc.contact_user = this.user;
+         this.busy = this.authDataServise.register(this.user).then( r => {
+            this.esperando = false;
+            if (r == 0 || typeof r == 'undefined') {
+               Swal.fire({
+                  title: 'La información proporcionada no es correcta.',
+                  text: 'No es posible crear una nueva cuenta, con la información proporcionada.',
+                  type: 'error',
+                })
+                .then( response => {
+                  this.router.navigate(['/login']);
+                });
+                return;
+            }
             Swal.fire({
-               title: 'La información proporcionada no es correcta.',
-               text: 'No es posible crear una nueva cuenta, con la información proporcionada.',
-               type: 'error',
-             })
-             .then( response => {
-               this.router.navigate(['/login']);
-             });
-             return;
-         }
+              title: 'Te damos la bienvenida',
+              text: 'Tu contraseña, es la misma que utilizas para acceder a tu correo institucional.',
+              type: 'success',
+            })
+            .then( response => {
+              this.user = new User();
+              this.ruc = new Ruc();
+              this.router.navigate(['/login']);
+            });
+          }).catch( e => {
+            this.esperando = false;
+            console.log(e);
+          });
+        } else {
          Swal.fire({
-           title: 'Te damos la bienvenida',
-           text: 'Enviamos tu contraseña a tu correo',
-           type: 'success',
-         })
-         .then( response => {
-           this.user = new User();
-           this.ruc = new Ruc();
-           this.router.navigate(['/login']);
-         });
-       }).catch( e => {
-         this.esperando = false;
-         console.log(e);
-       });
+            title: 'Datos no confirmados',
+            text: 'El registro no se pudo completar, los datos ingresados no se pudieron confirmar.',
+            type: 'error',
+          });
+        }
      } else {
-      Swal.fire({
-         title: 'Datos no confirmados',
-         text: 'El registro no se pudo completar, los datos ingresados no se pudieron confirmar.',
-         type: 'error',
-       });
+      if(this.emailContactValidated && this.rucValidated && this.identidadConfirmada && !this.esperando){
+         this.esperando = true;
+         this.user.ruc = this.ruc.number;
+         this.ruc.contact_user = this.user;
+         this.busy = this.authDataServise.register(this.user).then( r => {
+            this.esperando = false;
+            if (r == 0 || typeof r == 'undefined') {
+               Swal.fire({
+                  title: 'La información proporcionada no es correcta.',
+                  text: 'No es posible crear una nueva cuenta, con la información proporcionada.',
+                  type: 'error',
+                })
+                .then( response => {
+                  this.router.navigate(['/login']);
+                });
+                return;
+            }
+            Swal.fire({
+              title: 'Te damos la bienvenida',
+              text: 'Enviamos tu contraseña a tu correo',
+              type: 'success',
+            })
+            .then( response => {
+              this.user = new User();
+              this.ruc = new Ruc();
+              this.router.navigate(['/login']);
+            });
+          }).catch( e => {
+            this.esperando = false;
+            console.log(e);
+          });
+        } else {
+         Swal.fire({
+            title: 'Datos no confirmados',
+            text: 'El registro no se pudo completar, los datos ingresados no se pudieron confirmar.',
+            type: 'error',
+          });
+        }
      }
+     
   }
   
   checkCedula() {
@@ -182,8 +226,8 @@ export class RegisterComponent implements OnInit {
                } else {
                   this.toastr.errorToastr('El RUC ingresado no es Activo.', 'SRI');
                   this.rucData = 'RUC INACTIVO';
-                  this.rucInactive = true;
-                  this.SRIOK = false;
+                  this.rucInactive = false;
+                  this.SRIOK = true;
                }
             }
          });
@@ -199,6 +243,11 @@ export class RegisterComponent implements OnInit {
   checkEmail(): Boolean {
     const isOk = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(this.user.email.toString());
     this.emailContactValidated = isOk;
+    if (this.user.email.split('@')[1] == 'turismo.gob.ec') {
+       this.cuentaInterno = true;
+    } else {
+      this.cuentaInterno = false;
+    }
     return this.emailContactValidated;
   }
 
