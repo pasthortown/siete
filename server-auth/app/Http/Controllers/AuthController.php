@@ -139,27 +139,56 @@ class AuthController extends Controller
           'error' => 'Bad Credentials'
         ], 400);
       }
-      if ($password === Crypt::decrypt($user->password)) {
-        $token = $this->jwt($user);
-        $response = User::where('id',$user->id)->update([
-          'api_token'=>$token,
-        ]);
-        $rol_assigments = AccountRolAssigment::where('user_id',$user->id)->get();
-        $roles = [];
-        foreach($rol_assigments as $rol_assigment) {
-          $rol = AccountRol::where('id', $rol_assigment->account_rol_id)->first();
-          array_push($roles, $rol);
+      $domain = explode('@', $email);
+      if (sizeof($domain) == 2) {
+        if ($domain[1] == 'turismo.gob.ec') {
+          if ($this->authenticate_ldap($email, $password)) {
+            return $this->iniciarSesion($user);
+          }
+        } else {
+          if ($password === Crypt::decrypt($user->password)) {
+            return $this->iniciarSesion($user);
+          }
         }
-        return response()->json([
-            'token' => $token,
-            'name' => $user->name,
-            'id' => $user->id,
-            'roles' => $roles,
-        ], 200);
       }
       return response()->json([
         'error' => 'Bad Credentials'
       ], 400);
+  }
+
+  protected function authenticate_ldap($email, $password) {
+    $LDAP_HOST = '192.168.20.102';
+    $LDAP_BASE_DN = 'ou=people,dc=turismo,dc=gob,dc=ec';
+    $LDAP_PORT = 389;
+    $ldap_connection = ldap_connect($LDAP_HOST, $LDAP_PORT);
+    $ldap_dn = 'uid='.$email.','.$LDAP_BASE_DN;
+    ldap_set_option($ldap_connection,LDAP_OPT_PROTOCOL_VERSION,3);
+    ldap_set_option($ldap_connection,LDAP_OPT_REFERRALS,0);
+    $bind = @ldap_bind($ldap_connection, $ldap_dn, $password);
+    if ($bind) {
+        return true;
+    } else {
+        return false;
+    }
+  }
+
+  protected function iniciarSesion($user) {
+    $token = $this->jwt($user);
+    $response = User::where('id',$user->id)->update([
+      'api_token'=>$token,
+    ]);
+    $rol_assigments = AccountRolAssigment::where('user_id',$user->id)->get();
+    $roles = [];
+    foreach($rol_assigments as $rol_assigment) {
+      $rol = AccountRol::where('id', $rol_assigment->account_rol_id)->first();
+      array_push($roles, $rol);
+    }
+    return response()->json([
+        'token' => $token,
+        'name' => $user->name,
+        'id' => $user->id,
+        'roles' => $roles,
+    ], 200);
   }
 
   protected function jwt(User $user) {
