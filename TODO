@@ -30,6 +30,8 @@ INSERT INTO public.account_rols(
 	id, name, description, code, father_code)
 	VALUES (9, 'Administrador Establecimiento', 'Coordinador Zonal', 9, '-');
 
+cualquiernombre@turismo.gob.ec
+mintur.123
 
     $wsdl = "https://interoperabilidad.dinardap.gob.ec/interoperador-v2?wsdl";
   

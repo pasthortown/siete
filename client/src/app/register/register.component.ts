@@ -243,6 +243,11 @@ export class RegisterComponent implements OnInit {
   checkEmail(): Boolean {
     const isOk = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(this.user.email.toString());
     this.emailContactValidated = isOk;
+    if (!isOk) {
+       this.user.identification = '';
+       this.fechaIngresada = '';
+       this.user.name = '';
+    }
     if (this.user.email.split('@')[1] == 'turismo.gob.ec') {
        this.cuentaInterno = true;
     } else {
