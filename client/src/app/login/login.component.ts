@@ -69,7 +69,7 @@ export class LoginComponent implements OnInit {
     if (this.email.split('@')[1] == 'turismo.gob.ec') {
       Swal.fire({
         title: 'Recuperación Contraseña',
-        text: 'Para recuperar tu contraseña, envía un correo a la Dirección de Tecnologías de la Información y Comunicaciones.',
+        text: 'Para recuperar tu contraseña, comunícate con la Dirección de Tecnologías de la Información y Comunicaciones.',
         type: 'success',
       })
       .then( response => {
