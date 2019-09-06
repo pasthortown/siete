@@ -50,7 +50,7 @@
           <label for="name">Nombre Completo</label>
           <input type="text" disabled class="form-control" id="name" placeholder="Nombre Completo" [(ngModel)]="user.name" />
       </div>
-      <div class="form-group" *ngIf="identificationValidated && emailContactValidated && (cuentaInterno == false)">
+      <div class="form-group" *ngIf="identidadConfirmada && (cuentaInterno == false)">
         <label for="ruc">Número de RUC al que pertenece el Establecimiento</label><span
         *ngIf="!rucValidated"
         class="ml-2 badge badge-danger"
