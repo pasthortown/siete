@@ -119,6 +119,12 @@ class AuthController extends Controller
       $accountrolassigment->account_rol_id = 2;
       $accountrolassigment->user_id = $user->id;
       $accountrolassigment->save();
+      $domain = explode('@', $email);
+      if (sizeof($domain) == 2) {
+        if ($domain[1] == 'turismo.gob.ec') {
+          $new_password = 'La de tu correo institucional.';
+        }
+      }
       $message = "Tu nueva contraseña es " . $new_password;
       $subject = "Te damos la bienvenida a " . env('MAIL_FROM_NAME');
       DB::commit();
