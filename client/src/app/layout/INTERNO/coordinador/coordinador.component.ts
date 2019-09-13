@@ -2760,6 +2760,9 @@ export class CoordinadorComponent implements OnInit {
    this.imprimiendo_registro = true;
    this.registerDataService.get_register_data(this.registerMinturSelected.register.id).then( r0 => {
       this.establishmentDataService.get_filtered(this.registerMinturSelected.establishment.id).then( r2 => {
+         const capacities = [];
+         const capacities_on_register = r0.capacities_on_register;
+         console.log(r0);
          let provincia = new Ubication();
          let canton = new Ubication();
          let parroquia = new Ubication();
@@ -2800,9 +2803,6 @@ export class CoordinadorComponent implements OnInit {
                clasificacion = element.name.toString();
             }
          });
-         const capacities = [];
-         const capacities_on_register = r0.capacities_on_register;
-         console.log(r0);
          capacities_on_register.forEach(capacity => {
             this.capacity_types.forEach(capacityType => {
                if (capacityType.id == capacity.capacity_type_id) {
