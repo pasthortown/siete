@@ -2759,7 +2759,8 @@ export class CoordinadorComponent implements OnInit {
   imprimirRegistro() {
    this.imprimiendo_registro = true;
    this.registerDataService.get_register_data(this.registerMinturSelected.register.id).then( r0 => {
-      console.log(this.registerMinturSelected.register.id);
+      const responseInitial = r0;
+      console.log(responseInitial);
       this.establishmentDataService.get_filtered(this.registerMinturSelected.establishment.id).then( r2 => {
          const capacities = [];
          const capacities_on_register = r0.capacities_on_register;
