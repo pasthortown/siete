@@ -2790,8 +2790,7 @@ export class CoordinadorComponent implements OnInit {
          this.user.name.split(' ').forEach(element => {
             iniciales_cordinador_zonal += element.substring(0, 1).toUpperCase();
          });
-         console.log(registerDataIncomming);
-         /*let iniciales_cordinacion_zonal = '';
+         let iniciales_cordinacion_zonal = '';
          const zonalName = zonal.name.split(' ');
          iniciales_cordinacion_zonal = zonalName[zonalName.length - 1].toUpperCase();
          const today = new Date();
@@ -2803,7 +2802,8 @@ export class CoordinadorComponent implements OnInit {
                clasificacion = element.name.toString();
             }
          });
-         capacities_on_register.forEach(capacity => {
+         console.log(registerDataIncomming);
+         /*capacities_on_register.forEach(capacity => {
             this.capacity_types.forEach(capacityType => {
                if (capacityType.id == capacity.capacity_type_id) {
                   if (capacityType.editable_spaces) {
