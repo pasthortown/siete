@@ -2759,9 +2759,8 @@ export class CoordinadorComponent implements OnInit {
   imprimirRegistro() {
    this.imprimiendo_registro = true;
    this.registerDataService.get_register_data(this.registerMinturSelected.register.id).then( registerDataIncomming => {
-      const responseInitial = registerDataIncomming.capacities_on_register;
-      console.log(responseInitial);
-      this.establishmentDataService.get_filtered(this.registerMinturSelected.establishment.id).then( r2 => {
+      console.log(registerDataIncomming);
+      /*this.establishmentDataService.get_filtered(this.registerMinturSelected.establishment.id).then( r2 => {
          const capacities = [];
          const capacities_on_register = registerDataIncomming.capacities_on_register;
          let provincia = new Ubication();
@@ -2879,7 +2878,7 @@ export class CoordinadorComponent implements OnInit {
             saveAs(blob, qr_value + '.pdf');
             this.imprimiendo_registro = false;
          }).catch( e => { console.log(e); });
-      }).catch( e => { console.log(e); });
+      }).catch( e => { console.log(e); });*/
    }).catch( e => { console.log(e); });
   }
 
