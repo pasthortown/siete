@@ -2802,6 +2802,7 @@ export class CoordinadorComponent implements OnInit {
          });
          const capacities = [];
          const capacities_on_register = r0.capacities_on_register;
+         console.log(r0.capacities_on_register);
          capacities_on_register.forEach(capacity => {
             this.capacity_types.forEach(capacityType => {
                if (capacityType.id == capacity.capacity_type_id) {
@@ -2834,7 +2835,7 @@ export class CoordinadorComponent implements OnInit {
          });
          capacities.forEach(capacity => {
             habitaciones += capacity.habitaciones;
-            plazas += capacity.max_spaces; //AQUI
+            plazas += capacity.spaces; //AQUI
          });
          const params = [{canton: canton.name.toUpperCase()},
             {fecha: today.toLocaleDateString().toUpperCase()},
