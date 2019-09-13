@@ -2758,12 +2758,12 @@ export class CoordinadorComponent implements OnInit {
 
   imprimirRegistro() {
    this.imprimiendo_registro = true;
-   this.registerDataService.get_register_data(this.registerMinturSelected.register.id).then( r0 => {
-      const responseInitial = r0;
+   this.registerDataService.get_register_data(this.registerMinturSelected.register.id).then( registerDataIncomming => {
+      const responseInitial = registerDataIncomming.capacities_on_register;
       console.log(responseInitial);
       this.establishmentDataService.get_filtered(this.registerMinturSelected.establishment.id).then( r2 => {
          const capacities = [];
-         const capacities_on_register = r0.capacities_on_register;
+         const capacities_on_register = registerDataIncomming.capacities_on_register;
          let provincia = new Ubication();
          let canton = new Ubication();
          let parroquia = new Ubication();
@@ -2800,7 +2800,7 @@ export class CoordinadorComponent implements OnInit {
          const actividad = 'ALOJAMIENTO';
          let clasificacion = '';
          this.register_types.forEach(element => {
-            if (element.id == r0.register.register_type_id) {
+            if (element.id == registerDataIncomming.register.register_type_id) {
                clasificacion = element.name.toString();
             }
          });
@@ -2840,12 +2840,12 @@ export class CoordinadorComponent implements OnInit {
          });
          const params = [{canton: canton.name.toUpperCase()},
             {fecha: today.toLocaleDateString().toUpperCase()},
-            {numero_registro: r0.register.code.toUpperCase()},
+            {numero_registro: registerDataIncomming.register.code.toUpperCase()},
             {razon_social: this.razon_social.toUpperCase()},
             {nombre_comercial: r2.establishment.commercially_known_name.toUpperCase()},
             {actividad: actividad},
             {categoria: clasificacion.toUpperCase()},
-            {clasificacion: r0.register_category.name.toUpperCase()},
+            {clasificacion: registerDataIncomming.register_category.name.toUpperCase()},
             {representant_legal: this.representante_legal.toUpperCase()},
             {ruc: this.ruc_registro_selected.ruc.number},
             {zonal: iniciales_cordinacion_zonal.toUpperCase()},
