@@ -2759,8 +2759,7 @@ export class CoordinadorComponent implements OnInit {
   imprimirRegistro() {
    this.imprimiendo_registro = true;
    this.registerDataService.get_register_data(this.registerMinturSelected.register.id).then( registerDataIncomming => {
-      console.log(registerDataIncomming);
-      /*this.establishmentDataService.get_filtered(this.registerMinturSelected.establishment.id).then( r2 => {
+      this.establishmentDataService.get_filtered(this.registerMinturSelected.establishment.id).then( r2 => {
          const capacities = [];
          const capacities_on_register = registerDataIncomming.capacities_on_register;
          let provincia = new Ubication();
@@ -2791,7 +2790,8 @@ export class CoordinadorComponent implements OnInit {
          this.user.name.split(' ').forEach(element => {
             iniciales_cordinador_zonal += element.substring(0, 1).toUpperCase();
          });
-         let iniciales_cordinacion_zonal = '';
+         console.log(registerDataIncomming);
+         /*let iniciales_cordinacion_zonal = '';
          const zonalName = zonal.name.split(' ');
          iniciales_cordinacion_zonal = zonalName[zonalName.length - 1].toUpperCase();
          const today = new Date();
@@ -2877,8 +2877,8 @@ export class CoordinadorComponent implements OnInit {
             const blob = new Blob([byteArray], { type: 'application/pdf'});
             saveAs(blob, qr_value + '.pdf');
             this.imprimiendo_registro = false;
-         }).catch( e => { console.log(e); });
-      }).catch( e => { console.log(e); });*/
+         }).catch( e => { console.log(e); });*/
+      }).catch( e => { console.log(e); });
    }).catch( e => { console.log(e); });
   }
 
