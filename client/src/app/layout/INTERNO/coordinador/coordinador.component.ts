@@ -2802,12 +2802,11 @@ export class CoordinadorComponent implements OnInit {
                clasificacion = element.name.toString();
             }
          });
-         console.log(registerDataIncomming);
-         /*capacities_on_register.forEach(capacity => {
+         capacities_on_register.forEach(capacity => {
             this.capacity_types.forEach(capacityType => {
                if (capacityType.id == capacity.capacity_type_id) {
                   if (capacityType.editable_spaces) {
-                     capacity.max_spaces = 0;
+                  
                   } else {
                      capacity.max_spaces = capacityType.spaces * capacity.quantity;
                   }
@@ -2877,7 +2876,7 @@ export class CoordinadorComponent implements OnInit {
             const blob = new Blob([byteArray], { type: 'application/pdf'});
             saveAs(blob, qr_value + '.pdf');
             this.imprimiendo_registro = false;
-         }).catch( e => { console.log(e); });*/
+         }).catch( e => { console.log(e); });
       }).catch( e => { console.log(e); });
    }).catch( e => { console.log(e); });
   }
