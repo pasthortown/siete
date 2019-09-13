@@ -2834,7 +2834,7 @@ export class CoordinadorComponent implements OnInit {
          });
          capacities.forEach(capacity => {
             habitaciones += capacity.habitaciones;
-            plazas += capacity.spaces;
+            plazas += capacity.max_spaces; //AQUI
          });
          const params = [{canton: canton.name.toUpperCase()},
             {fecha: today.toLocaleDateString().toUpperCase()},

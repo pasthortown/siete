@@ -167,12 +167,48 @@ class AuthController extends Controller
     $LDAP_BASE_DN = 'ou=people,dc=turismo,dc=gob,dc=ec';
     $LDAP_PORT = 389;
     $ldap_connection = ldap_connect($LDAP_HOST, $LDAP_PORT);
-    $ldap_dn = 'uid='.$email.','.$LDAP_BASE_DN;
+    $username = $email;
+    $ldap_dn = 'uid='.$username.','.$LDAP_BASE_DN;
     ldap_set_option($ldap_connection,LDAP_OPT_PROTOCOL_VERSION,3);
     ldap_set_option($ldap_connection,LDAP_OPT_REFERRALS,0);
+    $isDisabled = $this->checkIfIsActive($username);
+    if (!$isDisabled) {
+      $bind = @ldap_bind($ldap_connection, $ldap_dn, $password);
+      if ($bind) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+    
     $bind = @ldap_bind($ldap_connection, $ldap_dn, $password);
     if ($bind) {
         return true;
+    } else {
+        return false;
+    }
+  }
+
+  protected function checkIfIsActive($username) {
+    $LDAP_HOST = '192.168.20.102';
+    $LDAP_BASE_DN = 'uid=zimbra,cn=admins,cn=zimbra';
+    $LDAP_PASS_ZIMBRA = 'XsWnu53E';
+    $LDAP_PORT = 389;
+    $ldap_connection = ldap_connect($LDAP_HOST, $LDAP_PORT);
+    ldap_set_option($ldap_connection,LDAP_OPT_PROTOCOL_VERSION,3);
+    ldap_set_option($ldap_connection,LDAP_OPT_REFERRALS,0);
+    $bind = @ldap_bind($ldap_connection, $LDAP_BASE_DN, $LDAP_PASS_ZIMBRA);
+    if ($bind) {           
+        $filter="(userid=".$username.")";
+        $attributes = array('zimbramailstatus');
+        $sr=ldap_search($ldap_connection, null, $filter, $attributes);
+        $info = ldap_get_entries($ldap_connection, $sr);
+        ldap_free_result($sr);
+        ldap_unbind($ldap_connection);
+        $respuesta = ($info[0]['zimbramailstatus'][0] == 'disabled' ? true : false);
+        return $respuesta;
     } else {
         return false;
     }
