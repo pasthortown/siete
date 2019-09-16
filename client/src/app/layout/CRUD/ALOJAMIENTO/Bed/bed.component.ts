@@ -104,7 +104,7 @@ export class BedComponent implements OnInit {
          backupData.forEach(element => {
             output += element.id + ';' + element.quantity + ';' + element.bed_type_id + '\n';
          });
-         const blob = new Blob([output], { type: 'text/plain' });
+         const blob = new Blob(["\ufeff", output], { type: 'text/plain' });
          const fecha = new Date();
          saveAs(blob, fecha.toLocaleDateString() + '_Beds.csv');
       }).catch( e => console.log(e) );

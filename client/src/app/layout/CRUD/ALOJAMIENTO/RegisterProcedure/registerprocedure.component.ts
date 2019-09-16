@@ -119,7 +119,7 @@ export class RegisterProcedureComponent implements OnInit {
          backupData.forEach(element => {
             output += element.id; + element.date + ';' + element.register_id + ';' + element.procedure_justification_id + '\n';
          });
-         const blob = new Blob([output], { type: 'text/plain' });
+         const blob = new Blob(["\ufeff", output], { type: 'text/plain' });
          const fecha = new Date();
          saveAs(blob, fecha.toLocaleDateString() + '_RegisterProcedures.csv');
       }).catch( e => console.log(e) );

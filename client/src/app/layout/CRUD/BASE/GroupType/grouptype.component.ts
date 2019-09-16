@@ -89,7 +89,7 @@ export class GroupTypeComponent implements OnInit {
          backupData.forEach(element => {
             output += element.id + ';' + element.name + ';' + element.description + ';' + element.representative_rol_name + ';' + element.representative_rol_description + '\n';
          });
-         const blob = new Blob([output], { type: 'text/plain' });
+         const blob = new Blob(["\ufeff", output], { type: 'text/plain' });
          const fecha = new Date();
          saveAs(blob, fecha.toLocaleDateString() + '_GroupTypes.csv');
       }).catch( e => console.log(e) );

@@ -2902,7 +2902,7 @@ export class CoordinadorComponent implements OnInit {
       row.created_at + ';' +
       row.code + '\n';
    });
-   const blob = new Blob([output], { type: 'text/plain' });
+   const blob = new Blob(["\ufeff", output], { type: 'text/plain' });
    const fecha = new Date();
    saveAs(blob, fecha.toLocaleDateString() + '_Bandejas.csv');
   }

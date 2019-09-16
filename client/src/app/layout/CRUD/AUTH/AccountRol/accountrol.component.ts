@@ -132,7 +132,7 @@ export class AccountRolComponent implements OnInit {
          backupData.forEach(element => {
             output += element.id + ';' + element.name + ';' + element.code + ';' + element.father_code + '\n';
          });
-         const blob = new Blob([output], { type: 'text/plain' });
+         const blob = new Blob(["\ufeff", output], { type: 'text/plain' });
          const fecha = new Date();
          saveAs(blob, fecha.toLocaleDateString() + '_AccountRols.csv');
       }).catch( e => console.log(e) );

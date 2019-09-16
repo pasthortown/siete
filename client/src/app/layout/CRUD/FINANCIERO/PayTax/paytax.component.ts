@@ -89,7 +89,7 @@ export class PayTaxComponent implements OnInit {
          backupData.forEach(element => {
             output += element.id; + element.year + ';' + element.trimester + ';' + element.value + '\n';
          });
-         const blob = new Blob([output], { type: 'text/plain' });
+         const blob = new Blob(["\ufeff", output], { type: 'text/plain' });
          const fecha = new Date();
          saveAs(blob, fecha.toLocaleDateString() + '_PayTaxes.csv');
       }).catch( e => console.log(e) );

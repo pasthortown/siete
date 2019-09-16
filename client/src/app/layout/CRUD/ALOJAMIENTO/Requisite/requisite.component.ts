@@ -104,7 +104,7 @@ export class RequisiteComponent implements OnInit {
          backupData.forEach(element => {
             output += element.id + ';' + element.name + ';' + element.description + ';' + element.father_code + ';' + element.to_approve + ';' + element.mandatory + ';' + element.type + ';' + element.params + ';' + element.code + ';' + element.register_type_id + '\n';
          });
-         const blob = new Blob([output], { type: 'text/plain' });
+         const blob = new Blob(["\ufeff", output], { type: 'text/plain' });
          const fecha = new Date();
          saveAs(blob, fecha.toLocaleDateString() + '_Requisites.csv');
       }).catch( e => console.log(e) );

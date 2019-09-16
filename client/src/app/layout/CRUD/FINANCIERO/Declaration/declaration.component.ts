@@ -117,7 +117,7 @@ export class DeclarationComponent implements OnInit {
          backupData.forEach(element => {
             output += element.id + ';' + element.establishment_id + ';' + element.declaration_date + ';' + element.year + ';' + element.max_date_to_pay + '\n';
          });
-         const blob = new Blob([output], { type: 'text/plain' });
+         const blob = new Blob(["\ufeff", output], { type: 'text/plain' });
          const fecha = new Date();
          saveAs(blob, fecha.toLocaleDateString() + '_Declarations.csv');
       }).catch( e => console.log(e) );

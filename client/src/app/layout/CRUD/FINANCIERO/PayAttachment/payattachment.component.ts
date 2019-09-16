@@ -117,7 +117,7 @@ export class PayAttachmentComponent implements OnInit {
          backupData.forEach(element => {
             output += element.id + ';' + element.pay_attachment_file_type + ';' + element.pay_attachment_file_name + ';' + element.pay_attachment_file + ';' + element.pay_id + '\n';
          });
-         const blob = new Blob([output], { type: 'text/plain' });
+         const blob = new Blob(["\ufeff", output], { type: 'text/plain' });
          const fecha = new Date();
          saveAs(blob, fecha.toLocaleDateString() + '_PayAttachments.csv');
       }).catch( e => console.log(e) );

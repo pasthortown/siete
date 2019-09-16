@@ -119,7 +119,7 @@ export class EstablishmentStateComponent implements OnInit {
          backupData.forEach(element => {
             output += element.id + ';' + element.justification + ';' + element.state_id + ';' + element.establishment_id + '\n';
          });
-         const blob = new Blob([output], { type: 'text/plain' });
+         const blob = new Blob(["\ufeff", output], { type: 'text/plain' });
          const fecha = new Date();
          saveAs(blob, fecha.toLocaleDateString() + '_EstablishmentStates.csv');
       }).catch( e => console.log(e) );

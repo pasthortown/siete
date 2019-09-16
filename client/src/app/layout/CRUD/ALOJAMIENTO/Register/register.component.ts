@@ -188,7 +188,7 @@ export class RegisterComponent implements OnInit {
          backupData.forEach(element => {
             output += element.id + ';' + element.code + ';' + element.autorized_complementary_capacities + ';' + element.establishment_id + ';' + element.autorized_complementary_food_capacities + ';' + element.register_type_id + '\n';
          });
-         const blob = new Blob([output], { type: 'text/plain' });
+         const blob = new Blob(["\ufeff", output], { type: 'text/plain' });
          const fecha = new Date();
          saveAs(blob, fecha.toLocaleDateString() + '_Registers.csv');
       }).catch( e => console.log(e) );

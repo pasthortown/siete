@@ -104,7 +104,7 @@ export class DeclarationItemComponent implements OnInit {
          backupData.forEach(element => {
             output += element.id + ';' + element.name + ';' + element.description + ';' + element.factor + ';' + element.year + ';' + element.tax_payer_type_id + ';' + element.declaration_item_category_id + '\n';
          });
-         const blob = new Blob([output], { type: 'text/plain' });
+         const blob = new Blob(["\ufeff", output], { type: 'text/plain' });
          const fecha = new Date();
          saveAs(blob, fecha.toLocaleDateString() + '_DeclarationItems.csv');
       }).catch( e => console.log(e) );

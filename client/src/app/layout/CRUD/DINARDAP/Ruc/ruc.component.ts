@@ -89,7 +89,7 @@ export class RucComponent implements OnInit {
          backupData.forEach(element => {
             output += element.id + ';' + element.number + ';' + element.data + ';' + element.date + '\n';
          });
-         const blob = new Blob([output], { type: 'text/plain' });
+         const blob = new Blob(["\ufeff", output], { type: 'text/plain' });
          const fecha = new Date();
          saveAs(blob, fecha.toLocaleDateString() + '_Rucs.csv');
       }).catch( e => console.log(e) );

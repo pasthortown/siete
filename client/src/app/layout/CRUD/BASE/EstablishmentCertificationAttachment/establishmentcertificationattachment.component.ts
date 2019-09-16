@@ -102,7 +102,7 @@ export class EstablishmentCertificationAttachmentComponent implements OnInit {
          backupData.forEach(element => {
             output += element.id + ';' + element.establishment_certification_attachment_file_type + ';' + element.establishment_certification_attachment_file_name + ';' + element.establishment_certification_attachment_file + '\n';
          });
-         const blob = new Blob([output], { type: 'text/plain' });
+         const blob = new Blob(["\ufeff", output], { type: 'text/plain' });
          const fecha = new Date();
          saveAs(blob, fecha.toLocaleDateString() + '_EstablishmentCertificationAttachments.csv');
       }).catch( e => console.log(e) );

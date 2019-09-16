@@ -91,7 +91,7 @@ export class TemplateComponent implements OnInit {
          backupData.forEach(element => {
             output += element.id + ';' + element.body + '\n';
          });
-         const blob = new Blob([output], { type: 'text/plain' });
+         const blob = new Blob(["\ufeff", output], { type: 'text/plain' });
          const fecha = new Date();
          saveAs(blob, fecha.toLocaleDateString() + '_templates.csv');
       }).catch( e => console.log(e) );

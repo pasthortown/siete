@@ -127,7 +127,7 @@ export class PagosReporteComponent implements OnInit {
            telefono_tercero + '\n';
         }
       });
-      const blob = new Blob([output], { type: 'text/plain' });
+      const blob = new Blob(["\ufeff", output], { type: 'text/plain' });
       const nombreArchivo = 'reporte_pagos.txt';
       saveAs(blob, nombreArchivo);
     }).catch( e => console.log(e) );

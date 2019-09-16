@@ -104,7 +104,7 @@ export class ReceptionRoomComponent implements OnInit {
          backupData.forEach(element => {
             output += element.id + ';' + element.quantity + ';' + element.fullfill + ';' + element.register_id + '\n';
          });
-         const blob = new Blob([output], { type: 'text/plain' });
+         const blob = new Blob(["\ufeff", output], { type: 'text/plain' });
          const fecha = new Date();
          saveAs(blob, fecha.toLocaleDateString() + '_ReceptionRooms.csv');
       }).catch( e => console.log(e) );

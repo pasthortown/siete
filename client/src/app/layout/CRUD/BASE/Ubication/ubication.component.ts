@@ -94,7 +94,7 @@ export class UbicationComponent implements OnInit {
          backupData.forEach(element => {
             output += element.id + ';' + element.name + ';' + element.code + ';' + element.father_code + ';' + element.gmap_reference_latitude + ';' + element.gmap_reference_longitude + '\n';
          });
-         const blob = new Blob([output], { type: 'text/plain' });
+         const blob = new Blob(["\ufeff", output], { type: 'text/plain' });
          const fecha = new Date();
          saveAs(blob, fecha.toLocaleDateString() + '_Ubications.csv');
       }).catch( e => console.log(e) );

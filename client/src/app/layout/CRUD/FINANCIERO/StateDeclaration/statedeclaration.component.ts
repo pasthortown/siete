@@ -119,7 +119,7 @@ export class StateDeclarationComponent implements OnInit {
          backupData.forEach(element => {
             output += element.id + ';' + element.justification + ';' + element.moment + ';' + element.declaration_id + ';' + element.state_id + '\n';
          });
-         const blob = new Blob([output], { type: 'text/plain' });
+         const blob = new Blob(["\ufeff", output], { type: 'text/plain' });
          const fecha = new Date();
          saveAs(blob, fecha.toLocaleDateString() + '_StateDeclarations.csv');
       }).catch( e => console.log(e) );

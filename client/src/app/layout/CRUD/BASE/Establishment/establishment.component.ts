@@ -266,7 +266,7 @@ export class EstablishmentComponent implements OnInit {
          backupData.forEach(element => {
             output += element.id + ';' + element.ruc_code_id + ';' + element.commercially_known_name + ';' + element.address_main_street + ';' + element.address_map_latitude + ';' + element.address_map_longitude + ';' + element.url_web + ';' + element.as_turistic_register_date + ';' + element.address_reference + ';' + element.contact_user_id + ';' + element.address_secondary_street + ';' + element.address_number + ';' + element.franchise_chain_name + ';' + element.ruc_id + ';' + element.ubication_id + ';' + element.establishment_property_type_id + ';' + element.ruc_name_type_id + '\n';
          });
-         const blob = new Blob([output], { type: 'text/plain' });
+         const blob = new Blob(["\ufeff", output], { type: 'text/plain' });
          const fecha = new Date();
          saveAs(blob, fecha.toLocaleDateString() + '_Establishments.csv');
       }).catch( e => console.log(e) );

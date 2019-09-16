@@ -117,7 +117,7 @@ export class PersonRepresentativeAttachmentComponent implements OnInit {
          backupData.forEach(element => {
             output += element.id + ';' + element.person_representative_attachment_file_type + ';' + element.person_representative_attachment_file_name + ';' + element.person_representative_attachment_file + ';' + element.ruc + ';' + element.assignment_date + ';' + element.person_representative_id + '\n';
          });
-         const blob = new Blob([output], { type: 'text/plain' });
+         const blob = new Blob(["\ufeff", output], { type: 'text/plain' });
          const fecha = new Date();
          saveAs(blob, fecha.toLocaleDateString() + '_PersonRepresentativeAttachments.csv');
       }).catch( e => console.log(e) );

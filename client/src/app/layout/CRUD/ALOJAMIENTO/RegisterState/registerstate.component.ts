@@ -119,7 +119,7 @@ export class RegisterStateComponent implements OnInit {
          backupData.forEach(element => {
             output += element.id + ';' + element.justification + ';' + element.register_id + ';' + element.state_id + '\n';
          });
-         const blob = new Blob([output], { type: 'text/plain' });
+         const blob = new Blob(["\ufeff", output], { type: 'text/plain' });
          const fecha = new Date();
          saveAs(blob, fecha.toLocaleDateString() + '_RegisterStates.csv');
       }).catch( e => console.log(e) );

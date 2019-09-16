@@ -232,7 +232,7 @@ export class RegisterComponent implements OnInit {
             backupData.forEach(element => {
                output += element.id + ';' + + element.ruc + ';' + element.comercial_name + ';' + element.register_code + ';' + element.as_turistic_date + ';' + element.activity + ';' + element.category + ';' + element.classification + ';' + element.legal_representant_name + ';' + element.legal_representant_identification + ';' + element.establishment_property_type + ';' + element.organization_type + ';' + element.ubication_main + ';' + element.ubication_sencond + ';' + element.ubication_third + ';' + element.address + ';' + element.main_phone_number + ';' + element.secondary_phone_number + ';' + element.email + ';' + element.web + ';' + element.system_source + ';' + element.georeference_latitude + ';' + element.georeference_longitude + ';' + element.establishment_ruc_code + ';' + element.max_capacity + ';' + element.max_areas + ';' + element.total_male + ';' + element.total_female + ';' + element.ruc_state + ';' + element.max_beds + ';' + element.establishment_state + '\n';
             });
-            const blob = new Blob([output], { type: 'text/plain' });
+            const blob = new Blob(["\ufeff", output], { type: 'text/plain' });
             const fecha = new Date();
             saveAs(blob, fecha.toLocaleDateString() + '_Registers.csv');
          }).catch( e => console.log(e) );
@@ -246,7 +246,7 @@ export class RegisterComponent implements OnInit {
          backupData.forEach(element => {
             output += element.id + ';' + + element.ruc + ';' + element.comercial_name + ';' + element.register_code + ';' + element.as_turistic_date + ';' + element.activity + ';' + element.category + ';' + element.classification + ';' + element.legal_representant_name + ';' + element.legal_representant_identification + ';' + element.establishment_property_type + ';' + element.organization_type + ';' + element.ubication_main + ';' + element.ubication_sencond + ';' + element.ubication_third + ';' + element.address + ';' + element.main_phone_number + ';' + element.secondary_phone_number + ';' + element.email + ';' + element.web + ';' + element.system_source + ';' + element.georeference_latitude + ';' + element.georeference_longitude + ';' + element.establishment_ruc_code + ';' + element.max_capacity + ';' + element.max_areas + ';' + element.total_male + ';' + element.total_female + ';' + element.ruc_state + ';' + element.max_beds + ';' + element.establishment_state + '\n';
          });
-         const blob = new Blob([output], { type: 'text/plain' });
+         const blob = new Blob(["\ufeff", output], { type: 'text/plain' });
          const fecha = new Date();
          saveAs(blob, fecha.toLocaleDateString() + '_Registers.csv');
       }).catch( e => console.log(e) );

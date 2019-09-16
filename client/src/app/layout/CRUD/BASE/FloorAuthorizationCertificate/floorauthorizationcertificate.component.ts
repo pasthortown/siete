@@ -102,7 +102,7 @@ export class FloorAuthorizationCertificateComponent implements OnInit {
          backupData.forEach(element => {
             output += element.id + ';' + element.floor_authorization_certificate_file_type + ';' + element.floor_authorization_certificate_file_name + ';' + element.floor_authorization_certificate_file + ';' + element.register_id + '\n';
          });
-         const blob = new Blob([output], { type: 'text/plain' });
+         const blob = new Blob(["\ufeff", output], { type: 'text/plain' });
          const fecha = new Date();
          saveAs(blob, fecha.toLocaleDateString() + '_FloorAuthorizationCertificates.csv');
       }).catch( e => console.log(e) );

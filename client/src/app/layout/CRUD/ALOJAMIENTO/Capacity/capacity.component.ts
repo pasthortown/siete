@@ -132,7 +132,7 @@ export class CapacityComponent implements OnInit {
          backupData.forEach(element => {
             output += element.id + ';' + element.quantity + ';' + element.max_beds + ';' + element.max_spaces + ';' + element.capacity_type_id + '\n';
          });
-         const blob = new Blob([output], { type: 'text/plain' });
+         const blob = new Blob(["\ufeff", output], { type: 'text/plain' });
          const fecha = new Date();
          saveAs(blob, fecha.toLocaleDateString() + '_Capacities.csv');
       }).catch( e => console.log(e) );

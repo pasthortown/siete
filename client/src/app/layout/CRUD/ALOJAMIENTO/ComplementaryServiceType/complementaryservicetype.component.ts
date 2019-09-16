@@ -132,7 +132,7 @@ export class ComplementaryServiceTypeComponent implements OnInit {
          backupData.forEach(element => {
             output += element.id + ';' + element.name + ';' + element.code + ';' + element.father_code + ';' + element.description + '\n';
          });
-         const blob = new Blob([output], { type: 'text/plain' });
+         const blob = new Blob(["\ufeff", output], { type: 'text/plain' });
          const fecha = new Date();
          saveAs(blob, fecha.toLocaleDateString() + '_ComplementaryServiceTypes.csv');
       }).catch( e => console.log(e) );

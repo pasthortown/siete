@@ -119,7 +119,7 @@ export class RegisterRequisiteComponent implements OnInit {
          backupData.forEach(element => {
             output += element.id + ';' + element.fullfill + ';' + element.value + ';' + element.requisite_id + ';' + element.register_id + '\n';
          });
-         const blob = new Blob([output], { type: 'text/plain' });
+         const blob = new Blob(["\ufeff", output], { type: 'text/plain' });
          const fecha = new Date();
          saveAs(blob, fecha.toLocaleDateString() + '_RegisterRequisites.csv');
       }).catch( e => console.log(e) );

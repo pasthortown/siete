@@ -117,7 +117,7 @@ export class AuthorizationAttachmentComponent implements OnInit {
          backupData.forEach(element => {
             output += element.id; + element.authorization_attachment_file_type + ';' + element.authorization_attachment_file_name + ';' + element.authorization_attachment_file + ';' + element.register_id + '\n';
          });
-         const blob = new Blob([output], { type: 'text/plain' });
+         const blob = new Blob(["\ufeff", output], { type: 'text/plain' });
          const fecha = new Date();
          saveAs(blob, fecha.toLocaleDateString() + '_AuthorizationAttachments.csv');
       }).catch( e => console.log(e) );

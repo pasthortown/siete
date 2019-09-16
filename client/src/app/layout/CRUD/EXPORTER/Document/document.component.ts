@@ -89,7 +89,7 @@ export class DocumentComponent implements OnInit {
          backupData.forEach(element => {
             output += element.id + ';' + element.params + ';' + element.code + ';' + element.procedure_id + ';' + element.activity + ';' + element.zonal + ';' + element.document_type + ';' + element.user + '\n';
          });
-         const blob = new Blob([output], { type: 'text/plain' });
+         const blob = new Blob(["\ufeff", output], { type: 'text/plain' });
          const fecha = new Date();
          saveAs(blob, fecha.toLocaleDateString() + '_Documents.csv');
       }).catch( e => console.log(e) );

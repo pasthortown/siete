@@ -117,7 +117,7 @@ export class ApprovalStateAttachmentComponent implements OnInit {
          backupData.forEach(element => {
             output += element.id + ';' + element.approval_state_attachment_file_type + ';' + element.approval_state_attachment_file_name + ';' + element.approval_state_attachment_file + ';' + element.approval_state_id + '\n';
          });
-         const blob = new Blob([output], { type: 'text/plain' });
+         const blob = new Blob(["\ufeff", output], { type: 'text/plain' });
          const fecha = new Date();
          saveAs(blob, fecha.toLocaleDateString() + '_ApprovalStateAttachments.csv');
       }).catch( e => console.log(e) );

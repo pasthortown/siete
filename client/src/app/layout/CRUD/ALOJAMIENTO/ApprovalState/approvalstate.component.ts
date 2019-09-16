@@ -119,7 +119,7 @@ export class ApprovalStateComponent implements OnInit {
          backupData.forEach(element => {
             output += element.id + ';' + element.value + ';' + element.date_assigment + ';' + element.notes + ';' + element.id_user + ';' + element.date_fullfill + ';' + element.register_id + ';' + element.approval_id + '\n';
          });
-         const blob = new Blob([output], { type: 'text/plain' });
+         const blob = new Blob(["\ufeff", output], { type: 'text/plain' });
          const fecha = new Date();
          saveAs(blob, fecha.toLocaleDateString() + '_ApprovalStates.csv');
       }).catch( e => console.log(e) );

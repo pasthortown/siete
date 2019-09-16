@@ -89,7 +89,7 @@ export class PayComponent implements OnInit {
          backupData.forEach(element => {
             output += element.id + ';' + element.amount_payed + ';' + element.amount_to_pay + ';' + element.pay_date + ';' + element.payed + ';' + element.code + ';' + element.max_pay_date + ';' + element.ruc_id + ';' + element.amount_to_pay_taxes + ';' + element.amount_to_pay_base + ';' + element.amount_to_pay_fines + ';' + element.notes + '\n';
          });
-         const blob = new Blob([output], { type: 'text/plain' });
+         const blob = new Blob(["\ufeff", output], { type: 'text/plain' });
          const fecha = new Date();
          saveAs(blob, fecha.toLocaleDateString() + '_Pays.csv');
       }).catch( e => console.log(e) );

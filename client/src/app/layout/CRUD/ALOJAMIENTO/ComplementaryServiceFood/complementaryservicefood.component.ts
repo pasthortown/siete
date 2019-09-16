@@ -104,7 +104,7 @@ export class ComplementaryServiceFoodComponent implements OnInit {
          backupData.forEach(element => {
             output += element.id + ';' + element.quantity_tables + ';' + element.quantity_chairs + ';' + element.complementary_service_food_type_id + '\n';
          });
-         const blob = new Blob([output], { type: 'text/plain' });
+         const blob = new Blob(["\ufeff", output], { type: 'text/plain' });
          const fecha = new Date();
          saveAs(blob, fecha.toLocaleDateString() + '_ComplementaryServiceFoods.csv');
       }).catch( e => console.log(e) );

@@ -134,7 +134,7 @@ export class GroupGivenComponent implements OnInit {
          backupData.forEach(element => {
             output += element.id + ';' + element.register_code + ';' + element.ruc_id + ';' + element.person_representative_id + ';' + element.group_type_id + '\n';
          });
-         const blob = new Blob([output], { type: 'text/plain' });
+         const blob = new Blob(["\ufeff", output], { type: 'text/plain' });
          const fecha = new Date();
          saveAs(blob, fecha.toLocaleDateString() + '_GroupGivens.csv');
       }).catch( e => console.log(e) );

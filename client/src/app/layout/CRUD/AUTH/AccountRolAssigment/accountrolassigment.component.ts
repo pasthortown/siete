@@ -119,7 +119,7 @@ export class AccountRolAssigmentComponent implements OnInit {
          backupData.forEach(element => {
             output += element.id + ';' + element.account_rol_id + ';' + element.user_id + '\n';
          });
-         const blob = new Blob([output], { type: 'text/plain' });
+         const blob = new Blob(["\ufeff", output], { type: 'text/plain' });
          const fecha = new Date();
          saveAs(blob, fecha.toLocaleDateString() + '_AccountRolAssigments.csv');
       }).catch( e => console.log(e) );
