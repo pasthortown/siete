@@ -2881,6 +2881,32 @@ export class CoordinadorComponent implements OnInit {
    }).catch( e => { console.log(e); });
   }
 
+  BandejaToCSV() {
+   let output = '';
+   this.columns.forEach(column => {
+      output += column.title + ';';
+   });
+   output += '\n';
+   this.data.forEach(row => {
+      output += row.selected + ';' +
+      row.number + ';' +
+      row.ruc_code_id + ';' +
+      row.establishment + ';' +
+      row.status + ';' +
+      row.actividad + ';' +
+      row.provincia + ';' +
+      row.canton + ';' +
+      row.parroquia + ';' +
+      row.address + ';' +
+      row.category + ';' +
+      row.created_at + ';' +
+      row.code + '\n';
+   });
+   const blob = new Blob([output], { type: 'text/plain' });
+   const fecha = new Date();
+   saveAs(blob, fecha.toLocaleDateString() + '_Bandejas.csv');
+  }
+
   imprimirTarifarioRack() {
    this.imprimiendo_tarifario = true;
    this.registerDataService.get_register_data(this.registerMinturSelected.register.id).then( r0 => {
