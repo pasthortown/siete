@@ -57,6 +57,7 @@ import { StateService as StateAlojamientoService } from 'src/app/services/CRUD/A
 import { PayTaxService } from 'src/app/services/CRUD/FINANCIERO/paytax.service';
 import { RegisterService as RegistroCatastroService } from 'src/app/services/CRUD/CATASTRO/register.service';
 import { ExporterService } from 'src/app/services/negocio/exporter.service';
+import { PayAttachmentService } from 'src/app/services/CRUD/FINANCIERO/payattachment.service';
 @NgModule({
   imports: [CommonModule,
     CKEditorModule,
@@ -80,6 +81,7 @@ import { ExporterService } from 'src/app/services/negocio/exporter.service';
     MailerService,
     RegisterStateService,
     TaxPayerTypeService,
+    PayAttachmentService,
     StateAlojamientoService,
     RegistroCatastroService,
     RegisterProcedureService,

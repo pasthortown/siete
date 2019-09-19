@@ -98,6 +98,8 @@ import { PayTax } from 'src/app/models/FINANCIERO/PayTax';
 import { PayTaxService } from 'src/app/services/CRUD/FINANCIERO/paytax.service';
 import { RegisterProcedureService } from 'src/app/services/CRUD/ALOJAMIENTO/registerprocedure.service';
 import { ExporterService } from 'src/app/services/negocio/exporter.service';
+import { PayAttachmentService } from 'src/app/services/CRUD/FINANCIERO/payattachment.service';
+import { PayAttachment } from 'src/app/models/FINANCIERO/PayAttachment';
 @Component({
   selector: 'app-tecnico-financiero',
   templateUrl: './tecnico-financiero.component.html',
@@ -315,6 +317,7 @@ export class TecnicoFinancieroComponent implements OnInit {
              private approvalStateAttachmentDataService: ApprovalStateAttachmentService,
              private rucDataService: RucService,
              private modalService: NgbModal,
+             private payAttachmentDataService: PayAttachmentService,
              private agreementDataService: AgreementService,
              private rucNameTypeDataService: RucNameTypeService,
              private group_typeDataService: GroupTypeService,
@@ -352,6 +355,37 @@ export class TecnicoFinancieroComponent implements OnInit {
  ngOnInit() {
   this.refresh();
   this.getUser();
+ }
+
+ descargarDocumentoDePago(paySelected: Pay) {
+   this.downloadFile(
+      paySelected.pay_attachment.pay_attachment_file,
+      paySelected.pay_attachment.pay_attachment_file_type,
+      paySelected.pay_attachment.pay_attachment_file_name);   
+ }
+
+ CodeFileDocumentoPago(event, payselected: Pay) {
+   const reader = new FileReader();
+   if (event.target.files && event.target.files.length > 0) {
+      const file = event.target.files[0];
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+         payselected.pay_attachment.pay_attachment_file_name = file.name;
+         payselected.pay_attachment.pay_attachment_file_type = file.type;
+         payselected.pay_attachment.pay_attachment_file = reader.result.toString().split(',')[1];
+         payselected.pay_attachment.pay_id = payselected.id;
+         this.payAttachmentDataService.post(payselected.pay_attachment).then( r=> {
+            this.toastr.successToastr('Documento de Pago Guardado Satisfactoriamente', 'Documento de Pago');
+         }).catch( e => { console.log(e); })
+      };
+   }
+  }
+
+ borrarDocumentoDePago(paySelected: Pay) {
+   this.payAttachmentDataService.delete(paySelected.pay_attachment.id).then( r => {
+      paySelected.pay_attachment = new PayAttachment();
+      this.toastr.warningToastr('Documento de Pago Borrado Satisfactoriamente', 'Documento de Pago');
+   }).catch( e => { console.log(e); });
  }
 
  checkMotivoTramite(estado: String) {
@@ -1634,6 +1668,11 @@ getDeclarationItems() {
     this.paySelectedOrders = new Pay();
    this.payDataService.get_by_ruc_id(this.ruc_registro_selected.ruc.id).then( r => {
       this.pays = r as Pay[];
+      this.pays.forEach(pay => {
+         if( pay.pay_attachment == null || typeof(pay.pay_attachment) == 'undefined') {
+            pay.pay_attachment = new PayAttachment();
+         }
+      });
       if (this.pays.length == 0) {
          this.pay = new Pay();
       }

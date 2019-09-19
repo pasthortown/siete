@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 Use Exception;
 use App\Pay;
+use App\PayAttachment;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -78,7 +79,52 @@ class PayController extends Controller
     function get_by_ruc_id(Request $data)
     {
        $id = $data['id'];
-       return response()->json(Pay::where('ruc_id', $id)->orderBy('created_at', 'DESC')->get(),200);
+       $pays = Pay::where('ruc_id', $id)->orderBy('created_at', 'DESC')->get();
+       $toReturn = [];
+       foreach($pays as $pay) {
+         $payattachment = PayAttachment::where('pay_id', $pay->id)->first();
+         if ($payattachment) {
+            $newPay = [
+               "id" => $pay->id,
+               "amount_payed" => $pay->amount_payed,
+               "amount_to_pay" => $pay->amount_to_pay,
+               "pay_date" => $pay->pay_date,
+               "payed" => $pay->payed,
+               "code" => $pay->code,
+               "max_pay_date" => $pay->max_pay_date,
+               "ruc_id" => $pay->ruc_id,
+               "amount_to_pay_taxes" => $pay->amount_to_pay_taxes,
+               "amount_to_pay_base" => $pay->amount_to_pay_base,
+               "amount_to_pay_fines" => $pay->amount_to_pay_fines,
+               "notes" => $pay->notes,
+               "pay_attachment" => [
+                  "id" => $payattachment->id,
+                  "pay_attachment_file_type" => $payattachment->pay_attachment_file_type,
+                  "pay_attachment_file" => $payattachment->pay_attachment_file,
+                  "pay_attachment_file_name" => $payattachment->pay_attachment_file_name,
+                  "pay_id" => $payattachment->pay_id,
+               ]
+            ];
+            array_push($toReturn, $newPay);
+         } else {
+            $newPay = [
+               "id" => $pay->id,
+               "amount_payed" => $pay->amount_payed,
+               "amount_to_pay" => $pay->amount_to_pay,
+               "pay_date" => $pay->pay_date,
+               "payed" => $pay->payed,
+               "code" => $pay->code,
+               "max_pay_date" => $pay->max_pay_date,
+               "ruc_id" => $pay->ruc_id,
+               "amount_to_pay_taxes" => $pay->amount_to_pay_taxes,
+               "amount_to_pay_base" => $pay->amount_to_pay_base,
+               "amount_to_pay_fines" => $pay->amount_to_pay_fines,
+               "notes" => $pay->notes,
+            ];
+            array_push($toReturn, $newPay);
+         }
+       }
+       return response()->json($toReturn,200);
     }
 
     function get_by_ruc_number(Request $data)

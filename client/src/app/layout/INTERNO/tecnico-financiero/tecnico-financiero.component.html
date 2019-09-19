@@ -244,12 +244,12 @@
                           <th>Valor a Pagar - Multas</th>
                           <th>Valor a Pagar - Intereses</th>
                           <th>Valor a Pagar - Total</th>
-                          <th>Fecha de Pago</th>
+                          <th>Documento Pago</th>
                           <th>Opciones</th>
                        </tr>
                     </thead>
                     <tbody>
-                       <tr *ngFor="let paySelected of pays">
+                       <tr *ngFor="let paySelected of pays; let payAttachmentIndex = index">
                           <td>{{paySelected.code}}</td>
                           <td><span class="badge badge-success" *ngIf="paySelected.payed">Pagado</span><span class="badge badge-danger" *ngIf="!paySelected.payed">No Pagado</span></td>
                           <td><strong *ngIf="paySelected.amount_payed != -1">{{paySelected.amount_payed | number: '1.2'}} USD</strong></td>
@@ -257,7 +257,30 @@
                           <td>{{paySelected.amount_to_pay_fines | number: '1.2'}} USD</td>
                           <td>{{paySelected.amount_to_pay_taxes | number: '1.2'}} USD</td>
                           <td>{{paySelected.amount_to_pay | number: '1.2'}} USD</td>
-                          <td>{{paySelected.pay_date | date:'y-MM-dd'}}</td>
+                          <td>
+                                <div class="btn-group">
+                                  <button type="button" [hidden]="paySelected.pay_attachment == null || paySelected.pay_attachment.pay_attachment_file_name == ''" class="btn btn-info" title="Descargar Adjunto" (click)="
+                                    descargarDocumentoDePago(paySelected)
+                                    ">
+                                    <i class="fas fa-file-pdf"></i>
+                                  </button>
+                                  <button type="button" [hidden]="paySelected.pay_attachment == null || paySelected.pay_attachment.pay_attachment_file_name == ''" class="btn btn-danger" title="Eliminar Adjunto" (click)="
+                                    borrarDocumentoDePago(paySelected)
+                                    ">
+                                    <i class="fas fa-eraser"></i>
+                                  </button>
+                                  <label for="{{payAttachmentIndex}}Upload" [hidden]="paySelected.pay_attachment.pay_attachment_file_name !== ''" class="btn btn-success">
+                                      <i class="fas fa-upload"></i>
+                                  </label>
+                                </div>
+                                <div class="btn-group">
+                                  <input type="file" [hidden]="true" class="form-control" id="{{payAttachmentIndex}}Upload" (change)="
+                            CodeFileDocumentoPago(
+                                  $event, paySelected
+                                )
+                              " accept="application/pdf" />
+                                </div>
+                          </td>
                           <td>
                               <button type="button" class="btn btn-danger" *ngIf="!paySelected.payed" title="Borrar Órden de Pago" (click)="
                                 borrarOrdenDePago(paySelected)
