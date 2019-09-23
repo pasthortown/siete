@@ -376,6 +376,13 @@ const routes: Routes = [
             path: 'catastro',
             loadChildren: './CRUD/CATASTRO/Register/register.module#RegisterModule'
          },
+
+         //ADMINISTRATORS
+
+         {
+            path: 'accounts',
+            loadChildren: './INTERNO/administrators/tics/Accounts/accounts.module#AccountsModule'
+         },
          {
             path: '**',
             redirectTo: 'not-found'
