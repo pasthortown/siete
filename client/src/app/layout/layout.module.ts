@@ -10,10 +10,12 @@ import { SidebarComponent } from '../components/sidebar/sidebar.component';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { UserService } from '../services/profile/user.service';
 import { RegisterService } from '../services/CRUD/CATASTRO/register.service';
+import { AdminRegistroComponent } from './INTERNO/administrators/admin-registro/admin-registro.component';
+import { AdminFinancieroComponent } from './INTERNO/administrators/admin-financiero/admin-financiero.component';
 
 @NgModule({
     imports: [CommonModule, LayoutRoutingModule, NgbDropdownModule, HttpModule],
-    declarations: [LayoutComponent, NavbarComponent, SidebarComponent],
+    declarations: [LayoutComponent, NavbarComponent, SidebarComponent, AdminRegistroComponent, AdminFinancieroComponent],
     providers: [ProfilePictureService, UserService, RegisterService]
 })
 export class LayoutModule {}
