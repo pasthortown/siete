@@ -6,10 +6,11 @@ import { AccountRolAssigment } from 'src/app/models/AUTH/AccountRolAssigment';
 import { AccountRol } from 'src/app/models/AUTH/AccountRol';
 import { User } from 'src/app/models/profile/User';
 import { AccountRolService } from 'src/app/services/CRUD/AUTH/accountrol.service';
-import { UserService } from 'src/app/services/profile/user.service';
 import { AccountRolAssigmentService } from 'src/app/services/CRUD/AUTH/accountrolassigment.service';
 import { Ubication } from 'src/app/models/BASE/Ubication';
 import { UbicationService } from 'src/app/services/CRUD/BASE/ubication.service';
+import { AuthLocation } from 'src/app/models/AUTH/AuthLocation';
+import { AccountService } from 'src/app/services/negocio/account.service';
 
 @Component({
    selector: 'app-accounts',
@@ -24,8 +25,8 @@ export class AccountsComponent implements OnInit {
    lastPage = 1;
    showDialog = false;
    recordsByPage = 5;
+   accounts: any[] = [];
    account_rols: AccountRol[] = [];
-   users: User[] = [];
    ubications: Ubication[] = [];
    provincias: Ubication[] = [];
    cantones: Ubication[] = [];
@@ -34,23 +35,31 @@ export class AccountsComponent implements OnInit {
    canton_code_selected: string = '-';
    new_user: User = new User();
    new_user_ubication: number = 0;
+   new_user_account_location: AuthLocation = new AuthLocation();
+   account_selected: any = null;
+   config: any = {
+      paging: true,
+      filtering: {filterString: ''},
+      className: ['table-striped', 'table-hover', 'table-bordered']
+   };
+   rows = [];
+   columns = [];
+   data = [];
    constructor(
                private modalService: NgbModal,
                private toastr: ToastrManager,
                private account_rolDataService: AccountRolService,
+               private accountDataService: AccountService,
                private ubicationDataService: UbicationService,
-               private userDataService: UserService,
                private account_rol_assigmentDataService: AccountRolAssigmentService) {}
 
    ngOnInit() {
-      this.goToPage(1);
-      this.getAccountRol();
-      this.getUser();
-      this.getUbications();
+      this.refresh();
    }
 
-   selectAccountRolAssigment(account_rol_assigment: AccountRolAssigment) {
-      this.account_rol_assigmentSelected = account_rol_assigment;
+   refresh() {
+      this.getAccountRol();
+      this.getUbications();
    }
 
    getUbications() {
@@ -90,6 +99,21 @@ export class AccountsComponent implements OnInit {
       });
    }
 
+   onCellClick(event) {
+      this.accounts.forEach(account => {
+         if (account.account.email == event.row.email) {
+            this.account_selected = account;
+         }
+      });
+      this.rows.forEach(row => {
+         if (this.account_selected.account.email == row.email) {
+            row.selected = '<div class="col-12 text-right"><span class="far fa-hand-point-right"></span></div>';
+         } else {
+            row.selected = '';
+         }
+      });
+   }
+
    getParroquias() {
       this.parroquias = [];
       this.new_user_ubication = 0;
@@ -104,69 +128,151 @@ export class AccountsComponent implements OnInit {
       this.account_rols = [];
       this.account_rolDataService.get().then( r => {
          this.account_rols = r as AccountRol[];
+         this.getAccounts();
       }).catch( e => console.log(e) );
    }
 
-   getUser() {
-      this.users = [];
-      this.userDataService.get().then( r => {
-         this.users = r as User[];
-      }).catch( e => console.log(e) );
+   getAccounts() {
+      this.accounts = [];
+      this.accountDataService.get_accounts().then( r => {
+         this.accounts = r;
+         this.buildDataTable();
+      }).catch( e => { console.log(e); });
    }
 
-   goToPage(page: number) {
-      if ( page < 1 || page > this.lastPage ) {
-         this.toastr.errorToastr('La página solicitada no existe.', 'Error');
-         return;
+   get_rol_account(id): string {
+      let toReturn = '';
+      this.account_rols.forEach(account_rol => {
+         if (account_rol.id == id) {
+            toReturn = account_rol.name.toString(); 
+         }
+      });
+      return toReturn;
+   }
+
+   buildDataTable() {
+      this.columns = [
+         {title: '', name: 'selected'},
+         {title: 'Identificación', name: 'identification'},
+         {title: 'Correo Electrónico', name: 'email'},
+         {title: 'Nombre Completo', name: 'name'},
+         {title: 'Rol Asignado', name: 'rol'},
+      ];
+      const data = [];
+      this.accounts.forEach(item => {
+          data.push({
+             selected: '',
+             identification: item.account.identification,
+             email: item.account.email,
+             name: item.account.name,
+             rol: this.get_rol_account(item.account_rol_assigment.account_rol_id),
+          });
+      });
+      this.data = data;
+      this.onChangeTable(this.config);
+   }
+
+   onChangeTable(config: any, event?): any {
+      const page: any = {page: this.currentPage, itemsPerPage: this.recordsByPage};
+      if (config.filtering) {
+        Object.assign(this.config.filtering, config.filtering);
       }
-      this.currentPage = page;
-      this.getAccountRolAssigments();
+      if (config.sorting) {
+        Object.assign(this.config.sorting, config.sorting);
+      }
+      const filteredData = this.changeFilter(this.data, this.config);
+      const sortedData = this.changeSort(filteredData, this.config);
+      this.rows = page && config.paging ? this.changePage(page, sortedData) : sortedData;
    }
 
-   getAccountRolAssigments() {
-      this.account_rol_assigments = [];
-      this.account_rol_assigmentSelected = new AccountRolAssigment();
-      this.account_rol_assigmentSelected.account_rol_id = 0;
-      this.account_rol_assigmentSelected.user_id = 0;
-      this.account_rol_assigmentDataService.get_paginate(this.recordsByPage, this.currentPage).then( r => {
-         this.account_rol_assigments = r.data as AccountRolAssigment[];
-         this.lastPage = r.last_page;
-      }).catch( e => console.log(e) );
-   }
+   changeFilter(data: any, config: any): any {
+      this.account_selected = null;
+      this.rows.forEach(row => {
+         row.selected = '';
+      });
+      let filteredData: Array<any> = data;
+      this.columns.forEach((column: any) => {
+        if (column.filtering) {
+          filteredData = filteredData.filter((item: any) => {
+            return item[column.name].match(column.filtering.filterString);
+          });
+        }
+      });
+      if (!config.filtering) {
+        return filteredData;
+      }
+      if (config.filtering.columnName) {
+        return filteredData.filter((item:any) =>
+          item[config.filtering.columnName].match(this.config.filtering.filterString));
+      }
+      const tempArray: Array<any> = [];
+      filteredData.forEach((item: any) => {
+        let flag = false;
+        this.columns.forEach((column: any) => {
+          if (item[column.name].toString().match(this.config.filtering.filterString)) {
+            flag = true;
+          }
+        });
+        if (flag) {
+          tempArray.push(item);
+        }
+      });
+      filteredData = tempArray;
+      return filteredData;
+     }
+   
+     changeSort(data: any, config: any): any {
+      if (!config.sorting) {
+        return data;
+      }
+      const columns = this.config.sorting.columns || [];
+      let columnName: string = void 0;
+      let sort: string = void 0;
+      for (let i = 0; i < columns.length; i++) {
+        if (columns[i].sort !== '' && columns[i].sort !== false) {
+          columnName = columns[i].name;
+          sort = columns[i].sort;
+        }
+      }
+      if (!columnName) {
+        return data;
+      }
+      return data.sort((previous:any, current:any) => {
+        if (previous[columnName] > current[columnName]) {
+          return sort === 'desc' ? -1 : 1;
+        } else if (previous[columnName] < current[columnName]) {
+          return sort === 'asc' ? -1 : 1;
+        }
+        return 0;
+      });
+     }
+   
+     changePage(page: any, data: Array<any> = this.data):Array<any> {
+      const start = (page.page - 1) * page.itemsPerPage;
+      const end = page.itemsPerPage > -1 ? (start + page.itemsPerPage) : data.length;
+      return data.slice(start, end);
+     }
 
    newAccountRolAssigment(content) {
       this.account_rol_assigmentSelected = new AccountRolAssigment();
       this.account_rol_assigmentSelected.account_rol_id = 0;
       this.account_rol_assigmentSelected.user_id = 0;
+      this.new_user = new User();
+      this.new_user.id = 0;
+      this.new_user_ubication = 0;
+      this.provincia_code_selected = '-';
+      this.canton_code_selected = '-';
       this.openDialog(content);
    }
 
    editAccountRolAssigment(content) {
-      if (typeof this.account_rol_assigmentSelected.id === 'undefined') {
+      if (this.account_selected == null) {
          this.toastr.errorToastr('Debe seleccionar un registro.', 'Error');
          return;
       }
+      this.new_user = this.account_selected.account as User;
+      this.account_rol_assigmentSelected = this.account_selected.account_rol_assigment as AccountRolAssigment;
       this.openDialog(content);
-   }
-
-   deleteAccountRolAssigment() {
-      if (typeof this.account_rol_assigmentSelected.id === 'undefined') {
-         this.toastr.errorToastr('Debe seleccionar un registro.', 'Error');
-         return;
-      }
-      this.account_rol_assigmentDataService.delete(this.account_rol_assigmentSelected.id).then( r => {
-         this.toastr.successToastr('Registro Borrado satisfactoriamente.', 'Borrar');
-         this.getAccountRolAssigments();
-      }).catch( e => console.log(e) );
-   }
-
-   backup() {
-      this.account_rol_assigmentDataService.getBackUp().then( r => {
-         const backupData = r;
-         const blob = new Blob([JSON.stringify(backupData)], { type: 'text/plain' });
-         const fecha = new Date();
-         saveAs(blob, fecha.toLocaleDateString() + '_AccountRolAssigments.json');
-      }).catch( e => console.log(e) );
    }
 
    toCSV() {
@@ -191,7 +297,7 @@ export class AccountsComponent implements OnInit {
             const fileBytes = reader.result.toString().split(',')[1];
             const newData = JSON.parse(decodeURIComponent(escape(atob(fileBytes)))) as any[];
             this.account_rol_assigmentDataService.masiveLoad(newData).then( r => {
-               this.goToPage(this.currentPage);
+               this.refresh();
             }).catch( e => console.log(e) );
          };
       }
@@ -199,19 +305,39 @@ export class AccountsComponent implements OnInit {
 
    openDialog(content) {
       this.modalService.open(content, { centered: true }).result.then(( response => {
-         if ( response === 'Guardar click' ) {
-            if (typeof this.account_rol_assigmentSelected.id === 'undefined') {
-               this.account_rol_assigmentDataService.post(this.account_rol_assigmentSelected).then( r => {
-                  this.toastr.successToastr('Datos guardados satisfactoriamente.', 'Nuevo');
-                  this.getAccountRolAssigments();
-               }).catch( e => console.log(e) );
-            } else {
-               this.account_rol_assigmentDataService.put(this.account_rol_assigmentSelected).then( r => {
-                  this.toastr.successToastr('Registro actualizado satisfactoriamente.', 'Actualizar');
-                  this.getAccountRolAssigments();
-               }).catch( e => console.log(e) );
-            }
+         if (response == 'block_account') {
+            this.blockAccount();
+         }
+         if (response == 'password_reset') {
+            this.passwordResetAccount();
+         }
+         if (response == 'save') {
+            this.saveAccount();
          }
       }), ( r => {}));
+   }
+
+   blockAccount() {
+      if (this.account_selected == null) {
+         this.toastr.errorToastr('Debe seleccionar un registro.', 'Error');
+         return;
+      }
+      this.accountDataService.block_account(this.account_selected);
+   }
+
+   saveAccount() {
+      this.accountDataService.save_account(this.account_selected);
+   }
+
+   passwordResetAccount() {
+      if (this.account_selected == null) {
+         this.toastr.errorToastr('Debe seleccionar un registro.', 'Error');
+         return;
+      }
+      if (this.account_selected.account.email.search('@turismo.gob.ec') !== -1) {
+         this.toastr.errorToastr('No puede reiniciar contraseñas del dominio del Ministerio de Turismo.', 'Error');
+         return;
+      }
+      this.accountDataService.password_reset_account(this.account_selected);
    }
 }

@@ -2,11 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrManager } from 'ng6-toastr-notifications';
 import { saveAs } from 'file-saver/FileSaver';
-import { AuthLocationService } from './../../../../services/CRUD/AUTH/authlocation.service';
-import { AuthLocation } from './../../../../models/AUTH/AuthLocation';
-import { AccountRolService } from './../../../../services/CRUD/AUTH/accountrol.service';
-import { AccountRol } from './../../../../models/AUTH/AccountRol';
-
+import { AuthLocation } from 'src/app/models/AUTH/AuthLocation';
+import { AuthLocationService } from 'src/app/services/CRUD/AUTH/authlocation.service';
 
 @Component({
    selector: 'app-authlocation',
@@ -21,27 +18,17 @@ export class AuthLocationComponent implements OnInit {
    lastPage = 1;
    showDialog = false;
    recordsByPage = 5;
-   account_rols: AccountRol[] = [];
    constructor(
                private modalService: NgbModal,
                private toastr: ToastrManager,
-               private account_rolDataService: AccountRolService,
                private auth_locationDataService: AuthLocationService) {}
 
    ngOnInit() {
       this.goToPage(1);
-      this.getAccountRol();
    }
 
    selectAuthLocation(auth_location: AuthLocation) {
       this.auth_locationSelected = auth_location;
-   }
-
-   getAccountRol() {
-      this.account_rols = [];
-      this.account_rolDataService.get().then( r => {
-         this.account_rols = r as AccountRol[];
-      }).catch( e => console.log(e) );
    }
 
    goToPage(page: number) {
@@ -56,7 +43,6 @@ export class AuthLocationComponent implements OnInit {
    getAuthLocations() {
       this.auth_locations = [];
       this.auth_locationSelected = new AuthLocation();
-      this.auth_locationSelected.account_rol_id = 0;
       this.auth_locationDataService.get_paginate(this.recordsByPage, this.currentPage).then( r => {
          this.auth_locations = r.data as AuthLocation[];
          this.lastPage = r.last_page;
@@ -65,7 +51,6 @@ export class AuthLocationComponent implements OnInit {
 
    newAuthLocation(content) {
       this.auth_locationSelected = new AuthLocation();
-      this.auth_locationSelected.account_rol_id = 0;
       this.openDialog(content);
    }
 
@@ -100,11 +85,11 @@ export class AuthLocationComponent implements OnInit {
    toCSV() {
       this.auth_locationDataService.get().then( r => {
          const backupData = r as AuthLocation[];
-         let output = 'id;code_ubication;account_rol_id\n';
+         let output = 'id;id_ubication;id_user\n';
          backupData.forEach(element => {
-            output += element.id + ';' + element.code_ubication + ';' + element.account_rol_id + '\n';
+            output += element.id; + element.id_ubication + ';' + element.id_user + '\n';
          });
-         const blob = new Blob(["\ufeff", output], { type: 'text/plain' });
+         const blob = new Blob([output], { type: 'text/plain' });
          const fecha = new Date();
          saveAs(blob, fecha.toLocaleDateString() + '_AuthLocations.csv');
       }).catch( e => console.log(e) );

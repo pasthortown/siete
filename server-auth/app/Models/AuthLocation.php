@@ -12,7 +12,7 @@ class AuthLocation extends Model
      * @var array
      */
     protected $fillable = [
-       'code_ubication',
+       'id_ubication','id_user',
     ];
 
     /**
@@ -23,10 +23,5 @@ class AuthLocation extends Model
     protected $hidden = [
        
     ];
-
-    function AccountRol()
-    {
-       return $this->hasOne('App\AccountRol');
-    }
 
 }

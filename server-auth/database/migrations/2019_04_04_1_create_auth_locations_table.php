@@ -16,9 +16,8 @@ class CreateAuthLocationsTable extends Migration
        Schema::create('auth_locations', function (Blueprint $table) {
           $table->increments('id');
           $table->timestamps();
-          $table->string('code_ubication',100)->nullable($value = true);
-          $table->unsignedInteger('account_rol_id');
-          $table->foreign('account_rol_id')->references('id')->on('account_rols')->onDelete('cascade');
+          $table->integer('id_ubication')->nullable($value = true);
+          $table->integer('id_user')->nullable($value = true);
        });
     }
 

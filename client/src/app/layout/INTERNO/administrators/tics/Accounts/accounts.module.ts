@@ -4,21 +4,24 @@ import { FormsModule } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AccountsRoutingModule } from './accounts-routing.module';
 import { AccountsComponent } from './accounts.component';
-import { environment } from 'src/environments/environment';
 import { AccountRolService } from 'src/app/services/CRUD/AUTH/accountrol.service';
-import { UserService } from 'src/app/services/profile/user.service';
 import { AccountRolAssigmentService } from 'src/app/services/CRUD/AUTH/accountrolassigment.service';
 import { UbicationService } from 'src/app/services/CRUD/BASE/ubication.service';
+import { AccountService } from 'src/app/services/negocio/account.service';
+import { Ng2TableModule } from 'ng2-table/ng2-table';
+import { NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
    imports: [CommonModule,
              AccountsRoutingModule,
+             Ng2TableModule,
+             NgbModule,
              FormsModule],
    declarations: [AccountsComponent],
    providers: [
                NgbModal,
                AccountRolService,
-               UserService,
+               AccountService,
                UbicationService,
                AccountRolAssigmentService
                ]

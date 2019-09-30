@@ -20,7 +20,7 @@ $router->group(['middleware' => []], function () use ($router) {
    $router->post('/register', ['uses' => 'AuthController@register']);
    $router->post('/password_recovery_request', ['uses' => 'AuthController@passwordRecoveryRequest']);
    $router->get('/password_recovery', ['uses' => 'AuthController@passwordRecovery']);
-   
+   $router->get('/get_accounts', ['uses' => 'UserController@get_accounts']);
 });
 
 $router->group(['middleware' => ['auth']], function () use ($router) {

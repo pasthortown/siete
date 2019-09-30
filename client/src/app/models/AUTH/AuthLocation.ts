@@ -1,5 +1,5 @@
 export class AuthLocation {
    id: number;
-   code_ubication: String;
-   account_rol_id: number;
+   id_ubication: number;
+   id_user: number;
 }

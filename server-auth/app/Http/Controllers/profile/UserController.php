@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 Use Exception;
 use App\User;
+use App\AuthLocation;
 use App\AccountRolAssigment;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Support\Facades\DB;
@@ -22,6 +23,32 @@ class UserController extends Controller
        } else {
           return response()->json(User::findOrFail($id),200);
        }
+    }
+
+    function get_accounts(Request $data)
+    {
+      $toReturn = [];
+      $AuthLocations = AuthLocation::get();
+      $Accounts = User::get();
+      $AccountRolAssigments = AccountRolAssigment::get();
+      foreach($Accounts as $account) {
+         $new_account_data = ["account"=>$account,
+                              "account_rol_assigment"=>[],
+                              "auth_location"=>[],
+                             ];
+         foreach($AccountRolAssigments as $account_rol_assigment) {
+            if ($account_rol_assigment->user_id == $account->id) {
+               $new_account_data["account_rol_assigment"] = $account_rol_assigment;
+            }
+         }
+         foreach($AuthLocations as $auth_location) {
+            if ($aut_location->id_user == $account->id) {
+               $new_account_data["auth_location"] = $auth_location;
+            }
+         }
+         array_push($toReturn, $new_account_data);
+      }
+      return response()->json($toReturn,200);
     }
 
     function paginate(Request $data)

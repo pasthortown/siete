@@ -41,8 +41,8 @@ class AuthLocationController extends Controller
           } else {
              $authlocation->id = 1;
           }
-          $authlocation->code_ubication = $result['code_ubication'];
-          $authlocation->account_rol_id = $result['account_rol_id'];
+          $authlocation->id_ubication = $result['id_ubication'];
+          $authlocation->id_user = $result['id_user'];
           $authlocation->save();
           DB::commit();
        } catch (Exception $e) {
@@ -57,8 +57,8 @@ class AuthLocationController extends Controller
           DB::beginTransaction();
           $result = $data->json()->all();
           $authlocation = AuthLocation::where('id',$result['id'])->update([
-             'code_ubication'=>$result['code_ubication'],
-             'account_rol_id'=>$result['account_rol_id'],
+             'id_ubication'=>$result['id_ubication'],
+             'id_user'=>$result['id_user'],
           ]);
           DB::commit();
        } catch (Exception $e) {
@@ -95,14 +95,14 @@ class AuthLocationController extends Controller
          $exist = AuthLocation::where('id',$result['id'])->first();
          if ($exist) {
            AuthLocation::where('id', $result['id'])->update([
-             'code_ubication'=>$result['code_ubication'],
-             'account_rol_id'=>$result['account_rol_id'],
+             'id_ubication'=>$result['id_ubication'],
+             'id_user'=>$result['id_user'],
            ]);
          } else {
           $authlocation = new AuthLocation();
           $authlocation->id = $result['id'];
-          $authlocation->code_ubication = $result['code_ubication'];
-          $authlocation->account_rol_id = $result['account_rol_id'];
+          $authlocation->id_ubication = $result['id_ubication'];
+          $authlocation->id_user = $result['id_user'];
           $authlocation->save();
          }
        }
