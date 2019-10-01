@@ -21,6 +21,10 @@ $router->group(['middleware' => []], function () use ($router) {
    $router->post('/password_recovery_request', ['uses' => 'AuthController@passwordRecoveryRequest']);
    $router->get('/password_recovery', ['uses' => 'AuthController@passwordRecovery']);
    $router->get('/get_accounts', ['uses' => 'UserController@get_accounts']);
+   $router->post('/block_account', ['uses' => 'UserController@block_account']);
+   $router->post('/save_account', ['uses' => 'UserController@save_account']);
+   $router->post('/password_reset_account', ['uses' => 'UserController@password_reset_account']);
+   $router->post('/mass_upload', ['uses' => 'UserController@mass_upload']);
 });
 
 $router->group(['middleware' => ['auth']], function () use ($router) {

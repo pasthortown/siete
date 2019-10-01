@@ -51,6 +51,26 @@ class UserController extends Controller
       return response()->json($toReturn,200);
     }
 
+    function block_account(Request $data)
+    {
+       return 1;
+    }
+
+    function save_account(Request $data)
+    {
+       return 1;
+    }
+    
+    function password_reset_account(Request $data)
+    {
+       return 1;
+    }
+    
+    function mass_upload(Request $data)
+    {
+       return 1;
+    }
+    
     function paginate(Request $data)
     {
        $size = $data['size'];
