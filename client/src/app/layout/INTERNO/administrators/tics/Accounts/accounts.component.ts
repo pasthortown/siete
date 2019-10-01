@@ -125,15 +125,21 @@ export class AccountsComponent implements OnInit {
          {title: 'Correo Electrónico', name: 'email'},
          {title: 'Nombre Completo', name: 'name'},
          {title: 'Rol Asignado', name: 'rol'},
+         {title: 'Estado', name: 'block'},
       ];
       const data = [];
       this.accounts.forEach(item => {
+         let status = '<div class="col-12 text-center"><span class="fas fa-lock-open"></span></div>';
+         if (item.blocked) {
+            status = '<div class="col-12 text-center"><span class="fas fa-lock"></span></div>';
+         }
           data.push({
              selected: '',
              identification: item.account.identification,
              email: item.account.email,
              name: item.account.name,
              rol: this.get_rol_account(item.account_rol_assigment.account_rol_id),
+             block: status,
           });
       });
       this.data = data;
@@ -245,7 +251,7 @@ export class AccountsComponent implements OnInit {
    toCSV() {
       const backupData = this.accounts;
       let output = 'id_cuenta (opcional 0 default);identification;email;name;id_rol;;id_ubication;\n';
-      output += 'Id_Cuenta;Identificación;Correo Electrónico;Nombre Completo;Id_Rol;Rol Asignado;Id_Coordinación_Zonal;Coordinación Zonal\n';
+      output += 'Id_Cuenta;Identificación;Correo Electrónico;Nombre Completo (Apellidos Nombres);Id_Rol;Rol Asignado;Id_Coordinación_Zonal;Coordinación Zonal\n';
       backupData.forEach(element => {
          output += element.account.id + ';' + element.account.identification + ';' + element.account.email + ';' + element.account.name + ';' + element.account_rol_assigment.account_rol_id + ';' + this.get_rol_account(element.account_rol_assigment.account_rol_id) + ';' + element.auth_location.id_ubication + ';' + this.get_zonal(element.auth_location.id_ubication) + '\n';
       });
@@ -282,7 +288,13 @@ export class AccountsComponent implements OnInit {
    }
 
    massUpload(data) {
-      this.accountDataService.mass_upload(data);
+      this.accountDataService.mass_upload(data).then( r => {
+         this.refresh();
+      }).catch( e => { console.log(e); });
+   }
+
+   checkCedula() {
+      this.new_user.identification = this.new_user.identification.replace(/[^\d]/, '');
    }
 
    blockAccount() {
@@ -290,11 +302,20 @@ export class AccountsComponent implements OnInit {
          this.toastr.errorToastr('Debe seleccionar un registro.', 'Error');
          return;
       }
-      this.accountDataService.block_account(this.account_selected);
+      this.accountDataService.block_account(this.account_selected).then( r => {
+         this.refresh();
+      }).catch( e => { console.log(e); });
    }
 
    saveAccount() {
-      this.accountDataService.save_account(this.account_selected);
+      if (this.new_user.email.split('@')[1] !== 'turismo.gob.ec') {
+         this.toastr.errorToastr('Solo se permite la creación de cuentas de usuarios internos.', 'Error');
+         return;
+      }
+      let account = {account: this.new_user, auth_location: this.new_user_account_location, account_rol_assigment: this.account_rol_assigmentSelected};
+      this.accountDataService.save_account(account).then( r => {
+         this.refresh();
+      }).catch( e => { console.log(e); });
    }
 
    passwordResetAccount() {

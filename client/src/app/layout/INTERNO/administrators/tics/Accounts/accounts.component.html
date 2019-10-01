@@ -1,6 +1,6 @@
 <div class="row">
    <h1 class="col-12 text-right">
-      Administración de Cuentas
+      Administración de Cuentas - Internas
    </h1>
 </div>
 <div class="row">
@@ -81,7 +81,7 @@
             <div class="form-group row">
                <label for="identification" class="col-4 col-form-label">Identificación</label>
                <div class="col-8">
-                  <input type="text" class="form-control" [(ngModel)]="new_user.identification" id="identification" name="identification" placeholder="Identificación">
+                  <input type="text" class="form-control" [(ngModel)]="new_user.identification" (keyup)="checkCedula()" id="identification" name="identification" placeholder="Identificación">
                </div>
             </div>
             <div class="form-group row">

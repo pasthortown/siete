@@ -133,11 +133,11 @@ class AuthController extends Controller
       $domain = explode('@', $email);
       if (sizeof($domain) == 2) {
         if ($domain[1] == 'turismo.gob.ec') {
-          $new_password = 'La de tu correo institucional.';
+          $new_password = 'la de su correo institucional.';
         }
       }
-      $message = "Tu nueva contraseña es " . $new_password;
-      $subject = "Te damos la bienvenida a " . env('MAIL_FROM_NAME');
+      $message = "Su nueva contraseña es " . $new_password;
+      $subject = "Le damos la bienvenida a " . env('MAIL_FROM_NAME');
       DB::commit();
       return $this->send_mail($email, $user->name, $subject, $message, env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME'));
     } catch (Exception $e) {
@@ -154,6 +154,11 @@ class AuthController extends Controller
       if (!$user) {
         return response()->json([
           'error' => 'Bad Credentials'
+        ], 400);
+      }
+      if (substr(Crypt::decrypt($user->password),0,9) == 'BLOQUEADA') {
+        return response()->json([
+          'error' => 'Cuenta Bloqueada'
         ], 400);
       }
       $domain = explode('@', $email);

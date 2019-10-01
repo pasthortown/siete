@@ -29,12 +29,13 @@ class UserController extends Controller
     {
       $toReturn = [];
       $AuthLocations = AuthLocation::get();
-      $Accounts = User::get();
+      $Accounts = User::orderBy('id')->get();
       $AccountRolAssigments = AccountRolAssigment::get();
       foreach($Accounts as $account) {
          $new_account_data = ["account"=>$account,
                               "account_rol_assigment"=>[],
                               "auth_location"=>[],
+                              "blocked"=>false,
                              ];
          foreach($AccountRolAssigments as $account_rol_assigment) {
             if ($account_rol_assigment->user_id == $account->id) {
@@ -46,6 +47,11 @@ class UserController extends Controller
                $new_account_data["auth_location"] = $auth_location;
             }
          }
+         if (substr(Crypt::decrypt($account->password),0,9) == 'BLOQUEADA') {
+            $new_account_data["blocked"] = true;
+         } else {
+            $new_account_data["blocked"] = false;
+         }
          array_push($toReturn, $new_account_data);
       }
       return response()->json($toReturn,200);
@@ -53,22 +59,137 @@ class UserController extends Controller
 
     function block_account(Request $data)
     {
-       return 1;
+      $result = $data->json()->all();
+      $user = User::where('id', $result['account']['id'])->first();
+      if (substr(Crypt::decrypt($user->password),0,9) == 'BLOQUEADA') {
+         $new_password = str_random(10);
+         try {
+            DB::beginTransaction();
+            $status = User::where('id', $result['account']['id'])->update([
+            'password'=>Crypt::encrypt($new_password),
+            ]);
+            DB::commit();
+         } catch (Exception $e) {
+            return response()->json('Ocurrió un error',400);
+         }
+         $domain = explode('@', $user->email);
+         if (sizeof($domain) == 2) {
+            if ($domain[1] !== 'turismo.gob.ec') {
+               $message = "Tu nueva contraseña es " . $new_password;
+               $subject = "Recuperación de Contraseña";
+               $user = User::where('id', $result['account']['id'])->first();
+               return $this->send_mail($user->email, $user->name, $subject, $message, env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME'));      
+            }
+         }
+         return response()->json('Success!',200);
+      } else {
+         $new_password = 'BLOQUEADA'.str_random(10);
+         try {
+            DB::beginTransaction();
+            $status = User::where('id', $result['account']['id'])->update([
+            'password'=>Crypt::encrypt($new_password),
+            ]);
+            DB::commit();
+            return response()->json('Success!',200);
+         } catch (Exception $e) {
+            return response()->json('Ocurrió un error',400);
+         }   
+      }
     }
 
     function save_account(Request $data)
     {
-       return 1;
+       $result = $data->json()->all();
+       if ($result['account']['id'] !== 0) {
+         DB::beginTransaction();
+         $user = User::where('id',$result['account']['id'])->update([
+            'name'=>$result['account']['name'],
+            'email'=>$result['account']['email'],
+            'identification'=>$result['account']['identification'],
+         ]);
+         $account_rol_assigment = AccountRolAssigment::where('id',$result['account_rol_assigment']['id'])->update([
+            'account_rol_id'=>$result['account_rol_assigment']['account_rol_id'],
+         ]);
+         $auth_location = AuthLocation::where('id',$result['auth_location']['id'])->update([
+            'id_ubication'=>$result['auth_location']['id_ubication'],
+         ]);
+         DB::commit();
+       } else {
+          DB::beginTransaction();
+          $user = new User();
+          $lastUser = User::orderBy('id')->get()->last();
+          if($lastUser) {
+               $user->id = $lastUser->id + 1;
+          } else {
+               $user->id = 1;
+          }
+          $user->name = $result['account']['name'];
+          $user->email = $result['account']['email'];
+          $user->identification = $result['account']['identification'];
+          $user->ruc = $result['account']['identification'].'001';
+          $user->main_phone_number = '0000000000';
+          $user->secondary_phone_number = '0000000000';
+          $user->password = Crypt::encrypt(str_random(10));
+          $user->api_token = str_random(64);
+          $user->save();
+          $accountrolassigment = new AccountRolAssigment();
+          $lastAccountRolAssigment = AccountRolAssigment::orderBy('id')->get()->last();
+          if($lastAccountRolAssigment) {
+             $accountrolassigment->id = $lastAccountRolAssigment->id + 1;
+          } else {
+             $accountrolassigment->id = 1;
+          }
+          $accountrolassigment->account_rol_id = $result['account_rol_assigment']['account_rol_id'];
+          $accountrolassigment->user_id = $user->id;
+          $accountrolassigment->save();
+          $authlocation = new AuthLocation();
+          $lastAuthLocation = AuthLocation::orderBy('id')->get()->last();
+          if($lastAuthLocation) {
+              $authlocation->id = $lastAuthLocation->id + 1;
+          } else {
+              $authlocation->id = 1;
+          }
+          $authlocation->id_ubication = $result['auth_location']['id_ubication'];
+          $authlocation->id_user = $user->id;
+          $authlocation->save();
+          DB::commit();
+          $domain = explode('@', $user->email);
+          if (sizeof($domain) == 2) {
+            $new_password = $user->password;
+            if ($domain[1] == 'turismo.gob.ec') {
+               $new_password = 'la de su correo institucional.';
+            }
+            $message = "Su nueva contraseña es " . $new_password;
+            $subject = "Le damos la bienvenida a " . env('MAIL_FROM_NAME');
+            return $this->send_mail($user->email, $user->name, $subject, $message, env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME'));
+          }
+       }
+       return response()->json('Success!',200);
     }
     
     function password_reset_account(Request $data)
     {
-       return 1;
+      $result = $data->json()->all();
+      $new_password = str_random(10);
+      try {
+         DB::beginTransaction();
+         $status = User::where('id', $result['account']['id'])->update([
+         'password'=>Crypt::encrypt($new_password),
+         ]);
+         DB::commit();
+      } catch (Exception $e) {
+         return response()->json('Ocurrió un error',400);
+      }
+      $message = "Tu nueva contraseña es " . $new_password;
+      $subject = "Recuperación de Contraseña";
+      $user = User::where('id', $result['account']['id'])->first();
+      return $this->send_mail($user->email, $user->name, $subject, $message, env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME'));
     }
     
     function mass_upload(Request $data)
     {
-       return 1;
+      $result = $data->json()->all();
+      return response()->json($result,200);
     }
     
     function paginate(Request $data)
