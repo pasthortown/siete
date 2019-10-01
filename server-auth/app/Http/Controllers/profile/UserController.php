@@ -42,7 +42,7 @@ class UserController extends Controller
             }
          }
          foreach($AuthLocations as $auth_location) {
-            if ($aut_location->id_user == $account->id) {
+            if ($auth_location->id_user == $account->id) {
                $new_account_data["auth_location"] = $auth_location;
             }
          }

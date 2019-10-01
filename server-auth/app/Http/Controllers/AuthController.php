@@ -6,6 +6,7 @@ use Validator;
 use Exception;
 use App\User;
 use App\AccountRol;
+use App\AuthLocation;
 use App\AccountRolAssigment;
 use Illuminate\Http\Request;
 use Firebase\JWT\JWT;
@@ -119,6 +120,16 @@ class AuthController extends Controller
       $accountrolassigment->account_rol_id = 2;
       $accountrolassigment->user_id = $user->id;
       $accountrolassigment->save();
+      $authlocation = new AuthLocation();
+      $lastAuthLocation = AuthLocation::orderBy('id')->get()->last();
+      if($lastAuthLocation) {
+          $authlocation->id = $lastAuthLocation->id + 1;
+      } else {
+          $authlocation->id = 1;
+      }
+      $authlocation->id_ubication = 2;
+      $authlocation->id_user = $user->id;
+      $authlocation->save();
       $domain = explode('@', $email);
       if (sizeof($domain) == 2) {
         if ($domain[1] == 'turismo.gob.ec') {

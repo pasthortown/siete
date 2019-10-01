@@ -6,7 +6,6 @@ import { AccountRolAssigment } from 'src/app/models/AUTH/AccountRolAssigment';
 import { AccountRol } from 'src/app/models/AUTH/AccountRol';
 import { User } from 'src/app/models/profile/User';
 import { AccountRolService } from 'src/app/services/CRUD/AUTH/accountrol.service';
-import { AccountRolAssigmentService } from 'src/app/services/CRUD/AUTH/accountrolassigment.service';
 import { Ubication } from 'src/app/models/BASE/Ubication';
 import { UbicationService } from 'src/app/services/CRUD/BASE/ubication.service';
 import { AuthLocation } from 'src/app/models/AUTH/AuthLocation';
@@ -28,13 +27,8 @@ export class AccountsComponent implements OnInit {
    accounts: any[] = [];
    account_rols: AccountRol[] = [];
    ubications: Ubication[] = [];
-   provincias: Ubication[] = [];
-   cantones: Ubication[] = [];
-   parroquias: Ubication[] = [];
-   provincia_code_selected: string = '-';
-   canton_code_selected: string = '-';
+   zonales: Ubication[] = [];
    new_user: User = new User();
-   new_user_ubication: number = 0;
    new_user_account_location: AuthLocation = new AuthLocation();
    account_selected: any = null;
    config: any = {
@@ -50,8 +44,7 @@ export class AccountsComponent implements OnInit {
                private toastr: ToastrManager,
                private account_rolDataService: AccountRolService,
                private accountDataService: AccountService,
-               private ubicationDataService: UbicationService,
-               private account_rol_assigmentDataService: AccountRolAssigmentService) {}
+               private ubicationDataService: UbicationService) {}
 
    ngOnInit() {
       this.refresh();
@@ -63,40 +56,15 @@ export class AccountsComponent implements OnInit {
    }
 
    getUbications() {
-      this.provincias = [];
-      this.cantones = [];
-      this.parroquias = [];
-      this.provincia_code_selected = '-';
-      this.canton_code_selected = '-';
-      this.new_user_ubication = 0;
+      this.zonales = [];
       this.ubicationDataService.get().then( r => {
          this.ubications = r as Ubication[];
          this.ubications.forEach(ubication => {
-            if (
-               ubication.father_code == '1' ||
-               ubication.father_code == '2' ||
-               ubication.father_code == '3' ||
-               ubication.father_code == '4' ||
-               ubication.father_code == '5' ||
-               ubication.father_code == '6' ||
-               ubication.father_code == '7' ||
-               ubication.father_code == '8') {
-               this.provincias.push(ubication);
+            if (ubication.father_code == '-') {
+               this.zonales.push(ubication);
             }
          });
       }).catch( e => { console.log(e); });
-   }
-
-   getCantones() {
-      this.cantones = [];
-      this.parroquias = [];
-      this.canton_code_selected = '-';
-      this.new_user_ubication = 0;
-      this.ubications.forEach(ubication => {
-         if (ubication.father_code == this.provincia_code_selected) {
-            this.cantones.push(ubication);
-         }   
-      });
    }
 
    onCellClick(event) {
@@ -111,16 +79,6 @@ export class AccountsComponent implements OnInit {
          } else {
             row.selected = '';
          }
-      });
-   }
-
-   getParroquias() {
-      this.parroquias = [];
-      this.new_user_ubication = 0;
-      this.ubications.forEach(ubication => {
-         if (ubication.father_code == this.canton_code_selected) {
-            this.parroquias.push(ubication);
-         }   
       });
    }
 
@@ -145,6 +103,16 @@ export class AccountsComponent implements OnInit {
       this.account_rols.forEach(account_rol => {
          if (account_rol.id == id) {
             toReturn = account_rol.name.toString(); 
+         }
+      });
+      return toReturn;
+   }
+
+   get_zonal(id): string {
+      let toReturn = '';
+      this.zonales.forEach(zonal => {
+         if (zonal.id == id) {
+            toReturn = zonal.name.toString();
          }
       });
       return toReturn;
@@ -259,9 +227,7 @@ export class AccountsComponent implements OnInit {
       this.account_rol_assigmentSelected.user_id = 0;
       this.new_user = new User();
       this.new_user.id = 0;
-      this.new_user_ubication = 0;
-      this.provincia_code_selected = '-';
-      this.canton_code_selected = '-';
+      this.new_user_account_location = new AuthLocation();
       this.openDialog(content);
    }
 
@@ -272,20 +238,20 @@ export class AccountsComponent implements OnInit {
       }
       this.new_user = this.account_selected.account as User;
       this.account_rol_assigmentSelected = this.account_selected.account_rol_assigment as AccountRolAssigment;
+      this.new_user_account_location = this.account_selected.auth_location as AuthLocation;
       this.openDialog(content);
    }
 
    toCSV() {
-      this.account_rol_assigmentDataService.get().then( r => {
-         const backupData = r as AccountRolAssigment[];
-         let output = 'id;account_rol_id;user_id\n';
-         backupData.forEach(element => {
-            output += element.id + ';' + element.account_rol_id + ';' + element.user_id + '\n';
-         });
-         const blob = new Blob(["\ufeff", output], { type: 'text/plain' });
-         const fecha = new Date();
-         saveAs(blob, fecha.toLocaleDateString() + '_AccountRolAssigments.csv');
-      }).catch( e => console.log(e) );
+      const backupData = this.accounts;
+      let output = 'id_cuenta (opcional 0 default);identification;email;name;id_rol;;id_ubication;\n';
+      output += 'Id_Cuenta;Identificación;Correo Electrónico;Nombre Completo;Id_Rol;Rol Asignado;Id_Coordinación_Zonal;Coordinación Zonal\n';
+      backupData.forEach(element => {
+         output += element.account.id + ';' + element.account.identification + ';' + element.account.email + ';' + element.account.name + ';' + element.account_rol_assigment.account_rol_id + ';' + this.get_rol_account(element.account_rol_assigment.account_rol_id) + ';' + element.auth_location.id_ubication + ';' + this.get_zonal(element.auth_location.id_ubication) + '\n';
+      });
+      const blob = new Blob(["\ufeff", output], { type: 'text/plain' });
+      const fecha = new Date();
+      saveAs(blob, fecha.toLocaleDateString() + '_Accounts.csv');
    }
 
    decodeUploadFile(event) {
@@ -295,10 +261,8 @@ export class AccountsComponent implements OnInit {
          reader.readAsDataURL(file);
          reader.onload = () => {
             const fileBytes = reader.result.toString().split(',')[1];
-            const newData = JSON.parse(decodeURIComponent(escape(atob(fileBytes)))) as any[];
-            this.account_rol_assigmentDataService.masiveLoad(newData).then( r => {
-               this.refresh();
-            }).catch( e => console.log(e) );
+            const newData = decodeURIComponent(escape(atob(fileBytes)));
+            this.massUpload(newData);
          };
       }
    }
@@ -315,6 +279,10 @@ export class AccountsComponent implements OnInit {
             this.saveAccount();
          }
       }), ( r => {}));
+   }
+
+   massUpload(data) {
+      this.accountDataService.mass_upload(data);
    }
 
    blockAccount() {
