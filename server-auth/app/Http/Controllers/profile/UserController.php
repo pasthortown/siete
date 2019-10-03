@@ -189,9 +189,105 @@ class UserController extends Controller
     function mass_upload(Request $data)
     {
       $result = $data->json()->all();
-      return response()->json($result,200);
+      $dataIncomming = explode("\n", $result['data']);
+      $toRegister = [];
+      for($i = 2; $i < sizeof($dataIncomming); $i++) {
+         if ($dataIncomming[$i] != '') {
+            array_push($toRegister,$dataIncomming[$i]);
+         }
+      }
+      $toReturn = [];
+      array_push($toReturn, 'id;result');
+      foreach($toRegister as $newRecord) {
+         $result = $this->accountFromLine($newRecord);
+         array_push($toReturn, explode(";", $newRecord)[0].';'.$result);
+      }
+      return response()->json($toReturn,200);
     }
     
+    function accountFromLine($newRecord) {
+      $newRecordData = explode(";", $newRecord);
+      if (sizeof($newRecordData) < 6) {
+         return 'No válido';
+      }
+      $previewUser = User::where('id',$newRecordData[0])->first();
+      $previewMail = User::where('email',$newRecordData[2])->first();
+      if ($previewUser) {
+         if ($previewMail) {
+            if ($previewMail->id != $newRecordData[0]) {
+               return 'No se puede crear. El correo electrónico ya existe y pertenece a otro usuario.';
+            }
+         }
+         DB::beginTransaction();
+         $user = User::where('id',$newRecordData[0])->update([
+            'name'=>$newRecordData[3],
+            'email'=>$newRecordData[2],
+            'identification'=>$newRecordData[1],
+         ]);
+         $account_rol_assigment = AccountRolAssigment::where('user_id',$newRecordData[0])->update([
+            'account_rol_id'=>$newRecordData[4],
+         ]);
+         $auth_location = AuthLocation::where('id_user',$newRecordData[0])->update([
+            'id_ubication'=>$newRecordData[6],
+         ]);
+         DB::commit();
+         return 'Cuenta Actualizada';
+      } else {
+         $domain = explode('@', $newRecordData[2]);
+         if (sizeof($domain) == 2) {
+            if ($domain[1] !== 'turismo.gob.ec') {
+               return 'No se puede crear cuentas ajenas al Ministerio de Turismo.';
+            }
+         }
+         if ($previewMail) {
+            return 'No se puede crear. El correo electrónico ya existe y pertenece a otro usuario.';
+         }
+         DB::beginTransaction();
+         $user = new User();
+         $lastUser = User::orderBy('id')->get()->last();
+         if($lastUser) {
+            $user->id = $lastUser->id + 1;
+         } else {
+            $user->id = 1;
+         }
+         $user->name = $newRecordData[3];
+         $user->email = $newRecordData[2];
+         $user->identification = $newRecordData[1];
+         $user->ruc = $newRecordData[1].'001';
+         $user->main_phone_number = '0000000000';
+         $user->secondary_phone_number = '0000000000';
+         $user->password = Crypt::encrypt(str_random(10));
+         $user->api_token = str_random(64);
+         $user->save();
+         $accountrolassigment = new AccountRolAssigment();
+         $lastAccountRolAssigment = AccountRolAssigment::orderBy('id')->get()->last();
+         if($lastAccountRolAssigment) {
+            $accountrolassigment->id = $lastAccountRolAssigment->id + 1;
+         } else {
+            $accountrolassigment->id = 1;
+         }
+         $accountrolassigment->account_rol_id = $newRecordData[4];
+         $accountrolassigment->user_id = $user->id;
+         $accountrolassigment->save();
+         $authlocation = new AuthLocation();
+         $lastAuthLocation = AuthLocation::orderBy('id')->get()->last();
+         if($lastAuthLocation) {
+            $authlocation->id = $lastAuthLocation->id + 1;
+         } else {
+            $authlocation->id = 1;
+         }
+         $authlocation->id_ubication = $newRecordData[6];
+         $authlocation->id_user = $user->id;
+         $authlocation->save();
+         DB::commit();
+         $new_password = 'la de su correo institucional.';
+         $message = "Su nueva contraseña es " . $new_password;
+         $subject = "Le damos la bienvenida a " . env('MAIL_FROM_NAME');
+         $resp = $this->send_mail($user->email, $user->name, $subject, $message, env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME'));  
+         return 'Cuenta Creada';
+      }
+    }
+
     function paginate(Request $data)
     {
        $size = $data['size'];

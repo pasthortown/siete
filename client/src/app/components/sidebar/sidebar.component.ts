@@ -91,6 +91,10 @@ export class SidebarComponent implements OnInit {
     return true;
   }
 
+  checkShowRegistroActividadesTuristicas(): Boolean {
+    return (this.isExternal || this.isAdminRuc || this.isCoAdminRuc || this.isAdminEst || this.isAdminRegC) && !this.cuentaInterna;
+  }
+
   checkCatastro(): Boolean {
     let toReturn: Boolean = false;
     if ( JSON.parse(sessionStorage.getItem('canMoreThanRegister')) !== null ) {

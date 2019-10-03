@@ -357,15 +357,15 @@
             </ul>
          </li>
       </div>
-         <a [routerLink]="['/externo-registro']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="(isExternal || isAdminRuc || isCoAdminRuc || isAdminEst || isAdminRegC) && (cuentaInterna == false)">
-            <i class="fas fa-newspaper"></i>&nbsp; <span>&nbsp;Registro de Actividades Turísticas</span>
-         </a>
-
-         <a [routerLink]="['/externo-dashboard']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="checkCatastro() && (cuentaInterna == false)">
-            <i class="fas fa-newspaper"></i>&nbsp; <span>&nbsp;Gestión de Actividades Turísticas</span>
-         </a>
       <a [routerLink]="['/tarifario-rack']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="checkCatastro()">
          <i class="fas fa-newspaper"></i>&nbsp; <span>&nbsp;Tarifario Rack o Mostrador </span>
+      </a>
+      <a [routerLink]="['/externo-registro']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="checkShowRegistroActividadesTuristicas()">
+         <i class="fas fa-newspaper"></i>&nbsp; <span>&nbsp;Registro de Actividades Turísticas</span>
+      </a>
+
+      <a [routerLink]="['/externo-dashboard']" [routerLinkActive]="['router-link-active']" class="list-group-item" *ngIf="checkCatastro() && !cuentaInterna">
+         <i class="fas fa-newspaper"></i>&nbsp; <span>&nbsp;Gestión de Actividades Turísticas</span>
       </a>
       <div class="nested-menu">
          <a class="list-group-item" (click)="addExpandClass('profile')">

@@ -273,22 +273,45 @@ export class AccountsComponent implements OnInit {
       }
    }
 
+   checkEmail(email): Boolean {
+      const isOk = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email.toString());
+      return isOk;
+   }
+
    openDialog(content) {
       this.modalService.open(content, { centered: true }).result.then(( response => {
          if (response == 'block_account') {
-            this.blockAccount();
+            if (this.new_user.id !== 0) {
+               this.blockAccount();
+            }
          }
          if (response == 'password_reset') {
-            this.passwordResetAccount();
+            if (this.new_user.id !== 0) {
+               this.passwordResetAccount();
+            }
          }
          if (response == 'save') {
-            this.saveAccount();
+            if ((this.new_user.identification.length == 10)  &&
+               this.checkEmail(this.new_user.email) &&
+               this.new_user.name != '' &&
+               this.new_user_account_location.id_ubication != 0 &&
+               this.account_rol_assigmentSelected.account_rol_id != 0
+            ) {
+               this.saveAccount();
+            }
          }
       }), ( r => {}));
    }
 
    massUpload(data) {
       this.accountDataService.mass_upload(data).then( r => {
+         let output = '';
+         r.forEach(row => {
+            output += row +'\n';
+         });
+         const blob = new Blob(["\ufeff", output], { type: 'text/plain' });
+         const fecha = new Date();
+         saveAs(blob, fecha.toLocaleDateString() + '_Accounts_UpLoad_Result.csv');
          this.refresh();
       }).catch( e => { console.log(e); });
    }
